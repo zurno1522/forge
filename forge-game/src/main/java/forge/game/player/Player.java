@@ -1159,6 +1159,9 @@ public class Player extends GameEntity implements Comparable<Player> {
                 game.getAction().revealTo(e.getValue(), e.getKey(), "Revealing cards drawn from ");
             }
         }
+        if (gameStarted && !drawn.isEmpty()) {
+            game.fireEvent(new GameEventCardsDrawn(this, drawn));
+        }
         return drawn;
     }
 
