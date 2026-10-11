@@ -34,17 +34,24 @@ final class SimulationTraceCollector {
     private final SimulationTraceWriter writer;
     private final int gameNumber;
     private final Map<LobbyPlayer, Integer> participantIds;
+    private final Integer matchId;
+    private final Integer gameInMatch;
+    private final Integer tournamentRound;
     private final Map<Integer, Integer> abilityToStack = new HashMap<>();
     private final Map<Integer, Integer> mulligansByPlayer = new HashMap<>();
     private int eventIndex = 0;
     private IOException failure;
 
     SimulationTraceCollector(final Game game, final SimulationTraceWriter writer, final int gameNumber,
-            final Map<LobbyPlayer, Integer> participantIds) {
+            final Map<LobbyPlayer, Integer> participantIds, final Integer matchId,
+            final Integer gameInMatch, final Integer tournamentRound) {
         this.game = game;
         this.writer = writer;
         this.gameNumber = gameNumber;
         this.participantIds = participantIds;
+        this.matchId = matchId;
+        this.gameInMatch = gameInMatch;
+        this.tournamentRound = tournamentRound;
     }
 
     @Subscribe
@@ -128,6 +135,13 @@ final class SimulationTraceCollector {
     private void gameStarted(final GameEventGameStarted event) throws IOException {
         final Map<String, Object> record = scoped("GAME_STARTED", false);
         record.put("gameType", event.gameType().name());
+        if (matchId != null) {
+            record.put("matchId", matchId);
+            record.put("gameInMatch", gameInMatch);
+        }
+        if (tournamentRound != null) {
+            record.put("tournamentRound", tournamentRound);
+        }
         record.put("firstPlayer", playerRef(event.firstTurn()));
 
         final List<Map<String, Object>> players = new ArrayList<>();
