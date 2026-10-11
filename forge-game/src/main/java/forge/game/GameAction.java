@@ -1038,6 +1038,7 @@ public class GameAction {
         game.getTriggerHandler().runTrigger(TriggerType.ChangesController, runParams, false);
 
         game.getTriggerHandler().clearSuppression(TriggerType.ChangesZone);
+        game.fireEvent(new GameEventCardControllerChanged(c, original, controller));
     }
 
     // Temporarily disable (if mode = true) actively checking static abilities.
@@ -2165,8 +2166,13 @@ public class GameAction {
         }
         game.getTriggerHandler().runTrigger(TriggerType.Destroyed, runParams, false);
 
+        final GameEventCardDestroyedObserved observedDestroy = new GameEventCardDestroyedObserved(c, sa);
         final Card sacrificed = sacrificeDestroy(c, sa, params);
-        return sacrificed != null;
+        if (sacrificed != null) {
+            game.fireEvent(observedDestroy);
+            return true;
+        }
+        return false;
     }
 
     /**
