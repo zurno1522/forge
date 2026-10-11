@@ -80,6 +80,10 @@ final class SimulationTraceCollector {
                 landPlayed(e);
             } else if (event instanceof GameEventMulligan e) {
                 mulligan(e);
+            } else if (event instanceof GameEventStartingHandFinalized e) {
+                startingHandFinalized(e);
+            } else if (event instanceof GameEventCardsDrawn e) {
+                cardsDrawn(e);
             } else if (event instanceof GameEventScry e) {
                 scry(e);
             } else if (event instanceof GameEventSurveil e) {
@@ -359,6 +363,34 @@ final class SimulationTraceCollector {
         write(record);
     }
 
+    private void startingHandFinalized(final GameEventStartingHandFinalized event) throws IOException {
+        final Map<String, Object> record = scoped("STARTING_HAND_FINALIZED", false);
+        record.put("player", playerRef(event.player()));
+        record.put("mulligans", mulligansByPlayer.getOrDefault(event.player().getId(), 0));
+        record.put("handSize", event.handSize());
+
+        final Player player = findPlayer(event.player().getId());
+        if (player != null) {
+            final List<Map<String, Object>> cards = new ArrayList<>();
+            for (final Card card : player.getCardsIn(ZoneType.Hand)) {
+                cards.add(cardRef(card.getView()));
+            }
+            record.put("cards", cards);
+        }
+        write(record);
+    }
+
+    private void cardsDrawn(final GameEventCardsDrawn event) throws IOException {
+        final Map<String, Object> record = scoped("CARDS_DRAWN", true);
+        record.put("player", playerRef(event.player()));
+        final List<Map<String, Object>> cards = new ArrayList<>();
+        for (final CardView card : event.cards()) {
+            cards.add(cardRef(card));
+        }
+        record.put("cards", cards);
+        write(record);
+    }
+
     private void scry(final GameEventScry event) throws IOException {
         final Map<String, Object> record = scoped("SCRY", true);
         record.put("player", playerRef(event.player()));
@@ -464,6 +496,15 @@ final class SimulationTraceCollector {
         }
         record.put("winners", winners);
         write(record);
+    }
+
+    private Player findPlayer(final int playerId) {
+        for (final Player player : game.getPlayers()) {
+            if (player.getId() == playerId) {
+                return player;
+            }
+        }
+        return null;
     }
 
     private SpellAbilityStackInstance findStackItem(final int stackId) {
