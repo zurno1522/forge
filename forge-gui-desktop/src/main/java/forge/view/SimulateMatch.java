@@ -192,12 +192,12 @@ public class SimulateMatch {
                 int iGame = 0;
                 while (!mc.isMatchOver()) {
                     // play games until the match ends
-                    simulateSingleMatch(mc, iGame, outputGamelog, traceRun);
+                    simulateSingleMatch(mc, iGame, outputGamelog, traceRun, 1, null);
                     iGame++;
                 }
             } else {
                 for (int iGame = 0; iGame < nGames; iGame++) {
-                    simulateSingleMatch(mc, iGame, outputGamelog, traceRun);
+                    simulateSingleMatch(mc, iGame, outputGamelog, traceRun, null, null);
                 }
             }
 
@@ -238,17 +238,18 @@ public class SimulateMatch {
     }
 
     public static void simulateSingleMatch(final Match mc, int iGame, boolean outputGamelog) {
-        simulateSingleMatch(mc, iGame, outputGamelog, null);
+        simulateSingleMatch(mc, iGame, outputGamelog, null, null, null);
     }
 
     private static void simulateSingleMatch(final Match mc, int iGame, boolean outputGamelog,
-            final SimulationTraceRun traceRun) {
+            final SimulationTraceRun traceRun, final Integer matchId, final Integer tournamentRound) {
         final StopWatch sw = new StopWatch();
         sw.start();
 
         final Game g1 = mc.createGame();
         g1.setNoGUIUser();
-        final SimulationTraceCollector traceCollector = traceRun == null ? null : traceRun.beginGame(g1);
+        final SimulationTraceCollector traceCollector = traceRun == null ? null
+                : traceRun.beginGame(g1, matchId, matchId == null ? null : iGame + 1, tournamentRound);
         String executionStatus = "NORMAL";
         Throwable executionError = null;
 
