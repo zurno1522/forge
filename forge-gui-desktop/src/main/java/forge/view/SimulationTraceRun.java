@@ -1,5 +1,6 @@
 package forge.view;
 
+import forge.LobbyPlayer;
 import forge.ai.LobbyPlayerAi;
 import forge.deck.CardPool;
 import forge.deck.Deck;
@@ -31,7 +32,7 @@ final class SimulationTraceRun implements AutoCloseable {
     }
 
     private final SimulationTraceWriter writer;
-    private final Map<RegisteredPlayer, Integer> participantIds = new IdentityHashMap<>();
+    private final Map<LobbyPlayer, Integer> participantIds = new IdentityHashMap<>();
     private int gamesAttempted;
     private int gamesNormal;
     private int gamesTimedOut;
@@ -88,7 +89,7 @@ final class SimulationTraceRun implements AutoCloseable {
         for (int i = 0; i < players.size(); i++) {
             final RegisteredPlayer player = players.get(i);
             final int participantId = i + 1;
-            participantIds.put(player, participantId);
+            participantIds.put(player.getPlayer(), participantId);
 
             final Map<String, Object> participant = new LinkedHashMap<>();
             participant.put("participantId", participantId);
