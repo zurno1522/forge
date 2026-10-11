@@ -3931,6 +3931,7 @@ public class Player extends GameEntity implements Comparable<Player> {
                     runParams.putAll(params);
                 }
                 getGame().getTriggerHandler().runTrigger(TriggerType.DiscardedAll, runParams, false);
+                getGame().fireEvent(new forge.game.event.GameEventCardsDiscarded(this, new CardCollection(moved), sa));
 
                 drawCards(1, sa, params);
             }
