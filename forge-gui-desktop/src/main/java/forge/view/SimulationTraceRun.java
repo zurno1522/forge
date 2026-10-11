@@ -48,14 +48,22 @@ final class SimulationTraceRun implements AutoCloseable {
             final Integer requestedGames, final Integer gamesPerMatch,
             final String tournamentType, final Integer playersPerMatch,
             final Long seed) {
+        SimulationTraceWriter writer = null;
         try {
-            final SimulationTraceWriter writer = SimulationTraceWriter.open(filename);
+            writer = SimulationTraceWriter.open(filename);
             final SimulationTraceRun run = new SimulationTraceRun(writer);
             run.writeStarted(rules, players, runMode, requestedGames, gamesPerMatch,
                     tournamentType, playersPerMatch, seed);
             writer.flush();
             return run;
         } catch (IOException e) {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException ignored) {
+                    // Preserve the initialization failure as the primary diagnostic.
+                }
+            }
             throw new TraceFailure("Unable to initialize simulation trace: " + filename, e);
         }
     }
@@ -140,7 +148,6 @@ final class SimulationTraceRun implements AutoCloseable {
         if (finished) {
             return;
         }
-        finished = true;
         try {
             final Map<String, Object> record = new LinkedHashMap<>();
             record.put("type", "RUN_FINISHED");
@@ -151,7 +158,13 @@ final class SimulationTraceRun implements AutoCloseable {
             record.put("gamesFailed", gamesFailed);
             writer.write(record);
             writer.close();
+            finished = true;
         } catch (IOException e) {
+            try {
+                writer.close();
+            } catch (IOException ignored) {
+                // The sink is already failing; best-effort close only.
+            }
             throw new TraceFailure("Unable to finalize simulation trace", e);
         }
     }
