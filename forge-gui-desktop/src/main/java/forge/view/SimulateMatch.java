@@ -355,73 +355,110 @@ public class SimulateMatch {
             return;
         }
 
-        tourney.initializeTournament();
+        final List<RegisteredPlayer> traceParticipants = new ArrayList<>();
+        for (final TournamentPlayer tournamentPlayer : players) {
+            if (tournamentPlayer.getIndex() < 0) {
+                continue;
+            }
+            traceParticipants.add(new RegisteredPlayer(
+                    deckGroup.getAiDecks().get(tournamentPlayer.getIndex()))
+                    .setPlayer(tournamentPlayer.getPlayer()));
+        }
 
-        String lastWinner = "";
-        int curRound = 0;
-        System.out.println(TextUtil.concatNoSpace("Starting a ", tournament, " tournament with ",
-                String.valueOf(numPlayers), " players over ",
-                String.valueOf(tourney.getTotalRounds()), " rounds"));
-        while (!tourney.isTournamentOver()) {
-            if (tourney.getActiveRound() != curRound) {
-                if (curRound != 0) {
-                    System.out.println(TextUtil.concatNoSpace("End Round - ", String.valueOf(curRound)));
-                }
-                curRound = tourney.getActiveRound();
-                System.out.println();
-                System.out.println(TextUtil.concatNoSpace("Round ", String.valueOf(curRound), " Pairings:"));
-
-                for (TournamentPairing pairing : tourney.getActivePairings()) {
-                    System.out.println(pairing.outputHeader());
-                }
-                System.out.println();
+        SimulationTraceRun traceRun = null;
+        try {
+            if (traceFile != null) {
+                traceRun = SimulationTraceRun.open(traceFile, rules, traceParticipants,
+                        "TOURNAMENT", null, rules.getGamesPerMatch(),
+                        tournament.toUpperCase(Locale.ROOT), matchPlayers, seed);
             }
 
-            TournamentPairing pairing = tourney.getNextPairing();
-            List<RegisteredPlayer> regPlayers = AbstractTournament.registerTournamentPlayers(pairing, deckGroup);
+            tourney.initializeTournament();
 
-            StringBuilder sb = new StringBuilder();
-            sb.append("Round ").append(tourney.getActiveRound()).append(" - ");
-            sb.append(pairing.outputHeader());
-            System.out.println(sb.toString());
+            String lastWinner = "";
+            int curRound = 0;
+            int traceMatchId = 0;
+            System.out.println(TextUtil.concatNoSpace("Starting a ", tournament, " tournament with ",
+                    String.valueOf(numPlayers), " players over ",
+                    String.valueOf(tourney.getTotalRounds()), " rounds"));
+            while (!tourney.isTournamentOver()) {
+                if (tourney.getActiveRound() != curRound) {
+                    if (curRound != 0) {
+                        System.out.println(TextUtil.concatNoSpace("End Round - ", String.valueOf(curRound)));
+                    }
+                    curRound = tourney.getActiveRound();
+                    System.out.println();
+                    System.out.println(TextUtil.concatNoSpace("Round ", String.valueOf(curRound), " Pairings:"));
 
-            if (!pairing.isBye()) {
-                Match mc = new Match(rules, regPlayers, "TourneyMatch");
+                    for (TournamentPairing pairing : tourney.getActivePairings()) {
+                        System.out.println(pairing.outputHeader());
+                    }
+                    System.out.println();
+                }
 
-                int exceptions = 0;
-                int iGame = 0;
-                while (!mc.isMatchOver()) {
-                    // play games until the match ends
-                    try {
-                        simulateSingleMatch(mc, iGame, outputGamelog);
-                        iGame++;
-                    } catch (Exception e) {
-                        exceptions++;
-                        System.out.println(e.toString());
-                        if (exceptions > 5) {
-                            System.out.println("Exceeded number of exceptions thrown. Abandoning match...");
+                TournamentPairing pairing = tourney.getNextPairing();
+                List<RegisteredPlayer> regPlayers = AbstractTournament.registerTournamentPlayers(pairing, deckGroup);
+
+                StringBuilder sb = new StringBuilder();
+                sb.append("Round ").append(tourney.getActiveRound()).append(" - ");
+                sb.append(pairing.outputHeader());
+                System.out.println(sb.toString());
+
+                if (!pairing.isBye()) {
+                    final int matchId = ++traceMatchId;
+                    Match mc = new Match(rules, regPlayers, "TourneyMatch");
+
+                    int exceptions = 0;
+                    int iGame = 0;
+                    while (!mc.isMatchOver()) {
+                        // play games until the match ends
+                        try {
+                            simulateSingleMatch(mc, iGame, outputGamelog, traceRun,
+                                    matchId, tourney.getActiveRound());
+                            iGame++;
+                        } catch (SimulationTraceRun.TraceFailure e) {
+                            throw e;
+                        } catch (Exception e) {
+                            exceptions++;
+                            System.out.println(e.toString());
+                            if (exceptions > 5) {
+                                System.out.println("Exceeded number of exceptions thrown. Abandoning match...");
+                                break;
+                            } else {
+                                System.out.println("Game threw exception. Abandoning game and continuing...");
+                            }
+                        }
+
+                    }
+                    LobbyPlayer winner = mc.getWinner().getPlayer();
+                    for (TournamentPlayer tp : pairing.getPairedPlayers()) {
+                        if (winner.equals(tp.getPlayer())) {
+                            pairing.setWinner(tp);
+                            lastWinner = winner.getName();
+                            System.out.println(TextUtil.concatNoSpace("Match Winner - ", lastWinner, "!"));
+                            System.out.println();
                             break;
-                        } else {
-                            System.out.println("Game threw exception. Abandoning game and continuing...");
                         }
                     }
-
                 }
-                LobbyPlayer winner = mc.getWinner().getPlayer();
-                for (TournamentPlayer tp : pairing.getPairedPlayers()) {
-                    if (winner.equals(tp.getPlayer())) {
-                        pairing.setWinner(tp);
-                        lastWinner = winner.getName();
-                        System.out.println(TextUtil.concatNoSpace("Match Winner - ", lastWinner, "!"));
-                        System.out.println();
-                        break;
-                    }
+
+                tourney.reportMatchCompletion(pairing);
+            }
+            tourney.outputTournamentResults();
+
+            if (traceRun != null) {
+                traceRun.finishNormal();
+            }
+        } catch (SimulationTraceRun.TraceFailure e) {
+            System.err.println(e.getMessage());
+            if (traceRun != null) {
+                try {
+                    traceRun.finishAborted();
+                } catch (SimulationTraceRun.TraceFailure ignored) {
+                    // The original trace failure is the useful diagnostic.
                 }
             }
-
-            tourney.reportMatchCompletion(pairing);
         }
-        tourney.outputTournamentResults();
     }
 
     public static Match simulateOffthreadGame(List<Deck> decks, GameType format, int games) {
