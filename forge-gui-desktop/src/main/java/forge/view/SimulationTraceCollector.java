@@ -74,6 +74,8 @@ final class SimulationTraceCollector {
                 stackResolved(e);
             } else if (event instanceof GameEventSpellRemovedFromStack e) {
                 stackRemoved(e);
+            } else if (event instanceof GameEventStackCountered e) {
+                stackCountered(e);
             } else if (event instanceof GameEventCardChangeZone e) {
                 zoneChange(e);
             } else if (event instanceof GameEventLandPlayed e) {
@@ -331,6 +333,15 @@ final class SimulationTraceCollector {
         write(record);
     }
 
+    private void stackCountered(final GameEventStackCountered event) throws IOException {
+        final Map<String, Object> record = scoped("STACK_COUNTERED", true);
+        record.put("stackId", event.stackId());
+        record.put("abilityId", event.counteredAbility().getId());
+        record.put("source", cardRef(event.counteredAbility().getHostCard()));
+        record.put("cause", causeRef(event.cause()));
+        write(record);
+    }
+
     private void zoneChange(final GameEventCardChangeZone event) throws IOException {
         final Map<String, Object> record = scoped("ZONE_CHANGE", true);
         record.put("card", cardRef(event.card()));
@@ -541,6 +552,13 @@ final class SimulationTraceCollector {
         final Map<String, Object> ref = new LinkedHashMap<>();
         ref.put("id", player.getId());
         ref.put("name", player.getName());
+        return ref;
+    }
+
+    private static Map<String, Object> causeRef(final forge.game.spellability.SpellAbilityView ability) {
+        final Map<String, Object> ref = new LinkedHashMap<>();
+        ref.put("abilityId", ability.getId());
+        ref.put("source", cardRef(ability.getHostCard()));
         return ref;
     }
 
