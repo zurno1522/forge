@@ -244,6 +244,7 @@ public class CostDiscard extends CostPartWithList {
             runParams.put(AbilityKey.Cause, ability);
             runParams.put(AbilityKey.DiscardedBefore, discardedBefore);
             payer.getGame().getTriggerHandler().runTrigger(TriggerType.DiscardedAll, runParams, false);
+            payer.getGame().fireEvent(new forge.game.event.GameEventCardsDiscarded(payer, cardList, ability));
         }
     }
 }
