@@ -21,6 +21,7 @@ import forge.game.zone.ZoneView;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -62,6 +63,12 @@ final class SimulationTraceCollector {
         try {
             if (event instanceof GameEventGameStarted e) {
                 gameStarted(e);
+            } else if (event instanceof GameEventAttackersDeclared e) {
+                attackersDeclared(e);
+            } else if (event instanceof GameEventBlockersDeclared e) {
+                blockersDeclared(e);
+            } else if (event instanceof GameEventManaPool e) {
+                manaPoolChanged(e);
             } else if (event instanceof GameEventTurnBegan e) {
                 turnBegan(e);
             } else if (event instanceof GameEventTurnPhase e) {
@@ -164,6 +171,70 @@ final class SimulationTraceCollector {
         write(record);
     }
 
+    private void attackersDeclared(final GameEventAttackersDeclared event) throws IOException {
+        final Map<String, Object> record = scoped("ATTACKERS_DECLARED", true);
+        record.put("player", playerRef(event.player()));
+
+        final List<Map<String, Object>> groups = new ArrayList<>();
+        for (final Map.Entry<GameEntityView, Collection<CardView>> entry : event.attackersMap().asMap().entrySet()) {
+            final Map<String, Object> group = new LinkedHashMap<>();
+            group.put("defender", entityRef(entry.getKey()));
+            final List<Map<String, Object>> attackers = new ArrayList<>();
+            for (final CardView attacker : entry.getValue()) {
+                attackers.add(cardRef(attacker));
+            }
+            group.put("attackers", attackers);
+            groups.add(group);
+        }
+        record.put("groups", groups);
+        write(record);
+    }
+
+    private void blockersDeclared(final GameEventBlockersDeclared event) throws IOException {
+        final Map<String, Object> record = scoped("BLOCKERS_DECLARED", true);
+        record.put("defendingPlayer", playerRef(event.defendingPlayer()));
+
+        final List<Map<String, Object>> attackedEntities = new ArrayList<>();
+        for (final Map.Entry<GameEntityView, com.google.common.collect.Multimap<CardView, CardView>> entry
+                : event.blockers().entrySet()) {
+            final Map<String, Object> attacked = new LinkedHashMap<>();
+            attacked.put("attackedEntity", entityRef(entry.getKey()));
+
+            final List<Map<String, Object>> blocks = new ArrayList<>();
+            for (final Map.Entry<CardView, Collection<CardView>> block
+                    : entry.getValue().asMap().entrySet()) {
+                final Map<String, Object> blockEntry = new LinkedHashMap<>();
+                blockEntry.put("attacker", cardRef(block.getKey()));
+                final List<Map<String, Object>> blockers = new ArrayList<>();
+                for (final CardView blocker : block.getValue()) {
+                    blockers.add(cardRef(blocker));
+                }
+                blockEntry.put("blockers", blockers);
+                blocks.add(blockEntry);
+            }
+            attacked.put("blocks", blocks);
+            attackedEntities.add(attacked);
+        }
+        record.put("attackedEntities", attackedEntities);
+        write(record);
+    }
+
+    private void manaPoolChanged(final GameEventManaPool event) throws IOException {
+        final Map<String, Object> record = scoped("MANA_POOL_CHANGED", true);
+        record.put("player", playerRef(event.player()));
+        record.put("change", event.mode().name());
+
+        final Player player = findPlayer(event.player().getId());
+        final List<Map<String, Object>> mana = new ArrayList<>();
+        if (player != null) {
+            for (final Mana floating : player.getManaPool()) {
+                mana.add(manaRef(floating, null));
+            }
+        }
+        record.put("mana", mana);
+        write(record);
+    }
+
     private void turnBegan(final GameEventTurnBegan event) throws IOException {
         final Map<String, Object> record = scoped("TURN_BEGAN", false);
         record.put("turn", event.turnNumber());
@@ -254,20 +325,7 @@ final class SimulationTraceCollector {
         if (!sa.isCopied() && !sa.getPayingMana().isEmpty()) {
             final List<Map<String, Object>> manaSpent = new ArrayList<>();
             for (final Mana mana : sa.getPayingMana()) {
-                final Map<String, Object> payment = new LinkedHashMap<>();
-                payment.put("payer", playerRef(mana.getPlayer().getView()));
-                payment.put("color", mana.toString());
-                payment.put("source", cardRef(mana.getSourceCard().getView()));
-                payment.put("snow", mana.isSnow());
-                payment.put("manaRestriction", mana.getManaAbility() == null ? "" : mana.getManaAbility().getManaRestrictions());
-                payment.put("extraManaRestriction", mana.getManaAbility() == null ? "" : mana.getManaAbility().getExtraManaRestriction());
-                payment.put("persistent", mana.isPersistentMana());
-                payment.put("combatOnly", mana.isCombatMana());
-                payment.put("cannotCounterPaidSpell", mana.addsNoCounterMagic(sa));
-                payment.put("addsCounters", mana.addsCounters(sa));
-                payment.put("addsKeywords", mana.addsKeywords(sa));
-                payment.put("triggersWhenSpent", mana.triggersWhenSpent());
-                manaSpent.add(payment);
+                manaSpent.add(manaRef(mana, sa));
             }
             record.put("manaSpent", manaSpent);
         }
@@ -559,6 +617,37 @@ final class SimulationTraceCollector {
         final Map<String, Object> ref = new LinkedHashMap<>();
         ref.put("abilityId", ability.getId());
         ref.put("source", cardRef(ability.getHostCard()));
+        return ref;
+    }
+
+    private static Map<String, Object> manaRef(final Mana mana, final SpellAbility paidAbility) {
+        final Map<String, Object> ref = new LinkedHashMap<>();
+        ref.put("payer", playerRef(mana.getPlayer().getView()));
+        ref.put("color", mana.toString());
+        ref.put("source", cardRef(mana.getSourceCard().getView()));
+        ref.put("snow", mana.isSnow());
+
+        if (mana.getManaAbility() == null) {
+            ref.put("manaRestriction", "");
+            ref.put("extraManaRestriction", "");
+            ref.put("persistent", false);
+            ref.put("combatOnly", false);
+            ref.put("cannotCounterPaidSpell", false);
+            ref.put("addsCounters", false);
+            ref.put("addsKeywords", false);
+            ref.put("triggersWhenSpent", false);
+        } else {
+            ref.put("manaRestriction", mana.getManaAbility().getManaRestrictions());
+            ref.put("extraManaRestriction", mana.getManaAbility().getExtraManaRestriction());
+            ref.put("persistent", mana.isPersistentMana());
+            ref.put("combatOnly", mana.isCombatMana());
+            ref.put("cannotCounterPaidSpell", paidAbility == null
+                    ? mana.getManaAbility().isCannotCounterPaidWith()
+                    : mana.addsNoCounterMagic(paidAbility));
+            ref.put("addsCounters", mana.addsCounters(paidAbility));
+            ref.put("addsKeywords", mana.addsKeywords(paidAbility));
+            ref.put("triggersWhenSpent", mana.triggersWhenSpent());
+        }
         return ref;
     }
 
