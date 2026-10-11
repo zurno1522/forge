@@ -103,6 +103,10 @@ final class SimulationTraceCollector {
                 cardTapped(e);
             } else if (event instanceof GameEventPlayerLivesChanged e) {
                 livesChanged(e);
+            } else if (event instanceof GameEventLifePaid e) {
+                lifePaid(e);
+            } else if (event instanceof GameEventPlayerLost e) {
+                playerLost(e);
             } else if (event instanceof GameEventCardCounters e) {
                 cardCounters(e);
             } else if (event instanceof GameEventPlayerCounters e) {
@@ -499,6 +503,26 @@ final class SimulationTraceCollector {
         record.put("amount", Math.abs(event.newLives() - event.oldLives()));
         record.put("oldLife", event.oldLives());
         record.put("newLife", event.newLives());
+        write(record);
+    }
+
+    private void lifePaid(final GameEventLifePaid event) throws IOException {
+        final Map<String, Object> record = scoped("LIFE_PAID", true);
+        record.put("player", playerRef(event.player()));
+        record.put("amount", event.amount());
+        record.put("cause", causeRef(event.cause()));
+        write(record);
+    }
+
+    private void playerLost(final GameEventPlayerLost event) throws IOException {
+        final Map<String, Object> record = scoped("PLAYER_LOST", true);
+        record.put("player", playerRef(event.player()));
+        if (event.lossReason() != null) {
+            record.put("lossReason", event.lossReason().name());
+        }
+        if (event.lossSource() != null && !event.lossSource().isEmpty()) {
+            record.put("lossSource", event.lossSource());
+        }
         write(record);
     }
 
