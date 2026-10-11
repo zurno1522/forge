@@ -8,6 +8,7 @@ public interface IGameEventVisitor<T> {
     T visit(GameEventCardDestroyed event);
     T visit(GameEventCardAttachment event);
     T visit(GameEventCardChangeZone event);
+    T visit(GameEventCardsDrawn event);
     T visit(GameEventCardModeChosen event);
     T visit(GameEventCardRegenerated event);
     T visit(GameEventCardSacrificed event);
@@ -40,6 +41,7 @@ public interface IGameEventVisitor<T> {
     T visit(GameEventRollDie event);
     T visit(GameEventScry event);
     T visit(GameEventShuffle event);
+    T visit(GameEventStartingHandFinalized event);
     T visit(GameEventSpeedChanged event);
     T visit(GameEventSpellAbilityCast event);
     T visit(GameEventSpellResolved event);
@@ -69,6 +71,7 @@ public interface IGameEventVisitor<T> {
         public T visit(GameEventCardDestroyed event) { return null; }
         public T visit(GameEventCardAttachment event) { return null; }
         public T visit(GameEventCardChangeZone event) { return null; }
+        public T visit(GameEventCardsDrawn event) { return null; }
         public T visit(GameEventCardModeChosen event) { return null; }
         public T visit(GameEventCardRegenerated event) { return null; }
         public T visit(GameEventCardSacrificed event) { return null; }
@@ -100,6 +103,7 @@ public interface IGameEventVisitor<T> {
         public T visit(GameEventRollDie event) { return null; }
         public T visit(GameEventScry event) { return null; }
         public T visit(GameEventShuffle event) { return null; }
+        public T visit(GameEventStartingHandFinalized event) { return null; }
         public T visit(GameEventSpeedChanged event) { return null; }
         public T visit(GameEventSpellResolved event) { return null; }
         public T visit(GameEventSpellAbilityCast event) { return null; }
