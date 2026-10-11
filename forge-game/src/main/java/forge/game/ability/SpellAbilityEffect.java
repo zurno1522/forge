@@ -941,6 +941,7 @@ public abstract class SpellAbilityEffect {
                     runParams.put(AbilityKey.Random, params.get(AbilityKey.Random));
                 }
                 e.getKey().getGame().getTriggerHandler().runTrigger(TriggerType.DiscardedAll, runParams, false);
+                e.getKey().getGame().fireEvent(new forge.game.event.GameEventCardsDiscarded(e.getKey(), e.getValue(), sa));
             }
         }
     }
