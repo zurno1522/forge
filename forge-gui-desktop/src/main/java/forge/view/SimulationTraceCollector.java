@@ -85,6 +85,10 @@ final class SimulationTraceCollector {
                 stackCountered(e);
             } else if (event instanceof GameEventCardChangeZone e) {
                 zoneChange(e);
+            } else if (event instanceof GameEventCardsDiscarded e) {
+                cardsDiscarded(e);
+            } else if (event instanceof GameEventCardsSacrificed e) {
+                cardsSacrificed(e);
             } else if (event instanceof GameEventLandPlayed e) {
                 landPlayed(e);
             } else if (event instanceof GameEventMulligan e) {
@@ -417,6 +421,34 @@ final class SimulationTraceCollector {
                 battlefieldState.put("tapped", event.card().isTapped());
                 record.put("battlefieldState", battlefieldState);
             }
+        }
+        write(record);
+    }
+
+    private void cardsDiscarded(final GameEventCardsDiscarded event) throws IOException {
+        final Map<String, Object> record = scoped("CARDS_DISCARDED", true);
+        record.put("player", playerRef(event.player()));
+        final List<Map<String, Object>> cards = new ArrayList<>();
+        for (final CardView card : event.cards()) {
+            cards.add(cardRef(card));
+        }
+        record.put("cards", cards);
+        if (event.cause() != null) {
+            record.put("cause", causeRef(event.cause()));
+        }
+        write(record);
+    }
+
+    private void cardsSacrificed(final GameEventCardsSacrificed event) throws IOException {
+        final Map<String, Object> record = scoped("CARDS_SACRIFICED", true);
+        record.put("player", playerRef(event.player()));
+        final List<Map<String, Object>> cards = new ArrayList<>();
+        for (final CardView card : event.cards()) {
+            cards.add(cardRef(card));
+        }
+        record.put("cards", cards);
+        if (event.cause() != null) {
+            record.put("cause", causeRef(event.cause()));
         }
         write(record);
     }
