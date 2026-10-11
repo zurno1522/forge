@@ -8,6 +8,8 @@ public interface IGameEventVisitor<T> {
     T visit(GameEventCardDestroyed event);
     T visit(GameEventCardAttachment event);
     T visit(GameEventCardChangeZone event);
+    T visit(GameEventCardsDiscarded event);
+    T visit(GameEventCardsSacrificed event);
     T visit(GameEventCardsDrawn event);
     T visit(GameEventCardModeChosen event);
     T visit(GameEventCardRegenerated event);
@@ -74,6 +76,8 @@ public interface IGameEventVisitor<T> {
         public T visit(GameEventCardDestroyed event) { return null; }
         public T visit(GameEventCardAttachment event) { return null; }
         public T visit(GameEventCardChangeZone event) { return null; }
+        public T visit(GameEventCardsDiscarded event) { return null; }
+        public T visit(GameEventCardsSacrificed event) { return null; }
         public T visit(GameEventCardsDrawn event) { return null; }
         public T visit(GameEventCardModeChosen event) { return null; }
         public T visit(GameEventCardRegenerated event) { return null; }
