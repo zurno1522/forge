@@ -1,0 +1,512 @@
+package forge.view;
+
+import com.google.common.eventbus.Subscribe;
+import forge.game.Game;
+import forge.game.GameEntityView;
+import forge.game.card.Card;
+import forge.game.card.CardView;
+import forge.game.event.*;
+import forge.game.mana.Mana;
+import forge.game.player.Player;
+import forge.game.player.PlayerView;
+import forge.game.player.RegisteredPlayer;
+import forge.game.spellability.AbilitySub;
+import forge.game.spellability.OptionalCost;
+import forge.game.spellability.SpellAbility;
+import forge.game.spellability.SpellAbilityStackInstance;
+import forge.game.spellability.StackItemView;
+import forge.game.zone.Zone;
+import forge.game.zone.ZoneType;
+import forge.game.zone.ZoneView;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Read-only translator from Forge game events to the structured simulation trace.
+ */
+final class SimulationTraceCollector {
+    private final Game game;
+    private final SimulationTraceWriter writer;
+    private final int gameNumber;
+    private final Map<RegisteredPlayer, Integer> participantIds;
+    private final Map<Integer, Integer> abilityToStack = new HashMap<>();
+    private final Map<Integer, Integer> mulligansByPlayer = new HashMap<>();
+    private int eventIndex = 0;
+    private IOException failure;
+
+    SimulationTraceCollector(final Game game, final SimulationTraceWriter writer, final int gameNumber,
+            final Map<RegisteredPlayer, Integer> participantIds) {
+        this.game = game;
+        this.writer = writer;
+        this.gameNumber = gameNumber;
+        this.participantIds = participantIds;
+    }
+
+    @Subscribe
+    public void onGameEvent(final GameEvent event) {
+        if (failure != null) {
+            return;
+        }
+        try {
+            if (event instanceof GameEventGameStarted e) {
+                gameStarted(e);
+            } else if (event instanceof GameEventTurnBegan e) {
+                turnBegan(e);
+            } else if (event instanceof GameEventTurnPhase e) {
+                phaseChanged(e);
+            } else if (event instanceof GameEventTurnEnded) {
+                turnEnded();
+            } else if (event instanceof GameEventSpellAbilityCast e) {
+                stackAdded(e);
+            } else if (event instanceof GameEventSpellResolved e) {
+                stackResolved(e);
+            } else if (event instanceof GameEventSpellRemovedFromStack e) {
+                stackRemoved(e);
+            } else if (event instanceof GameEventCardChangeZone e) {
+                zoneChange(e);
+            } else if (event instanceof GameEventLandPlayed e) {
+                landPlayed(e);
+            } else if (event instanceof GameEventMulligan e) {
+                mulligan(e);
+            } else if (event instanceof GameEventScry e) {
+                scry(e);
+            } else if (event instanceof GameEventSurveil e) {
+                surveil(e);
+            } else if (event instanceof GameEventShuffle e) {
+                shuffle(e);
+            } else if (event instanceof GameEventCardTapped e) {
+                cardTapped(e);
+            } else if (event instanceof GameEventPlayerLivesChanged e) {
+                livesChanged(e);
+            } else if (event instanceof GameEventCardCounters e) {
+                cardCounters(e);
+            } else if (event instanceof GameEventPlayerCounters e) {
+                playerCounters(e);
+            } else if (event instanceof GameEventPlayerDamaged e) {
+                playerDamaged(e);
+            } else if (event instanceof GameEventCardAttachment e) {
+                attachmentChanged(e);
+            } else if (event instanceof GameEventGameOutcome) {
+                gameOutcome();
+            } else if (event instanceof GameEventGameFinished) {
+                write(scoped("GAME_FINISHED", true));
+            }
+        } catch (IOException e) {
+            failure = e;
+        }
+    }
+
+    void checkHealthy() throws IOException {
+        if (failure != null) {
+            throw failure;
+        }
+    }
+
+    int nextEventIndex() {
+        return eventIndex + 1;
+    }
+
+    private void gameStarted(final GameEventGameStarted event) throws IOException {
+        final Map<String, Object> record = scoped("GAME_STARTED", false);
+        record.put("gameType", event.gameType().name());
+        record.put("firstPlayer", playerRef(event.firstTurn()));
+
+        final List<Map<String, Object>> players = new ArrayList<>();
+        for (final Player player : game.getPlayers()) {
+            final Map<String, Object> entry = new LinkedHashMap<>();
+            final Integer participantId = participantIds.get(player.getRegisteredPlayer());
+            if (participantId != null) {
+                entry.put("participantId", participantId);
+            }
+            entry.put("player", playerRef(player.getView()));
+            players.add(entry);
+        }
+        record.put("players", players);
+        write(record);
+    }
+
+    private void turnBegan(final GameEventTurnBegan event) throws IOException {
+        final Map<String, Object> record = scoped("TURN_BEGAN", false);
+        record.put("turn", event.turnNumber());
+        record.put("player", playerRef(event.turnOwner()));
+        write(record);
+    }
+
+    private void phaseChanged(final GameEventTurnPhase event) throws IOException {
+        final Map<String, Object> record = scoped("PHASE_CHANGED", false);
+        if (game.getPhaseHandler().getTurn() > 0) {
+            record.put("turn", game.getPhaseHandler().getTurn());
+        }
+        record.put("phase", event.phase().name());
+        record.put("player", playerRef(event.playerTurn()));
+        write(record);
+    }
+
+    private void turnEnded() throws IOException {
+        final Map<String, Object> record = scoped("TURN_ENDED", false);
+        if (game.getPhaseHandler().getTurn() > 0) {
+            record.put("turn", game.getPhaseHandler().getTurn());
+        }
+        write(record);
+    }
+
+    private void stackAdded(final GameEventSpellAbilityCast event) throws IOException {
+        final StackItemView item = event.si();
+        final Map<String, Object> record = scoped("STACK_ADDED", true);
+        record.put("stackId", item.getId());
+        record.put("abilityId", event.sa().getId());
+        record.put("kind", event.sa().isSpell() ? "SPELL" : item.isTrigger() ? "TRIGGERED_ABILITY" : "ACTIVATED_ABILITY");
+        record.put("copied", false);
+        record.put("player", playerRef(item.getActivatingPlayer()));
+        record.put("source", cardRef(item.getSourceCard()));
+
+        final List<Map<String, Object>> targets = new ArrayList<>();
+        if (item.getTargetCards() != null) {
+            for (final CardView target : item.getTargetCards()) {
+                final Map<String, Object> ref = new LinkedHashMap<>();
+                ref.put("type", "CARD");
+                ref.put("card", cardRef(target));
+                targets.add(ref);
+            }
+        }
+        if (item.getTargetPlayers() != null) {
+            for (final PlayerView target : item.getTargetPlayers()) {
+                final Map<String, Object> ref = new LinkedHashMap<>();
+                ref.put("type", "PLAYER");
+                ref.put("player", playerRef(target));
+                targets.add(ref);
+            }
+        }
+        if (!targets.isEmpty()) {
+            record.put("targets", targets);
+        }
+        if (event.targetDescription() != null && !event.targetDescription().isEmpty()) {
+            record.put("targetDescription", event.targetDescription());
+        }
+
+        final SpellAbilityStackInstance live = findStackItem(item.getId());
+        if (live != null) {
+            final SpellAbility sa = live.getSpellAbility();
+            record.put("copied", sa.isCopied());
+            abilityToStack.put(sa.getId(), item.getId());
+            addCastDetails(record, sa);
+        } else {
+            abilityToStack.put(event.sa().getId(), item.getId());
+        }
+        write(record);
+    }
+
+    private void addCastDetails(final Map<String, Object> record, final SpellAbility sa) {
+        final Card host = sa.getHostCard();
+
+        if (sa.isSpell() && !sa.isCopied() && host != null && host.getCastFrom() != null) {
+            record.put("castFrom", zoneRef(host.getCastFrom()));
+        }
+
+        if (sa.isCopied()) {
+            if (sa.isAbility() && sa.getOriginalAbility() != null) {
+                record.put("copiedFromAbilityId", sa.getOriginalAbility().getId());
+            }
+            if (sa.isSpell() && host != null && host.getCopiedPermanent() != null) {
+                record.put("copiedFromSource", cardRef(host.getCopiedPermanent().getView()));
+            }
+        }
+
+        if (!sa.isCopied() && !sa.getPayingMana().isEmpty()) {
+            final List<Map<String, Object>> manaSpent = new ArrayList<>();
+            for (final Mana mana : sa.getPayingMana()) {
+                final Map<String, Object> payment = new LinkedHashMap<>();
+                payment.put("payer", playerRef(mana.getPlayer().getView()));
+                payment.put("color", mana.toString());
+                payment.put("source", cardRef(mana.getSourceCard().getView()));
+                payment.put("snow", mana.isSnow());
+                payment.put("manaRestriction", mana.getManaAbility() == null ? "" : mana.getManaAbility().getManaRestrictions());
+                payment.put("extraManaRestriction", mana.getManaAbility() == null ? "" : mana.getManaAbility().getExtraManaRestriction());
+                payment.put("persistent", mana.isPersistentMana());
+                payment.put("combatOnly", mana.isCombatMana());
+                payment.put("cannotCounterPaidSpell", mana.addsNoCounterMagic(sa));
+                payment.put("addsCounters", mana.addsCounters(sa));
+                payment.put("addsKeywords", mana.addsKeywords(sa));
+                payment.put("triggersWhenSpent", mana.triggersWhenSpent());
+                manaSpent.add(payment);
+            }
+            record.put("manaSpent", manaSpent);
+        }
+
+        final Map<String, Object> choices = new LinkedHashMap<>();
+        if (sa.getXManaCostPaid() != null) {
+            choices.put("x", sa.getXManaCostPaid());
+        }
+        if (sa.getChosenList() != null && !sa.getChosenList().isEmpty()) {
+            final List<Map<String, Object>> modes = new ArrayList<>();
+            for (final AbilitySub mode : sa.getChosenList()) {
+                final Map<String, Object> modeRef = new LinkedHashMap<>();
+                modeRef.put("abilityId", mode.getId());
+                modeRef.put("description", mode.getDescription());
+                modes.add(modeRef);
+            }
+            choices.put("modes", modes);
+        }
+        final List<Map<String, Object>> optionalCosts = new ArrayList<>();
+        for (final OptionalCost cost : sa.getOptionalCosts()) {
+            final Map<String, Object> costRef = new LinkedHashMap<>();
+            costRef.put("type", cost.name());
+            costRef.put("name", cost.getName());
+            optionalCosts.add(costRef);
+        }
+        if (!optionalCosts.isEmpty()) {
+            choices.put("optionalCosts", optionalCosts);
+        }
+        if (sa.getAlternativeCost() != null) {
+            choices.put("alternativeCost", sa.getAlternativeCost().name());
+        }
+        if (sa.hasParam("WithoutManaCost")) {
+            choices.put("withoutManaCost", true);
+        }
+        if (!choices.isEmpty()) {
+            record.put("choices", choices);
+        }
+    }
+
+    private void stackResolved(final GameEventSpellResolved event) throws IOException {
+        final Map<String, Object> record = scoped("STACK_RESOLVED", true);
+        record.put("abilityId", event.spell().getId());
+        final Integer stackId = abilityToStack.get(event.spell().getId());
+        if (stackId != null) {
+            record.put("stackId", stackId);
+        }
+        record.put("source", cardRef(event.spell().getHostCard()));
+        record.put("fizzled", event.hasFizzled());
+        if (event.stackDescription() != null && !event.stackDescription().isEmpty()) {
+            record.put("description", event.stackDescription());
+        }
+        write(record);
+    }
+
+    private void stackRemoved(final GameEventSpellRemovedFromStack event) throws IOException {
+        final Map<String, Object> record = scoped("STACK_REMOVED", true);
+        record.put("abilityId", event.sa().getId());
+        final Integer stackId = abilityToStack.remove(event.sa().getId());
+        if (stackId != null) {
+            record.put("stackId", stackId);
+        }
+        record.put("source", cardRef(event.sa().getHostCard()));
+        write(record);
+    }
+
+    private void zoneChange(final GameEventCardChangeZone event) throws IOException {
+        final Map<String, Object> record = scoped("ZONE_CHANGE", true);
+        record.put("card", cardRef(event.card()));
+        if (event.from() != null) {
+            record.put("from", zoneRef(event.from()));
+        }
+        if (event.to() != null) {
+            record.put("to", zoneRef(event.to()));
+            if (event.to().zoneType() == ZoneType.Battlefield) {
+                final Map<String, Object> battlefieldState = new LinkedHashMap<>();
+                battlefieldState.put("tapped", event.card().isTapped());
+                record.put("battlefieldState", battlefieldState);
+            }
+        }
+        write(record);
+    }
+
+    private void landPlayed(final GameEventLandPlayed event) throws IOException {
+        final Map<String, Object> record = scoped("LAND_PLAYED", true);
+        record.put("player", playerRef(event.player()));
+        record.put("land", cardRef(event.land()));
+        write(record);
+    }
+
+    private void mulligan(final GameEventMulligan event) throws IOException {
+        final int count = mulligansByPlayer.merge(event.player().getId(), 1, Integer::sum);
+        final Map<String, Object> record = scoped("MULLIGAN", false);
+        record.put("player", playerRef(event.player()));
+        record.put("mulligans", count);
+        write(record);
+    }
+
+    private void scry(final GameEventScry event) throws IOException {
+        final Map<String, Object> record = scoped("SCRY", true);
+        record.put("player", playerRef(event.player()));
+        record.put("toTop", event.toTop());
+        record.put("toBottom", event.toBottom());
+        write(record);
+    }
+
+    private void surveil(final GameEventSurveil event) throws IOException {
+        final Map<String, Object> record = scoped("SURVEIL", true);
+        record.put("player", playerRef(event.player()));
+        record.put("toLibrary", event.toLibrary());
+        record.put("toGraveyard", event.toGraveyard());
+        write(record);
+    }
+
+    private void shuffle(final GameEventShuffle event) throws IOException {
+        final Map<String, Object> record = scoped("SHUFFLE", true);
+        record.put("player", playerRef(event.player()));
+        write(record);
+    }
+
+    private void cardTapped(final GameEventCardTapped event) throws IOException {
+        final Map<String, Object> record = scoped("CARD_TAPPED", true);
+        record.put("card", cardRef(event.card()));
+        record.put("tapped", event.tapped());
+        write(record);
+    }
+
+    private void livesChanged(final GameEventPlayerLivesChanged event) throws IOException {
+        if (event.oldLives() == event.newLives()) {
+            return;
+        }
+        final boolean gained = event.newLives() > event.oldLives();
+        final Map<String, Object> record = scoped(gained ? "LIFE_GAINED" : "LIFE_LOST", true);
+        record.put("player", playerRef(event.player()));
+        record.put("amount", Math.abs(event.newLives() - event.oldLives()));
+        record.put("oldLife", event.oldLives());
+        record.put("newLife", event.newLives());
+        write(record);
+    }
+
+    private void cardCounters(final GameEventCardCounters event) throws IOException {
+        final Map<String, Object> record = scoped("CARD_COUNTERS_CHANGED", true);
+        record.put("card", cardRef(event.card()));
+        record.put("counterType", event.type().toString());
+        record.put("oldValue", event.oldValue());
+        record.put("newValue", event.newValue());
+        write(record);
+    }
+
+    private void playerCounters(final GameEventPlayerCounters event) throws IOException {
+        final Map<String, Object> record = scoped("PLAYER_COUNTERS_CHANGED", true);
+        record.put("player", playerRef(event.receiver()));
+        record.put("counterType", event.type().toString());
+        record.put("oldValue", event.oldValue());
+        record.put("newValue", event.oldValue() + event.amount());
+        write(record);
+    }
+
+    private void playerDamaged(final GameEventPlayerDamaged event) throws IOException {
+        final Map<String, Object> record = scoped("PLAYER_DAMAGED", true);
+        record.put("player", playerRef(event.target()));
+        record.put("source", cardRef(event.source()));
+        record.put("amount", event.amount());
+        record.put("combat", event.combat());
+        record.put("infect", event.infect());
+        write(record);
+    }
+
+    private void attachmentChanged(final GameEventCardAttachment event) throws IOException {
+        final Map<String, Object> record = scoped("ATTACHMENT_CHANGED", true);
+        record.put("attachment", cardRef(event.equipment()));
+        if (event.oldEntity() != null) {
+            record.put("from", entityRef(event.oldEntity()));
+        }
+        if (event.newTarget() != null) {
+            record.put("to", entityRef(event.newTarget()));
+        }
+        write(record);
+    }
+
+    private void gameOutcome() throws IOException {
+        if (game.getOutcome() == null) {
+            return;
+        }
+        final Map<String, Object> record = scoped("GAME_OUTCOME", false);
+        record.put("endReason", game.getOutcome().getWinCondition().name());
+        record.put("draw", game.getOutcome().isDraw());
+        record.put("lastTurnNumber", game.getOutcome().getLastTurnNumber());
+
+        final List<Map<String, Object>> winners = new ArrayList<>();
+        for (final Player player : game.getPlayers()) {
+            if (player.getOutcome() != null && player.getOutcome().hasWon()) {
+                final Map<String, Object> winner = new LinkedHashMap<>();
+                final Integer participantId = participantIds.get(player.getRegisteredPlayer());
+                if (participantId != null) {
+                    winner.put("participantId", participantId);
+                }
+                winner.put("player", playerRef(player.getView()));
+                winners.add(winner);
+            }
+        }
+        record.put("winners", winners);
+        write(record);
+    }
+
+    private SpellAbilityStackInstance findStackItem(final int stackId) {
+        for (final SpellAbilityStackInstance item : game.getStack()) {
+            if (item.getId() == stackId) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    private Map<String, Object> scoped(final String type, final boolean includeContext) {
+        final Map<String, Object> record = new LinkedHashMap<>();
+        record.put("type", type);
+        record.put("game", gameNumber);
+        record.put("eventIndex", ++eventIndex);
+        if (includeContext && game.getPhaseHandler().getTurn() > 0 && game.getPhaseHandler().getPlayerTurn() != null) {
+            record.put("turn", game.getPhaseHandler().getTurn());
+            if (game.getPhaseHandler().getPhase() != null) {
+                record.put("phase", game.getPhaseHandler().getPhase().name());
+            }
+        }
+        return record;
+    }
+
+    private void write(final Map<String, Object> record) throws IOException {
+        writer.write(record);
+    }
+
+    private static Map<String, Object> playerRef(final PlayerView player) {
+        final Map<String, Object> ref = new LinkedHashMap<>();
+        ref.put("id", player.getId());
+        ref.put("name", player.getName());
+        return ref;
+    }
+
+    private static Map<String, Object> cardRef(final CardView card) {
+        final Map<String, Object> ref = new LinkedHashMap<>();
+        ref.put("id", card.getId());
+        ref.put("name", card.getName());
+        ref.put("gamePieceType", card.getGamePieceType().name());
+        return ref;
+    }
+
+    private static Map<String, Object> zoneRef(final ZoneView zone) {
+        final Map<String, Object> ref = new LinkedHashMap<>();
+        ref.put("zone", zone.zoneType().name());
+        ref.put("player", playerRef(zone.player()));
+        return ref;
+    }
+
+    private static Map<String, Object> zoneRef(final Zone zone) {
+        final Map<String, Object> ref = new LinkedHashMap<>();
+        ref.put("zone", zone.getZoneType().name());
+        ref.put("player", playerRef(zone.getPlayer().getView()));
+        return ref;
+    }
+
+    private static Map<String, Object> entityRef(final GameEntityView entity) {
+        final Map<String, Object> ref = new LinkedHashMap<>();
+        if (entity instanceof CardView card) {
+            ref.put("type", "CARD");
+            ref.put("card", cardRef(card));
+        } else if (entity instanceof PlayerView player) {
+            ref.put("type", "PLAYER");
+            ref.put("player", playerRef(player));
+        } else {
+            ref.put("type", "ENTITY");
+            ref.put("id", entity.getId());
+            ref.put("name", entity.getName());
+        }
+        return ref;
+    }
+}
