@@ -1,6 +1,7 @@
 package forge.view;
 
 import com.google.common.eventbus.Subscribe;
+import forge.LobbyPlayer;
 import forge.game.Game;
 import forge.game.GameEntityView;
 import forge.game.card.Card;
@@ -9,7 +10,6 @@ import forge.game.event.*;
 import forge.game.mana.Mana;
 import forge.game.player.Player;
 import forge.game.player.PlayerView;
-import forge.game.player.RegisteredPlayer;
 import forge.game.spellability.AbilitySub;
 import forge.game.spellability.OptionalCost;
 import forge.game.spellability.SpellAbility;
@@ -33,14 +33,14 @@ final class SimulationTraceCollector {
     private final Game game;
     private final SimulationTraceWriter writer;
     private final int gameNumber;
-    private final Map<RegisteredPlayer, Integer> participantIds;
+    private final Map<LobbyPlayer, Integer> participantIds;
     private final Map<Integer, Integer> abilityToStack = new HashMap<>();
     private final Map<Integer, Integer> mulligansByPlayer = new HashMap<>();
     private int eventIndex = 0;
     private IOException failure;
 
     SimulationTraceCollector(final Game game, final SimulationTraceWriter writer, final int gameNumber,
-            final Map<RegisteredPlayer, Integer> participantIds) {
+            final Map<LobbyPlayer, Integer> participantIds) {
         this.game = game;
         this.writer = writer;
         this.gameNumber = gameNumber;
@@ -133,7 +133,7 @@ final class SimulationTraceCollector {
         final List<Map<String, Object>> players = new ArrayList<>();
         for (final Player player : game.getPlayers()) {
             final Map<String, Object> entry = new LinkedHashMap<>();
-            final Integer participantId = participantIds.get(player.getRegisteredPlayer());
+            final Integer participantId = participantIds.get(player.getRegisteredPlayer().getPlayer());
             if (participantId != null) {
                 entry.put("participantId", participantId);
             }
@@ -440,7 +440,7 @@ final class SimulationTraceCollector {
         for (final Player player : game.getPlayers()) {
             if (player.getOutcome() != null && player.getOutcome().hasWon()) {
                 final Map<String, Object> winner = new LinkedHashMap<>();
-                final Integer participantId = participantIds.get(player.getRegisteredPlayer());
+                final Integer participantId = participantIds.get(player.getRegisteredPlayer().getPlayer());
                 if (participantId != null) {
                     winner.put("participantId", participantId);
                 }
