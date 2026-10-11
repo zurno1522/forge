@@ -26,11 +26,13 @@ public interface IGameEventVisitor<T> {
     T visit(GameEventGameRestarted event);
     T visit(GameEventLandPlayed event);
     T visit(GameEventPlayerLivesChanged event);
+    T visit(GameEventLifePaid event);
     T visit(GameEventManaPool event);
     T visit(GameEventManaBurn event);
     T visit(GameEventMulligan event);
     T visit(GameEventPlayerControl event);
     T visit(GameEventPlayerDamaged event);
+    T visit(GameEventPlayerLost event);
     T visit(GameEventPlayerCounters event);
     T visit(GameEventPlayerPoisoned event);
     T visit(GameEventPlayerRadiation event);
@@ -90,6 +92,7 @@ public interface IGameEventVisitor<T> {
         public T visit(GameEventGameRestarted event) { return null; }
         public T visit(GameEventLandPlayed event) { return null; }
         public T visit(GameEventPlayerLivesChanged event) { return null; }
+        public T visit(GameEventLifePaid event) { return null; }
         public T visit(GameEventManaPool event) { return null; }
         public T visit(GameEventManaBurn event) { return null; }
         public T visit(GameEventMulligan event) { return null; }
@@ -119,6 +122,7 @@ public interface IGameEventVisitor<T> {
         public T visit(GameEventTurnEnded event) { return null; }
         public T visit(GameEventTurnPhase event) { return null; }
         public T visit(GameEventPlayerDamaged event) { return null; }
+        public T visit(GameEventPlayerLost event) { return null; }
         public T visit(GameEventZone event) { return null; }
         public T visit(GameEventCardForetold event) { return null; }
         public T visit(GameEventCardPlotted event) { return null; }
