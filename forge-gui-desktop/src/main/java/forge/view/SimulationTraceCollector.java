@@ -121,6 +121,8 @@ final class SimulationTraceCollector {
                 playerCounters(e);
             } else if (event instanceof GameEventPlayerDamaged e) {
                 playerDamaged(e);
+            } else if (event instanceof GameEventEntityDamaged e) {
+                entityDamaged(e);
             } else if (event instanceof GameEventCardAttachment e) {
                 attachmentChanged(e);
             } else if (event instanceof GameEventGameOutcome) {
@@ -606,6 +608,17 @@ final class SimulationTraceCollector {
         record.put("amount", event.amount());
         record.put("combat", event.combat());
         record.put("infect", event.infect());
+        write(record);
+    }
+
+    private void entityDamaged(final GameEventEntityDamaged event) throws IOException {
+        final Map<String, Object> record = scoped("ENTITY_DAMAGED", true);
+        record.put("target", cardRef(event.target()));
+        record.put("targetController", playerRef(event.target().getController()));
+        record.put("source", cardRef(event.source()));
+        record.put("sourceController", playerRef(event.source().getController()));
+        record.put("amount", event.amount());
+        record.put("combat", event.combat());
         write(record);
     }
 
