@@ -605,6 +605,7 @@ public class Player extends GameEntity implements Comparable<Player> {
             }
         }
 
+        game.fireEvent(new GameEventLifePaid(this, lifePayment, cause));
         return true;
     }
 
