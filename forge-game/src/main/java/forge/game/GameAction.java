@@ -2128,6 +2128,7 @@ public class GameAction {
             runParams.put(AbilityKey.Cards, new CardCollection(e.getValue()));
             runParams.put(AbilityKey.Cause, source);
             game.getTriggerHandler().runTrigger(TriggerType.SacrificedOnce, runParams, false);
+            game.fireEvent(new forge.game.event.GameEventCardsSacrificed(e.getKey(), e.getValue(), source));
         }
         return result;
     }
