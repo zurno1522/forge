@@ -466,6 +466,9 @@ final class SimulationTraceCollector {
     }
 
     private static Map<String, Object> playerRef(final PlayerView player) {
+        if (player == null) {
+            return null;
+        }
         final Map<String, Object> ref = new LinkedHashMap<>();
         ref.put("id", player.getId());
         ref.put("name", player.getName());
@@ -473,6 +476,9 @@ final class SimulationTraceCollector {
     }
 
     private static Map<String, Object> cardRef(final CardView card) {
+        if (card == null) {
+            return null;
+        }
         final Map<String, Object> ref = new LinkedHashMap<>();
         ref.put("id", card.getId());
         ref.put("name", card.getName());
@@ -490,7 +496,7 @@ final class SimulationTraceCollector {
     private static Map<String, Object> zoneRef(final Zone zone) {
         final Map<String, Object> ref = new LinkedHashMap<>();
         ref.put("zone", zone.getZoneType().name());
-        ref.put("player", playerRef(zone.getPlayer().getView()));
+        ref.put("player", zone.getPlayer() == null ? null : playerRef(zone.getPlayer().getView()));
         return ref;
     }
 
