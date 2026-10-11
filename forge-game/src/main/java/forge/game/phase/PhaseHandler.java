@@ -393,6 +393,7 @@ public class PhaseHandler implements java.io.Serializable, IHasForgeLog {
                             runParams.put(AbilityKey.Cause, null);
                             runParams.put(AbilityKey.DiscardedBefore, discardedBefore);
                             game.getTriggerHandler().runTrigger(TriggerType.DiscardedAll, runParams, false);
+                            game.fireEvent(new forge.game.event.GameEventCardsDiscarded(playerTurn, discarded, null));
                         }
                     }
 
