@@ -85,6 +85,10 @@ final class SimulationTraceCollector {
                 stackCountered(e);
             } else if (event instanceof GameEventCardChangeZone e) {
                 zoneChange(e);
+            } else if (event instanceof GameEventCardDestroyedObserved e) {
+                cardDestroyed(e);
+            } else if (event instanceof GameEventCardControllerChanged e) {
+                cardControllerChanged(e);
             } else if (event instanceof GameEventCardsDiscarded e) {
                 cardsDiscarded(e);
             } else if (event instanceof GameEventCardsSacrificed e) {
@@ -422,6 +426,25 @@ final class SimulationTraceCollector {
                 record.put("battlefieldState", battlefieldState);
             }
         }
+        write(record);
+    }
+
+    private void cardDestroyed(final GameEventCardDestroyedObserved event) throws IOException {
+        final Map<String, Object> record = scoped("CARD_DESTROYED", true);
+        record.put("card", cardRef(event.card()));
+        record.put("owner", playerRef(event.owner()));
+        record.put("controller", playerRef(event.controller()));
+        if (event.cause() != null) {
+            record.put("cause", causeRef(event.cause()));
+        }
+        write(record);
+    }
+
+    private void cardControllerChanged(final GameEventCardControllerChanged event) throws IOException {
+        final Map<String, Object> record = scoped("CARD_CONTROLLER_CHANGED", true);
+        record.put("card", cardRef(event.card()));
+        record.put("oldController", playerRef(event.oldController()));
+        record.put("newController", playerRef(event.newController()));
         write(record);
     }
 
