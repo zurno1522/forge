@@ -107,6 +107,20 @@ final class SimulationTraceCollector {
         }
     }
 
+    void executionFinished(final String status, final Throwable error) throws IOException {
+        checkHealthy();
+        final Map<String, Object> record = scoped("GAME_EXECUTION_FINISHED", false);
+        record.put("status", status);
+        if (error != null) {
+            final Map<String, Object> errorRef = new LinkedHashMap<>();
+            errorRef.put("type", error.getClass().getSimpleName());
+            errorRef.put("message", error.getMessage() == null ? "" : error.getMessage());
+            record.put("error", errorRef);
+        }
+        write(record);
+        writer.flush();
+    }
+
     int nextEventIndex() {
         return eventIndex + 1;
     }
