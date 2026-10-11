@@ -5,6 +5,7 @@ public interface IGameEventVisitor<T> {
     T visit(GameEventAttackersDeclared event);
     T visit(GameEventBlockersDeclared event);
     T visit(GameEventCardDamaged event);
+    T visit(GameEventEntityDamaged event);
     T visit(GameEventCardDestroyed event);
     T visit(GameEventCardDestroyedObserved event);
     T visit(GameEventCardControllerChanged event);
@@ -75,6 +76,7 @@ public interface IGameEventVisitor<T> {
         public T visit(GameEventAttackersDeclared event) { return null; }
         public T visit(GameEventBlockersDeclared event) { return null; }
         public T visit(GameEventCardDamaged event) { return null; }
+        public T visit(GameEventEntityDamaged event) { return null; }
         public T visit(GameEventCardDestroyed event) { return null; }
         public T visit(GameEventCardDestroyedObserved event) { return null; }
         public T visit(GameEventCardControllerChanged event) { return null; }
