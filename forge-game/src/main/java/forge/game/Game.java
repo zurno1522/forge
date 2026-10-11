@@ -1010,6 +1010,9 @@ public class Game {
         getTriggerHandler().runTrigger(TriggerType.LosesGame, runParams, false);
 
         getTriggerHandler().onPlayerLost(p);
+        if (p.getOutcome() != null) {
+            fireEvent(new GameEventPlayerLost(p, p.getOutcome().lossState, p.getOutcome().loseConditionSpell));
+        }
     }
 
     /**
