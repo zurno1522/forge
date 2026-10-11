@@ -83,6 +83,15 @@ public class SimulateMatch {
 
         boolean outputGamelog = !params.containsKey("q");
 
+        String traceFile = null;
+        if (params.containsKey("log-game")) {
+            if (params.get("log-game").size() != 1) {
+                System.err.println("-log-game requires exactly one output filename");
+                return;
+            }
+            traceFile = params.get("log-game").get(0);
+        }
+
         Long seed = null;
         if (params.containsKey("s")) {
             seed = Long.parseLong(params.get("s").get(0));
@@ -102,7 +111,7 @@ public class SimulateMatch {
         }
 
         if (params.containsKey("t")) {
-            simulateTournament(params, rules, outputGamelog);
+            simulateTournament(params, rules, outputGamelog, traceFile, seed);
             System.out.flush();
             return;
         }
@@ -169,24 +178,49 @@ public class SimulateMatch {
 
         Match mc = new Match(rules, pp, "Test");
 
-        if (matchSize != 0) {
-            int iGame = 0;
-            while (!mc.isMatchOver()) {
-                // play games until the match ends
-                simulateSingleMatch(mc, iGame, outputGamelog);
-                iGame++;
+        SimulationTraceRun traceRun = null;
+        try {
+            if (traceFile != null) {
+                traceRun = SimulationTraceRun.open(traceFile, rules, pp,
+                        matchSize != 0 ? "MATCH" : "GAMES",
+                        matchSize == 0 ? nGames : null,
+                        matchSize != 0 ? rules.getGamesPerMatch() : null,
+                        null, null, seed);
             }
-        } else {
-            for (int iGame = 0; iGame < nGames; iGame++) {
-                simulateSingleMatch(mc, iGame, outputGamelog);
+
+            if (matchSize != 0) {
+                int iGame = 0;
+                while (!mc.isMatchOver()) {
+                    // play games until the match ends
+                    simulateSingleMatch(mc, iGame, outputGamelog, traceRun);
+                    iGame++;
+                }
+            } else {
+                for (int iGame = 0; iGame < nGames; iGame++) {
+                    simulateSingleMatch(mc, iGame, outputGamelog, traceRun);
+                }
             }
+
+            if (traceRun != null) {
+                traceRun.finishNormal();
+            }
+        } catch (SimulationTraceRun.TraceFailure e) {
+            System.err.println(e.getMessage());
+            if (traceRun != null) {
+                try {
+                    traceRun.finishAborted();
+                } catch (SimulationTraceRun.TraceFailure ignored) {
+                    // The original trace failure is the useful diagnostic.
+                }
+            }
+            return;
         }
 
         System.out.flush();
     }
 
     private static void argumentHelp() {
-        System.out.println("Syntax: forge.exe sim -d <deck1[.dck]> ... <deckX[.dck]> -D [D] -n [N] -m [M] -t [T] -p [P] -f [F] -s [S] -a [A] -q");
+        System.out.println("Syntax: forge.exe sim -d <deck1[.dck]> ... <deckX[.dck]> -D [D] -n [N] -m [M] -t [T] -p [P] -f [F] -s [S] -a [A] -log-game [FILE] -q");
         System.out.println("\tsim - stands for simulation mode");
         System.out.println("\tdeck1 (or deck2,...,X) - constructed deck name or filename (has to be quoted when contains multiple words)");
         System.out.println("\tdeck is treated as file if it ends with a dot followed by three numbers or letters");
@@ -198,16 +232,26 @@ public class SimulateMatch {
         System.out.println("\tF - format of games, defaults to constructed");
         System.out.println("\tS - RNG seed for simulation");
         System.out.println("\tA - AI profile per player, in the same order as the decks (e.g. -a Default Experimental)");
+        System.out.println("\tlog-game - Write structured simulation game events to a JSONL file.");
         System.out.println("\tc - Clock flag. Set the maximum time in seconds before calling the match a draw, defaults to 120.");
         System.out.println("\tq - Quiet flag. Output just the game result, not the entire game log.");
     }
 
     public static void simulateSingleMatch(final Match mc, int iGame, boolean outputGamelog) {
+        simulateSingleMatch(mc, iGame, outputGamelog, null);
+    }
+
+    private static void simulateSingleMatch(final Match mc, int iGame, boolean outputGamelog,
+            final SimulationTraceRun traceRun) {
         final StopWatch sw = new StopWatch();
         sw.start();
 
         final Game g1 = mc.createGame();
         g1.setNoGUIUser();
+        final SimulationTraceCollector traceCollector = traceRun == null ? null : traceRun.beginGame(g1);
+        String executionStatus = "NORMAL";
+        Throwable executionError = null;
+
         // will run match in the same thread
         try {
             TimeLimitedCodeBlock.runWithTimeout(() -> {
@@ -215,14 +259,21 @@ public class SimulateMatch {
                 sw.stop();
             }, mc.getRules().getSimTimeout(), TimeUnit.SECONDS);
         } catch (TimeoutException e) {
+            executionStatus = "TIMEOUT";
             System.out.println("Stopping slow match as draw");
         } catch (Exception | StackOverflowError e) {
+            executionStatus = "EXCEPTION";
+            executionError = e;
             e.printStackTrace();
         } finally {
             if (sw.isStarted()) {
                 sw.stop();
             }
             g1.setGameOver(GameEndReason.Draw);
+        }
+
+        if (traceRun != null) {
+            traceRun.finishGame(traceCollector, executionStatus, executionError);
         }
 
         List<GameLogEntry> log;
@@ -244,7 +295,8 @@ public class SimulateMatch {
         }
     }
 
-    private static void simulateTournament(Map<String, List<String>> params, GameRules rules, boolean outputGamelog) {
+    private static void simulateTournament(Map<String, List<String>> params, GameRules rules, boolean outputGamelog,
+            String traceFile, Long seed) {
         String tournament = params.get("t").get(0);
         AbstractTournament tourney = null;
         int matchPlayers = params.containsKey("p") ? Integer.parseInt(params.get("p").get(0)) : 2;
