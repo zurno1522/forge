@@ -7,7 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -81,9 +80,6 @@ final class SimulationTraceWriter implements AutoCloseable {
                 }
             }
             out.append(']');
-        } else if (value.getClass().isArray()) {
-            final Object[] array = (Object[]) value;
-            appendJson(out, List.of(array));
         } else {
             appendString(out, value.toString());
         }
