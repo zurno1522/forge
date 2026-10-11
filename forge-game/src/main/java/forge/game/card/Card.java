@@ -6237,6 +6237,7 @@ public class Card extends GameEntity implements Comparable<Card>, IHasSVars, ITr
             game.fireEvent(new GameEventCardDamaged(CardView.get(this), CardView.get(source), damageIn, damageType));
         }
 
+        game.fireEvent(new GameEventEntityDamaged(this, source, damageIn, isCombat));
         return damageIn;
     }
 
