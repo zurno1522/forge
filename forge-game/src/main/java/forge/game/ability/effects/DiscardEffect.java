@@ -245,7 +245,7 @@ public class DiscardEffect extends SpellAbilityEffect {
                     game.getAction().reveal(dPHand, p);
                 }
                 if (mode.startsWith("Look") && p != chooser) {
-                    game.getAction().revealTo(dPHand, chooser);
+                    game.getAction().lookAt(dPHand, chooser);
                 }
 
                 if (!p.canDiscardBy(sa, true)) {
