@@ -103,6 +103,8 @@ final class SimulationTraceCollector {
                 startingHandFinalized(e);
             } else if (event instanceof GameEventCardsDrawn e) {
                 cardsDrawn(e);
+            } else if (event instanceof GameEventCardsShown e) {
+                cardsShown(e);
             } else if (event instanceof GameEventScry e) {
                 scry(e);
             } else if (event instanceof GameEventSurveil e) {
@@ -527,6 +529,24 @@ final class SimulationTraceCollector {
             cards.add(cardRef(card));
         }
         record.put("cards", cards);
+        write(record);
+    }
+
+    private void cardsShown(final GameEventCardsShown event) throws IOException {
+        final Map<String, Object> record = scoped("CARDS_SHOWN", true);
+        final List<Map<String, Object>> cards = new ArrayList<>();
+        for (final CardView card : event.cards()) {
+            cards.add(cardRef(card));
+        }
+        record.put("cards", cards);
+        record.put("cardOwner", playerRef(event.cardOwner()));
+
+        final List<Map<String, Object>> viewers = new ArrayList<>();
+        for (final PlayerView viewer : event.viewers()) {
+            viewers.add(playerRef(viewer));
+        }
+        record.put("viewers", viewers);
+        record.put("visibilityType", event.visibilityType().name());
         write(record);
     }
 
