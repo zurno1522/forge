@@ -2205,14 +2205,28 @@ public class GameAction {
         revealTo(cards, to, null, true);
     }
     public void revealTo(final CardCollectionView cards, final Iterable<Player> to, String messagePrefix, boolean addSuffix) {
+        showCardsTo(cards, to, messagePrefix, addSuffix, CardVisibilityType.REVEAL);
+    }
+
+    public void lookAt(final CardCollectionView cards, final Player to) {
+        showCardsTo(cards, Collections.singleton(to), null, true, CardVisibilityType.LOOK);
+    }
+
+    private void showCardsTo(final CardCollectionView cards, final Iterable<Player> to,
+            final String messagePrefix, final boolean addSuffix, final CardVisibilityType visibilityType) {
         if (cards.isEmpty()) {
             return;
         }
 
         final ZoneType zone = cards.getFirst().getZone().getZoneType();
         final Player owner = cards.getFirst().getOwner();
+        final List<Player> viewers = new ArrayList<>();
         for (final Player p : to) {
+            viewers.add(p);
             p.getController().reveal(cards, zone, owner, messagePrefix, addSuffix);
+        }
+        if (!viewers.isEmpty()) {
+            game.fireEvent(new GameEventCardsShown(cards, owner, viewers, visibilityType));
         }
     }
 
@@ -2237,11 +2251,16 @@ public class GameAction {
         reveal(cards, zt, cardOwner, dontRevealToOwner, messagePrefix, true);
     }
     public void reveal(CardCollectionView cards, ZoneType zt, Player cardOwner, boolean dontRevealToOwner, String messagePrefix, boolean msgAddSuffix) {
+        final List<Player> viewers = new ArrayList<>();
         for (Player p : game.getPlayers()) {
             if (dontRevealToOwner && cardOwner == p) {
                 continue;
             }
+            viewers.add(p);
             p.getController().reveal(cards, zt, cardOwner, messagePrefix, msgAddSuffix);
+        }
+        if (!cards.isEmpty() && !viewers.isEmpty()) {
+            game.fireEvent(new GameEventCardsShown(cards, cardOwner, viewers, CardVisibilityType.REVEAL));
         }
     }
 
