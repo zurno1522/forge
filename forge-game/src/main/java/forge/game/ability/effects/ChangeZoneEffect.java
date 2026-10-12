@@ -13,6 +13,7 @@ import forge.game.ability.SpellAbilityEffect;
 import forge.game.card.*;
 import forge.game.event.GameEventAddLog;
 import forge.game.event.GameEventCombatChanged;
+import forge.game.event.GameEventLibrarySearched;
 import forge.game.keyword.Keyword;
 import forge.game.player.*;
 import forge.game.player.PlayerController.FullControlFlag;
@@ -1086,6 +1087,7 @@ public class ChangeZoneEffect extends SpellAbilityEffect {
                 final Map<AbilityKey, Object> runParams = AbilityKey.mapFromPlayer(decider);
                 runParams.put(AbilityKey.Target, player);
                 game.getTriggerHandler().runTrigger(TriggerType.SearchedLibrary, runParams, false);
+                game.fireEvent(new GameEventLibrarySearched(decider, player));
             }
             if (searchedLibrary && sa.hasParam("Searched")) {
                 searchedLibrary = false;
