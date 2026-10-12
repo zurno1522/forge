@@ -30,6 +30,7 @@ public interface IGameEventVisitor<T> {
     T visit(GameEventGameStarted event);
     T visit(GameEventGameRestarted event);
     T visit(GameEventLandPlayed event);
+    T visit(GameEventLibrarySearched event);
     T visit(GameEventPlayerLivesChanged event);
     T visit(GameEventLifePaid event);
     T visit(GameEventManaPool event);
@@ -101,6 +102,7 @@ public interface IGameEventVisitor<T> {
         public T visit(GameEventGameStarted event) { return null; }
         public T visit(GameEventGameRestarted event) { return null; }
         public T visit(GameEventLandPlayed event) { return null; }
+        public T visit(GameEventLibrarySearched event) { return null; }
         public T visit(GameEventPlayerLivesChanged event) { return null; }
         public T visit(GameEventLifePaid event) { return null; }
         public T visit(GameEventManaPool event) { return null; }
