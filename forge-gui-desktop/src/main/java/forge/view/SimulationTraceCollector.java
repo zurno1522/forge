@@ -95,6 +95,8 @@ final class SimulationTraceCollector {
                 cardsSacrificed(e);
             } else if (event instanceof GameEventLandPlayed e) {
                 landPlayed(e);
+            } else if (event instanceof GameEventLibrarySearched e) {
+                librarySearched(e);
             } else if (event instanceof GameEventMulligan e) {
                 mulligan(e);
             } else if (event instanceof GameEventStartingHandFinalized e) {
@@ -482,6 +484,13 @@ final class SimulationTraceCollector {
         final Map<String, Object> record = scoped("LAND_PLAYED", true);
         record.put("player", playerRef(event.player()));
         record.put("land", cardRef(event.land()));
+        write(record);
+    }
+
+    private void librarySearched(final GameEventLibrarySearched event) throws IOException {
+        final Map<String, Object> record = scoped("LIBRARY_SEARCHED", true);
+        record.put("searcher", playerRef(event.searcher()));
+        record.put("libraryOwner", playerRef(event.libraryOwner()));
         write(record);
     }
 
