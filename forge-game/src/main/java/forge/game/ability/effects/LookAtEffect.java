@@ -8,7 +8,7 @@ public class LookAtEffect extends SpellAbilityEffect {
 
     @Override
     public void resolve(final SpellAbility sa) {
-        sa.getHostCard().getGame().getAction().revealTo(getTargetCards(sa), sa.getActivatingPlayer());
+        sa.getHostCard().getGame().getAction().lookAt(getTargetCards(sa), sa.getActivatingPlayer());
     }
 
     @Override
