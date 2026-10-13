@@ -24,6 +24,7 @@ import forge.StaticData;
 import forge.card.*;
 import forge.card.mana.ManaCost;
 import forge.card.mana.ManaCostShard;
+import forge.deck.DeckFormat;
 import forge.game.*;
 import forge.game.ability.AbilityFactory;
 import forge.game.ability.AbilityKey;
@@ -57,6 +58,7 @@ import forge.item.IPaperCard;
 import forge.item.PaperCard;
 import forge.util.*;
 import forge.util.collect.FCollection;
+import forge.util.collect.FCollectionView;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
@@ -76,7 +78,7 @@ public class Player extends GameEntity implements Comparable<Player> {
     public static final List<ZoneType> ALL_ZONES = Collections.unmodifiableList(Arrays.asList(ZoneType.Battlefield,
             ZoneType.Library, ZoneType.Graveyard, ZoneType.Hand, ZoneType.Exile, ZoneType.Command, ZoneType.Ante,
             ZoneType.Sideboard, ZoneType.PlanarDeck, ZoneType.SchemeDeck, ZoneType.AttractionDeck, ZoneType.ContraptionDeck,
-            ZoneType.Junkyard, ZoneType.Merged, ZoneType.Subgame, ZoneType.None));
+            ZoneType.Junkyard, ZoneType.StickerSheets, ZoneType.Merged, ZoneType.Subgame, ZoneType.None));
 
     private int life = 20;
     private int startingLife = 20;
@@ -308,8 +310,11 @@ public class Player extends GameEntity implements Comparable<Player> {
     }
 
     public void updateFlashbackForView() {
+        final FCollectionView<CardView> before = view.getFlashback();
         view.updateFlashback(this);
-        game.fireEvent(new GameEventZone(ZoneType.Flashback, this, EventValueChangeType.Added, null));
+        if (!before.equals(view.getFlashback())) {
+            game.fireEvent(new GameEventZone(ZoneType.Flashback, this, EventValueChangeType.Added, null));
+        }
     }
 
     //get single opponent for player if only one, otherwise returns null
@@ -533,6 +538,8 @@ public class Player extends GameEntity implements Comparable<Player> {
 
         boolean firstLost = lifeLostThisTurn == 0;
         lifeLostThisTurn += toLose;
+        // a chain of triggers that costs life ends by itself
+        game.getStack().clearTriggerRepeats();
 
         final Map<AbilityKey, Object> runParams = AbilityKey.mapFromPlayer(this);
         runParams.put(AbilityKey.LifeAmount, toLose);
@@ -1131,6 +1138,9 @@ public class Player extends GameEntity implements Comparable<Player> {
             return drawn;
         }
 
+        // A card is about to leave a hidden library: whoever draws it learns something, so no undo past this point
+        game.getUndoManager().barrier("Card drawn");
+
         // always allow drawing cards before the game actually starts (e.g. Maralen of the Mornsong Avatar)
         final boolean gameStarted = game.getAge().ordinal() > GameStage.Mulligan.ordinal();
 
@@ -1151,7 +1161,11 @@ public class Player extends GameEntity implements Comparable<Player> {
             if (gameStarted && !canDraw()) {
                 return drawn;
             }
-            drawn.addAll(doDraw(toReveal, cause, params, zone));
+            CardCollectionView cards = doDraw(toReveal, cause, params, zone);
+            if (cards == null) {
+                break;
+            }
+            drawn.addAll(cards);
         }
 
         // reveal multiple drawn cards when playing with the top of the library revealed
@@ -1167,10 +1181,11 @@ public class Player extends GameEntity implements Comparable<Player> {
     }
 
     /**
-     * @return a CardCollectionView of cards actually drawn
+     * @return a CardCollectionView of cards actually drawn, or null if the library is empty and no
+     *         replacement effect applies, since every further draw of the same batch would do the same
      */
     private CardCollectionView doDraw(Map<Player, CardCollection> revealed, SpellAbility sa, Map<AbilityKey, Object> params, PlayerZone hand) {
-        final CardCollection drawn = new CardCollection();
+        CardCollection drawn = new CardCollection();
         final PlayerZone library = getZone(ZoneType.Library);
 
         SpellAbility cause = sa;
@@ -1179,7 +1194,6 @@ public class Player extends GameEntity implements Comparable<Player> {
         }
 
         final boolean gameStarted = game.getAge().ordinal() > GameStage.Mulligan.ordinal();
-
         if (gameStarted) {
             Map<AbilityKey, Object> repParams = AbilityKey.mapFromAffected(this);
             repParams.put(AbilityKey.Cause, cause);
@@ -1190,12 +1204,15 @@ public class Player extends GameEntity implements Comparable<Player> {
             if (game.getReplacementHandler().run(ReplacementType.Draw, repParams) != ReplacementResult.NotReplaced) {
                 return drawn;
             }
+            if (library.isEmpty() && game.getReplacementHandler().getReplacementList(ReplacementType.Draw, repParams, null).isEmpty()) {
+                drawn = null;
+            }
         }
 
         if (!library.isEmpty()) {
             Card c;
 
-            if (hasKeyword("You draw cards from the bottom of your library instead of the top of your library.")) {
+            if (drawsFromBottom()) {
                 c = library.get(library.size() - 1);
             } else {
                 c = library.get(0);
@@ -1574,6 +1591,7 @@ public class Player extends GameEntity implements Comparable<Player> {
             milled = GameActionUtil.orderCardsByTheirOwners(game, milled, ZoneType.Graveyard, sa);
         }
 
+        game.getUndoManager().barrier("Cards milled");
         for (Card m : milled) {
             Card moved = game.getAction().moveTo(destination, m, sa, params);
             moved.setMilled(true);
@@ -2061,12 +2079,13 @@ public class Player extends GameEntity implements Comparable<Player> {
     }
 
     public final boolean hasWon() {
-        if (cantWin()) {
+        // no outcome means the player is still in the game, so the replacement check cannot change the answer
+        if (getOutcome() == null || getOutcome().lossState != null) {
             return false;
         }
         // in multiplayer game one player's win is replaced by all other's lose (rule 103.4h)
         // so if someone cannot lose, the game appears to continue
-        return getOutcome() != null && getOutcome().lossState == null;
+        return !cantWin();
     }
 
     public final boolean isInGame() {
@@ -2453,6 +2472,10 @@ public class Player extends GameEntity implements Comparable<Player> {
         return StaticAbilityTurnPhaseReversed.isPhaseReversed(this);
     }
 
+    public boolean drawsFromBottom() {
+        return StaticAbilityDrawFromBottom.drawsFromBottom(this);
+    }
+
     public void onCleanupPhase() {
         for (Card c : getCardsIn(ZoneType.Hand)) {
             c.setDrawnThisTurn(false);
@@ -2492,7 +2515,9 @@ public class Player extends GameEntity implements Comparable<Player> {
         setExpentThisTurn(0);
         attractionsVisitedThisTurn = 0;
 
-        damageReceivedThisTurn.clear();
+        damageReceivedLastTurn = damageReceivedThisTurn;
+        damageReceivedThisTurn = Lists.newArrayList();
+
         planeswalkedToThisTurn.clear();
 
         elementalBendThisTurn.clear();
@@ -3031,6 +3056,15 @@ public class Player extends GameEntity implements Comparable<Player> {
         if (!attractionDeck.isEmpty())
             attractionDeck.shuffle();
 
+        // Sticker sheets - CR 123.2a/c: only the three chosen are kept
+        PlayerZone stickerSheets = getZone(ZoneType.StickerSheets);
+        for (IPaperCard cp : Aggregates.random(registeredPlayer.getStickerSheets(), DeckFormat.CHOSEN_STICKER_SHEETS)) {
+            Card sheet = Card.fromPaperCard(cp, this);
+            sheet.setCollectible(false);
+            stickerSheets.add(sheet);
+        }
+        Card.refreshSheetViews(this);
+
         // Contraptions
         PlayerZone contraptionDeck = getZone(ZoneType.ContraptionDeck);
         for (IPaperCard cp : registeredPlayer.getContraptions()) {
@@ -3435,7 +3469,7 @@ public class Player extends GameEntity implements Comparable<Player> {
     }
 
     public String getMonarchSet() {
-        return monarchEffect == null ? monarchEffect.getSetCode() : null;
+        return monarchEffect != null ? monarchEffect.getSetCode() : null;
     }
 
     public void createMonarchEffect(final String set) {
