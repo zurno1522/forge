@@ -35,6 +35,7 @@ import forge.game.event.Event;
 import forge.game.event.GameEventDayTimeChanged;
 import forge.game.event.GameEventAddLog;
 import forge.game.event.GameEventGameOutcome;
+import forge.game.event.GameEventPlayerLost;
 import forge.game.phase.Phase;
 import forge.game.phase.PhaseHandler;
 import forge.game.phase.PhaseType;
