@@ -225,7 +225,10 @@ final class SimulationTraceCollector {
                 blockEntry.put("attacker", cardRef(block.getKey()));
                 final List<Map<String, Object>> blockers = new ArrayList<>();
                 for (final CardView blocker : block.getValue()) {
-                    blockers.add(cardRef(blocker));
+                    // PhaseHandler uses the attacker itself to represent an unblocked attacker.
+                    if (blocker.getId() != block.getKey().getId()) {
+                        blockers.add(cardRef(blocker));
+                    }
                 }
                 blockEntry.put("blockers", blockers);
                 blocks.add(blockEntry);
