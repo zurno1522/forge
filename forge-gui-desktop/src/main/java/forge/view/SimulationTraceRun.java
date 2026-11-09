@@ -125,6 +125,7 @@ final class SimulationTraceRun implements AutoCloseable {
         try {
             collector.executionFinished(status, error);
         } catch (IOException e) {
+            gamesFailed++;
             throw new TraceFailure("Simulation trace failed while finishing game " + gamesAttempted, e);
         }
 
@@ -137,7 +138,8 @@ final class SimulationTraceRun implements AutoCloseable {
     }
 
     void finishNormal() {
-        finishRun("NORMAL");
+        // Completing the requested run does not mean that every game completed normally.
+        finishRun(gamesFailed > 0 ? "EXCEPTION" : gamesTimedOut > 0 ? "TIMEOUT" : "NORMAL");
     }
 
     void finishAborted() {

@@ -2,6 +2,7 @@ package forge.view;
 
 import com.google.common.eventbus.Subscribe;
 import forge.LobbyPlayer;
+import forge.card.GamePieceType;
 import forge.game.Game;
 import forge.game.GameEntityView;
 import forge.game.card.Card;
@@ -134,8 +135,11 @@ final class SimulationTraceCollector {
             } else if (event instanceof GameEventGameFinished) {
                 write(scoped("GAME_FINISHED", true));
             }
-        } catch (IOException e) {
-            failure = e;
+        } catch (IOException | RuntimeException e) {
+            // EventBus logs subscriber exceptions and continues dispatching. Retain
+            // the failure so a partial trace cannot be reported as successful.
+            failure = new IOException("Unable to collect simulation trace event "
+                    + event.getClass().getSimpleName(), e);
         }
     }
 
@@ -784,7 +788,11 @@ final class SimulationTraceCollector {
         final Map<String, Object> ref = new LinkedHashMap<>();
         ref.put("id", card.getId());
         ref.put("name", card.getName());
-        ref.put("gamePieceType", card.getGamePieceType().name());
+        // Minimal views used by detach events can lack game-piece metadata.
+        final GamePieceType gamePieceType = card.getGamePieceType();
+        if (gamePieceType != null) {
+            ref.put("gamePieceType", gamePieceType.name());
+        }
         return ref;
     }
 

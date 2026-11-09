@@ -19,6 +19,7 @@ import forge.game.GameLogEntryType;
 import forge.game.GameRules;
 import forge.game.GameType;
 import forge.game.Match;
+import forge.game.player.Player;
 import forge.game.player.RegisteredPlayer;
 import forge.gamemodes.tournament.system.AbstractTournament;
 import forge.gamemodes.tournament.system.TournamentBracket;
@@ -210,7 +211,7 @@ public class SimulateMatch {
                 traceRun.finishNormal();
             }
         } catch (SimulationTraceRun.TraceFailure e) {
-            System.err.println(e.getMessage());
+            e.printStackTrace(System.err);
             if (traceRun != null) {
                 try {
                     traceRun.finishAborted();
@@ -246,7 +247,7 @@ public class SimulateMatch {
         simulateSingleMatch(mc, iGame, outputGamelog, null, null, null);
     }
 
-    private static void simulateSingleMatch(final Match mc, int iGame, boolean outputGamelog,
+    static void simulateSingleMatch(final Match mc, int iGame, boolean outputGamelog,
             final SimulationTraceRun traceRun, final Integer matchId, final Integer tournamentRound) {
         final StopWatch sw = new StopWatch();
         sw.start();
@@ -258,15 +259,17 @@ public class SimulateMatch {
         String executionStatus = "NORMAL";
         Throwable executionError = null;
 
-        // will run match in the same thread
         try {
-            TimeLimitedCodeBlock.runWithTimeout(() -> {
-                mc.startGame(g1);
-                sw.stop();
-            }, mc.getRules().getSimTimeout(), TimeUnit.SECONDS);
+            TimeLimitedCodeBlock.runWithTimeout(() -> mc.startGame(g1),
+                    mc.getRules().getSimTimeout(), TimeUnit.SECONDS, () -> finishAsDraw(g1));
         } catch (TimeoutException e) {
             executionStatus = "TIMEOUT";
             System.out.println("Stopping slow match as draw");
+            if (e.getSuppressed().length > 0) {
+                executionStatus = "EXCEPTION";
+                executionError = e;
+                e.printStackTrace(System.err);
+            }
         } catch (Exception | StackOverflowError e) {
             executionStatus = "EXCEPTION";
             executionError = e;
@@ -275,7 +278,7 @@ public class SimulateMatch {
             if (sw.isStarted()) {
                 sw.stop();
             }
-            g1.setGameOver(GameEndReason.Draw);
+            finishAsDraw(g1);
         }
 
         if (traceRun != null) {
@@ -298,6 +301,22 @@ public class SimulateMatch {
             System.out.printf("\nGame Result: Game %d ended in a Draw! Took %d ms.%n", 1 + iGame, sw.getTime());
         } else {
             System.out.printf("\nGame Result: Game %d ended in %d ms. %s has won!\n%n", 1 + iGame, sw.getTime(), g1.getOutcome().getWinningLobbyPlayer().getName());
+        }
+    }
+
+    static void finishAsDraw(final Game game) {
+        synchronized (game) {
+            if (game.isGameOver()) {
+                return;
+            }
+            // setGameOver defaults unset outcomes to wins. Mark survivors as
+            // drawing first, preserving losses and any already completed game.
+            for (final Player player : game.getRegisteredPlayers()) {
+                if (player.getOutcome() == null || player.getOutcome().hasWon()) {
+                    player.intentionalDraw();
+                }
+            }
+            game.setGameOver(GameEndReason.Draw);
         }
     }
 
@@ -455,7 +474,7 @@ public class SimulateMatch {
                 traceRun.finishNormal();
             }
         } catch (SimulationTraceRun.TraceFailure e) {
-            System.err.println(e.getMessage());
+            e.printStackTrace(System.err);
             if (traceRun != null) {
                 try {
                     traceRun.finishAborted();
