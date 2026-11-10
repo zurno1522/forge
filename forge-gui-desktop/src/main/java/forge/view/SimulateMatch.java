@@ -9,6 +9,7 @@ import org.apache.commons.lang3.time.StopWatch;
 
 import forge.LobbyPlayer;
 import forge.ai.AiProfileUtil;
+import forge.ai.simulation.FlatMonteCarloStats;
 import forge.deck.Deck;
 import forge.deck.DeckGroup;
 import forge.deck.io.DeckSerializer;
@@ -37,6 +38,10 @@ import forge.util.WordUtil;
 import forge.util.storage.IStorage;
 
 public class SimulateMatch {
+    /** Set by -mc: null leaves the game default (off, as the GUI's preference is only applied by HostedMatch). */
+    private static Boolean flatMonteCarlo = null;
+    private static Boolean flatMonteCarloMax = null;
+
     public static void simulate(String[] args) {
         FModel.initialize(null, null);
 
@@ -97,6 +102,27 @@ public class SimulateMatch {
             }
             traceFile = params.get("log-game").get(0);
         }
+
+        // Flat Monte Carlo is a match preference that only the GUI applies (HostedMatch); without this switch a
+        // simulation always runs the plain heuristic AI, whatever the preference says.
+        flatMonteCarlo = null;
+        flatMonteCarloMax = null;
+        if (params.containsKey("mc")) {
+            final List<String> mcValues = params.get("mc");
+            final String mcValue = mcValues.isEmpty() ? "on" : mcValues.get(0);
+            if ("on".equalsIgnoreCase(mcValue) || "true".equalsIgnoreCase(mcValue)) {
+                flatMonteCarlo = Boolean.TRUE;
+            } else if ("max".equalsIgnoreCase(mcValue)) {
+                flatMonteCarlo = Boolean.TRUE;
+                flatMonteCarloMax = Boolean.TRUE; // the strength a desktop match gets automatically
+            } else if ("off".equalsIgnoreCase(mcValue) || "false".equalsIgnoreCase(mcValue)) {
+                flatMonteCarlo = Boolean.FALSE;
+            } else {
+                System.out.println("Unknown value for -mc (use on, max or off): " + mcValue);
+                return;
+            }
+        }
+        FlatMonteCarloStats.reset();
 
         Long seed = null;
         if (params.containsKey("s")) {
@@ -222,11 +248,14 @@ public class SimulateMatch {
             return;
         }
 
+        if (Boolean.TRUE.equals(flatMonteCarlo)) {
+            System.out.println(FlatMonteCarloStats.summary());
+        }
         System.out.flush();
     }
 
     private static void argumentHelp() {
-        System.out.println("Syntax: forge.exe sim -d <deck1[.dck]> ... <deckX[.dck]> -D [D] -n [N] -m [M] -t [T] -p [P] -f [F] -s [S] -a [A] -log-game [FILE] -q");
+        System.out.println("Syntax: forge.exe sim -d <deck1[.dck]> ... <deckX[.dck]> -D [D] -n [N] -m [M] -t [T] -p [P] -f [F] -s [S] -a [A] -mc [on|max|off] -log-game [FILE] -q");
         System.out.println("\tsim - stands for simulation mode");
         System.out.println("\tdeck1 (or deck2,...,X) - constructed deck name or filename (has to be quoted when contains multiple words)");
         System.out.println("\tdeck is treated as file if it ends with a dot followed by three numbers or letters");
@@ -240,6 +269,7 @@ public class SimulateMatch {
         System.out.println("\tA - AI profile per player, in the same order as the decks (e.g. -a Default Experimental)");
         System.out.println("\tlog-game - Write structured simulation game events to a JSONL file.");
         System.out.println("\tc - Clock flag. Set the maximum time in seconds before calling the match a draw, defaults to 120.");
+        System.out.println("\tmc - Flat Monte Carlo AI refinement for this run, on, max or off (default off in simulations; max = desktop strength). Prints timing statistics at the end when on.");
         System.out.println("\tq - Quiet flag. Output just the game result, not the entire game log.");
     }
 
@@ -254,6 +284,10 @@ public class SimulateMatch {
 
         final Game g1 = mc.createGame();
         g1.setNoGUIUser();
+        if (flatMonteCarlo != null) {
+            g1.AI_FLAT_MONTE_CARLO = flatMonteCarlo;
+            g1.AI_FLAT_MONTE_CARLO_MAX = Boolean.TRUE.equals(flatMonteCarloMax);
+        }
         final SimulationTraceCollector traceCollector = traceRun == null ? null
                 : traceRun.beginGame(g1, matchId, matchId == null ? null : iGame + 1, tournamentRound);
         String executionStatus = "NORMAL";
