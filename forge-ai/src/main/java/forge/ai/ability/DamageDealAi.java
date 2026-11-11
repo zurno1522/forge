@@ -32,7 +32,6 @@ import forge.util.collect.FCollectionView;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -200,7 +199,7 @@ public class DamageDealAi extends DamageAiBase {
                 if (doTarget) {
                     Card tgt = sa.getTargetCard();
                     if (tgt != null) {
-                        if (ai.getGame().getPhaseHandler().getPlayerTurn() == tgt.getController()) {
+                        if (ai.getGame().getPhaseHandler().isPlayerTurn(tgt.getController())) {
                             return new AiAbilityDecision(100, AiPlayDecision.WillPlay);
                         }
                         return new AiAbilityDecision(0, AiPlayDecision.WaitForEndOfTurn);
@@ -683,7 +682,7 @@ public class DamageDealAi extends DamageAiBase {
             if (sa.canTarget(enemy) && sa.canAddMoreTarget()) {
                 boolean freePing = immediately || sa.getTargets().size() > 0;
                 if (sa.isActivatedAbility()) {
-                    if (phase.is(PhaseType.END_OF_TURN) && phase.getNextTurn().equals(ai) && sa.getPayCosts().isReusuableResource()) {
+                    if (phase.is(PhaseType.END_OF_TURN) && phase.isPlayerNextTurn(ai) && sa.getPayCosts().isReusuableResource()) {
                         freePing = true;
                     }
                     if (phase.is(PhaseType.MAIN2) && source.hasSVar("EndOfTurnLeavePlay")) {
@@ -695,7 +694,7 @@ public class DamageDealAi extends DamageAiBase {
                 }
 
                 if ((freePing && !avoidTargetP(ai, sa))
-                        || (((phase.is(PhaseType.END_OF_TURN) && phase.getNextTurn().equals(ai))
+                        || (((phase.is(PhaseType.END_OF_TURN) && phase.isPlayerNextTurn(ai))
                         || (isSorcerySpeed(sa, ai) && phase.is(PhaseType.MAIN2))
                         || ("BurnCreatures".equals(logic) && !enemy.getCreaturesInPlay().isEmpty()))
                         && ((sa.isPwAbility() && sa.getPayCosts().hasSpecificCostType(CostPutCounter.class))
@@ -1058,6 +1057,8 @@ public class DamageDealAi extends DamageAiBase {
         // Try to chain damage/debuff effects
         if (StringUtils.isNumeric(damage) || (damage.startsWith("-") && StringUtils.isNumeric(damage.substring(1)))) {
             // currently only works for predictable numeric damage
+            final List<GameEntity> targets = sa.usesTargeting()
+                    ? sa.getTargetRestrictions().getAllCandidates(sa) : List.of();
             CardCollection cards = new CardCollection();
             cards.addAll(ai.getCardsIn(ZoneType.Hand));
             cards.addAll(ai.getCardsIn(ZoneType.Battlefield));
@@ -1069,6 +1070,9 @@ public class DamageDealAi extends DamageAiBase {
                 for (SpellAbility ab : c.getSpellAbilities()) {
                     if (ab.equals(sa) || ab.getSubAbility() != null) { // decisions for complex SAs with subs are not supported yet
                         continue;
+                    }
+                    if (ab.getActivatingPlayer() == null) {
+                        ab.setActivatingPlayer(ai); // a spell still in hand has none, and canPlay() checks need one
                     }
                     if (!ab.canPlay()) {
                         continue;
@@ -1088,16 +1092,13 @@ public class DamageDealAi extends DamageAiBase {
                         }
                         if (StringUtils.isNumeric(dmgDef)) { // currently doesn't work for X and other dependent costs
                             if (sa.usesTargeting() && ab.usesTargeting()) {
-                                // Ensure that the chained spell can target at least the same things (or more) as the current one
-                                TargetRestrictions tgtSa = sa.getTargetRestrictions();
-                                TargetRestrictions tgtAb = sa.getTargetRestrictions();
-                                String[] validTgtsSa = tgtSa.getValidTgts();
-                                String[] validTgtsAb = tgtAb.getValidTgts();
-                                if (!Arrays.asList(validTgtsSa).containsAll(Arrays.asList(validTgtsAb))) {
+                                // The target is chosen after adding the chained damage, so the
+                                // follow-up must be able to hit any target the first spell can choose.
+                                ab.getTargetRestrictions().applyTargetTextChanges(ab);
+                                if (targets.stream().anyMatch(target -> !ab.canTarget(target))) {
                                     continue;
                                 }
 
-                                // FIXME: should it also check restrictions for targeting players?
                                 ManaCost costSa = sa.getPayCosts().getTotalMana();
                                 ManaCost costAb = ab.getPayCosts().getTotalMana(); // checked for null above
                                 ManaCost total = ManaCost.combine(costSa, costAb);
