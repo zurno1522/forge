@@ -225,7 +225,9 @@ final class SimulationTraceCollector {
                 blockEntry.put("attacker", cardRef(block.getKey()));
                 final List<Map<String, Object>> blockers = new ArrayList<>();
                 for (final CardView blocker : block.getValue()) {
-                    // PhaseHandler uses the attacker itself to represent an unblocked attacker.
+                    // Forge's GameEventBlockersDeclared uses the attacker itself as a
+                    // sentinel when that attacker has no blockers. Preserve the
+                    // attacker's entry, but represent the actual blocker set as empty.
                     if (blocker.getId() != block.getKey().getId()) {
                         blockers.add(cardRef(blocker));
                     }
