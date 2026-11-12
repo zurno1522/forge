@@ -2,6 +2,7 @@ package forge.view;
 
 import com.google.common.eventbus.Subscribe;
 import forge.LobbyPlayer;
+import forge.ai.AiDecisionEvent;
 import forge.card.GamePieceType;
 import forge.game.Game;
 import forge.game.GameEntityView;
@@ -140,6 +141,20 @@ final class SimulationTraceCollector {
             // the failure so a partial trace cannot be reported as successful.
             failure = new IOException("Unable to collect simulation trace event "
                     + event.getClass().getSimpleName(), e);
+        }
+    }
+
+    @Subscribe
+    public void onAiDecision(final AiDecisionEvent event) {
+        if (failure != null) {
+            return;
+        }
+        try {
+            final Map<String, Object> record = scoped("AI_DECISION", true);
+            record.put("decision", event.data());
+            write(record);
+        } catch (IOException | RuntimeException e) {
+            failure = new IOException("Unable to collect simulation trace event AiDecisionEvent", e);
         }
     }
 
@@ -408,6 +423,12 @@ final class SimulationTraceCollector {
     }
 
     private void stackRemoved(final GameEventSpellRemovedFromStack event) throws IOException {
+        if (event.sa() == null) {
+            // MagicStack.clear emits one bulk removal without an individual ability.
+            abilityToStack.clear();
+            write(scoped("STACK_CLEARED", true));
+            return;
+        }
         final Map<String, Object> record = scoped("STACK_REMOVED", true);
         record.put("abilityId", event.sa().getId());
         final Integer stackId = abilityToStack.remove(event.sa().getId());

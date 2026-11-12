@@ -100,6 +100,7 @@ public class AiController {
     private int flatMcTurn = -1;
     private long flatMcTurnSpentNanos;
     private FlatMonteCarloPicker.Result lastFlatMcResult;
+    private volatile AiDecisionRecorder decisionRecorder;
     /** Circuit breaker: Monte Carlo switches itself off for this player after repeated errors or hopeless slowness. */
     private int flatMcErrors;
     private int flatMcSlowStreak;
@@ -1639,6 +1640,12 @@ public class AiController {
      * (= the AI passes priority) the moment the timer runs out.
      */
     public List<SpellAbility> chooseSpellAbilityToPlay() {
+        final PhaseHandler phase = game.getPhaseHandler();
+        final AiDecisionRecorder decision = game.isRecordingAiDecisions() && phase.getPlayerTurn() == player
+                && (phase.is(PhaseType.MAIN1) || phase.is(PhaseType.MAIN2)) && game.getStack().isEmpty()
+                ? new AiDecisionRecorder(game, player, game.nextAiDecisionSequence()) : null;
+        final FlatMonteCarloPicker.Result previousSearch = lastFlatMcResult;
+        decisionRecorder = decision;
         final long id = AITimeoutTracker.key(game.getId(), player.getId());
         final long timeoutNanos = TimeUnit.SECONDS.toNanos(game.getAITimeout());
         AITimeoutTracker.begin(id, timeoutNanos);
@@ -1651,10 +1658,23 @@ public class AiController {
             if (SimAudit.ENABLED) {
                 SimAudit.afterChoice(game, player, chosen);
             }
+            if (decision != null) {
+                game.fireEvent(decision.finish(chosen, "COMPLETED",
+                        lastFlatMcResult == previousSearch ? null : lastFlatMcResult));
+            }
             return chosen;
         } catch (AITimeoutTracker.Expired e) {
+            if (decision != null) {
+                game.fireEvent(decision.finish(null, "AI_TIMEOUT", null));
+            }
             return null; // out of time: pass priority
+        } catch (RuntimeException e) {
+            if (decision != null) {
+                game.fireEvent(decision.finish(null, "ERROR", null));
+            }
+            throw e;
         } finally {
+            decisionRecorder = null;
             AITimeoutTracker.disarm(limit);
             AITimeoutTracker.end(id);
         }
@@ -2027,7 +2047,7 @@ public class AiController {
                 return true;
             }
             final Card h = spellAbility.getHostCard();
-            return h != null && ((ComputerUtilCard.isCardRemAIDeck(h) && !flatMc) || ComboAssembly.deadOnArrival(player, spellAbility)
+            final boolean removed = h != null && ((ComputerUtilCard.isCardRemAIDeck(h) && !flatMc) || ComboAssembly.deadOnArrival(player, spellAbility)
                     || (flatMc && LoopRunner.held(player, spellAbility))
                     || (flatMc && SurpriseEntry.isEntryAbility(spellAbility) && !SurpriseEntry.offered(player, spellAbility))
                     || (flatMc && FlatMonteCarloPicker.needlessTrick(player, spellAbility))
@@ -2039,6 +2059,10 @@ public class AiController {
                         && !(Forecast.isForecast(spellAbility) && Forecast.worthIt(player, spellAbility)))
                     || (flatMc && FlatMonteCarloPicker.isOtherZonePlay(spellAbility)
                     && !FlatMonteCarloPicker.sparesMana(player, spellAbility)));
+            if (removed && decisionRecorder != null) {
+                decisionRecorder.evaluated(spellAbility, "PRE_EVALUATION_FILTER");
+            }
+            return removed;
         });
         //removed skipped SA
         skipped = saList.stream().filter(SpellAbility::isSkip).collect(Collectors.toList());
@@ -2817,6 +2841,7 @@ public class AiController {
         final long timeoutNanos = TimeUnit.SECONDS.toNanos(game.getAITimeout());
         AITimeoutTracker.begin(aiId, timeoutNanos);
         final long deadlineNanos = AITimeoutTracker.deadlineNanos(aiId, timeoutNanos);
+        final AiDecisionRecorder decision = decisionRecorder;
         FutureTask<List<SpellAbility>> future = new FutureTask<>(() -> {
             final List<SpellAbility> approvedPlays = new ArrayList<>();
             // the eval thread aborts itself at the shared deadline (or when cancelled) instead of running on as a zombie
@@ -2829,6 +2854,9 @@ public class AiController {
 
                     // Don't add Counterspells to the "normal" playcard lookups
                     if (skipCounter && sa.getApi() == ApiType.Counter) {
+                        if (decision != null) {
+                            decision.evaluated(sa, "SKIPPED_COUNTERSPELL");
+                        }
                         continue;
                     }
 
@@ -2843,12 +2871,18 @@ public class AiController {
                                 && ((combos.has(ComboPlan.Kind.TUTOR_STORM) && ComboPlan.takesLifePerCopy(sa.getHostCard()))
                                 || game.getView().getStormCount() < this.getIntProperty(AiProps.MIN_COUNT_FOR_STORM_SPELLS))) {
                             // skip evaluating Storm unless we reached the minimum Storm count
+                            if (decision != null) {
+                                decision.evaluated(sa, "HELD_STORM_FINISHER");
+                            }
                             continue;
                         }
                     }
 
                     // a tutor storm deck keeps its rituals and moxen for the turn the solver finds the kill
                     if (combos.holdsForKill(sa) || combos.wastesTutor(sa) || combos.wastesFodder(sa)) {
+                        if (decision != null) {
+                            decision.evaluated(sa, "HELD_FOR_COMBO");
+                        }
                         continue;
                     }
                     // a take-life storm finisher is never cast unless it kills, even when it is the only spell left in hand
@@ -2891,6 +2925,9 @@ public class AiController {
                     // PhaseHandler ph = game.getPhaseHandler();
                     // System.out.printf("Ai thinks '%s' of %s -> %s @ %s %s >>> \n", opinion, sa.getHostCard(), sa, Lang.getInstance().getPossesive(ph.getPlayerTurn().getName()), ph.getPhase());
 
+                    if (decision != null) {
+                        decision.evaluated(sa, isFlatMcOnlyPlay(sa) ? "MONTE_CARLO_ONLY_" + opinion.name() : opinion.name());
+                    }
                     if (isFlatMcOnlyPlay(sa)) {
                         // never approved by the heuristics: only a play for the rollouts to weigh, and only with discovery
                         if (extrasOut != null && isLegalDiscovery(sa, opinion)) {
@@ -2917,6 +2954,9 @@ public class AiController {
 
                 return approvedPlays;
             } catch (AITimeoutTracker.Expired e) {
+                if (decision != null) {
+                    decision.interrupted("EVALUATION_TIMEOUT");
+                }
                 return approvedPlays; // whatever was approved before time ran out
             } finally {
                 AITimeoutTracker.disarm(evalLimit); // matters as soon as this runs on a pooled thread
@@ -2929,6 +2969,9 @@ public class AiController {
             // wait only for what is left of the shared deadline (not a fresh full timeout per call)
             return future.get(Math.max(0, deadlineNanos - System.nanoTime()), TimeUnit.NANOSECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            if (decision != null) {
+                decision.interrupted(e instanceof ExecutionException ? "EVALUATION_ERROR" : "EVALUATION_TIMEOUT");
+            }
             e.printStackTrace();
             if (e instanceof TimeoutException) {
                 // log where the eval thread currently is - each timeout doubles as a

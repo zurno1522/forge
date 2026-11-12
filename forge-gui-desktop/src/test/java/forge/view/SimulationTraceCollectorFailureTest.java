@@ -2,6 +2,7 @@ package forge.view;
 
 import com.google.common.eventbus.EventBus;
 import forge.game.Game;
+import forge.ai.AiDecisionEvent;
 import forge.game.card.CardView;
 import forge.game.event.GameEventCardAttachment;
 import forge.game.event.GameEventShuffle;
@@ -80,6 +81,33 @@ public class SimulationTraceCollectorFailureTest {
                 writer.close();
             } catch (IOException ignored) {
                 // The writer was deliberately closed to provoke the failure.
+            }
+            Files.deleteIfExists(file);
+        }
+    }
+
+    @Test(groups = { "UnitTest", "fast" })
+    public void decisionWriteFailureRemainsVisibleThroughEventBus() throws Exception {
+        final Path file = Files.createTempFile("forge-decision-failure-", ".jsonl");
+        final SimulationTraceWriter writer = SimulationTraceWriter.open(file.toString());
+        try {
+            final SimulationTraceCollector collector = collector(writer);
+            final EventBus events = new EventBus();
+            events.register(collector);
+            writer.close();
+            events.post(new AiDecisionEvent(Map.of("decisionId", "1:1")));
+            final IOException failure = Assert.expectThrows(IOException.class, collector::checkHealthy);
+            Assert.assertTrue(failure.getMessage().contains("AiDecisionEvent"));
+            Assert.assertTrue(failure.getCause() instanceof IOException);
+            events.post(new AiDecisionEvent(Map.of("decisionId", "1:2")));
+            Assert.assertSame(Assert.expectThrows(IOException.class, collector::checkHealthy), failure);
+            Assert.assertSame(Assert.expectThrows(IOException.class,
+                    () -> collector.executionFinished("NORMAL", null)), failure);
+        } finally {
+            try {
+                writer.close();
+            } catch (IOException ignored) {
+                // Already closed deliberately to exercise subscriber failure reporting.
             }
             Files.deleteIfExists(file);
         }

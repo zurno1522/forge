@@ -116,6 +116,18 @@ public class Game {
 
     // True for the games the AI copies to play out its choices (rollouts): nothing that only matters for the real
     // game (like taking a snapshot to roll an AI cast back) has to be done there.
+    private boolean recordAiDecisions;
+    private long aiDecisionSequence;
+    public long nextAiDecisionSequence() {
+        return ++aiDecisionSequence;
+    }
+    public boolean isRecordingAiDecisions() {
+        return recordAiDecisions && !simulationCopy;
+    }
+    public void setRecordAiDecisions(final boolean enabled) {
+        recordAiDecisions = enabled;
+    }
+
     private boolean simulationCopy = false;
     public boolean isSimulationCopy() {
         return simulationCopy;

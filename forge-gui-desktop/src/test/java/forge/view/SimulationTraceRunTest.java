@@ -5,8 +5,10 @@ import com.google.gson.JsonParser;
 import forge.game.Game;
 import forge.game.GameRules;
 import forge.game.GameType;
+import forge.util.Localizer;
 import org.mockito.Mockito;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -17,6 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimulationTraceRunTest {
+    @BeforeClass
+    public void initializeLocalizer() {
+        Localizer.getInstance().initialize("en-US", "../forge-gui/res/languages/");
+    }
+
     @DataProvider
     public Object[][] completedRunStatuses() {
         return new Object[][] {
