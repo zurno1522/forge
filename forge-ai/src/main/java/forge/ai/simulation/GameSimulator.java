@@ -199,7 +199,23 @@ public class GameSimulator {
         Card hostCard = copier.find(origHostCard);
         String desc = sa.getDescription();
 
-        SpellAbility result = saMatcher(hostCard.getAllPossibleAbilities(aiPlayer, true), desc);
+        final List<SpellAbility> candidates = hostCard.getAllPossibleAbilities(aiPlayer, true);
+        if (sa.isFlashback()) {
+            // A printed and a granted flashback can share a description but have different costs.
+            for (final boolean exact : new boolean[] { true, false }) {
+                for (final SpellAbility candidate : candidates) {
+                    if (!candidate.isFlashback() || !(exact ? desc.equals(candidate.getDescription())
+                            : desc.startsWith(candidate.getDescription()))) { continue; }
+                    final SpellAbility mapped = SpellAbilityChoiceCopier.copyCastChoices(sa,
+                            candidate.copy(hostCard, aiPlayer, false, true), aiPlayer);
+                    if (mapped != null && mapped.getPayCosts().toSimpleString().equals(sa.getPayCosts().toSimpleString())) {
+                        return mapped;
+                    }
+                }
+            }
+            return null; // Never substitute another flashback cost when the selected one is unavailable.
+        }
+        SpellAbility result = saMatcher(candidates, desc);
 
         if (result == null && Boolean.getBoolean("flatmc.trace")) {
             System.err.println("[sim] no match for: " + desc + " in " + hostCard.getAllPossibleAbilities(aiPlayer, true) + " / unfiltered "

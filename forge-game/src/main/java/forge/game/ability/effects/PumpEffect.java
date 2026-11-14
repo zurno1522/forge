@@ -93,35 +93,60 @@ public class PumpEffect extends SpellAbilityEffect {
 
         if (!"Permanent".equals(duration) && !perpetual) {
             // If not Permanent, remove Pumped at EOT
-            final GameCommand untilEOT = new GameCommand() {
-                private static final long serialVersionUID = -42244224L;
-
-                @Override
-                public void run() {
-                    host.removeGainControlTargets(gameCard);
-
-                    gameCard.removePTBoost(timestamp, 0);
-                    boolean updateText = gameCard.removeCanBlockAny(timestamp);
-                    updateText |= gameCard.removeCanBlockAdditional(timestamp);
-
-                    if (keywords.size() > 0) {
-                        gameCard.removeHiddenExtrinsicKeywords(timestamp, 0);
-                        gameCard.removeChangedCardKeywords(timestamp, 0);
-                    }
-                    gameCard.updatePTforView();
-                    if (updateText) {
-                        gameCard.updateAbilityTextForView();
-                    }
-
-                    game.fireEvent(new GameEventCardStatsChanged(gameCard));
-                }
-            };
+            final GameCommand untilEOT = new RemoveCardPump(host, gameCard, timestamp, !keywords.isEmpty());
             if ("UntilUntaps".equals(duration)) {
                 host.addGainControlTarget(gameCard);
             }
             addUntilCommand(sa, untilEOT);
         }
         game.fireEvent(new GameEventCardStatsChanged(gameCard));
+    }
+
+    private static final class RemoveCardPump implements GameCommand {
+        private static final long serialVersionUID = 1L;
+        private final Card host;
+        private final Card card;
+        private final long timestamp;
+        private final boolean removeKeywords;
+
+        private RemoveCardPump(final Card host, final Card card, final long timestamp, final boolean removeKeywords) {
+            this.host = host;
+            this.card = card;
+            this.timestamp = timestamp;
+            this.removeKeywords = removeKeywords;
+        }
+
+        @Override
+        public void run() {
+            if (host != null) { host.removeGainControlTargets(card); }
+            card.removePTBoost(timestamp, 0);
+            boolean updateText = card.removeCanBlockAny(timestamp);
+            updateText |= card.removeCanBlockAdditional(timestamp);
+            if (removeKeywords) {
+                card.removeHiddenExtrinsicKeywords(timestamp, 0);
+                card.removeChangedCardKeywords(timestamp, 0);
+            }
+            card.updatePTforView();
+            if (updateText) { card.updateAbilityTextForView(); }
+            card.getGame().fireEvent(new GameEventCardStatsChanged(card));
+        }
+
+        @Override
+        public GameCommand copyForGame(final forge.game.IEntityMap map) {
+            final Card target = (Card) map.map(card);
+            if (target == null) { return null; }
+            // Copy a graveyard grant together with its expiry, not arbitrary unsupported temporary effects.
+            // A target that changed zones is a new object and must not regain the old permission.
+            if (!target.isInZone(ZoneType.Battlefield)
+                    && card.equalsWithGameTimestamp(card.getGame().getCardState(card))) {
+                final var keywords = card.getChangedCardKeywords().get(timestamp, 0L);
+                if (keywords != null) {
+                    target.getChangedCardKeywords().put(timestamp, 0L, keywords.copy(target, true));
+                    target.updateKeywordsCache();
+                }
+            }
+            return new RemoveCardPump(host == null ? null : (Card) map.map(host), target, timestamp, removeKeywords);
+        }
     }
 
     private static void applyPump(final SpellAbility sa, final Player p,

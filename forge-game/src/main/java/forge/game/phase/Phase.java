@@ -52,6 +52,32 @@ public class Phase implements java.io.Serializable {
     private final Multimap<Player, GameCommand> untilEndMap = MultimapBuilder.hashKeys().arrayListValues().build();
     private final Multimap<Player, GameCommand> registerMap = MultimapBuilder.hashKeys().arrayListValues().build();
 
+    /** Copy supported duration callbacks without retaining references to the original game. */
+    public final void copyMappedCommandsTo(final Phase target, final forge.game.IEntityMap map) {
+        copyMapped(at, target.at, map);
+        copyMapped(until, target.until, map);
+        copyMapped(untilMap, target.untilMap, map);
+        copyMapped(untilEndMap, target.untilEndMap, map);
+        copyMapped(registerMap, target.registerMap, map);
+    }
+
+    private static void copyMapped(final Collection<GameCommand> source, final Collection<GameCommand> target,
+            final forge.game.IEntityMap map) {
+        for (final GameCommand command : source) {
+            final GameCommand copy = command.copyForGame(map);
+            if (copy != null) { target.add(copy); }
+        }
+    }
+
+    private static void copyMapped(final Multimap<Player, GameCommand> source,
+            final Multimap<Player, GameCommand> target, final forge.game.IEntityMap map) {
+        for (final java.util.Map.Entry<Player, GameCommand> entry : source.entries()) {
+            final Player player = (Player) map.map(entry.getKey());
+            final GameCommand copy = entry.getValue().copyForGame(map);
+            if (player != null && copy != null) { target.put(player, copy); }
+        }
+    }
+
     public void clearCommands() {
         at.clear();
         until.clear();

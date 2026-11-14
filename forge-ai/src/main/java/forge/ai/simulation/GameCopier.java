@@ -209,6 +209,13 @@ public class GameCopier {
             }
         }
 
+        // Pump effects can grant graveyard abilities (Snapcaster) and must expire in the copy too.
+        origGame.getEndOfTurn().copyMappedCommandsTo(newGame.getEndOfTurn(), lenient);
+        origGame.getEndOfCombat().copyMappedCommandsTo(newGame.getEndOfCombat(), lenient);
+        origGame.getUpkeep().copyMappedCommandsTo(newGame.getUpkeep(), lenient);
+        origGame.getUntap().copyMappedCommandsTo(newGame.getUntap(), lenient);
+        origGame.getCleanup().copyMappedCommandsTo(newGame.getCleanup(), lenient);
+
         if (origPhaseHandler.getCombat() != null) {
             newGame.getPhaseHandler().setCombat(new Combat(origPhaseHandler.getCombat(), gameObjectMap));
         }

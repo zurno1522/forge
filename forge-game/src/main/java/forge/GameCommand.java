@@ -26,6 +26,11 @@ package forge;
  * @version $Id$
  */
 public interface GameCommand extends java.io.Serializable, Runnable {
+    /** Copy supported effect state and its callback into a mapped game, or return null if unsupported. */
+    default GameCommand copyForGame(final forge.game.IEntityMap map) {
+        return null;
+    }
+
     /** Constant <code>Blank</code>. */
     GameCommand BLANK = new GameCommand() {
 
