@@ -12,6 +12,9 @@ import forge.item.PaperCard;
 import forge.util.BuildInfo;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
@@ -32,6 +35,9 @@ final class SimulationTraceRun implements AutoCloseable {
     }
 
     private final SimulationTraceWriter writer;
+    private final SimulationTraceWriter decisionWriter;
+    private final String runId = UUID.randomUUID().toString();
+    private String pilotMode;
     private final Map<LobbyPlayer, Integer> participantIds = new IdentityHashMap<>();
     private int gamesAttempted;
     private int gamesNormal;
@@ -39,8 +45,9 @@ final class SimulationTraceRun implements AutoCloseable {
     private int gamesFailed;
     private boolean finished;
 
-    private SimulationTraceRun(final SimulationTraceWriter writer) {
+    private SimulationTraceRun(final SimulationTraceWriter writer, final SimulationTraceWriter decisionWriter) {
         this.writer = writer;
+        this.decisionWriter = decisionWriter;
     }
 
     static SimulationTraceRun open(final String filename, final GameRules rules,
@@ -48,13 +55,36 @@ final class SimulationTraceRun implements AutoCloseable {
             final Integer requestedGames, final Integer gamesPerMatch,
             final String tournamentType, final Integer playersPerMatch,
             final Long seed) {
+        return open(filename, null, rules, players, runMode, requestedGames, gamesPerMatch,
+                tournamentType, playersPerMatch, seed, "UNKNOWN");
+    }
+
+    static SimulationTraceRun open(final String filename, final String decisionFilename, final GameRules rules,
+            final List<RegisteredPlayer> players, final String runMode,
+            final Integer requestedGames, final Integer gamesPerMatch,
+            final String tournamentType, final Integer playersPerMatch, final Long seed, final String pilotMode) {
         SimulationTraceWriter writer = null;
+        SimulationTraceWriter decisionWriter = null;
         try {
-            writer = SimulationTraceWriter.open(filename);
-            final SimulationTraceRun run = new SimulationTraceRun(writer);
+            if (filename == null && decisionFilename == null) {
+                throw new IOException("At least one simulation output is required");
+            }
+            if (filename != null && decisionFilename != null) {
+                final Path trace = Path.of(filename).toAbsolutePath().normalize();
+                final Path decisions = Path.of(decisionFilename).toAbsolutePath().normalize();
+                if (trace.equals(decisions) || (Files.exists(trace) && Files.exists(decisions)
+                        && Files.isSameFile(trace, decisions))) {
+                    throw new IOException("Game trace and decision output must use different files");
+                }
+            }
+            writer = filename == null ? null : SimulationTraceWriter.open(filename);
+            decisionWriter = decisionFilename == null ? null : SimulationTraceWriter.open(decisionFilename);
+            final SimulationTraceRun run = new SimulationTraceRun(writer, decisionWriter);
+            run.pilotMode = pilotMode;
             run.writeStarted(rules, players, runMode, requestedGames, gamesPerMatch,
                     tournamentType, playersPerMatch, seed);
-            writer.flush();
+            if (writer != null) { writer.flush(); }
+            if (decisionWriter != null) { decisionWriter.flush(); }
             return run;
         } catch (IOException e) {
             if (writer != null) {
@@ -64,7 +94,10 @@ final class SimulationTraceRun implements AutoCloseable {
                     // Preserve the initialization failure as the primary diagnostic.
                 }
             }
-            throw new TraceFailure("Unable to initialize simulation trace: " + filename, e);
+            if (decisionWriter != null) {
+                try { decisionWriter.close(); } catch (IOException ignored) { /* Retain original failure. */ }
+            }
+            throw new TraceFailure("Unable to initialize simulation outputs", e);
         }
     }
 
@@ -74,6 +107,10 @@ final class SimulationTraceRun implements AutoCloseable {
         final Map<String, Object> record = new LinkedHashMap<>();
         record.put("type", "RUN_STARTED");
         record.put("schemaVersion", 1);
+        record.put("runId", runId);
+        record.put("pilotMode", pilotMode);
+        record.put("engineRevision", System.getProperty("forge.simulation.revision", "UNKNOWN"));
+        record.put("engineDirty", System.getProperty("forge.simulation.dirty", "UNKNOWN"));
         record.put("forgeVersion", BuildInfo.getVersionString());
         record.put("runMode", runMode);
         record.put("gameType", rules.getGameType().name());
@@ -108,14 +145,23 @@ final class SimulationTraceRun implements AutoCloseable {
             participants.add(participant);
         }
         record.put("participants", participants);
-        writer.write(record);
+        if (writer != null) {
+            record.put("streamKind", "FULL_GAME_TRACE");
+            record.put("eventIndexMode", "CONTIGUOUS");
+            writer.write(record);
+        }
+        if (decisionWriter != null) {
+            record.put("streamKind", "AI_DECISIONS");
+            record.put("eventIndexMode", writer == null ? "CONTIGUOUS" : "SHARED_WITH_GAME_TRACE");
+            decisionWriter.write(record);
+        }
     }
 
     SimulationTraceCollector beginGame(final Game game, final Integer matchId,
             final Integer gameInMatch, final Integer tournamentRound) {
         gamesAttempted++;
         final SimulationTraceCollector collector =
-                new SimulationTraceCollector(game, writer, gamesAttempted, participantIds,
+                new SimulationTraceCollector(game, writer, decisionWriter, gamesAttempted, participantIds,
                         matchId, gameInMatch, tournamentRound);
         game.subscribeToEvents(collector);
         game.setRecordAiDecisions(true);
@@ -159,17 +205,31 @@ final class SimulationTraceRun implements AutoCloseable {
             record.put("gamesNormal", gamesNormal);
             record.put("gamesTimedOut", gamesTimedOut);
             record.put("gamesFailed", gamesFailed);
-            writer.write(record);
-            writer.close();
+            if (writer != null) { writer.write(record); }
+            if (decisionWriter != null) { decisionWriter.write(record); }
+            closeWriters();
             finished = true;
         } catch (IOException e) {
             try {
-                writer.close();
+                closeWriters();
             } catch (IOException ignored) {
                 // The sink is already failing; best-effort close only.
             }
             throw new TraceFailure("Unable to finalize simulation trace", e);
         }
+    }
+
+    private void closeWriters() throws IOException {
+        IOException failure = null;
+        for (final SimulationTraceWriter sink : new SimulationTraceWriter[] { writer, decisionWriter }) {
+            if (sink == null) { continue; }
+            try {
+                sink.close();
+            } catch (IOException e) {
+                if (failure == null) { failure = e; } else { failure.addSuppressed(e); }
+            }
+        }
+        if (failure != null) { throw failure; }
     }
 
     @Override

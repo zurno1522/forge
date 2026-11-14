@@ -35,6 +35,7 @@ import java.util.Map;
 final class SimulationTraceCollector {
     private final Game game;
     private final SimulationTraceWriter writer;
+    private final SimulationTraceWriter decisionWriter;
     private final int gameNumber;
     private final Map<LobbyPlayer, Integer> participantIds;
     private final Integer matchId;
@@ -48,8 +49,16 @@ final class SimulationTraceCollector {
     SimulationTraceCollector(final Game game, final SimulationTraceWriter writer, final int gameNumber,
             final Map<LobbyPlayer, Integer> participantIds, final Integer matchId,
             final Integer gameInMatch, final Integer tournamentRound) {
+        this(game, writer, null, gameNumber, participantIds, matchId, gameInMatch, tournamentRound);
+    }
+
+    SimulationTraceCollector(final Game game, final SimulationTraceWriter writer,
+            final SimulationTraceWriter decisionWriter, final int gameNumber,
+            final Map<LobbyPlayer, Integer> participantIds, final Integer matchId,
+            final Integer gameInMatch, final Integer tournamentRound) {
         this.game = game;
         this.writer = writer;
+        this.decisionWriter = decisionWriter;
         this.gameNumber = gameNumber;
         this.participantIds = participantIds;
         this.matchId = matchId;
@@ -60,6 +69,10 @@ final class SimulationTraceCollector {
     @Subscribe
     public void onGameEvent(final GameEvent event) {
         if (failure != null) {
+            return;
+        }
+        if (writer == null && !(event instanceof GameEventGameStarted)
+                && !(event instanceof GameEventGameOutcome) && !(event instanceof GameEventGameFinished)) {
             return;
         }
         try {
@@ -175,7 +188,12 @@ final class SimulationTraceCollector {
             record.put("error", errorRef);
         }
         write(record);
-        writer.flush();
+        if (writer != null) {
+            writer.flush();
+        }
+        if (decisionWriter != null) {
+            decisionWriter.flush();
+        }
     }
 
     int nextEventIndex() {
@@ -751,7 +769,13 @@ final class SimulationTraceCollector {
     }
 
     private void write(final Map<String, Object> record) throws IOException {
-        writer.write(record);
+        if (writer != null) {
+            writer.write(record);
+        }
+        if (decisionWriter != null && List.of("GAME_STARTED", "AI_DECISION", "GAME_OUTCOME",
+                "GAME_FINISHED", "GAME_EXECUTION_FINISHED").contains(record.get("type"))) {
+            decisionWriter.write(record);
+        }
     }
 
     private static Map<String, Object> playerRef(final PlayerView player) {

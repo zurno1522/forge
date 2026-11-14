@@ -17,6 +17,7 @@ import java.util.Map;
 final class AiDecisionRecorder {
     private final Map<String, Object> data = new LinkedHashMap<>();
     private final List<Map<String, Object>> candidates = new ArrayList<>();
+    private final Map<Integer, Map<String, Object>> details = new LinkedHashMap<>();
     private final long started = System.nanoTime();
     private boolean closed;
     private String evaluationFailure;
@@ -34,10 +35,51 @@ final class AiDecisionRecorder {
     }
 
     // Evaluation can run on a worker which outlives cancellation. Never write into another decision.
+    synchronized void beginAssessment(final SpellAbility sa) {
+        if (!closed) { details.remove(sa.getRootAbility().getId()); }
+    }
+
+    synchronized void detail(final SpellAbility sa, final Map<String, Object> reason) {
+        if (!closed) { details.put(sa.getRootAbility().getId(), reason); }
+    }
+
+    synchronized void lands(final Iterable<Card> playable, final SpellAbility heuristic) {
+        if (closed) { return; }
+        for (final Card land : playable) {
+            final boolean preferred = land.getId() == heuristic.getHostCard().getId();
+            final Map<String, Object> option = preferred ? action(heuristic) : cardAction(land);
+            option.put("kind", "LAND");
+            option.put("assessment", "LAND_OPTION");
+            option.put("assessmentStage", "LAND_SHORTLIST");
+            option.put("heuristicDefault", preferred);
+            option.put("searchOffered", false);
+            candidates.add(option);
+        }
+    }
+
+    synchronized void landSearchCandidates(final List<SpellAbility> offered) {
+        if (closed) { return; }
+        for (final Map<String, Object> candidate : candidates) {
+            if (!"LAND_SHORTLIST".equals(candidate.get("assessmentStage"))) { continue; }
+            for (final SpellAbility sa : offered) {
+                if (candidate.get("sourceId").equals(sa.getHostCard().getId())) {
+                    candidate.put("searchOffered", true);
+                    candidate.put("abilityId", sa.getId());
+                }
+            }
+        }
+    }
+
     synchronized void evaluated(final SpellAbility sa, final String reason) {
         if (!closed) {
             final Map<String, Object> candidate = action(sa);
             candidate.put("assessment", reason);
+            final Map<String, Object> detail = details.remove(sa.getRootAbility().getId());
+            if (detail != null && !"WillPlay".equals(reason) && !"MONTE_CARLO_ONLY_WillPlay".equals(reason)) {
+                // Handler names can reveal a face-down card's implementation. Retain only the generic code then.
+                candidate.put("assessmentDetail", candidate.containsKey("sourceName") ? detail
+                        : Map.of("reason", detail.get("reason")));
+            }
             candidates.add(candidate);
         }
     }
@@ -76,15 +118,19 @@ final class AiDecisionRecorder {
         result.put("abilityId", sa.getId());
         result.put("kind", sa.isLandAbility() ? "LAND" : sa.isSpell() ? "SPELL" : "ABILITY");
         if (sa.getHostCard() != null) {
-            result.put("sourceId", sa.getHostCard().getId());
-            if (!sa.getHostCard().isFaceDown() && sa.getHostCard().getView().canBeShownTo(viewer.getView())) {
-                result.put("sourceName", sa.getHostCard().getName());
-                result.put("description", sa.getDescription());
-            }
-            if (sa.getHostCard().getZone() != null) {
-                result.put("zone", sa.getHostCard().getZone().getZoneType().name());
-            }
+            result.putAll(cardAction(sa.getHostCard()));
+            if (result.containsKey("sourceName")) { result.put("description", sa.getDescription()); }
         }
+        return result;
+    }
+
+    private Map<String, Object> cardAction(final Card card) {
+        final Map<String, Object> result = new LinkedHashMap<>();
+        result.put("sourceId", card.getId());
+        if (!card.isFaceDown() && card.getView().canBeShownTo(viewer.getView())) {
+            result.put("sourceName", card.getName());
+        }
+        if (card.getZone() != null) { result.put("zone", card.getZone().getZoneType().name()); }
         return result;
     }
 

@@ -101,6 +101,7 @@ public class AiController {
     private long flatMcTurnSpentNanos;
     private FlatMonteCarloPicker.Result lastFlatMcResult;
     private volatile AiDecisionRecorder decisionRecorder;
+    private final ThreadLocal<AiDecisionRecorder> evaluationDecision = new ThreadLocal<>();
     /** Circuit breaker: Monte Carlo switches itself off for this player after repeated errors or hopeless slowness. */
     private int flatMcErrors;
     private int flatMcSlowStreak;
@@ -944,6 +945,12 @@ public class AiController {
         }
     }
 
+    private void decisionDetail(final SpellAbility sa, final String reason) {
+        if (!game.isRecordingAiDecisions()) { return; }
+        final AiDecisionRecorder recorder = evaluationDecision.get();
+        if (recorder != null) { recorder.detail(sa, Map.of("reason", reason)); }
+    }
+
     private AiPlayDecision canPlayAndPayFor(final SpellAbility sa) {
         AITimeoutTracker.check();
         final Card host = sa.getHostCard();
@@ -951,6 +958,7 @@ public class AiController {
         if (sa instanceof Spell sp) {
             Card altHost = sp.canPlayFromHost();
             if (altHost == null) {
+                decisionDetail(sa, "NO_PLAYABLE_CARD_FACE");
                 return AiPlayDecision.CantPlaySa;
             }
             // state needs to be switched here so API checks evaluate the right face
@@ -993,6 +1001,7 @@ public class AiController {
         if (!ComputerUtilCost.canPayCost(sa, player, sa.isTrigger())) {
             // for dependent costs with X, e.g. Repeal, which require a valid target to be specified before a decision can be made
             // on whether the cost can be paid, this can only be checked late after canPlaySa has been run (or the AI will misplay)
+            decisionDetail(sa, "CANNOT_PAY_COST");
             return AiPlayDecision.CantAfford;
         }
 
@@ -1000,6 +1009,7 @@ public class AiController {
         Set<Card> tappedForMana = AiCardMemory.getMemorySet(player, MemorySet.PAYS_TAP_COST);
         if (tappedForMana != null && !tappedForMana.isEmpty() &&
                 !ComputerUtilCost.checkTapTypeCost(player, sa.getPayCosts(), host, sa, new CardCollection(tappedForMana))) {
+            decisionDetail(sa, "RESERVED_TAP_RESOURCES");
             return AiPlayDecision.CantAfford;
         }
 
@@ -1017,6 +1027,7 @@ public class AiController {
 
     public AiPlayDecision canPlaySa(SpellAbility sa) {
         if (hasFailedToCast(sa)) {
+            decisionDetail(sa, "PREVIOUS_CAST_FAILED_THIS_TURN");
             return AiPlayDecision.CantPlayAi; // it could not be put on the stack earlier this turn
         }
         if (deckPlan(player).combos.outletMustWait(player, sa)) {
@@ -1029,6 +1040,7 @@ public class AiController {
             return AiPlayDecision.AnotherTime; // Breakthrough without the Diamond and a dredger only empties the hand
         }
         if (!checkAiSpecificRestrictions(sa)) {
+            decisionDetail(sa, "AI_SPECIFIC_RESTRICTION");
             return AiPlayDecision.CantPlayAi;
         }
         if (sa instanceof WrappedAbility) {
@@ -1059,7 +1071,17 @@ public class AiController {
             Sentry.setExtra("Card", card.getName());
             Sentry.setExtra("SA", sa.toString());
 
-            boolean canPlay = SpellApiToAi.Converter.get(sa).canPlayWithSubs(player, sa).willingToPlay();
+            final var evaluator = SpellApiToAi.Converter.get(sa);
+            final AiAbilityDecision cardOpinion = evaluator.canPlayWithSubs(player, sa);
+            final boolean canPlay = cardOpinion.willingToPlay();
+            if (!canPlay && game.isRecordingAiDecisions()) {
+                final AiDecisionRecorder recorder = evaluationDecision.get();
+                if (recorder != null) {
+                    recorder.detail(sa, Map.of("reason", cardOpinion.decision().willingToPlay()
+                            ? "CARD_AI_RATING_TOO_LOW" : "CARD_AI_DECLINED", "handler", evaluator.getClass().getSimpleName(),
+                            "handlerAssessment", cardOpinion.decision().name(), "handlerRating", cardOpinion.rating()));
+                }
+            }
 
             // remove added extra
             Sentry.removeExtra("Card");
@@ -1717,6 +1739,7 @@ public class AiController {
         cfg.considerHolding = false;
         cfg.targetVariants = 0;
         cfg.extraCandidates = 0;
+        if (decisionRecorder != null) { decisionRecorder.landSearchCandidates(candidates); }
         try {
             final FlatMonteCarloPicker.Result result = FlatMonteCarloPicker.choose(player, candidates, Collections.emptyList(), cfg, null,
                     FlatMonteCarloPicker.Mode.MAIN);
@@ -1783,6 +1806,7 @@ public class AiController {
 
                     if (!abilities.isEmpty()) {
                         // TODO extend this logic to evaluate MDFC with both sides land
+                        if (decisionRecorder != null) { decisionRecorder.lands(landsWannaPlay, abilities.get(0)); }
                         return refineLandChoice(landsWannaPlay, abilities);
                     }
                 }
@@ -2846,11 +2870,13 @@ public class AiController {
             final List<SpellAbility> approvedPlays = new ArrayList<>();
             // the eval thread aborts itself at the shared deadline (or when cancelled) instead of running on as a zombie
             final Object evalLimit = AITimeoutTracker.arm(deadlineNanos, true);
+            if (decision != null) { evaluationDecision.set(decision); }
             try {
                 //avoid ComputerUtil.aiLifeInDanger in loops as it slows down a lot.. call this outside loops will generally be fast...
                 final boolean isLifeInDanger = massReanimation && ComputerUtil.aiLifeInDanger(player, true, 0);
                 for (final SpellAbility sa : ComputerUtilAbility.getOriginalAndAltCostAbilities(all, player)) {
                     AITimeoutTracker.check();
+                    if (decision != null) { decision.beginAssessment(sa); }
 
                     // Don't add Counterspells to the "normal" playcard lookups
                     if (skipCounter && sa.getApi() == ApiType.Counter) {
@@ -2959,6 +2985,7 @@ public class AiController {
                 }
                 return approvedPlays; // whatever was approved before time ran out
             } finally {
+                if (decision != null) { evaluationDecision.remove(); }
                 AITimeoutTracker.disarm(evalLimit); // matters as soon as this runs on a pooled thread
             }
         });

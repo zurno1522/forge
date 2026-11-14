@@ -103,6 +103,15 @@ public class SimulateMatch {
             traceFile = params.get("log-game").get(0);
         }
 
+        String decisionFile = null;
+        if (params.containsKey("log-decisions")) {
+            if (params.get("log-decisions").size() != 1) {
+                System.err.println("-log-decisions requires exactly one output filename");
+                return;
+            }
+            decisionFile = params.get("log-decisions").get(0);
+        }
+
         // Flat Monte Carlo is a match preference that only the GUI applies (HostedMatch); without this switch a
         // simulation always runs the plain heuristic AI, whatever the preference says.
         flatMonteCarlo = null;
@@ -143,7 +152,7 @@ public class SimulateMatch {
         }
 
         if (params.containsKey("t")) {
-            simulateTournament(params, rules, outputGamelog, traceFile, seed);
+            simulateTournament(params, rules, outputGamelog, traceFile, decisionFile, seed);
             System.out.flush();
             return;
         }
@@ -212,12 +221,12 @@ public class SimulateMatch {
 
         SimulationTraceRun traceRun = null;
         try {
-            if (traceFile != null) {
-                traceRun = SimulationTraceRun.open(traceFile, rules, pp,
+            if (traceFile != null || decisionFile != null) {
+                traceRun = SimulationTraceRun.open(traceFile, decisionFile, rules, pp,
                         matchSize != 0 ? "MATCH" : "GAMES",
                         matchSize == 0 ? nGames : null,
                         matchSize != 0 ? rules.getGamesPerMatch() : null,
-                        null, null, seed);
+                        null, null, seed, pilotMode());
             }
 
             if (matchSize != 0) {
@@ -255,7 +264,7 @@ public class SimulateMatch {
     }
 
     private static void argumentHelp() {
-        System.out.println("Syntax: forge.exe sim -d <deck1[.dck]> ... <deckX[.dck]> -D [D] -n [N] -m [M] -t [T] -p [P] -f [F] -s [S] -a [A] -mc [on|max|off] -log-game [FILE] -q");
+        System.out.println("Syntax: forge.exe sim -d <deck1[.dck]> ... <deckX[.dck]> -D [D] -n [N] -m [M] -t [T] -p [P] -f [F] -s [S] -a [A] -mc [on|max|off] -log-game [FILE] -log-decisions [FILE] -q");
         System.out.println("\tsim - stands for simulation mode");
         System.out.println("\tdeck1 (or deck2,...,X) - constructed deck name or filename (has to be quoted when contains multiple words)");
         System.out.println("\tdeck is treated as file if it ends with a dot followed by three numbers or letters");
@@ -268,6 +277,7 @@ public class SimulateMatch {
         System.out.println("\tS - RNG seed for simulation");
         System.out.println("\tA - AI profile per player, in the same order as the decks (e.g. -a Default Experimental)");
         System.out.println("\tlog-game - Write structured simulation game events to a JSONL file.");
+        System.out.println("\tlog-decisions - Write AI decisions and outcomes without full game tracing.");
         System.out.println("\tc - Clock flag. Set the maximum time in seconds before calling the match a draw, defaults to 120.");
         System.out.println("\tmc - Flat Monte Carlo AI refinement for this run, on, max or off (default off in simulations; max = desktop strength). Prints timing statistics at the end when on.");
         System.out.println("\tq - Quiet flag. Output just the game result, not the entire game log.");
@@ -354,8 +364,13 @@ public class SimulateMatch {
         }
     }
 
+    private static String pilotMode() {
+        return Boolean.TRUE.equals(flatMonteCarlo) ? Boolean.TRUE.equals(flatMonteCarloMax)
+                ? "FLAT_MONTE_CARLO_MAX" : "FLAT_MONTE_CARLO" : "HEURISTIC";
+    }
+
     private static void simulateTournament(Map<String, List<String>> params, GameRules rules, boolean outputGamelog,
-            String traceFile, Long seed) {
+            String traceFile, String decisionFile, Long seed) {
         String tournament = params.get("t").get(0);
         AbstractTournament tourney = null;
         int matchPlayers = params.containsKey("p") ? Integer.parseInt(params.get("p").get(0)) : 2;
@@ -425,10 +440,10 @@ public class SimulateMatch {
 
         SimulationTraceRun traceRun = null;
         try {
-            if (traceFile != null) {
-                traceRun = SimulationTraceRun.open(traceFile, rules, traceParticipants,
+            if (traceFile != null || decisionFile != null) {
+                traceRun = SimulationTraceRun.open(traceFile, decisionFile, rules, traceParticipants,
                         "TOURNAMENT", null, rules.getGamesPerMatch(),
-                        tournament.toUpperCase(Locale.ROOT), matchPlayers, seed);
+                        tournament.toUpperCase(Locale.ROOT), matchPlayers, seed, pilotMode());
             }
 
             tourney.initializeTournament();
