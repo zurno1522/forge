@@ -961,13 +961,25 @@ public class PlayerControllerAi extends PlayerController {
 
     @Override
     public boolean playChosenSpellAbility(SpellAbility sa) {
-        if (sa.isLandAbility()) {
-            if (sa.canPlay()) {
-                sa.resolve();
+        final AiActionTracker tracker = brains.actionTracker();
+        final AiActionTracker.Attempt attempt = tracker == null ? null : tracker.begin(sa);
+        try {
+            boolean played;
+            if (sa.isLandAbility()) {
+                final int landsBefore = player.getLandsPlayedThisTurn();
+                if (sa.canPlay()) {
+                    sa.resolve();
+                }
+                played = player.getLandsPlayedThisTurn() > landsBefore;
+            } else {
+                played = playWithRollback(sa, getDeferredTargetingPlayerAction(sa));
             }
-        } else {
-            playWithRollback(sa, getDeferredTargetingPlayerAction(sa));
+            if (tracker != null) { tracker.played(attempt, sa, played); }
+        } catch (RuntimeException | Error error) {
+            if (tracker != null) { tracker.finish(attempt, "ERROR", "EXECUTION_EXCEPTION"); }
+            throw error;
         }
+        // Preserve the controller's existing priority-loop behavior; telemetry uses the internal result above.
         return true;
     }
 

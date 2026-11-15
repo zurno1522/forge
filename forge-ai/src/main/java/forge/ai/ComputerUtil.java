@@ -81,6 +81,7 @@ import java.util.stream.Collectors;
 public class ComputerUtil {
 
     public static boolean handlePlayingSpellAbility(final Player ai, SpellAbility sa, Consumer<SpellAbility> chooseTargets) {
+        final SpellAbility selectedAbility = sa;
         final Card source = sa.getHostCard();
         final Game game = source.getGame();
         RunawayLoop.note(ai, sa);
@@ -125,6 +126,10 @@ public class ComputerUtil {
         }
 
         sa = GameActionUtil.addExtraKeywordCost(sa);
+
+        if (ai.getController() instanceof PlayerControllerAi pc) {
+            pc.getAi().aliasSelectedAction(selectedAbility, sa);
+        }
 
         if (sa.getApi() == ApiType.Charm && !CharmEffect.makeChoices(sa)) {
             // 603.3c If no mode is chosen, the ability is removed from the stack.

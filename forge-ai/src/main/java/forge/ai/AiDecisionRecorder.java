@@ -26,6 +26,7 @@ final class AiDecisionRecorder {
     AiDecisionRecorder(final Game game, final Player viewer, final long sequence) {
         this.viewer = viewer;
         data.put("decisionSchemaVersion", 1);
+        data.put("actionExecutionSchemaVersion", 1);
         data.put("decisionId", viewer.getId() + ":" + sequence);
         data.put("playerId", viewer.getId());
         data.put("decisionType", "MAIN_PHASE_PLAY_SELECTION");
@@ -98,7 +99,9 @@ final class AiDecisionRecorder {
         final List<Map<String, Object>> selected = new ArrayList<>();
         if (chosen != null) {
             for (final SpellAbility sa : chosen) {
-                selected.add(action(sa));
+                final Map<String, Object> action = action(sa);
+                action.put("actionId", data.get("decisionId") + ":" + selected.size());
+                selected.add(action);
             }
         }
         data.put("selection", "ERROR".equals(status) ? "NO_ACTION" : selected.isEmpty() ? "PASS_PRIORITY" : "PLAY");

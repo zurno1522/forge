@@ -32,6 +32,7 @@ def validate_decision(record, game):
     d = record.get('decision')
     require(isinstance(d, dict), 'AI_DECISION lacks decision object')
     require(d.get('decisionSchemaVersion') == 1, 'unsupported decision schema version')
+    require(d.get('actionExecutionSchemaVersion') in (None, 1), 'unsupported action execution schema version')
     require(isinstance(d.get('decisionId'), str) and d['decisionId'], 'missing decisionId')
     require(integer(d.get('playerId')), 'invalid decision playerId')
     require(d.get('decisionType') == 'MAIN_PHASE_PLAY_SELECTION', 'unsupported decision type')
@@ -90,6 +91,8 @@ def validate_decision(record, game):
     for candidate in candidates:
         require(isinstance(candidate.get('assessment'), str) and candidate['assessment'], 'candidate lacks assessment')
     require(bool(selected) == (d['selection'] == 'PLAY'), 'selection/action count mismatch')
+    if d.get('actionExecutionSchemaVersion') == 1:
+        require(all(isinstance(a.get('actionId'), str) and a['actionId'] for a in selected), 'selected action lacks actionId')
     require((d['selection'] == 'NO_ACTION') == (d['status'] == 'ERROR'), 'selection error status mismatch')
     if 'search' in d:
         search = d['search']
@@ -98,6 +101,39 @@ def validate_decision(record, game):
         for key in ('rollouts', 'candidatesEvaluated', 'elapsedNanos'):
             require(integer(search.get(key)) and search[key] >= 0, 'invalid search count/duration')
     return d
+
+
+def accept_execution(record, game):
+    execution = record.get('execution')
+    require(isinstance(execution, dict) and execution.get('executionSchemaVersion') == 1, 'invalid action execution schema')
+    require(set(execution) <= {'executionSchemaVersion', 'actionId', 'decisionId', 'playerId', 'abilityId', 'sourceId', 'kind',
+                               'status', 'reason', 'executedAbilityId', 'stackId'}, 'unexpected execution payload field')
+    action_id = execution.get('actionId')
+    require(isinstance(action_id, str) and action_id in game['actions'], 'execution has no preceding selected action')
+    action = game['actions'][action_id]
+    require(all(integer(execution.get(k)) for k in ('playerId', 'abilityId', 'sourceId')), 'invalid execution identity identifiers')
+    for key in ('decisionId', 'playerId', 'abilityId', 'sourceId', 'kind'):
+        require(execution.get(key) == action['identity'][key], 'execution/selection identity mismatch')
+    require(isinstance(execution.get('reason'), str) and execution['reason'], 'missing execution reason')
+    for key in ('executedAbilityId', 'stackId'):
+        require(key not in execution or integer(execution[key]), 'invalid execution engine identifier')
+    status = execution.get('status')
+    require(action['terminal'] is None, 'execution after terminal result')
+    if status == 'STARTED':
+        require(not action['events'], 'duplicate execution start')
+    elif status == 'ABANDONED':
+        require(not action['events'], 'attempted action cannot be abandoned')
+        action['terminal'] = status
+    else:
+        require(status in ('SUCCEEDED', 'FAILED', 'ERROR', 'UNOBSERVED'), 'invalid action execution status')
+        require(action['events'] and action['events'][0]['execution']['status'] == 'STARTED', 'execution result without start')
+        if status == 'SUCCEEDED' and execution['reason'] == 'STACKED':
+            require('stackId' in execution and 'executedAbilityId' in execution, 'stacked action lacks engine identifiers')
+        action['terminal'] = status
+    # Keep only the execution envelope, not unrelated diagnostic fields from a full trace.
+    event = {key: record[key] for key in ('type', 'game', 'eventIndex', 'turn', 'phase') if key in record}
+    event.update(execution=execution, postOutcome=game['outcome'] is not None)
+    action['events'].append(event)
 
 
 def load_run(path):
@@ -143,7 +179,7 @@ def load_run(path):
                 else:
                     number = record.get('game')
                     require(integer(number) and number > 0, 'missing game number')
-                    game = games.setdefault(number, dict(lastIndex=0, start=None, outcome=None, finish=None, execution=None, decisions=[], players={}))
+                    game = games.setdefault(number, dict(lastIndex=0, start=None, outcome=None, finish=None, execution=None, decisions=[], players={}, actions={}))
                     require(game['execution'] is None, 'scoped event after GAME_EXECUTION_FINISHED')
                     index = record.get('eventIndex')
                     require(integer(index) and index > game['lastIndex'], 'event indices not strictly increasing')
@@ -151,7 +187,7 @@ def load_run(path):
                         require(index == game['lastIndex'] + 1, 'event index gap')
                     game['lastIndex'] = index
                     if metadata.get('streamKind') == 'AI_DECISIONS':
-                        require(kind in ('GAME_STARTED', 'AI_DECISION', 'GAME_OUTCOME', 'GAME_FINISHED', 'GAME_EXECUTION_FINISHED'), 'unexpected full game event in decision stream')
+                        require(kind in ('GAME_STARTED', 'AI_DECISION', 'AI_ACTION_EXECUTION', 'GAME_OUTCOME', 'GAME_FINISHED', 'GAME_EXECUTION_FINISHED'), 'unexpected full game event in decision stream')
                     if kind == 'GAME_STARTED':
                         require(game['start'] is None, 'duplicate GAME_STARTED')
                         game['start'] = record
@@ -169,6 +205,14 @@ def load_run(path):
                         require(all(old['decision']['decisionId'] != d['decisionId'] for old in game['decisions']), 'duplicate decision id')
                         require(d['playerId'] in game['players'], 'unknown deciding player')
                         game['decisions'].append(record)
+                        if d.get('actionExecutionSchemaVersion') == 1:
+                            for selected in d['selectedActions']:
+                                action_id = selected['actionId']
+                                require(action_id not in game['actions'], 'duplicate selected actionId')
+                                identity = dict(selected, decisionId=d['decisionId'], playerId=d['playerId'])
+                                game['actions'][action_id] = dict(identity=identity, events=[], terminal=None)
+                    elif kind == 'AI_ACTION_EXECUTION':
+                        accept_execution(record, game)
                     elif kind == 'GAME_OUTCOME':
                         require(game['outcome'] is None, 'duplicate outcome')
                         game['outcome'] = record
@@ -188,6 +232,8 @@ def load_run(path):
         execution, outcome = game['execution'], game['outcome']
         require(execution is not None, f'{path}: game {number} lacks execution finish')
         counts[execution['status']] += 1
+        if execution['status'] == 'NORMAL':
+            require(all(a['terminal'] is not None for a in game['actions'].values()), f'{path}: normally completed game has unfinished selected actions')
         if execution['status'] != 'EXCEPTION' or game['decisions']:
             require(game['start'] is not None and game['finish'] is not None and outcome is not None, f'{path}: game {number} lacks start/outcome/finish')
         if outcome is not None:
@@ -222,7 +268,15 @@ def dataset_rows(run):
             d = record['decision']
             participant_id = game['players'][d['playerId']]
             participant = participants[participant_id]
+            linked = []
+            for selected in d['selectedActions']:
+                action = game['actions'].get(selected.get('actionId'))
+                linked.append(dict(actionId=selected.get('actionId'),
+                                   status=(action['terminal'] or 'INCOMPLETE') if action else 'UNAVAILABLE',
+                                   events=action['events'] if action else []))
             eligible = (run['finished']['status'] != 'ABORTED' and game['execution']['status'] == 'NORMAL' and d['status'] == 'COMPLETED' and not record.get('postOutcome', False))
+            eligible = eligible and not any(a['status'] in ('ABANDONED', 'ERROR', 'UNOBSERVED', 'INCOMPLETE')
+                                           or any(e['postOutcome'] for e in a['events']) for a in linked)
             outcome = game['outcome']
             winners = [p['participantId'] for p in outcome['winners']] if outcome else []
             label = ('DRAW' if outcome['draw'] else 'WIN' if participant_id in winners else 'LOSS') if eligible else None
@@ -232,7 +286,7 @@ def dataset_rows(run):
                        aiProfile=participant.get('aiProfile'), pilotMode=meta['pilotMode'], seed=meta.get('seed'),
                        forgeVersion=meta.get('forgeVersion'), engineRevision=meta['engineRevision'], engineDirty=meta['engineDirty'],
                        executionStatus=game['execution']['status'], outcomeEligible=eligible,
-                       outcomeLabel=label, trainingReady=False, decision=d)
+                       outcomeLabel=label, trainingReady=False, actionExecutions=linked, decision=d)
 
 
 def matches_selected(action, candidate):
@@ -267,6 +321,7 @@ def make_coverage(runs, rows):
     summary['decisionsAfterOutcome'] = sum(r['postOutcome'] for r in rows)
     summary['decisionsWithAssessments'] = sum(bool(r['decision']['candidates']) for r in rows)
     summary['selectedActionsWithoutAssessment'] = sum(not any(matches_selected(a, c) for c in r['decision']['candidates']) for r in rows for a in r['decision']['selectedActions'])
+    summary['actionExecutionStatuses'] = dict(collections.Counter(a['status'] for r in rows for a in r['actionExecutions']))
     summary['searchRecords'] = sum('search' in r['decision'] for r in rows)
     summary['searchDecidedByRollouts'] = sum(r['decision'].get('search', {}).get('decidedByRollouts', False) for r in rows)
     summary['runsSummary'] = [dict(runId=r['metadata']['runId'], decks=[p.get('deckName') for p in r['metadata']['participants']],
@@ -288,7 +343,8 @@ def make_coverage(runs, rows):
         'Player observations are partial. Missing state includes remembered reveals, detailed mana restrictions and delayed effects.',
         'Win/loss labels describe eventual game outcomes, not whether individual choices were correct. trainingReady remains false.',
         'Search summaries omit per-candidate values and the heuristic counterfactual; actual choice-change rates cannot be inferred.',
-        'No guaranteed selection-to-execution join; legacy land records and some direct combo selections can lack assessment rows.',
+        'Action execution joins are available when declared by new records; legacy executions remain UNAVAILABLE. Execution success does not establish resolution or strategic value.',
+        'Legacy land records and some direct combo selections can lack assessment rows.',
         'UNKNOWN engine/pilot metadata in legacy inputs is retained explicitly rather than guessed.',
         'Handler labels are preserved from Forge: MissingPhaseRestrictions means a phase check declined the play, not necessarily missing card configuration.',
     ]
@@ -320,6 +376,7 @@ def report_markdown(summary, runs):
               'Decision statuses: `' + json.dumps(summary['decisionStatuses'], sort_keys=True) + '`.',
               'Selected action kinds: `' + json.dumps(summary['selectedActionKinds'], sort_keys=True) + '`.',
               'Phases: `' + json.dumps(summary['phases'], sort_keys=True) + '`.',
+              'Selected action execution results: `' + json.dumps(summary['actionExecutionStatuses'], sort_keys=True) + '`.',
               f"{summary['decisionsWithAssessments']} decisions have assessment rows. {summary['selectedActionsWithoutAssessment']} selected actions lack a matching assessment row.",
               f"{summary['decisionsAfterOutcome']} in-flight decisions completed after an outcome was announced; these are retained in order and censored.",
               f"{summary['searchRecords']} decisions include search summaries; {summary['searchDecidedByRollouts']} report that rollouts decided the choice.", '',
@@ -352,11 +409,12 @@ def export(paths, output_dir=None, examples=12):
         require(not any((out / name).resolve() in {p.resolve() for p in paths} for name in names), 'output would overwrite an input')
         out.mkdir(parents=True, exist_ok=True)
         (out / 'dataset.jsonl').write_text(''.join(json.dumps(r, ensure_ascii=False) + '\n' for r in rows), encoding='utf-8')
-        # Include examples from distinct pilot/selection/outcome/search groups before filling remaining slots.
+        # Include distinct pilot/selection/outcome/search/execution groups before filling remaining slots.
         sample = []
         seen = set()
         for row in rows:
-            key = (row['pilotMode'], row['decision']['selection'], row['outcomeEligible'], bool(row['decision'].get('search')))
+            key = (row['pilotMode'], row['decision']['selection'], row['outcomeEligible'], bool(row['decision'].get('search')),
+                   tuple(a['status'] for a in row['actionExecutions']))
             if key not in seen:
                 seen.add(key)
                 sample.append(row)

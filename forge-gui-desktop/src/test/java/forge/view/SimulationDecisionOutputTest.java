@@ -3,6 +3,7 @@ package forge.view;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import forge.ai.AiDecisionEvent;
+import forge.ai.AiActionExecutionEvent;
 import forge.game.Game;
 import forge.game.GameRules;
 import forge.game.GameType;
@@ -10,6 +11,7 @@ import forge.game.Match;
 import forge.game.card.CardView;
 import forge.game.event.GameEventCardTapped;
 import forge.game.event.GameEventGameStarted;
+import forge.game.event.GameEventGameFinished;
 import forge.game.event.GameEventShuffle;
 import forge.game.player.PlayerView;
 import forge.util.Localizer;
@@ -51,20 +53,22 @@ public class SimulationDecisionOutputTest {
                 game.fireEvent(new GameEventShuffle((PlayerView) null));
                 game.fireEvent(new GameEventGameStarted(GameType.Constructed, new PlayerView(0, game.getTracker()), List.of()));
                 game.fireEvent(new AiDecisionEvent(Map.of("decisionId", "0:1")));
+                game.fireEvent(new AiActionExecutionEvent(Map.of("actionId", "0:1:0", "status", "STARTED")));
                 game.fireEvent(new GameEventCardTapped((CardView) null, false));
+                game.fireEvent(new AiActionExecutionEvent(Map.of("actionId", "0:1:0", "status", "FAILED")));
                 run.finishGame(collector, "NORMAL", null);
                 run.finishNormal();
             }
             final List<JsonObject> data = read(decisions);
             Assert.assertEquals(data.stream().map(r -> r.get("type").getAsString()).toList(),
-                    List.of("RUN_STARTED", "GAME_STARTED", "AI_DECISION", "GAME_EXECUTION_FINISHED", "RUN_FINISHED"));
+                    List.of("RUN_STARTED", "GAME_STARTED", "AI_DECISION", "AI_ACTION_EXECUTION", "AI_ACTION_EXECUTION", "GAME_EXECUTION_FINISHED", "RUN_FINISHED"));
             Assert.assertEquals(data.get(0).get("streamKind").getAsString(), "AI_DECISIONS");
             Assert.assertEquals(data.get(0).get("pilotMode").getAsString(), "HEURISTIC");
             Assert.assertEquals(data.get(0).get("seed").getAsLong(), 7L);
             Assert.assertEquals(data.get(1).get("eventIndex").getAsInt(), fullTrace ? 2 : 1);
             if (fullTrace) {
                 final List<JsonObject> complete = read(full);
-                Assert.assertEquals(complete.size(), 7);
+                Assert.assertEquals(complete.size(), 9);
                 Assert.assertEquals(complete.get(1).get("type").getAsString(), "SHUFFLE");
                 Assert.assertEquals(complete.get(0).get("runId"), data.get(0).get("runId"));
                 Assert.assertEquals(data.get(0).get("eventIndexMode").getAsString(), "SHARED_WITH_GAME_TRACE");
@@ -93,8 +97,14 @@ public class SimulationDecisionOutputTest {
         }
     }
 
-    @Test(groups = { "UnitTest", "fast" })
-    public void secondarySinkFailureCannotReportHealthy() throws Exception {
+    @DataProvider
+    public Object[][] failureEvents() {
+        return new Object[][] { { new AiDecisionEvent(Map.of("decisionId", "0:1")) },
+                { new AiActionExecutionEvent(Map.of("actionId", "0:1:0", "status", "STARTED")) } };
+    }
+
+    @Test(dataProvider = "failureEvents", groups = { "UnitTest", "fast" })
+    public void secondarySinkFailureCannotReportHealthy(final forge.game.event.Event event) throws Exception {
         final Path full = Files.createTempFile("forge-full-", ".jsonl");
         final Path decisions = Files.createTempFile("forge-decisions-", ".jsonl");
         final SimulationTraceWriter writer = SimulationTraceWriter.open(full.toString());
@@ -106,9 +116,9 @@ public class SimulationDecisionOutputTest {
                     Map.of(), null, null, null);
             game.subscribeToEvents(collector);
             sink.close();
-            game.fireEvent(new AiDecisionEvent(Map.of("decisionId", "0:1")));
+            game.fireEvent(event);
             final IOException error = Assert.expectThrows(IOException.class, collector::checkHealthy);
-            Assert.assertTrue(error.getMessage().contains("AiDecisionEvent"));
+            Assert.assertTrue(error.getMessage().contains(event.getClass().getSimpleName()));
             Assert.expectThrows(IOException.class, () -> collector.executionFinished("NORMAL", null));
         } finally {
             writer.close();
@@ -120,5 +130,50 @@ public class SimulationDecisionOutputTest {
 
     private static List<JsonObject> read(final Path path) throws Exception {
         return Files.readAllLines(path).stream().map(line -> JsonParser.parseString(line).getAsJsonObject()).toList();
+    }
+
+    @DataProvider
+    public Object[][] pendingAttempts() {
+        return new Object[][] { { false, false }, { false, true }, { true, false }, { true, true } };
+    }
+
+    @Test(dataProvider = "pendingAttempts", groups = { "UnitTest", "fast" })
+    public void finalizationAbandonsOnlyNeverStartedActions(final boolean fullTrace, final boolean started) throws Exception {
+        final Path dir = Files.createTempDirectory("forge-pending-action-");
+        final Path full = dir.resolve("trace.jsonl");
+        final Path decisions = dir.resolve("decisions.jsonl");
+        try {
+            final GameRules rules = new GameRules(GameType.Constructed);
+            final Game game = new Game(List.of(), rules, new Match(rules, List.of(), "Pending"));
+            final Map<String, Object> identity = Map.of("executionSchemaVersion", 1, "decisionId", "0:1",
+                    "actionId", "0:1:0", "playerId", 0, "abilityId", 7, "sourceId", 8, "kind", "SPELL");
+            try (SimulationTraceRun run = SimulationTraceRun.open(fullTrace ? full.toString() : null,
+                    decisions.toString(), rules, List.of(), "GAMES", 1, null, null, null, 7L, "HEURISTIC")) {
+                final SimulationTraceCollector collector = run.beginGame(game, null, null, null);
+                game.fireEvent(new GameEventGameStarted(GameType.Constructed, new PlayerView(0, game.getTracker()), List.of()));
+                // Simulate a choice completing after the engine has announced game finish.
+                game.fireEvent(new GameEventGameFinished());
+                game.fireEvent(new AiDecisionEvent(Map.of("decisionId", "0:1", "playerId", 0,
+                        "actionExecutionSchemaVersion", 1, "selectedActions", List.of(Map.of("actionId", "0:1:0",
+                                "abilityId", 7, "sourceId", 8, "kind", "SPELL")))));
+                if (started) {
+                    final Map<String, Object> event = new java.util.LinkedHashMap<>(identity);
+                    event.put("status", "STARTED");
+                    event.put("reason", "EXECUTION_REQUESTED");
+                    game.fireEvent(new AiActionExecutionEvent(event));
+                }
+                run.finishGame(collector, "TIMEOUT", null);
+                run.finishNormal();
+            }
+            final List<JsonObject> rows = read(decisions);
+            final List<JsonObject> executions = rows.stream().filter(r -> "AI_ACTION_EXECUTION".equals(r.get("type").getAsString())).toList();
+            Assert.assertEquals(executions.size(), 1);
+            Assert.assertEquals(executions.get(0).getAsJsonObject("execution").get("status").getAsString(), started ? "STARTED" : "ABANDONED");
+            Assert.assertEquals(rows.get(rows.size() - 2).get("type").getAsString(), "GAME_EXECUTION_FINISHED");
+        } finally {
+            Files.deleteIfExists(full);
+            Files.deleteIfExists(decisions);
+            Files.deleteIfExists(dir);
+        }
     }
 }

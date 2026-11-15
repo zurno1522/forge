@@ -101,6 +101,7 @@ public class AiController {
     private long flatMcTurnSpentNanos;
     private FlatMonteCarloPicker.Result lastFlatMcResult;
     private volatile AiDecisionRecorder decisionRecorder;
+    private AiActionTracker actionTracker;
     private final ThreadLocal<AiDecisionRecorder> evaluationDecision = new ThreadLocal<>();
     /** Circuit breaker: Monte Carlo switches itself off for this player after repeated errors or hopeless slowness. */
     private int flatMcErrors;
@@ -156,6 +157,20 @@ public class AiController {
         game = game0;
         memory = new AiCardMemory();
         simPicker = new SpellAbilityPicker(player);
+    }
+
+    AiActionTracker actionTracker() { return actionTracker; }
+
+    void aliasSelectedAction(final SpellAbility original, final SpellAbility transformed) {
+        if (actionTracker != null) { actionTracker.alias(original, transformed); }
+    }
+
+    void publishDecision(final AiDecisionRecorder recorder, final List<SpellAbility> chosen,
+            final String status, final FlatMonteCarloPicker.Result search) {
+        final AiDecisionEvent event = recorder.finish(chosen, status, search);
+        if (actionTracker == null) { actionTracker = new AiActionTracker(game); }
+        actionTracker.selected(event, chosen);
+        game.fireEvent(event);
     }
 
     public boolean usesHybridSimulation() {
@@ -1662,6 +1677,7 @@ public class AiController {
      * (= the AI passes priority) the moment the timer runs out.
      */
     public List<SpellAbility> chooseSpellAbilityToPlay() {
+        if (actionTracker != null) { actionTracker.abandonPending("SUPERSEDED_BY_NEXT_SELECTION"); }
         final PhaseHandler phase = game.getPhaseHandler();
         final AiDecisionRecorder decision = game.isRecordingAiDecisions() && phase.getPlayerTurn() == player
                 && (phase.is(PhaseType.MAIN1) || phase.is(PhaseType.MAIN2)) && game.getStack().isEmpty()
@@ -1681,18 +1697,18 @@ public class AiController {
                 SimAudit.afterChoice(game, player, chosen);
             }
             if (decision != null) {
-                game.fireEvent(decision.finish(chosen, "COMPLETED",
-                        lastFlatMcResult == previousSearch ? null : lastFlatMcResult));
+                publishDecision(decision, chosen, "COMPLETED",
+                        lastFlatMcResult == previousSearch ? null : lastFlatMcResult);
             }
             return chosen;
         } catch (AITimeoutTracker.Expired e) {
             if (decision != null) {
-                game.fireEvent(decision.finish(null, "AI_TIMEOUT", null));
+                publishDecision(decision, null, "AI_TIMEOUT", null);
             }
             return null; // out of time: pass priority
         } catch (RuntimeException e) {
             if (decision != null) {
-                game.fireEvent(decision.finish(null, "ERROR", null));
+                publishDecision(decision, null, "ERROR", null);
             }
             throw e;
         } finally {

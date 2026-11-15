@@ -30,6 +30,24 @@ def fixture(status='NORMAL', draw=False):
     return rows
 
 
+def linked_fixture(result='SUCCEEDED', game_status='NORMAL'):
+    rows = fixture(game_status)
+    action = dict(actionId='0:1:0', abilityId=7, sourceId=8, kind='SPELL')
+    rows[2]['decision'].update(actionExecutionSchemaVersion=1, selection='PLAY', selectedActions=[action])
+    identity = dict(action, executionSchemaVersion=1, decisionId='0:1', playerId=0)
+    executions = []
+    if result != 'ABANDONED':
+        executions.append(dict(type='AI_ACTION_EXECUTION', execution=dict(identity, status='STARTED', reason='EXECUTION_REQUESTED')))
+    if result is not None:
+        execution = dict(identity, status=result, reason='STACKED' if result == 'SUCCEEDED' else 'TEST_RESULT')
+        if result == 'SUCCEEDED':
+            execution.update(executedAbilityId=77, stackId=12)
+        executions.append(dict(type='AI_ACTION_EXECUTION', execution=execution))
+    rows[3:3] = executions
+    for i, row in enumerate(rows[1:-1], 1): row.update(game=1, eventIndex=i)
+    return rows
+
+
 class ExportTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
@@ -163,6 +181,71 @@ class ExportTests(unittest.TestCase):
         self.assertTrue(run['metadata']['runId'].startswith('legacy-'))
         self.assertEqual(run['metadata']['pilotMode'],'UNKNOWN')
         self.assertEqual(run['metadata']['engineRevision'],'UNKNOWN')
+
+    def test_action_execution_joins_through_changed_ability_ids(self):
+        rows=linked_fixture()
+        rows[0]['streamKind']='AI_DECISIONS'
+        run=module.load_run(self.write(rows))
+        dataset=list(module.dataset_rows(run))
+        execution=dataset[0]['actionExecutions'][0]
+        self.assertEqual(execution['status'],'SUCCEEDED')
+        self.assertEqual(execution['events'][-1]['execution']['executedAbilityId'],77)
+        self.assertEqual(module.make_coverage([run],dataset)['actionExecutionStatuses'],{'SUCCEEDED':1})
+        self.assertEqual(dataset[0]['outcomeLabel'],'WIN')
+
+    def test_abandoned_errors_and_unknown_executions_are_censored(self):
+        for status in ('ABANDONED','ERROR','UNOBSERVED'):
+            row=list(module.dataset_rows(module.load_run(self.write(linked_fixture(status)))))[0]
+            self.assertEqual(row['actionExecutions'][0]['status'],status)
+            self.assertIsNone(row['outcomeLabel'])
+        # A definitively failed attempt remains observable; WIN still means eventual game outcome only.
+        row=list(module.dataset_rows(module.load_run(self.write(linked_fixture('FAILED')))))[0]
+        self.assertEqual(row['actionExecutions'][0]['status'],'FAILED')
+
+    def test_incomplete_execution_is_accepted_only_for_abnormal_games(self):
+        with self.assertRaises(module.InvalidData): module.load_run(self.write(linked_fixture(None)))
+        row=list(module.dataset_rows(module.load_run(self.write(linked_fixture(None,'TIMEOUT')))))[0]
+        self.assertEqual(row['actionExecutions'][0]['status'],'INCOMPLETE')
+        self.assertIsNone(row['outcomeLabel'])
+
+    def test_legacy_action_execution_is_unavailable_not_guessed(self):
+        rows=linked_fixture()
+        rows=[r for r in rows if r['type']!='AI_ACTION_EXECUTION']
+        del rows[2]['decision']['actionExecutionSchemaVersion']
+        del rows[2]['decision']['selectedActions'][0]['actionId']
+        for i,row in enumerate(rows[1:-1],1):row['eventIndex']=i
+        row=list(module.dataset_rows(module.load_run(self.write(rows))))[0]
+        self.assertEqual(row['actionExecutions'][0]['status'],'UNAVAILABLE')
+
+    def test_rejects_orphan_duplicate_and_mismatched_execution(self):
+        for mutation in ('orphan','duplicate','no_start','wrong_player','wrong_source','missing_stack','hidden_detail'):
+            rows=linked_fixture()
+            if mutation=='orphan': rows[3]['execution']['actionId']='other'
+            if mutation=='duplicate': rows.insert(5,copy.deepcopy(rows[4]))
+            if mutation=='no_start': rows.pop(3)
+            if mutation=='wrong_player': rows[4]['execution']['playerId']=1
+            if mutation=='wrong_source': rows[4]['execution']['sourceId']=19
+            if mutation=='missing_stack': del rows[4]['execution']['stackId']
+            if mutation=='hidden_detail': rows[4]['execution']['sourceName']='Secret'
+            for i,row in enumerate(rows[1:-1],1):row['eventIndex']=i
+            with self.subTest(mutation=mutation):
+                with self.assertRaises(module.InvalidData): module.load_run(self.write(rows))
+
+    def test_execution_after_outcome_is_retained_in_order_and_censored(self):
+        rows=linked_fixture()
+        result=rows.pop(4)
+        rows.insert(5,result)
+        for i,row in enumerate(rows[1:-1],1):row['eventIndex']=i
+        row=list(module.dataset_rows(module.load_run(self.write(rows))))[0]
+        self.assertTrue(row['actionExecutions'][0]['events'][-1]['postOutcome'])
+        self.assertIsNone(row['outcomeLabel'])
+
+    def test_execution_export_omits_unrelated_diagnostic_envelope_fields(self):
+        rows=linked_fixture()
+        rows[3]['diagnosticEngineState']={'opponentHand':['Secret Card']}
+        row=list(module.dataset_rows(module.load_run(self.write(rows))))[0]
+        self.assertNotIn('Secret Card',json.dumps(row))
+        self.assertEqual(row['actionExecutions'][0]['events'][0]['eventIndex'],3)
 
 
 if __name__=='__main__':unittest.main()

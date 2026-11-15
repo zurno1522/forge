@@ -69,6 +69,8 @@ Before submission, rerun the focused regressions on then-current upstream and re
 
 The branch records immutable, partial player-view observations, observed candidate assessments, selected actions, interruption status, land shortlists, rejection details, and Monte Carlo summaries. See [the schema](Simulation-Decision-Records.md) and [collection/export guide](../../tools/decision-records/README.md).
 
+Execution-linkage follow-up: selected actions now receive stable correlation IDs, and separate observational records describe execution attempts and results, including copied activated-ability IDs. This belongs with the structured-data enhancement rather than PR-001/002. Resolution linkage and downstream effect attribution remain future work; execution success is not a strategic-quality label.
+
 Upstream [#12180](https://github.com/Card-Forge/forge/pull/12180) proposes opt-in text decision logging and handler ratings. It overlaps the logging goal, but does not replace structured observations, standalone decision streams, datasets, or coverage reports. Coordinate scope before proposing this enhancement. The local Python exporter and report workflow can remain branch-specific unless upstream wants them.
 
 This is a feature proposal, not a prerequisite for PR-001/002. Observations and candidate coverage remain partial; records are not yet training-ready. Do not present handler rejections or deck performance as proof of engine/card bugs.

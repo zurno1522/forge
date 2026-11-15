@@ -3,6 +3,7 @@ package forge.view;
 import com.google.common.eventbus.Subscribe;
 import forge.LobbyPlayer;
 import forge.ai.AiDecisionEvent;
+import forge.ai.AiActionExecutionEvent;
 import forge.card.GamePieceType;
 import forge.game.Game;
 import forge.game.GameEntityView;
@@ -43,6 +44,7 @@ final class SimulationTraceCollector {
     private final Integer tournamentRound;
     private final Map<Integer, Integer> abilityToStack = new HashMap<>();
     private final Map<Integer, Integer> mulligansByPlayer = new HashMap<>();
+    private final Map<String, Map<String, Object>> unstartedActions = new LinkedHashMap<>();
     private int eventIndex = 0;
     private IOException failure;
 
@@ -166,8 +168,34 @@ final class SimulationTraceCollector {
             final Map<String, Object> record = scoped("AI_DECISION", true);
             record.put("decision", event.data());
             write(record);
+            if (Integer.valueOf(1).equals(event.data().get("actionExecutionSchemaVersion"))) {
+                for (final Object item : (List<?>) event.data().get("selectedActions")) {
+                    final Map<?, ?> selected = (Map<?, ?>) item;
+                    final Map<String, Object> identity = new LinkedHashMap<>();
+                    identity.put("executionSchemaVersion", 1);
+                    identity.put("decisionId", event.data().get("decisionId"));
+                    identity.put("playerId", event.data().get("playerId"));
+                    for (final String key : List.of("actionId", "abilityId", "sourceId", "kind")) {
+                        identity.put(key, selected.get(key));
+                    }
+                    unstartedActions.put((String) selected.get("actionId"), identity);
+                }
+            }
         } catch (IOException | RuntimeException e) {
             failure = new IOException("Unable to collect simulation trace event AiDecisionEvent", e);
+        }
+    }
+
+    @Subscribe
+    public void onAiActionExecution(final AiActionExecutionEvent event) {
+        if (failure != null) { return; }
+        try {
+            final Map<String, Object> record = scoped("AI_ACTION_EXECUTION", true);
+            record.put("execution", event.data());
+            write(record);
+            unstartedActions.remove(event.data().get("actionId"));
+        } catch (IOException | RuntimeException e) {
+            failure = new IOException("Unable to collect simulation trace event AiActionExecutionEvent", e);
         }
     }
 
@@ -178,6 +206,14 @@ final class SimulationTraceCollector {
     }
 
     void executionFinished(final String status, final Throwable error) throws IOException {
+        checkHealthy();
+        // GAME_FINISHED may precede a late choice/attempt during cancellation. Only this boundary
+        // establishes that an action which never started will not be attempted by the game worker.
+        for (final Map<String, Object> identity : new ArrayList<>(unstartedActions.values())) {
+            identity.put("status", "ABANDONED");
+            identity.put("reason", "GAME_EXECUTION_ENDED");
+            onAiActionExecution(new AiActionExecutionEvent(identity));
+        }
         checkHealthy();
         final Map<String, Object> record = scoped("GAME_EXECUTION_FINISHED", false);
         record.put("status", status);
@@ -772,7 +808,7 @@ final class SimulationTraceCollector {
         if (writer != null) {
             writer.write(record);
         }
-        if (decisionWriter != null && List.of("GAME_STARTED", "AI_DECISION", "GAME_OUTCOME",
+        if (decisionWriter != null && List.of("GAME_STARTED", "AI_DECISION", "AI_ACTION_EXECUTION", "GAME_OUTCOME",
                 "GAME_FINISHED", "GAME_EXECUTION_FINISHED").contains(record.get("type"))) {
             decisionWriter.write(record);
         }
