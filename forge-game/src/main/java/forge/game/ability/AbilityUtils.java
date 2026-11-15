@@ -278,7 +278,7 @@ public class AbilityUtils {
         } else if (defined.startsWith("CardUID_")) {
             String idString = defined.substring(8);
             for (final Card cardByID : game.getCardsInGame()) {
-                if (cardByID.getId() == Integer.parseInt(idString)) {
+                if (cardByID.getId() == Long.parseLong(idString)) {
                     cards.add(game.getCardState(cardByID));
                 }
             }
@@ -934,7 +934,7 @@ public class AbilityUtils {
                 players.addAll(tc.getTargetPlayers());
             }
         } else if (defined.startsWith("PlayerUID_")) {
-            int id = Integer.parseInt(defined.split("PlayerUID_")[1]);
+            long id = Long.parseLong(defined.split("PlayerUID_")[1]);
             for (Player p : game.getRegisteredPlayers()) {
                 if (p.getId() == id) {
                     players.add(p);

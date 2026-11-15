@@ -36,13 +36,13 @@ public final class TrackableSerializer implements IHasForgeLog {
     static final byte TYPE_PLAYER_VIEW = 1;
 
     /** Marker for tracker-stable refs (top-level protocol method args, and PlayerView in events). */
-    record IdRef(byte typeTag, int id) implements Serializable {
-        @Serial private static final long serialVersionUID = 1L;
+    record IdRef(byte typeTag, long id) implements Serializable {
+        @Serial private static final long serialVersionUID = 2L;
     }
 
     /** CardView ref inside a wrapped event. {@code preserveSnapshot=true} forces fallback even if the tracker has the id. */
-    record EventCardRef(int id, String name, String imageKey, boolean preserveSnapshot) implements Serializable {
-        @Serial private static final long serialVersionUID = 1L;
+    record EventCardRef(long id, String name, String imageKey, boolean preserveSnapshot) implements Serializable {
+        @Serial private static final long serialVersionUID = 2L;
     }
 
     static byte typeTagFor(TrackableObject obj) {
@@ -169,7 +169,7 @@ public final class TrackableSerializer implements IHasForgeLog {
      * client tracker is populated.
      */
     record WrappedEvent(byte[] data) implements Serializable {
-        private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 2L;
     }
 
     /**

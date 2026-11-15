@@ -71,7 +71,7 @@ final class HumanControlledGame {
     static LobbyPlayerHuman lobbyPlayer(final String name) {
         return new LobbyPlayerHuman(name) {
             @Override
-            public Player createIngamePlayer(final Game game, final int id) {
+            public Player createIngamePlayer(final Game game, final long id) {
                 final Player player = new Player(getName(), game, id);
                 player.setFirstController(new PlayerControllerHuman(game, player, this));
                 return player;

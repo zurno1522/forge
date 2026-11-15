@@ -75,8 +75,8 @@ import forge.game.zone.ZoneType;
  * @version $Id$
  */
 public abstract class SpellAbility extends CardTraitBase implements ISpellAbility, IIdentifiable, Comparable<SpellAbility> {
-    private static int maxId = 0;
-    private static int nextId() { return ++maxId; }
+    private static final java.util.concurrent.atomic.AtomicLong maxId = new java.util.concurrent.atomic.AtomicLong();
+    private static long nextId() { return maxId.incrementAndGet(); }
 
     public static class EmptySa extends SpellAbility {
         public EmptySa(Card sourceCard) { super(sourceCard, Cost.Zero); setActivatingPlayer(sourceCard.getController());}
@@ -87,7 +87,7 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
         @Override public boolean canPlay() { return false; }
     }
 
-    private int id;
+    private long id;
 
     private String originalDescription = "", description = "";
     private String originalStackDescription = "", stackDescription = "";
@@ -215,13 +215,13 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
     }
 
     @Override
-    public final int getId() {
+    public final long getId() {
         return id;
     }
     private static final int CLASS_HASH = SpellAbility.class.hashCode();
     @Override
     public int hashCode() {
-        return 31 * (31 + CLASS_HASH) + getId();
+        return 31 * (31 + CLASS_HASH) + Long.hashCode(getId());
     }
     @Override
     public boolean equals(final Object obj) {
@@ -1353,7 +1353,7 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
         optionalTrigger = optrigger;
     }
 
-    public int getSourceTrigger() {
+    public long getSourceTrigger() {
         return isTrigger() ? getTrigger().getId() : -1;
     }
 

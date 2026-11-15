@@ -38,8 +38,8 @@ import forge.util.TextUtil;
  * @version $Id$
  */
 public class SpellAbilityStackInstance implements IIdentifiable, IHasCardView {
-    private static int maxId = 0;
-    public static int nextId() { return ++maxId; }
+    private static final java.util.concurrent.atomic.AtomicLong maxId = new java.util.concurrent.atomic.AtomicLong();
+    public static long nextId() { return maxId.incrementAndGet(); }
 
     // At some point I want this functioning more like Target/Target Choices
     // where the SA has an "active"
@@ -50,7 +50,7 @@ public class SpellAbilityStackInstance implements IIdentifiable, IHasCardView {
     // Coming off the Stack would work similarly, except it would just add the
     // full active SI instead of each of the parts
 
-    private final int id;
+    private final long id;
     private final SpellAbility ability;
 
     private final SpellAbilityStackInstance subInstance;
@@ -62,7 +62,7 @@ public class SpellAbilityStackInstance implements IIdentifiable, IHasCardView {
     public SpellAbilityStackInstance(final SpellAbility sa) {
         this(sa, nextId());
     }
-    public SpellAbilityStackInstance(final SpellAbility sa, int assignedId) {
+    public SpellAbilityStackInstance(final SpellAbility sa, long assignedId) {
         // Base SA info
         id = assignedId;
         ability = sa;
@@ -84,7 +84,7 @@ public class SpellAbilityStackInstance implements IIdentifiable, IHasCardView {
     }
 
     @Override
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -113,7 +113,7 @@ public class SpellAbilityStackInstance implements IIdentifiable, IHasCardView {
         return ability.isTrigger();
     }
 
-    public final boolean isStateTrigger(final int id) {
+    public final boolean isStateTrigger(final long id) {
         return ability.getSourceTrigger() == id;
     }
 

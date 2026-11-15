@@ -681,7 +681,7 @@ public class CardState implements GameObject, IHasSVars, ITranslatable {
     public final boolean hasSpellAbility(final SpellAbility sa) {
         return getSpellAbilities().contains(sa);
     }
-    public final boolean hasSpellAbility(final int id) {
+    public final boolean hasSpellAbility(final long id) {
         for (SpellAbility sa : getSpellAbilities()) {
             if (id == sa.getId()) {
                 return true;
@@ -710,7 +710,7 @@ public class CardState implements GameObject, IHasSVars, ITranslatable {
         return getTriggers().contains(t);
     }
 
-    public final boolean hasTrigger(final int id) {
+    public final boolean hasTrigger(final long id) {
         for (final Trigger t : getTriggers()) {
             if (id == t.getId()) {
                 return true;
@@ -962,11 +962,11 @@ public class CardState implements GameObject, IHasSVars, ITranslatable {
     public final boolean hasReplacementEffect(final ReplacementEffect re) {
         return getReplacementEffects().contains(re);
     }
-    public final boolean hasReplacementEffect(final int id) {
+    public final boolean hasReplacementEffect(final long id) {
         return getReplacementEffect(id) != null;
     }
 
-    public final ReplacementEffect getReplacementEffect(final int id) {
+    public final ReplacementEffect getReplacementEffect(final long id) {
         for (final ReplacementEffect r : getReplacementEffects()) {
             if (id == r.getId()) {
                 return r;

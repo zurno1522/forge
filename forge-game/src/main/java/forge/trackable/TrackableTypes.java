@@ -130,6 +130,7 @@ public class TrackableTypes {
     }
 
     public static final TrackableType<Boolean> BooleanType = new TrackableType<Boolean>(false);
+    public static final TrackableType<Long> LongType = new TrackableType<>(0L);
     public static final TrackableType<Integer> IntegerType = new TrackableType<Integer>(0);
     public static final TrackableType<Float> FloatType = new TrackableType<Float>(0f);
     public static final TrackableType<String> StringType = new TrackableType<String>("");
@@ -180,6 +181,7 @@ public class TrackableTypes {
 
     public static final TrackableType<Set<Integer>> IntegerSetType = new TrackableType<>(null);
     public static final TrackableType<Map<Integer, Integer>> IntegerMapType = new TrackableType<>(null);
+    public static final TrackableType<Map<Long, Integer>> LongIntegerMapType = new TrackableType<>(null);
     public static final TrackableType<Map<Byte, Integer>> ManaMapType = new TrackableType<>(null);
     public static final TrackableType<Multiset<CounterType>> CounterMapType = new TrackableType<>(null);
     public static final TrackableType<Map<Object, Object>> GenericMapType = new TrackableType<>(null);

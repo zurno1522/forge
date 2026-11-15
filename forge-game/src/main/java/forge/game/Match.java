@@ -36,7 +36,7 @@ public class Match {
     private final String title;
 
     private final EventBus events = new EventBus("match events");
-    private final Map<Integer, GameOutcome> gameOutcomes = Maps.newHashMap();
+    private final Map<Long, GameOutcome> gameOutcomes = Maps.newHashMap();
 
     private GameOutcome lastOutcome = null;
 
@@ -115,7 +115,7 @@ public class Match {
         return main == null ? null : Collections.unmodifiableList(main);
     }
 
-    public GameOutcome getOutcomeById(int id) {
+    public GameOutcome getOutcomeById(long id) {
         return gameOutcomes.get(id);
     }
 

@@ -285,7 +285,7 @@ public class CopyPermanentEffect extends TokenEffectBase {
         } else {
             final Card host = sa.getHostCard();
 
-            int id = newOwner == null ? 0 : newOwner.getGame().nextCardId();
+            long id = newOwner == null ? 0 : newOwner.getGame().nextCardId();
             // need to create a physical card first, i need the original card faces
             if (original.getPaperCard() == null) {
                 // a token made from its own characteristics (not from a card script) has no paper card to rebuild

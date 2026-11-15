@@ -397,7 +397,7 @@ public class Card extends GameEntity implements Comparable<Card>, IHasSVars, ITr
      * Instantiates a new card not associated to any paper card.
      * @param id0 the unique id of the new card.
      */
-    public Card(final int id0, final Game game0) {
+    public Card(final long id0, final Game game0) {
         this(id0, null, game0);
     }
 
@@ -409,14 +409,14 @@ public class Card extends GameEntity implements Comparable<Card>, IHasSVars, ITr
      * card.
      * @see IPaperCard
      */
-    public Card(final int id0, final IPaperCard paperCard0, final Game game0) {
+    public Card(final long id0, final IPaperCard paperCard0, final Game game0) {
         this(id0, paperCard0, game0, game0 == null ? null : game0.getTracker());
     }
-    public Card(final int id0, final IPaperCard paperCard0, final Game game0, final Tracker tracker0) {
+    public Card(final long id0, final IPaperCard paperCard0, final Game game0, final Tracker tracker0) {
         this(id0, paperCard0, game0, tracker0, false);
     }
     // textFromSource: the caller sets the view's ability text itself, so there is no point computing it
-    public Card(final int id0, final IPaperCard paperCard0, final Game game0, final Tracker tracker0,
+    public Card(final long id0, final IPaperCard paperCard0, final Game game0, final Tracker tracker0,
             final boolean textFromSource) {
         super(id0);
 
@@ -437,7 +437,7 @@ public class Card extends GameEntity implements Comparable<Card>, IHasSVars, ITr
         }
     }
 
-    public int getHiddenId() {
+    public long getHiddenId() {
         return view.getHiddenId();
     }
 
@@ -3426,7 +3426,7 @@ public class Card extends GameEntity implements Comparable<Card>, IHasSVars, ITr
         return currentState.hasSpellAbility(sa);
     }
 
-    public final boolean hasSpellAbility(final int id) {
+    public final boolean hasSpellAbility(final long id) {
         return currentState.hasSpellAbility(id);
     }
 
@@ -5681,7 +5681,7 @@ public class Card extends GameEntity implements Comparable<Card>, IHasSVars, ITr
              */
             return 1;
         }
-        return Integer.compare(id, that.id);
+        return Long.compare(id, that.id);
     }
 
     /** {@inheritDoc} */
@@ -7144,7 +7144,7 @@ public class Card extends GameEntity implements Comparable<Card>, IHasSVars, ITr
     public final boolean hasTrigger(final Trigger t) {
        return currentState.hasTrigger(t);
     }
-    public final boolean hasTrigger(final int id) {
+    public final boolean hasTrigger(final long id) {
         return currentState.hasTrigger(id);
     }
 
@@ -7224,11 +7224,11 @@ public class Card extends GameEntity implements Comparable<Card>, IHasSVars, ITr
     public boolean hasReplacementEffect(final ReplacementEffect re) {
         return currentState.hasReplacementEffect(re);
     }
-    public boolean hasReplacementEffect(final int id) {
+    public boolean hasReplacementEffect(final long id) {
         return currentState.hasReplacementEffect(id);
     }
 
-    public ReplacementEffect getReplacementEffect(final int id) {
+    public ReplacementEffect getReplacementEffect(final long id) {
         return currentState.getReplacementEffect(id);
     }
 

@@ -17,7 +17,7 @@ import java.util.Map;
 final class AiDecisionRecorder {
     private final Map<String, Object> data = new LinkedHashMap<>();
     private final List<Map<String, Object>> candidates = new ArrayList<>();
-    private final Map<Integer, Map<String, Object>> details = new LinkedHashMap<>();
+    private final Map<Long, Map<String, Object>> details = new LinkedHashMap<>();
     private final long started = System.nanoTime();
     private boolean closed;
     private String evaluationFailure;

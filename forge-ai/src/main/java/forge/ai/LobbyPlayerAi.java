@@ -46,7 +46,7 @@ public class LobbyPlayerAi extends LobbyPlayer implements IGameEntitiesFactory {
     }
 
     @Override
-    public Player createIngamePlayer(Game game, final int id) {
+    public Player createIngamePlayer(Game game, final long id) {
         Player ai = new Player(getName(), game, id);
         ai.setFirstController(createControllerFor(ai));
 

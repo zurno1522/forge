@@ -110,7 +110,7 @@ public class CardDamageTable extends ForwardingTable<Card, GameEntity, Integer> 
         game.getTriggerHandler().runTrigger(TriggerType.DamageAll, runParams, false);
     }
 
-    public void triggerExcessDamage(boolean isCombat, Map<Card, Integer> lethalDamage, final Game game, final SpellAbility cause, final Map<Integer, Card> lkiCache) {
+    public void triggerExcessDamage(boolean isCombat, Map<Card, Integer> lethalDamage, final Game game, final SpellAbility cause, final Map<Long, Card> lkiCache) {
         int storedExcess = 0;
 
         CardCollection damagedList = new CardCollection();

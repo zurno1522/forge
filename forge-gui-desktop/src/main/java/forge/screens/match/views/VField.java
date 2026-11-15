@@ -111,9 +111,9 @@ public class VField implements IVDoc<CField> {
     private boolean aiTimeoutBarShown;
 
     /** (game, player) key of this field's player; the tracker is shared by every game in the JVM. */
-    private long aiTimeoutKey() {
+    private AITimeoutTracker.SessionKey aiTimeoutKey() {
         final GameView gv = matchUI == null ? null : matchUI.getGameView();
-        return gv == null ? Long.MIN_VALUE : AITimeoutTracker.key(gv.getId(), player.getId()); // MIN_VALUE: no session
+        return gv == null ? null : AITimeoutTracker.key(gv.getId(), player.getId()); // null: no session
     }
 
     private void refreshAITimeoutBar() {

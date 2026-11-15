@@ -8,6 +8,7 @@ import forge.game.player.PlayerView;
 import forge.game.spellability.StackItemView;
 import forge.game.zone.ZoneType;
 import forge.gamemodes.net.DeltaPacket;
+import forge.gamemodes.net.DeltaPacket.ObjectKey;
 import forge.gamemodes.net.DeltaPacket.CombatData;
 import forge.gamemodes.net.NetworkChecksumUtil;
 import forge.game.combat.CombatView;
@@ -79,9 +80,9 @@ public class DeltaSyncManager implements IHasForgeLog {
     private long sequenceNumber = 0;
 
     // Objects registered with this consumer (for cleanup on disconnect/reset)
-    private final Map<Integer, TrackableObject> registeredByKey = new HashMap<>();
+    private final Map<ObjectKey, TrackableObject> registeredByKey = new HashMap<>();
     // Used to block stale cross-reference replacements
-    private final Map<Integer, CardView> authoritativeInstances = new HashMap<>();
+    private final Map<ObjectKey, CardView> authoritativeInstances = new HashMap<>();
     private final Set<TrackableObject> walkedInstances = Collections.newSetFromMap(new IdentityHashMap<>());
     // Per-object detail of the current collectDeltas call, logged as one line
     private final StringBuilder walkTrace = new StringBuilder();
@@ -111,17 +112,17 @@ public class DeltaSyncManager implements IHasForgeLog {
      * the game loop and leave the match unable to continue.
      */
     public DeltaPacket collectDeltas(GameView gameView) {
-        Map<Integer, Map<TrackableProperty, Object>> objectDeltas = new HashMap<>();
+        Map<ObjectKey, Map<TrackableProperty, Object>> objectDeltas = new HashMap<>();
         // need parent-before-child insertion order
-        Map<Integer, Map<TrackableProperty, Object>> newObjects = new LinkedHashMap<>();
-        Set<Integer> currentObjectIds = null;
+        Map<ObjectKey, Map<TrackableProperty, Object>> newObjects = new LinkedHashMap<>();
+        Set<ObjectKey> currentObjectIds = null;
         walkTrace.setLength(0);
 
         // A fresh visited set per attempt: reusing it would make walkAndCollect return at the
         // root and collect nothing. Deltas already gathered are kept, because the dirty flags
         // behind them have been cleared and no later walk would find them again.
         for (int attempt = 1; attempt <= MAX_WALK_ATTEMPTS; attempt++) {
-            Set<Integer> visited = new HashSet<>();
+            Set<ObjectKey> visited = new HashSet<>();
             try {
                 authoritativeInstances.clear();
                 walkedInstances.clear();
@@ -141,9 +142,9 @@ public class DeltaSyncManager implements IHasForgeLog {
         // visited set would unregister objects that are still in the graph
         if (currentObjectIds != null) {
             // Prune registrations for objects no longer in the graph
-            Iterator<Map.Entry<Integer, TrackableObject>> regIt = registeredByKey.entrySet().iterator();
+            Iterator<Map.Entry<DeltaPacket.ObjectKey, TrackableObject>> regIt = registeredByKey.entrySet().iterator();
             while (regIt.hasNext()) {
-                Map.Entry<Integer, TrackableObject> entry = regIt.next();
+                Map.Entry<DeltaPacket.ObjectKey, TrackableObject> entry = regIt.next();
                 if (!currentObjectIds.contains(entry.getKey())) {
                     entry.getValue().unregisterConsumer(consumerId);
                     regIt.remove();
@@ -203,12 +204,12 @@ public class DeltaSyncManager implements IHasForgeLog {
      * references. CombatView is serialized inline by toNetworkValue().
      */
     private void walkAndCollect(TrackableObject obj,
-                                Map<Integer, Map<TrackableProperty, Object>> objectDeltas,
-                                Map<Integer, Map<TrackableProperty, Object>> newObjects,
-                                Set<Integer> currentObjectIds) {
+                                Map<ObjectKey, Map<TrackableProperty, Object>> objectDeltas,
+                                Map<ObjectKey, Map<TrackableProperty, Object>> newObjects,
+                                Set<ObjectKey> currentObjectIds) {
         int type = DeltaPacket.typeTagFor(obj);
         if (type < 0) return;
-        int deltaKey = DeltaPacket.makeDeltaKey(obj);
+        ObjectKey deltaKey = DeltaPacket.makeDeltaKey(obj);
 
         // Block stale cross-references before touching currentObjectIds.
         // Zone instances (seeded by preScanZoneCollections) are authoritative —
@@ -249,9 +250,9 @@ public class DeltaSyncManager implements IHasForgeLog {
      * filtered by the authoritative check in walkAndCollect.
      */
     private void collectObjectDelta(TrackableObject obj,
-                                    Map<Integer, Map<TrackableProperty, Object>> objectDeltas,
-                                    Map<Integer, Map<TrackableProperty, Object>> newObjects) {
-        int deltaKey = DeltaPacket.makeDeltaKey(obj);
+                                    Map<ObjectKey, Map<TrackableProperty, Object>> objectDeltas,
+                                    Map<ObjectKey, Map<TrackableProperty, Object>> newObjects) {
+        ObjectKey deltaKey = DeltaPacket.makeDeltaKey(obj);
         TrackableObject old = registeredByKey.get(deltaKey);
 
         if (old == obj) {
@@ -272,7 +273,7 @@ public class DeltaSyncManager implements IHasForgeLog {
                 } else {
                     objectDeltas.put(deltaKey, delta);
                 }
-                walkTrace.append(String.format(" 0x%08X", deltaKey)).append(delta.keySet());
+                walkTrace.append(' ').append(deltaKey).append(delta.keySet());
             }
             return;
         }
@@ -291,7 +292,8 @@ public class DeltaSyncManager implements IHasForgeLog {
         registeredByKey.put(deltaKey, obj);
         if (!allProps.isEmpty()) {
             newObjects.put(deltaKey, allProps);
-            walkTrace.append(String.format(" %s0x%08X(%d)", old != null ? "~" : "+", deltaKey, allProps.size()));
+            walkTrace.append(' ').append(old != null ? "~" : "+").append(deltaKey)
+                    .append('(').append(allProps.size()).append(')');
         }
     }
 
@@ -377,14 +379,14 @@ public class DeltaSyncManager implements IHasForgeLog {
         // Polymorphic reference → int[]{typeMarker, id}
         if (type == TrackableTypes.GameEntityViewType) {
             GameEntityView entity = (GameEntityView) value;
-            return new int[]{ entity instanceof CardView ? 0 : 1, entity.getId() };
+            return new long[]{ entity instanceof CardView ? 0 : 1, entity.getId() };
         }
 
         // Collections of objects → List<Integer> of IDs
         if (type == TrackableTypes.CardViewCollectionType || type == TrackableTypes.PlayerViewCollectionType || type == TrackableTypes.StackItemViewListType) {
             TrackableCollection<?> coll = (TrackableCollection<?>) value;
-            List<Integer> ids = new ArrayList<>(coll.size());
-            for (TrackableObject obj : coll) ids.add(obj == null ? -1 : obj.getId());
+            List<Long> ids = new ArrayList<>(coll.size());
+            for (TrackableObject obj : coll) ids.add(obj == null ? -1L : obj.getId());
             return ids;
         }
 
@@ -418,29 +420,29 @@ public class DeltaSyncManager implements IHasForgeLog {
             return new CombatData(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         }
 
-        List<List<Integer>> allAttackerIds = new ArrayList<>();
-        List<int[]> allDefenderRefs = new ArrayList<>();
-        List<List<Integer>> allBlockerIds = new ArrayList<>();
-        List<List<Integer>> allPlannedBlockerIds = new ArrayList<>();
+        List<List<Long>> allAttackerIds = new ArrayList<>();
+        List<long[]> allDefenderRefs = new ArrayList<>();
+        List<List<Long>> allBlockerIds = new ArrayList<>();
+        List<List<Long>> allPlannedBlockerIds = new ArrayList<>();
 
         for (Map.Entry<FCollection<CardView>, GameEntityView> entry : bandsWithDefenders.entrySet()) {
             FCollection<CardView> band = entry.getKey();
             GameEntityView defender = entry.getValue();
 
             // Attacker IDs for this band
-            List<Integer> attackerIds = new ArrayList<>();
+            List<Long> attackerIds = new ArrayList<>();
             for (CardView attacker : band) {
                 attackerIds.add(attacker.getId());
             }
             allAttackerIds.add(attackerIds);
 
             // Defender reference: {typeMarker, id}
-            allDefenderRefs.add(new int[]{ defender instanceof CardView ? 0 : 1, defender.getId() });
+            allDefenderRefs.add(new long[]{ defender instanceof CardView ? 0 : 1, defender.getId() });
 
             // Blockers for this band
             FCollection<CardView> blockers = bandsWithBlockers != null ? bandsWithBlockers.get(band) : null;
             if (blockers != null && !blockers.isEmpty()) {
-                List<Integer> blockerIds = new ArrayList<>();
+                List<Long> blockerIds = new ArrayList<>();
                 for (CardView blocker : blockers) {
                     blockerIds.add(blocker.getId());
                 }
@@ -452,7 +454,7 @@ public class DeltaSyncManager implements IHasForgeLog {
             // Planned blockers for this band
             FCollection<CardView> plannedBlockers = bandsWithPlannedBlockers != null ? bandsWithPlannedBlockers.get(band) : null;
             if (plannedBlockers != null && !plannedBlockers.isEmpty()) {
-                List<Integer> plannedIds = new ArrayList<>();
+                List<Long> plannedIds = new ArrayList<>();
                 for (CardView pb : plannedBlockers) {
                     plannedIds.add(pb.getId());
                 }
@@ -483,10 +485,10 @@ public class DeltaSyncManager implements IHasForgeLog {
         }
     }
 
-    private void walkAndRegister(TrackableObject obj, Set<Integer> visited) {
+    private void walkAndRegister(TrackableObject obj, Set<ObjectKey> visited) {
         int type = DeltaPacket.typeTagFor(obj);
         if (type < 0) return;
-        int deltaKey = DeltaPacket.makeDeltaKey(obj);
+        ObjectKey deltaKey = DeltaPacket.makeDeltaKey(obj);
         if (!visited.add(deltaKey)) return;
 
         // Only register consumer if not already tracked — don't add to

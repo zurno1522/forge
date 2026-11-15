@@ -28,9 +28,9 @@ import forge.game.card.CardView;
  * returns the pre-freeze value, not the queued one.
  */
 public abstract class TrackableObject implements IIdentifiable, Serializable {
-    private static final long serialVersionUID = 7386836745378571056L;
+    private static final long serialVersionUID = 7386836745378571057L;
 
-    private final int id;
+    private final long id;
     protected transient Tracker tracker;
     private final Map<TrackableProperty, Object> props;
     private int version;
@@ -38,13 +38,13 @@ public abstract class TrackableObject implements IIdentifiable, Serializable {
     private transient Map<Integer, EnumSet<TrackableProperty>> consumers;
     private boolean copyingProps;
 
-    protected TrackableObject(final int id0, final Tracker tracker) {
+    protected TrackableObject(final long id0, final Tracker tracker) {
         id = id0;
         this.tracker = tracker;
         props = new EnumMap<>(TrackableProperty.class);
     }
 
-    public final int getId() {
+    public final long getId() {
         return id;
     }
 
@@ -59,13 +59,13 @@ public abstract class TrackableObject implements IIdentifiable, Serializable {
 
     @Override
     public int hashCode() {
-        return id;
+        return Long.hashCode(id);
     }
 
     @Override
     public boolean equals(final Object o) {
         if (o == null) { return false; }
-        return o.hashCode() == hashCode() && o.getClass().equals(getClass());
+        return o.getClass().equals(getClass()) && ((TrackableObject) o).id == id;
     }
 
     public Map<TrackableProperty, Object> getProps() {

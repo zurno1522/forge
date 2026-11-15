@@ -49,19 +49,19 @@ import forge.trackable.TrackableProperty;
 import forge.util.Lang;
 
 public abstract class GameEntity implements GameObject, IIdentifiable {
-    protected int id;
+    protected long id;
     private String name = "";
     protected CardCollection attachedCards = new CardCollection();
     protected Multiset<CounterType> counters = HashMultiset.create();
     protected List<Pair<Integer, Boolean>> damageReceivedThisTurn = Lists.newArrayList();
     protected List<Pair<Integer, Boolean>> damageReceivedLastTurn = Lists.newArrayList();
 
-    protected GameEntity(int id0) {
+    protected GameEntity(long id0) {
         id = id0;
     }
 
     @Override
-    public int getId() {
+    public long getId() {
         return id;
     }
     public void dangerouslySetId(int i) { id = i; }
@@ -394,12 +394,12 @@ public abstract class GameEntity implements GameObject, IIdentifiable {
     @Override
     public final boolean equals(Object o) {
         if (o == null) { return false; }
-        return o.hashCode() == id && o.getClass().equals(getClass());
+        return o.getClass().equals(getClass()) && ((GameEntity) o).id == id;
     }
 
     @Override
     public final int hashCode() {
-        return id;
+        return Long.hashCode(id);
     }
 
     @Override

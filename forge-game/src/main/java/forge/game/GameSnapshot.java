@@ -229,13 +229,13 @@ public class GameSnapshot {
         // If we do find it, we may need to alter the existing stack instance
         // If we find it and we're restoring, we dont need to do anything
 
-        Map<Integer, SpellAbilityStackInstance> stackIds = new HashMap<>();
+        Map<Long, SpellAbilityStackInstance> stackIds = new HashMap<>();
         for (SpellAbilityStackInstance toEntry : toGame.getStack()) {
             stackIds.put(toEntry.getId(), toEntry);
         }
 
         for (SpellAbilityStackInstance origEntry : fromGame.getStack()) {
-            int id = origEntry.getId();
+            long id = origEntry.getId();
             SpellAbilityStackInstance instance = stackIds.getOrDefault(id, null);
 
             if (instance != null) {
@@ -425,7 +425,7 @@ public class GameSnapshot {
         return cards;
     }
 
-    private static Card findCardById(Game game, int id) {
+    private static Card findCardById(Game game, long id) {
         Card found = game.findById(id);
         if (found != null) {
             return found;

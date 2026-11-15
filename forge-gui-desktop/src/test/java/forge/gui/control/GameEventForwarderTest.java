@@ -35,7 +35,7 @@ import forge.gui.interfaces.IGuiGame;
 /** What a batch sent to a remote client holds, cut by the real forwarder from a real game. */
 public class GameEventForwarderTest extends AITest {
     /** A batch's events, and where every card was when it was cut, which is the state sent with it. */
-    private record Batch(List<GameEvent> events, Map<Integer, ZoneType> zones) {
+    private record Batch(List<GameEvent> events, Map<Long, ZoneType> zones) {
         boolean has(final Class<? extends GameEvent> kind) {
             return events.stream().anyMatch(kind::isInstance);
         }
@@ -44,7 +44,7 @@ public class GameEventForwarderTest extends AITest {
             return zones.get(card.getId()) == ZoneType.Battlefield;
         }
 
-        boolean moves(final int card) {
+        boolean moves(final long card) {
             return events.stream().anyMatch(e -> e instanceof GameEventCardChangeZone move && move.card().getId() == card);
         }
     }
@@ -53,7 +53,7 @@ public class GameEventForwarderTest extends AITest {
     private static final class Sent {
         final List<Batch> batches = new ArrayList<>();
         final List<GameEvent> fired = new ArrayList<>();
-        final Map<Integer, ZoneType> zonesAtStart;
+        final Map<Long, ZoneType> zonesAtStart;
         final GameEventForwarder forwarder;
 
         @SuppressWarnings("unchecked")
@@ -85,8 +85,8 @@ public class GameEventForwarderTest extends AITest {
         }
     }
 
-    private static Map<Integer, ZoneType> zonesOf(final Game game) {
-        final Map<Integer, ZoneType> zones = new HashMap<>();
+    private static Map<Long, ZoneType> zonesOf(final Game game) {
+        final Map<Long, ZoneType> zones = new HashMap<>();
         for (final Card card : game.getCardsInGame()) {
             if (card.getZone() != null) {
                 zones.put(card.getId(), card.getZone().getZoneType());
@@ -270,12 +270,12 @@ public class GameEventForwarderTest extends AITest {
         final Sent sent = twoBusyTurns();
 
         final Set<ZoneType> arrivedIn = new HashSet<>();
-        Map<Integer, ZoneType> before = sent.zonesAtStart;
+        Map<Long, ZoneType> before = sent.zonesAtStart;
         for (int i = 0; i < sent.batches.size(); i++) {
             final Batch batch = sent.batches.get(i);
-            final Set<Integer> cards = new HashSet<>(before.keySet());
+            final Set<Long> cards = new HashSet<>(before.keySet());
             cards.addAll(batch.zones().keySet());
-            for (final Integer card : cards) {
+            for (final Long card : cards) {
                 if (before.get(card) != batch.zones().get(card)) {
                     arrivedIn.add(batch.zones().get(card));
                     AssertJUnit.assertTrue("card " + card + " went from " + before.get(card) + " to " + batch.zones().get(card) + " in batch " + i + " with its move",

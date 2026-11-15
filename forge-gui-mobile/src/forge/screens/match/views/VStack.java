@@ -67,7 +67,7 @@ public class VStack extends FDropDown {
     private Map<PlayerView, Object> playersWithValidTargets;
 
     private int stackSize;
-    private final Map<Integer, StackInstanceDisplay> displayById = new HashMap<>(); // rebuilt on every layout
+    private final Map<Long, StackInstanceDisplay> displayById = new HashMap<>(); // rebuilt on every layout
 
     public VStack() {
     }
@@ -395,7 +395,7 @@ public class VStack extends FDropDown {
             }
 
             // one arrow per targeted stack entry, however many modes aim at it; created on first use, as this runs every frame
-            Set<Integer> drawnStackTargets = null;
+            Set<Long> drawnStackTargets = null;
             StackItemView instance = activeStackInstance;
             while (instance != null) {
                 for (CardView c : instance.getTargetCards()) {

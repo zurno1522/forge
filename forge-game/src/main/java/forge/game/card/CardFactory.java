@@ -82,7 +82,7 @@ public class CardFactory {
         final Card source = sourceSA.getHostCard();
         final Card original = targetSA.getHostCard();
         final Game game = source.getGame();
-        int id = game.nextCardId();
+        long id = game.nextCardId();
 
         // need to create a physical card first, i need the original card faces
         final Card copy = getCard(original.getPaperCard(), controller, id, game);
@@ -170,7 +170,7 @@ public class CardFactory {
     public static Card getCard(final IPaperCard cp, final Player owner, final Game game) {
         return getCard(cp, owner, owner == null ? -1 : owner.getGame().nextCardId(), game);
     }
-    public static Card getCard(final IPaperCard cp, final Player owner, final int cardId, final Game game) {
+    public static Card getCard(final IPaperCard cp, final Player owner, final long cardId, final Game game) {
         final Card c = readCard(cp, cardId, game);
         c.setOwner(owner);
         buildAbilities(c);
@@ -291,7 +291,7 @@ public class CardFactory {
         }
     }
 
-    private static Card readCard(final IPaperCard paperCard, int cardId, Game game) {
+    private static Card readCard(final IPaperCard paperCard, long cardId, Game game) {
         final Card card = new Card(cardId, paperCard, game);
         CardRules rules = paperCard.getRules();
         card.updateRulesView();

@@ -53,7 +53,7 @@ public class CardView extends GameEntityView {
     @Override
     public final boolean equals(final Object o) {
         if (o == null) { return false; }
-        return o.hashCode() == hashCode() && o instanceof CardView;
+        return o instanceof CardView other && getId() == other.getId();
     }
 
     public CardView getBackup() {
@@ -96,11 +96,11 @@ public class CardView extends GameEntityView {
         return false;
     }
 
-    public CardView(final int id0, final Tracker tracker) {
+    public CardView(final long id0, final Tracker tracker) {
         super(id0, tracker);
         set(TrackableProperty.CurrentState, createAlternateState(CardStateName.Original));
     }
-    public CardView(final int id0, final Tracker tracker, final String name0, final String description, final Object object) {
+    public CardView(final long id0, final Tracker tracker, final String name0, final String description, final Object object) {
         super(id0, tracker);
         set(TrackableProperty.CurrentState, createAlternateState(CardStateName.Original));
         getCurrentState().setName(name0);
@@ -108,7 +108,7 @@ public class CardView extends GameEntityView {
         set(TrackableProperty.Name, name0);
         set(TrackableProperty.Object, object);
     }
-    public CardView(final int id0, final Tracker tracker, final String name0) {
+    public CardView(final long id0, final Tracker tracker, final String name0) {
         this(id0, tracker);
         getCurrentState().setName(name0);
         set(TrackableProperty.Name, name0);
@@ -116,7 +116,7 @@ public class CardView extends GameEntityView {
         set(TrackableProperty.ChangedTypes, new HashMap<String, String>());
         set(TrackableProperty.Sickness, true);
     }
-    public CardView(final int id0, final Tracker tracker, final String name0, final String imageKey) {
+    public CardView(final long id0, final Tracker tracker, final String name0, final String imageKey) {
         this(id0, tracker, name0);
         set(TrackableProperty.ImageKey, imageKey);
     }
@@ -1125,14 +1125,14 @@ public class CardView extends GameEntityView {
         }
     }
 
-    public int getHiddenId() {
-        final Integer hiddenId = get(TrackableProperty.HiddenId);
+    public long getHiddenId() {
+        final Long hiddenId = get(TrackableProperty.HiddenId);
         if (hiddenId == null) {
             return getId();
         }
         return hiddenId;
     }
-    void updateHiddenId(final int hiddenId) {
+    void updateHiddenId(final long hiddenId) {
         set(TrackableProperty.HiddenId, hiddenId);
     }
 
@@ -1224,7 +1224,7 @@ public class CardView extends GameEntityView {
 
         private final CardStateName state;
 
-        public CardStateView(final int id0, final CardStateName state0, final Tracker tracker) {
+        public CardStateView(final long id0, final CardStateName state0, final Tracker tracker) {
             super(id0, tracker);
             state = state0;
         }
@@ -1233,7 +1233,7 @@ public class CardView extends GameEntityView {
             if (getState().equals(CardStateName.FaceDown)) {
                 return "H" + getHiddenId();
             }
-            final int id = getId();
+            final long id = getId();
             if (id > 0) {
                 return String.valueOf(getId());
             }
@@ -1243,7 +1243,7 @@ public class CardView extends GameEntityView {
         @Override
         public final boolean equals(final Object o) {
             if (o == null) { return false; }
-            return o.hashCode() == hashCode() && o instanceof CardStateView;
+            return o instanceof CardStateView other && getId() == other.getId() && state == other.state;
         }
 
         @Override

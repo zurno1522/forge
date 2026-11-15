@@ -217,7 +217,7 @@ public class Player extends GameEntity implements Comparable<Player> {
     private final AchievementTracker achievementTracker = new AchievementTracker();
     private final PlayerView view;
 
-    public Player(String name0, Game game0, final int id0) {
+    public Player(String name0, Game game0, final long id0) {
         super(id0);
 
         game = game0;

@@ -130,13 +130,13 @@ public class FlatMonteCarloScenarioTest extends AITest {
         Player copyAi = sim.getSimulatedAiPlayer();
         Player copyOpp = copy.getPlayers().get(0);
 
-        Set<Integer> aiHandBefore = idsIn(copyAi, ZoneType.Hand);
+        Set<Long> aiHandBefore = idsIn(copyAi, ZoneType.Hand);
         int oppHandSize = copyOpp.getZone(ZoneType.Hand).size();
         int oppLibrarySize = copyOpp.getZone(ZoneType.Library).size();
         int aiLibrarySize = copyAi.getZone(ZoneType.Library).size();
 
         boolean oppHandChangedAtLeastOnce = false;
-        Set<Integer> oppHandBefore = idsIn(copyOpp, ZoneType.Hand);
+        Set<Long> oppHandBefore = idsIn(copyOpp, ZoneType.Hand);
         for (long seed = 1; seed <= 30; seed++) {
             HiddenInfoShuffler.shuffle(copy, sim.getGameCopier(), ai, new Random(seed));
             AssertJUnit.assertEquals("the AI's own hand is known to it and must stay as it is", aiHandBefore,
@@ -152,8 +152,8 @@ public class FlatMonteCarloScenarioTest extends AITest {
                 oppHandChangedAtLeastOnce);
     }
 
-    private static Set<Integer> idsIn(Player p, ZoneType zone) {
-        Set<Integer> ids = new HashSet<>();
+    private static Set<Long> idsIn(Player p, ZoneType zone) {
+        Set<Long> ids = new HashSet<>();
         for (Card c : p.getZone(zone).getCards()) {
             ids.add(c.getId());
         }

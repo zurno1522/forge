@@ -36,7 +36,7 @@ public class LobbyPlayerForTests extends LobbyPlayer implements IGameEntitiesFac
     }
 
     @Override
-    public Player createIngamePlayer(Game gameState, final int id) {
+    public Player createIngamePlayer(Game gameState, final long id) {
         Player dummyPlayer = new Player(getName(), gameState, id);
         dummyPlayer.setFirstController(createControllerFor(dummyPlayer));
         return dummyPlayer;

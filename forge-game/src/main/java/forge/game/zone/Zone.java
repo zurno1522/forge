@@ -268,7 +268,7 @@ public class Zone implements java.io.Serializable, Iterable<Card> {
         return zoneType.toString();
     }
 
-    public Zone getLKICopy(Map<Integer, Card> cachedMap) {
+    public Zone getLKICopy(Map<Long, Card> cachedMap) {
         Zone result = new Zone(zoneType, game);
 
         result.setCards(CardCopyService.getLKICopyList(getCards(), cachedMap));

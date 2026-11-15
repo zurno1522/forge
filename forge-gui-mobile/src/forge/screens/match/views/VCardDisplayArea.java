@@ -44,7 +44,7 @@ public abstract class VCardDisplayArea extends VDisplayArea implements ActivateH
     protected Supplier<List<CardView>> orderedCards = Suppliers.memoize(ArrayList::new);
     protected Supplier<List<CardAreaPanel>> cardPanels = Suppliers.memoize(ArrayList::new);
     // Cards shown only as informational exile ghosts here, so the zoom carousel doesn't act on them
-    private final Supplier<Set<Integer>> infoGhostCardIds = Suppliers.memoize(HashSet::new);
+    private final Supplier<Set<Long>> infoGhostCardIds = Suppliers.memoize(HashSet::new);
     private boolean rotateCards180;
     // what the previous refresh showed. The row's cardPanels is already emptied before refreshCardPanels runs
     // (so it can't be used to find departed cards), which is why we keep our own list.
@@ -486,8 +486,8 @@ public abstract class VCardDisplayArea extends VDisplayArea implements ActivateH
     }
 
     public static class CardAreaPanel extends FCardPanel {
-        private static Map<Integer, CardAreaPanel> allCardPanels = new HashMap<>();
-        private static final Map<Integer, Rectangle> handStarts = new ConcurrentHashMap<>();
+        private static Map<Long, CardAreaPanel> allCardPanels = new HashMap<>();
+        private static final Map<Long, Rectangle> handStarts = new ConcurrentHashMap<>();
         private static long matchStartTime = System.currentTimeMillis();
         private long entryStart = -1;
         private CardFlightOverlay.Flight flight;
@@ -498,8 +498,8 @@ public abstract class VCardDisplayArea extends VDisplayArea implements ActivateH
         private boolean hasFieldRect;
         private boolean leaveOriginLocked;
         private VCardDisplayArea lastFieldRow;
-        private static final Set<Integer> animatedIds = Sets.newConcurrentHashSet();
-        private static final Set<Integer> movedIds = Sets.newConcurrentHashSet();
+        private static final Set<Long> animatedIds = Sets.newConcurrentHashSet();
+        private static final Set<Long> movedIds = Sets.newConcurrentHashSet();
         public static void markMoved(CardView c) { movedIds.add(c.getId()); }
         public static Rectangle takeHandStart(CardView card) {
             return handStarts.remove(card.getId());
@@ -524,7 +524,7 @@ public abstract class VCardDisplayArea extends VDisplayArea implements ActivateH
             if (CardFlightOverlay.style() == CardFlightOverlay.Style.OFF) { return; }
             if (System.currentTimeMillis() - matchStartTime < 2000) { return; }
 
-            final int id = getCard().getId();
+            final long id = getCard().getId();
 
             // the new row refreshed before the old row could mark the move, so detect it here
             if (target != null && lastFieldRow != null && lastFieldRow != target && hasFieldRect

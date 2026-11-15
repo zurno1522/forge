@@ -77,13 +77,13 @@ public class PlayArea extends CardPanelContainer implements CardPanelMouseListen
     // can't share a stack. doUpdateCard removes entries on tapped state
     // changes, but this does NOT cover undeclare during InputAttack since
     // cards aren't actually tapped yet — click handlers must clean up.
-    private final Set<Integer> splitCardIds = new HashSet<>();
+    private final Set<Long> splitCardIds = new HashSet<>();
     // Combat pairing map; rebuilt each doLayout() from CombatView.
-    private Map<Integer, Integer> combatAssignments = Collections.emptyMap();
+    private Map<Long, Long> combatAssignments = Collections.emptyMap();
     // Coalesces multiple invokeLater(doLayout) calls within a single EDT cycle.
     private boolean layoutPending;
     // Ghost panels (cards a permanent holds in exile), keyed by host card id; not in the battlefield model
-    private final Map<Integer, List<CardPanel>> ghostPanels = new HashMap<>();
+    private final Map<Long, List<CardPanel>> ghostPanels = new HashMap<>();
 
     // Computed in layout.
     private List<CardStackRow> rows = new ArrayList<>();
@@ -192,8 +192,8 @@ public class PlayArea extends CardPanelContainer implements CardPanelMouseListen
                         // Cards with different combat pairings can't group together.
                         // Must unbox to int — != on boxed Integer compares references,
                         // not values, for IDs >= 128.
-                        int cardAssign = combatAssignments.getOrDefault(card.getId(), 0);
-                        int firstAssign = combatAssignments.getOrDefault(firstCard.getId(), 0);
+                        long cardAssign = combatAssignments.getOrDefault(card.getId(), 0L);
+                        long firstAssign = combatAssignments.getOrDefault(firstCard.getId(), 0L);
                         if (cardAssign != firstAssign) {
                             insertIndex = i + 1;
                             continue;
@@ -392,29 +392,29 @@ public class PlayArea extends CardPanelContainer implements CardPanelMouseListen
     // different attackers stay separate), attacker→defender+blockerHash (so
     // attackers assigned to different defenders or with different blocker
     // sets stay separate).
-    private Map<Integer, Integer> buildCombatAssignments() {
+    private Map<Long, Long> buildCombatAssignments() {
         if (getMatchUI().getGameView() == null) { return Collections.emptyMap(); }
         CombatView combat = getMatchUI().getGameView().getCombat();
         if (combat == null) { return Collections.emptyMap(); }
-        Map<Integer, Integer> assignments = new HashMap<>();
+        Map<Long, Long> assignments = new HashMap<>();
         for (CardView attacker : combat.getAttackers()) {
             // High bit ensures combat assignments are always negative, never
             // colliding with the default 0 for non-combat cards
             GameEntityView defender = combat.getDefender(attacker);
-            int assignment = (defender != null ? defender.getId() : 0) | Integer.MIN_VALUE;
+            long assignment = (defender != null ? defender.getId() : 0) | Long.MIN_VALUE;
 
             FCollection<CardView> blockers = combat.getPlannedBlockers(attacker);
             if (blockers != null && !blockers.isEmpty()) {
                 for (CardView blocker : blockers) {
-                    assignments.put(blocker.getId(), attacker.getId() | Integer.MIN_VALUE);
+                    assignments.put(blocker.getId(), attacker.getId() | Long.MIN_VALUE);
                 }
                 // Multiplicative hash, not XOR — XOR of certain ID
                 // combinations cancels to 0
-                int blockerHash = 1;
+                long blockerHash = 1;
                 for (CardView blocker : blockers) {
                     blockerHash = 31 * blockerHash + blocker.getId();
                 }
-                assignment = (assignment ^ blockerHash) | Integer.MIN_VALUE;
+                assignment = (assignment ^ blockerHash) | Long.MIN_VALUE;
             }
             assignments.put(attacker.getId(), assignment);
         }
@@ -894,7 +894,7 @@ public class PlayArea extends CardPanelContainer implements CardPanelMouseListen
         }
         if (alreadyInCombat) {
             // Undeclaring: selected cards merge back. Non-selected stay split.
-            Set<Integer> selectedIds = new HashSet<>();
+            Set<Long> selectedIds = new HashSet<>();
             for (CardView cv : selected) {
                 selectedIds.add(cv.getId());
             }
@@ -1172,7 +1172,7 @@ public class PlayArea extends CardPanelContainer implements CardPanelMouseListen
         return linked.size() > cap ? linked.subList(0, cap) : linked;
     }
 
-    private static CardPanel takeGhost(final List<CardPanel> panels, final int cardId) {
+    private static CardPanel takeGhost(final List<CardPanel> panels, final long cardId) {
         for (final Iterator<CardPanel> it = panels.iterator(); it.hasNext();) {
             final CardPanel p = it.next();
             if (p.getCard() != null && p.getCard().getId() == cardId) {
@@ -1183,7 +1183,7 @@ public class PlayArea extends CardPanelContainer implements CardPanelMouseListen
         return null;
     }
 
-    private void removeGhosts(final int hostId) {
+    private void removeGhosts(final long hostId) {
         final List<CardPanel> ghosts = ghostPanels.remove(hostId);
         if (ghosts != null) {
             for (final CardPanel ghost : ghosts) {

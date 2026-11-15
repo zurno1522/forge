@@ -4,20 +4,20 @@ import forge.gamemodes.net.ProtocolMethod;
 
 public final class GuiGameEvent implements IdentifiableNetEvent {
     private static final long serialVersionUID = 6223690008522514574L;
-    private static int staticId = 0;
+    private static final java.util.concurrent.atomic.AtomicLong staticId = new java.util.concurrent.atomic.AtomicLong();
 
-    private final int id;
+    private final long id;
     private final ProtocolMethod method;
     private final Object[] objects;
     private final byte[] encodedObjects;
 
     public GuiGameEvent(final ProtocolMethod method, final Object ... objects) {
-        this.id = staticId++;
+        this.id = staticId.getAndIncrement();
         this.method = method;
         this.objects = objects == null ? new Object[0] : objects;
         this.encodedObjects = null;
     }
-    private GuiGameEvent(final int id, final ProtocolMethod method, final byte[] encodedObjects) {
+    private GuiGameEvent(final long id, final ProtocolMethod method, final byte[] encodedObjects) {
         this.id = id;
         this.method = method;
         this.objects = new Object[0];
@@ -36,7 +36,7 @@ public final class GuiGameEvent implements IdentifiableNetEvent {
     }
 
     @Override
-    public int getId() {
+    public long getId() {
         return id;
     }
 

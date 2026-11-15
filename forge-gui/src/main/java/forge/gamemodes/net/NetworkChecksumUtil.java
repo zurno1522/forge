@@ -60,7 +60,7 @@ public final class NetworkChecksumUtil {
         }
         if (players != null) {
             for (PlayerView player : getSortedPlayers(players)) {
-                hash = 31 * hash + player.getId();
+                hash = 31 * hash + Long.hashCode(player.getId());
                 Object life = getEffectiveValue(player, TrackableProperty.Life);
                 hash = 31 * hash + (life instanceof Integer ? (int) life : 0);
             }
@@ -83,7 +83,7 @@ public final class NetworkChecksumUtil {
         }
         List<PlayerView> sortedPlayers = getSortedPlayers(gameView);
         for (PlayerView player : sortedPlayers) {
-            hash = 31 * hash + player.getId();
+            hash = 31 * hash + Long.hashCode(player.getId());
             Object life = getEffectiveValue(player, TrackableProperty.Life);
             hash = 31 * hash + (life instanceof Integer ? (int) life : 0);
         }
@@ -142,7 +142,7 @@ public final class NetworkChecksumUtil {
                 }
             }
         }
-        all.sort(Comparator.comparingInt(CardView::getId));
+        all.sort(Comparator.comparingLong(CardView::getId));
         return all;
     }
 
@@ -153,7 +153,7 @@ public final class NetworkChecksumUtil {
      * operations in the exact same order to agree on the checksum.
      */
     private static int hashCardProps(int hash, CardView card) {
-        hash = 31 * hash + card.getId();
+        hash = 31 * hash + Long.hashCode(card.getId());
         hash = 31 * hash + (Boolean.TRUE.equals(getEffectiveValue(card, TrackableProperty.Tapped)) ? 1 : 0);
         Object stateObj = getEffectiveValue(card, TrackableProperty.CurrentState);
         CardView.CardStateView state = stateObj instanceof CardView.CardStateView ? (CardView.CardStateView) stateObj : null;
@@ -166,7 +166,7 @@ public final class NetworkChecksumUtil {
         Object zone = getEffectiveValue(card, TrackableProperty.Zone);
         hash = 31 * hash + (zone instanceof ZoneType ? ((ZoneType) zone).ordinal() : -1);
         Object ctrl = getEffectiveValue(card, TrackableProperty.Controller);
-        hash = 31 * hash + (ctrl instanceof PlayerView ? ((PlayerView) ctrl).getId() : -1);
+        hash = 31 * hash + Long.hashCode(ctrl instanceof PlayerView ? ((PlayerView) ctrl).getId() : -1);
         if (getEffectiveValue(card, TrackableProperty.Counters) instanceof Multiset counters) {
             hash = 31 * hash + counters.size();
         }
@@ -185,13 +185,13 @@ public final class NetworkChecksumUtil {
      */
     private static int hashCombatAttackers(int hash, CombatView combat) {
         hash = 31 * hash + combat.getNumAttackers();
-        List<Integer> attackerIds = new ArrayList<>();
+        List<Long> attackerIds = new ArrayList<>();
         for (CardView attacker : combat.getAttackers()) {
             attackerIds.add(attacker.getId());
         }
         attackerIds.sort(null);
-        for (int id : attackerIds) {
-            hash = 31 * hash + id;
+        for (long id : attackerIds) {
+            hash = 31 * hash + Long.hashCode(id);
         }
         return hash;
     }
@@ -216,7 +216,7 @@ public final class NetworkChecksumUtil {
         }
         List<PlayerView> sortedPlayers = getSortedPlayers(gameView);
         for (PlayerView player : sortedPlayers) {
-            hash = 31 * hash + player.getId();
+            hash = 31 * hash + Long.hashCode(player.getId());
             Object life = getEffectiveValue(player, TrackableProperty.Life);
             hash = 31 * hash + (life instanceof Integer ? (int) life : 0);
         }
@@ -264,7 +264,7 @@ public final class NetworkChecksumUtil {
             Object zoneObj = getEffectiveValue(card, TrackableProperty.Zone);
             int zoneOrd = zoneObj instanceof ZoneType ? ((ZoneType) zoneObj).ordinal() : -1;
             Object ctrlObj = getEffectiveValue(card, TrackableProperty.Controller);
-            int ctrlId = ctrlObj instanceof PlayerView ? ((PlayerView) ctrlObj).getId() : -1;
+            long ctrlId = ctrlObj instanceof PlayerView ? ((PlayerView) ctrlObj).getId() : -1;
             int ct = 0;
             if (getEffectiveValue(card, TrackableProperty.Counters) instanceof Multiset counters) {
                 ct = counters.size();
@@ -382,7 +382,7 @@ public final class NetworkChecksumUtil {
             addCards(cards, getEffectiveValue(player, TrackableProperty.Graveyard));
             addCards(cards, getEffectiveValue(player, TrackableProperty.Exile));
             addCards(cards, getEffectiveValue(player, TrackableProperty.Command));
-            cards.sort(Comparator.comparingInt(CardView::getId));
+            cards.sort(Comparator.comparingLong(CardView::getId));
 
             for (CardView card : cards) {
                 objects.add(card);
@@ -403,7 +403,7 @@ public final class NetworkChecksumUtil {
             for (Object item : (Iterable<?>) stackObj) {
                 if (item instanceof StackItemView siv) stackItems.add(siv);
             }
-            stackItems.sort(Comparator.comparingInt(StackItemView::getId));
+            stackItems.sort(Comparator.comparingLong(StackItemView::getId));
             objects.addAll(stackItems);
         }
 
@@ -448,12 +448,12 @@ public final class NetworkChecksumUtil {
             return 0;
         }
         if (value instanceof TrackableObject to) {
-            return to.getId();
+            return Long.hashCode(to.getId());
         }
         if (value instanceof TrackableCollection tc) {
-            List<Integer> ids = new ArrayList<>(tc.size());
+            List<Long> ids = new ArrayList<>(tc.size());
             for (Object item : tc) {
-                ids.add(item instanceof TrackableObject to ? to.getId() : Objects.hashCode(item));
+                ids.add(item instanceof TrackableObject to ? to.getId() : (long) Objects.hashCode(item));
             }
             ids.sort(null);
             return ids.hashCode();
@@ -502,7 +502,7 @@ public final class NetworkChecksumUtil {
         }
         if (gameView.getPlayers() != null) {
             for (PlayerView player : getSortedPlayers(gameView.getPlayers())) {
-                hash = 31 * hash + player.getId();
+                hash = 31 * hash + Long.hashCode(player.getId());
                 Object life = getEffectiveValue(player, TrackableProperty.Life);
                 hash = 31 * hash + (life instanceof Integer ? (int) life : 0);
             }
@@ -579,7 +579,7 @@ public final class NetworkChecksumUtil {
         for (PlayerView p : players) {
             sorted.add(p);
         }
-        sorted.sort(Comparator.comparingInt(PlayerView::getId));
+        sorted.sort(Comparator.comparingLong(PlayerView::getId));
         return sorted;
     }
 }

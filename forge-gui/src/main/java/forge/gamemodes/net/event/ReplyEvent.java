@@ -5,14 +5,14 @@ import java.io.Serializable;
 public final class ReplyEvent implements NetEvent {
     private static final long serialVersionUID = -2814651319617795386L;
 
-    private final int index;
+    private final long index;
     private final Serializable reply;
-    public ReplyEvent(final int index, final Serializable reply) {
+    public ReplyEvent(final long index, final Serializable reply) {
         this.index = index;
         this.reply = reply;
     }
 
-    public int getIndex() {
+    public long getIndex() {
         return index;
     }
     public Object getReply() {

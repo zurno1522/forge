@@ -32,13 +32,13 @@ import forge.util.AITimeoutTracker;
  */
 public class AITimeoutScenarioTest extends SimulationTest {
     private static final long EXPIRED_NANOS = 1_000_000L; // 1 ms: gone before the AI starts
-    private int sessionPlayerId = -1;
+    private AITimeoutTracker.SessionKey sessionPlayerId;
 
     @AfterMethod
     public void closeSession() {
-        if (sessionPlayerId >= 0) {
+        if (sessionPlayerId != null) {
             AITimeoutTracker.end(sessionPlayerId);
-            sessionPlayerId = -1;
+            sessionPlayerId = null;
         }
     }
 
@@ -207,8 +207,8 @@ public class AITimeoutScenarioTest extends SimulationTest {
         startCombatStep(game, human, PhaseType.COMBAT_DECLARE_ATTACKERS);
 
         final Map<?, ?> slots = trackerSlots();
-        final long humanKey = AITimeoutTracker.key(game.getId(), human.getId());
-        final long aiKey = AITimeoutTracker.key(game.getId(), ai.getId());
+        final AITimeoutTracker.SessionKey humanKey = AITimeoutTracker.key(game.getId(), human.getId());
+        final AITimeoutTracker.SessionKey aiKey = AITimeoutTracker.key(game.getId(), ai.getId());
         slots.remove(humanKey);
         slots.remove(aiKey);
 
@@ -228,7 +228,7 @@ public class AITimeoutScenarioTest extends SimulationTest {
 
     /** Opens a session for the player whose deadline has already passed; nested AI sessions inherit it. */
     private void expireSession(final Player p) {
-        sessionPlayerId = p.getId();
+        sessionPlayerId = AITimeoutTracker.key(p.getGame().getId(), p.getId());
         AITimeoutTracker.begin(sessionPlayerId, EXPIRED_NANOS);
         try {
             Thread.sleep(20);

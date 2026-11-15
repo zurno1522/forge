@@ -39,13 +39,13 @@ public final class SimAudit {
 
     /** What the last real choice predicted, waiting to be compared at the AI's next priority. */
     private static final class Pending {
-        final int gameId;
+        final long gameId;
         final int turn;
         final PhaseType phase;
         final String play;
         final Map<String, String> predicted;
 
-        Pending(final int gameId, final int turn, final PhaseType phase, final String play, final Map<String, String> predicted) {
+        Pending(final long gameId, final int turn, final PhaseType phase, final String play, final Map<String, String> predicted) {
             this.gameId = gameId;
             this.turn = turn;
             this.phase = phase;
@@ -54,12 +54,12 @@ public final class SimAudit {
         }
     }
 
-    private static final Map<Long, Pending> PENDING = new java.util.concurrent.ConcurrentHashMap<>();
+    private static final Map<forge.util.AITimeoutTracker.SessionKey, Pending> PENDING = new java.util.concurrent.ConcurrentHashMap<>();
 
     private SimAudit() { }
 
-    private static long key(final Game game, final Player p) {
-        return ((long) game.getId() << 32) | (p.getId() & 0xFFFFFFFFL);
+    private static forge.util.AITimeoutTracker.SessionKey key(final Game game, final Player p) {
+        return forge.util.AITimeoutTracker.key(game.getId(), p.getId());
     }
 
     /** Called when the AI is asked for a play: compares a pending prediction with reality, and the game with a copy of it. */

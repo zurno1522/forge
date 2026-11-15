@@ -353,7 +353,7 @@ public class HeadlessNetworkClient implements AutoCloseable, IHasForgeLog {
             // Only check the LAST tap event per card in the batch — earlier events
             // may reference intermediate states that the delta (final-state-only)
             // correctly doesn't include.
-            java.util.Map<Integer, forge.game.event.GameEventCardTapped> lastTapPerCard = new java.util.LinkedHashMap<>();
+            java.util.Map<Long, forge.game.event.GameEventCardTapped> lastTapPerCard = new java.util.LinkedHashMap<>();
             for (forge.game.event.GameEvent event : events) {
                 if (event instanceof forge.game.event.GameEventCardTapped tapEvent) {
                     forge.game.card.CardView card = tapEvent.card();

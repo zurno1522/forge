@@ -233,7 +233,7 @@ public class CardDamageHistory {
         return damagedThisGame;
     }
 
-    public void registerDamage(int damage, boolean isCombat, Card sourceLKI, GameEntity target, Map<Integer, Card> lkiCache) {
+    public void registerDamage(int damage, boolean isCombat, Card sourceLKI, GameEntity target, Map<Long, Card> lkiCache) {
         if (damage <= 0) {
             return;
         }

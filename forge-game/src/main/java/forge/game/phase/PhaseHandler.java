@@ -894,7 +894,7 @@ public class PhaseHandler implements IHasForgeLog {
         }
 
         List<Card> blocked = Lists.newArrayList();
-        Map<Integer, Card> lkiCache = Maps.newHashMap();
+        Map<Long, Card> lkiCache = Maps.newHashMap();
 
         for (final Card a : combat.getAttackers()) {
             if (combat.isBlocked(a)) {

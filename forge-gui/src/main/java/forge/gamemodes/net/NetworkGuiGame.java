@@ -1,6 +1,7 @@
 package forge.gamemodes.net;
 
 import forge.card.CardStateName;
+import forge.gamemodes.net.DeltaPacket.ObjectKey;
 import forge.game.GameView;
 import forge.game.event.GameEvent;
 import forge.game.card.CardView;
@@ -58,22 +59,22 @@ public abstract class NetworkGuiGame extends AbstractGuiGame implements IHasForg
         int skippedCount = 0;
 
         List<Map.Entry<TrackableObject, Map<TrackableProperty, Object>>> pendingPropertyApplications = new ArrayList<>();
-        Map<Integer, CardStateView> csvRegistry = new HashMap<>();
-        Map<Integer, Map<TrackableProperty, Object>> newObjects = packet.getNewObjects();
+        Map<ObjectKey, CardStateView> csvRegistry = new HashMap<>();
+        Map<ObjectKey, Map<TrackableProperty, Object>> newObjects = packet.getNewObjects();
         if (!newObjects.isEmpty()) {
             // Sort by delta key so CardViews (type 0) are created before CSVs (type 4)
-            List<Map.Entry<Integer, Map<TrackableProperty, Object>>> sortedNew = new ArrayList<>(newObjects.entrySet());
-            sortedNew.sort(Comparator.comparingInt(Map.Entry::getKey));
+            List<Map.Entry<ObjectKey, Map<TrackableProperty, Object>>> sortedNew = new ArrayList<>(newObjects.entrySet());
+            sortedNew.sort(Map.Entry.comparingByKey());
 
             // STEP 1: Create new objects first
-            for (Map.Entry<Integer, Map<TrackableProperty, Object>> newEntry : sortedNew) {
-                int deltaKey = newEntry.getKey();
+            for (Map.Entry<ObjectKey, Map<TrackableProperty, Object>> newEntry : sortedNew) {
+                ObjectKey deltaKey = newEntry.getKey();
                 int objectType = DeltaPacket.getTypeFromDeltaKey(deltaKey);
-                int objectId = DeltaPacket.getIdFromDeltaKey(deltaKey);
+                long objectId = DeltaPacket.getIdFromDeltaKey(deltaKey);
                 try {
                     if (objectType == DeltaPacket.TYPE_CSV) {
-                        int cardId = getCardIdFromCsvEncodedId(objectId);
-                        CardStateName state = getStateFromCsvEncodedId(objectId);
+                        long cardId = objectId;
+                        CardStateName state = CardStateName.values()[deltaKey.stateOrdinal()];
                         CardView parent = tracker.getObj(TrackableTypes.CardViewType, cardId);
                         if (parent == null) {
                             netLog.error("[DeltaSync] Parent CardView ID={} not found for CSV state={}",
@@ -113,21 +114,21 @@ public abstract class NetworkGuiGame extends AbstractGuiGame implements IHasForg
         }
 
         // STEP 3: Apply property deltas to existing objects
-        for (Map.Entry<Integer, Map<TrackableProperty, Object>> entry : packet.getObjectDeltas().entrySet()) {
-            int deltaKey = entry.getKey();
+        for (Map.Entry<ObjectKey, Map<TrackableProperty, Object>> entry : packet.getObjectDeltas().entrySet()) {
+            ObjectKey deltaKey = entry.getKey();
             Map<TrackableProperty, Object> deltaProps = entry.getValue();
 
             int objectType = DeltaPacket.getTypeFromDeltaKey(deltaKey);
-            int actualObjectId = DeltaPacket.getIdFromDeltaKey(deltaKey);
+            long actualObjectId = DeltaPacket.getIdFromDeltaKey(deltaKey);
 
             TrackableObject obj;
             if (objectType == DeltaPacket.TYPE_CSV) {
                 obj = csvRegistry.get(deltaKey);
                 if (obj == null) {
-                    obj = findObjectByTypeAndId(tracker, objectType, actualObjectId);
+                    obj = findObjectByTypeAndId(tracker, deltaKey);
                 }
             } else {
-                obj = findObjectByTypeAndId(tracker, objectType, actualObjectId);
+                obj = findObjectByTypeAndId(tracker, deltaKey);
             }
 
             if (obj != null) {
@@ -136,14 +137,14 @@ public abstract class NetworkGuiGame extends AbstractGuiGame implements IHasForg
                     appliedCount++;
                 } catch (Exception e) {
                     netLog.error("[DeltaSync] Error applying delta to object ID={} type={} (deltaKey={})",
-                            actualObjectId, objectType, String.format("0x%08X", deltaKey));
+                            actualObjectId, objectType, deltaKey.toString());
                     netLog.error(e, "[DeltaSync] Exception details:");
                     skippedCount++;
                 }
             } else {
                 String typeName = getObjectTypeName(objectType);
                 netLog.warn("[DeltaSync] {} ID={} (deltaKey={}) NOT FOUND for delta application",
-                        typeName, actualObjectId, String.format("0x%08X", deltaKey));
+                        typeName, actualObjectId, deltaKey.toString());
                 skippedCount++;
             }
         }
@@ -191,7 +192,7 @@ public abstract class NetworkGuiGame extends AbstractGuiGame implements IHasForg
      * Resolves network values (IDs) back to object references.
      */
     private void applyPropertyMap(TrackableObject obj, Map<TrackableProperty, Object> delta,
-                                   Tracker tracker, Map<Integer, CardStateView> csvRegistry) {
+                                   Tracker tracker, Map<ObjectKey, CardStateView> csvRegistry) {
         // Snapshot existing CSVs before processing — slot assignments processed in ordinal
         // order can displace a CSV from its slot before a later slot assignment looks for it.
         Map<CardStateName, CardStateView> existingCsvs = null;
@@ -214,9 +215,9 @@ public abstract class NetworkGuiGame extends AbstractGuiGame implements IHasForg
                     if (value == null) {
                         cardView.set(prop, null);
                     } else {
-                        int ordinal = (Integer) value;
+                        int ordinal = ((Number) value).intValue();
                         CardStateName state = CardStateName.values()[ordinal];
-                        int csvKey = DeltaPacket.makeDeltaKey(DeltaPacket.TYPE_CSV, cardView.getId() * 16 + ordinal);
+                        ObjectKey csvKey = DeltaPacket.makeDeltaKey(DeltaPacket.TYPE_CSV, cardView.getId(), ordinal);
                         CardStateView csv = csvRegistry.get(csvKey);
                         if (csv == null) csv = findCsvByState(cardView, state);
                         if (csv == null && existingCsvs != null) csv = existingCsvs.get(state);
@@ -265,16 +266,16 @@ public abstract class NetworkGuiGame extends AbstractGuiGame implements IHasForg
 
         // Integer ID → CardView
         if (type == TrackableTypes.CardViewType) {
-            return tracker.getObj(TrackableTypes.CardViewType, (Integer) value);
+            return tracker.getObj(TrackableTypes.CardViewType, ((Number) value).longValue());
         }
         // Integer ID → PlayerView
         if (type == TrackableTypes.PlayerViewType) {
-            return tracker.getObj(TrackableTypes.PlayerViewType, (Integer) value);
+            return tracker.getObj(TrackableTypes.PlayerViewType, ((Number) value).longValue());
         }
 
         // int[]{typeMarker, id} → GameEntityView
         if (type == TrackableTypes.GameEntityViewType) {
-            int[] arr = (int[]) value;
+            long[] arr = (long[]) value;
             return arr[0] == 0
                 ? tracker.getObj(TrackableTypes.CardViewType, arr[1])
                 : tracker.getObj(TrackableTypes.PlayerViewType, arr[1]);
@@ -282,9 +283,9 @@ public abstract class NetworkGuiGame extends AbstractGuiGame implements IHasForg
 
         // List<Integer> → TrackableCollection<CardView>
         if (type == TrackableTypes.CardViewCollectionType) {
-            List<Integer> ids = (List<Integer>) value;
+            List<Long> ids = (List<Long>) value;
             TrackableCollection<CardView> coll = new TrackableCollection<>();
-            for (int id : ids) {
+            for (long id : ids) {
                 if (id != -1) {
                     CardView cv = tracker.getObj(TrackableTypes.CardViewType, id);
                     if (cv != null) {
@@ -299,9 +300,9 @@ public abstract class NetworkGuiGame extends AbstractGuiGame implements IHasForg
 
         // List<Integer> → TrackableCollection<PlayerView>
         if (type == TrackableTypes.PlayerViewCollectionType) {
-            List<Integer> ids = (List<Integer>) value;
+            List<Long> ids = (List<Long>) value;
             TrackableCollection<PlayerView> coll = new TrackableCollection<>();
-            for (int id : ids) {
+            for (long id : ids) {
                 if (id != -1) {
                     PlayerView pv = tracker.getObj(TrackableTypes.PlayerViewType, id);
                     if (pv != null) {
@@ -323,13 +324,13 @@ public abstract class NetworkGuiGame extends AbstractGuiGame implements IHasForg
         }
 
         if (type == TrackableTypes.StackItemViewType) {
-            return tracker.getObj(TrackableTypes.StackItemViewType, (Integer) value);
+            return tracker.getObj(TrackableTypes.StackItemViewType, ((Number) value).longValue());
         }
 
         if (type == TrackableTypes.StackItemViewListType) {
-            List<Integer> ids = (List<Integer>) value;
+            List<Long> ids = (List<Long>) value;
             TrackableCollection<forge.game.spellability.StackItemView> coll = new TrackableCollection<>();
-            for (int id : ids) {
+            for (long id : ids) {
                 if (id != -1) {
                     forge.game.spellability.StackItemView siv = tracker.getObj(TrackableTypes.StackItemViewType, id);
                     if (siv != null) {
@@ -351,7 +352,7 @@ public abstract class NetworkGuiGame extends AbstractGuiGame implements IHasForg
 
         for (int i = 0; i < data.bandAttackerIds.size(); i++) {
             List<CardView> attackers = new ArrayList<>();
-            for (int id : data.bandAttackerIds.get(i)) {
+            for (long id : data.bandAttackerIds.get(i)) {
                 CardView cv = tracker.getObj(TrackableTypes.CardViewType, id);
                 if (cv != null) {
                     attackers.add(cv);
@@ -360,7 +361,7 @@ public abstract class NetworkGuiGame extends AbstractGuiGame implements IHasForg
                 }
             }
 
-            int[] defRef = data.bandDefenderRefs.get(i);
+            long[] defRef = data.bandDefenderRefs.get(i);
             forge.game.GameEntityView defender = defRef[0] == 0
                     ? tracker.getObj(TrackableTypes.CardViewType, defRef[1])
                     : tracker.getObj(TrackableTypes.PlayerViewType, defRef[1]);
@@ -377,10 +378,10 @@ public abstract class NetworkGuiGame extends AbstractGuiGame implements IHasForg
             }
 
             List<CardView> blockers = null;
-            List<Integer> blockerIds = data.bandBlockerIds.get(i);
+            List<Long> blockerIds = data.bandBlockerIds.get(i);
             if (blockerIds != null) {
                 blockers = new ArrayList<>();
-                for (int id : blockerIds) {
+                for (long id : blockerIds) {
                     CardView cv = tracker.getObj(TrackableTypes.CardViewType, id);
                     if (cv != null) {
                         blockers.add(cv);
@@ -391,10 +392,10 @@ public abstract class NetworkGuiGame extends AbstractGuiGame implements IHasForg
             }
 
             List<CardView> plannedBlockers = null;
-            List<Integer> plannedIds = data.bandPlannedBlockerIds.get(i);
+            List<Long> plannedIds = data.bandPlannedBlockerIds.get(i);
             if (plannedIds != null) {
                 plannedBlockers = new ArrayList<>();
-                for (int id : plannedIds) {
+                for (long id : plannedIds) {
                     CardView cv = tracker.getObj(TrackableTypes.CardViewType, id);
                     if (cv != null) {
                         plannedBlockers.add(cv);
@@ -410,11 +411,11 @@ public abstract class NetworkGuiGame extends AbstractGuiGame implements IHasForg
         return combat;
     }
 
-    private TrackableObject createObjectOnly(int objectType, int objectId, Tracker tracker) {
+    private TrackableObject createObjectOnly(int objectType, long objectId, Tracker tracker) {
         String typeName = getObjectTypeName(objectType);
 
         // Check if object of the SAME TYPE already exists
-        TrackableObject existing = findObjectByTypeAndId(tracker, objectType, objectId);
+        TrackableObject existing = findObjectByTypeAndId(tracker, DeltaPacket.makeDeltaKey(objectType, objectId));
         if (existing != null) {
             if (objectType == DeltaPacket.TYPE_CARD_VIEW) {
                 // Create a NEW instance rather than clearing the existing one in-place.
@@ -466,7 +467,9 @@ public abstract class NetworkGuiGame extends AbstractGuiGame implements IHasForg
         return obj;
     }
 
-    private TrackableObject findObjectByTypeAndId(Tracker tracker, int objectType, int objectId) {
+    private TrackableObject findObjectByTypeAndId(Tracker tracker, ObjectKey deltaKey) {
+        final int objectType = deltaKey.type();
+        final long objectId = deltaKey.id();
         switch (objectType) {
             case DeltaPacket.TYPE_CARD_VIEW:
                 return tracker.getObj(TrackableTypes.CardViewType, objectId);
@@ -477,8 +480,8 @@ public abstract class NetworkGuiGame extends AbstractGuiGame implements IHasForg
             case DeltaPacket.TYPE_GAME_VIEW:
                 return getGameView();
             case DeltaPacket.TYPE_CSV:
-                int cardId = getCardIdFromCsvEncodedId(objectId);
-                CardStateName state = getStateFromCsvEncodedId(objectId);
+                long cardId = objectId;
+                CardStateName state = CardStateName.values()[deltaKey.stateOrdinal()];
                 CardView parent = tracker.getObj(TrackableTypes.CardViewType, cardId);
                 return parent != null ? findCsvByState(parent, state) : null;
             default:
@@ -523,13 +526,6 @@ public abstract class NetworkGuiGame extends AbstractGuiGame implements IHasForg
         csv = parent.getRightSplitState();
         if (csv != null && csv.getState() == state) return csv;
         return null;
-    }
-
-    private static int getCardIdFromCsvEncodedId(int encodedId) {
-        return encodedId / 16;
-    }
-    private static CardStateName getStateFromCsvEncodedId(int encodedId) {
-        return CardStateName.values()[encodedId % 16];
     }
 
     private static boolean isCsvSlotProperty(TrackableProperty prop) {

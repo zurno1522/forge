@@ -570,8 +570,8 @@ public class PerfPatchRulesTest extends GameSimulationTest {
         }
     }
 
-    private static List<Integer> ids(Iterable<Card> cards) {
-        List<Integer> out = new ArrayList<>();
+    private static List<Long> ids(Iterable<Card> cards) {
+        List<Long> out = new ArrayList<>();
         for (Card c : cards) out.add(c.getId());
         return out;
     }
@@ -612,7 +612,7 @@ public class PerfPatchRulesTest extends GameSimulationTest {
 
         CardCollection expected = new CardCollection();
         for (ZoneType z : zones) expected.addAll(game.getCardsIncludePhasingIn(z));
-        List<Integer> expectedIds = ids(CardLists.filter(expected, CardPredicates.isOwner(p)));
+        List<Long> expectedIds = ids(CardLists.filter(expected, CardPredicates.isOwner(p)));
 
         Assert.assertEquals(ids(game.getCardsInOwnedBy(zones, p)), expectedIds,
                 "getCardsInOwnedBy must keep the phasing semantics of the original implementation");
@@ -625,7 +625,7 @@ public class PerfPatchRulesTest extends GameSimulationTest {
         PlayerCollection players = game.getPlayers();
 
         for (ZoneType z : new ZoneType[]{ZoneType.Hand, ZoneType.Library, ZoneType.Graveyard, ZoneType.Exile, ZoneType.Battlefield, ZoneType.Stack}) {
-            List<Integer> expected = new ArrayList<>();
+            List<Long> expected = new ArrayList<>();
             if (z == ZoneType.Stack) {
                 expected = ids(game.getStackZone().getCards());
             } else {
@@ -633,20 +633,20 @@ public class PerfPatchRulesTest extends GameSimulationTest {
             }
             Assert.assertEquals(ids(game.getCardsIn(z)), expected, "Game.getCardsIn(" + z + ")");
             if (z != ZoneType.Stack) {
-                List<Integer> viaPlayers = ids(players.getCardsIn(z));
-                List<Integer> manual = new ArrayList<>();
+                List<Long> viaPlayers = ids(players.getCardsIn(z));
+                List<Long> manual = new ArrayList<>();
                 for (Player p : players) manual.addAll(ids(p.getCardsIn(z)));
                 Assert.assertEquals(viaPlayers, manual, "PlayerCollection.getCardsIn(" + z + ")");
             }
         }
 
         List<ZoneType> listZones = Arrays.asList(ZoneType.Hand, ZoneType.Battlefield, ZoneType.Graveyard);
-        List<Integer> expList = new ArrayList<>();
+        List<Long> expList = new ArrayList<>();
         for (ZoneType z : listZones) for (Player p : players) expList.addAll(ids(p.getCardsIn(z)));
         Assert.assertEquals(ids(game.getCardsIn(listZones)), expList, "Game.getCardsIn(List) keeps the caller's zone order");
 
         EnumSet<ZoneType> set = EnumSet.of(ZoneType.Graveyard, ZoneType.Hand, ZoneType.Battlefield);
-        List<Integer> expSet = new ArrayList<>();
+        List<Long> expSet = new ArrayList<>();
         for (ZoneType z : ZoneType.values()) if (set.contains(z)) for (Player p : players) expSet.addAll(ids(p.getCardsIn(z)));
         Assert.assertEquals(ids(game.getCardsIn(set)), expSet, "Game.getCardsIn(EnumSet)");
 
@@ -658,8 +658,8 @@ public class PerfPatchRulesTest extends GameSimulationTest {
                 ids(CardLists.filter(game.getCardsIn(ZoneType.Battlefield), CardPredicates.isColor(green))), "getColoredCardsInPlay");
     }
 
-    private static List<Integer> idsOfCreatures(PlayerCollection players) {
-        List<Integer> out = new ArrayList<>();
+    private static List<Long> idsOfCreatures(PlayerCollection players) {
+        List<Long> out = new ArrayList<>();
         for (Player p : players) out.addAll(ids(p.getCreaturesInPlay()));
         return out;
     }

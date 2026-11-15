@@ -6,7 +6,7 @@ import forge.trackable.Tracker;
 // this class should be used in games without GUI
 public class DummyCardView extends CardView {
 
-    public DummyCardView(final int id0, final Tracker tracker) {
+    public DummyCardView(final long id0, final Tracker tracker) {
         super(id0, tracker);
     }
 
@@ -17,7 +17,7 @@ public class DummyCardView extends CardView {
 
     public class DummyCardStateView extends CardStateView {
 
-        public DummyCardStateView(final int id0, final CardStateName state0, final Tracker tracker) {
+        public DummyCardStateView(final long id0, final CardStateName state0, final Tracker tracker) {
             super(id0, state0, tracker);
         }
 

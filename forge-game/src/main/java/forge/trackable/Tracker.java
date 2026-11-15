@@ -34,7 +34,7 @@ public class Tracker {
     private int freezeCounter = 0;
     private final List<DelayedPropChange> delayedPropChanges = Lists.newArrayList();
 
-    private final Table<TrackableType<?>, Integer, Object> objLookups = HashBasedTable.create();
+    private final Table<TrackableType<?>, Long, Object> objLookups = HashBasedTable.create();
 
     public final boolean isFrozen() {
         return freezeCounter > 0;
@@ -47,15 +47,15 @@ public class Tracker {
     // Note: objLookups exist on the tracker and not on the TrackableType because
     // TrackableType is global and Tracker is per game.
     @SuppressWarnings("unchecked")
-    public <T> T getObj(TrackableType<T> type, Integer id) {
+    public <T> T getObj(TrackableType<T> type, long id) {
         return (T)objLookups.get(type, id);
     }
 
-    public boolean hasObj(TrackableType<?> type, Integer id) {
+    public boolean hasObj(TrackableType<?> type, long id) {
         return objLookups.contains(type, id);
     }
 
-    public <T> void putObj(TrackableType<T> type, Integer id, T val) {
+    public <T> void putObj(TrackableType<T> type, long id, T val) {
         objLookups.put(type, id, val);
     }
 

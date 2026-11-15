@@ -23,13 +23,13 @@ import forge.util.AITimeoutTracker;
  */
 public class AITimeoutBlockValidityTest extends SimulationTest {
     private static final long EXPIRED_NANOS = 1_000_000L;
-    private int sessionPlayerId = -1;
+    private AITimeoutTracker.SessionKey sessionPlayerId;
 
     @AfterMethod
     public void closeSession() {
-        if (sessionPlayerId >= 0) {
+        if (sessionPlayerId != null) {
             AITimeoutTracker.end(sessionPlayerId);
-            sessionPlayerId = -1;
+            sessionPlayerId = null;
         }
     }
 
@@ -161,7 +161,7 @@ public class AITimeoutBlockValidityTest extends SimulationTest {
     }
 
     private void expireSession(final Player p) {
-        sessionPlayerId = p.getId();
+        sessionPlayerId = AITimeoutTracker.key(p.getGame().getId(), p.getId());
         AITimeoutTracker.begin(sessionPlayerId, EXPIRED_NANOS);
         try {
             Thread.sleep(20);

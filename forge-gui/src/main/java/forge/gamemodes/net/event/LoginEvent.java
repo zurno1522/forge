@@ -3,7 +3,7 @@ package forge.gamemodes.net.event;
 import forge.util.LogSafe;
 
 public class LoginEvent implements NetEvent {
-    private static final long serialVersionUID = -8865183377417377938L;
+    private static final long serialVersionUID = -8865183377417377937L;
 
     private final String username;
     private final int avatarIndex, sleeveIndex;

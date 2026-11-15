@@ -66,13 +66,13 @@ public class Game {
 
     private static final TaggedLogger netLog = Logger.tag("NETWORK");
 
-    private static int maxId = 0;
-    private static int nextId() { return ++maxId; }
+    private static final java.util.concurrent.atomic.AtomicLong maxId = new java.util.concurrent.atomic.AtomicLong();
+    private static long nextId() { return maxId.incrementAndGet(); }
 
     private boolean noGUIUser;
 
     /** The ID. */
-    private int id;
+    private long id;
     private final GameRules rules;
     private final PlayerCollection allPlayers = new PlayerCollection();
     private final PlayerCollection ingamePlayers = new PlayerCollection();
@@ -184,7 +184,7 @@ public class Game {
      *
      * @return the id
      */
-    public int getId() {
+    public long getId() {
         return this.id;
     }
 
@@ -259,7 +259,7 @@ public class Game {
     public void copyLastState() {
         lastStateBattlefield.clear();
         lastStateGraveyard.clear();
-        Map<Integer, Card> cachedMap = Maps.newHashMap();
+        Map<Long, Card> cachedMap = Maps.newHashMap();
         for (final Player p : getPlayers()) {
             lastStateBattlefield.addAll(p.getZone(ZoneType.Battlefield).getLKICopy(cachedMap));
             lastStateGraveyard.addAll(p.getZone(ZoneType.Graveyard).getLKICopy(cachedMap));
@@ -268,7 +268,7 @@ public class Game {
 
     public CardCollectionView copyLastState(ZoneType type) {
         final CardCollection result = new CardCollection(0);
-        final Map<Integer, Card> cachedMap = Maps.newHashMap();
+        final Map<Long, Card> cachedMap = Maps.newHashMap();
         for (final Player p : getPlayers()) {
             // the LKI copies of different players' cards are distinct: no duplicate check needed
             result.addAllUnique(p.getZone(type).getLKICopy(cachedMap).getCards());
@@ -306,7 +306,7 @@ public class Game {
         return playerCache.get(playerView);
     }
 
-    public Player getPlayer(int id) {
+    public Player getPlayer(long id) {
         for (Player p : allPlayers) {
             if (p.getId() == id) {
                 return p;
@@ -316,7 +316,7 @@ public class Game {
     }
 
     // methods that deal with saving, retrieving and clearing LKI information about cards on zone change
-    private final Table<Integer, Long, Card> changeZoneLKIInfo = HashBasedTable.create();
+    private final Table<Long, Long, Card> changeZoneLKIInfo = HashBasedTable.create();
     public final void addChangeZoneLKIInfo(Card lki) {
         if (lki == null) {
             return;
@@ -816,9 +816,9 @@ public class Game {
 
     private static class CardIdVisitor implements Visitor<Card> {
         Card found = null;
-        int id;
+        long id;
 
-        private CardIdVisitor(final int id) {
+        private CardIdVisitor(final long id) {
             this.id = id;
         }
 
@@ -862,7 +862,7 @@ public class Game {
         return found;
     }
 
-    public Card findById(int id) {
+    public Card findById(long id) {
         CardIdVisitor visit = new CardIdVisitor(id);
         this.forEachCardInGame(visit);
         return visit.getFound();
@@ -1179,11 +1179,11 @@ public class Game {
         age = value;
     }
 
-    private int cardIdCounter = 0, hiddenCardIdCounter = 0;
-    public int nextCardId() {
+    private long cardIdCounter = 0, hiddenCardIdCounter = 0;
+    public long nextCardId() {
         return ++cardIdCounter;
     }
-    public int nextHiddenCardId() {
+    public long nextHiddenCardId() {
         return ++hiddenCardIdCounter;
     }
 

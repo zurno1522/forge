@@ -247,5 +247,23 @@ class ExportTests(unittest.TestCase):
         self.assertNotIn('Secret Card',json.dumps(row))
         self.assertEqual(row['actionExecutions'][0]['events'][0]['eventIndex'],3)
 
+    def test_full_width_engine_ids_and_event_indices_survive_export(self):
+        rows=linked_fixture()
+        rows[0].update(streamKind='AI_DECISIONS',eventIndexMode='SHARED_WITH_GAME_TRACE')
+        identity=dict(abilityId=(1<<40)+7,sourceId=(1<<41)+8)
+        rows[2]['decision']['selectedActions'][0].update(identity)
+        for row in rows[1:-1]:
+            row['eventIndex']+=(1<<33)
+            if row['type']=='AI_ACTION_EXECUTION':row['execution'].update(identity)
+        rows[4]['execution'].update(executedAbilityId=(1<<42)+9,stackId=(1<<43)+10)
+        out=self.root/'wide-ids'
+        module.export([self.write(rows)],out)
+        exported=json.loads((out/'dataset.jsonl').read_text())
+        self.assertEqual(exported['sourceEventIndex'],(1<<33)+2)
+        execution=exported['actionExecutions'][0]['events'][-1]['execution']
+        self.assertEqual(execution['abilityId'],(1<<40)+7)
+        self.assertEqual(execution['executedAbilityId'],(1<<42)+9)
+        self.assertEqual(execution['stackId'],(1<<43)+10)
+
 
 if __name__=='__main__':unittest.main()

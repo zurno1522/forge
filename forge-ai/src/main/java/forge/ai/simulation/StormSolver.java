@@ -75,9 +75,9 @@ public final class StormSolver {
         final List<Step> steps;
         final int added; // how many plays of steps this node added to its parent's: 1, or 2 for the tutor and the Diamond
         final int score;
-        final Set<Integer> gyCast; // ids of graveyard cards already cast in this line
+        final Set<Long> gyCast; // ids of graveyard cards already cast in this line
 
-        Node(final GameSimulator sim, final Node parent, final List<Step> steps, final int added, final int score, final Set<Integer> gyCast) {
+        Node(final GameSimulator sim, final Node parent, final List<Step> steps, final int added, final int score, final Set<Long> gyCast) {
             this.sim = sim;
             this.parent = parent;
             this.steps = steps;
@@ -421,7 +421,7 @@ public final class StormSolver {
         final List<Node> live = new ArrayList<>(cap + 2); // the nodes that hold their game, oldest first
         final PriorityQueue<Node> open = new PriorityQueue<>();
         final Set<Long> seen = new HashSet<>();
-        final Node first = new Node(root, null, new ArrayList<Step>(), 0, combos.solverScore(root.getSimulatedAiPlayer()), new HashSet<Integer>());
+        final Node first = new Node(root, null, new ArrayList<Step>(), 0, combos.solverScore(root.getSimulatedAiPlayer()), new HashSet<Long>());
         open.add(first); // the root keeps its game for good: every replay starts from it at the latest
         seen.add(hash(stateKey(root.getSimulatedAiPlayer())));
         int nodes = 0;
@@ -479,7 +479,7 @@ public final class StormSolver {
                 if (child.getSimulatedGameState().isGameOver()) {
                     continue;
                 }
-                final Set<Integer> gy = new HashSet<>(node.gyCast);
+                final Set<Long> gy = new HashSet<>(node.gyCast);
                 if (fromGy) {
                     gy.add(host.getId());
                 }

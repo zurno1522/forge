@@ -53,8 +53,8 @@ import java.util.function.Predicate;
  * @version $Id$
  */
 public abstract class Trigger extends TriggerReplacementBase {
-    private static int maxId = 0;
-    private static int nextId() { return ++maxId; }
+    private static final java.util.concurrent.atomic.AtomicLong maxId = new java.util.concurrent.atomic.AtomicLong();
+    private static long nextId() { return maxId.incrementAndGet(); }
 
     /**
      * <p>
@@ -62,11 +62,11 @@ public abstract class Trigger extends TriggerReplacementBase {
      * </p>
      */
     public static void resetIDs() {
-        Trigger.maxId = 50000;
+        Trigger.maxId.set(50000);
     }
 
     /** The ID. */
-    private int id;
+    private long id;
 
     private TriggerType mode;
 
@@ -511,7 +511,7 @@ public abstract class Trigger extends TriggerReplacementBase {
      *
      * @return the id
      */
-    public int getId() {
+    public long getId() {
         return this.id;
     }
 
@@ -523,7 +523,7 @@ public abstract class Trigger extends TriggerReplacementBase {
      * @param id
      *            a int.
      */
-    public final void setId(final int id) {
+    public final void setId(final long id) {
         this.id = id;
     }
 

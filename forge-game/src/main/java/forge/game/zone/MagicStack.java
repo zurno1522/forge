@@ -83,9 +83,9 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
     private final List<SpellAbility> thisTurnActivated = Lists.newArrayList();
 
     private SpellAbility curResolving = null;
-    private final Map<Integer, Integer> triggerRepeats = new HashMap<>();
+    private final Map<Long, Integer> triggerRepeats = new HashMap<>();
     /** Card id -> how often it could not be added to the stack this turn because its targets were not legal. */
-    private final Map<Integer, Integer> illegalAdditions = new HashMap<>();
+    private final Map<Long, Integer> illegalAdditions = new HashMap<>();
 
     private final Game game;
 
@@ -204,7 +204,7 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
     public final void add(SpellAbility sp) {
         add(sp, null, SpellAbilityStackInstance.nextId());
     }
-    public final void add(SpellAbility sp, int id) {
+    public final void add(SpellAbility sp, long id) {
         add(sp, null, id);
     }
 
@@ -212,7 +212,7 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
         add(sp, si, si.getId());
     }
 
-    public final void add(SpellAbility sp, SpellAbilityStackInstance si, int id) {
+    public final void add(SpellAbility sp, SpellAbilityStackInstance si, long id) {
         final Card source = sp.getHostCard();
 
         // if activating player slips through the cracks, assign activating
@@ -332,7 +332,7 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
         stack.addFirst(si);
 
         int distinctSources = 0;
-        Set<Integer> sources = new TreeSet<>();
+        Set<Long> sources = new TreeSet<>();
         for (SpellAbilityStackInstance s : stack) {
             if (s.isSpell()) {
                 distinctSources++;
@@ -573,7 +573,7 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
         if (!sp.isMandatory() || sp.usesTargeting()) {
             return false;
         }
-        final int id = sp.getSourceTrigger();
+        final long id = sp.getSourceTrigger();
         for (final SpellAbilityStackInstance si : stack) {
             if (si.isStateTrigger(id)) {
                 return false;
@@ -995,7 +995,7 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
         }
     }
 
-    public final boolean hasStateTrigger(final int triggerID) {
+    public final boolean hasStateTrigger(final long triggerID) {
         for (final SpellAbilityStackInstance sasi : stack) {
             if (sasi.isStateTrigger(triggerID)) {
                 return true;

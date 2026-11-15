@@ -173,8 +173,8 @@ public final class StaticAbilityContinuous {
                 final List<String> newKeywords = Lists.newArrayList();
 
                 // Protection with "doesn't remove" effect
-                final String hostCardUID = Integer.toString(hostCard.getId());
-                final String hostCardControllerUID = Integer.toString(hostCard.getController().getId());
+                final String hostCardUID = Long.toString(hostCard.getId());
+                final String hostCardControllerUID = Long.toString(hostCard.getController().getId());
 
                 // update keywords with Chosen parts
                 addKeywords.removeIf(input -> {

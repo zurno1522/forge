@@ -9,6 +9,8 @@ Last review and upstream validation: **2026-11-14**, upstream master `eace840dc3
 | PR-001 | Preserve temporary flashback grants and supported pump expiry callbacks in AI game copies | Confirmed upstream bug; fix and regressions validated | Combine with PR-002 in one focused AI simulation bug-fix PR |
 | PR-002 | Match the selected flashback ability by its complete cost as well as description | Confirmed upstream bug; fix and regression validated | Combine with PR-001; independent cause in the same simulation path |
 | PR-003 | Structured AI decision observations and optional simulation output | Enhancement to discuss; overlaps an existing upstream proposal | Review upstream interest and PR #12180 before proposing a separate feature PR |
+| PR-004 | Widen engine identifiers and dependent lookups to 64 bits | Implemented locally; classification and upstream review pending | Capacity/hardening enhancement candidate; review public API and multiplayer compatibility costs before proposing |
+| PR-005 | Preserve full IDs in multiplayer delta keys | Implemented with PR-004; classification and upstream review pending | Review the packed-key range limitation independently; determine whether it warrants a separate bug-fix PR |
 
 ## PR-001: temporary grants and expiry in copied games
 
@@ -75,9 +77,19 @@ Upstream [#12180](https://github.com/Card-Forge/forge/pull/12180) proposes opt-i
 
 This is a feature proposal, not a prerequisite for PR-001/002. Observations and candidate coverage remain partial; records are not yet training-ready. Do not present handler rejections or deck performance as proof of engine/card bugs.
 
+## PR-004/005: classification and compatibility review
+
+Classification note (2026-11-15): this branch primarily serves personal simulation work. Treat the 64-bit migration as proactive capacity and robustness work, not an established ordinary-game defect. Decide the upstream classification (enhancement, hardening, refactor, or a narrower bug fix) when reviewing requirements, evidence, and scope. Boundary tests establish behavior at large IDs; they do not establish that ordinary upstream games currently encounter these limits.
+
+The shared identifier API and multiplayer serialization changed, including login serialization versioning. Multiplayer peers require matching updated builds. This is acceptable for the current personal branch, but the compatibility impact, migration approach, and upstream acceptance need explicit review before submission.
+
+Keep PR-005's signed 28-bit packed-key limitation distinct from the broader PR-004 migration. It may justify a defect classification independently, subject to checking upstream's supported ID range and reproducing the issue on then-current upstream. Do not label the entire migration a bug fix merely because it includes that change. Both candidates remain deferred; no upstream classification or submission has been decided.
+
 ## Branch validation and follow-up
 
-The combined working-branch changes passed the desktop reactor: 2,339 tests, zero failures/errors, six skipped. Four Commander coverage games completed normally, yielding 200 validated decisions and 50 selected land plays; no selected action lacked an assessment. Both Monte Carlo games reported zero rollout failures or unsimulatable-card entries. These are coverage checks, not comparative deck-strength evidence. All 14 Python exporter tests pass.
+Identifier follow-up (2026-11-15): [the identifier-width design](Simulation-Identifier-Widths.md) describes atomic process-wide allocation, full-ID equality, typed composite lookup keys, long trace indices, and the required multiplayer serialization version change. These candidates have not been checked against current upstream PRs and are not automatically ready for submission. Boundary regressions cover IDs above the old int limit, hash collisions, parallel allocation, network round trips, and trace ordering.
+
+Earlier decision-coverage validation passed the desktop reactor: 2,339 tests, zero failures/errors, six skipped. Four Commander coverage games completed normally, yielding 200 validated decisions and 50 selected land plays; no selected action lacked an assessment. Both Monte Carlo games reported zero rollout failures or unsimulatable-card entries. These are coverage checks, not comparative deck-strength evidence. That validation also passed all 14 Python exporter tests.
 
 Attachment-detach trace translation, bulk stack-clear handling, subscriber failure reporting, timeout status, and filtered-stream ordering are fixes to this branch's tracing functionality. Keep them out of the engine flashback PR unless an independent upstream reproduction is established.
 

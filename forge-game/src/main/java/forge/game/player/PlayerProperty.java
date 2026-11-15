@@ -44,7 +44,7 @@ public class PlayerProperty {
                 }
             }
         } else if (property.startsWith("PlayerUID_")) {
-            if (player.getId() != Integer.parseInt(property.split("PlayerUID_")[1])) {
+            if (player.getId() != Long.parseLong(property.split("PlayerUID_")[1])) {
                 return false;
             }
         } else if (property.equals("YourTeam")) {

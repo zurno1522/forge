@@ -8,18 +8,18 @@ import java.util.concurrent.FutureTask;
 
 public class ReplyPool {
 
-    private final Map<Integer, CompletableFuture> pool = Maps.newHashMap();
+    private final Map<Long, CompletableFuture> pool = Maps.newHashMap();
 
     public ReplyPool() {
     }
 
-    public void initialize(final int index) {
+    public void initialize(final long index) {
         synchronized (pool) {
             pool.put(index, new CompletableFuture());
         }
     }
 
-    public void complete(final int index, final Object value) {
+    public void complete(final long index, final Object value) {
         synchronized (pool) {
             final CompletableFuture future = pool.get(index);
             if (future != null) {
@@ -28,7 +28,7 @@ public class ReplyPool {
         }
     }
 
-    public Object get(final int index) {
+    public Object get(final long index) {
         final CompletableFuture future;
         synchronized (pool) {
             future = pool.get(index);

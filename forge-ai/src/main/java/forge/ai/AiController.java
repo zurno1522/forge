@@ -1517,7 +1517,7 @@ public class AiController {
 
     // declares blockers for given defender in a given combat
     public void declareBlockersFor(Player defender, Combat combat) {
-        final long id = AITimeoutTracker.key(game.getId(), player.getId());
+        final AITimeoutTracker.SessionKey id = AITimeoutTracker.key(game.getId(), player.getId());
         final long timeoutNanos = TimeUnit.SECONDS.toNanos(game.getAITimeout());
         AITimeoutTracker.begin(id, timeoutNanos);
         Object limit = null;
@@ -1605,7 +1605,7 @@ public class AiController {
         }
         // 12/2/10(sol) the decision making here has moved to getAttackers()
         final AiAttackController aiAtk = new AiAttackController(attacker);
-        final long id = AITimeoutTracker.key(game.getId(), player.getId());
+        final AITimeoutTracker.SessionKey id = AITimeoutTracker.key(game.getId(), player.getId());
         final long timeoutNanos = TimeUnit.SECONDS.toNanos(game.getAITimeout());
         AITimeoutTracker.begin(id, timeoutNanos);
         Object limit = null;
@@ -1684,7 +1684,7 @@ public class AiController {
                 ? new AiDecisionRecorder(game, player, game.nextAiDecisionSequence()) : null;
         final FlatMonteCarloPicker.Result previousSearch = lastFlatMcResult;
         decisionRecorder = decision;
-        final long id = AITimeoutTracker.key(game.getId(), player.getId());
+        final AITimeoutTracker.SessionKey id = AITimeoutTracker.key(game.getId(), player.getId());
         final long timeoutNanos = TimeUnit.SECONDS.toNanos(game.getAITimeout());
         AITimeoutTracker.begin(id, timeoutNanos);
         final Object limit = AITimeoutTracker.arm(AITimeoutTracker.deadlineNanos(id, timeoutNanos), false);
@@ -2877,7 +2877,7 @@ public class AiController {
         final ComboPlan combos = deckPlan(player).combos;
         final boolean massReanimation = combos.isMassReanimationDeck(player);
         final boolean darkDepths = combos.has(ComboPlan.Kind.DARK_DEPTHS);
-        final long aiId = AITimeoutTracker.key(game.getId(), player.getId());
+        final AITimeoutTracker.SessionKey aiId = AITimeoutTracker.key(game.getId(), player.getId());
         final long timeoutNanos = TimeUnit.SECONDS.toNanos(game.getAITimeout());
         AITimeoutTracker.begin(aiId, timeoutNanos);
         final long deadlineNanos = AITimeoutTracker.deadlineNanos(aiId, timeoutNanos);

@@ -70,7 +70,7 @@ public class SimulationTraceBlockersTest {
         }
     }
 
-    private static CardView cardView(final int id, final String name) {
+    private static CardView cardView(final long id, final String name) {
         final CardView card = mock(CardView.class);
         when(card.getId()).thenReturn(id);
         when(card.getName()).thenReturn(name);

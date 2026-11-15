@@ -101,7 +101,7 @@ public class MatchScreen extends FScreen {
     private int selectedPlayer;
 
 
-    private final Map<Integer, Vector2> endpoints;
+    private final Map<Long, Vector2> endpoints;
     private final Set<CardView> cardsonBattlefield;
     private final Set<PlayerView> playerViewSet;
     //the dropdowns that open over the field: arrows to anything under them are not drawn (see updateArrowVisibility)

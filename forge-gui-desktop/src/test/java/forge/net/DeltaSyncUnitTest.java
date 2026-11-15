@@ -22,25 +22,25 @@ public class DeltaSyncUnitTest {
 
     @Test
     public void testDeltaSizeCalculationAccuracy() {
-        Map<Integer, Map<TrackableProperty, Object>> deltas = new HashMap<>();
+        Map<DeltaPacket.ObjectKey, Map<TrackableProperty, Object>> deltas = new HashMap<>();
         Map<TrackableProperty, Object> props1 = new HashMap<>();
         props1.put(TrackableProperty.Name, "Test");
         props1.put(TrackableProperty.Power, 3);
-        deltas.put(1, props1);
+        deltas.put(DeltaPacket.makeDeltaKey(DeltaPacket.TYPE_CARD_VIEW, 1L), props1);
 
         Map<TrackableProperty, Object> props2 = new HashMap<>();
         props2.put(TrackableProperty.Life, 20);
         props2.put(TrackableProperty.Toughness, 5);
         props2.put(TrackableProperty.MaxHandSize, 7);
-        deltas.put(2, props2);
+        deltas.put(DeltaPacket.makeDeltaKey(DeltaPacket.TYPE_CARD_VIEW, 2L), props2);
 
         DeltaPacket packet = new DeltaPacket(1L, deltas, new HashMap<>(), 0, null);
 
         // Header: 8 (seq) + 4 (checksum) = 12 bytes
-        // Delta key=1: 4 + 2*50 = 104 bytes
-        // Delta key=2: 4 + 3*50 = 154 bytes
-        // Total: 270 bytes
-        int expectedSize = 12 + (4 + 2 * 50) + (4 + 3 * 50);
+        // Delta key=1: 16 + 2*50 = 116 bytes
+        // Delta key=2: 16 + 3*50 = 166 bytes
+        // Total: 294 bytes
+        int expectedSize = 12 + (16 + 2 * 50) + (16 + 3 * 50);
 
         Assert.assertEquals(packet.getApproximateSize(), expectedSize,
             "Delta size calculation should match expected value");
@@ -48,29 +48,29 @@ public class DeltaSyncUnitTest {
 
     @Test
     public void testDeltaSizeWithNewObjects() {
-        Map<Integer, Map<TrackableProperty, Object>> deltas = new HashMap<>();
+        Map<DeltaPacket.ObjectKey, Map<TrackableProperty, Object>> deltas = new HashMap<>();
         Map<TrackableProperty, Object> deltaProps = new HashMap<>();
         deltaProps.put(TrackableProperty.Name, "Test");
-        deltas.put(1, deltaProps);
+        deltas.put(DeltaPacket.makeDeltaKey(DeltaPacket.TYPE_CARD_VIEW, 1L), deltaProps);
 
-        Map<Integer, Map<TrackableProperty, Object>> newObjects = new HashMap<>();
+        Map<DeltaPacket.ObjectKey, Map<TrackableProperty, Object>> newObjects = new HashMap<>();
         Map<TrackableProperty, Object> newProps1 = new HashMap<>();
         newProps1.put(TrackableProperty.Name, "Card1");
         newProps1.put(TrackableProperty.Power, 2);
         newProps1.put(TrackableProperty.Toughness, 3);
-        newObjects.put(100, newProps1);
+        newObjects.put(DeltaPacket.makeDeltaKey(DeltaPacket.TYPE_CARD_VIEW, 100L), newProps1);
 
         Map<TrackableProperty, Object> newProps2 = new HashMap<>();
         newProps2.put(TrackableProperty.Life, 20);
         newProps2.put(TrackableProperty.Toughness, 0);
         newProps2.put(TrackableProperty.MaxHandSize, 7);
         newProps2.put(TrackableProperty.IsAI, false);
-        newObjects.put(101, newProps2);
+        newObjects.put(DeltaPacket.makeDeltaKey(DeltaPacket.TYPE_CARD_VIEW, 101L), newProps2);
 
         DeltaPacket packet = new DeltaPacket(1L, deltas, newObjects, 0, null);
 
-        // Header: 12, Delta: (4+1*50)=54, New 100: (4+3*50)=154, New 101: (4+4*50)=204
-        int expectedSize = 12 + 54 + 154 + 204;
+        // Header: 12, Delta: 66, New 100: 166, New 101: 216
+        int expectedSize = 12 + 66 + 166 + 216;
 
         Assert.assertEquals(packet.getApproximateSize(), expectedSize,
             "Delta packet with new objects should match expected size");

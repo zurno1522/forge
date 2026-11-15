@@ -9,8 +9,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.IntMap;
-import com.badlogic.gdx.utils.IntSet;
+import com.badlogic.gdx.utils.LongMap;
+import java.util.Set;
+import java.util.HashSet;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import forge.Forge;
@@ -62,10 +63,10 @@ public final class CardFlightOverlay {
 
     // last on-screen rect of each spell's thumbnail in the stack view, keyed by card id.
     // Each entry is allocated once and then updated in place by VStack every frame.
-    private static final IntMap<Rectangle> stackRects = new IntMap<>();
+    private static final LongMap<Rectangle> stackRects = new LongMap<>();
 
     // ids of spells whose flight has launched from the stack view; VStack hides those items
-    private static final IntSet launchedFromStack = new IntSet();
+    private static final Set<Long> launchedFromStack = new HashSet<>();
 
     private static long lastLeaveStartNanos;
     private static int leaveBatchIndex;
@@ -143,7 +144,7 @@ public final class CardFlightOverlay {
      * Called by VStack every time it draws a spell's thumbnail, so we know where it was on screen.
      * Rect is in screen coordinates (same space as FDisplayObject.screenPos).
      */
-    public static void noteStackRect(int cardId, float x, float y, float w, float h) {
+    public static void noteStackRect(long cardId, float x, float y, float w, float h) {
         Rectangle r = stackRects.get(cardId);
         if (r == null) {
             r = new Rectangle();
@@ -153,8 +154,8 @@ public final class CardFlightOverlay {
     }
 
     /** VStack asks this so it can hide an item whose card is already flying to the battlefield. */
-    public static boolean isLeavingStack(int cardId) {
-        return launchedFromStack.size > 0 && launchedFromStack.contains(cardId);
+    public static boolean isLeavingStack(long cardId) {
+        return !launchedFromStack.isEmpty() && launchedFromStack.contains(cardId);
     }
 
     /**

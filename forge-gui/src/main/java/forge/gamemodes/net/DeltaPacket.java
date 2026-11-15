@@ -1,6 +1,5 @@
 package forge.gamemodes.net;
 
-import forge.card.CardStateName;
 import forge.game.GameView;
 import forge.game.card.CardView;
 import forge.game.card.CardView.CardStateView;
@@ -22,11 +21,11 @@ import java.util.Map;
  * Standard Java serialization handles the maps natively via Netty's ObjectEncoder.
  */
 public final class DeltaPacket implements NetEvent {
-    private static final long serialVersionUID = 8L;
+    private static final long serialVersionUID = 9L;
 
     private final long sequenceNumber;
-    private final Map<Integer, Map<TrackableProperty, Object>> objectDeltas;
-    private final Map<Integer, Map<TrackableProperty, Object>> newObjects;
+    private final Map<ObjectKey, Map<TrackableProperty, Object>> objectDeltas;
+    private final Map<ObjectKey, Map<TrackableProperty, Object>> newObjects;
     private final int checksum;
     private final int[] checksumProperties;
     private List<Object> events;
@@ -36,13 +35,6 @@ public final class DeltaPacket implements NetEvent {
     public static final int TYPE_STACK_ITEM_VIEW = 2;
     public static final int TYPE_GAME_VIEW = 3;
     public static final int TYPE_CSV = 4;
-
-    static {
-        if (CardStateName.values().length > 16) {
-            throw new AssertionError("CardStateName has " + CardStateName.values().length
-                    + " values; CSV delta key encoding supports at most 16");
-        }
-    }
 
     public static int typeTagFor(TrackableObject obj) {
         if (obj == null) return -1;
@@ -54,46 +46,46 @@ public final class DeltaPacket implements NetEvent {
         return -1;
     }
 
-    /**
-     * Create a composite delta key encoding both object type and ID.
-     * Upper 4 bits = type (0-15), lower 28 bits = ID.
-     */
-    public static int makeDeltaKey(TrackableObject obj) {
-        int type = typeTagFor(obj);
-        int id = obj.getId();
-        if (obj instanceof CardStateView csv) {
-            id = id * 16 + csv.getState().ordinal();
+    /** Full-width object identity; card state is separate rather than packed into ID bits. */
+    public record ObjectKey(int type, long id, int stateOrdinal) implements Serializable, Comparable<ObjectKey> {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public int compareTo(final ObjectKey other) {
+            int result = Integer.compare(type, other.type);
+            if (result == 0) { result = Long.compare(id, other.id); }
+            return result == 0 ? Integer.compare(stateOrdinal, other.stateOrdinal) : result;
         }
-        return makeDeltaKey(type, id);
-    }
-    public static int makeDeltaKey(int type, int id) {
-        return (type << 28) | (id & 0x0FFFFFFF);
     }
 
-    public static int getTypeFromDeltaKey(int deltaKey) {
-        return (deltaKey >>> 28) & 0xF;
+    public static ObjectKey makeDeltaKey(TrackableObject obj) {
+        return new ObjectKey(typeTagFor(obj), obj.getId(),
+                obj instanceof CardStateView csv ? csv.getState().ordinal() : -1);
     }
 
-    public static int getIdFromDeltaKey(int deltaKey) {
-        int id = deltaKey & 0x0FFFFFFF;
-        if ((id & 0x08000000) != 0) {
-            id |= 0xF0000000;
-        }
-        return id;
+    public static ObjectKey makeDeltaKey(int type, long id) {
+        return new ObjectKey(type, id, -1);
     }
+
+    public static ObjectKey makeDeltaKey(int type, long id, int stateOrdinal) {
+        return new ObjectKey(type, id, stateOrdinal);
+    }
+
+    public static int getTypeFromDeltaKey(ObjectKey key) { return key.type(); }
+    public static long getIdFromDeltaKey(ObjectKey key) { return key.id(); }
 
     /** Each entry represents one attacking band with its defender, blockers, and planned blockers. */
     public static class CombatData implements Serializable {
         private static final long serialVersionUID = 1L;
 
-        public final List<List<Integer>> bandAttackerIds;
+        public final List<List<Long>> bandAttackerIds;
         /** {typeMarker, id} per band — 0=CardView, 1=PlayerView. */
-        public final List<int[]> bandDefenderRefs;
-        public final List<List<Integer>> bandBlockerIds;
-        public final List<List<Integer>> bandPlannedBlockerIds;
+        public final List<long[]> bandDefenderRefs;
+        public final List<List<Long>> bandBlockerIds;
+        public final List<List<Long>> bandPlannedBlockerIds;
 
-        public CombatData(List<List<Integer>> bandAttackerIds, List<int[]> bandDefenderRefs,
-                          List<List<Integer>> bandBlockerIds, List<List<Integer>> bandPlannedBlockerIds) {
+        public CombatData(List<List<Long>> bandAttackerIds, List<long[]> bandDefenderRefs,
+                          List<List<Long>> bandBlockerIds, List<List<Long>> bandPlannedBlockerIds) {
             this.bandAttackerIds = bandAttackerIds;
             this.bandDefenderRefs = bandDefenderRefs;
             this.bandBlockerIds = bandBlockerIds;
@@ -108,8 +100,8 @@ public final class DeltaPacket implements NetEvent {
         return packet;
     }
 
-    public DeltaPacket(long sequenceNumber, Map<Integer, Map<TrackableProperty, Object>> objectDeltas,
-                       Map<Integer, Map<TrackableProperty, Object>> newObjects,
+    public DeltaPacket(long sequenceNumber, Map<ObjectKey, Map<TrackableProperty, Object>> objectDeltas,
+                       Map<ObjectKey, Map<TrackableProperty, Object>> newObjects,
                        int checksum, int[] checksumProperties) {
         this.sequenceNumber = sequenceNumber;
         this.objectDeltas = objectDeltas != null ? objectDeltas : Collections.emptyMap();
@@ -122,11 +114,11 @@ public final class DeltaPacket implements NetEvent {
         return sequenceNumber;
     }
 
-    public Map<Integer, Map<TrackableProperty, Object>> getObjectDeltas() {
+    public Map<ObjectKey, Map<TrackableProperty, Object>> getObjectDeltas() {
         return Collections.unmodifiableMap(objectDeltas);
     }
 
-    public Map<Integer, Map<TrackableProperty, Object>> getNewObjects() {
+    public Map<ObjectKey, Map<TrackableProperty, Object>> getNewObjects() {
         return Collections.unmodifiableMap(newObjects);
     }
 
@@ -169,10 +161,10 @@ public final class DeltaPacket implements NetEvent {
             size += 4 + checksumProperties.length * 4; // array overhead + int per ordinal
         }
         for (Map<TrackableProperty, Object> delta : objectDeltas.values()) {
-            size += 4 + delta.size() * 50; // key + ~50 bytes per property estimate
+            size += 16 + delta.size() * 50; // key + ~50 bytes per property estimate
         }
         for (Map<TrackableProperty, Object> props : newObjects.values()) {
-            size += 4 + props.size() * 50; // key + properties
+            size += 16 + props.size() * 50; // key + properties
         }
         return size;
     }

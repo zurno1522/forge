@@ -90,19 +90,19 @@ public class PeekAndRevealEffect extends SpellAbilityEffect {
                                 Localizer.getInstance().getMessage("lblRevealingCardFrom"));
 
                 if (rememberRevealed) {
-                    Map<Integer, Card> cachedMap = Maps.newHashMap();
+                    Map<Long, Card> cachedMap = Maps.newHashMap();
                     for (Card c : revealableCards) {
                         source.addRemembered(CardCopyService.getLKICopy(c, cachedMap));
                     }
                 }
                 if (imprintRevealed) {
-                    Map<Integer, Card> cachedMap = Maps.newHashMap();
+                    Map<Long, Card> cachedMap = Maps.newHashMap();
                     for (Card c : revealableCards) {
                         source.addImprintedCard(CardCopyService.getLKICopy(c, cachedMap));
                     }
                 }
             } else if (sa.hasParam("RememberPeeked")) {
-                Map<Integer, Card> cachedMap = Maps.newHashMap();
+                Map<Long, Card> cachedMap = Maps.newHashMap();
                 for (Card c : revealableCards) {
                     source.addRemembered(CardCopyService.getLKICopy(c, cachedMap));
                 }

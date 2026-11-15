@@ -62,16 +62,16 @@ public class AITimeoutTrackerTest {
 
     @Test
     public void unarmedCallerGetsABoundedWait() {
-        Assert.assertTrue(AITimeoutTracker.remainingNanos(910L, 5 * SEC) <= 5 * SEC);
+        Assert.assertTrue(AITimeoutTracker.remainingNanos(AITimeoutTracker.key(0, 910), 5 * SEC) <= 5 * SEC);
     }
 
     @Test
     public void barIsHiddenBeforeShowThresholdAndAfterEnd() {
-        AITimeoutTracker.begin(911, 10 * SEC);
-        Assert.assertTrue(AITimeoutTracker.isActive(911));
-        Assert.assertTrue(AITimeoutTracker.getRemainingFraction(911) < 0f);
-        AITimeoutTracker.end(911);
-        Assert.assertFalse(AITimeoutTracker.isActive(911));
+        AITimeoutTracker.begin(AITimeoutTracker.key(0, 911), 10 * SEC);
+        Assert.assertTrue(AITimeoutTracker.isActive(AITimeoutTracker.key(0, 911)));
+        Assert.assertTrue(AITimeoutTracker.getRemainingFraction(AITimeoutTracker.key(0, 911)) < 0f);
+        AITimeoutTracker.end(AITimeoutTracker.key(0, 911));
+        Assert.assertFalse(AITimeoutTracker.isActive(AITimeoutTracker.key(0, 911)));
     }
 
     @Test
@@ -79,13 +79,13 @@ public class AITimeoutTrackerTest {
         final long old = AITimeoutTracker.staleGraceNanos;
         AITimeoutTracker.staleGraceNanos = TimeUnit.MILLISECONDS.toNanos(50);
         try {
-            AITimeoutTracker.begin(912, TimeUnit.MILLISECONDS.toNanos(10)); // never ended
+            AITimeoutTracker.begin(AITimeoutTracker.key(0, 912), TimeUnit.MILLISECONDS.toNanos(10)); // never ended
             Thread.sleep(150);
-            AITimeoutTracker.begin(912, 5 * SEC);
+            AITimeoutTracker.begin(AITimeoutTracker.key(0, 912), 5 * SEC);
             try {
-                Assert.assertTrue(AITimeoutTracker.deadlineNanos(912, 0) - System.nanoTime() > 4 * SEC);
+                Assert.assertTrue(AITimeoutTracker.deadlineNanos(AITimeoutTracker.key(0, 912), 0) - System.nanoTime() > 4 * SEC);
             } finally {
-                AITimeoutTracker.end(912);
+                AITimeoutTracker.end(AITimeoutTracker.key(0, 912));
             }
         } finally {
             AITimeoutTracker.staleGraceNanos = old;
@@ -114,8 +114,8 @@ public class AITimeoutTrackerTest {
     @Test
     public void sessionsOfDifferentGamesDoNotShareDeadlinesOrBars() {
         // every game numbers its players from 0: same player id, different game
-        final long a = AITimeoutTracker.key(7001, 0);
-        final long b = AITimeoutTracker.key(7002, 0);
+        final AITimeoutTracker.SessionKey a = AITimeoutTracker.key(7001, 0);
+        final AITimeoutTracker.SessionKey b = AITimeoutTracker.key(7002, 0);
         Assert.assertNotEquals(a, b);
         AITimeoutTracker.begin(a, 10 * SEC);
         try {
@@ -131,11 +131,11 @@ public class AITimeoutTrackerTest {
     @Test
     public void idleSlotsArePurgedAndKeysStayUsable() {
         for (int g = 0; g < 500; g++) { // many finished games
-            final long k = AITimeoutTracker.key(8000 + g, 1);
+            final AITimeoutTracker.SessionKey k = AITimeoutTracker.key(8000 + g, 1);
             AITimeoutTracker.begin(k, 5 * SEC);
             AITimeoutTracker.end(k);
         }
-        final long live = AITimeoutTracker.key(9000, 1);
+        final AITimeoutTracker.SessionKey live = AITimeoutTracker.key(9000, 1);
         AITimeoutTracker.begin(live, 5 * SEC);
         try {
             Assert.assertTrue(AITimeoutTracker.isActive(live));

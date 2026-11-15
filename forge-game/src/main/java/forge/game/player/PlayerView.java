@@ -48,7 +48,7 @@ public class PlayerView extends GameEntityView {
         return collection;
     }
 
-    public PlayerView(final int id0, final Tracker tracker) {
+    public PlayerView(final long id0, final Tracker tracker) {
         super(id0, tracker);
 
         set(TrackableProperty.Mana, Maps.newHashMapWithExpectedSize(MagicColor.NUMBER_OR_COLORS + 1));
@@ -347,13 +347,13 @@ public class PlayerView extends GameEntityView {
     }
 
     public int getCommanderDamage(CardView commander) {
-        Map<Integer, Integer> map = get(TrackableProperty.CommanderDamage);
+        Map<Long, Integer> map = get(TrackableProperty.CommanderDamage);
         if (map == null) { return 0; }
         Integer damage = map.get(commander.getId());
         return damage == null ? 0 : damage;
     }
     void updateCommanderDamage(Player p) {
-        Map<Integer, Integer> map = Maps.newHashMap();
+        Map<Long, Integer> map = Maps.newHashMap();
         for (Entry<Card, Integer> entry : p.getCommanderDamage()) {
             map.put(entry.getKey().getId(), entry.getValue());
         }
@@ -362,7 +362,7 @@ public class PlayerView extends GameEntityView {
     void updateMergedCommanderDamage(Card card, Card commander) {
         // Add commander damage to top card for card view panel info
         for (final PlayerView p : Iterables.concat(Collections.singleton(this), getOpponents())) {
-            Map<Integer, Integer> map = p.get(TrackableProperty.CommanderDamage);
+            Map<Long, Integer> map = p.get(TrackableProperty.CommanderDamage);
             if (map == null) continue;
             Integer damage = map.get(commander.getId());
             map.put(card.getId(), damage);
@@ -370,14 +370,14 @@ public class PlayerView extends GameEntityView {
     }
 
     public int getCommanderCast(CardView commander) {
-        Map<Integer, Integer> map = get(TrackableProperty.CommanderCast);
+        Map<Long, Integer> map = get(TrackableProperty.CommanderCast);
         if (map == null) { return 0; }
         Integer damage = map.get(commander.getId());
         return damage == null ? 0 : damage;
     }
 
     void updateCommanderCast(Player p, Card c) {
-        Map<Integer, Integer> map = get(TrackableProperty.CommanderCast);
+        Map<Long, Integer> map = get(TrackableProperty.CommanderCast);
         if (map == null) {
             map = Maps.newHashMap();
             set(TrackableProperty.CommanderCast, map);
@@ -387,7 +387,7 @@ public class PlayerView extends GameEntityView {
     }
 
     void updateMergedCommanderCast(Player p, Card target, Card commander) {
-        Map<Integer, Integer> map = get(TrackableProperty.CommanderCast);
+        Map<Long, Integer> map = get(TrackableProperty.CommanderCast);
         if (map == null) {
             map = Maps.newHashMap();
             set(TrackableProperty.CommanderCast, map);

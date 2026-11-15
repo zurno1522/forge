@@ -877,7 +877,7 @@ public final class CMatchUI
      *         found.
      */
     private CardPanel findCardPanel(final CardView card) {
-        final int id = card.getId();
+        final long id = card.getId();
         ZoneType zone = card.getZone();
         if (zone == ZoneType.Battlefield) {
             for (final VField f : view.getFieldViews()) {

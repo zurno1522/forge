@@ -114,7 +114,7 @@ public class CardCopyService {
     }
 
     public static Card copyStats(final Card in, final Player newOwner, boolean assignNewId) {
-        int id = in.getId();
+        long id = in.getId();
         if (assignNewId) {
             id = newOwner == null ? 0 : newOwner.getGame().nextCardId();
         }
@@ -177,7 +177,7 @@ public class CardCopyService {
     // ========================================================
     // LKI functions
 
-    public static List<Card> getLKICopyList(final Iterable<Card> in, Map<Integer, Card> cachedMap) {
+    public static List<Card> getLKICopyList(final Iterable<Card> in, Map<Long, Card> cachedMap) {
         if (in == null) {
             return null;
         }
@@ -193,11 +193,11 @@ public class CardCopyService {
         return new CardCopyService(c).getLKICopy();
     }
 
-    public static Card getLKICopy(final Card c, Map<Integer, Card> cachedMap) {
+    public static Card getLKICopy(final Card c, Map<Long, Card> cachedMap) {
         return new CardCopyService(c).getLKICopy(cachedMap);
     }
 
-    public static GameEntity getLKICopy(final GameEntity c, Map<Integer, Card> cachedMap) {
+    public static GameEntity getLKICopy(final GameEntity c, Map<Long, Card> cachedMap) {
         // Ideally, we'd just convert all calls to getLKICopy to use the Map version
         if (c instanceof Card) {
             return new CardCopyService((Card) c).getLKICopy(cachedMap);
@@ -218,7 +218,7 @@ public class CardCopyService {
         }
     }
 
-    public Card getLKICopy(Map<Integer, Card> cachedMap) {
+    public Card getLKICopy(Map<Long, Card> cachedMap) {
         if (copyFrom == null) {
             return null;
         }

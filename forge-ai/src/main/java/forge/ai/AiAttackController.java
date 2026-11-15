@@ -810,7 +810,7 @@ public class AiAttackController {
      */
     public final int declareAttackers(final Combat combat) {
         // TODO plan the attack with teammates, so lethal that needs both players' creatures is found (CR 805.10b)
-        final long id = AITimeoutTracker.key(ai.getGame().getId(), ai.getId());
+        final AITimeoutTracker.SessionKey id = AITimeoutTracker.key(ai.getGame().getId(), ai.getId());
         final long timeoutNanos = TimeUnit.SECONDS.toNanos(ai.getGame().getAITimeout());
         // predicting a HUMAN player's attack must not light up that player's timer bar
         final boolean trackTimer = ai.getController().isAI();

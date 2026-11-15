@@ -58,12 +58,12 @@ public class BasicMacroSystem implements IMacroSystem {
         int currentIndex = sequenceIndex;
         sequenceIndex = 0;
         // Use a Pair so we can keep a flag for isPlayer
-        final List<Pair<Integer, Boolean>> entityInfo = Lists.newArrayList();
-        final int playerID = playerControllerHuman.getPlayer().getId();
+        final List<Pair<Long, Boolean>> entityInfo = Lists.newArrayList();
+        final long playerID = playerControllerHuman.getPlayer().getId();
         // Only support 1 opponent for now. There are some ideas about
         // supporting multiplayer games in the future, but for now it would complicate
         // the parsing process, and this implementation is still a "proof of concept".
-        int opponentID = 0;
+        long opponentID = 0;
         for (final Player player : playerControllerHuman.getGame().getPlayers()) {
             if (player.getId() != playerID) {
                 opponentID = player.getId();
@@ -107,7 +107,7 @@ public class BasicMacroSystem implements IMacroSystem {
         final String[] splitSequence = textSequence.split("_");
         for (final String textID : splitSequence) {
             if (StringUtils.isNumeric(textID)) {
-                entityInfo.add(Pair.of(Integer.valueOf(textID), false));
+                entityInfo.add(Pair.of(Long.valueOf(textID), false));
             } else if (textID.equals("%")) {
                 entityInfo.add(Pair.of(opponentID, true));
             } else if (textID.equals("@")) {
@@ -123,7 +123,7 @@ public class BasicMacroSystem implements IMacroSystem {
         final ZoneType[] zones = {ZoneType.Battlefield, ZoneType.Hand, ZoneType.Graveyard, ZoneType.Exile,
                 ZoneType.Command};
         final CardCollectionView cards = playerControllerHuman.getGame().getCardsIn(Arrays.asList(zones));
-        for (final Pair<Integer, Boolean> entity : entityInfo) {
+        for (final Pair<Long, Boolean> entity : entityInfo) {
             boolean found = false;
             // Nested loops are no fun; however, seems there's no better way
             // to get stuff by ID

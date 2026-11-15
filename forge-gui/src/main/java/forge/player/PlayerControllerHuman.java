@@ -515,7 +515,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
      * IDs of Contraptions that have been cranked previously, and will default to the "cranked" column next time their
      * sprocket is cranked.
      */
-    private final Set<Integer> savedCrankedIDs = new HashSet<>();
+    private final Set<Long> savedCrankedIDs = new HashSet<>();
 
     @Override
     public List<Card> chooseContraptionsToCrank(List<Card> contraptions) {
@@ -529,7 +529,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
         //Contraptions that were cranked previously will start in the cranked column when the dialog is shown.
         List<CardView> cranked = new ArrayList<>(), uncranked = new ArrayList<>();
         for(CardView c : viewList) {
-            int id = c.getId();
+            long id = c.getId();
             (savedCrankedIDs.contains(id) ? cranked : uncranked).add(c);
         }
 
@@ -2202,7 +2202,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
             }
         }
 
-        final Map<Integer, ReplacementEffect> replacementViewCache = Maps.uniqueIndex(possibleReplacers, ReplacementEffect::getId);
+        final Map<Long, ReplacementEffect> replacementViewCache = Maps.uniqueIndex(possibleReplacers, ReplacementEffect::getId);
 
         final List<ReplacementEffectView> sourceREVs = Lists.newArrayList();
         final List<ReplacementEffectView> orderedREVs = Lists.newArrayList();

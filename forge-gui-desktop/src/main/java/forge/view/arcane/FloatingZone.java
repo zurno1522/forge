@@ -75,11 +75,13 @@ import forge.view.FView;
 public class FloatingZone extends FloatingCardArea {
     private static final long serialVersionUID = 1927906492186378596L;
 
-    private static final Map<Integer, FloatingZone> floatingAreas = new HashMap<>();
-    private static final Map<Integer, VZone> dockedZones = new HashMap<>();
+    private record ZoneKey(long playerId, ZoneType zone) { }
 
-    private static int getKey(final PlayerView player, final ZoneType zone) {
-        return 40 * player.getId() + zone.hashCode();
+    private static final Map<ZoneKey, FloatingZone> floatingAreas = new HashMap<>();
+    private static final Map<ZoneKey, VZone> dockedZones = new HashMap<>();
+
+    private static ZoneKey getKey(final PlayerView player, final ZoneType zone) {
+        return new ZoneKey(player.getId(), zone);
     }
 
     // ========== Tab mode preference ==========
@@ -129,7 +131,7 @@ public class FloatingZone extends FloatingCardArea {
             }
         }
 
-        final int key = getKey(player, zone);
+        final ZoneKey key = getKey(player, zone);
         final VZone docked = dockedZones.get(key);
         if (docked != null) {
             final DragCell cell = docked.getParentCell();
@@ -216,7 +218,7 @@ public class FloatingZone extends FloatingCardArea {
 
     /** Close any existing display (docked tab or floating window) for this player/zone. */
     public static void closeExisting(final CMatchUI matchUI, final PlayerView player, final ZoneType zone) {
-        final int key = getKey(player, zone);
+        final ZoneKey key = getKey(player, zone);
 
         // Close docked zone if present
         final VZone docked = dockedZones.get(key);
@@ -233,7 +235,7 @@ public class FloatingZone extends FloatingCardArea {
     }
 
     private static FloatingZone _init(final CMatchUI matchUI, final PlayerView player, final ZoneType zone) {
-        final int key = getKey(player, zone);
+        final ZoneKey key = getKey(player, zone);
         FloatingZone cardArea = floatingAreas.get(key);
         if (cardArea == null || cardArea.getMatchUI() != matchUI) {
             cardArea = new FloatingZone(matchUI, player, zone);
@@ -246,7 +248,7 @@ public class FloatingZone extends FloatingCardArea {
 
     public static CardPanel getCardPanel(final CMatchUI matchUI, final CardView card) {
         // Check docked zones first
-        final int key = getKey(card.getController(), card.getZone());
+        final ZoneKey key = getKey(card.getController(), card.getZone());
         final VZone docked = dockedZones.get(key);
         if (docked != null) {
             final CardPanel panel = docked.getCardPanel(card);
@@ -353,7 +355,7 @@ public class FloatingZone extends FloatingCardArea {
         final VZone vZone = new VZone(getMatchUI(), player, zone);
         docID.setDoc(vZone);
 
-        final int key = getKey(player, zone);
+        final ZoneKey key = getKey(player, zone);
         dockedZones.put(key, vZone);
 
         // Close the floating window
@@ -379,7 +381,7 @@ public class FloatingZone extends FloatingCardArea {
             docID.setDoc(null);
         }
 
-        final int key = getKey(vZone.getPlayer(), vZone.getZone());
+        final ZoneKey key = getKey(vZone.getPlayer(), vZone.getZone());
         dockedZones.remove(key);
 
         SLayoutIO.saveLayout(null);

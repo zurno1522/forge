@@ -51,7 +51,7 @@ public class StackItemView extends TrackableObject implements IHasCardView {
      * Constructor for network deserialization.
      * Creates an empty StackItemView that will be populated via property deserialization.
      */
-    public StackItemView(final int id0, final Tracker tracker) {
+    public StackItemView(final long id0, final Tracker tracker) {
         super(id0, tracker);
     }
 
@@ -115,7 +115,7 @@ public class StackItemView extends TrackableObject implements IHasCardView {
         return getSourceTrigger() > 0;
     }
 
-    public int getSourceTrigger() {
+    public long getSourceTrigger() {
         return get(TrackableProperty.SourceTrigger);
     }
     void updateSourceTrigger(SpellAbilityStackInstance si) {

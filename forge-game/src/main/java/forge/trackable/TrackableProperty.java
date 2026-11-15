@@ -107,7 +107,7 @@ public enum TrackableProperty {
     LeftSplitState(TrackableTypes.CardStateViewType, FreezeMode.IgnoresFreeze),
     RightSplitState(TrackableTypes.CardStateViewType, FreezeMode.IgnoresFreeze),
     Room(TrackableTypes.BooleanType, FreezeMode.IgnoresFreeze),
-    HiddenId(TrackableTypes.IntegerType),
+    HiddenId(TrackableTypes.LongType),
     ExertedThisTurn(TrackableTypes.BooleanType),
     Detained(TrackableTypes.BooleanType),
 
@@ -175,8 +175,8 @@ public enum TrackableProperty {
     ControlVotes(TrackableTypes.BooleanType),
     AdditionalVillainousChoices(TrackableTypes.IntegerType),
     Commander(TrackableTypes.CardViewCollectionType, FreezeMode.IgnoresFreeze),
-    CommanderCast(TrackableTypes.IntegerMapType),
-    CommanderDamage(TrackableTypes.IntegerMapType),
+    CommanderCast(TrackableTypes.LongIntegerMapType),
+    CommanderDamage(TrackableTypes.LongIntegerMapType),
     MindSlaveMaster(TrackableTypes.PlayerViewType),
 
     Ante(TrackableTypes.CardViewCollectionType, FreezeMode.IgnoresFreeze),
@@ -215,7 +215,7 @@ public enum TrackableProperty {
 
     //StackItem
     Key(TrackableTypes.StringType),
-    SourceTrigger(TrackableTypes.IntegerType),
+    SourceTrigger(TrackableTypes.LongType),
     SourceCard(TrackableTypes.CardViewType),
     ActivatingPlayer(TrackableTypes.PlayerViewType),
     TargetCards(TrackableTypes.CardViewCollectionType),

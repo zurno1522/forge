@@ -158,7 +158,7 @@ public class TargetingOverlay {
 
         //final Point docOffsets = FView.SINGLETON_INSTANCE.getLpnDocument().getLocationOnScreen();
         // Locations of arc endpoint, per card, with ID as primary key.
-        final Map<Integer, Point> endpoints = new HashMap<>();
+        final Map<Long, Point> endpoints = new HashMap<>();
 
         Point cardLocOnScreen;
         Point locOnScreen = this.getPanel().getLocationOnScreen();
@@ -285,7 +285,7 @@ public class TargetingOverlay {
 
             //final Point docOffsets = FView.SINGLETON_INSTANCE.getLpnDocument().getLocationOnScreen();
             // Locations of arc endpoint, per card, with ID as primary key.
-            final Map<Integer, Point> endpoints = getCardEndpoints();
+            final Map<Long, Point> endpoints = getCardEndpoints();
 
             if (matchUI.getCDock().getArcState() == ArcState.MOUSEOVER) {
                 // Only work with the active panel
@@ -309,8 +309,8 @@ public class TargetingOverlay {
         return true;
     }
 
-    private Map<Integer, Point> getCardEndpoints() {
-        final Map<Integer, Point> endpoints = new HashMap<>();
+    private Map<Long, Point> getCardEndpoints() {
+        final Map<Long, Point> endpoints = new HashMap<>();
 
         Point cardLocOnScreen;
         Point locOnScreen = this.getPanel().getLocationOnScreen();
@@ -363,7 +363,7 @@ public class TargetingOverlay {
                     }
                 });
             }
-            final Map<Integer, Point> endpoints = getCardEndpoints();
+            final Map<Long, Point> endpoints = getCardEndpoints();
             Point locOnScreen = this.getPanel().getLocationOnScreen();
             Point itemLocOnScreen = activeStackItem.getLocationOnScreen();
             if (itemLocOnScreen != null) {
@@ -430,7 +430,7 @@ public class TargetingOverlay {
         }
     }
 
-    private void addArcsForCard(final CardView c, final Map<Integer, Point> endpoints, final CombatView combat) {
+    private void addArcsForCard(final CardView c, final Map<Long, Point> endpoints, final CombatView combat) {
         if (!cardsVisualized.add(c)) {
             return; //don't add arcs for cards if card already visualized
         }

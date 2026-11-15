@@ -72,8 +72,8 @@ public class GameState {
 
     private boolean puzzleCreatorState = false;
 
-    private final Map<Integer, Card> idToCard = new HashMap<>();
-    private final Map<Card, Integer> cardToAttachId = new HashMap<>();
+    private final Map<Long, Card> idToCard = new HashMap<>();
+    private final Map<Card, Long> cardToAttachId = new HashMap<>();
     private final Map<Card, Player> cardToEnchantPlayerId = new HashMap<>();
     private final Map<Card, Integer> markedDamage = new HashMap<>();
     private final Map<Card, List<String>> cardToChosenClrs = new HashMap<>();
@@ -397,7 +397,7 @@ public class GameState {
             List<String> rememberedCardIds = Lists.newArrayList();
             for (Object obj : c.getRemembered()) {
                 if (obj instanceof Card) {
-                    int id = ((Card)obj).getId();
+                    long id = ((Card)obj).getId();
                     rememberedCardIds.add(String.valueOf(id));
                 }
             }
@@ -407,7 +407,7 @@ public class GameState {
 
             List<String> imprintedCardIds = Lists.newArrayList();
             for (Card impr : c.getImprintedCards()) {
-                int id = impr.getId();
+                long id = impr.getId();
                 imprintedCardIds.add(String.valueOf(id));
             }
             if (!imprintedCardIds.isEmpty()) {
@@ -776,7 +776,7 @@ public class GameState {
             List<String> ids = rememberedEnts.getValue();
 
             for (String id : ids) {
-                Card tgt = idToCard.get(Integer.parseInt(id));
+                Card tgt = idToCard.get(Long.parseLong(id));
                 c.addRemembered(tgt);
             }
         }
@@ -787,7 +787,7 @@ public class GameState {
             List<String> ids = imprintedCards.getValue();
 
             for (String id : ids) {
-                Card tgt = idToCard.get(Integer.parseInt(id));
+                Card tgt = idToCard.get(Long.parseLong(id));
                 c.addImprintedCard(tgt);
             }
         }
@@ -797,7 +797,7 @@ public class GameState {
             Card c = rememberedEnts.getKey();
             String id = rememberedEnts.getValue();
 
-            Card exiledWith = idToCard.get(Integer.parseInt(id));
+            Card exiledWith = idToCard.get(Long.parseLong(id));
             if (exiledWith != null) {
                 exiledWith.addExiledCard(c);
                 c.setExiledWith(exiledWith);
@@ -806,34 +806,30 @@ public class GameState {
         }
     }
 
-    private int parseTargetInScript(final String tgtDef) {
-        int tgtID;
+    private long parseTargetInScript(final String tgtDef) {
+        long tgtID;
         if (tgtDef.equalsIgnoreCase("human")) {
             tgtID = TARGET_HUMAN;
         } else if (tgtDef.equalsIgnoreCase("ai")) {
             tgtID = TARGET_AI;
         } else {
-            tgtID = Integer.parseInt(tgtDef);
+            tgtID = Long.parseLong(tgtDef);
         }
 
         return tgtID;
     }
 
-    private void handleScriptedTargetingForSA(final Game game, final SpellAbility sa, int tgtID) {
+    private void handleScriptedTargetingForSA(final Game game, final SpellAbility sa, long tgtID) {
         Player human = game.getPlayers().get(0);
         Player ai = game.getPlayers().get(1);
 
         if (tgtID != TARGET_NONE) {
-            switch (tgtID) {
-                case TARGET_HUMAN:
-                    sa.getTargets().add(human);
-                    break;
-                case TARGET_AI:
-                    sa.getTargets().add(ai);
-                    break;
-                default:
-                    sa.getTargets().add(idToCard.get(tgtID));
-                    break;
+            if (tgtID == TARGET_HUMAN) {
+                sa.getTargets().add(human);
+            } else if (tgtID == TARGET_AI) {
+                sa.getTargets().add(ai);
+            } else {
+                sa.getTargets().add(idToCard.get(tgtID));
             }
         }
 
@@ -855,7 +851,7 @@ public class GameState {
         executeScript(game, c, sPtr, false);
     }
     private void executeScript(Game game, Card c, String sPtr, boolean putOnStack) {
-        int tgtID = TARGET_NONE;
+        long tgtID = TARGET_NONE;
         if (sPtr.contains("->")) {
             String tgtDef = sPtr.substring(sPtr.lastIndexOf("->") + 2);
 
@@ -971,7 +967,7 @@ public class GameState {
         precastSpellFromCard(spellDef, activator, game, false);
     }
     private void precastSpellFromCard(String spellDef, final Player activator, final Game game, final boolean putOnStack) {
-        int tgtID = TARGET_NONE;
+        long tgtID = TARGET_NONE;
         String scriptID = "";
 
         if (spellDef.contains(":")) {
@@ -990,7 +986,7 @@ public class GameState {
 
         if (StringUtils.isNumeric(spellDef)) {
             // Precast from a specific host
-            c = idToCard.get(Integer.parseInt(spellDef));
+            c = idToCard.get(Long.parseLong(spellDef));
             if (c == null) {
                 System.err.println("ERROR: Could not find a card with ID " + spellDef + " to precast!");
                 return;
@@ -1081,13 +1077,13 @@ public class GameState {
 
     private void handleCardAttachments() {
         // Unattach all permanents first
-        for (Entry<Card, Integer> entry : cardToAttachId.entrySet()) {
+        for (Entry<Card, Long> entry : cardToAttachId.entrySet()) {
             Card attachedTo = idToCard.get(entry.getValue());
             attachedTo.unAttachAllCards(attachedTo);
         }
 
         // Attach permanents by ID
-        for (Entry<Card, Integer> entry : cardToAttachId.entrySet()) {
+        for (Entry<Card, Long> entry : cardToAttachId.entrySet()) {
             Card attachedTo = idToCard.get(entry.getValue());
             Card attacher = entry.getKey();
             if (attacher.isAttachment()) {
@@ -1377,10 +1373,10 @@ public class GameState {
                     c.setRingBearer(true);
                     player.setRingBearer(c);
                 } else if (info.startsWith("Id:")) {
-                    int id = Integer.parseInt(info.substring(3));
+                    long id = Long.parseLong(info.substring(3));
                     idToCard.put(id, c);
                 } else if (info.startsWith("Attaching:") /*deprecated*/ || info.startsWith("AttachedTo:")) {
-                    int id = Integer.parseInt(info.substring(info.indexOf(':') + 1));
+                    long id = Long.parseLong(info.substring(info.indexOf(':') + 1));
                     cardToAttachId.put(c, id);
                 } else if (info.startsWith("EnchantingPlayer:")) {
                     String tgt = info.substring(info.indexOf(':') + 1);
@@ -1406,7 +1402,7 @@ public class GameState {
                     CardCollection chosen = new CardCollection();
                     String[] idlist = info.substring(info.indexOf(':') + 1).split(",");
                     for (String id : idlist) {
-                        chosen.add(idToCard.get(Integer.parseInt(id)));
+                        chosen.add(idToCard.get(Long.parseLong(id)));
                     }
                     cardToChosenCards.put(c, chosen);
                 } else if (info.startsWith("MergedCards:")) {
@@ -1425,7 +1421,7 @@ public class GameState {
                     cardToExiledWithId.put(c, info.substring(info.indexOf(':') + 1));
                 } else if (info.startsWith("Attacking")) {
                     if (info.contains(":")) {
-                        int id = Integer.parseInt(info.substring(info.indexOf(':') + 1));
+                        long id = Long.parseLong(info.substring(info.indexOf(':') + 1));
                         cardAttackMap.put(c, idToCard.get(id));
                     } else {
                         cardAttackMap.put(c, null);

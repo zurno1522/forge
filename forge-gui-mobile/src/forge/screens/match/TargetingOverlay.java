@@ -166,7 +166,7 @@ public class TargetingOverlay {
         list.add(attacker);
     }
 
-    public static void assembleArrows(final Graphics g, final Set<CardView> cardsonBattlefield, final Map<Integer, Vector2> endpoints, final CombatView combat, final Set<PlayerView> playerViewSet) {
+    public static void assembleArrows(final Graphics g, final Set<CardView> cardsonBattlefield, final Map<Long, Vector2> endpoints, final CombatView combat, final Set<PlayerView> playerViewSet) {
         if (cardsonBattlefield.isEmpty())
             return;
         try {

@@ -23,8 +23,8 @@ public final class AiActionTracker {
         private final Set<SpellAbility> aliases = Collections.newSetFromMap(new IdentityHashMap<>());
         private boolean started;
         private int activationsBefore;
-        private Integer executedAbilityId;
-        private Integer stackId;
+        private Long executedAbilityId;
+        private Long stackId;
 
         private Attempt(final Map<String, Object> identity) { this.identity = identity; }
     }

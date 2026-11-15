@@ -97,7 +97,7 @@ public class CardProperty {
                 return false;
             }
         } else if (property.startsWith("CardUID_")) {// Protection with "doesn't remove effect"
-            if (card.getId() != Integer.parseInt(property.split("CardUID_")[1])) {
+            if (card.getId() != Long.parseLong(property.split("CardUID_")[1])) {
                 return false;
             }
         } else if (property.startsWith("ChosenCard")) {

@@ -93,8 +93,8 @@ public class PerfPatchFollowUpRulesTest extends GameSimulationTest {
         return ReplacementHandler.parseReplacement("Event$ DamageDone | Prevent$ True | ValidTarget$ Card.Self | Description$ perf test", host, true, st); // ADAPT
     }
 
-    private static List<Integer> ids(Iterable<Card> cards) {
-        List<Integer> out = new ArrayList<>();
+    private static List<Long> ids(Iterable<Card> cards) {
+        List<Long> out = new ArrayList<>();
         for (Card c : cards) out.add(c.getId());
         return out;
     }
@@ -169,7 +169,7 @@ public class PerfPatchFollowUpRulesTest extends GameSimulationTest {
     }
 
     private static void assertUniqueAndMembershipCorrect(Collection<Card> result, Card outsider, String ctx) {
-        Set<Integer> seen = new HashSet<>();
+        Set<Long> seen = new HashSet<>();
         for (Card c : result) {
             Assert.assertTrue(seen.add(c.getId()), ctx + ": duplicate card " + c);
         }
@@ -228,7 +228,7 @@ public class PerfPatchFollowUpRulesTest extends GameSimulationTest {
         phased.phase(false);                                                                  // ADAPT: phase-out API (as in PerfPatchRulesTest)
 
         EnumSet<ZoneType> zones = EnumSet.of(ZoneType.Graveyard, ZoneType.Hand, ZoneType.Battlefield, ZoneType.Exile);
-        List<Integer> expected = new ArrayList<>();
+        List<Long> expected = new ArrayList<>();
         for (ZoneType z : ZoneType.values()) {
             if (zones.contains(z)) {
                 for (Player pl : players) expected.addAll(ids(pl.getCardsIn(z)));

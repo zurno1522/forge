@@ -51,10 +51,10 @@ import forge.util.*;
  * The Class StaticAbility.
  */
 public class StaticAbility extends CardTraitBase implements IIdentifiable, Cloneable, Comparable<StaticAbility> {
-    private static int maxId = 0;
-    private static int nextId() { return ++maxId; }
+    private static final java.util.concurrent.atomic.AtomicLong maxId = new java.util.concurrent.atomic.AtomicLong();
+    private static long nextId() { return maxId.incrementAndGet(); }
 
-    private int id;
+    private long id;
 
     protected EnumSet<ZoneType> validHostZones;
     private Set<StaticAbilityMode> modes;
@@ -67,7 +67,7 @@ public class StaticAbility extends CardTraitBase implements IIdentifiable, Clone
     private StaticAbilityView view = null;
 
     @Override
-    public final int getId() {
+    public final long getId() {
         return id;
     }
 

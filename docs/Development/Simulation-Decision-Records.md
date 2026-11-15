@@ -30,6 +30,8 @@ Candidate assessments can optionally include `assessmentDetail`: a reason code a
 
 `MissingPhaseRestrictions` is an existing card-handler assessment label for a failed phase check; it does not by itself establish that a card script is missing configuration. Handler assessments explain the handler's return value, while the outer assessment preserves the controller's original result.
 
+Engine IDs and event indices use 64-bit integers; composed decision/action IDs remain strings. See [identifier widths and compatibility](Simulation-Identifier-Widths.md), including multiplayer versioning and consumer integer requirements.
+
 ## Selected action execution
 
 `AI_ACTION_EXECUTION` is a separate observational event in both full and decision-only streams. Its normal envelope contains the actual emission turn, phase, and event index. The nested `execution` object has `executionSchemaVersion: 1`, `decisionId`, `actionId`, `playerId`, the selected `abilityId`, `sourceId`, and `kind`, plus `status` and `reason`. Action IDs are the decision ID plus a zero-based selected-action ordinal; join them within their run and game. Candidate evaluations do not get action IDs.

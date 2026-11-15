@@ -42,10 +42,10 @@ final class SimulationTraceCollector {
     private final Integer matchId;
     private final Integer gameInMatch;
     private final Integer tournamentRound;
-    private final Map<Integer, Integer> abilityToStack = new HashMap<>();
-    private final Map<Integer, Integer> mulligansByPlayer = new HashMap<>();
+    private final Map<Long, Long> abilityToStack = new HashMap<>();
+    private final Map<Long, Integer> mulligansByPlayer = new HashMap<>();
     private final Map<String, Map<String, Object>> unstartedActions = new LinkedHashMap<>();
-    private int eventIndex = 0;
+    private long eventIndex = 0;
     private IOException failure;
 
     SimulationTraceCollector(final Game game, final SimulationTraceWriter writer, final int gameNumber,
@@ -232,7 +232,7 @@ final class SimulationTraceCollector {
         }
     }
 
-    int nextEventIndex() {
+    long nextEventIndex() {
         return eventIndex + 1;
     }
 
@@ -464,7 +464,7 @@ final class SimulationTraceCollector {
     private void stackResolved(final GameEventSpellResolved event) throws IOException {
         final Map<String, Object> record = scoped("STACK_RESOLVED", true);
         record.put("abilityId", event.spell().getId());
-        final Integer stackId = abilityToStack.get(event.spell().getId());
+        final Long stackId = abilityToStack.get(event.spell().getId());
         if (stackId != null) {
             record.put("stackId", stackId);
         }
@@ -485,7 +485,7 @@ final class SimulationTraceCollector {
         }
         final Map<String, Object> record = scoped("STACK_REMOVED", true);
         record.put("abilityId", event.sa().getId());
-        final Integer stackId = abilityToStack.remove(event.sa().getId());
+        final Long stackId = abilityToStack.remove(event.sa().getId());
         if (stackId != null) {
             record.put("stackId", stackId);
         }
@@ -772,7 +772,7 @@ final class SimulationTraceCollector {
         write(record);
     }
 
-    private Player findPlayer(final int playerId) {
+    private Player findPlayer(final long playerId) {
         for (final Player player : game.getPlayers()) {
             if (player.getId() == playerId) {
                 return player;
@@ -781,7 +781,7 @@ final class SimulationTraceCollector {
         return null;
     }
 
-    private SpellAbilityStackInstance findStackItem(final int stackId) {
+    private SpellAbilityStackInstance findStackItem(final long stackId) {
         for (final SpellAbilityStackInstance item : game.getStack()) {
             if (item.getId() == stackId) {
                 return item;

@@ -1005,7 +1005,7 @@ public class PlayerControllerAi extends PlayerController {
         final Game game = player.getGame();
         final boolean guarded = AI_ROLLBACK && !game.isSimulationCopy() && !sa.isCopied() && !sa.isTrigger() && usesTargeting(sa);
         final UndoManager.Mark mark = guarded ? game.getUndoManager().markForRollback(game) : null;
-        final int hostId = sa.getHostCard().getId();
+        final long hostId = sa.getHostCard().getId();
         final int failedBefore = game.getStack().getIllegalAdditionCount(sa.getHostCard());
         final String key = AiController.castKey(sa);
 

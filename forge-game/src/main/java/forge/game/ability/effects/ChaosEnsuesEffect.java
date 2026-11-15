@@ -35,7 +35,7 @@ public class ChaosEnsuesEffect extends SpellAbilityEffect {
         }
 
         Map<AbilityKey, Object> runParams = AbilityKey.mapFromPlayer(activator);
-        Map<Integer, EnumSet<ZoneType>> tweakedTrigs = new HashMap<>();
+        Map<Long, EnumSet<ZoneType>> tweakedTrigs = new HashMap<>();
 
         List<Card> affected = Lists.newArrayList();
         if (sa.hasParam("Defined")) {
@@ -58,7 +58,7 @@ public class ChaosEnsuesEffect extends SpellAbilityEffect {
 
         game.getTriggerHandler().runTrigger(TriggerType.ChaosEnsues, runParams, false);
 
-        for (Map.Entry<Integer, EnumSet<ZoneType>> e : tweakedTrigs.entrySet()) {
+        for (Map.Entry<Long, EnumSet<ZoneType>> e : tweakedTrigs.entrySet()) {
             for (Card c : affected) {
                 for (Trigger t : c.getTriggers()) {
                     if (t.getId() == e.getKey()) {

@@ -350,7 +350,7 @@ public class WrappedAbility extends Ability {
     }
 
     @Override
-    public int getSourceTrigger() {
+    public long getSourceTrigger() {
         return sa.getSourceTrigger();
     }
 

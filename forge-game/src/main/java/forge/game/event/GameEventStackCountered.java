@@ -3,9 +3,9 @@ package forge.game.event;
 import forge.game.spellability.SpellAbility;
 import forge.game.spellability.SpellAbilityView;
 
-public record GameEventStackCountered(int stackId, SpellAbilityView counteredAbility,
+public record GameEventStackCountered(long stackId, SpellAbilityView counteredAbility,
         SpellAbilityView cause) implements GameEvent {
-    public GameEventStackCountered(int stackId, SpellAbility counteredAbility, SpellAbility cause) {
+    public GameEventStackCountered(long stackId, SpellAbility counteredAbility, SpellAbility cause) {
         this(stackId, SpellAbilityView.get(counteredAbility), SpellAbilityView.get(cause));
     }
 

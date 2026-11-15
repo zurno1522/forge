@@ -51,7 +51,7 @@ public class RolloutHeuristicPlayersTest extends SimulationTest {
         }
 
         @Override
-        public Player createIngamePlayer(final Game game, final int id) {
+        public Player createIngamePlayer(final Game game, final long id) {
             final Player p = new Player(getName(), game, id);
             p.setFirstController(new PlayerControllerAi(game, p, this));
             return p;

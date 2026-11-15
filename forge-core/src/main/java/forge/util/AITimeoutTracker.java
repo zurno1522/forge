@@ -36,12 +36,14 @@ public final class AITimeoutTracker {
      * Key of one AI player's session. Player ids restart at 0 in every game while game ids are unique per JVM,
      * so two matches running side by side (or a sim and a real game) never share a deadline or a timer bar.
      */
-    public static long key(final int gameId, final int playerId) {
-        return ((long) gameId << 32) | (playerId & 0xFFFFFFFFL);
+    public record SessionKey(long gameId, long playerId) { }
+
+    public static SessionKey key(final long gameId, final long playerId) {
+        return new SessionKey(gameId, playerId);
     }
 
     private static void purgeIdle() {
-        for (final java.util.Map.Entry<Long, Slot> e : SLOTS.entrySet()) {
+        for (final java.util.Map.Entry<SessionKey, Slot> e : SLOTS.entrySet()) {
             final Slot s = e.getValue();
             synchronized (s) {
                 if (s.depth == 0 && !s.removed) {
@@ -52,7 +54,7 @@ public final class AITimeoutTracker {
         }
     }
 
-    private static final ConcurrentHashMap<Long, Slot> SLOTS = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<SessionKey, Slot> SLOTS = new ConcurrentHashMap<>();
     private static volatile Runnable repaintHook;
 
     private AITimeoutTracker() { }
@@ -66,7 +68,7 @@ public final class AITimeoutTracker {
         return s.depth > 0 && now - s.startNanos - s.timeoutNanos > staleGraceNanos;
     }
 
-    public static void begin(final long key, final long timeoutNanos) {
+    public static void begin(final SessionKey key, final long timeoutNanos) {
         boolean outermost = false;
         long sessionStart = 0;
         Slot s;
@@ -115,8 +117,8 @@ public final class AITimeoutTracker {
         }
     }
 
-    public static void end(final long key) {
-        final Slot s = SLOTS.get(key);
+    public static void end(final SessionKey key) {
+        final Slot s = key == null ? null : SLOTS.get(key);
         if (s == null) {
             return;
         }
@@ -132,15 +134,15 @@ public final class AITimeoutTracker {
         }
     }
 
-    public static boolean isActive(final long key) {
-        final Slot s = SLOTS.get(key);
+    public static boolean isActive(final SessionKey key) {
+        final Slot s = key == null ? null : SLOTS.get(key);
         return s != null && s.depth > 0 && !isStale(s, System.nanoTime());
     }
 
     /** Absolute System.nanoTime() deadline of the active session, or fallbackNanos from now when none is active. */
-    public static long deadlineNanos(final long key, final long fallbackTimeoutNanos) {
+    public static long deadlineNanos(final SessionKey key, final long fallbackTimeoutNanos) {
         final long now = System.nanoTime();
-        final Slot s = SLOTS.get(key);
+        final Slot s = key == null ? null : SLOTS.get(key);
         if (s != null && s.depth > 0 && !isStale(s, now)) {
             return s.startNanos + s.timeoutNanos;
         }
@@ -151,8 +153,8 @@ public final class AITimeoutTracker {
      * 1.0 when the bar first appears (SHOW_AFTER elapsed) shrinking to 0.0 at the timeout.
      * Returns -1 when the bar must be hidden (no session, too early, finished or timed out).
      */
-    public static float getRemainingFraction(final long key) {
-        final Slot s = SLOTS.get(key);
+    public static float getRemainingFraction(final SessionKey key) {
+        final Slot s = key == null ? null : SLOTS.get(key);
         if (s == null || s.depth == 0) {
             return -1f;
         }
@@ -226,7 +228,7 @@ public final class AITimeoutTracker {
      * and the player's session deadline (or a fresh fallback timeout when there is no session).
      * Use this instead of {@link #remainingNanos()} for waits - an unarmed caller must not wait "forever".
      */
-    public static long remainingNanos(final long key, final long fallbackTimeoutNanos) {
+    public static long remainingNanos(final SessionKey key, final long fallbackTimeoutNanos) {
         return Math.min(remainingNanos(), deadlineNanos(key, fallbackTimeoutNanos) - System.nanoTime());
     }
 }

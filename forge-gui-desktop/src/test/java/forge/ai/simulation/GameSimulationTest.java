@@ -2777,7 +2777,7 @@ public class GameSimulationTest extends SimulationTest {
         // Card ids are visible to the AI (Card.compareTo, id-keyed
         // collections), so copies must keep them for simulations on the copy
         // to play out like the original game.
-        Set<Integer> preservedIds = new HashSet<>();
+        Set<Long> preservedIds = new HashSet<>();
         for (ZoneType zone : new ZoneType[] { ZoneType.Battlefield, ZoneType.Hand,
                 ZoneType.Graveyard, ZoneType.Library, ZoneType.Command }) {
             for (Card c : game.getCardsIn(zone)) {

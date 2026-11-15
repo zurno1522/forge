@@ -44,11 +44,11 @@ import forge.util.TextUtil;
  *
  */
 public abstract class ReplacementEffect extends TriggerReplacementBase {
-    private static int maxId = 0;
-    private static int nextId() { return ++maxId; }
+    private static final java.util.concurrent.atomic.AtomicLong maxId = new java.util.concurrent.atomic.AtomicLong();
+    private static long nextId() { return maxId.incrementAndGet(); }
 
     /** The ID. */
-    private int id;
+    private long id;
 
     private ReplacementType mode;
 
@@ -65,7 +65,7 @@ public abstract class ReplacementEffect extends TriggerReplacementBase {
      *
      * @return the id
      */
-    public int getId() {
+    public long getId() {
         return this.id;
     }
 
@@ -77,7 +77,7 @@ public abstract class ReplacementEffect extends TriggerReplacementBase {
      * @param id
      *            a int.
      */
-    public final void setId(final int id) {
+    public final void setId(final long id) {
         this.id = id;
     }
     /**
@@ -307,7 +307,7 @@ public abstract class ReplacementEffect extends TriggerReplacementBase {
     /** {@inheritDoc} */
     @Override
     public int hashCode() {
-        return 31 * (31 + CLASS_HASH) + getId();
+        return 31 * (31 + CLASS_HASH) + Long.hashCode(getId());
     }
 
     public ReplacementType getMode() {

@@ -37,7 +37,7 @@ public abstract class GameEntityView extends TrackableObject {
         return gameViewCache;
     }
 
-    protected GameEntityView(final int id0, final Tracker tracker) {
+    protected GameEntityView(final long id0, final Tracker tracker) {
         super(id0, tracker);
     }
 

@@ -615,7 +615,7 @@ public class GameCopier {
      * Only for undoing effects; {@link #find} stays strict for everything that must exist in the copy.
      */
     private IEntityMap lenientMap(final Game newGame) {
-        final Map<Integer, Card> byId = new HashMap<>();
+        final Map<Long, Card> byId = new HashMap<>();
         for (final Card c : newGame.getCardsInGame()) {
             byId.put(c.getId(), c);
         }
