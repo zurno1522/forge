@@ -214,6 +214,33 @@ public class SimulationActionLinkageTest extends AITest {
         for (int i = 0; i < rows.size(); i++) { Assert.assertEquals(rows.get(i).get("eventIndex").getAsLong(), i + 1L); }
     }
 
+    @Test(dataProvider = "outputModes", groups = {"UnitTest", "fast"})
+    public void committedModesSurviveCastingAndProduceTheRecordedEffects(final boolean full) throws Exception {
+        final Game game = initAndCreateGame();
+        final Player ai = game.getPlayers().get(1);
+        fillLibrary(ai, 10);
+        for (int i = 0; i < 4; i++) { addCardToZone("Island", ai, ZoneType.Battlefield); }
+        final Card creature = addCardToZone("Memnite", game.getPlayers().get(0), ZoneType.Battlefield);
+        final SpellAbility sa = addCardToZone("Cryptic Command", ai, ZoneType.Hand).getFirstSpellAbility();
+        sa.setActivatingPlayer(ai);
+        forge.game.ability.effects.CharmEffect.makePossibleOptions(sa);
+        final var options = sa.getAdditionalAbilityList("Choices");
+        sa.setChosenList(new java.util.ArrayList<>(List.of(options.get(2), options.get(3))));
+        try (Trace trace = new Trace(game, full)) {
+            RecordedSelectionTestSupport.select(ai, sa);
+            ((PlayerControllerAi) ai.getController()).playChosenSpellAbility(sa);
+            Assert.assertFalse(game.getStack().isEmpty());
+            final JsonObject snapshot = row(trace.decisions(), "STACK_ADDED").getAsJsonObject("finalizedModes");
+            Assert.assertEquals(snapshot.getAsJsonArray("modes").size(), 2);
+            Assert.assertEquals(snapshot.getAsJsonArray("modes").get(0).getAsJsonObject().get("optionIndex").getAsInt(), 2);
+            Assert.assertEquals(snapshot.getAsJsonArray("modes").get(1).getAsJsonObject().get("optionIndex").getAsInt(), 3);
+            if (full) { Assert.assertEquals(row(trace.full(), "STACK_ADDED").get("finalizedModes"), snapshot); }
+            game.getStack().resolveStack();
+            Assert.assertTrue(creature.isTapped(), "The recorded tap mode actually resolved");
+            Assert.assertEquals(ai.getCardsIn(ZoneType.Hand).size(), 1, "The recorded draw mode actually resolved");
+        }
+    }
+
     private static final class Trace implements AutoCloseable {
         private final Path directory = Files.createTempDirectory("forge-action-linkage-");
         private final Path full = directory.resolve("full.jsonl");

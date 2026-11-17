@@ -104,7 +104,20 @@ def validate_decision(record, game):
 
 
 ACTION_EVENT_TYPES = ('STACK_ADDED', 'STACK_RESOLVED', 'STACK_REMOVED', 'STACK_COUNTERED', 'STACK_CLEARED', 'LAND_PLAYED')
-ACTION_EVENT_FIELDS = ('type', 'game', 'eventIndex', 'turn', 'phase', 'decisionId', 'actionId', 'stackId', 'abilityId', 'fizzled', 'finalizedTargets')
+ACTION_EVENT_FIELDS = ('type', 'game', 'eventIndex', 'turn', 'phase', 'decisionId', 'actionId', 'stackId', 'abilityId', 'fizzled', 'finalizedTargets', 'finalizedModes')
+
+
+def validate_finalized_modes(snapshot):
+    if snapshot is None:
+        return
+    require(isinstance(snapshot, dict) and set(snapshot) == {'schemaVersion', 'modal', 'modes'}, 'invalid finalized mode snapshot')
+    require(integer(snapshot['schemaVersion']) and snapshot['schemaVersion'] == 1, 'unsupported finalized mode schema')
+    require(isinstance(snapshot['modal'], bool) and isinstance(snapshot['modes'], list), 'invalid finalized mode flags/list')
+    require(snapshot['modal'] or not snapshot['modes'], 'mode choices on nonmodal action')
+    for mode in snapshot['modes']:
+        require(isinstance(mode, dict) and set(mode) == {'abilityId', 'optionIndex'}, 'invalid finalized mode reference')
+        require(integer(mode['abilityId']), 'invalid finalized mode ability id')
+        require(mode['optionIndex'] is None or integer(mode['optionIndex']) and mode['optionIndex'] >= 0, 'invalid finalized mode option index')
 
 
 def validate_finalized_targets(snapshot, ability_id):
@@ -157,6 +170,9 @@ def _accept_action_event(record, game):
     if 'finalizedTargets' in record:
         require(kind == 'STACK_ADDED', 'finalized target snapshot outside stack addition')
         validate_finalized_targets(record['finalizedTargets'], record.get('abilityId'))
+    if 'finalizedModes' in record:
+        require(kind == 'STACK_ADDED', 'finalized mode snapshot outside stack addition')
+        validate_finalized_modes(record['finalizedModes'])
     require(not any(e['type'] == kind for e in action['engineEvents']), 'duplicate linked engine event')
     if kind == 'LAND_PLAYED':
         require(action['identity']['kind'] == 'LAND', 'land event linked to non-land selection')
@@ -417,6 +433,9 @@ def make_coverage(runs, rows):
     summary['finalizedTargetSnapshots'] = dict(collections.Counter('OBSERVED' if e.get('finalizedTargets') is not None else 'UNAVAILABLE' for e in additions))
     summary['finalizedTargetTypes'] = dict(collections.Counter(t['type'] for e in additions if e.get('finalizedTargets') is not None
                                                              for group in e['finalizedTargets']['abilities'] for t in group['targets']))
+    summary['finalizedModeSnapshots'] = dict(collections.Counter('OBSERVED' if e.get('finalizedModes') is not None else 'UNAVAILABLE' for e in additions))
+    summary['selectedModeCounts'] = dict(collections.Counter(len(e['finalizedModes']['modes']) for e in additions
+                                                           if e.get('finalizedModes') is not None and e['finalizedModes']['modal']))
     summary['searchRecords'] = sum('search' in r['decision'] for r in rows)
     summary['searchDecidedByRollouts'] = sum(r['decision'].get('search', {}).get('decidedByRollouts', False) for r in rows)
     summary['runsSummary'] = [dict(runId=r['metadata']['runId'], decks=[p.get('deckName') for p in r['metadata']['participants']],
@@ -478,6 +497,8 @@ def report_markdown(summary, runs):
               'Engine-event coverage: `' + json.dumps(summary['actionEngineEventCoverage'], sort_keys=True) + '`.',
               'Finalized target snapshots: `' + json.dumps(summary['finalizedTargetSnapshots'], sort_keys=True) + '`.',
               'Finalized target references (including sub-abilities): `' + json.dumps(summary['finalizedTargetTypes'], sort_keys=True) + '`.',
+              'Finalized mode snapshots: `' + json.dumps(summary['finalizedModeSnapshots'], sort_keys=True) + '`.',
+              'Selected mode counts per modal action: `' + json.dumps(summary['selectedModeCounts'], sort_keys=True) + '`.',
               f"{summary['decisionsWithAssessments']} decisions have assessment rows. {summary['selectedActionsWithoutAssessment']} selected actions lack a matching assessment row.",
               f"{summary['decisionsAfterOutcome']} in-flight decisions completed after an outcome was announced; these are retained in order and censored.",
               f"{summary['searchRecords']} decisions include search summaries; {summary['searchDecidedByRollouts']} report that rollouts decided the choice.", '',

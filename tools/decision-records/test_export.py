@@ -501,4 +501,44 @@ class ExportTests(unittest.TestCase):
                     with self.assertRaises(module.InvalidData): module.load_run(self.write(rows))
 
 
+    def test_finalized_modes_keep_committed_order_repeats_and_ambiguous_indices(self):
+        rows = engine_fixture()
+        rows[4]['finalizedModes'] = dict(schemaVersion=1, modal=True, modes=[
+            dict(abilityId=(1 << 42) + 1, optionIndex=2), dict(abilityId=(1 << 42) + 2, optionIndex=2),
+            dict(abilityId=(1 << 42) + 3, optionIndex=None)])
+        run = module.load_run(self.write(rows))
+        dataset = list(module.dataset_rows(run))
+        self.assertEqual(dataset[0]['actionExecutions'][0]['engineEvents'][0]['finalizedModes'], rows[4]['finalizedModes'])
+        summary = module.make_coverage([run], dataset)
+        self.assertEqual(summary['finalizedModeSnapshots'], {'OBSERVED': 1})
+        self.assertEqual(summary['selectedModeCounts'], {3: 1})
+        full = copy.deepcopy(rows)
+        full[0]['streamKind'] = 'FULL_GAME_TRACE'
+        full[4]['choices'] = dict(modes=[dict(description='Secret script description')])
+        self.assertEqual(list(module.dataset_rows(module.load_run(self.write(full)))), dataset)
+        self.assertNotIn('Secret script description', json.dumps(dataset))
+
+    def test_nonmodal_and_unavailable_modes_are_distinct(self):
+        for snapshot in (None, dict(schemaVersion=1, modal=False, modes=[]), dict(schemaVersion=1, modal=True, modes=[])):
+            rows = engine_fixture()
+            rows[4]['finalizedModes'] = snapshot
+            run = module.load_run(self.write(rows))
+            data = list(module.dataset_rows(run))
+            self.assertEqual(data[0]['actionExecutions'][0]['engineEvents'][0]['finalizedModes'], snapshot)
+            self.assertEqual(module.make_coverage([run], data)['finalizedModeSnapshots'], {'UNAVAILABLE' if snapshot is None else 'OBSERVED': 1})
+
+    def test_invalid_or_privileged_mode_data_is_rejected(self):
+        for mutation in ('version', 'nonmodal', 'private', 'negative_index', 'wrong_event'):
+            rows = engine_fixture()
+            snapshot = dict(schemaVersion=1, modal=True, modes=[dict(abilityId=78, optionIndex=0)])
+            rows[4]['finalizedModes'] = snapshot
+            if mutation == 'version': snapshot['schemaVersion'] = True
+            if mutation == 'nonmodal': snapshot['modal'] = False
+            if mutation == 'private': snapshot['modes'][0]['description'] = 'Secret card'
+            if mutation == 'negative_index': snapshot['modes'][0]['optionIndex'] = -1
+            if mutation == 'wrong_event': rows[6]['finalizedModes'] = rows[4].pop('finalizedModes')
+            with self.subTest(mutation=mutation):
+                with self.assertRaises(module.InvalidData): module.load_run(self.write(rows))
+
+
 if __name__=='__main__':unittest.main()
