@@ -73,18 +73,46 @@ public final class AiActionTracker {
         }
     }
 
+    private Attempt startedAttempt(final SpellAbility actual) {
+        if (!game.isRecordingAiDecisions() || actual == null || actual.isCopied() || actual.isTrigger()) { return null; }
+        for (final Attempt attempt : actions) {
+            if (attempt.started && (attempt.aliases.contains(actual) || attempt.aliases.contains(actual.getOriginalAbility()))) {
+                return attempt;
+            }
+        }
+        return null;
+    }
+
+    synchronized AiActionReference referenceFor(final SpellAbility actual) {
+        return reference(startedAttempt(actual));
+    }
+
+    synchronized AiActionReference landReferenceFor(final long sourceId) {
+        if (!game.isRecordingAiDecisions()) { return null; }
+        for (final Attempt attempt : actions) {
+            if (attempt.started && "LAND".equals(attempt.identity.get("kind"))
+                    && Long.valueOf(sourceId).equals(attempt.identity.get("sourceId"))) {
+                return reference(attempt);
+            }
+        }
+        return null;
+    }
+
+    private static AiActionReference reference(final Attempt attempt) {
+        return attempt == null ? null : new AiActionReference(
+                (String) attempt.identity.get("decisionId"), (String) attempt.identity.get("actionId"));
+    }
+
     @Subscribe
     public synchronized void stacked(final GameEventSpellAbilityCast event) {
         if (!game.isRecordingAiDecisions()) { return; }
         for (final var item : game.getStack()) {
             if (item.getId() != event.si().getId()) { continue; }
             final SpellAbility actual = item.getSpellAbility();
-            if (actual.isCopied() || actual.isTrigger()) { return; }
-            for (final Attempt attempt : actions) {
-                if (attempt.started && (attempt.aliases.contains(actual) || attempt.aliases.contains(actual.getOriginalAbility()))) {
-                    attempt.executedAbilityId = actual.getId();
-                    attempt.stackId = item.getId();
-                }
+            final Attempt attempt = startedAttempt(actual);
+            if (attempt != null) {
+                attempt.executedAbilityId = actual.getId();
+                attempt.stackId = item.getId();
             }
             return;
         }

@@ -103,6 +103,50 @@ def validate_decision(record, game):
     return d
 
 
+ACTION_EVENT_TYPES = ('STACK_ADDED', 'STACK_RESOLVED', 'STACK_REMOVED', 'STACK_COUNTERED', 'STACK_CLEARED', 'LAND_PLAYED')
+ACTION_EVENT_FIELDS = ('type', 'game', 'eventIndex', 'turn', 'phase', 'decisionId', 'actionId', 'stackId', 'abilityId', 'fizzled')
+
+
+def accept_action_event(record, game):
+    """Join explicit references only; preserve observed events without inferring a result."""
+    if record['type'] == 'STACK_CLEARED':
+        require(record.get('actionId') is None and record.get('decisionId') is None, 'bulk clear has a single action reference')
+        cleared = record.get('clearedActions', [])
+        require(isinstance(cleared, list), 'invalid cleared actions')
+        require(all(isinstance(ref, dict) and set(ref) == {'stackId', 'decisionId', 'actionId'} for ref in cleared), 'invalid cleared action reference')
+        for ref in cleared:
+            _accept_action_event(dict(record, **ref), game)
+    elif record.get('actionId') is not None or record.get('decisionId') is not None:
+        _accept_action_event(record, game)
+
+
+def _accept_action_event(record, game):
+    action_id = record.get('actionId')
+    require(isinstance(action_id, str) and action_id in game['actions'], 'engine event has no preceding selected action')
+    action = game['actions'][action_id]
+    require(record.get('decisionId') == action['identity']['decisionId'], 'engine event decision/action mismatch')
+    require(action['events'] and action['events'][0]['execution']['status'] == 'STARTED', 'engine event before execution start')
+    kind = record['type']
+    require(not any(e['type'] == kind for e in action['engineEvents']), 'duplicate linked engine event')
+    if kind == 'LAND_PLAYED':
+        require(action['identity']['kind'] == 'LAND', 'land event linked to non-land selection')
+    else:
+        require(action['identity']['kind'] != 'LAND' and integer(record.get('stackId')), 'invalid linked stack identity')
+        if kind != 'STACK_CLEARED':
+            require(integer(record.get('abilityId')), 'linked stack event lacks ability identity')
+        if kind == 'STACK_ADDED':
+            action['stackIdentity'] = (record['stackId'], record['abilityId'])
+        else:
+            require(action['stackIdentity'] is not None, 'linked stack event without stack addition')
+            stack_id, ability_id = action['stackIdentity']
+            require(record['stackId'] == stack_id and record.get('abilityId', ability_id) == ability_id, 'linked stack identity mismatch')
+    if kind == 'STACK_RESOLVED':
+        require(isinstance(record.get('fizzled'), bool), 'resolution lacks fizzled flag')
+    event = {key: record[key] for key in ACTION_EVENT_FIELDS if key in record}
+    event['postOutcome'] = game['outcome'] is not None
+    action['engineEvents'].append(event)
+
+
 def accept_execution(record, game):
     execution = record.get('execution')
     require(isinstance(execution, dict) and execution.get('executionSchemaVersion') == 1, 'invalid action execution schema')
@@ -129,6 +173,8 @@ def accept_execution(record, game):
         require(action['events'] and action['events'][0]['execution']['status'] == 'STARTED', 'execution result without start')
         if status == 'SUCCEEDED' and execution['reason'] == 'STACKED':
             require('stackId' in execution and 'executedAbilityId' in execution, 'stacked action lacks engine identifiers')
+            if action['stackIdentity'] is not None:
+                require((execution['stackId'], execution['executedAbilityId']) == action['stackIdentity'], 'execution/stack identity mismatch')
         action['terminal'] = status
     # Keep only the execution envelope, not unrelated diagnostic fields from a full trace.
     event = {key: record[key] for key in ('type', 'game', 'eventIndex', 'turn', 'phase') if key in record}
@@ -155,6 +201,7 @@ def load_run(path):
                 if metadata is None:
                     require(kind == 'RUN_STARTED' and record.get('schemaVersion') == 1, 'file must start with supported RUN_STARTED')
                     require(record.get('streamKind') in (None, 'FULL_GAME_TRACE', 'AI_DECISIONS'), 'unsupported stream kind')
+                    require(record.get('actionEventSchemaVersion') in (None, 1), 'unsupported action event schema')
                     require(record.get('eventIndexMode', 'CONTIGUOUS') in ('CONTIGUOUS', 'SHARED_WITH_GAME_TRACE'), 'unsupported event index mode')
                     require(record.get('eventIndexMode') != 'SHARED_WITH_GAME_TRACE' or record.get('streamKind') == 'AI_DECISIONS', 'shared indices require a filtered decision stream')
                     require('runId' not in record or isinstance(record['runId'], str) and record['runId'], 'invalid runId')
@@ -187,7 +234,11 @@ def load_run(path):
                         require(index == game['lastIndex'] + 1, 'event index gap')
                     game['lastIndex'] = index
                     if metadata.get('streamKind') == 'AI_DECISIONS':
-                        require(kind in ('GAME_STARTED', 'AI_DECISION', 'AI_ACTION_EXECUTION', 'GAME_OUTCOME', 'GAME_FINISHED', 'GAME_EXECUTION_FINISHED'), 'unexpected full game event in decision stream')
+                        require(kind in ('GAME_STARTED', 'AI_DECISION', 'AI_ACTION_EXECUTION', 'GAME_OUTCOME', 'GAME_FINISHED', 'GAME_EXECUTION_FINISHED') + ACTION_EVENT_TYPES, 'unexpected full game event in decision stream')
+                        if kind in ACTION_EVENT_TYPES:
+                            require(metadata.get('actionEventSchemaVersion') == 1, 'linked event in undeclared decision stream')
+                            require(set(record) <= set(ACTION_EVENT_FIELDS) | {'clearedActions'}, 'unexpected diagnostic field in linked event')
+                            require(record.get('actionId') is not None or kind == 'STACK_CLEARED' and record.get('clearedActions'), 'unlinked engine event in decision stream')
                     if kind == 'GAME_STARTED':
                         require(game['start'] is None, 'duplicate GAME_STARTED')
                         game['start'] = record
@@ -210,9 +261,11 @@ def load_run(path):
                                 action_id = selected['actionId']
                                 require(action_id not in game['actions'], 'duplicate selected actionId')
                                 identity = dict(selected, decisionId=d['decisionId'], playerId=d['playerId'])
-                                game['actions'][action_id] = dict(identity=identity, events=[], terminal=None)
+                                game['actions'][action_id] = dict(identity=identity, events=[], terminal=None, engineEvents=[], stackIdentity=None)
                     elif kind == 'AI_ACTION_EXECUTION':
                         accept_execution(record, game)
+                    elif kind in ACTION_EVENT_TYPES:
+                        accept_action_event(record, game)
                     elif kind == 'GAME_OUTCOME':
                         require(game['outcome'] is None, 'duplicate outcome')
                         game['outcome'] = record
@@ -235,7 +288,11 @@ def load_run(path):
         if execution['status'] == 'NORMAL':
             require(all(a['terminal'] is not None for a in game['actions'].values()), f'{path}: normally completed game has unfinished selected actions')
         if execution['status'] != 'EXCEPTION' or game['decisions']:
-            require(game['start'] is not None and game['finish'] is not None and outcome is not None, f'{path}: game {number} lacks start/outcome/finish')
+            require(game['finish'] is not None and outcome is not None, f'{path}: game {number} lacks outcome/finish')
+            # A cancellation can finalize a draw during setup, before GAME_STARTED is emitted.
+            # There are no decisions to label, but the attempted game's administrative result matters.
+            if execution['status'] == 'NORMAL' or game['decisions']:
+                require(game['start'] is not None, f'{path}: game {number} lacks start')
         if outcome is not None:
             require(isinstance(outcome.get('draw'), bool) and isinstance(outcome.get('winners'), list), f'{path}: malformed outcome')
             require(outcome['draw'] == (not outcome['winners']), f'{path}: draw/winner inconsistency')
@@ -273,10 +330,12 @@ def dataset_rows(run):
                 action = game['actions'].get(selected.get('actionId'))
                 linked.append(dict(actionId=selected.get('actionId'),
                                    status=(action['terminal'] or 'INCOMPLETE') if action else 'UNAVAILABLE',
-                                   events=action['events'] if action else []))
+                                   events=action['events'] if action else [],
+                                   engineEventCoverage='LINKED_EVENTS_V1' if meta.get('actionEventSchemaVersion') == 1 and action else 'UNAVAILABLE',
+                                   engineEvents=action['engineEvents'] if action else []))
             eligible = (run['finished']['status'] != 'ABORTED' and game['execution']['status'] == 'NORMAL' and d['status'] == 'COMPLETED' and not record.get('postOutcome', False))
             eligible = eligible and not any(a['status'] in ('ABANDONED', 'ERROR', 'UNOBSERVED', 'INCOMPLETE')
-                                           or any(e['postOutcome'] for e in a['events']) for a in linked)
+                                           or any(e['postOutcome'] for e in a['events'] + a['engineEvents']) for a in linked)
             outcome = game['outcome']
             winners = [p['participantId'] for p in outcome['winners']] if outcome else []
             label = ('DRAW' if outcome['draw'] else 'WIN' if participant_id in winners else 'LOSS') if eligible else None
@@ -322,6 +381,8 @@ def make_coverage(runs, rows):
     summary['decisionsWithAssessments'] = sum(bool(r['decision']['candidates']) for r in rows)
     summary['selectedActionsWithoutAssessment'] = sum(not any(matches_selected(a, c) for c in r['decision']['candidates']) for r in rows for a in r['decision']['selectedActions'])
     summary['actionExecutionStatuses'] = dict(collections.Counter(a['status'] for r in rows for a in r['actionExecutions']))
+    summary['linkedEngineEvents'] = dict(collections.Counter(e['type'] for r in rows for a in r['actionExecutions'] for e in a['engineEvents']))
+    summary['actionEngineEventCoverage'] = dict(collections.Counter(a['engineEventCoverage'] for r in rows for a in r['actionExecutions']))
     summary['searchRecords'] = sum('search' in r['decision'] for r in rows)
     summary['searchDecidedByRollouts'] = sum(r['decision'].get('search', {}).get('decidedByRollouts', False) for r in rows)
     summary['runsSummary'] = [dict(runId=r['metadata']['runId'], decks=[p.get('deckName') for p in r['metadata']['participants']],
@@ -344,6 +405,7 @@ def make_coverage(runs, rows):
         'Win/loss labels describe eventual game outcomes, not whether individual choices were correct. trainingReady remains false.',
         'Search summaries omit per-candidate values and the heuristic counterfactual; actual choice-change rates cannot be inferred.',
         'Action execution joins are available when declared by new records; legacy executions remain UNAVAILABLE. Execution success does not establish resolution or strategic value.',
+        'Linked engine events retain resolution, counter, removal, bulk-clear and land-play observations where recorded. Missing events do not establish failure or resolution; downstream effects are not attributed.',
         'Legacy land records and some direct combo selections can lack assessment rows.',
         'UNKNOWN engine/pilot metadata in legacy inputs is retained explicitly rather than guessed.',
         'Handler labels are preserved from Forge: MissingPhaseRestrictions means a phase check declined the play, not necessarily missing card configuration.',
@@ -377,6 +439,8 @@ def report_markdown(summary, runs):
               'Selected action kinds: `' + json.dumps(summary['selectedActionKinds'], sort_keys=True) + '`.',
               'Phases: `' + json.dumps(summary['phases'], sort_keys=True) + '`.',
               'Selected action execution results: `' + json.dumps(summary['actionExecutionStatuses'], sort_keys=True) + '`.',
+              'Linked engine events: `' + json.dumps(summary['linkedEngineEvents'], sort_keys=True) + '`.',
+              'Engine-event coverage: `' + json.dumps(summary['actionEngineEventCoverage'], sort_keys=True) + '`.',
               f"{summary['decisionsWithAssessments']} decisions have assessment rows. {summary['selectedActionsWithoutAssessment']} selected actions lack a matching assessment row.",
               f"{summary['decisionsAfterOutcome']} in-flight decisions completed after an outcome was announced; these are retained in order and censored.",
               f"{summary['searchRecords']} decisions include search summaries; {summary['searchDecidedByRollouts']} report that rollouts decided the choice.", '',
@@ -432,7 +496,7 @@ def export(paths, output_dir=None, examples=12):
         (out / 'manifest.json').write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
         (out / 'coverage.json').write_text(json.dumps(summary, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
         (out / 'coverage.md').write_text(report_markdown(summary, runs), encoding='utf-8')
-        (out / 'validation.json').write_text(json.dumps(dict(valid=True, inputs=len(runs), decisions=len(rows), checks=['run/game boundaries', 'event order', 'schemas and identities', 'visibility constraints', 'status/outcome agreement', 'timeout/error censoring']), indent=2) + '\n', encoding='utf-8')
+        (out / 'validation.json').write_text(json.dumps(dict(valid=True, inputs=len(runs), decisions=len(rows), checks=['run/game boundaries', 'event order', 'schemas and identities', 'engine-event references', 'visibility constraints', 'status/outcome agreement', 'timeout/error censoring']), indent=2) + '\n', encoding='utf-8')
     return summary
 
 

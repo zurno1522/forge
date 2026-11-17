@@ -161,6 +161,16 @@ public class AiController {
 
     AiActionTracker actionTracker() { return actionTracker; }
 
+    /** Read-only identity lookup while a recorded selection is being executed. */
+    public AiActionReference getActionReference(final SpellAbility actual) {
+        return actionTracker == null ? null : actionTracker.referenceFor(actual);
+    }
+
+    /** Land events carry a card identity rather than a spell ability. */
+    public AiActionReference getLandActionReference(final long sourceId) {
+        return actionTracker == null ? null : actionTracker.landReferenceFor(sourceId);
+    }
+
     void aliasSelectedAction(final SpellAbility original, final SpellAbility transformed) {
         if (actionTracker != null) { actionTracker.alias(original, transformed); }
     }

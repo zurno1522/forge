@@ -201,4 +201,31 @@ public class AiActionExecutionTest extends AITest {
         assertResult(events, "UNOBSERVED", "NO_STACK_ENTRY_OBSERVED");
         Assert.assertTrue(ai.getManaPool().isEmpty());
     }
+
+    @Test(groups = {"UnitTest", "fast"})
+    public void referenceLookupUsesActiveAliasesAndExcludesDerivedEffects() {
+        final Game game = initAndCreateGame();
+        final Player ai = game.getPlayers().get(1);
+        final SpellAbility selected = addCardToZone("Memnite", ai, ZoneType.Hand).getFirstSpellAbility();
+        final Events events = record(game, ai, selected);
+        final AiController brain = ((PlayerControllerAi) ai.getController()).getAi();
+        Assert.assertNull(brain.getActionReference(selected), "Selection alone does not prove execution started");
+        final AiActionTracker.Attempt attempt = brain.actionTracker().begin(selected);
+        final AiActionReference reference = brain.getActionReference(selected);
+        Assert.assertEquals(reference.actionId(), events.executions.get(0).get("actionId"));
+        final SpellAbility transformed = selected.copy();
+        brain.aliasSelectedAction(selected, transformed);
+        Assert.assertEquals(brain.getActionReference(transformed), reference);
+        final SpellAbility engineCopy = transformed.copy();
+        engineCopy.setOriginalAbility(transformed);
+        Assert.assertEquals(brain.getActionReference(engineCopy), reference);
+        engineCopy.setCopied(true);
+        Assert.assertNull(brain.getActionReference(engineCopy));
+        transformed.setTrigger(new forge.game.trigger.TriggerAlways(Map.of(), selected.getHostCard(), true));
+        Assert.assertNull(brain.getActionReference(transformed));
+        game.markAsSimulationCopy();
+        Assert.assertNull(brain.getActionReference(selected));
+        brain.actionTracker().finish(attempt, "FAILED", "TEST_FINISHED");
+        Assert.assertNull(brain.getActionReference(selected));
+    }
 }

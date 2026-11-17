@@ -107,6 +107,7 @@ final class SimulationTraceRun implements AutoCloseable {
         final Map<String, Object> record = new LinkedHashMap<>();
         record.put("type", "RUN_STARTED");
         record.put("schemaVersion", 1);
+        record.put("actionEventSchemaVersion", 1);
         record.put("runId", runId);
         record.put("pilotMode", pilotMode);
         record.put("engineRevision", System.getProperty("forge.simulation.revision", "UNKNOWN"));

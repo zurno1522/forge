@@ -196,7 +196,7 @@ public class SimulationTraceCollectorTest {
             Assert.assertFalse(records.get(3).has("stackId"));
             Assert.assertFalse(records.get(4).has("stackId"));
             Assert.assertEquals(records.get(6).get("stackId").getAsInt(), 103);
-            Assert.assertEquals(records.get(6).get("abilityId").getAsInt(), abilities.get(0).getId());
+            Assert.assertEquals(records.get(6).get("abilityId").getAsLong(), abilities.get(0).getId());
             assertCard(records.get(6).getAsJsonObject("source"), 30, source.getView().getName());
         }
     }

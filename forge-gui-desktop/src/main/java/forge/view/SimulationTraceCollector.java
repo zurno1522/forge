@@ -4,6 +4,8 @@ import com.google.common.eventbus.Subscribe;
 import forge.LobbyPlayer;
 import forge.ai.AiDecisionEvent;
 import forge.ai.AiActionExecutionEvent;
+import forge.ai.AiActionReference;
+import forge.ai.PlayerControllerAi;
 import forge.card.GamePieceType;
 import forge.game.Game;
 import forge.game.GameEntityView;
@@ -26,9 +28,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Read-only translator from Forge game events to the structured simulation trace.
@@ -43,6 +47,10 @@ final class SimulationTraceCollector {
     private final Integer gameInMatch;
     private final Integer tournamentRound;
     private final Map<Long, Long> abilityToStack = new HashMap<>();
+    // CounterEffect announces the counter after removing the entry. Keep unresolved removal
+    // identities until that diagnostic arrives; completed entries are released after removal.
+    private final Map<Long, AiActionReference> stackActions = new LinkedHashMap<>();
+    private final Set<Long> completedStacks = new HashSet<>();
     private final Map<Long, Integer> mulligansByPlayer = new HashMap<>();
     private final Map<String, Map<String, Object>> unstartedActions = new LinkedHashMap<>();
     private long eventIndex = 0;
@@ -74,7 +82,10 @@ final class SimulationTraceCollector {
             return;
         }
         if (writer == null && !(event instanceof GameEventGameStarted)
-                && !(event instanceof GameEventGameOutcome) && !(event instanceof GameEventGameFinished)) {
+                && !(event instanceof GameEventGameOutcome) && !(event instanceof GameEventGameFinished)
+                && !(event instanceof GameEventSpellAbilityCast) && !(event instanceof GameEventSpellResolved)
+                && !(event instanceof GameEventSpellRemovedFromStack) && !(event instanceof GameEventStackCountered)
+                && !(event instanceof GameEventLandPlayed)) {
             return;
         }
         try {
@@ -358,7 +369,17 @@ final class SimulationTraceCollector {
 
     private void stackAdded(final GameEventSpellAbilityCast event) throws IOException {
         final StackItemView item = event.si();
+        final SpellAbilityStackInstance live = findStackItem(item.getId());
+        final SpellAbility actual = live == null ? null : live.getSpellAbility();
+        final AiActionReference action = actual != null && actual.getActivatingPlayer() != null
+                && actual.getActivatingPlayer().getController() instanceof PlayerControllerAi ai
+                ? ai.getAi().getActionReference(actual) : null;
+        if (action == null) { stackActions.remove(item.getId()); }
+        else { stackActions.put(item.getId(), action); }
+        completedStacks.remove(item.getId());
+        if (writer == null && action == null) { return; }
         final Map<String, Object> record = scoped("STACK_ADDED", true);
+        addActionReference(record, action);
         record.put("stackId", item.getId());
         record.put("abilityId", event.sa().getId());
         record.put("kind", event.sa().isSpell() ? "SPELL" : item.isTrigger() ? "TRIGGERED_ABILITY" : "ACTIVATED_ABILITY");
@@ -390,7 +411,6 @@ final class SimulationTraceCollector {
             record.put("targetDescription", event.targetDescription());
         }
 
-        final SpellAbilityStackInstance live = findStackItem(item.getId());
         if (live != null) {
             final SpellAbility sa = live.getSpellAbility();
             record.put("copied", sa.isCopied());
@@ -462,9 +482,12 @@ final class SimulationTraceCollector {
     }
 
     private void stackResolved(final GameEventSpellResolved event) throws IOException {
-        final Map<String, Object> record = scoped("STACK_RESOLVED", true);
-        record.put("abilityId", event.spell().getId());
         final Long stackId = abilityToStack.get(event.spell().getId());
+        final AiActionReference action = stackActions.get(stackId);
+        if (writer == null && action == null) { return; }
+        final Map<String, Object> record = scoped("STACK_RESOLVED", true);
+        addActionReference(record, action);
+        record.put("abilityId", event.spell().getId());
         if (stackId != null) {
             record.put("stackId", stackId);
         }
@@ -474,18 +497,39 @@ final class SimulationTraceCollector {
             record.put("description", event.stackDescription());
         }
         write(record);
+        if (action != null) { completedStacks.add(stackId); }
     }
 
     private void stackRemoved(final GameEventSpellRemovedFromStack event) throws IOException {
         if (event.sa() == null) {
             // MagicStack.clear emits one bulk removal without an individual ability.
+            final List<Map<String, Object>> cleared = new ArrayList<>();
+            for (final var entry : stackActions.entrySet()) {
+                if (!abilityToStack.containsValue(entry.getKey())) { continue; }
+                final Map<String, Object> action = new LinkedHashMap<>();
+                action.put("stackId", entry.getKey());
+                addActionReference(action, entry.getValue());
+                cleared.add(action);
+            }
+            for (final Long stackId : abilityToStack.values()) {
+                stackActions.remove(stackId);
+                completedStacks.remove(stackId);
+            }
             abilityToStack.clear();
-            write(scoped("STACK_CLEARED", true));
+            if (writer == null && cleared.isEmpty()) { return; }
+            final Map<String, Object> record = scoped("STACK_CLEARED", true);
+            addActionReference(record, null);
+            record.put("clearedActions", cleared);
+            write(record);
             return;
         }
-        final Map<String, Object> record = scoped("STACK_REMOVED", true);
-        record.put("abilityId", event.sa().getId());
         final Long stackId = abilityToStack.remove(event.sa().getId());
+        final AiActionReference action = stackActions.get(stackId);
+        if (completedStacks.remove(stackId)) { stackActions.remove(stackId); }
+        if (writer == null && action == null) { return; }
+        final Map<String, Object> record = scoped("STACK_REMOVED", true);
+        addActionReference(record, action);
+        record.put("abilityId", event.sa().getId());
         if (stackId != null) {
             record.put("stackId", stackId);
         }
@@ -494,12 +538,17 @@ final class SimulationTraceCollector {
     }
 
     private void stackCountered(final GameEventStackCountered event) throws IOException {
+        final AiActionReference action = stackActions.get(event.stackId());
+        if (writer == null && action == null) { return; }
         final Map<String, Object> record = scoped("STACK_COUNTERED", true);
+        addActionReference(record, action);
         record.put("stackId", event.stackId());
         record.put("abilityId", event.counteredAbility().getId());
         record.put("source", cardRef(event.counteredAbility().getHostCard()));
         record.put("cause", causeRef(event.cause()));
         write(record);
+        if (abilityToStack.containsValue(event.stackId())) { completedStacks.add(event.stackId()); }
+        else { stackActions.remove(event.stackId()); }
     }
 
     private void zoneChange(final GameEventCardChangeZone event) throws IOException {
@@ -567,7 +616,13 @@ final class SimulationTraceCollector {
     }
 
     private void landPlayed(final GameEventLandPlayed event) throws IOException {
+        final Player player = event.player() == null ? null : game.getPlayer(event.player());
+        final AiActionReference action = player != null && event.land() != null
+                && player.getController() instanceof PlayerControllerAi ai
+                ? ai.getAi().getLandActionReference(event.land().getId()) : null;
+        if (writer == null && action == null) { return; }
         final Map<String, Object> record = scoped("LAND_PLAYED", true);
+        addActionReference(record, action);
         record.put("player", playerRef(event.player()));
         record.put("land", cardRef(event.land()));
         write(record);
@@ -811,7 +866,21 @@ final class SimulationTraceCollector {
         if (decisionWriter != null && List.of("GAME_STARTED", "AI_DECISION", "AI_ACTION_EXECUTION", "GAME_OUTCOME",
                 "GAME_FINISHED", "GAME_EXECUTION_FINISHED").contains(record.get("type"))) {
             decisionWriter.write(record);
+        } else if (decisionWriter != null && (record.get("actionId") != null
+                || "STACK_CLEARED".equals(record.get("type")) && !((List<?>) record.get("clearedActions")).isEmpty())) {
+            // Preserve the existing event and its position without exporting privileged cast details.
+            final Map<String, Object> projection = new LinkedHashMap<>();
+            for (final String key : List.of("type", "game", "eventIndex", "turn", "phase", "decisionId", "actionId",
+                    "stackId", "abilityId", "fizzled", "clearedActions")) {
+                if (record.containsKey(key)) { projection.put(key, record.get(key)); }
+            }
+            decisionWriter.write(projection);
         }
+    }
+
+    private static void addActionReference(final Map<String, Object> record, final AiActionReference action) {
+        record.put("decisionId", action == null ? null : action.decisionId());
+        record.put("actionId", action == null ? null : action.actionId());
     }
 
     private static Map<String, Object> playerRef(final PlayerView player) {

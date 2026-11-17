@@ -48,6 +48,25 @@ def linked_fixture(result='SUCCEEDED', game_status='NORMAL'):
     return rows
 
 
+def engine_fixture(ending='resolved', filtered=True):
+    rows = linked_fixture()
+    rows[0]['actionEventSchemaVersion'] = 1
+    if filtered:
+        rows[0]['streamKind'] = 'AI_DECISIONS'
+    identity = dict(decisionId='0:1', actionId='0:1:0', stackId=12, abilityId=77)
+    rows.insert(4, dict(type='STACK_ADDED', **identity))
+    if ending == 'resolved':
+        events = [dict(type='STACK_RESOLVED', fizzled=False, **identity), dict(type='STACK_REMOVED', **identity)]
+    elif ending == 'countered':
+        events = [dict(type='STACK_REMOVED', **identity), dict(type='STACK_COUNTERED', **identity)]
+    else:
+        events = [dict(type='STACK_CLEARED', decisionId=None, actionId=None,
+                       clearedActions=[{k: v for k, v in identity.items() if k != 'abilityId'}])]
+    rows[6:6] = events
+    for i, row in enumerate(rows[1:-1], 1): row.update(game=1, eventIndex=i)
+    return rows
+
+
 class ExportTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
@@ -85,6 +104,23 @@ class ExportTests(unittest.TestCase):
         # Actual normal-completion draws remain legitimate outcome labels.
         row=list(module.dataset_rows(module.load_run(self.write(fixture(draw=True)))))[0]
         self.assertEqual(row['outcomeLabel'],'DRAW')
+
+    def test_timeout_during_setup_retains_administrative_result_without_game_start(self):
+        rows = fixture('TIMEOUT', draw=True)
+        rows = [r for r in rows if r['type'] not in ('GAME_STARTED', 'AI_DECISION')]
+        for i, row in enumerate(rows[1:-1], 1): row.update(game=1, eventIndex=i)
+        path = self.write(rows)
+        run = module.load_run(path)
+        self.assertEqual(list(module.dataset_rows(run)), [])
+        summary = module.export([path], self.root / 'pregame-timeout')
+        self.assertEqual(summary['executionStatuses'], {'TIMEOUT': 1})
+        self.assertEqual(summary['outcomeEligibleDecisions'], 0)
+        manifest = json.loads((self.root / 'pregame-timeout/manifest.json').read_text())
+        self.assertIsNone(manifest['games'][0]['gameStarted'])
+        self.assertTrue(manifest['games'][0]['administrativeOutcome'])
+        rows[-2]['status'] = rows[-1]['status'] = 'NORMAL'
+        rows[-1].update(gamesNormal=1, gamesTimedOut=0)
+        with self.assertRaises(module.InvalidData): module.load_run(self.write(rows))
 
     def test_interrupted_decision_is_censored_even_in_winning_game(self):
         rows=fixture();rows[2]['decision']['status']='EVALUATION_TIMEOUT'
@@ -264,6 +300,111 @@ class ExportTests(unittest.TestCase):
         self.assertEqual(execution['abilityId'],(1<<40)+7)
         self.assertEqual(execution['executedAbilityId'],(1<<42)+9)
         self.assertEqual(execution['stackId'],(1<<43)+10)
+
+    def test_linked_resolution_retains_observations_without_changing_execution_status(self):
+        for ending, types in (('resolved', ['STACK_ADDED', 'STACK_RESOLVED', 'STACK_REMOVED']),
+                              ('countered', ['STACK_ADDED', 'STACK_REMOVED', 'STACK_COUNTERED']),
+                              ('cleared', ['STACK_ADDED', 'STACK_CLEARED'])):
+            with self.subTest(ending=ending):
+                run = module.load_run(self.write(engine_fixture(ending)))
+                dataset = list(module.dataset_rows(run))
+                action = dataset[0]['actionExecutions'][0]
+                self.assertEqual(action['status'], 'SUCCEEDED')
+                self.assertEqual(action['engineEventCoverage'], 'LINKED_EVENTS_V1')
+                self.assertEqual([e['type'] for e in action['engineEvents']], types)
+                self.assertEqual(action['engineEvents'][-1]['actionId'], '0:1:0')
+                self.assertEqual(action['engineEvents'][-1]['stackId'], 12)
+                self.assertEqual(dataset[0]['outcomeLabel'], 'WIN')
+                self.assertEqual(module.make_coverage([run], dataset)['linkedEngineEvents'], dict.fromkeys(types, 1))
+
+    def test_full_and_filtered_events_export_identically_without_privileged_fields(self):
+        filtered = engine_fixture()
+        full = copy.deepcopy(filtered)
+        full[0]['streamKind'] = 'FULL_GAME_TRACE'
+        full[4].update(source={'name': 'Secret card'}, choices={'secret': 'Secret card'}, targets=['Secret card'])
+        full.insert(7, dict(type='STACK_ADDED', decisionId=None, actionId=None, source={'name': 'Secret card'}))
+        for i, row in enumerate(full[1:-1], 1): row.update(game=1, eventIndex=i)
+        # Shared indices refer to the original full trace, including its unlinked event.
+        filtered[0]['eventIndexMode'] = 'SHARED_WITH_GAME_TRACE'
+        for row in filtered[1:-1]:
+            if row['eventIndex'] >= 7: row['eventIndex'] += 1
+        full_rows = list(module.dataset_rows(module.load_run(self.write(full, 'full.jsonl'))))
+        decision_rows = list(module.dataset_rows(module.load_run(self.write(filtered, 'filtered.jsonl'))))
+        self.assertEqual(full_rows, decision_rows)
+        self.assertNotIn('Secret card', json.dumps(full_rows))
+
+    def test_missing_resolution_does_not_invent_a_failure_or_resolved_result(self):
+        rows = linked_fixture()
+        rows[0]['actionEventSchemaVersion'] = 1
+        action = list(module.dataset_rows(module.load_run(self.write(rows))))[0]['actionExecutions'][0]
+        self.assertEqual(action['status'], 'SUCCEEDED')
+        self.assertEqual(action['engineEvents'], [])
+        legacy = list(module.dataset_rows(module.load_run(self.write(linked_fixture()))))[0]['actionExecutions'][0]
+        self.assertEqual(legacy['engineEventCoverage'], 'UNAVAILABLE')
+
+    def test_fizzled_resolution_is_retained_as_an_engine_observation(self):
+        rows = engine_fixture()
+        rows[6]['fizzled'] = True
+        action = list(module.dataset_rows(module.load_run(self.write(rows))))[0]['actionExecutions'][0]
+        self.assertTrue(action['engineEvents'][1]['fizzled'])
+        self.assertEqual(action['status'], 'SUCCEEDED')
+
+    def test_linked_land_event_has_no_stack_identity(self):
+        rows = linked_fixture()
+        rows[0].update(actionEventSchemaVersion=1, streamKind='AI_DECISIONS')
+        rows[2]['decision']['selectedActions'][0]['kind'] = 'LAND'
+        for row in rows:
+            if row['type'] == 'AI_ACTION_EXECUTION': row['execution']['kind'] = 'LAND'
+        terminal = rows[4]['execution']
+        terminal['reason'] = 'LAND_PLAYED'
+        del terminal['executedAbilityId'], terminal['stackId']
+        rows.insert(4, dict(type='LAND_PLAYED', decisionId='0:1', actionId='0:1:0'))
+        for i, row in enumerate(rows[1:-1], 1): row.update(game=1, eventIndex=i)
+        action = list(module.dataset_rows(module.load_run(self.write(rows))))[0]['actionExecutions'][0]
+        self.assertEqual(action['engineEvents'][0]['type'], 'LAND_PLAYED')
+        self.assertNotIn('stackId', action['engineEvents'][0])
+
+    def test_invalid_engine_references_are_rejected(self):
+        for mutation in ('orphan', 'wrong_decision', 'wrong_stack', 'wrong_ability', 'execution_mismatch',
+                         'duplicate', 'before_start', 'hidden_detail', 'single_clear', 'bad_clear', 'missing_fizzled'):
+            rows = engine_fixture('cleared' if mutation in ('single_clear', 'bad_clear') else 'resolved')
+            if mutation == 'orphan': rows[4]['actionId'] = 'other'
+            if mutation == 'wrong_decision': rows[4]['decisionId'] = 'other'
+            if mutation == 'wrong_stack': rows[6]['stackId'] = 99
+            if mutation == 'wrong_ability': rows[6]['abilityId'] = 99
+            if mutation == 'execution_mismatch': rows[5]['execution']['executedAbilityId'] = 99
+            if mutation == 'duplicate': rows.insert(7, copy.deepcopy(rows[6]))
+            if mutation == 'before_start': rows[3], rows[4] = rows[4], rows[3]
+            if mutation == 'hidden_detail': rows[4]['source'] = {'name': 'Secret card'}
+            if mutation == 'single_clear': rows[6]['actionId'] = '0:1:0'
+            if mutation == 'bad_clear': rows[6]['clearedActions'][0]['stackId'] = 99
+            if mutation == 'missing_fizzled': del rows[6]['fizzled']
+            for i, row in enumerate(rows[1:-1], 1): row.update(game=1, eventIndex=i)
+            with self.subTest(mutation=mutation):
+                with self.assertRaises(module.InvalidData): module.load_run(self.write(rows))
+
+    def test_post_outcome_engine_event_is_retained_and_censored(self):
+        rows = engine_fixture()
+        resolved = rows.pop(6)
+        rows.insert(9, resolved)
+        for i, row in enumerate(rows[1:-1], 1): row.update(game=1, eventIndex=i)
+        dataset = list(module.dataset_rows(module.load_run(self.write(rows))))[0]
+        self.assertTrue(dataset['actionExecutions'][0]['engineEvents'][-1]['postOutcome'])
+        self.assertIsNone(dataset['outcomeLabel'])
+
+    def test_linked_engine_events_preserve_long_ids(self):
+        rows = engine_fixture()
+        for row in rows:
+            if row['type'].startswith('STACK_'):
+                row['stackId'] += 1 << 40
+                row['abilityId'] += 1 << 41
+            if row['type'] == 'AI_ACTION_EXECUTION' and row['execution']['status'] == 'SUCCEEDED':
+                row['execution']['stackId'] += 1 << 40
+                row['execution']['executedAbilityId'] += 1 << 41
+        action = list(module.dataset_rows(module.load_run(self.write(rows))))[0]['actionExecutions'][0]
+        self.assertEqual(action['engineEvents'][-1]['stackId'], (1 << 40) + 12)
+        self.assertEqual(action['engineEvents'][-1]['abilityId'], (1 << 41) + 77)
+
 
 
 if __name__=='__main__':unittest.main()
