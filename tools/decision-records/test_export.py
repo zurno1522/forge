@@ -78,6 +78,18 @@ def target_fixture(filtered=True):
     return rows
 
 
+def payment_fixture():
+    rows = engine_fixture()
+    rows[4]['finalizedPayments'] = dict(
+        schemaVersion=1, coverage='ENGINE_PAYMENT_FACTS_V1',
+        mana=[dict(color='B', playerId=0, source=dict(id=(1 << 41) + 8, gameTimestamp=(1 << 50) + 3), snow=False)],
+        lastLifePayment=2, phyrexianLifePaid=4, optionalCosts=['Kicker1'], alternativeCost='Flashback',
+        keywordAmounts=[dict(keyword='MULTIKICKER', amount=2)], withoutManaCost=False,
+        cardPayments=[dict(type='Sacrificed', intrinsic=True, cards=[dict(id=(1 << 41) + 9, gameTimestamp=(1 << 50) + 4)])],
+        unrecognizedCardPaymentGroups=1)
+    return rows
+
+
 class ExportTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
@@ -568,6 +580,56 @@ class ExportTests(unittest.TestCase):
             if mutation == 'boolean': snapshot['announcedValue'] = False
             if mutation == 'description': snapshot['description'] = 'Secret card'
             if mutation == 'wrong_event': rows[6]['finalizedX'] = rows[4].pop('finalizedX')
+            with self.subTest(mutation=mutation):
+                with self.assertRaises(module.InvalidData): module.load_run(self.write(rows))
+
+
+    def test_payment_facts_survive_both_exports_without_inventing_a_life_total(self):
+        rows = payment_fixture()
+        run = module.load_run(self.write(rows))
+        dataset = list(module.dataset_rows(run))
+        payment = dataset[0]['actionExecutions'][0]['engineEvents'][0]['finalizedPayments']
+        self.assertEqual(payment, rows[4]['finalizedPayments'])
+        self.assertEqual(payment['lastLifePayment'], 2)
+        self.assertEqual(payment['phyrexianLifePaid'], 4)
+        self.assertNotIn('totalLifePaid', payment)
+        summary = module.make_coverage([run], dataset)
+        self.assertEqual(summary['optionalCostSelections'], {'Kicker1': 1})
+        self.assertEqual(summary['alternativeCostSelections'], {'Flashback': 1})
+        self.assertEqual(summary['unrecognizedCardPaymentGroups'], 1)
+        full = copy.deepcopy(rows)
+        full[0]['streamKind'] = 'FULL_GAME_TRACE'
+        full[4]['manaSpent'] = [dict(source=dict(name='Secret payment source'))]
+        self.assertEqual(list(module.dataset_rows(module.load_run(self.write(full)))), dataset)
+        self.assertNotIn('Secret payment source', json.dumps(dataset))
+
+    def test_payment_snapshot_may_be_unavailable_or_have_unknown_mana_provenance(self):
+        rows = payment_fixture()
+        rows[4]['finalizedPayments'] = None
+        run = module.load_run(self.write(rows))
+        self.assertEqual(module.make_coverage([run], list(module.dataset_rows(run)))['finalizedPaymentSnapshots'], {'UNAVAILABLE': 1})
+        rows = payment_fixture()
+        rows[4]['finalizedPayments']['mana'][0].update(source=None, playerId=None, snow=None)
+        data = list(module.dataset_rows(module.load_run(self.write(rows))))
+        self.assertIsNone(data[0]['actionExecutions'][0]['engineEvents'][0]['finalizedPayments']['mana'][0]['source'])
+
+    def test_invalid_and_private_payment_payloads_are_rejected(self):
+        for mutation in ('schema', 'coverage', 'private_source', 'private_card', 'private_cost_type', 'negative_amount',
+                         'life_total', 'invalid_color', 'invalid_source_id', 'private_root', 'wrong_event', 'duplicate_optional'):
+            rows = payment_fixture()
+            payment = rows[4]['finalizedPayments']
+            if mutation == 'schema': payment['schemaVersion'] = 2
+            if mutation == 'coverage': payment['coverage'] = 'COMPLETE_PAYMENTS'
+            if mutation == 'private_source': payment['mana'][0]['source']['name'] = 'Secret source'
+            if mutation == 'private_card': payment['cardPayments'][0]['cards'][0]['name'] = 'Secret card'
+            if mutation == 'private_cost_type': payment['cardPayments'][0]['type'] = 'Secret payment label'
+            if mutation == 'negative_amount': payment['keywordAmounts'][0]['amount'] = -1
+            if mutation == 'life_total': payment['totalLifePaid'] = 6
+            if mutation == 'invalid_color': payment['mana'][0]['color'] = 'X'
+            if mutation == 'invalid_source_id': payment['mana'][0]['source']['id'] = True
+            if mutation == 'private_root': payment['description'] = 'Secret card'
+            if mutation == 'duplicate_optional': payment['optionalCosts'] *= 2
+            if mutation == 'wrong_event': rows[6]['finalizedPayments'] = rows[4].pop('finalizedPayments')
             with self.subTest(mutation=mutation):
                 with self.assertRaises(module.InvalidData): module.load_run(self.write(rows))
 

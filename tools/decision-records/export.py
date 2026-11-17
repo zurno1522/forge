@@ -104,7 +104,53 @@ def validate_decision(record, game):
 
 
 ACTION_EVENT_TYPES = ('STACK_ADDED', 'STACK_RESOLVED', 'STACK_REMOVED', 'STACK_COUNTERED', 'STACK_CLEARED', 'LAND_PLAYED')
-ACTION_EVENT_FIELDS = ('type', 'game', 'eventIndex', 'turn', 'phase', 'decisionId', 'actionId', 'stackId', 'abilityId', 'fizzled', 'finalizedTargets', 'finalizedModes', 'finalizedX')
+ACTION_EVENT_FIELDS = ('type', 'game', 'eventIndex', 'turn', 'phase', 'decisionId', 'actionId', 'stackId', 'abilityId', 'fizzled', 'finalizedTargets', 'finalizedModes', 'finalizedX', 'finalizedPayments')
+
+
+def validate_finalized_payments(snapshot):
+    if snapshot is None:
+        return
+    fields = {'schemaVersion', 'coverage', 'mana', 'lastLifePayment', 'phyrexianLifePaid', 'optionalCosts',
+              'alternativeCost', 'keywordAmounts', 'withoutManaCost', 'cardPayments', 'unrecognizedCardPaymentGroups'}
+    require(isinstance(snapshot, dict) and set(snapshot) == fields, 'invalid payment snapshot fields')
+    require(integer(snapshot['schemaVersion']) and snapshot['schemaVersion'] == 1, 'unsupported payment schema')
+    require(snapshot['coverage'] == 'ENGINE_PAYMENT_FACTS_V1', 'invalid payment coverage')
+    for key in ('lastLifePayment', 'phyrexianLifePaid', 'unrecognizedCardPaymentGroups'):
+        require(integer(snapshot[key]) and snapshot[key] >= 0, 'invalid payment count')
+    require(isinstance(snapshot['withoutManaCost'], bool), 'invalid mana-cost waiver flag')
+
+    def token(value):
+        return isinstance(value, str) and value.isascii() and value.replace('_', '').isalnum()
+
+    def card(ref):
+        require(isinstance(ref, dict) and set(ref) == {'id', 'gameTimestamp'}, 'invalid payment card identity')
+        require(integer(ref['id']) and integer(ref['gameTimestamp']), 'invalid payment card identifiers')
+
+    require(isinstance(snapshot['optionalCosts'], list) and all(token(c) for c in snapshot['optionalCosts']), 'invalid optional payment costs')
+    require(len(snapshot['optionalCosts']) == len(set(snapshot['optionalCosts'])), 'duplicate optional cost flag')
+    require(snapshot['alternativeCost'] is None or token(snapshot['alternativeCost']), 'invalid alternative cost')
+    require(isinstance(snapshot['mana'], list), 'invalid paid mana list')
+    for mana in snapshot['mana']:
+        require(isinstance(mana, dict) and set(mana) == {'color', 'playerId', 'source', 'snow'}, 'invalid paid mana fields')
+        require(mana['color'] in ('W', 'U', 'B', 'R', 'G', 'C'), 'invalid paid mana color')
+        require(mana['playerId'] is None or integer(mana['playerId']), 'invalid mana player identity')
+        require(mana['snow'] is None or isinstance(mana['snow'], bool), 'invalid snow mana flag')
+        if mana['source'] is not None:
+            card(mana['source'])
+    require(isinstance(snapshot['keywordAmounts'], list), 'invalid keyword payment amounts')
+    for keyword in snapshot['keywordAmounts']:
+        require(isinstance(keyword, dict) and set(keyword) == {'keyword', 'amount'}, 'invalid keyword payment fields')
+        require(token(keyword['keyword']) and integer(keyword['amount']) and keyword['amount'] >= 0, 'invalid keyword payment amount')
+    require(len({k['keyword'] for k in snapshot['keywordAmounts']}) == len(snapshot['keywordAmounts']), 'duplicate keyword payment aggregate')
+    require(isinstance(snapshot['cardPayments'], list), 'invalid card payment list')
+    types = ('Discarded', 'Enlisted', 'Exerted', 'Exiled', 'MovedToGrave', 'ControlGained', 'CardPutToLib',
+             'CounterPut', 'Returned', 'Revealed', 'Sacrificed', 'Tapped', 'Unattached', 'Untapped')
+    for payment in snapshot['cardPayments']:
+        require(isinstance(payment, dict) and set(payment) == {'type', 'intrinsic', 'cards'}, 'invalid card payment fields')
+        require(payment['type'] in types + tuple(t + 'Cards' for t in types) and isinstance(payment['intrinsic'], bool), 'invalid card payment type/flag')
+        require(isinstance(payment['cards'], list), 'invalid paid card list')
+        for ref in payment['cards']:
+            card(ref)
 
 
 def validate_finalized_x(snapshot):
@@ -185,6 +231,9 @@ def _accept_action_event(record, game):
     if 'finalizedX' in record:
         require(kind == 'STACK_ADDED', 'finalized X snapshot outside stack addition')
         validate_finalized_x(record['finalizedX'])
+    if 'finalizedPayments' in record:
+        require(kind == 'STACK_ADDED', 'payment snapshot outside stack addition')
+        validate_finalized_payments(record['finalizedPayments'])
     require(not any(e['type'] == kind for e in action['engineEvents']), 'duplicate linked engine event')
     if kind == 'LAND_PLAYED':
         require(action['identity']['kind'] == 'LAND', 'land event linked to non-land selection')
@@ -451,6 +500,12 @@ def make_coverage(runs, rows):
     summary['finalizedXSnapshots'] = dict(collections.Counter('OBSERVED' if e.get('finalizedX') is not None else 'UNAVAILABLE' for e in additions))
     summary['announcedXValues'] = dict(collections.Counter(e['finalizedX']['announcedValue'] for e in additions
                                                         if e.get('finalizedX') is not None and e['finalizedX']['announcedValue'] is not None))
+    payments = [e['finalizedPayments'] for e in additions if e.get('finalizedPayments') is not None]
+    summary['finalizedPaymentSnapshots'] = dict(collections.Counter('OBSERVED' if e.get('finalizedPayments') is not None else 'UNAVAILABLE' for e in additions))
+    summary['optionalCostSelections'] = dict(collections.Counter(c for p in payments for c in p['optionalCosts']))
+    summary['alternativeCostSelections'] = dict(collections.Counter(p['alternativeCost'] for p in payments if p['alternativeCost'] is not None))
+    summary['cardPaymentGroups'] = dict(collections.Counter(c['type'] for p in payments for c in p['cardPayments']))
+    summary['unrecognizedCardPaymentGroups'] = sum(p['unrecognizedCardPaymentGroups'] for p in payments)
     summary['searchRecords'] = sum('search' in r['decision'] for r in rows)
     summary['searchDecidedByRollouts'] = sum(r['decision'].get('search', {}).get('decidedByRollouts', False) for r in rows)
     summary['runsSummary'] = [dict(runId=r['metadata']['runId'], decks=[p.get('deckName') for p in r['metadata']['participants']],
@@ -475,6 +530,7 @@ def make_coverage(runs, rows):
         'Action execution joins are available when declared by new records; legacy executions remain UNAVAILABLE. Execution success does not establish resolution or strategic value.',
         'Linked engine events retain resolution, counter, removal, bulk-clear and land-play observations where recorded. Missing events do not establish failure or resolution; downstream effects are not attributed.',
         'Finalized target snapshots describe committed stack targets, not alternatives or why they were selected. They omit identities beyond IDs, later retargeting, and choices made during resolution; legacy or unavailable snapshots are not empty target lists.',
+        'Payment snapshots contain recorded engine facts, not every cost decision. lastLifePayment is not a total and must not be summed with phyrexianLifePaid. LKI/current card lists can refer to the same paid card. Counter-removal choices and complete restriction/payment alternatives remain outside this coverage.',
         'Legacy land records and some direct combo selections can lack assessment rows.',
         'UNKNOWN engine/pilot metadata in legacy inputs is retained explicitly rather than guessed.',
         'Handler labels are preserved from Forge: MissingPhaseRestrictions means a phase check declined the play, not necessarily missing card configuration.',
@@ -516,6 +572,11 @@ def report_markdown(summary, runs):
               'Selected mode counts per modal action: `' + json.dumps(summary['selectedModeCounts'], sort_keys=True) + '`.',
               'Finalized X snapshots: `' + json.dumps(summary['finalizedXSnapshots'], sort_keys=True) + '`.',
               'Announced X values: `' + json.dumps(summary['announcedXValues'], sort_keys=True) + '`.',
+              'Payment snapshots (recorded engine facts): `' + json.dumps(summary['finalizedPaymentSnapshots'], sort_keys=True) + '`.',
+              'Optional cost selections: `' + json.dumps(summary['optionalCostSelections'], sort_keys=True) + '`.',
+              'Alternative cost selections: `' + json.dumps(summary['alternativeCostSelections'], sort_keys=True) + '`.',
+              'Card payment groups (LKI/current lists are separate, not unique paid-card counts): `' + json.dumps(summary['cardPaymentGroups'], sort_keys=True) + '`.',
+              f"Unrecognized card-payment groups omitted: {summary['unrecognizedCardPaymentGroups']}.",
               f"{summary['decisionsWithAssessments']} decisions have assessment rows. {summary['selectedActionsWithoutAssessment']} selected actions lack a matching assessment row.",
               f"{summary['decisionsAfterOutcome']} in-flight decisions completed after an outcome was announced; these are retained in order and censored.",
               f"{summary['searchRecords']} decisions include search summaries; {summary['searchDecidedByRollouts']} report that rollouts decided the choice.", '',

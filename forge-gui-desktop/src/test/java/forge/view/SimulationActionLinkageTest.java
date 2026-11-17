@@ -263,6 +263,138 @@ public class SimulationActionLinkageTest extends AITest {
         }
     }
 
+    @Test(dataProvider = "outputModes", groups = {"UnitTest", "fast"})
+    public void recordedSacrificeAndManaAgreeWithAnActuallyPaidCost(final boolean full) throws Exception {
+        final Game game = initAndCreateGame();
+        final Player ai = game.getPlayers().get(1);
+        final Card swamp = addCardToZone("Swamp", ai, ZoneType.Battlefield);
+        final Card creature = addCardToZone("Memnite", ai, ZoneType.Battlefield);
+        final long beforeTimestamp = creature.getGameTimestamp();
+        fillLibrary(ai, 10);
+        final SpellAbility sa = addCardToZone("Village Rites", ai, ZoneType.Hand).getFirstSpellAbility();
+        try (Trace trace = new Trace(game, full)) {
+            RecordedSelectionTestSupport.select(ai, sa);
+            ((PlayerControllerAi) ai.getController()).playChosenSpellAbility(sa);
+            final var entry = game.getStack().peek();
+            Assert.assertNotNull(entry);
+            final JsonObject snapshot = row(trace.decisions(), "STACK_ADDED").getAsJsonObject("finalizedPayments");
+            Assert.assertEquals(snapshot.getAsJsonArray("mana").size(), 1);
+            final JsonObject mana = snapshot.getAsJsonArray("mana").get(0).getAsJsonObject();
+            Assert.assertEquals(mana.get("color").getAsString(), "B");
+            Assert.assertEquals(mana.getAsJsonObject("source").get("id").getAsLong(), swamp.getId());
+            JsonObject sacrificed = null;
+            for (final var element : snapshot.getAsJsonArray("cardPayments")) {
+                final JsonObject group = element.getAsJsonObject();
+                if (group.get("type").getAsString().equals("Sacrificed")) { sacrificed = group; }
+            }
+            Assert.assertNotNull(sacrificed);
+            final JsonObject paid = sacrificed.getAsJsonArray("cards").get(0).getAsJsonObject();
+            Assert.assertEquals(paid.get("id").getAsLong(), creature.getId());
+            Assert.assertEquals(paid.get("gameTimestamp").getAsLong(), beforeTimestamp);
+            Assert.assertFalse(snapshot.toString().contains("Memnite"));
+            if (full) { Assert.assertEquals(row(trace.full(), "STACK_ADDED").get("finalizedPayments"), snapshot); }
+            final var copy = entry.getSpellAbility().copy();
+            copy.setCopied(true);
+            Assert.assertNull(SimulationChoiceSnapshot.payments(new forge.game.spellability.SpellAbilityStackInstance(copy)),
+                    "A copied effect must not report inherited history as a new payment");
+            entry.getSpellAbility().addCostToHashList(creature, "Secret future payment label", true);
+            final Map<String, Object> partial = SimulationChoiceSnapshot.payments(entry);
+            Assert.assertEquals(partial.get("unrecognizedCardPaymentGroups"), 1);
+            final String frozen = new com.google.gson.Gson().toJson(partial);
+            Assert.assertFalse(frozen.contains("Secret future payment label"));
+            entry.getSpellAbility().resetPaidHash();
+            Assert.assertEquals(new com.google.gson.Gson().toJson(partial), frozen);
+            game.getStack().resolveStack();
+            Assert.assertEquals(ai.getCardsIn(ZoneType.Hand).size(), 2);
+            Assert.assertTrue(ai.getCardsIn(ZoneType.Graveyard).stream().anyMatch(c -> c.getId() == creature.getId()));
+        }
+    }
+
+    @Test(groups = {"UnitTest", "fast"})
+    public void multiplePhyrexianPaymentsDoNotPretendTheLastPaymentIsATotal() throws Exception {
+        final Game game = initAndCreateGame();
+        final Player ai = game.getPlayers().get(1);
+        addCardToZone("Forest", ai, ZoneType.Battlefield);
+        final Card target = addCardToZone("Bear Cub", game.getPlayers().get(0), ZoneType.Battlefield);
+        final SpellAbility sa = addCardToZone("Dismember", ai, ZoneType.Hand).getFirstSpellAbility();
+        sa.getTargets().add(target);
+        final int life = ai.getLife();
+        try (Trace trace = new Trace(game, false)) {
+            RecordedSelectionTestSupport.select(ai, sa);
+            ((PlayerControllerAi) ai.getController()).playChosenSpellAbility(sa);
+            final JsonObject payment = row(trace.decisions(), "STACK_ADDED").getAsJsonObject("finalizedPayments");
+            Assert.assertEquals(ai.getLife(), life - 4);
+            Assert.assertEquals(payment.get("phyrexianLifePaid").getAsInt(), 4);
+            Assert.assertEquals(payment.get("lastLifePayment").getAsInt(), 2);
+            Assert.assertEquals(payment.getAsJsonArray("mana").size(), 1);
+        }
+    }
+
+    @Test(groups = {"UnitTest", "fast"})
+    public void kickedCostIsRecordedAndChangesTheResolvedDamage() throws Exception {
+        final Game game = initAndCreateGame();
+        final Player ai = game.getPlayers().get(1);
+        final Player opponent = game.getPlayers().get(0);
+        for (int i = 0; i < 5; i++) { addCardToZone("Mountain", ai, ZoneType.Battlefield); }
+        final SpellAbility base = addCardToZone("Burst Lightning", ai, ZoneType.Hand).getFirstSpellAbility();
+        base.setActivatingPlayer(ai);
+        final SpellAbility kicked = forge.game.GameActionUtil.addOptionalCosts(base, forge.game.GameActionUtil.getOptionalCostValues(base));
+        kicked.getTargets().add(opponent);
+        final int life = opponent.getLife();
+        try (Trace trace = new Trace(game, false)) {
+            RecordedSelectionTestSupport.select(ai, kicked);
+            ((PlayerControllerAi) ai.getController()).playChosenSpellAbility(kicked);
+            final JsonObject payment = row(trace.decisions(), "STACK_ADDED").getAsJsonObject("finalizedPayments");
+            Assert.assertEquals(payment.getAsJsonArray("optionalCosts").get(0).getAsString(), "Kicker1");
+            Assert.assertEquals(payment.getAsJsonArray("mana").size(), 5);
+            game.getStack().resolveStack();
+            Assert.assertEquals(opponent.getLife(), life - 4);
+        }
+    }
+
+    @Test(groups = {"UnitTest", "fast"})
+    public void flashbackCostIsRecordedAndTheResolvedSpellIsExiled() throws Exception {
+        final Game game = initAndCreateGame();
+        final Player ai = game.getPlayers().get(1);
+        for (int i = 0; i < 3; i++) { addCardToZone("Island", ai, ZoneType.Battlefield); }
+        fillLibrary(ai, 10);
+        final Card card = addCardToZone("Think Twice", ai, ZoneType.Graveyard);
+        final SpellAbility flashback = card.getAllPossibleAbilities(ai, true).stream().filter(SpellAbility::isFlashback).findFirst().orElseThrow();
+        try (Trace trace = new Trace(game, false)) {
+            RecordedSelectionTestSupport.select(ai, flashback);
+            ((PlayerControllerAi) ai.getController()).playChosenSpellAbility(flashback);
+            final JsonObject payment = row(trace.decisions(), "STACK_ADDED").getAsJsonObject("finalizedPayments");
+            Assert.assertEquals(payment.get("alternativeCost").getAsString(), "Flashback");
+            Assert.assertEquals(payment.getAsJsonArray("mana").size(), 3);
+            game.getStack().resolveStack();
+            Assert.assertEquals(ai.getCardsIn(ZoneType.Hand).size(), 1);
+            Assert.assertTrue(ai.getCardsIn(ZoneType.Exile).stream().anyMatch(c -> c.getId() == card.getId()));
+        }
+    }
+
+    @Test(groups = {"UnitTest", "fast"})
+    public void multikickerCountReflectsTheCastTransformationAndItsTokenResult() throws Exception {
+        final Game game = initAndCreateGame();
+        final Player ai = game.getPlayers().get(1);
+        for (int i = 0; i < 6; i++) { addCardToZone("Forest", ai, ZoneType.Battlefield); }
+        final SpellAbility sa = addCardToZone("Wolfbriar Elemental", ai, ZoneType.Hand).getFirstSpellAbility();
+        try (Trace trace = new Trace(game, false)) {
+            RecordedSelectionTestSupport.select(ai, sa);
+            ((PlayerControllerAi) ai.getController()).playChosenSpellAbility(sa);
+            final JsonObject payment = row(trace.decisions(), "STACK_ADDED").getAsJsonObject("finalizedPayments");
+            final JsonObject keyword = payment.getAsJsonArray("keywordAmounts").get(0).getAsJsonObject();
+            Assert.assertEquals(keyword.get("keyword").getAsString(), "MULTIKICKER");
+            Assert.assertEquals(keyword.get("amount").getAsInt(), 2);
+            Assert.assertEquals(payment.getAsJsonArray("mana").size(), 6);
+            game.getStack().resolveStack();
+            game.getTriggerHandler().runWaitingTriggers();
+            game.getStack().addAllTriggeredAbilitiesToStack();
+            Assert.assertFalse(game.getStack().isEmpty());
+            game.getStack().resolveStack();
+            Assert.assertEquals(ai.getCreaturesInPlay().size(), 3, "Elemental plus two Wolves from the recorded multikicker count");
+        }
+    }
+
     private static final class Trace implements AutoCloseable {
         private final Path directory = Files.createTempDirectory("forge-action-linkage-");
         private final Path full = directory.resolve("full.jsonl");
