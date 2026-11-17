@@ -13,6 +13,14 @@ import java.util.Map;
 final class SimulationChoiceSnapshot {
     private SimulationChoiceSnapshot() { }
 
+    static Map<String, Object> x(final SpellAbilityStackInstance entry) {
+        if (entry == null) { return null; }
+        final Map<String, Object> snapshot = new LinkedHashMap<>();
+        snapshot.put("schemaVersion", 1);
+        snapshot.put("announcedValue", entry.getSpellAbility().getXManaCostPaid());
+        return snapshot;
+    }
+
     static Map<String, Object> modes(final SpellAbilityStackInstance entry) {
         if (entry == null) { return null; }
         final SpellAbility root = entry.getSpellAbility();

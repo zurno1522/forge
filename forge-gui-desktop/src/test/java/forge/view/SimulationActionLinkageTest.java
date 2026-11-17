@@ -241,6 +241,28 @@ public class SimulationActionLinkageTest extends AITest {
         }
     }
 
+    @Test(dataProvider = "outputModes", groups = {"UnitTest", "fast"})
+    public void announcedXIsNotTheTotalManaPaidAndControlsResolution(final boolean full) throws Exception {
+        final Game game = initAndCreateGame();
+        final Player ai = game.getPlayers().get(1);
+        for (int i = 0; i < 4; i++) { addCardToZone("Forest", ai, ZoneType.Battlefield); }
+        final SpellAbility sa = addCardToZone("Walking Ballista", ai, ZoneType.Hand).getFirstSpellAbility();
+        sa.setXManaCostPaid(2);
+        try (Trace trace = new Trace(game, full)) {
+            RecordedSelectionTestSupport.select(ai, sa);
+            ((PlayerControllerAi) ai.getController()).playChosenSpellAbility(sa);
+            Assert.assertFalse(game.getStack().isEmpty());
+            Assert.assertEquals(game.getStack().peekAbility().getPayingMana().size(), 4, "XX means four mana for X=2");
+            final JsonObject snapshot = row(trace.decisions(), "STACK_ADDED").getAsJsonObject("finalizedX");
+            Assert.assertEquals(snapshot.get("announcedValue").getAsInt(), 2);
+            if (full) { Assert.assertEquals(row(trace.full(), "STACK_ADDED").get("finalizedX"), snapshot); }
+            game.getStack().resolveStack();
+            final Card ballista = ai.getCardsIn(ZoneType.Battlefield).stream()
+                    .filter(c -> c.getName().equals("Walking Ballista")).findFirst().orElseThrow();
+            Assert.assertEquals(ballista.getCounters(forge.game.card.CounterEnumType.P1P1), 2);
+        }
+    }
+
     private static final class Trace implements AutoCloseable {
         private final Path directory = Files.createTempDirectory("forge-action-linkage-");
         private final Path full = directory.resolve("full.jsonl");

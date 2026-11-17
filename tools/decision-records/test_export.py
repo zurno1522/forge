@@ -541,4 +541,35 @@ class ExportTests(unittest.TestCase):
                 with self.assertRaises(module.InvalidData): module.load_run(self.write(rows))
 
 
+    def test_announced_x_zero_and_unannounced_are_not_inferred_from_other_fields(self):
+        for value in (None, 0, 2):
+            rows = engine_fixture()
+            rows[4]['finalizedX'] = dict(schemaVersion=1, announcedValue=value)
+            rows[0]['streamKind'] = 'FULL_GAME_TRACE'
+            rows[4]['manaSpent'] = [{'color': 'G'}] * 4
+            run = module.load_run(self.write(rows))
+            dataset = list(module.dataset_rows(run))
+            event = dataset[0]['actionExecutions'][0]['engineEvents'][0]
+            self.assertEqual(event['finalizedX']['announcedValue'], value)
+            self.assertNotIn('manaSpent', event)
+            summary = module.make_coverage([run], dataset)
+            self.assertEqual(summary['announcedXValues'], {} if value is None else {value: 1})
+            filtered = copy.deepcopy(rows)
+            filtered[0]['streamKind'] = 'AI_DECISIONS'
+            del filtered[4]['manaSpent']
+            self.assertEqual(list(module.dataset_rows(module.load_run(self.write(filtered)))), dataset)
+
+    def test_invalid_or_privileged_x_data_is_rejected(self):
+        for mutation in ('negative', 'boolean', 'description', 'wrong_event'):
+            rows = engine_fixture()
+            snapshot = dict(schemaVersion=1, announcedValue=2)
+            rows[4]['finalizedX'] = snapshot
+            if mutation == 'negative': snapshot['announcedValue'] = -1
+            if mutation == 'boolean': snapshot['announcedValue'] = False
+            if mutation == 'description': snapshot['description'] = 'Secret card'
+            if mutation == 'wrong_event': rows[6]['finalizedX'] = rows[4].pop('finalizedX')
+            with self.subTest(mutation=mutation):
+                with self.assertRaises(module.InvalidData): module.load_run(self.write(rows))
+
+
 if __name__=='__main__':unittest.main()

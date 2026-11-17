@@ -104,7 +104,16 @@ def validate_decision(record, game):
 
 
 ACTION_EVENT_TYPES = ('STACK_ADDED', 'STACK_RESOLVED', 'STACK_REMOVED', 'STACK_COUNTERED', 'STACK_CLEARED', 'LAND_PLAYED')
-ACTION_EVENT_FIELDS = ('type', 'game', 'eventIndex', 'turn', 'phase', 'decisionId', 'actionId', 'stackId', 'abilityId', 'fizzled', 'finalizedTargets', 'finalizedModes')
+ACTION_EVENT_FIELDS = ('type', 'game', 'eventIndex', 'turn', 'phase', 'decisionId', 'actionId', 'stackId', 'abilityId', 'fizzled', 'finalizedTargets', 'finalizedModes', 'finalizedX')
+
+
+def validate_finalized_x(snapshot):
+    if snapshot is None:
+        return
+    require(isinstance(snapshot, dict) and set(snapshot) == {'schemaVersion', 'announcedValue'}, 'invalid finalized X snapshot')
+    require(integer(snapshot['schemaVersion']) and snapshot['schemaVersion'] == 1, 'unsupported finalized X schema')
+    value = snapshot['announcedValue']
+    require(value is None or integer(value) and value >= 0, 'invalid announced X value')
 
 
 def validate_finalized_modes(snapshot):
@@ -173,6 +182,9 @@ def _accept_action_event(record, game):
     if 'finalizedModes' in record:
         require(kind == 'STACK_ADDED', 'finalized mode snapshot outside stack addition')
         validate_finalized_modes(record['finalizedModes'])
+    if 'finalizedX' in record:
+        require(kind == 'STACK_ADDED', 'finalized X snapshot outside stack addition')
+        validate_finalized_x(record['finalizedX'])
     require(not any(e['type'] == kind for e in action['engineEvents']), 'duplicate linked engine event')
     if kind == 'LAND_PLAYED':
         require(action['identity']['kind'] == 'LAND', 'land event linked to non-land selection')
@@ -436,6 +448,9 @@ def make_coverage(runs, rows):
     summary['finalizedModeSnapshots'] = dict(collections.Counter('OBSERVED' if e.get('finalizedModes') is not None else 'UNAVAILABLE' for e in additions))
     summary['selectedModeCounts'] = dict(collections.Counter(len(e['finalizedModes']['modes']) for e in additions
                                                            if e.get('finalizedModes') is not None and e['finalizedModes']['modal']))
+    summary['finalizedXSnapshots'] = dict(collections.Counter('OBSERVED' if e.get('finalizedX') is not None else 'UNAVAILABLE' for e in additions))
+    summary['announcedXValues'] = dict(collections.Counter(e['finalizedX']['announcedValue'] for e in additions
+                                                        if e.get('finalizedX') is not None and e['finalizedX']['announcedValue'] is not None))
     summary['searchRecords'] = sum('search' in r['decision'] for r in rows)
     summary['searchDecidedByRollouts'] = sum(r['decision'].get('search', {}).get('decidedByRollouts', False) for r in rows)
     summary['runsSummary'] = [dict(runId=r['metadata']['runId'], decks=[p.get('deckName') for p in r['metadata']['participants']],
@@ -499,6 +514,8 @@ def report_markdown(summary, runs):
               'Finalized target references (including sub-abilities): `' + json.dumps(summary['finalizedTargetTypes'], sort_keys=True) + '`.',
               'Finalized mode snapshots: `' + json.dumps(summary['finalizedModeSnapshots'], sort_keys=True) + '`.',
               'Selected mode counts per modal action: `' + json.dumps(summary['selectedModeCounts'], sort_keys=True) + '`.',
+              'Finalized X snapshots: `' + json.dumps(summary['finalizedXSnapshots'], sort_keys=True) + '`.',
+              'Announced X values: `' + json.dumps(summary['announcedXValues'], sort_keys=True) + '`.',
               f"{summary['decisionsWithAssessments']} decisions have assessment rows. {summary['selectedActionsWithoutAssessment']} selected actions lack a matching assessment row.",
               f"{summary['decisionsAfterOutcome']} in-flight decisions completed after an outcome was announced; these are retained in order and censored.",
               f"{summary['searchRecords']} decisions include search summaries; {summary['searchDecidedByRollouts']} report that rollouts decided the choice.", '',
