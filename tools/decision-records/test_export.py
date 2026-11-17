@@ -67,6 +67,17 @@ def engine_fixture(ending='resolved', filtered=True):
     return rows
 
 
+def target_fixture(filtered=True):
+    rows = engine_fixture(filtered=filtered)
+    rows[4]['finalizedTargets'] = dict(schemaVersion=1, abilities=[
+        dict(abilityId=77, usesTargeting=True, targets=[
+            dict(type='PLAYER', id=1, dividedAmount=1),
+            dict(type='CARD', id=(1 << 41) + 8, gameTimestamp=(1 << 50) + 3, dividedAmount=2),
+            dict(type='SPELL_ABILITY', id=(1 << 42) + 9, stackId=(1 << 43) + 10)]),
+        dict(abilityId=78, usesTargeting=True, targets=[dict(type='CARD', id=(1 << 41) + 8, gameTimestamp=(1 << 50) + 3)])])
+    return rows
+
+
 class ExportTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
@@ -405,6 +416,89 @@ class ExportTests(unittest.TestCase):
         self.assertEqual(action['engineEvents'][-1]['stackId'], (1 << 40) + 12)
         self.assertEqual(action['engineEvents'][-1]['abilityId'], (1 << 41) + 77)
 
+    def test_finalized_targets_preserve_groups_order_allocations_and_long_ids(self):
+        rows = target_fixture()
+        run = module.load_run(self.write(rows))
+        dataset = list(module.dataset_rows(run))
+        snapshot = dataset[0]['actionExecutions'][0]['engineEvents'][0]['finalizedTargets']
+        self.assertEqual(snapshot, rows[4]['finalizedTargets'])
+        self.assertEqual([t['type'] for t in snapshot['abilities'][0]['targets']], ['PLAYER', 'CARD', 'SPELL_ABILITY'])
+        self.assertEqual(snapshot['abilities'][0]['targets'][1]['gameTimestamp'], (1 << 50) + 3)
+        summary = module.make_coverage([run], dataset)
+        self.assertEqual(summary['finalizedTargetSnapshots'], {'OBSERVED': 1})
+        self.assertEqual(summary['finalizedTargetTypes'], {'PLAYER': 1, 'CARD': 2, 'SPELL_ABILITY': 1})
+        out = self.root / 'target-export'
+        module.export([self.write(rows)], out)
+        exported = json.loads((out / 'dataset.jsonl').read_text())
+        self.assertEqual(exported['actionExecutions'][0]['engineEvents'][0]['finalizedTargets'], snapshot)
+        self.assertIn('Finalized target snapshots', (out / 'coverage.md').read_text())
+        self.assertEqual(exported['outcomeLabel'], 'WIN')
+        self.assertFalse(exported['trainingReady'])
+
+    def test_target_snapshots_export_equally_from_full_and_filtered_streams(self):
+        filtered = target_fixture()
+        full = copy.deepcopy(filtered)
+        full[0]['streamKind'] = 'FULL_GAME_TRACE'
+        full[4].update(targets=[dict(card=dict(name='Secret target identity'))], targetDescription='Secret target identity')
+        full_rows = list(module.dataset_rows(module.load_run(self.write(full, 'full.jsonl'))))
+        filtered_rows = list(module.dataset_rows(module.load_run(self.write(filtered, 'filtered.jsonl'))))
+        self.assertEqual(full_rows, filtered_rows)
+        self.assertNotIn('Secret target identity', json.dumps(full_rows))
+
+    def test_target_snapshot_unavailable_is_distinct_from_observed_empty_targets(self):
+        for state in ('legacy', 'unavailable', 'untargeted', 'optional_zero'):
+            rows = engine_fixture()
+            if state == 'unavailable': rows[4]['finalizedTargets'] = None
+            if state in ('untargeted', 'optional_zero'):
+                rows[4]['finalizedTargets'] = dict(schemaVersion=1, abilities=[
+                    dict(abilityId=77, usesTargeting=state == 'optional_zero', targets=[])])
+            run = module.load_run(self.write(rows))
+            dataset = list(module.dataset_rows(run))
+            coverage = module.make_coverage([run], dataset)
+            with self.subTest(state=state):
+                self.assertEqual(coverage['finalizedTargetSnapshots'],
+                                 {'OBSERVED': 1} if state in ('untargeted', 'optional_zero') else {'UNAVAILABLE': 1})
+                self.assertEqual(coverage['finalizedTargetTypes'], {})
+
+    def test_targeted_ability_without_live_stack_entry_retains_null_stack_id(self):
+        rows = target_fixture()
+        rows[4]['finalizedTargets']['abilities'][0]['targets'][2]['stackId'] = None
+        event = list(module.dataset_rows(module.load_run(self.write(rows))))[0]['actionExecutions'][0]['engineEvents'][0]
+        self.assertIsNone(event['finalizedTargets']['abilities'][0]['targets'][2]['stackId'])
+
+    def test_invalid_or_privileged_target_snapshots_are_rejected(self):
+        mutations = ('bad_version', 'boolean_version', 'missing_groups', 'empty_groups', 'wrong_root', 'bad_group_flag',
+                     'extra_snapshot_field', 'extra_group_field', 'extra_target_field', 'missing_card_timestamp',
+                     'bad_card_timestamp', 'bad_target_id', 'unknown_type', 'missing_stack_id', 'bad_stack_id',
+                     'negative_allocation', 'boolean_allocation', 'wrong_event', 'invalid_group', 'invalid_target')
+        for filtered in (True, False):
+            for mutation in mutations:
+                rows = target_fixture(filtered=filtered)
+                snapshot = rows[4]['finalizedTargets']
+                group = snapshot['abilities'][0]
+                target = group['targets'][1]
+                if mutation == 'bad_version': snapshot['schemaVersion'] = 2
+                if mutation == 'boolean_version': snapshot['schemaVersion'] = True
+                if mutation == 'missing_groups': del snapshot['abilities']
+                if mutation == 'empty_groups': snapshot['abilities'] = []
+                if mutation == 'wrong_root': group['abilityId'] = 999
+                if mutation == 'bad_group_flag': group['usesTargeting'] = 1
+                if mutation == 'extra_snapshot_field': snapshot['sourceName'] = 'Secret card'
+                if mutation == 'extra_group_field': group['description'] = 'Secret card'
+                if mutation == 'extra_target_field': target['name'] = 'Secret card'
+                if mutation == 'missing_card_timestamp': del target['gameTimestamp']
+                if mutation == 'bad_card_timestamp': target['gameTimestamp'] = 1.5
+                if mutation == 'bad_target_id': target['id'] = True
+                if mutation == 'unknown_type': target['type'] = 'UNKNOWN'
+                if mutation == 'missing_stack_id': del group['targets'][2]['stackId']
+                if mutation == 'bad_stack_id': group['targets'][2]['stackId'] = '12'
+                if mutation == 'negative_allocation': target['dividedAmount'] = -1
+                if mutation == 'boolean_allocation': target['dividedAmount'] = True
+                if mutation == 'wrong_event': rows[6]['finalizedTargets'] = rows[4].pop('finalizedTargets')
+                if mutation == 'invalid_group': snapshot['abilities'][0] = None
+                if mutation == 'invalid_target': group['targets'][1] = None
+                with self.subTest(filtered=filtered, mutation=mutation):
+                    with self.assertRaises(module.InvalidData): module.load_run(self.write(rows))
 
 
 if __name__=='__main__':unittest.main()

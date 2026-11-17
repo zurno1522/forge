@@ -104,7 +104,34 @@ def validate_decision(record, game):
 
 
 ACTION_EVENT_TYPES = ('STACK_ADDED', 'STACK_RESOLVED', 'STACK_REMOVED', 'STACK_COUNTERED', 'STACK_CLEARED', 'LAND_PLAYED')
-ACTION_EVENT_FIELDS = ('type', 'game', 'eventIndex', 'turn', 'phase', 'decisionId', 'actionId', 'stackId', 'abilityId', 'fizzled')
+ACTION_EVENT_FIELDS = ('type', 'game', 'eventIndex', 'turn', 'phase', 'decisionId', 'actionId', 'stackId', 'abilityId', 'fizzled', 'finalizedTargets')
+
+
+def validate_finalized_targets(snapshot, ability_id):
+    if snapshot is None:
+        return  # An unavailable engine entry is not an observed empty target list.
+    require(isinstance(snapshot, dict) and set(snapshot) == {'schemaVersion', 'abilities'}, 'invalid finalized target snapshot')
+    require(integer(snapshot['schemaVersion']) and snapshot['schemaVersion'] == 1, 'unsupported finalized target schema')
+    groups = snapshot['abilities']
+    require(isinstance(groups, list) and groups, 'finalized target snapshot lacks root ability')
+    for group in groups:
+        require(isinstance(group, dict) and set(group) == {'abilityId', 'usesTargeting', 'targets'}, 'invalid target ability group')
+        require(integer(group['abilityId']) and isinstance(group['usesTargeting'], bool), 'invalid target ability identity/flag')
+        require(isinstance(group['targets'], list), 'invalid finalized target list')
+        for target in group['targets']:
+            require(isinstance(target, dict), 'invalid finalized target reference')
+            kind = target.get('type')
+            required = {'CARD': {'type', 'id', 'gameTimestamp'}, 'PLAYER': {'type', 'id'},
+                        'SPELL_ABILITY': {'type', 'id', 'stackId'}}.get(kind)
+            require(required is not None and required <= set(target) <= required | {'dividedAmount'}, 'invalid finalized target fields')
+            require(integer(target['id']), 'invalid finalized target identifier')
+            if kind == 'CARD':
+                require(integer(target['gameTimestamp']), 'invalid target card timestamp')
+            if kind == 'SPELL_ABILITY':
+                require(target['stackId'] is None or integer(target['stackId']), 'invalid targeted stack identifier')
+            if 'dividedAmount' in target:
+                require(integer(target['dividedAmount']) and target['dividedAmount'] >= 0, 'invalid divided target allocation')
+    require(groups[0]['abilityId'] == ability_id, 'finalized target root/stack ability mismatch')
 
 
 def accept_action_event(record, game):
@@ -127,6 +154,9 @@ def _accept_action_event(record, game):
     require(record.get('decisionId') == action['identity']['decisionId'], 'engine event decision/action mismatch')
     require(action['events'] and action['events'][0]['execution']['status'] == 'STARTED', 'engine event before execution start')
     kind = record['type']
+    if 'finalizedTargets' in record:
+        require(kind == 'STACK_ADDED', 'finalized target snapshot outside stack addition')
+        validate_finalized_targets(record['finalizedTargets'], record.get('abilityId'))
     require(not any(e['type'] == kind for e in action['engineEvents']), 'duplicate linked engine event')
     if kind == 'LAND_PLAYED':
         require(action['identity']['kind'] == 'LAND', 'land event linked to non-land selection')
@@ -383,6 +413,10 @@ def make_coverage(runs, rows):
     summary['actionExecutionStatuses'] = dict(collections.Counter(a['status'] for r in rows for a in r['actionExecutions']))
     summary['linkedEngineEvents'] = dict(collections.Counter(e['type'] for r in rows for a in r['actionExecutions'] for e in a['engineEvents']))
     summary['actionEngineEventCoverage'] = dict(collections.Counter(a['engineEventCoverage'] for r in rows for a in r['actionExecutions']))
+    additions = [e for r in rows for a in r['actionExecutions'] for e in a['engineEvents'] if e['type'] == 'STACK_ADDED']
+    summary['finalizedTargetSnapshots'] = dict(collections.Counter('OBSERVED' if e.get('finalizedTargets') is not None else 'UNAVAILABLE' for e in additions))
+    summary['finalizedTargetTypes'] = dict(collections.Counter(t['type'] for e in additions if e.get('finalizedTargets') is not None
+                                                             for group in e['finalizedTargets']['abilities'] for t in group['targets']))
     summary['searchRecords'] = sum('search' in r['decision'] for r in rows)
     summary['searchDecidedByRollouts'] = sum(r['decision'].get('search', {}).get('decidedByRollouts', False) for r in rows)
     summary['runsSummary'] = [dict(runId=r['metadata']['runId'], decks=[p.get('deckName') for p in r['metadata']['participants']],
@@ -406,6 +440,7 @@ def make_coverage(runs, rows):
         'Search summaries omit per-candidate values and the heuristic counterfactual; actual choice-change rates cannot be inferred.',
         'Action execution joins are available when declared by new records; legacy executions remain UNAVAILABLE. Execution success does not establish resolution or strategic value.',
         'Linked engine events retain resolution, counter, removal, bulk-clear and land-play observations where recorded. Missing events do not establish failure or resolution; downstream effects are not attributed.',
+        'Finalized target snapshots describe committed stack targets, not alternatives or why they were selected. They omit identities beyond IDs, later retargeting, and choices made during resolution; legacy or unavailable snapshots are not empty target lists.',
         'Legacy land records and some direct combo selections can lack assessment rows.',
         'UNKNOWN engine/pilot metadata in legacy inputs is retained explicitly rather than guessed.',
         'Handler labels are preserved from Forge: MissingPhaseRestrictions means a phase check declined the play, not necessarily missing card configuration.',
@@ -441,6 +476,8 @@ def report_markdown(summary, runs):
               'Selected action execution results: `' + json.dumps(summary['actionExecutionStatuses'], sort_keys=True) + '`.',
               'Linked engine events: `' + json.dumps(summary['linkedEngineEvents'], sort_keys=True) + '`.',
               'Engine-event coverage: `' + json.dumps(summary['actionEngineEventCoverage'], sort_keys=True) + '`.',
+              'Finalized target snapshots: `' + json.dumps(summary['finalizedTargetSnapshots'], sort_keys=True) + '`.',
+              'Finalized target references (including sub-abilities): `' + json.dumps(summary['finalizedTargetTypes'], sort_keys=True) + '`.',
               f"{summary['decisionsWithAssessments']} decisions have assessment rows. {summary['selectedActionsWithoutAssessment']} selected actions lack a matching assessment row.",
               f"{summary['decisionsAfterOutcome']} in-flight decisions completed after an outcome was announced; these are retained in order and censored.",
               f"{summary['searchRecords']} decisions include search summaries; {summary['searchDecidedByRollouts']} report that rollouts decided the choice.", '',

@@ -7,6 +7,7 @@ import forge.ai.PlayerControllerAi;
 import forge.ai.RecordedSelectionTestSupport;
 import forge.game.Game;
 import forge.game.ability.AbilityUtils;
+import forge.game.ability.AbilityFactory;
 import forge.game.card.Card;
 import forge.game.event.GameEventSpellResolved;
 import forge.game.player.Player;
@@ -170,6 +171,43 @@ public class SimulationActionLinkageTest extends AITest {
 
     private static JsonObject row(final List<JsonObject> rows, final String type) {
         return rows.stream().filter(r -> r.get("type").getAsString().equals(type)).findFirst().orElseThrow();
+    }
+
+    @DataProvider
+    public Object[][] outputModes() { return new Object[][] { {true}, {false} }; }
+
+    @Test(dataProvider = "outputModes", groups = {"UnitTest", "fast"})
+    public void finalizedTargetsFollowCopiedActivationsIntoBothOutputs(final boolean full) throws Exception {
+        final Game game = initAndCreateGame();
+        final Player ai = game.getPlayers().get(1);
+        final Card source = addCardToZone("Island", ai, ZoneType.Battlefield);
+        final Card target = addCardToZone("Memnite", game.getPlayers().get(0), ZoneType.Battlefield);
+        final long targetTimestamp = target.getGameTimestamp();
+        final SpellAbility selected = AbilityFactory.getAbility(
+                "AB$ DealDamage | Cost$ 0 | ValidTgts$ Creature | NumDmg$ 1 | SpellDescription$ Target snapshot fixture.", source);
+        selected.getTargets().add(target);
+        try (Trace trace = new Trace(game, full)) {
+            RecordedSelectionTestSupport.select(ai, selected);
+            ((PlayerControllerAi) ai.getController()).playChosenSpellAbility(selected);
+            Assert.assertFalse(game.getStack().isEmpty());
+            final long actualId = game.getStack().peekAbility().getId();
+            Assert.assertNotEquals(actualId, selected.getId());
+            game.getStack().peekAbility().resetTargets();
+            target.setGameTimestamp(targetTimestamp + 1);
+            final JsonObject added = row(trace.decisions(), "STACK_ADDED");
+            final JsonObject snapshot = added.getAsJsonObject("finalizedTargets");
+            final JsonObject group = snapshot.getAsJsonArray("abilities").get(0).getAsJsonObject();
+            Assert.assertEquals(group.get("abilityId").getAsLong(), actualId);
+            Assert.assertTrue(group.get("usesTargeting").getAsBoolean());
+            final JsonObject ref = group.getAsJsonArray("targets").get(0).getAsJsonObject();
+            Assert.assertEquals(ref.get("type").getAsString(), "CARD");
+            Assert.assertEquals(ref.get("id").getAsLong(), target.getId());
+            Assert.assertEquals(ref.get("gameTimestamp").getAsLong(), targetTimestamp);
+            Assert.assertFalse(snapshot.toString().contains("Memnite"));
+            Assert.assertFalse(added.has("targets"), "Privileged full-trace targets must stay out of the filtered stream");
+            if (full) { Assert.assertEquals(row(trace.full(), "STACK_ADDED").get("finalizedTargets"), snapshot); }
+            else { assertContiguous(trace.decisions()); }
+        }
     }
 
     private static void assertContiguous(final List<JsonObject> rows) {

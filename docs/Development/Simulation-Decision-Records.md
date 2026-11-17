@@ -51,7 +51,7 @@ For `STACKED`, `executedAbilityId` and `stackId` identify the actual stack entry
 
 Tracking is limited to the recorded selections, suppressed in simulation copies, and does not change AI policy, controller return values, rules events, or their ordering. `STARTED` precedes the attempt and the terminal record follows its internal return, so intervening engine events retain their original order.
 
-Execution success is not proof of resolution: a successfully cast spell can be countered, and a resolved spell can have little effect. Target/mode/payment decisions and attribution of downstream effects remain separate work. Pass decisions have no selected actions and require no execution records.
+Execution success is not proof of resolution: a successfully cast spell can be countered, and a resolved spell can have little effect. Finalized stack targets are described below; target alternatives, mode/payment decision records, and attribution of downstream effects remain separate work. Pass decisions have no selected actions and require no execution records.
 
 The exporter validates identities, lifecycle order, duplicate terminal records, and completeness in normally completed games that declare execution linkage. Administrative timeouts/exceptions may leave an attempt without a terminal result; exports mark it `INCOMPLETE`, without inventing failure or abandonment. Legacy actions without declared linkage are `UNAVAILABLE`. Abandoned, erroneous, unobserved, incomplete, and post-outcome executions are censored for outcome labels. A definitive failed attempt can retain its eventual game outcome; that label still does not rate the action's quality. All rows remain `trainingReady=false`.
 
@@ -63,15 +63,37 @@ The collector obtains a stack entry's reference while the selection is executing
 
 `STACK_CLEARED` can represent several actions. Its scalar references are null, with a `clearedActions` list containing each observed linked entry's `stackId`, `decisionId`, and `actionId`. The active ability-to-stack mapping is then cleared. A resolution announcement after a bulk clear can therefore have null references; the collector does not guess from a card name or a past ability ID.
 
-Decision-only output retains a projection of these existing events only when they link to a recorded selection (or list linked entries in a bulk clear). The projection contains the event envelope, reference IDs, available stack/ability IDs, the resolution's `fizzled` flag. It omits source/card descriptions, targets, modes, payments and other privileged diagnostics. Full traces retain their existing details. Neither output reorders observations; standalone decision-stream indices remain contiguous, while dual output uses shared full-trace indices.
+Decision-only output retains a projection of these existing events only when they link to a recorded selection (or list linked entries in a bulk clear). The projection contains the event envelope, reference IDs, available stack/ability IDs, the resolution's `fizzled` flag, and the optional identity-only `finalizedTargets` snapshot described below. It omits source/card descriptions, privileged diagnostic target details, modes, payments and other privileged diagnostics. Full traces retain their existing details. Neither output reorders observations; standalone decision-stream indices remain contiguous, while dual output uses shared full-trace indices.
 
 Exports retain these projections in each selected action's `actionExecutions[].engineEvents`, with their original event indices and `postOutcome` flags. A bulk clear is projected once per listed action. `engineEventCoverage` is `LINKED_EVENTS_V1` for declared coverage and `UNAVAILABLE` for legacy/unlinked actions. Absence of a resolution event does not establish failure or resolution: games can end with actions on the stack, and collection can be interrupted. The exporter does not invent a result, downstream-effect attribution, or a per-action reward. Post-outcome engine observations are retained and censored for outcome labels.
+
+## Finalized targets
+
+New `STACK_ADDED` records include `finalizedTargets`, captured from the live committed stack entry at the existing cast event. Its `schemaVersion` is 1. `abilities` contains the root and its sub-ability chain in engine order. Each group has the engine `abilityId`, a boolean `usesTargeting`, and a `targets` list in the engine's selection order. Groups remain separate when several parts of a spell target the same object. No new decision/action IDs are allocated.
+
+Target references contain only these fields:
+
+| Type | Fields beyond `type` |
+| --- | --- |
+| `CARD` | `id`, `gameTimestamp` identifying the engine card object at capture time |
+| `PLAYER` | `id` |
+| `SPELL_ABILITY` | `id` for the targeted engine ability, `stackId` for its observed live stack entry or null when unavailable |
+
+An optional integer `dividedAmount` retains the engine's allocation to a target, such as divided damage. The snapshot exports no card/player names, descriptions, hidden faces, or candidate lists. Card names may be joined from an already-visible observation; the snapshot does not supply missing identities. Card timestamps distinguish zone-change incarnations that reuse the same card ID. Existing observations do not yet contain these timestamps, so they are not a complete cross-record object-identity mapping.
+
+An observed ability without targeting has `usesTargeting=false` and an empty target list. An ability that permits choosing zero targets retains `usesTargeting=true` with an empty list when none were chosen. A null snapshot means the live entry was unavailable; an absent field is valid legacy data. Neither means an observed empty choice. Snapshots are copied into JSON values immediately, so later retargeting, resolution, or removal cannot mutate them.
+
+Full and decision-only output carry the same snapshot on linked additions. The exporter validates its shape, root ability identity, identifier types, allocations, and absence of extra diagnostic fields, and retains it in the existing `engineEvents` projection. Reports distinguish observed snapshots from unavailable/legacy ones and count target references by type, including sub-abilities; these counts are not counts of unique targets or decisions.
+
+This closes finalized-target capture for observed stack additions, not the entire action-details gap. It does not enumerate alternatives, explain target selection, record later retargeting, or cover untargeted choices made during resolution. Targets can come from delegated choices or random effects as well as the acting AI. These committed action parameters are action/outcome data, not additional pre-decision observation features. Mode, X, and payment-choice records remain follow-up work.
+
+Boundary review for HARD-001: `SimulationTargetSnapshot` depends only on existing engine target/stack APIs and returns copied JSON values. The collector calls it at its existing cast-event boundary; it adds no AI callback, module dependency, subscriber, retained engine reference, or correlation map. Snapshot retention ends with the existing write; the Python exporter owns the resulting dataset lifetime. Existing collector-to-`AiController` correlation lookups and their timing assumptions remain unchanged. Added work is proportional to the committed ability chain and its target references per observed addition; broader performance measurement and the existing correlation/lifetime assessment remain open under HARD-001. This boundary review does not establish that the overall architecture is free of detrimental coupling.
 
 ## Hardening backlog
 
 ### HARD-001: assess decision-tracing coupling
 
-Status: **Open — architectural assessment required before expanding instrumentation.** Added 2026-11-16. The references and repeated identity fields raise a coupling concern; architectural harm has not been established. This task calls for analysis, with no predetermined refactor or schema reduction.
+Status: **Open — prioritize architectural assessment before broader instrumentation expansion.** Added 2026-11-16. The bounded finalized-target review above is complete; it does not complete this broader task. The references and repeated identity fields raise a coupling concern; architectural harm has not been established. This task calls for analysis, with no predetermined refactor or schema reduction.
 
 Assess the dependencies among `AiDecisionRecorder`, `AiActionTracker`, `AiController`, `SimulationTraceCollector`, and the exporter:
 

@@ -386,6 +386,7 @@ final class SimulationTraceCollector {
         record.put("copied", false);
         record.put("player", playerRef(item.getActivatingPlayer()));
         record.put("source", cardRef(item.getSourceCard()));
+        record.put("finalizedTargets", SimulationTargetSnapshot.capture(live, game.getStack()));
 
         final List<Map<String, Object>> targets = new ArrayList<>();
         if (item.getTargetCards() != null) {
@@ -871,7 +872,7 @@ final class SimulationTraceCollector {
             // Preserve the existing event and its position without exporting privileged cast details.
             final Map<String, Object> projection = new LinkedHashMap<>();
             for (final String key : List.of("type", "game", "eventIndex", "turn", "phase", "decisionId", "actionId",
-                    "stackId", "abilityId", "fizzled", "clearedActions")) {
+                    "stackId", "abilityId", "fizzled", "clearedActions", "finalizedTargets")) {
                 if (record.containsKey(key)) { projection.put(key, record.get(key)); }
             }
             decisionWriter.write(projection);
