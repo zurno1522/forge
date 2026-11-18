@@ -243,6 +243,10 @@ def _accept_action_event(record, game):
             require(integer(record.get('abilityId')), 'linked stack event lacks ability identity')
         if kind == 'STACK_ADDED':
             action['stackIdentity'] = (record['stackId'], record['abilityId'])
+            for prior in action['events']:
+                execution = prior['execution']
+                if execution['status'] == 'SUCCEEDED' and execution['reason'] == 'STACKED':
+                    require((execution['stackId'], execution['executedAbilityId']) == action['stackIdentity'], 'execution/stack identity mismatch')
         else:
             require(action['stackIdentity'] is not None, 'linked stack event without stack addition')
             stack_id, ability_id = action['stackIdentity']

@@ -648,4 +648,16 @@ class ExportTests(unittest.TestCase):
         with self.assertRaises(module.InvalidData): module.load_run(self.write(rows))
 
 
+    def test_actual_stack_identity_is_checked_even_when_terminal_arrives_first(self):
+        for matches in (True, False):
+            rows = engine_fixture()
+            if not matches: rows[5]['execution']['executedAbilityId'] = 99
+            rows[4], rows[5] = rows[5], rows[4]
+            for index, row in enumerate(rows[1:-1], 1): row.update(game=1, eventIndex=index)
+            if matches:
+                self.assertEqual(list(module.dataset_rows(module.load_run(self.write(rows))))[0]['actionExecutions'][0]['status'], 'SUCCEEDED')
+            else:
+                with self.assertRaises(module.InvalidData): module.load_run(self.write(rows))
+
+
 if __name__=='__main__':unittest.main()
