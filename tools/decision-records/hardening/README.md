@@ -2,7 +2,7 @@
 
 These tools reproduce the [coupling assessment](../../../docs/Development/Simulation-Trace-Coupling-Assessment.md). They are not shipped engine dependencies, training data generators, or additions to the unit-test suite. They deliberately use existing `AITest`/recorded-selection fixtures and reflection to inspect internal ownership. Run on Linux with JDK 21, Python 3 and a display/Xvfb. `ru_maxrss` is reported in Linux KiB.
 
-Production baseline is `f2bc148cecf`. The assessment commit only adds documentation and these development tools; production sources remain that baseline. Later fixes should change the defect-probe results. Use matching source/resources and compiled classes; do not benchmark stale classes while Maven recompiles them.
+Production baseline is `f2bc148cecf`. The assessment commit only added documentation and these development tools. Subsequent implementation fixes change the defect-probe results; see [follow-up status](../../../docs/Development/Simulation-Trace-Coupling-Assessment.md#implementation-follow-up-2026-11-18). Use matching source/resources and compiled classes; do not benchmark stale classes while Maven recompiles them.
 
 ## Build and classpath
 
@@ -71,7 +71,9 @@ xvfb-run -a java -cp "$probe_dir/classes:$probe_cp" forge.view.ActionCorrelation
 xvfb-run -a java -cp "$probe_dir/classes:$probe_cp" forge.view.TraceFailureProbe "$probe_dir/failure"
 ```
 
-Use a separate `-Duser.home=...` if you do not want fixtures to initialize the default Forge home. These are development-only, deterministic fixtures, not normal AI selection benchmarks. The correlation probe exercises ordinary Archivist, real Necrotic Ooze/Archivist, and a deliberately reentrant EventBus play. The failure probe overrides `Match.startGame`, posts a start and deterministic selection, then throws through the real runner. It also checks persistent flush failure. On the baseline, both exceptional streams fail `export.py --validate-only` because `GAME_FINISHED` is missing; the error is preserved in the streams. A future repair should make the intended failure traces valid and censored rather than erase the exception.
+Use a separate `-Duser.home=...` if you do not want fixtures to initialize the default Forge home. These are development-only, deterministic fixtures, not normal AI selection benchmarks. The correlation probe exercises ordinary Archivist, real Necrotic Ooze/Archivist, and a deliberately reentrant EventBus play. The failure probe overrides `Match.startGame`, posts a start and deterministic selection, then throws through the real runner. It also checks persistent flush failure. On the baseline, both exceptional streams fail `export.py --validate-only` because `GAME_FINISHED` is missing; the error is preserved in the streams.
+
+The current probes assert the repaired behavior: ordinary and granted activations link, the intentionally reentrant case still reports missing linkage (HARD-006), and a failed explicit flush still closes the delegate with an idempotent second close. Both generated exception streams should now validate and export censored rows. Historical baseline results remain in the HARD-001 evidence directory.
 
 ## Schema bytes and exporter scaling
 

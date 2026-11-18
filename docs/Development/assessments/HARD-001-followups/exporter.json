@@ -1,0 +1,151 @@
+{
+  "repeatedInputs": [
+    {
+      "peakRssKiB": 19004,
+      "seconds": 0.043849334004335105,
+      "cpuSeconds": 0.058974,
+      "runs": 1,
+      "games": 3,
+      "decisions": 204,
+      "executionStatuses": {
+        "NORMAL": 3
+      },
+      "outcomeEligibleDecisions": 204,
+      "censoredDecisions": 0,
+      "mode": "--validate-only",
+      "inputBytes": 1230159
+    },
+    {
+      "peakRssKiB": 19004,
+      "seconds": 0.0627125529863406,
+      "cpuSeconds": 0.086123,
+      "runs": 1,
+      "games": 3,
+      "decisions": 204,
+      "executionStatuses": {
+        "NORMAL": 3
+      },
+      "outcomeEligibleDecisions": 204,
+      "censoredDecisions": 0,
+      "mode": "--output-dir",
+      "inputBytes": 1230159,
+      "datasetBytes": 1476372
+    },
+    {
+      "peakRssKiB": 56520,
+      "seconds": 0.35779055699822493,
+      "cpuSeconds": 0.376537,
+      "runs": 8,
+      "games": 24,
+      "decisions": 1632,
+      "executionStatuses": {
+        "NORMAL": 24
+      },
+      "outcomeEligibleDecisions": 1632,
+      "censoredDecisions": 0,
+      "mode": "--validate-only",
+      "inputBytes": 9841272
+    },
+    {
+      "peakRssKiB": 56776,
+      "seconds": 0.4879773030115757,
+      "cpuSeconds": 0.502276,
+      "runs": 8,
+      "games": 24,
+      "decisions": 1632,
+      "executionStatuses": {
+        "NORMAL": 24
+      },
+      "outcomeEligibleDecisions": 1632,
+      "censoredDecisions": 0,
+      "mode": "--output-dir",
+      "inputBytes": 9841272,
+      "datasetBytes": 11810976
+    },
+    {
+      "peakRssKiB": 185060,
+      "seconds": 1.9232540560187772,
+      "cpuSeconds": 1.932702,
+      "runs": 32,
+      "games": 96,
+      "decisions": 6528,
+      "executionStatuses": {
+        "NORMAL": 96
+      },
+      "outcomeEligibleDecisions": 6528,
+      "censoredDecisions": 0,
+      "mode": "--validate-only",
+      "inputBytes": 39365111
+    },
+    {
+      "peakRssKiB": 186080,
+      "seconds": 2.101966783986427,
+      "cpuSeconds": 2.116269,
+      "runs": 32,
+      "games": 96,
+      "decisions": 6528,
+      "executionStatuses": {
+        "NORMAL": 96
+      },
+      "outcomeEligibleDecisions": 6528,
+      "censoredDecisions": 0,
+      "mode": "--output-dir",
+      "inputBytes": 39365111,
+      "datasetBytes": 47248596
+    }
+  ],
+  "longGames": [
+    {
+      "peakRssKiB": 18232,
+      "seconds": 0.03878026900929399,
+      "cpuSeconds": 0.053533,
+      "runs": 1,
+      "games": 1,
+      "decisions": 1000,
+      "executionStatuses": {
+        "NORMAL": 1
+      },
+      "outcomeEligibleDecisions": 1000,
+      "censoredDecisions": 0,
+      "mode": "--validate-only",
+      "inputBytes": 647598
+    },
+    {
+      "peakRssKiB": 31800,
+      "seconds": 0.10740940200048499,
+      "cpuSeconds": 0.121571,
+      "runs": 1,
+      "games": 1,
+      "decisions": 4000,
+      "executionStatuses": {
+        "NORMAL": 1
+      },
+      "outcomeEligibleDecisions": 4000,
+      "censoredDecisions": 0,
+      "mode": "--validate-only",
+      "inputBytes": 2594598
+    },
+    {
+      "peakRssKiB": 68536,
+      "seconds": 0.3061834789987188,
+      "cpuSeconds": 0.32038799999999995,
+      "runs": 1,
+      "games": 1,
+      "decisions": 12000,
+      "executionStatuses": {
+        "NORMAL": 1
+      },
+      "outcomeEligibleDecisions": 12000,
+      "censoredDecisions": 0,
+      "mode": "--validate-only",
+      "inputBytes": 7790604
+    }
+  ],
+  "context": {
+    "exporterRevision": "c48fd2e89ec913d08d97a508cd12ef12927c921f",
+    "command": "python3 tools/decision-records/hardening/measure_schema.py exporter /workspace/forge /workspace/work/action-detail-completion/modal-red.decisions.jsonl",
+    "inputSha256": "3595ae22b14dec2e389fbef7df1ad454b09165d3baf2ea14078b9f30e57e296d",
+    "pythonVersion": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "note": "Single-process samples; each workload uses a fresh subprocess. The exporter source matches this commit; timing is not a throughput guarantee."
+  }
+}

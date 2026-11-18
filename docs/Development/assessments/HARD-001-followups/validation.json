@@ -1,0 +1,56 @@
+{
+  "simple": {
+    "games": 3,
+    "decisions": 173,
+    "status": "NORMAL",
+    "fullFilteredDatasetEqual": true,
+    "pregameShufflesPreserved": true,
+    "outcomeEligibleDecisions": 173,
+    "censoredDecisions": 0,
+    "sourceSha256": {
+      "simple-full.jsonl": "b37888981a64e13cfc252e010c8b6da17db4176d472fc2ae7000cb2a7bff2393",
+      "simple-decisions.jsonl": "f630b8545cb2f12b0375623996ccb77cf19e1992cefb3e1f9978e96b4578080f"
+    }
+  },
+  "commander": {
+    "games": 1,
+    "decisions": 49,
+    "status": "NORMAL",
+    "fullFilteredDatasetEqual": true,
+    "pregameShufflesPreserved": true,
+    "outcomeEligibleDecisions": 49,
+    "censoredDecisions": 0,
+    "sourceSha256": {
+      "commander-full.jsonl": "9593f09bae7c89eba829fb7d5ff2570b93c12409f5ef65ae67daa493d28f1f00",
+      "commander-decisions.jsonl": "419f4ddc919a26ab2f063442b2ca064f4a4ea99154a8948797928547b29b1021"
+    }
+  },
+  "exception": {
+    "games": 1,
+    "decisions": 1,
+    "status": "EXCEPTION",
+    "fullFilteredDatasetEqual": true,
+    "pregameShufflesPreserved": null,
+    "outcomeEligibleDecisions": 0,
+    "censoredDecisions": 1,
+    "sourceSha256": {
+      "exception-full.jsonl": "33e452579b27694bdb63c698f8db41477be2f8735fc4826f5863d5c401160e71",
+      "exception-decisions.jsonl": "12b1347c2ca627e5afd3a1ac0a79b3772e7132e555e5676fa0b89b9ebda03c04"
+    }
+  },
+  "productionRevision": "6717724d55a6f4ee428dcc53334675dd4a89f2b0",
+  "workingTreeDirty": true,
+  "javaTests": {
+    "desktop": 2398,
+    "desktopSkipped": 6,
+    "core": 23,
+    "game": 23,
+    "failures": 0,
+    "errors": 0
+  },
+  "pythonTests": {
+    "tests": 46,
+    "failures": 0,
+    "errors": 0
+  }
+}

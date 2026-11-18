@@ -1,0 +1,4 @@
+ordinary selected=4 original=null actual=6 stack=1 indices=1/2/4/5 addedAction="1:1:0" terminal="SUCCEEDED" reason="STACKED" filteredAddition=true
+granted selected=13 original=11 actual=14 stack=2 indices=1/2/4/5 addedAction="1:1:0" terminal="SUCCEEDED" reason="STACKED" filteredAddition=true
+nested selected=19 original=null actual=21 stack=3 indices=1/2/4/5 addedAction=null terminal="UNOBSERVED" reason="NO_STACK_ENTRY_OBSERVED" filteredAddition=false
+Flush failures=1, delegate closed=true

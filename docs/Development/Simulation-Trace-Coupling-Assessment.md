@@ -2,6 +2,8 @@
 
 Assessment date: 2026-11-18. Production baseline: `f2bc148cecf6bae1a499889a8a02551c0f24509e` on `goldfish-trace`. **Complete: retain the architecture and version-1 wire format, with targeted correctness, lifetime, and exporter follow-ups.** This assessment does not declare those follow-ups fixed. No production behavior or schemas were changed for this review.
 
+The findings and measurements below describe that baseline. Subsequent fixes are tracked in [the implementation follow-up](#implementation-follow-up-2026-11-18); historical evidence is preserved.
+
 ## Decision
 
 The dependency on *live execution identity and delivery timing* has demonstrated costs. A real Necrotic Ooze activation loses its decision link because an existing engine accessor returns a transitive original rather than the selected intermediate ability. Some scalar correlations and pending ability aliases outlive their useful execution scope. Those are concrete reasons to harden the boundary before expanding instrumentation.
@@ -171,9 +173,38 @@ Changing engine IDs touches recorder maps, runtime aliases, collector references
 | HARD-006: dispatch/capture contract | P2, before broader callback/async use | Define supported dispatch contexts; retain the nested-dispatch reproduction; choose commit-time immutable context/snapshots if reentrant delivery is supported. Do not "fix" this by breaking engine ordering or weakening copy attribution |
 | HARD-007: bidirectional wire consistency | P2 | Reject contradictory actual IDs regardless of which correlated row is encountered first (or explicitly reject unsupported ordering), while keeping legitimate legacy/partial missing-event cases explicit |
 
-Source-only concerns (including a concurrent index race) remain unproven hypotheses, not completed defect findings. Filtered-only materialization and a shared identity builder are opportunities, not mandatory rewrites. HARD-001 is complete with this assessment, reproducible tools, measured evidence and these bounded follow-ups recorded; none of HARD-002–007 is closed by this document.
+Source-only concerns (including a concurrent index race) remain unproven hypotheses, not completed defect findings. Filtered-only materialization and a shared identity builder are opportunities, not mandatory rewrites. The original HARD-001 assessment recorded these bounded follow-ups without closing them; subsequent implementation status appears below.
 
 Every follow-up must preserve pregame shuffles before `GAME_STARTED`, copied/nullable attribution, counter/removal and bulk-clear ordering, cancellation/exception visibility, and full/filtered projection parity. Add tests of the affected unit contracts and real boundaries, rather than tests solely for coverage counts.
+
+## Implementation follow-up (2026-11-18)
+
+These changes keep the V1 wire format and engine event ordering. They repair branch-specific recording/export behavior; the Ooze fixture already executed correctly in the rules engine.
+
+| Item | Implemented behavior | Remaining scope |
+| --- | --- | --- |
+| HARD-002 | Match actual or immediate execution-copy predecessor against explicit selected/transformed aliases; keep transitive `getOriginalAbility()` semantics. Real Ooze/Archivist reaches `SUCCEEDED/STACKED`; siblings and copies of unselected grants do not inherit a selected template's token. | Complete for the supported execution path; deferred dispatch is HARD-006. |
+| HARD-003 | After authoritative finish, clear collector ledgers, disable recording and retire every registered AI player's aliases, including eliminated players. Cleanup runs after sink failure, late intake cannot revive state, and writer close still reaches its delegate after explicit flush failure. | Safe bounds for unclassified removals during a game remain open. |
+| HARD-004 | Accept available `EXCEPTION` decisions and diagnostics without requiring a normal `GAME_FINISHED` or outcome, while retaining authoritative execution/run boundaries, start requirements for decisions, identity validation and censoring. | Complete; normal/timeout validation stays strict. |
+| HARD-005 | Use a seen-ID set and serialize output rows incrementally after complete-input validation. | Loaded run graphs and dataset rows still scale with the corpus; bounded/spooled processing remains open. |
+| HARD-006 | Preserve the deliberately nested-dispatch reproduction and its explicit `UNOBSERVED` result. | Open: immutable commit-time capture for reentrant/async delivery. |
+| HARD-007 | Compare the terminal actual ability/stack tuple with its addition in either arrival order; retain legitimate terminal-first streams and reject contradictory IDs. | Complete. |
+
+HARD-002 commits: `9e6d425eb19`, `4c7e3ee65eb`. HARD-003: `af3eb3cc44a`, `6717724d55a` (eliminated-player regression and updated mock fixtures). HARD-004: `fe0927516e0`. HARD-005: `c48fd2e89ec`. HARD-007: `0ef72c7e6d4`.
+
+The repeated-input exporter benchmark now peaks at 186,080 KiB for the 32-copy full export, versus the baseline's 372,520 KiB. Validate-only remains comparable (185,060 versus 185,056 KiB), consistent with retaining parsed graphs. The 12k pass-decision fixture uses 0.320 CPU seconds versus 10.735 at baseline. These are single-process samples, not throughput guarantees. All six exported files on the real three-game input are byte-identical across the scaling change. See [follow-up exporter measurements](assessments/HARD-001-followups/exporter.json).
+
+The final full `forge-gui-desktop -am test` reactor passes: 2,398 desktop cases (six skipped), plus 23 core and 23 game cases, with zero failures/errors. All 46 Python exporter tests pass. Regressions exercise real grants/copies and unrelated lineage, healthy/failed terminal cleanup with an eliminated player and late intake, writer failure, missing exceptional finishes, and consistent/contradictory terminal-first identities. The first full pass exposed unstubbed player collections in older mocked fixtures; those now supply the collection required by the new lifecycle contract, while the real-game regression verifies actual alias retirement.
+
+Fresh CLI checks completed three constructed games (seed 7451) and one regular Doctor Who/Ur-Dragon Commander game (seed 31002), with Monte Carlo disabled and both outputs enabled. All four games completed normally, producing 222 validated decisions. Full/filtered dataset rows match exactly, and every full game retains shuffles before `GAME_STARTED`. These are output-integrity checks, not deck-strength evidence. The real-runner exception probe exports one censored decision in each stream without a `GAME_FINISHED`, and the writer probe reports one flush failure with its delegate closed.
+
+The original retention method was rerun for 1,000 operations on each removal path, with a never-started choice injected before finalization. After authoritative finish, all collector ledgers and pending tracker counts are zero. Unclassified removals still retain 1,000 links before finish; afterward the empty map's backing storage is 8,272 reachable bytes, versus 192,272 with entries. Clearing entries does not shrink that backing array. See [correctness results](assessments/HARD-001-followups/correctness-probes.txt), [retention measurements](assessments/HARD-001-followups/retention.json), and [validation summary and input hashes](assessments/HARD-001-followups/validation.json). Raw probe/CLI logs and traces remain under `/workspace/work/hard-followups`.
+
+The remaining work has distinct boundaries:
+
+- **HARD-003 within-game lifetime:** audit removal/counter/clear call sites and capture a reliable removal classification or intent at mutation time before evicting historical links. Immediate removal or next-event expiry would break delayed counter attribution. Terminal retirement does not bound a single exceptionally long game.
+- **HARD-005 bounded processing:** spool validated per-game/per-run data privately, aggregate coverage without retaining every row, then publish only after all inputs validate. Preserve duplicate-run checks, source hashes, example selection and outcome censoring. An eventual `ABORTED` run censors even earlier games, so game completion alone is insufficient to finalize labels.
+- **HARD-006 capture:** the supported path is serialized game-worker execution initiated outside an EventBus subscriber. Do not rely on subscriber ordering or live aliases for queued reentrant/async delivery. Supporting those paths requires immutable action context and snapshots captured at the engine commit boundary, explicit copy/rollout propagation rules and an ordered handoff. Collector-wide locking cannot repair context already retired before delivery and risks lock inversion. Keep the failing nested reproduction until that contract is implemented; no ordinary CLI occurrence or concurrent index race was established.
 
 ## Reproduction and evidence
 
@@ -181,4 +212,4 @@ See [development probe instructions](../../tools/decision-records/hardening/READ
 
 Primary evidence: [correctness probe output](assessments/HARD-001/correctness-probes.txt), [manifest](assessments/HARD-001/manifest.json), [controlled allocation/retention](assessments/HARD-001/controlled.json), [gameplay measurements and checks](assessments/HARD-001/gameplay.json), [wire counterfactual](assessments/HARD-001/schema-size-measurements.json), [exporter scaling](assessments/HARD-001/schema-exporter-measurements.json).
 
-Validation: all 44 existing exporter tests pass; Java probes compile and run against the built desktop fixture classes; all 12 primary gameplay traces validate with the current exporter. No new coverage-only unit tests or production changes were introduced. The previously passing full reactor was not rerun for documentation/development-only probes.
+Baseline assessment validation: all 44 existing exporter tests passed; Java probes compiled and ran against the built desktop fixture classes; all 12 primary gameplay traces validated with the baseline exporter. No new coverage-only unit tests or production changes were introduced by the assessment. The previously passing full reactor was not rerun for that documentation/development-only commit.
