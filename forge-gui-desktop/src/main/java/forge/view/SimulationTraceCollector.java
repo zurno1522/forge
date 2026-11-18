@@ -229,7 +229,7 @@ final class SimulationTraceCollector {
             completedStacks.clear();
             unstartedActions.clear();
             game.setRecordAiDecisions(false);
-            for (final Player player : game.getPlayers()) {
+            for (final Player player : game.getRegisteredPlayers()) {
                 if (player.getController() instanceof PlayerControllerAi ai) { ai.getAi().retireRecordedActions(); }
             }
         }

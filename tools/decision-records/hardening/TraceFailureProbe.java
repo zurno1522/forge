@@ -77,8 +77,8 @@ public final class TraceFailureProbe extends AITest {
                 failures++;
             }
         }
-        if (failures != 2 || delegate.closed) {
-            throw new IllegalStateException("flush failures did not leave the delegate open");
+        if (failures != 1 || !delegate.closed) {
+            throw new IllegalStateException("failed flush must still close the delegate exactly once");
         }
         System.out.printf("Flush failures=%d, delegate closed=%s%n", failures, delegate.closed);
     }

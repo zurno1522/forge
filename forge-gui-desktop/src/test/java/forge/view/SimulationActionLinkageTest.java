@@ -194,6 +194,8 @@ public class SimulationActionLinkageTest extends AITest {
             final var actionsField = tracker.getClass().getDeclaredField("actions");
             actionsField.setAccessible(true);
             Assert.assertEquals(((List<?>) actionsField.get(tracker)).size(), 1);
+            game.getPlayers().remove(ai); // Eliminated players still own trackers needing retirement.
+            Assert.assertTrue(game.getRegisteredPlayers().contains(ai));
             if (!healthy) {
                 trace.decisionWriter.close();
                 trace.decisionClosed = true;

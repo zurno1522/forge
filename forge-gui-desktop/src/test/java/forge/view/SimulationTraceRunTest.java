@@ -5,6 +5,7 @@ import com.google.gson.JsonParser;
 import forge.game.Game;
 import forge.game.GameRules;
 import forge.game.GameType;
+import forge.game.player.PlayerCollection;
 import forge.util.Localizer;
 import org.mockito.Mockito;
 import org.testng.Assert;
@@ -43,7 +44,7 @@ public class SimulationTraceRunTest {
         try {
             try (SimulationTraceRun run = open(file)) {
                 for (final String status : statuses) {
-                    final SimulationTraceCollector collector = run.beginGame(Mockito.mock(Game.class), null, null, null);
+                    final SimulationTraceCollector collector = run.beginGame(game(), null, null, null);
                     run.finishGame(collector, status,
                             "EXCEPTION".equals(status) ? new IllegalStateException("game failed") : null);
                 }
@@ -68,7 +69,7 @@ public class SimulationTraceRunTest {
         final Path file = Files.createTempFile("forge-sim-run-", ".jsonl");
         try {
             try (SimulationTraceRun run = open(file)) {
-                final SimulationTraceCollector collector = run.beginGame(Mockito.mock(Game.class), null, null, null);
+                final SimulationTraceCollector collector = run.beginGame(game(), null, null, null);
                 run.finishGame(collector, "TIMEOUT", null);
                 run.finishAborted();
                 run.finishNormal();
@@ -88,7 +89,7 @@ public class SimulationTraceRunTest {
         try {
             final IOException failure = new IOException("subscriber failed", new NullPointerException("card type"));
             try (SimulationTraceRun run = open(file)) {
-                run.beginGame(Mockito.mock(Game.class), null, null, null);
+                run.beginGame(game(), null, null, null);
                 final SimulationTraceCollector collector = Mockito.mock(SimulationTraceCollector.class);
                 Mockito.doThrow(failure).when(collector).executionFinished("NORMAL", null);
 
@@ -103,6 +104,12 @@ public class SimulationTraceRunTest {
         } finally {
             Files.deleteIfExists(file);
         }
+    }
+
+    private static Game game() {
+        final Game game = Mockito.mock(Game.class);
+        Mockito.when(game.getRegisteredPlayers()).thenReturn(new PlayerCollection());
+        return game;
     }
 
     private static SimulationTraceRun open(final Path file) {

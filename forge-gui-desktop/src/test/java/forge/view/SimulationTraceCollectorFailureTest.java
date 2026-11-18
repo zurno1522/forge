@@ -7,6 +7,7 @@ import forge.game.card.CardView;
 import forge.game.event.GameEventCardAttachment;
 import forge.game.event.GameEventShuffle;
 import forge.game.phase.PhaseHandler;
+import forge.game.player.PlayerCollection;
 import forge.game.player.PlayerView;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -115,6 +116,7 @@ public class SimulationTraceCollectorFailureTest {
 
     private static SimulationTraceCollector collector(final SimulationTraceWriter writer) {
         final Game game = mock(Game.class);
+        when(game.getRegisteredPlayers()).thenReturn(new PlayerCollection());
         when(game.getPhaseHandler()).thenReturn(mock(PhaseHandler.class));
         return new SimulationTraceCollector(game, writer, 1, Map.of(), null, null, null);
     }
