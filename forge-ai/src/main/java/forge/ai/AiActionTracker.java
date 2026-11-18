@@ -81,12 +81,11 @@ public final class AiActionTracker {
 
     private Attempt startedAttempt(final SpellAbility actual) {
         if (!game.isRecordingAiDecisions() || actual == null || actual.isCopied() || actual.isTrigger()) { return null; }
-        final Set<SpellAbility> visited = Collections.newSetFromMap(new IdentityHashMap<>());
-        for (SpellAbility predecessor = actual; predecessor != null && visited.add(predecessor);
-                predecessor = predecessor.getImmediateOriginalAbility()) {
-            for (final Attempt attempt : actions) {
-                if (attempt.started && attempt.aliases.contains(predecessor)) { return attempt; }
-            }
+        // MagicStack's execution copy points directly to the selected/transformed object.
+        // Walking farther would cross rules-grant ancestry and admit unselected grants.
+        for (final Attempt attempt : actions) {
+            if (attempt.started && (attempt.aliases.contains(actual)
+                    || attempt.aliases.contains(actual.getImmediateOriginalAbility()))) { return attempt; }
         }
         return null;
     }

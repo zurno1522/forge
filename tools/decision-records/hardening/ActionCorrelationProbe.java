@@ -102,7 +102,8 @@ public final class ActionCorrelationProbe extends AITest {
                 "unexpected emitter order");
         require(added.get("stackId").getAsLong() == stackId && added.get("abilityId").getAsLong() == actualId,
                 "wrong live stack identity");
-        final boolean missing = granted || nested;
+        // HARD-002 repairs the granted activation; HARD-006 still covers deferred dispatch.
+        final boolean missing = nested;
         require(added.get("actionId").isJsonNull() == missing, "unexpected action linkage");
         require((!terminalValues.has("stackId")) == missing, "unexpected terminal stackId");
         require((!terminalValues.has("executedAbilityId")) == missing, "unexpected terminal executedAbilityId");

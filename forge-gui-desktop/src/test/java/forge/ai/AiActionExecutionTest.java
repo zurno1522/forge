@@ -79,12 +79,20 @@ public class AiActionExecutionTest extends AITest {
         final SpellAbility sibling = template.copy();
         sibling.setOriginalAbility(template);
         Assert.assertNull(brain.getActionReference(sibling));
+        final SpellAbility unselectedExecution = sibling.copy();
+        unselectedExecution.setOriginalAbility(sibling);
+        Assert.assertNull(brain.getActionReference(unselectedExecution));
         final SpellAbility execution = selected.copy();
         execution.setOriginalAbility(selected);
         Assert.assertNotNull(brain.getActionReference(execution));
         execution.setCopied(true);
         Assert.assertNull(brain.getActionReference(execution));
         brain.actionTracker().finish(attempt, "FAILED", "TEST_FINISHED");
+        final Events next = record(game, ai, template);
+        final var ordinary = brain.actionTracker().begin(template);
+        Assert.assertNull(brain.getActionReference(unselectedExecution), "Grant ancestry must not match a selected template");
+        brain.actionTracker().finish(ordinary, "FAILED", "TEST_FINISHED");
+        Assert.assertEquals(next.executions.size(), 2);
     }
 
     @Test(groups = {"UnitTest", "fast"})
