@@ -634,4 +634,18 @@ class ExportTests(unittest.TestCase):
                 with self.assertRaises(module.InvalidData): module.load_run(self.write(rows))
 
 
+    def test_exception_after_selection_can_export_without_normal_engine_finish(self):
+        for outcome_present in (True, False):
+            rows = linked_fixture('ABANDONED', 'EXCEPTION')
+            rows = [r for r in rows if r['type'] != 'GAME_FINISHED' and (outcome_present or r['type'] != 'GAME_OUTCOME')]
+            for index, row in enumerate(rows[1:-1], 1): row.update(game=1, eventIndex=index)
+            dataset = list(module.dataset_rows(module.load_run(self.write(rows))))
+            self.assertEqual(dataset[0]['executionStatus'], 'EXCEPTION')
+            self.assertFalse(dataset[0]['outcomeEligible'])
+            self.assertIsNone(dataset[0]['outcomeLabel'])
+        rows = [r for r in fixture() if r['type'] != 'GAME_FINISHED']
+        for index, row in enumerate(rows[1:-1], 1): row.update(game=1, eventIndex=index)
+        with self.assertRaises(module.InvalidData): module.load_run(self.write(rows))
+
+
 if __name__=='__main__':unittest.main()

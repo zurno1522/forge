@@ -394,12 +394,12 @@ def load_run(path):
         counts[execution['status']] += 1
         if execution['status'] == 'NORMAL':
             require(all(a['terminal'] is not None for a in game['actions'].values()), f'{path}: normally completed game has unfinished selected actions')
-        if execution['status'] != 'EXCEPTION' or game['decisions']:
+        if execution['status'] != 'EXCEPTION':
             require(game['finish'] is not None and outcome is not None, f'{path}: game {number} lacks outcome/finish')
             # A cancellation can finalize a draw during setup, before GAME_STARTED is emitted.
             # There are no decisions to label, but the attempted game's administrative result matters.
-            if execution['status'] == 'NORMAL' or game['decisions']:
-                require(game['start'] is not None, f'{path}: game {number} lacks start')
+        if execution['status'] == 'NORMAL' or game['decisions']:
+            require(game['start'] is not None, f'{path}: game {number} lacks start')
         if outcome is not None:
             require(isinstance(outcome.get('draw'), bool) and isinstance(outcome.get('winners'), list), f'{path}: malformed outcome')
             require(outcome['draw'] == (not outcome['winners']), f'{path}: draw/winner inconsistency')
