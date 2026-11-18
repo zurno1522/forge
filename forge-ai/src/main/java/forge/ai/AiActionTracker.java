@@ -17,6 +17,12 @@ import java.util.Set;
 public final class AiActionTracker {
     private final Game game;
     private final List<Attempt> actions = new ArrayList<>();
+    private boolean retired;
+
+    synchronized void retire() {
+        retired = true;
+        actions.clear();
+    }
 
     static final class Attempt {
         private final Map<String, Object> identity;
@@ -35,7 +41,7 @@ public final class AiActionTracker {
     }
 
     synchronized void selected(final AiDecisionEvent event, final List<SpellAbility> chosen) {
-        if (chosen == null) { return; }
+        if (retired || chosen == null) { return; }
         final List<?> selected = (List<?>) event.data().get("selectedActions");
         for (int index = 0; index < chosen.size(); index++) {
             final Map<?, ?> action = (Map<?, ?>) selected.get(index);
@@ -53,7 +59,7 @@ public final class AiActionTracker {
     }
 
     synchronized Attempt begin(final SpellAbility sa) {
-        if (!game.isRecordingAiDecisions()) { return null; }
+        if (retired || !game.isRecordingAiDecisions()) { return null; }
         // Nested plays during payment/resolution are not the next selected action in the priority loop.
         if (actions.stream().anyMatch(attempt -> attempt.started)) { return null; }
         for (final Attempt attempt : actions) {

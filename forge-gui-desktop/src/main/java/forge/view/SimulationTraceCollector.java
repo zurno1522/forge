@@ -55,6 +55,7 @@ final class SimulationTraceCollector {
     private final Map<String, Map<String, Object>> unstartedActions = new LinkedHashMap<>();
     private long eventIndex = 0;
     private IOException failure;
+    private volatile boolean closed;
 
     SimulationTraceCollector(final Game game, final SimulationTraceWriter writer, final int gameNumber,
             final Map<LobbyPlayer, Integer> participantIds, final Integer matchId,
@@ -78,7 +79,7 @@ final class SimulationTraceCollector {
 
     @Subscribe
     public void onGameEvent(final GameEvent event) {
-        if (failure != null) {
+        if (closed || failure != null) {
             return;
         }
         if (writer == null && !(event instanceof GameEventGameStarted)
@@ -172,7 +173,7 @@ final class SimulationTraceCollector {
 
     @Subscribe
     public void onAiDecision(final AiDecisionEvent event) {
-        if (failure != null) {
+        if (closed || failure != null) {
             return;
         }
         try {
@@ -199,7 +200,7 @@ final class SimulationTraceCollector {
 
     @Subscribe
     public void onAiActionExecution(final AiActionExecutionEvent event) {
-        if (failure != null) { return; }
+        if (closed || failure != null) { return; }
         try {
             final Map<String, Object> record = scoped("AI_ACTION_EXECUTION", true);
             record.put("execution", event.data());
@@ -217,6 +218,24 @@ final class SimulationTraceCollector {
     }
 
     void executionFinished(final String status, final Throwable error) throws IOException {
+        if (closed) { return; }
+        try {
+            finishOutput(status, error);
+        } finally {
+            // This boundary is called after game-worker termination. GAME_FINISHED is too early.
+            closed = true;
+            abilityToStack.clear();
+            stackActions.clear();
+            completedStacks.clear();
+            unstartedActions.clear();
+            game.setRecordAiDecisions(false);
+            for (final Player player : game.getPlayers()) {
+                if (player.getController() instanceof PlayerControllerAi ai) { ai.getAi().retireRecordedActions(); }
+            }
+        }
+    }
+
+    private void finishOutput(final String status, final Throwable error) throws IOException {
         checkHealthy();
         // GAME_FINISHED may precede a late choice/attempt during cancellation. Only this boundary
         // establishes that an action which never started will not be attempted by the game worker.

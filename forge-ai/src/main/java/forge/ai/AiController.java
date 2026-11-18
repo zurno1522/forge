@@ -161,6 +161,11 @@ public class AiController {
 
     AiActionTracker actionTracker() { return actionTracker; }
 
+    /** Called only after the real game worker has terminated, without holding observer locks. */
+    public void retireRecordedActions() {
+        if (actionTracker != null) { actionTracker.retire(); }
+    }
+
     /** Read-only identity lookup while a recorded selection is being executed. */
     public AiActionReference getActionReference(final SpellAbility actual) {
         return actionTracker == null ? null : actionTracker.referenceFor(actual);

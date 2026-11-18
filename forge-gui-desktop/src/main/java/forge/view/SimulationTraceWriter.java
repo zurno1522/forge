@@ -18,6 +18,7 @@ import java.util.Map;
  */
 final class SimulationTraceWriter implements AutoCloseable {
     private final BufferedWriter writer;
+    private boolean closed;
 
     private SimulationTraceWriter(final BufferedWriter writer) {
         this.writer = writer;
@@ -44,8 +45,13 @@ final class SimulationTraceWriter implements AutoCloseable {
 
     @Override
     public synchronized void close() throws IOException {
-        writer.flush();
-        writer.close();
+        if (closed) { return; }
+        IOException failure = null;
+        try { writer.flush(); } catch (IOException e) { failure = e; }
+        try { writer.close(); } catch (IOException e) {
+            if (failure == null) { failure = e; } else { failure.addSuppressed(e); }
+        } finally { closed = true; }
+        if (failure != null) { throw failure; }
     }
 
     private static void appendJson(final Appendable out, final Object value) throws IOException {

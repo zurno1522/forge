@@ -173,6 +173,58 @@ public class SimulationActionLinkageTest extends AITest {
         return rows.stream().filter(r -> r.get("type").getAsString().equals(type)).findFirst().orElseThrow();
     }
 
+    @Test(dataProvider = "outputModes", groups = {"UnitTest", "fast"})
+    public void authoritativeFinishRetiresRemovedLinksAndPendingAliasesEvenAfterSinkFailure(final boolean healthy) throws Exception {
+        final Game game = initAndCreateGame();
+        final Player ai = game.getPlayers().get(1);
+        try (Trace trace = new Trace(game, false)) {
+            final SpellAbility sa = ability(game, "Memnite");
+            RecordedSelectionTestSupport.select(ai, sa);
+            ((PlayerControllerAi) ai.getController()).playChosenSpellAbility(sa);
+            game.getStack().remove(game.getStack().peek());
+            final var mapField = SimulationTraceCollector.class.getDeclaredField("stackActions");
+            mapField.setAccessible(true);
+            Assert.assertEquals(((Map<?, ?>) mapField.get(trace.collector)).size(), 1);
+            final SpellAbility pending = ability(game, "Memnite");
+            RecordedSelectionTestSupport.select(ai, pending);
+            final var brain = ((PlayerControllerAi) ai.getController()).getAi();
+            final var trackerField = brain.getClass().getDeclaredField("actionTracker");
+            trackerField.setAccessible(true);
+            final Object tracker = trackerField.get(brain);
+            final var actionsField = tracker.getClass().getDeclaredField("actions");
+            actionsField.setAccessible(true);
+            Assert.assertEquals(((List<?>) actionsField.get(tracker)).size(), 1);
+            if (!healthy) {
+                trace.decisionWriter.close();
+                trace.decisionClosed = true;
+                Assert.expectThrows(java.io.IOException.class, () -> trace.collector.executionFinished("TIMEOUT", null));
+            } else { trace.collector.executionFinished("TIMEOUT", null); }
+            Assert.assertTrue(((Map<?, ?>) mapField.get(trace.collector)).isEmpty());
+            Assert.assertTrue(((List<?>) actionsField.get(tracker)).isEmpty());
+            Assert.assertFalse(game.isRecordingAiDecisions());
+            final long next = trace.collector.nextEventIndex();
+            RecordedSelectionTestSupport.select(ai, pending); // Model a late extension producer.
+            Assert.assertTrue(((List<?>) actionsField.get(tracker)).isEmpty());
+            Assert.assertEquals(trace.collector.nextEventIndex(), next);
+        }
+    }
+
+    @Test(groups = {"UnitTest", "fast"})
+    public void writerCloseStillClosesDelegateWhenExplicitFlushFails() throws Exception {
+        final boolean[] closed = { false };
+        final java.io.Writer delegate = new java.io.Writer() {
+            @Override public void write(char[] data, int offset, int length) { }
+            @Override public void flush() throws java.io.IOException { throw new java.io.IOException("flush failure"); }
+            @Override public void close() { closed[0] = true; }
+        };
+        final var constructor = SimulationTraceWriter.class.getDeclaredConstructor(java.io.BufferedWriter.class);
+        constructor.setAccessible(true);
+        final SimulationTraceWriter writer = constructor.newInstance(new java.io.BufferedWriter(delegate));
+        Assert.expectThrows(java.io.IOException.class, writer::close);
+        Assert.assertTrue(closed[0]);
+        writer.close();
+    }
+
     @DataProvider
     public Object[][] outputModes() { return new Object[][] { {true}, {false} }; }
 
