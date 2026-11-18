@@ -1,0 +1,646 @@
+[
+  {
+    "name": "action-details-red.decisions.jsonl",
+    "counts": {
+      "RUN_STARTED": 1,
+      "GAME_STARTED": 3,
+      "AI_DECISION": 170,
+      "AI_ACTION_EXECUTION": 142,
+      "combinedRows": 281,
+      "executionIdentity": 142,
+      "LAND_PLAYED": 37,
+      "engineDecisionId": 139,
+      "STACK_ADDED": 34,
+      "stackedExecution": 34,
+      "stackedDifferentAbilityId": 3,
+      "stackIdentity": 102,
+      "STACK_RESOLVED": 34,
+      "STACK_REMOVED": 34,
+      "GAME_OUTCOME": 3,
+      "GAME_FINISHED": 3,
+      "GAME_EXECUTION_FINISHED": 3,
+      "RUN_FINISHED": 1
+    },
+    "observationBytes": 520325,
+    "groups": {
+      "combined": [
+        [
+          878852,
+          29859
+        ],
+        [
+          861776,
+          28465
+        ]
+      ],
+      "observationContext": [
+        [
+          793474,
+          20401
+        ],
+        [
+          786262,
+          19899
+        ]
+      ],
+      "combinedRows": [
+        [
+          82144,
+          5191
+        ],
+        [
+          65068,
+          3993
+        ]
+      ],
+      "executionIdentity": [
+        [
+          39161,
+          2475
+        ],
+        [
+          28125,
+          1672
+        ]
+      ],
+      "engineDecisionId": [
+        [
+          42983,
+          2823
+        ],
+        [
+          40221,
+          2607
+        ]
+      ],
+      "stackIdentity": [
+        [
+          20648,
+          1944
+        ],
+        [
+          17370,
+          1521
+        ]
+      ]
+    }
+  },
+  {
+    "name": "action-details-red.trace.jsonl",
+    "counts": {
+      "RUN_STARTED": 1,
+      "SHUFFLE": 6,
+      "GAME_STARTED": 3,
+      "ZONE_CHANGE": 221,
+      "STARTING_HAND_FINALIZED": 6,
+      "TURN_BEGAN": 51,
+      "PHASE_CHANGED": 651,
+      "AI_DECISION": 170,
+      "AI_ACTION_EXECUTION": 142,
+      "combinedRows": 281,
+      "executionIdentity": 142,
+      "LAND_PLAYED": 37,
+      "engineDecisionId": 139,
+      "ATTACKERS_DECLARED": 51,
+      "TURN_ENDED": 48,
+      "CARDS_DRAWN": 48,
+      "STACK_ADDED": 41,
+      "stackedExecution": 34,
+      "stackedDifferentAbilityId": 3,
+      "stackIdentity": 102,
+      "STACK_RESOLVED": 41,
+      "STACK_REMOVED": 41,
+      "CARD_TAPPED": 239,
+      "MANA_POOL_CHANGED": 175,
+      "BLOCKERS_DECLARED": 25,
+      "PLAYER_DAMAGED": 38,
+      "LIFE_LOST": 26,
+      "ENTITY_DAMAGED": 19,
+      "CARD_DESTROYED": 9,
+      "CARDS_SACRIFICED": 3,
+      "CARD_COUNTERS_CHANGED": 3,
+      "PLAYER_LOST": 3,
+      "GAME_OUTCOME": 3,
+      "GAME_FINISHED": 3,
+      "GAME_EXECUTION_FINISHED": 3,
+      "RUN_FINISHED": 1
+    },
+    "observationBytes": 520325,
+    "groups": {
+      "combined": [
+        [
+          1251786,
+          66682
+        ],
+        [
+          1234710,
+          64464
+        ]
+      ],
+      "observationContext": [
+        [
+          793474,
+          20401
+        ],
+        [
+          786262,
+          19899
+        ]
+      ],
+      "combinedRows": [
+        [
+          126044,
+          7285
+        ],
+        [
+          108968,
+          5928
+        ]
+      ],
+      "executionIdentity": [
+        [
+          39161,
+          2475
+        ],
+        [
+          28125,
+          1672
+        ]
+      ],
+      "engineDecisionId": [
+        [
+          86883,
+          4793
+        ],
+        [
+          84121,
+          4554
+        ]
+      ],
+      "stackIdentity": [
+        [
+          26957,
+          2381
+        ],
+        [
+          23679,
+          2024
+        ]
+      ]
+    }
+  },
+  {
+    "name": "doctor-urdragon-on.decisions.jsonl",
+    "counts": {
+      "RUN_STARTED": 1,
+      "GAME_STARTED": 1,
+      "AI_DECISION": 46,
+      "AI_ACTION_EXECUTION": 42,
+      "combinedRows": 81,
+      "executionIdentity": 42,
+      "LAND_PLAYED": 12,
+      "engineDecisionId": 39,
+      "STACK_ADDED": 9,
+      "stackedExecution": 9,
+      "stackedDifferentAbilityId": 1,
+      "stackIdentity": 27,
+      "STACK_RESOLVED": 9,
+      "STACK_REMOVED": 9,
+      "GAME_OUTCOME": 1,
+      "GAME_FINISHED": 1,
+      "GAME_EXECUTION_FINISHED": 1,
+      "RUN_FINISHED": 1
+    },
+    "observationBytes": 162535,
+    "groups": {
+      "combined": [
+        [
+          337690,
+          17598
+        ],
+        [
+          332675,
+          17185
+        ]
+      ],
+      "observationContext": [
+        [
+          303945,
+          11865
+        ],
+        [
+          301998,
+          11717
+        ]
+      ],
+      "combinedRows": [
+        [
+          24829,
+          2044
+        ],
+        [
+          19814,
+          1636
+        ]
+      ],
+      "executionIdentity": [
+        [
+          11626,
+          923
+        ],
+        [
+          8300,
+          634
+        ]
+      ],
+      "engineDecisionId": [
+        [
+          13203,
+          1276
+        ],
+        [
+          12426,
+          1197
+        ]
+      ],
+      "stackIdentity": [
+        [
+          5536,
+          735
+        ],
+        [
+          4624,
+          619
+        ]
+      ]
+    }
+  },
+  {
+    "name": "doctor-urdragon-on.trace.jsonl",
+    "counts": {
+      "RUN_STARTED": 1,
+      "SHUFFLE": 4,
+      "GAME_STARTED": 1,
+      "ZONE_CHANGE": 68,
+      "STARTING_HAND_FINALIZED": 2,
+      "TURN_BEGAN": 13,
+      "PHASE_CHANGED": 165,
+      "AI_DECISION": 46,
+      "AI_ACTION_EXECUTION": 42,
+      "combinedRows": 81,
+      "executionIdentity": 42,
+      "LAND_PLAYED": 12,
+      "engineDecisionId": 39,
+      "ATTACKERS_DECLARED": 13,
+      "TURN_ENDED": 12,
+      "CARDS_DRAWN": 13,
+      "CARD_TAPPED": 78,
+      "MANA_POOL_CHANGED": 74,
+      "LIFE_LOST": 11,
+      "LIFE_PAID": 4,
+      "STACK_ADDED": 19,
+      "stackedExecution": 9,
+      "stackedDifferentAbilityId": 1,
+      "stackIdentity": 27,
+      "STACK_RESOLVED": 19,
+      "STACK_REMOVED": 19,
+      "SCRY": 1,
+      "PLAYER_DAMAGED": 8,
+      "LIBRARY_SEARCHED": 1,
+      "CARD_COUNTERS_CHANGED": 3,
+      "BLOCKERS_DECLARED": 4,
+      "ENTITY_DAMAGED": 1,
+      "CARD_DESTROYED": 1,
+      "PLAYER_LOST": 1,
+      "GAME_OUTCOME": 1,
+      "GAME_FINISHED": 1,
+      "GAME_EXECUTION_FINISHED": 1,
+      "RUN_FINISHED": 1
+    },
+    "observationBytes": 162535,
+    "groups": {
+      "combined": [
+        [
+          478181,
+          29911
+        ],
+        [
+          473166,
+          29408
+        ]
+      ],
+      "observationContext": [
+        [
+          303945,
+          11865
+        ],
+        [
+          301998,
+          11717
+        ]
+      ],
+      "combinedRows": [
+        [
+          44343,
+          3392
+        ],
+        [
+          39328,
+          2973
+        ]
+      ],
+      "executionIdentity": [
+        [
+          11626,
+          923
+        ],
+        [
+          8300,
+          634
+        ]
+      ],
+      "engineDecisionId": [
+        [
+          32717,
+          2631
+        ],
+        [
+          31940,
+          2563
+        ]
+      ],
+      "stackIdentity": [
+        [
+          7733,
+          1276
+        ],
+        [
+          6821,
+          1170
+        ]
+      ]
+    }
+  },
+  {
+    "name": "modal-red.decisions.jsonl",
+    "counts": {
+      "RUN_STARTED": 1,
+      "GAME_STARTED": 3,
+      "AI_DECISION": 204,
+      "AI_ACTION_EXECUTION": 174,
+      "combinedRows": 339,
+      "executionIdentity": 174,
+      "LAND_PLAYED": 48,
+      "engineDecisionId": 165,
+      "STACK_ADDED": 39,
+      "stackedExecution": 39,
+      "stackedDifferentAbilityId": 2,
+      "stackIdentity": 117,
+      "STACK_RESOLVED": 39,
+      "STACK_REMOVED": 39,
+      "GAME_OUTCOME": 3,
+      "GAME_FINISHED": 3,
+      "GAME_EXECUTION_FINISHED": 3,
+      "RUN_FINISHED": 1
+    },
+    "observationBytes": 798776,
+    "groups": {
+      "combined": [
+        [
+          1230150,
+          41362
+        ],
+        [
+          1209485,
+          39684
+        ]
+      ],
+      "observationContext": [
+        [
+          1127283,
+          28457
+        ],
+        [
+          1118616,
+          27731
+        ]
+      ],
+      "combinedRows": [
+        [
+          99615,
+          6256
+        ],
+        [
+          78950,
+          4802
+        ]
+      ],
+      "executionIdentity": [
+        [
+          47976,
+          2945
+        ],
+        [
+          34404,
+          1978
+        ]
+      ],
+      "engineDecisionId": [
+        [
+          51639,
+          3434
+        ],
+        [
+          48365,
+          3173
+        ]
+      ],
+      "stackIdentity": [
+        [
+          23726,
+          2206
+        ],
+        [
+          19907,
+          1715
+        ]
+      ]
+    }
+  },
+  {
+    "name": "modal-red.trace.jsonl",
+    "counts": {
+      "RUN_STARTED": 1,
+      "SHUFFLE": 7,
+      "GAME_STARTED": 3,
+      "ZONE_CHANGE": 299,
+      "STARTING_HAND_FINALIZED": 6,
+      "TURN_BEGAN": 60,
+      "PHASE_CHANGED": 768,
+      "AI_DECISION": 204,
+      "AI_ACTION_EXECUTION": 174,
+      "combinedRows": 339,
+      "executionIdentity": 174,
+      "LAND_PLAYED": 48,
+      "engineDecisionId": 165,
+      "ATTACKERS_DECLARED": 60,
+      "TURN_ENDED": 57,
+      "CARDS_DRAWN": 61,
+      "CARD_TAPPED": 309,
+      "MANA_POOL_CHANGED": 196,
+      "STACK_ADDED": 46,
+      "stackedExecution": 39,
+      "stackedDifferentAbilityId": 2,
+      "stackIdentity": 117,
+      "STACK_RESOLVED": 46,
+      "STACK_REMOVED": 46,
+      "ENTITY_DAMAGED": 20,
+      "CARD_DESTROYED": 16,
+      "CARDS_DISCARDED": 4,
+      "CARDS_SACRIFICED": 4,
+      "BLOCKERS_DECLARED": 31,
+      "PLAYER_DAMAGED": 60,
+      "LIFE_LOST": 32,
+      "CARD_COUNTERS_CHANGED": 2,
+      "PLAYER_LOST": 3,
+      "GAME_OUTCOME": 3,
+      "GAME_FINISHED": 3,
+      "GAME_EXECUTION_FINISHED": 3,
+      "MULLIGAN": 1,
+      "RUN_FINISHED": 1
+    },
+    "observationBytes": 798776,
+    "groups": {
+      "combined": [
+        [
+          1687699,
+          83169
+        ],
+        [
+          1667034,
+          81262
+        ]
+      ],
+      "observationContext": [
+        [
+          1127283,
+          28457
+        ],
+        [
+          1118616,
+          27731
+        ]
+      ],
+      "combinedRows": [
+        [
+          153285,
+          9222
+        ],
+        [
+          132620,
+          7493
+        ]
+      ],
+      "executionIdentity": [
+        [
+          47976,
+          2945
+        ],
+        [
+          34404,
+          1978
+        ]
+      ],
+      "engineDecisionId": [
+        [
+          105309,
+          6108
+        ],
+        [
+          102035,
+          5816
+        ]
+      ],
+      "stackIdentity": [
+        [
+          31997,
+          2900
+        ],
+        [
+          28178,
+          2486
+        ]
+      ]
+    }
+  },
+  {
+    "name": "timeout.decisions.jsonl",
+    "counts": {
+      "RUN_STARTED": 1,
+      "GAME_STARTED": 1,
+      "AI_DECISION": 7,
+      "AI_ACTION_EXECUTION": 6,
+      "combinedRows": 9,
+      "executionIdentity": 6,
+      "LAND_PLAYED": 3,
+      "engineDecisionId": 3,
+      "GAME_OUTCOME": 1,
+      "GAME_FINISHED": 1,
+      "GAME_EXECUTION_FINISHED": 1,
+      "RUN_FINISHED": 1
+    },
+    "observationBytes": 16541,
+    "groups": {
+      "combined": [
+        [
+          41694,
+          5152
+        ],
+        [
+          41171,
+          5113
+        ]
+      ],
+      "observationContext": [
+        [
+          30976,
+          2512
+        ],
+        [
+          30682,
+          2484
+        ]
+      ],
+      "combinedRows": [
+        [
+          1923,
+          343
+        ],
+        [
+          1400,
+          268
+        ]
+      ],
+      "executionIdentity": [
+        [
+          1591,
+          304
+        ],
+        [
+          1125,
+          228
+        ]
+      ],
+      "engineDecisionId": [
+        [
+          332,
+          144
+        ],
+        [
+          275,
+          129
+        ]
+      ]
+    }
+  }
+]

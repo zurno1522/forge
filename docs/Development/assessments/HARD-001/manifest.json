@@ -1,0 +1,80 @@
+{
+  "productionBaseline": "f2bc148cecf6bae1a499889a8a02551c0f24509e",
+  "assessmentDate": "2026-11-18",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "cgroupCpuMax": "200000 100000",
+  "primaryArtifactDirectory": "/workspace/work/hard-001/assessment",
+  "sourcePreferencesSha256": "ae6639499ade589e090f0e2f9df5c361fb8bcee5b2752fd6aeee80d5f5d66644",
+  "decks": [
+    {
+      "name": "doctor-who.dck",
+      "sha256": "7e53bc5153ad98abc9a0eae4aa2a7c6d35b97b5db64af788c0ad99b6d8537f16"
+    },
+    {
+      "name": "trace-green.dck",
+      "sha256": "84e55f9a2dd8bcfa92a2a56de1143441c8e479ce8bb0c732578d0ff1603527cf"
+    },
+    {
+      "name": "trace-red.dck",
+      "sha256": "55745ca75b9da9b1c8f02fd0bba983ec653d44677290a509203797f0315bebae"
+    },
+    {
+      "name": "ur-dragon-draconic-domination.dck",
+      "sha256": "a50909153f7f07ea9077df668e452408b5762cf8fb9a9d43001282fe6deae86c"
+    }
+  ],
+  "historicalWireCorpus": [
+    {
+      "name": "action-details-red.decisions.jsonl",
+      "bytes": 878852,
+      "sha256": "5177a405c0eee3d3736ab29674ab72bb93e5a2321f6a358c3e3d36261695d1a8"
+    },
+    {
+      "name": "action-details-red.trace.jsonl",
+      "bytes": 1251786,
+      "sha256": "064247a00bd9e27dc19a1ba45cad9123e46f88665c51b52d419bdef0720aaa21"
+    },
+    {
+      "name": "doctor-urdragon-on.decisions.jsonl",
+      "bytes": 337690,
+      "sha256": "f24e3b248a4405b42160f0e178a32d8d8501e76cefdc7c8e3b80a8caf13a26e3"
+    },
+    {
+      "name": "doctor-urdragon-on.trace.jsonl",
+      "bytes": 478181,
+      "sha256": "b06e8599f291f353051047a98300aa42aabac768bb0cbdf0e9e3c5165c56ee95"
+    },
+    {
+      "name": "modal-red.decisions.jsonl",
+      "bytes": 1230150,
+      "sha256": "3595ae22b14dec2e389fbef7df1ad454b09165d3baf2ea14078b9f30e57e296d"
+    },
+    {
+      "name": "modal-red.trace.jsonl",
+      "bytes": 1687699,
+      "sha256": "c17042e6976f3a8323e3907bd39b2d5c83cb7659ba9095fe120f124db74640ee"
+    },
+    {
+      "name": "timeout.decisions.jsonl",
+      "bytes": 41694,
+      "sha256": "7db4ec129b6feaca75b59901ea4b00db0e034553180824287524080c20d145b1"
+    }
+  ],
+  "historicalCommandDirectory": "/workspace/work/action-detail-completion",
+  "methodology": "Primary controlled probe completed before macro processes. Earlier overlapping exploratory trials are excluded. Summary posthoc checks add nonempty outcomes, expected game counts, NORMAL traced markers and canonical action digests to the original run metadata.",
+  "javaMetadata": {
+    "revision": "f2bc148cecf6bae1a499889a8a02551c0f24509e",
+    "dirty": true,
+    "args": {
+      "classpath_file": "/workspace/.forge-tools/trace-classpath.txt",
+      "java_home": "/workspace/.forge-tools/jdk/usr/lib/jvm/java-21-openjdk-amd64",
+      "forge_home": "/workspace/.forge-home",
+      "commander_decks": "/workspace/work/complex-commander/decks",
+      "simple_decks": "/workspace/trace-test-decks",
+      "output_dir": "/workspace/work/hard-001/assessment",
+      "macro_only": false,
+      "rounds": 3
+    },
+    "javaVersion": "openjdk version \"21.0.12.1\" 2026-08-18\nOpenJDK Runtime Environment (build 21.0.12.1+1-1-deb13u1-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.12.1+1-1-deb13u1-Debian, mixed mode, sharing)\n"
+  }
+}

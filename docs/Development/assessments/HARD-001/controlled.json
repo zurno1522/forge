@@ -1,0 +1,480 @@
+{
+  "java": "21.0.12.1+1-1-deb13u1-Debian",
+  "measurements": [
+    {
+      "name": "board-4-round-0-NONE",
+      "mode": "NONE",
+      "boardCardsPerPlayer": 4,
+      "iterations": 400,
+      "wallNanos": 98469775,
+      "currentThreadCpuNanos": 98341109,
+      "currentThreadAllocatedBytes": 230873088,
+      "wholeJvmPostGcHeapBefore": 188302296,
+      "wholeJvmPostGcHeapWithGameRetained": 197934792,
+      "outputBytes": 0
+    },
+    {
+      "name": "board-4-round-0-DECISIONS",
+      "mode": "DECISIONS",
+      "boardCardsPerPlayer": 4,
+      "iterations": 400,
+      "wallNanos": 168035249,
+      "currentThreadCpuNanos": 167686741,
+      "currentThreadAllocatedBytes": 255736672,
+      "wholeJvmPostGcHeapBefore": 188321496,
+      "wholeJvmPostGcHeapWithGameRetained": 197963808,
+      "outputBytes": 1972677,
+      "retention": {
+        "abilityToStack": 0,
+        "stackActions": 0,
+        "completedStacks": 0,
+        "unstartedActions": 0,
+        "pendingAttempts": 0,
+        "stackActionReachableBytes": 144
+      }
+    },
+    {
+      "name": "board-4-round-0-FULL",
+      "mode": "FULL",
+      "boardCardsPerPlayer": 4,
+      "iterations": 400,
+      "wallNanos": 168046285,
+      "currentThreadCpuNanos": 167778426,
+      "currentThreadAllocatedBytes": 254840448,
+      "wholeJvmPostGcHeapBefore": 188322816,
+      "wholeJvmPostGcHeapWithGameRetained": 197965128,
+      "outputBytes": 2091512,
+      "retention": {
+        "abilityToStack": 0,
+        "stackActions": 0,
+        "completedStacks": 0,
+        "unstartedActions": 0,
+        "pendingAttempts": 0,
+        "stackActionReachableBytes": 144
+      }
+    },
+    {
+      "name": "board-4-round-1-DECISIONS",
+      "mode": "DECISIONS",
+      "boardCardsPerPlayer": 4,
+      "iterations": 400,
+      "wallNanos": 168765219,
+      "currentThreadCpuNanos": 168755026,
+      "currentThreadAllocatedBytes": 255673248,
+      "wholeJvmPostGcHeapBefore": 188324040,
+      "wholeJvmPostGcHeapWithGameRetained": 197966576,
+      "outputBytes": 1972565,
+      "retention": {
+        "abilityToStack": 0,
+        "stackActions": 0,
+        "completedStacks": 0,
+        "unstartedActions": 0,
+        "pendingAttempts": 0,
+        "stackActionReachableBytes": 144
+      }
+    },
+    {
+      "name": "board-4-round-1-FULL",
+      "mode": "FULL",
+      "boardCardsPerPlayer": 4,
+      "iterations": 400,
+      "wallNanos": 182104438,
+      "currentThreadCpuNanos": 182078732,
+      "currentThreadAllocatedBytes": 254718080,
+      "wholeJvmPostGcHeapBefore": 188325480,
+      "wholeJvmPostGcHeapWithGameRetained": 197967840,
+      "outputBytes": 2091421,
+      "retention": {
+        "abilityToStack": 0,
+        "stackActions": 0,
+        "completedStacks": 0,
+        "unstartedActions": 0,
+        "pendingAttempts": 0,
+        "stackActionReachableBytes": 144
+      }
+    },
+    {
+      "name": "board-4-round-1-NONE",
+      "mode": "NONE",
+      "boardCardsPerPlayer": 4,
+      "iterations": 400,
+      "wallNanos": 151938638,
+      "currentThreadCpuNanos": 120985848,
+      "currentThreadAllocatedBytes": 230875088,
+      "wholeJvmPostGcHeapBefore": 188308384,
+      "wholeJvmPostGcHeapWithGameRetained": 197943216,
+      "outputBytes": 0
+    },
+    {
+      "name": "board-4-round-2-FULL",
+      "mode": "FULL",
+      "boardCardsPerPlayer": 4,
+      "iterations": 400,
+      "wallNanos": 165630307,
+      "currentThreadCpuNanos": 165462254,
+      "currentThreadAllocatedBytes": 254644528,
+      "wholeJvmPostGcHeapBefore": 188329488,
+      "wholeJvmPostGcHeapWithGameRetained": 197972312,
+      "outputBytes": 2091301,
+      "retention": {
+        "abilityToStack": 0,
+        "stackActions": 0,
+        "completedStacks": 0,
+        "unstartedActions": 0,
+        "pendingAttempts": 0,
+        "stackActionReachableBytes": 144
+      }
+    },
+    {
+      "name": "board-4-round-2-NONE",
+      "mode": "NONE",
+      "boardCardsPerPlayer": 4,
+      "iterations": 400,
+      "wallNanos": 90006911,
+      "currentThreadCpuNanos": 90029975,
+      "currentThreadAllocatedBytes": 230860288,
+      "wholeJvmPostGcHeapBefore": 188312776,
+      "wholeJvmPostGcHeapWithGameRetained": 197945608,
+      "outputBytes": 0
+    },
+    {
+      "name": "board-4-round-2-DECISIONS",
+      "mode": "DECISIONS",
+      "boardCardsPerPlayer": 4,
+      "iterations": 400,
+      "wallNanos": 191015891,
+      "currentThreadCpuNanos": 190944810,
+      "currentThreadAllocatedBytes": 255539736,
+      "wholeJvmPostGcHeapBefore": 188331888,
+      "wholeJvmPostGcHeapWithGameRetained": 197982008,
+      "outputBytes": 1975700,
+      "retention": {
+        "abilityToStack": 0,
+        "stackActions": 0,
+        "completedStacks": 0,
+        "unstartedActions": 0,
+        "pendingAttempts": 0,
+        "stackActionReachableBytes": 144
+      }
+    },
+    {
+      "name": "board-30-round-0-NONE",
+      "mode": "NONE",
+      "boardCardsPerPlayer": 30,
+      "iterations": 400,
+      "wallNanos": 433219971,
+      "currentThreadCpuNanos": 421513473,
+      "currentThreadAllocatedBytes": 1268774864,
+      "wholeJvmPostGcHeapBefore": 189162840,
+      "wholeJvmPostGcHeapWithGameRetained": 199560992,
+      "outputBytes": 0
+    },
+    {
+      "name": "board-30-round-0-DECISIONS",
+      "mode": "DECISIONS",
+      "boardCardsPerPlayer": 30,
+      "iterations": 400,
+      "wallNanos": 1045554436,
+      "currentThreadCpuNanos": 976296015,
+      "currentThreadAllocatedBytes": 1348323952,
+      "wholeJvmPostGcHeapBefore": 189182032,
+      "wholeJvmPostGcHeapWithGameRetained": 199594640,
+      "outputBytes": 5716526,
+      "retention": {
+        "abilityToStack": 0,
+        "stackActions": 0,
+        "completedStacks": 0,
+        "unstartedActions": 0,
+        "pendingAttempts": 0,
+        "stackActionReachableBytes": 144
+      }
+    },
+    {
+      "name": "board-30-round-0-FULL",
+      "mode": "FULL",
+      "boardCardsPerPlayer": 30,
+      "iterations": 400,
+      "wallNanos": 505313007,
+      "currentThreadCpuNanos": 494008049,
+      "currentThreadAllocatedBytes": 1347386216,
+      "wholeJvmPostGcHeapBefore": 189183408,
+      "wholeJvmPostGcHeapWithGameRetained": 199596000,
+      "outputBytes": 5836878,
+      "retention": {
+        "abilityToStack": 0,
+        "stackActions": 0,
+        "completedStacks": 0,
+        "unstartedActions": 0,
+        "pendingAttempts": 0,
+        "stackActionReachableBytes": 144
+      }
+    },
+    {
+      "name": "board-30-round-1-DECISIONS",
+      "mode": "DECISIONS",
+      "boardCardsPerPlayer": 30,
+      "iterations": 400,
+      "wallNanos": 518636984,
+      "currentThreadCpuNanos": 502633634,
+      "currentThreadAllocatedBytes": 1348261128,
+      "wholeJvmPostGcHeapBefore": 189184632,
+      "wholeJvmPostGcHeapWithGameRetained": 199596544,
+      "outputBytes": 5716481,
+      "retention": {
+        "abilityToStack": 0,
+        "stackActions": 0,
+        "completedStacks": 0,
+        "unstartedActions": 0,
+        "pendingAttempts": 0,
+        "stackActionReachableBytes": 144
+      }
+    },
+    {
+      "name": "board-30-round-1-FULL",
+      "mode": "FULL",
+      "boardCardsPerPlayer": 30,
+      "iterations": 400,
+      "wallNanos": 509128770,
+      "currentThreadCpuNanos": 498048469,
+      "currentThreadAllocatedBytes": 1347323760,
+      "wholeJvmPostGcHeapBefore": 189186296,
+      "wholeJvmPostGcHeapWithGameRetained": 199621064,
+      "outputBytes": 5836881,
+      "retention": {
+        "abilityToStack": 0,
+        "stackActions": 0,
+        "completedStacks": 0,
+        "unstartedActions": 0,
+        "pendingAttempts": 0,
+        "stackActionReachableBytes": 144
+      }
+    },
+    {
+      "name": "board-30-round-1-NONE",
+      "mode": "NONE",
+      "boardCardsPerPlayer": 30,
+      "iterations": 400,
+      "wallNanos": 640406517,
+      "currentThreadCpuNanos": 632079716,
+      "currentThreadAllocatedBytes": 1268707664,
+      "wholeJvmPostGcHeapBefore": 189169520,
+      "wholeJvmPostGcHeapWithGameRetained": 199572680,
+      "outputBytes": 0
+    },
+    {
+      "name": "board-30-round-2-FULL",
+      "mode": "FULL",
+      "boardCardsPerPlayer": 30,
+      "iterations": 400,
+      "wallNanos": 495799253,
+      "currentThreadCpuNanos": 484533526,
+      "currentThreadAllocatedBytes": 1347332240,
+      "wholeJvmPostGcHeapBefore": 189188768,
+      "wholeJvmPostGcHeapWithGameRetained": 199603688,
+      "outputBytes": 5836879,
+      "retention": {
+        "abilityToStack": 0,
+        "stackActions": 0,
+        "completedStacks": 0,
+        "unstartedActions": 0,
+        "pendingAttempts": 0,
+        "stackActionReachableBytes": 144
+      }
+    },
+    {
+      "name": "board-30-round-2-NONE",
+      "mode": "NONE",
+      "boardCardsPerPlayer": 30,
+      "iterations": 400,
+      "wallNanos": 457302246,
+      "currentThreadCpuNanos": 436236331,
+      "currentThreadAllocatedBytes": 1268694864,
+      "wholeJvmPostGcHeapBefore": 189172096,
+      "wholeJvmPostGcHeapWithGameRetained": 199570432,
+      "outputBytes": 0
+    },
+    {
+      "name": "board-30-round-2-DECISIONS",
+      "mode": "DECISIONS",
+      "boardCardsPerPlayer": 30,
+      "iterations": 400,
+      "wallNanos": 574867394,
+      "currentThreadCpuNanos": 558045897,
+      "currentThreadAllocatedBytes": 1348179016,
+      "wholeJvmPostGcHeapBefore": 189191208,
+      "wholeJvmPostGcHeapWithGameRetained": 199611368,
+      "outputBytes": 5716486,
+      "retention": {
+        "abilityToStack": 0,
+        "stackActions": 0,
+        "completedStacks": 0,
+        "unstartedActions": 0,
+        "pendingAttempts": 0,
+        "stackActionReachableBytes": 144
+      }
+    }
+  ],
+  "retention": [
+    {
+      "path": "RESOLVED",
+      "iterations": 100,
+      "beforeExecutionFinish": {
+        "abilityToStack": 0,
+        "stackActions": 0,
+        "completedStacks": 0,
+        "unstartedActions": 0,
+        "pendingAttempts": 0,
+        "stackActionReachableBytes": 144
+      },
+      "afterExecutionFinish": {
+        "abilityToStack": 0,
+        "stackActions": 0,
+        "completedStacks": 0,
+        "unstartedActions": 0,
+        "pendingAttempts": 1,
+        "stackActionReachableBytes": 144
+      }
+    },
+    {
+      "path": "COUNTERED",
+      "iterations": 100,
+      "beforeExecutionFinish": {
+        "abilityToStack": 0,
+        "stackActions": 0,
+        "completedStacks": 0,
+        "unstartedActions": 0,
+        "pendingAttempts": 0,
+        "stackActionReachableBytes": 144
+      },
+      "afterExecutionFinish": {
+        "abilityToStack": 0,
+        "stackActions": 0,
+        "completedStacks": 0,
+        "unstartedActions": 0,
+        "pendingAttempts": 1,
+        "stackActionReachableBytes": 144
+      }
+    },
+    {
+      "path": "CLEARED",
+      "iterations": 100,
+      "beforeExecutionFinish": {
+        "abilityToStack": 0,
+        "stackActions": 0,
+        "completedStacks": 0,
+        "unstartedActions": 0,
+        "pendingAttempts": 0,
+        "stackActionReachableBytes": 168
+      },
+      "afterExecutionFinish": {
+        "abilityToStack": 0,
+        "stackActions": 0,
+        "completedStacks": 0,
+        "unstartedActions": 0,
+        "pendingAttempts": 1,
+        "stackActionReachableBytes": 168
+      }
+    },
+    {
+      "path": "UNCLASSIFIED_REMOVAL",
+      "iterations": 100,
+      "beforeExecutionFinish": {
+        "abilityToStack": 0,
+        "stackActions": 100,
+        "completedStacks": 0,
+        "unstartedActions": 0,
+        "pendingAttempts": 0,
+        "stackActionReachableBytes": 19504
+      },
+      "afterExecutionFinish": {
+        "abilityToStack": 0,
+        "stackActions": 100,
+        "completedStacks": 0,
+        "unstartedActions": 0,
+        "pendingAttempts": 1,
+        "stackActionReachableBytes": 19504
+      }
+    },
+    {
+      "path": "RESOLVED",
+      "iterations": 1000,
+      "beforeExecutionFinish": {
+        "abilityToStack": 0,
+        "stackActions": 0,
+        "completedStacks": 0,
+        "unstartedActions": 0,
+        "pendingAttempts": 0,
+        "stackActionReachableBytes": 144
+      },
+      "afterExecutionFinish": {
+        "abilityToStack": 0,
+        "stackActions": 0,
+        "completedStacks": 0,
+        "unstartedActions": 0,
+        "pendingAttempts": 1,
+        "stackActionReachableBytes": 144
+      }
+    },
+    {
+      "path": "COUNTERED",
+      "iterations": 1000,
+      "beforeExecutionFinish": {
+        "abilityToStack": 0,
+        "stackActions": 0,
+        "completedStacks": 0,
+        "unstartedActions": 0,
+        "pendingAttempts": 0,
+        "stackActionReachableBytes": 144
+      },
+      "afterExecutionFinish": {
+        "abilityToStack": 0,
+        "stackActions": 0,
+        "completedStacks": 0,
+        "unstartedActions": 0,
+        "pendingAttempts": 1,
+        "stackActionReachableBytes": 144
+      }
+    },
+    {
+      "path": "CLEARED",
+      "iterations": 1000,
+      "beforeExecutionFinish": {
+        "abilityToStack": 0,
+        "stackActions": 0,
+        "completedStacks": 0,
+        "unstartedActions": 0,
+        "pendingAttempts": 0,
+        "stackActionReachableBytes": 168
+      },
+      "afterExecutionFinish": {
+        "abilityToStack": 0,
+        "stackActions": 0,
+        "completedStacks": 0,
+        "unstartedActions": 0,
+        "pendingAttempts": 1,
+        "stackActionReachableBytes": 168
+      }
+    },
+    {
+      "path": "UNCLASSIFIED_REMOVAL",
+      "iterations": 1000,
+      "beforeExecutionFinish": {
+        "abilityToStack": 0,
+        "stackActions": 1000,
+        "completedStacks": 0,
+        "unstartedActions": 0,
+        "pendingAttempts": 0,
+        "stackActionReachableBytes": 192272
+      },
+      "afterExecutionFinish": {
+        "abilityToStack": 0,
+        "stackActions": 1000,
+        "completedStacks": 0,
+        "unstartedActions": 0,
+        "pendingAttempts": 1,
+        "stackActionReachableBytes": 192272
+      }
+    }
+  ],
+  "uncollectedProbeGamesAfterGc": 0
+}

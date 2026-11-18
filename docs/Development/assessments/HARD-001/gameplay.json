@@ -1,0 +1,487 @@
+{
+  "measurements": [
+    {
+      "scenario": "simple",
+      "round": 0,
+      "mode": "NONE",
+      "wallSeconds": 12.243470558998524,
+      "cpuSeconds": 22.477625,
+      "peakRssKiB": 857928,
+      "outcomeSignature": [
+        "Game Outcome: Turn 11",
+        "Game Outcome: Ai(1)-Trace Red has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Trace Green has won because all opponents have lost",
+        "Game Outcome: Turn 7",
+        "Game Outcome: Ai(1)-Trace Red has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Trace Green has won because all opponents have lost",
+        "Game Outcome: Turn 8",
+        "Game Outcome: Ai(1)-Trace Red has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Trace Green has won because all opponents have lost"
+      ],
+      "outputBytes": 0,
+      "gameResultCount": 3,
+      "reportedGameMillis": [
+        3042,
+        1212,
+        1489
+      ]
+    },
+    {
+      "scenario": "simple",
+      "round": 0,
+      "mode": "DECISIONS",
+      "wallSeconds": 13.051992303007864,
+      "cpuSeconds": 24.746652,
+      "peakRssKiB": 814932,
+      "outcomeSignature": [
+        "Game Outcome: Turn 11",
+        "Game Outcome: Ai(1)-Trace Red has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Trace Green has won because all opponents have lost",
+        "Game Outcome: Turn 7",
+        "Game Outcome: Ai(1)-Trace Red has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Trace Green has won because all opponents have lost",
+        "Game Outcome: Turn 8",
+        "Game Outcome: Ai(1)-Trace Red has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Trace Green has won because all opponents have lost"
+      ],
+      "outputBytes": 867559,
+      "gameResultCount": 3,
+      "reportedGameMillis": [
+        3213,
+        964,
+        1755
+      ]
+    },
+    {
+      "scenario": "simple",
+      "round": 0,
+      "mode": "FULL",
+      "wallSeconds": 13.72440055401239,
+      "cpuSeconds": 24.939837,
+      "peakRssKiB": 815592,
+      "outcomeSignature": [
+        "Game Outcome: Turn 11",
+        "Game Outcome: Ai(1)-Trace Red has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Trace Green has won because all opponents have lost",
+        "Game Outcome: Turn 7",
+        "Game Outcome: Ai(1)-Trace Red has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Trace Green has won because all opponents have lost",
+        "Game Outcome: Turn 8",
+        "Game Outcome: Ai(1)-Trace Red has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Trace Green has won because all opponents have lost"
+      ],
+      "outputBytes": 1248112,
+      "gameResultCount": 3,
+      "reportedGameMillis": [
+        3536,
+        827,
+        1845
+      ]
+    },
+    {
+      "scenario": "simple",
+      "round": 1,
+      "mode": "DECISIONS",
+      "wallSeconds": 12.140770897996845,
+      "cpuSeconds": 22.750049,
+      "peakRssKiB": 792624,
+      "outcomeSignature": [
+        "Game Outcome: Turn 11",
+        "Game Outcome: Ai(1)-Trace Red has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Trace Green has won because all opponents have lost",
+        "Game Outcome: Turn 7",
+        "Game Outcome: Ai(1)-Trace Red has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Trace Green has won because all opponents have lost",
+        "Game Outcome: Turn 8",
+        "Game Outcome: Ai(1)-Trace Red has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Trace Green has won because all opponents have lost"
+      ],
+      "outputBytes": 867541,
+      "gameResultCount": 3,
+      "reportedGameMillis": [
+        3278,
+        880,
+        1213
+      ]
+    },
+    {
+      "scenario": "simple",
+      "round": 1,
+      "mode": "FULL",
+      "wallSeconds": 11.74858182099706,
+      "cpuSeconds": 22.058179000000003,
+      "peakRssKiB": 755196,
+      "outcomeSignature": [
+        "Game Outcome: Turn 11",
+        "Game Outcome: Ai(1)-Trace Red has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Trace Green has won because all opponents have lost",
+        "Game Outcome: Turn 7",
+        "Game Outcome: Ai(1)-Trace Red has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Trace Green has won because all opponents have lost",
+        "Game Outcome: Turn 8",
+        "Game Outcome: Ai(1)-Trace Red has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Trace Green has won because all opponents have lost"
+      ],
+      "outputBytes": 1248103,
+      "gameResultCount": 3,
+      "reportedGameMillis": [
+        3154,
+        789,
+        1214
+      ]
+    },
+    {
+      "scenario": "simple",
+      "round": 1,
+      "mode": "NONE",
+      "wallSeconds": 11.814138574001845,
+      "cpuSeconds": 22.071351999999997,
+      "peakRssKiB": 687844,
+      "outcomeSignature": [
+        "Game Outcome: Turn 11",
+        "Game Outcome: Ai(1)-Trace Red has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Trace Green has won because all opponents have lost",
+        "Game Outcome: Turn 7",
+        "Game Outcome: Ai(1)-Trace Red has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Trace Green has won because all opponents have lost",
+        "Game Outcome: Turn 8",
+        "Game Outcome: Ai(1)-Trace Red has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Trace Green has won because all opponents have lost"
+      ],
+      "outputBytes": 0,
+      "gameResultCount": 3,
+      "reportedGameMillis": [
+        3041,
+        761,
+        1054
+      ]
+    },
+    {
+      "scenario": "simple",
+      "round": 2,
+      "mode": "FULL",
+      "wallSeconds": 12.545743091002805,
+      "cpuSeconds": 23.529172000000003,
+      "peakRssKiB": 841956,
+      "outcomeSignature": [
+        "Game Outcome: Turn 11",
+        "Game Outcome: Ai(1)-Trace Red has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Trace Green has won because all opponents have lost",
+        "Game Outcome: Turn 7",
+        "Game Outcome: Ai(1)-Trace Red has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Trace Green has won because all opponents have lost",
+        "Game Outcome: Turn 8",
+        "Game Outcome: Ai(1)-Trace Red has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Trace Green has won because all opponents have lost"
+      ],
+      "outputBytes": 1248109,
+      "gameResultCount": 3,
+      "reportedGameMillis": [
+        3267,
+        795,
+        1836
+      ]
+    },
+    {
+      "scenario": "simple",
+      "round": 2,
+      "mode": "NONE",
+      "wallSeconds": 13.133446774998447,
+      "cpuSeconds": 24.528430999999998,
+      "peakRssKiB": 839376,
+      "outcomeSignature": [
+        "Game Outcome: Turn 11",
+        "Game Outcome: Ai(1)-Trace Red has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Trace Green has won because all opponents have lost",
+        "Game Outcome: Turn 7",
+        "Game Outcome: Ai(1)-Trace Red has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Trace Green has won because all opponents have lost",
+        "Game Outcome: Turn 8",
+        "Game Outcome: Ai(1)-Trace Red has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Trace Green has won because all opponents have lost"
+      ],
+      "outputBytes": 0,
+      "gameResultCount": 3,
+      "reportedGameMillis": [
+        3171,
+        725,
+        1878
+      ]
+    },
+    {
+      "scenario": "simple",
+      "round": 2,
+      "mode": "DECISIONS",
+      "wallSeconds": 12.849991098992177,
+      "cpuSeconds": 23.84616,
+      "peakRssKiB": 784804,
+      "outcomeSignature": [
+        "Game Outcome: Turn 11",
+        "Game Outcome: Ai(1)-Trace Red has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Trace Green has won because all opponents have lost",
+        "Game Outcome: Turn 7",
+        "Game Outcome: Ai(1)-Trace Red has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Trace Green has won because all opponents have lost",
+        "Game Outcome: Turn 8",
+        "Game Outcome: Ai(1)-Trace Red has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Trace Green has won because all opponents have lost"
+      ],
+      "outputBytes": 867553,
+      "gameResultCount": 3,
+      "reportedGameMillis": [
+        3223,
+        823,
+        1135
+      ]
+    },
+    {
+      "scenario": "commander",
+      "round": 0,
+      "mode": "NONE",
+      "wallSeconds": 11.737781493007788,
+      "cpuSeconds": 21.444764,
+      "peakRssKiB": 699116,
+      "outcomeSignature": [
+        "Game Outcome: Turn 8",
+        "Game Outcome: Ai(1)-Doctor Who - The Thirteenth Doctor and Yasmin Khan has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Draconic Domination [C17] [2017] has won because all opponents have lost"
+      ],
+      "outputBytes": 0,
+      "gameResultCount": 1,
+      "reportedGameMillis": [
+        4374
+      ]
+    },
+    {
+      "scenario": "commander",
+      "round": 0,
+      "mode": "DECISIONS",
+      "wallSeconds": 11.819550872998661,
+      "cpuSeconds": 21.756548000000002,
+      "peakRssKiB": 626676,
+      "outcomeSignature": [
+        "Game Outcome: Turn 8",
+        "Game Outcome: Ai(1)-Doctor Who - The Thirteenth Doctor and Yasmin Khan has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Draconic Domination [C17] [2017] has won because all opponents have lost"
+      ],
+      "outputBytes": 339866,
+      "gameResultCount": 1,
+      "reportedGameMillis": [
+        4482
+      ]
+    },
+    {
+      "scenario": "commander",
+      "round": 0,
+      "mode": "FULL",
+      "wallSeconds": 11.886441629001638,
+      "cpuSeconds": 22.425277,
+      "peakRssKiB": 687224,
+      "outcomeSignature": [
+        "Game Outcome: Turn 8",
+        "Game Outcome: Ai(1)-Doctor Who - The Thirteenth Doctor and Yasmin Khan has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Draconic Domination [C17] [2017] has won because all opponents have lost"
+      ],
+      "outputBytes": 500471,
+      "gameResultCount": 1,
+      "reportedGameMillis": [
+        4706
+      ]
+    },
+    {
+      "scenario": "commander",
+      "round": 1,
+      "mode": "DECISIONS",
+      "wallSeconds": 10.792869924000115,
+      "cpuSeconds": 20.01541,
+      "peakRssKiB": 609300,
+      "outcomeSignature": [
+        "Game Outcome: Turn 8",
+        "Game Outcome: Ai(1)-Doctor Who - The Thirteenth Doctor and Yasmin Khan has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Draconic Domination [C17] [2017] has won because all opponents have lost"
+      ],
+      "outputBytes": 339865,
+      "gameResultCount": 1,
+      "reportedGameMillis": [
+        4018
+      ]
+    },
+    {
+      "scenario": "commander",
+      "round": 1,
+      "mode": "FULL",
+      "wallSeconds": 11.871371276996797,
+      "cpuSeconds": 22.220163000000003,
+      "peakRssKiB": 718012,
+      "outcomeSignature": [
+        "Game Outcome: Turn 8",
+        "Game Outcome: Ai(1)-Doctor Who - The Thirteenth Doctor and Yasmin Khan has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Draconic Domination [C17] [2017] has won because all opponents have lost"
+      ],
+      "outputBytes": 500468,
+      "gameResultCount": 1,
+      "reportedGameMillis": [
+        4215
+      ]
+    },
+    {
+      "scenario": "commander",
+      "round": 1,
+      "mode": "NONE",
+      "wallSeconds": 11.045386381010758,
+      "cpuSeconds": 20.452277000000002,
+      "peakRssKiB": 705680,
+      "outcomeSignature": [
+        "Game Outcome: Turn 8",
+        "Game Outcome: Ai(1)-Doctor Who - The Thirteenth Doctor and Yasmin Khan has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Draconic Domination [C17] [2017] has won because all opponents have lost"
+      ],
+      "outputBytes": 0,
+      "gameResultCount": 1,
+      "reportedGameMillis": [
+        4204
+      ]
+    },
+    {
+      "scenario": "commander",
+      "round": 2,
+      "mode": "FULL",
+      "wallSeconds": 10.998250296994229,
+      "cpuSeconds": 20.699285000000003,
+      "peakRssKiB": 697700,
+      "outcomeSignature": [
+        "Game Outcome: Turn 8",
+        "Game Outcome: Ai(1)-Doctor Who - The Thirteenth Doctor and Yasmin Khan has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Draconic Domination [C17] [2017] has won because all opponents have lost"
+      ],
+      "outputBytes": 500469,
+      "gameResultCount": 1,
+      "reportedGameMillis": [
+        4224
+      ]
+    },
+    {
+      "scenario": "commander",
+      "round": 2,
+      "mode": "NONE",
+      "wallSeconds": 10.56791567899927,
+      "cpuSeconds": 19.845491000000003,
+      "peakRssKiB": 705412,
+      "outcomeSignature": [
+        "Game Outcome: Turn 8",
+        "Game Outcome: Ai(1)-Doctor Who - The Thirteenth Doctor and Yasmin Khan has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Draconic Domination [C17] [2017] has won because all opponents have lost"
+      ],
+      "outputBytes": 0,
+      "gameResultCount": 1,
+      "reportedGameMillis": [
+        3938
+      ]
+    },
+    {
+      "scenario": "commander",
+      "round": 2,
+      "mode": "DECISIONS",
+      "wallSeconds": 11.160588389000623,
+      "cpuSeconds": 20.818527,
+      "peakRssKiB": 675900,
+      "outcomeSignature": [
+        "Game Outcome: Turn 8",
+        "Game Outcome: Ai(1)-Doctor Who - The Thirteenth Doctor and Yasmin Khan has lost because life total reached 0",
+        "Game Outcome: Ai(2)-Draconic Domination [C17] [2017] has won because all opponents have lost"
+      ],
+      "outputBytes": 339868,
+      "gameResultCount": 1,
+      "reportedGameMillis": [
+        4146
+      ]
+    }
+  ],
+  "audit": [
+    {
+      "label": "simple-0-DECISIONS",
+      "status": "NORMAL",
+      "games": 3,
+      "decisionExecutionPayloadSha256": "177c9665838b3a3a209227e35c14fe13a3ee3d6841c6c8595e321ba333be4690",
+      "rows": 317
+    },
+    {
+      "label": "simple-0-FULL",
+      "status": "NORMAL",
+      "games": 3,
+      "decisionExecutionPayloadSha256": "177c9665838b3a3a209227e35c14fe13a3ee3d6841c6c8595e321ba333be4690",
+      "rows": 317
+    },
+    {
+      "label": "simple-1-DECISIONS",
+      "status": "NORMAL",
+      "games": 3,
+      "decisionExecutionPayloadSha256": "177c9665838b3a3a209227e35c14fe13a3ee3d6841c6c8595e321ba333be4690",
+      "rows": 317
+    },
+    {
+      "label": "simple-1-FULL",
+      "status": "NORMAL",
+      "games": 3,
+      "decisionExecutionPayloadSha256": "177c9665838b3a3a209227e35c14fe13a3ee3d6841c6c8595e321ba333be4690",
+      "rows": 317
+    },
+    {
+      "label": "simple-2-FULL",
+      "status": "NORMAL",
+      "games": 3,
+      "decisionExecutionPayloadSha256": "177c9665838b3a3a209227e35c14fe13a3ee3d6841c6c8595e321ba333be4690",
+      "rows": 317
+    },
+    {
+      "label": "simple-2-DECISIONS",
+      "status": "NORMAL",
+      "games": 3,
+      "decisionExecutionPayloadSha256": "177c9665838b3a3a209227e35c14fe13a3ee3d6841c6c8595e321ba333be4690",
+      "rows": 317
+    },
+    {
+      "label": "commander-0-DECISIONS",
+      "status": "NORMAL",
+      "games": 1,
+      "decisionExecutionPayloadSha256": "c8ec7d36b01fa3a52b61b8dc49c3702327c82b948834e6bab78571d153d0aac3",
+      "rows": 89
+    },
+    {
+      "label": "commander-0-FULL",
+      "status": "NORMAL",
+      "games": 1,
+      "decisionExecutionPayloadSha256": "c8ec7d36b01fa3a52b61b8dc49c3702327c82b948834e6bab78571d153d0aac3",
+      "rows": 89
+    },
+    {
+      "label": "commander-1-DECISIONS",
+      "status": "NORMAL",
+      "games": 1,
+      "decisionExecutionPayloadSha256": "c8ec7d36b01fa3a52b61b8dc49c3702327c82b948834e6bab78571d153d0aac3",
+      "rows": 89
+    },
+    {
+      "label": "commander-1-FULL",
+      "status": "NORMAL",
+      "games": 1,
+      "decisionExecutionPayloadSha256": "c8ec7d36b01fa3a52b61b8dc49c3702327c82b948834e6bab78571d153d0aac3",
+      "rows": 89
+    },
+    {
+      "label": "commander-2-FULL",
+      "status": "NORMAL",
+      "games": 1,
+      "decisionExecutionPayloadSha256": "c8ec7d36b01fa3a52b61b8dc49c3702327c82b948834e6bab78571d153d0aac3",
+      "rows": 89
+    },
+    {
+      "label": "commander-2-DECISIONS",
+      "status": "NORMAL",
+      "games": 1,
+      "decisionExecutionPayloadSha256": "c8ec7d36b01fa3a52b61b8dc49c3702327c82b948834e6bab78571d153d0aac3",
+      "rows": 89
+    }
+  ],
+  "scope": "Process wall/CPU/RSS; traced action equality excludes decision elapsedNanos; off-mode actions unobserved."
+}
