@@ -75,9 +75,11 @@ public final class AiActionTracker {
 
     private Attempt startedAttempt(final SpellAbility actual) {
         if (!game.isRecordingAiDecisions() || actual == null || actual.isCopied() || actual.isTrigger()) { return null; }
-        for (final Attempt attempt : actions) {
-            if (attempt.started && (attempt.aliases.contains(actual) || attempt.aliases.contains(actual.getOriginalAbility()))) {
-                return attempt;
+        final Set<SpellAbility> visited = Collections.newSetFromMap(new IdentityHashMap<>());
+        for (SpellAbility predecessor = actual; predecessor != null && visited.add(predecessor);
+                predecessor = predecessor.getImmediateOriginalAbility()) {
+            for (final Attempt attempt : actions) {
+                if (attempt.started && attempt.aliases.contains(predecessor)) { return attempt; }
             }
         }
         return null;

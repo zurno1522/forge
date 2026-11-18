@@ -44,6 +44,50 @@ public class AiActionExecutionTest extends AITest {
     }
 
     @Test(groups = {"UnitTest", "fast"})
+    public void realGrantedActivationFollowsItsImmediateCopyPredecessor() {
+        final Game game = initAndCreateGame();
+        final Player ai = game.getPlayers().get(1);
+        final Card ooze = addCardToZone("Necrotic Ooze", ai, ZoneType.Battlefield);
+        ooze.setSickness(false);
+        addCardToZone("Archivist", ai, ZoneType.Graveyard);
+        fillLibrary(ai, 3);
+        game.getAction().checkStaticAbilities();
+        final SpellAbility selected = ooze.getSpellAbilities().stream().filter(SpellAbility::isActivatedAbility).findFirst().orElseThrow();
+        final SpellAbility template = selected.getOriginalAbility();
+        Assert.assertNotNull(template);
+        final Events events = record(game, ai, selected);
+        ((PlayerControllerAi) ai.getController()).playChosenSpellAbility(selected);
+        assertResult(events, "SUCCEEDED", "STACKED");
+        final SpellAbility actual = game.getStack().peekAbility();
+        Assert.assertSame(actual.getImmediateOriginalAbility(), selected);
+        Assert.assertSame(actual.getOriginalAbility(), template, "Existing root-original semantics must stay intact");
+        game.getStack().resolveStack();
+        Assert.assertEquals(ai.getCardsIn(ZoneType.Hand).size(), 1);
+    }
+
+    @Test(groups = {"UnitTest", "fast"})
+    public void sharedLineageRootDoesNotAttributeAnUnselectedSiblingGrant() {
+        final Game game = initAndCreateGame();
+        final Player ai = game.getPlayers().get(1);
+        final SpellAbility template = addCardToZone("Archivist", ai, ZoneType.Battlefield).getSpellAbilities().stream()
+                .filter(SpellAbility::isActivatedAbility).findFirst().orElseThrow();
+        final SpellAbility selected = template.copy();
+        selected.setOriginalAbility(template);
+        record(game, ai, selected);
+        final AiController brain = ((PlayerControllerAi) ai.getController()).getAi();
+        final var attempt = brain.actionTracker().begin(selected);
+        final SpellAbility sibling = template.copy();
+        sibling.setOriginalAbility(template);
+        Assert.assertNull(brain.getActionReference(sibling));
+        final SpellAbility execution = selected.copy();
+        execution.setOriginalAbility(selected);
+        Assert.assertNotNull(brain.getActionReference(execution));
+        execution.setCopied(true);
+        Assert.assertNull(brain.getActionReference(execution));
+        brain.actionTracker().finish(attempt, "FAILED", "TEST_FINISHED");
+    }
+
+    @Test(groups = {"UnitTest", "fast"})
     public void realLandSelectionAndExecutionAreLinked() {
         final Game game = initAndCreateGame();
         final Player ai = game.getPlayers().get(1);

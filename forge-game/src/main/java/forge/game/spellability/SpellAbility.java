@@ -2507,6 +2507,10 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
     public SpellAbility getOriginalAbility() {
         return grantorOriginal == null ? null : Objects.requireNonNullElse(grantorOriginal.getOriginalAbility(), grantorOriginal);
     }
+    /** Immediate copy/grant predecessor; unlike getOriginalAbility(), does not flatten lineage. */
+    public SpellAbility getImmediateOriginalAbility() {
+        return grantorOriginal;
+    }
     public void setOriginalAbility(final SpellAbility sa) {
         grantorOriginal = sa;
     }
