@@ -337,7 +337,7 @@ def load_run(path):
                 else:
                     number = record.get('game')
                     require(integer(number) and number > 0, 'missing game number')
-                    game = games.setdefault(number, dict(lastIndex=0, start=None, outcome=None, finish=None, execution=None, decisions=[], players={}, actions={}))
+                    game = games.setdefault(number, dict(lastIndex=0, start=None, outcome=None, finish=None, execution=None, decisions=[], decisionIds=set(), players={}, actions={}))
                     require(game['execution'] is None, 'scoped event after GAME_EXECUTION_FINISHED')
                     index = record.get('eventIndex')
                     require(integer(index) and index > game['lastIndex'], 'event indices not strictly increasing')
@@ -364,7 +364,8 @@ def load_run(path):
                         # Retain its actual position in the stream; never give such a choice an outcome label.
                         record['postOutcome'] = game['outcome'] is not None
                         d = validate_decision(record, game)
-                        require(all(old['decision']['decisionId'] != d['decisionId'] for old in game['decisions']), 'duplicate decision id')
+                        require(d['decisionId'] not in game['decisionIds'], 'duplicate decision id')
+                        game['decisionIds'].add(d['decisionId'])
                         require(d['playerId'] in game['players'], 'unknown deciding player')
                         game['decisions'].append(record)
                         if d.get('actionExecutionSchemaVersion') == 1:
@@ -612,7 +613,9 @@ def export(paths, output_dir=None, examples=12):
         require(not any((out / name).exists() for name in names), 'output files already exist; choose a fresh output directory')
         require(not any((out / name).resolve() in {p.resolve() for p in paths} for name in names), 'output would overwrite an input')
         out.mkdir(parents=True, exist_ok=True)
-        (out / 'dataset.jsonl').write_text(''.join(json.dumps(r, ensure_ascii=False) + '\n' for r in rows), encoding='utf-8')
+        with (out / 'dataset.jsonl').open('w', encoding='utf-8') as dataset:
+            for row in rows:
+                dataset.write(json.dumps(row, ensure_ascii=False) + '\n')
         # Include distinct pilot/selection/outcome/search/execution groups before filling remaining slots.
         sample = []
         seen = set()
