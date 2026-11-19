@@ -107,7 +107,7 @@ public final class HardeningProbe extends AITest {
             collector = writer == null ? null : new SimulationTraceCollector(game,
                     mode.equals("FULL") ? writer : null, mode.equals("DECISIONS") ? writer : null,
                     1, Map.of(), null, null, null);
-            if (collector != null) { game.subscribeToEvents(collector); }
+            if (collector != null) { collector.attach(); }
         }
 
         void play() {

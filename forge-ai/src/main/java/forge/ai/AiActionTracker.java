@@ -1,8 +1,8 @@
 package forge.ai;
 
-import com.google.common.eventbus.Subscribe;
 import forge.game.Game;
 import forge.game.event.GameEventSpellAbilityCast;
+import forge.game.event.EventEmissionObserver;
 import forge.game.spellability.SpellAbility;
 
 import java.util.ArrayList;
@@ -16,12 +16,14 @@ import java.util.Set;
 /** Real-game action attempts. Object aliases are explicit; names/descriptions are never join keys. */
 public final class AiActionTracker {
     private final Game game;
+    private final EventEmissionObserver.Subscription observation;
     private final List<Attempt> actions = new ArrayList<>();
     private boolean retired;
 
     synchronized void retire() {
         retired = true;
         actions.clear();
+        observation.close();
     }
 
     static final class Attempt {
@@ -37,7 +39,9 @@ public final class AiActionTracker {
 
     AiActionTracker(final Game game) {
         this.game = game;
-        game.subscribeToEvents(this);
+        observation = game.observeEventEmission(event -> {
+            if (event instanceof GameEventSpellAbilityCast cast) { stacked(cast); }
+        });
     }
 
     synchronized void selected(final AiDecisionEvent event, final List<SpellAbility> chosen) {
@@ -110,8 +114,7 @@ public final class AiActionTracker {
                 (String) attempt.identity.get("decisionId"), (String) attempt.identity.get("actionId"));
     }
 
-    @Subscribe
-    public synchronized void stacked(final GameEventSpellAbilityCast event) {
+    private synchronized void stacked(final GameEventSpellAbilityCast event) {
         if (!game.isRecordingAiDecisions()) { return; }
         for (final var item : game.getStack()) {
             if (item.getId() != event.si().getId()) { continue; }

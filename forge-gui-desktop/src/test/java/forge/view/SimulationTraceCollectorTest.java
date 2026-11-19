@@ -238,7 +238,7 @@ public class SimulationTraceCollectorTest {
         private Trace(final List<RegisteredPlayer> players) throws Exception {
             game = new Game(players, rules, new Match(rules, players, "Trace test"));
             collector = new SimulationTraceCollector(game, writer, 1, Map.of(), null, null, null);
-            game.subscribeToEvents(collector);
+            collector.attach();
         }
 
         private List<JsonObject> records() throws Exception {

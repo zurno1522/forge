@@ -114,7 +114,7 @@ public class SimulationDecisionOutputTest {
             final Game game = new Game(List.of(), rules, new Match(rules, List.of(), "Failure"));
             final SimulationTraceCollector collector = new SimulationTraceCollector(game, writer, sink, 1,
                     Map.of(), null, null, null);
-            game.subscribeToEvents(collector);
+            collector.attach();
             sink.close();
             game.fireEvent(event);
             final IOException error = Assert.expectThrows(IOException.class, collector::checkHealthy);

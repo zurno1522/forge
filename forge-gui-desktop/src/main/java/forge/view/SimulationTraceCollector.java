@@ -54,7 +54,8 @@ final class SimulationTraceCollector {
     private final Map<Long, Integer> mulligansByPlayer = new HashMap<>();
     private final Map<String, Map<String, Object>> unstartedActions = new LinkedHashMap<>();
     private long eventIndex = 0;
-    private IOException failure;
+    private volatile IOException failure;
+    private EventEmissionObserver.Subscription observation;
     private volatile boolean closed;
 
     SimulationTraceCollector(final Game game, final SimulationTraceWriter writer, final int gameNumber,
@@ -77,8 +78,37 @@ final class SimulationTraceCollector {
         this.tournamentRound = tournamentRound;
     }
 
+    void attach() {
+        observation = game.observeEventEmission(event -> {
+            if (event instanceof GameEvent e) { onGameEvent(e); }
+            else if (event instanceof AiDecisionEvent e) { onAiDecision(e); }
+            else if (event instanceof AiActionExecutionEvent e) { onAiActionExecution(e); }
+        });
+    }
+
     @Subscribe
     public void onGameEvent(final GameEvent event) {
+        if (closed || failure != null) { return; }
+        // Resolve tracker identity before taking our monitor. Tracker emission already holds
+        // its own monitor; no collector -> tracker lock edge may exist.
+        AiActionReference action = null;
+        if (event instanceof GameEventSpellAbilityCast cast) {
+            final SpellAbilityStackInstance live = findStackItem(cast.si().getId());
+            final SpellAbility actual = live == null ? null : live.getSpellAbility();
+            if (actual != null && actual.getActivatingPlayer() != null
+                    && actual.getActivatingPlayer().getController() instanceof PlayerControllerAi ai) {
+                action = ai.getAi().getActionReference(actual);
+            }
+        } else if (event instanceof GameEventLandPlayed land) {
+            final Player player = land.player() == null ? null : game.getPlayer(land.player());
+            if (player != null && land.land() != null && player.getController() instanceof PlayerControllerAi ai) {
+                action = ai.getAi().getLandActionReference(land.land().getId());
+            }
+        }
+        synchronized (this) { captureGameEvent(event, action); }
+    }
+
+    private void captureGameEvent(final GameEvent event, final AiActionReference action) {
         if (closed || failure != null) {
             return;
         }
@@ -105,7 +135,7 @@ final class SimulationTraceCollector {
             } else if (event instanceof GameEventTurnEnded) {
                 turnEnded();
             } else if (event instanceof GameEventSpellAbilityCast e) {
-                stackAdded(e);
+                stackAdded(e, action);
             } else if (event instanceof GameEventSpellResolved e) {
                 stackResolved(e);
             } else if (event instanceof GameEventSpellRemovedFromStack e) {
@@ -123,7 +153,7 @@ final class SimulationTraceCollector {
             } else if (event instanceof GameEventCardsSacrificed e) {
                 cardsSacrificed(e);
             } else if (event instanceof GameEventLandPlayed e) {
-                landPlayed(e);
+                landPlayed(e, action);
             } else if (event instanceof GameEventLibrarySearched e) {
                 librarySearched(e);
             } else if (event instanceof GameEventMulligan e) {
@@ -172,7 +202,7 @@ final class SimulationTraceCollector {
     }
 
     @Subscribe
-    public void onAiDecision(final AiDecisionEvent event) {
+    public synchronized void onAiDecision(final AiDecisionEvent event) {
         if (closed || failure != null) {
             return;
         }
@@ -199,7 +229,7 @@ final class SimulationTraceCollector {
     }
 
     @Subscribe
-    public void onAiActionExecution(final AiActionExecutionEvent event) {
+    public synchronized void onAiActionExecution(final AiActionExecutionEvent event) {
         if (closed || failure != null) { return; }
         try {
             final Map<String, Object> record = scoped("AI_ACTION_EXECUTION", true);
@@ -211,26 +241,41 @@ final class SimulationTraceCollector {
         }
     }
 
-    void checkHealthy() throws IOException {
+    synchronized void checkHealthy() throws IOException {
+        if (failure == null && game.getEventObservationFailure() != null) {
+            failure = new IOException("Unable to capture emitted game event", game.getEventObservationFailure());
+        }
         if (failure != null) {
             throw failure;
         }
     }
 
     void executionFinished(final String status, final Throwable error) throws IOException {
-        if (closed) { return; }
+        boolean finishing = false;
         try {
-            finishOutput(status, error);
+            synchronized (this) {
+                if (closed) { return; }
+                finishing = true;
+                try {
+                    finishOutput(status, error);
+                } finally {
+                    // Admission and close share this monitor; an admitted capture completes first.
+                    closed = true;
+                    if (observation != null) { observation.close(); }
+                    abilityToStack.clear();
+                    stackActions.clear();
+                    completedStacks.clear();
+                    unstartedActions.clear();
+                    mulligansByPlayer.clear();
+                }
+            }
         } finally {
-            // This boundary is called after game-worker termination. GAME_FINISHED is too early.
-            closed = true;
-            abilityToStack.clear();
-            stackActions.clear();
-            completedStacks.clear();
-            unstartedActions.clear();
-            game.setRecordAiDecisions(false);
-            for (final Player player : game.getRegisteredPlayers()) {
-                if (player.getController() instanceof PlayerControllerAi ai) { ai.getAi().retireRecordedActions(); }
+            // Never acquire tracker monitors while holding the collector monitor.
+            if (finishing) {
+                game.setRecordAiDecisions(false);
+                for (final Player player : game.getRegisteredPlayers()) {
+                    if (player.getController() instanceof PlayerControllerAi ai) { ai.getAi().retireRecordedActions(); }
+                }
             }
         }
     }
@@ -262,7 +307,7 @@ final class SimulationTraceCollector {
         }
     }
 
-    long nextEventIndex() {
+    synchronized long nextEventIndex() {
         return eventIndex + 1;
     }
 
@@ -386,13 +431,9 @@ final class SimulationTraceCollector {
         write(record);
     }
 
-    private void stackAdded(final GameEventSpellAbilityCast event) throws IOException {
+    private void stackAdded(final GameEventSpellAbilityCast event, final AiActionReference action) throws IOException {
         final StackItemView item = event.si();
         final SpellAbilityStackInstance live = findStackItem(item.getId());
-        final SpellAbility actual = live == null ? null : live.getSpellAbility();
-        final AiActionReference action = actual != null && actual.getActivatingPlayer() != null
-                && actual.getActivatingPlayer().getController() instanceof PlayerControllerAi ai
-                ? ai.getAi().getActionReference(actual) : null;
         if (action == null) { stackActions.remove(item.getId()); }
         else { stackActions.put(item.getId(), action); }
         completedStacks.remove(item.getId());
@@ -638,11 +679,7 @@ final class SimulationTraceCollector {
         write(record);
     }
 
-    private void landPlayed(final GameEventLandPlayed event) throws IOException {
-        final Player player = event.player() == null ? null : game.getPlayer(event.player());
-        final AiActionReference action = player != null && event.land() != null
-                && player.getController() instanceof PlayerControllerAi ai
-                ? ai.getAi().getLandActionReference(event.land().getId()) : null;
+    private void landPlayed(final GameEventLandPlayed event, final AiActionReference action) throws IOException {
         if (writer == null && action == null) { return; }
         final Map<String, Object> record = scoped("LAND_PLAYED", true);
         addActionReference(record, action);

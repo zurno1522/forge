@@ -1,0 +1,15 @@
+package forge.game.event;
+
+/**
+ * Synchronous, observational capture before EventBus delivery can be deferred.
+ * Implementations must not mutate rules state or emit events. Failures are retained by Game.
+ */
+@FunctionalInterface
+public interface EventEmissionObserver {
+    void capture(Event event);
+
+    @FunctionalInterface
+    interface Subscription extends AutoCloseable {
+        @Override void close();
+    }
+}

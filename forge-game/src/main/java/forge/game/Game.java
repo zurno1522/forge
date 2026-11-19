@@ -32,6 +32,7 @@ import forge.game.ability.AbilityKey;
 import forge.game.card.*;
 import forge.game.combat.Combat;
 import forge.game.event.Event;
+import forge.game.event.EventEmissionObserver;
 import forge.game.event.GameEventDayTimeChanged;
 import forge.game.event.GameEventAddLog;
 import forge.game.event.GameEventGameOutcome;
@@ -97,6 +98,8 @@ public class Game {
     private final TriggerHandler triggerHandler = new TriggerHandler(this);
     private final ReplacementHandler replacementHandler = new ReplacementHandler(this);
     private final EventBus events = new EventBus("game events");
+    private final java.util.concurrent.CopyOnWriteArrayList<EventEmissionObserver> emissionObservers = new java.util.concurrent.CopyOnWriteArrayList<>();
+    private final java.util.concurrent.atomic.AtomicReference<RuntimeException> observationFailure = new java.util.concurrent.atomic.AtomicReference<>();
     private final GameLog gameLog = new GameLog();
 
     private final Zone stackZone = new Zone(ZoneType.Stack, this);
@@ -1155,7 +1158,26 @@ public class Game {
      * The events are sent to UI, log and sound system. Network listeners are under development.
      */
     public void fireEvent(final Event event) {
+        for (final EventEmissionObserver observer : emissionObservers) {
+            try {
+                observer.capture(event);
+            } catch (RuntimeException error) {
+                observationFailure.compareAndSet(null, error);
+                emissionObservers.remove(observer);
+            }
+        }
         events.post(event);
+    }
+
+    /** Observation does not change the existing EventBus dispatch contract. Not inherited by copies. */
+    public EventEmissionObserver.Subscription observeEventEmission(final EventEmissionObserver observer) {
+        Objects.requireNonNull(observer);
+        emissionObservers.add(observer);
+        return () -> emissionObservers.remove(observer);
+    }
+
+    public RuntimeException getEventObservationFailure() {
+        return observationFailure.get();
     }
     public void subscribeToEvents(final Object subscriber) {
         events.register(subscriber);

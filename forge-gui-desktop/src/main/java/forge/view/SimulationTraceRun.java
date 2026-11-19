@@ -164,7 +164,7 @@ final class SimulationTraceRun implements AutoCloseable {
         final SimulationTraceCollector collector =
                 new SimulationTraceCollector(game, writer, decisionWriter, gamesAttempted, participantIds,
                         matchId, gameInMatch, tournamentRound);
-        game.subscribeToEvents(collector);
+        collector.attach();
         game.setRecordAiDecisions(true);
         return collector;
     }

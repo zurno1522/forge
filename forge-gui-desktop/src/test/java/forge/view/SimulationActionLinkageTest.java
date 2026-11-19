@@ -2,6 +2,7 @@ package forge.view;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.common.eventbus.Subscribe;
 import forge.ai.AITest;
 import forge.ai.PlayerControllerAi;
 import forge.ai.RecordedSelectionTestSupport;
@@ -10,6 +11,8 @@ import forge.game.ability.AbilityUtils;
 import forge.game.ability.AbilityFactory;
 import forge.game.card.Card;
 import forge.game.event.GameEventSpellResolved;
+import forge.game.event.Event;
+import forge.game.event.GameEventShuffle;
 import forge.game.player.Player;
 import forge.game.spellability.LandAbility;
 import forge.game.spellability.SpellAbility;
@@ -24,6 +27,136 @@ import java.util.List;
 import java.util.Map;
 
 public class SimulationActionLinkageTest extends AITest {
+    private record NestedPlay(Runnable play) implements Event { }
+
+    public static final class NestedSubscriber {
+        @Subscribe public void play(final NestedPlay event) { event.play().run(); }
+    }
+
+    public static final class ShuffleSubscriber {
+        private int calls;
+        @Subscribe public void shuffle(final GameEventShuffle event) { calls++; }
+    }
+
+    @DataProvider
+    public Object[][] nestedModes() {
+        return new Object[][] {{true, true}, {true, false}, {false, true}, {false, false}};
+    }
+
+    @Test(dataProvider = "nestedModes", groups = {"UnitTest", "fast"})
+    public void nestedExecutionCapturesIdentityAndTargetsBeforeResolutionAndDeferredDelivery(
+            final boolean full, final boolean subscriberFirst) throws Exception {
+        final Game game = initAndCreateGame();
+        final Player ai = game.getPlayers().get(1);
+        final Card source = addCardToZone("Island", ai, ZoneType.Battlefield);
+        final Card target = addCardToZone("Memnite", game.getPlayers().get(0), ZoneType.Battlefield);
+        final long timestamp = target.getGameTimestamp();
+        final SpellAbility selected = AbilityFactory.getAbility(
+                "AB$ DealDamage | Cost$ 0 | ValidTgts$ Creature | NumDmg$ 1 | SpellDescription$ Nested capture.", source);
+        selected.getTargets().add(target);
+        if (subscriberFirst) { game.subscribeToEvents(new NestedSubscriber()); }
+        try (Trace trace = new Trace(game, full)) {
+            if (!subscriberFirst) { game.subscribeToEvents(new NestedSubscriber()); }
+            game.fireEvent(new NestedPlay(() -> {
+                RecordedSelectionTestSupport.select(ai, selected);
+                Assert.assertTrue(((PlayerControllerAi) ai.getController()).playChosenSpellAbility(selected));
+                final SpellAbility actual = game.getStack().peekAbility();
+                game.getStack().resolveStack();
+                actual.resetTargets();
+                Assert.assertTrue(game.getStack().isEmpty());
+            }));
+            final List<JsonObject> rows = trace.decisions();
+            final JsonObject addition = row(rows, "STACK_ADDED");
+            Assert.assertFalse(addition.get("actionId").isJsonNull());
+            final JsonObject targetRef = addition.getAsJsonObject("finalizedTargets").getAsJsonArray("abilities")
+                    .get(0).getAsJsonObject().getAsJsonArray("targets").get(0).getAsJsonObject();
+            Assert.assertEquals(targetRef.get("id").getAsLong(), target.getId());
+            Assert.assertEquals(targetRef.get("gameTimestamp").getAsLong(), timestamp);
+            final List<JsonObject> executions = rows.stream().filter(r -> "AI_ACTION_EXECUTION".equals(r.get("type").getAsString())).toList();
+            Assert.assertEquals(executions.size(), 2);
+            final JsonObject terminal = executions.get(1).getAsJsonObject("execution");
+            Assert.assertEquals(terminal.get("status").getAsString(), "SUCCEEDED");
+            Assert.assertEquals(terminal.get("reason").getAsString(), "STACKED");
+            Assert.assertEquals(terminal.get("stackId"), addition.get("stackId"));
+            Assert.assertEquals(terminal.get("executedAbilityId"), addition.get("abilityId"));
+            Assert.assertEquals(rows.stream().filter(r -> "STACK_ADDED".equals(r.get("type").getAsString())).count(), 1L);
+            Assert.assertEquals(row(rows, "STACK_RESOLVED").get("actionId"), addition.get("actionId"));
+            if (full) {
+                Assert.assertEquals(row(trace.full(), "STACK_ADDED").get("finalizedTargets"), addition.get("finalizedTargets"));
+            }
+        }
+    }
+
+    @Test(groups = {"UnitTest", "fast"})
+    public void failedEmissionCaptureIsReportedEvenAfterDetachAndEngineDeliveryContinues() throws Exception {
+        final Game game = initAndCreateGame();
+        final ShuffleSubscriber subscriber = new ShuffleSubscriber();
+        game.subscribeToEvents(subscriber);
+        final IllegalStateException cause = new IllegalStateException("capture failed");
+        try (Trace trace = new Trace(game, false)) {
+            final var observation = game.observeEventEmission(event -> { throw cause; });
+            game.fireEvent(new GameEventShuffle((forge.game.player.PlayerView) null));
+            observation.close();
+            Assert.assertEquals(subscriber.calls, 1);
+            final var failure = Assert.expectThrows(java.io.IOException.class, trace.collector::checkHealthy);
+            Assert.assertSame(failure.getCause(), cause);
+            Assert.assertSame(Assert.expectThrows(java.io.IOException.class,
+                    () -> trace.collector.executionFinished("NORMAL", null)), failure);
+        }
+    }
+
+    @Test(groups = {"UnitTest", "fast"})
+    public void authoritativeCloseWaitsForAdmittedCaptureAndRejectsLateIntake() throws Exception {
+        final Game game = initAndCreateGame();
+        final var entered = new java.util.concurrent.CountDownLatch(1);
+        final var release = new java.util.concurrent.CountDownLatch(1);
+        final var finishing = new java.util.concurrent.CountDownLatch(1);
+        final var output = new java.io.StringWriter();
+        final java.io.Writer blocked = new java.io.Writer() {
+            @Override public void write(char[] chars, int offset, int length) throws java.io.IOException {
+                entered.countDown();
+                try { release.await(); } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    throw new java.io.IOException(e);
+                }
+                output.write(chars, offset, length);
+            }
+            @Override public void flush() { }
+            @Override public void close() { }
+        };
+        final var constructor = SimulationTraceWriter.class.getDeclaredConstructor(java.io.BufferedWriter.class);
+        constructor.setAccessible(true);
+        final var threads = java.util.concurrent.Executors.newFixedThreadPool(2);
+        try (SimulationTraceWriter writer = constructor.newInstance(new java.io.BufferedWriter(blocked, 1))) {
+            final var collector = new SimulationTraceCollector(game, writer, 1, Map.of(), null, null, null);
+            collector.attach();
+            final var capture = threads.submit(() -> game.fireEvent(new forge.ai.AiDecisionEvent(Map.of("decisionId", "admitted"))));
+            Assert.assertTrue(entered.await(5, java.util.concurrent.TimeUnit.SECONDS));
+            final var close = threads.submit(() -> {
+                finishing.countDown();
+                collector.executionFinished("TIMEOUT", null);
+                return null;
+            });
+            Assert.assertTrue(finishing.await(5, java.util.concurrent.TimeUnit.SECONDS));
+            Assert.assertFalse(close.isDone());
+            release.countDown();
+            capture.get(5, java.util.concurrent.TimeUnit.SECONDS);
+            close.get(5, java.util.concurrent.TimeUnit.SECONDS);
+            final List<JsonObject> rows = output.toString().lines().map(line -> JsonParser.parseString(line).getAsJsonObject()).toList();
+            Assert.assertEquals(rows.size(), 2);
+            Assert.assertEquals(rows.get(0).getAsJsonObject("decision").get("decisionId").getAsString(), "admitted");
+            Assert.assertEquals(rows.get(0).get("eventIndex").getAsLong(), 1L);
+            Assert.assertEquals(rows.get(1).get("type").getAsString(), "GAME_EXECUTION_FINISHED");
+            Assert.assertEquals(rows.get(1).get("eventIndex").getAsLong(), 2L);
+            final String finalized = output.toString();
+            game.fireEvent(new forge.ai.AiDecisionEvent(Map.of("decisionId", "late")));
+            Assert.assertEquals(output.toString(), finalized);
+        } finally {
+            release.countDown();
+            threads.shutdownNow();
+        }
+    }
+
     @DataProvider
     public Object[][] actions() {
         return new Object[][] { {true, "Memnite"}, {false, "Memnite"},
@@ -461,7 +594,7 @@ public class SimulationActionLinkageTest extends AITest {
         private Trace(final Game game, final boolean fullTrace) throws Exception {
             fullWriter = fullTrace ? SimulationTraceWriter.open(full.toString()) : null;
             collector = new SimulationTraceCollector(game, fullWriter, decisionWriter, 1, Map.of(), null, null, null);
-            game.subscribeToEvents(collector);
+            collector.attach();
         }
 
         private List<JsonObject> read(final Path path, final SimulationTraceWriter writer) throws Exception {

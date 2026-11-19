@@ -66,7 +66,7 @@ public final class ActionCorrelationProbe extends AITest {
                 SimulationTraceWriter decisionWriter = SimulationTraceWriter.open(decisions.toString())) {
             final SimulationTraceCollector collector = new SimulationTraceCollector(
                     game, fullWriter, decisionWriter, 1, Map.of(), null, null, null);
-            game.subscribeToEvents(collector);
+            collector.attach();
             final Runnable play = () -> {
                 RecordedSelectionTestSupport.select(ai, selected);
                 ((PlayerControllerAi) ai.getController()).playChosenSpellAbility(selected);
@@ -102,8 +102,8 @@ public final class ActionCorrelationProbe extends AITest {
                 "unexpected emitter order");
         require(added.get("stackId").getAsLong() == stackId && added.get("abilityId").getAsLong() == actualId,
                 "wrong live stack identity");
-        // HARD-002 repairs the granted activation; HARD-006 still covers deferred dispatch.
-        final boolean missing = nested;
+        // Emission-time capture covers ordinary, granted and reentrant activations.
+        final boolean missing = false;
         require(added.get("actionId").isJsonNull() == missing, "unexpected action linkage");
         require((!terminalValues.has("stackId")) == missing, "unexpected terminal stackId");
         require((!terminalValues.has("executedAbilityId")) == missing, "unexpected terminal executedAbilityId");
