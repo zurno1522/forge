@@ -859,10 +859,15 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
     }
 
     public final void remove(final SpellAbilityStackInstance si) {
+        remove(si, GameEventSpellRemovedFromStack.Disposition.FINAL);
+    }
+
+    public final void remove(final SpellAbilityStackInstance si,
+            final GameEventSpellRemovedFromStack.Disposition disposition) {
         stack.remove(si);
         frozenStack.remove(si);
         game.updateStackForView();
-        game.fireEvent(new GameEventSpellRemovedFromStack(SpellAbilityView.get(si.getSpellAbility())));
+        game.fireEvent(new GameEventSpellRemovedFromStack(SpellAbilityView.get(si.getSpellAbility()), si.getId(), disposition));
     }
 
     public final void remove(final Card c) {
@@ -1095,7 +1100,7 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
         if (stack.isEmpty()) { return; }
         stack.clear();
         game.updateStackForView();
-        game.fireEvent(new GameEventSpellRemovedFromStack(null));
+        game.fireEvent(new GameEventSpellRemovedFromStack(null, null, GameEventSpellRemovedFromStack.Disposition.FINAL));
     }
 
     @Override

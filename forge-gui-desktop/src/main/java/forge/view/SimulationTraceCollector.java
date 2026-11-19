@@ -116,6 +116,7 @@ final class SimulationTraceCollector {
                 && !(event instanceof GameEventGameOutcome) && !(event instanceof GameEventGameFinished)
                 && !(event instanceof GameEventSpellAbilityCast) && !(event instanceof GameEventSpellResolved)
                 && !(event instanceof GameEventSpellRemovedFromStack) && !(event instanceof GameEventStackCountered)
+                && !(event instanceof GameEventStackRemovalCompleted)
                 && !(event instanceof GameEventLandPlayed)) {
             return;
         }
@@ -142,6 +143,9 @@ final class SimulationTraceCollector {
                 stackRemoved(e);
             } else if (event instanceof GameEventStackCountered e) {
                 stackCountered(e);
+            } else if (event instanceof GameEventStackRemovalCompleted e) {
+                stackActions.remove(e.stackId());
+                completedStacks.remove(e.stackId());
             } else if (event instanceof GameEventCardChangeZone e) {
                 zoneChange(e);
             } else if (event instanceof GameEventCardDestroyedObserved e) {
@@ -587,9 +591,12 @@ final class SimulationTraceCollector {
             write(record);
             return;
         }
-        final Long stackId = abilityToStack.remove(event.sa().getId());
+        final Long mapped = abilityToStack.remove(event.sa().getId());
+        final Long stackId = event.stackId() == null ? mapped : event.stackId();
         final AiActionReference action = stackActions.get(stackId);
-        if (completedStacks.remove(stackId)) { stackActions.remove(stackId); }
+        if (completedStacks.remove(stackId) || event.disposition() == GameEventSpellRemovedFromStack.Disposition.FINAL) {
+            stackActions.remove(stackId);
+        }
         if (writer == null && action == null) { return; }
         final Map<String, Object> record = scoped("STACK_REMOVED", true);
         addActionReference(record, action);

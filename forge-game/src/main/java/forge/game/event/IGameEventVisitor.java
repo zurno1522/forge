@@ -57,6 +57,7 @@ public interface IGameEventVisitor<T> {
     T visit(GameEventSpellAbilityCast event);
     T visit(GameEventSpellResolved event);
     T visit(GameEventSpellRemovedFromStack event);
+    default T visit(GameEventStackRemovalCompleted event) { return null; }
     T visit(GameEventStackCountered event);
     T visit(GameEventSprocketUpdate event);
     T visit(GameEventSubgameStart event);

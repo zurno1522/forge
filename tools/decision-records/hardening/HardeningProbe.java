@@ -171,7 +171,9 @@ public final class HardeningProbe extends AITest {
                 if (path.equals("RESOLVED")) { fixture.game.getStack().resolveStack(); }
                 else if (path.equals("CLEARED")) { fixture.game.getStack().clear(); }
                 else {
-                    fixture.game.getStack().remove(item);
+                    fixture.game.getStack().remove(item, path.equals("COUNTERED")
+                            ? forge.game.event.GameEventSpellRemovedFromStack.Disposition.COUNTER_PENDING
+                            : forge.game.event.GameEventSpellRemovedFromStack.Disposition.FINAL);
                     if (path.equals("COUNTERED")) {
                         fixture.game.fireEvent(new GameEventStackCountered(item.getId(), item.getSpellAbility(), fixture.ability));
                     }
@@ -208,7 +210,7 @@ public final class HardeningProbe extends AITest {
         }
         List<Map<String, Object>> retention = new ArrayList<>();
         for (int count : List.of(100, 1000)) {
-            for (String path : List.of("RESOLVED", "COUNTERED", "CLEARED", "UNCLASSIFIED_REMOVAL")) {
+            for (String path : List.of("RESOLVED", "COUNTERED", "CLEARED", "FINAL_REMOVAL")) {
                 retention.add(probe.retention(path, count));
             }
         }

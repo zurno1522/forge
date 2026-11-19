@@ -38,6 +38,88 @@ public class SimulationActionLinkageTest extends AITest {
         @Subscribe public void shuffle(final GameEventShuffle event) { calls++; }
     }
 
+    public static final class DuringCounterRemoval {
+        private final Runnable action;
+        public DuringCounterRemoval(final Runnable action) { this.action = action; }
+        @Subscribe public void removed(final forge.game.event.GameEventSpellRemovedFromStack event) {
+            if (event.disposition() == forge.game.event.GameEventSpellRemovedFromStack.Disposition.COUNTER_PENDING) { action.run(); }
+        }
+    }
+
+    private static int retainedLinks(final SimulationTraceCollector collector) throws Exception {
+        final var field = SimulationTraceCollector.class.getDeclaredField("stackActions");
+        field.setAccessible(true);
+        return ((Map<?, ?>) field.get(collector)).size();
+    }
+
+    @Test(groups = {"UnitTest", "fast"})
+    public void finalRemovalsRetireHistoryDuringTheGame() throws Exception {
+        final Game game = initAndCreateGame();
+        final Player ai = game.getPlayers().get(1);
+        final Card source = addCardToZone("Island", ai, ZoneType.Battlefield);
+        final SpellAbility selected = AbilityFactory.getAbility("AB$ Draw | Cost$ 0 | NumCards$ 0 | SpellDescription$ Removal test.", source);
+        try (Trace trace = new Trace(game, false)) {
+            for (int i = 0; i < 64; i++) {
+                RecordedSelectionTestSupport.select(ai, selected);
+                Assert.assertTrue(((PlayerControllerAi) ai.getController()).playChosenSpellAbility(selected));
+                Assert.assertEquals(retainedLinks(trace.collector), 1);
+                game.getStack().remove(game.getStack().peek());
+                Assert.assertEquals(retainedLinks(trace.collector), 0);
+            }
+            Assert.assertFalse(game.isGameOver());
+            Assert.assertEquals(trace.decisions().stream().filter(r -> "STACK_REMOVED".equals(r.get("type").getAsString())).count(), 64L);
+        }
+    }
+
+    @Test(groups = {"UnitTest", "fast"})
+    public void pendingCounterSurvivesInterveningEventsAndBulkClear() throws Exception {
+        final Game game = initAndCreateGame();
+        final Player ai = game.getPlayers().get(1);
+        try (Trace trace = new Trace(game, true)) {
+            final SpellAbility selected = ability(game, "Memnite");
+            final SpellAbility other = ability(game, "Memnite");
+            RecordedSelectionTestSupport.select(ai, selected, other);
+            ((PlayerControllerAi) ai.getController()).playChosenSpellAbility(selected);
+            final SpellAbility target = game.getStack().peekAbility();
+            ((PlayerControllerAi) ai.getController()).playChosenSpellAbility(other);
+            game.subscribeToEvents(new DuringCounterRemoval(() -> {
+                game.getStack().clear();
+                for (int i = 0; i < 20; i++) { game.fireEvent(new GameEventShuffle((forge.game.player.PlayerView) null)); }
+            }));
+            final Player opponent = game.getPlayers().get(0);
+            final SpellAbility counter = addCardToZone("Counterspell", opponent, ZoneType.Hand).getFirstSpellAbility();
+            counter.setActivatingPlayer(opponent);
+            counter.getTargets().add(target);
+            AbilityUtils.resolve(counter);
+            final List<JsonObject> rows = trace.decisions();
+            final JsonObject addition = row(rows, "STACK_ADDED");
+            final JsonObject countered = row(rows, "STACK_COUNTERED");
+            Assert.assertEquals(countered.get("actionId"), addition.get("actionId"));
+            Assert.assertTrue(row(rows, "STACK_CLEARED").get("eventIndex").getAsLong() < countered.get("eventIndex").getAsLong());
+            Assert.assertEquals(retainedLinks(trace.collector), 0);
+        }
+    }
+
+    @Test(groups = {"UnitTest", "fast"})
+    public void counterOperationFailureRetiresPendingRemovalWithoutInventingCounterEvent() throws Exception {
+        final Game game = initAndCreateGame();
+        final Player ai = game.getPlayers().get(1);
+        try (Trace trace = new Trace(game, false)) {
+            final SpellAbility selected = ability(game, "Memnite");
+            RecordedSelectionTestSupport.select(ai, selected);
+            ((PlayerControllerAi) ai.getController()).playChosenSpellAbility(selected);
+            final Player opponent = game.getPlayers().get(0);
+            final Card source = addCardToZone("Counterspell", opponent, ZoneType.Hand);
+            final SpellAbility counter = AbilityFactory.getAbility("DB$ Counter | ValidTgts$ Spell | Destination$ Invalid", source);
+            counter.setActivatingPlayer(opponent);
+            counter.getTargets().add(game.getStack().peekAbility());
+            Assert.expectThrows(IllegalArgumentException.class, () -> AbilityUtils.resolve(counter));
+            Assert.assertTrue(game.getStack().isEmpty());
+            Assert.assertEquals(retainedLinks(trace.collector), 0);
+            Assert.assertTrue(trace.decisions().stream().noneMatch(r -> "STACK_COUNTERED".equals(r.get("type").getAsString())));
+        }
+    }
+
     @DataProvider
     public Object[][] nestedModes() {
         return new Object[][] {{true, true}, {true, false}, {false, true}, {false, false}};
@@ -314,7 +396,7 @@ public class SimulationActionLinkageTest extends AITest {
             final SpellAbility sa = ability(game, "Memnite");
             RecordedSelectionTestSupport.select(ai, sa);
             ((PlayerControllerAi) ai.getController()).playChosenSpellAbility(sa);
-            game.getStack().remove(game.getStack().peek());
+            game.getStack().remove(game.getStack().peek(), forge.game.event.GameEventSpellRemovedFromStack.Disposition.COUNTER_PENDING);
             final var mapField = SimulationTraceCollector.class.getDeclaredField("stackActions");
             mapField.setAccessible(true);
             Assert.assertEquals(((Map<?, ?>) mapField.get(trace.collector)).size(), 1);
