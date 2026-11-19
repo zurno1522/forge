@@ -1,0 +1,225 @@
+{
+  "repeatedInputs": [
+    {
+      "peakRssKiB": 16612,
+      "seconds": 0.11205357298604213,
+      "cpuSeconds": 0.125303,
+      "spoolAllocatedBytes": 2228224,
+      "runs": 1,
+      "games": 3,
+      "decisions": 204,
+      "executionStatuses": {
+        "NORMAL": 3
+      },
+      "outcomeEligibleDecisions": 204,
+      "censoredDecisions": 0,
+      "mode": "--validate-only",
+      "inputBytes": 1230159
+    },
+    {
+      "peakRssKiB": 16968,
+      "seconds": 0.14876029299921356,
+      "cpuSeconds": 0.16201500000000002,
+      "spoolAllocatedBytes": 2232320,
+      "runs": 1,
+      "games": 3,
+      "decisions": 204,
+      "executionStatuses": {
+        "NORMAL": 3
+      },
+      "outcomeEligibleDecisions": 204,
+      "censoredDecisions": 0,
+      "mode": "--output-dir",
+      "inputBytes": 1230159,
+      "datasetBytes": 1476372
+    },
+    {
+      "peakRssKiB": 16912,
+      "seconds": 0.7728212490037549,
+      "cpuSeconds": 0.782731,
+      "spoolAllocatedBytes": 17489920,
+      "runs": 8,
+      "games": 24,
+      "decisions": 1632,
+      "executionStatuses": {
+        "NORMAL": 24
+      },
+      "outcomeEligibleDecisions": 1632,
+      "censoredDecisions": 0,
+      "mode": "--validate-only",
+      "inputBytes": 9841272
+    },
+    {
+      "peakRssKiB": 17168,
+      "seconds": 0.8920800909982063,
+      "cpuSeconds": 0.905157,
+      "spoolAllocatedBytes": 17514496,
+      "runs": 8,
+      "games": 24,
+      "decisions": 1632,
+      "executionStatuses": {
+        "NORMAL": 24
+      },
+      "outcomeEligibleDecisions": 1632,
+      "censoredDecisions": 0,
+      "mode": "--output-dir",
+      "inputBytes": 9841272,
+      "datasetBytes": 11810976
+    },
+    {
+      "peakRssKiB": 16960,
+      "seconds": 2.956638092000503,
+      "cpuSeconds": 2.961935,
+      "spoolAllocatedBytes": 69824512,
+      "runs": 32,
+      "games": 96,
+      "decisions": 6528,
+      "executionStatuses": {
+        "NORMAL": 96
+      },
+      "outcomeEligibleDecisions": 6528,
+      "censoredDecisions": 0,
+      "mode": "--validate-only",
+      "inputBytes": 39365111
+    },
+    {
+      "peakRssKiB": 17452,
+      "seconds": 3.6107939679932315,
+      "cpuSeconds": 3.6054039999999996,
+      "spoolAllocatedBytes": 69947392,
+      "runs": 32,
+      "games": 96,
+      "decisions": 6528,
+      "executionStatuses": {
+        "NORMAL": 96
+      },
+      "outcomeEligibleDecisions": 6528,
+      "censoredDecisions": 0,
+      "mode": "--output-dir",
+      "inputBytes": 39365111,
+      "datasetBytes": 47248596
+    }
+  ],
+  "longGames": [
+    {
+      "peakRssKiB": 15844,
+      "seconds": 0.09233960398705676,
+      "cpuSeconds": 0.10571,
+      "spoolAllocatedBytes": 1990656,
+      "runs": 1,
+      "games": 1,
+      "decisions": 1000,
+      "executionStatuses": {
+        "NORMAL": 1
+      },
+      "outcomeEligibleDecisions": 1000,
+      "censoredDecisions": 0,
+      "mode": "--validate-only",
+      "inputBytes": 647598
+    },
+    {
+      "peakRssKiB": 16092,
+      "seconds": 0.3086947170086205,
+      "cpuSeconds": 0.32187099999999996,
+      "spoolAllocatedBytes": 8081408,
+      "runs": 1,
+      "games": 1,
+      "decisions": 4000,
+      "executionStatuses": {
+        "NORMAL": 1
+      },
+      "outcomeEligibleDecisions": 4000,
+      "censoredDecisions": 0,
+      "mode": "--validate-only",
+      "inputBytes": 2594598
+    },
+    {
+      "peakRssKiB": 16100,
+      "seconds": 0.9662581740121823,
+      "cpuSeconds": 0.980721,
+      "spoolAllocatedBytes": 24342528,
+      "runs": 1,
+      "games": 1,
+      "decisions": 12000,
+      "executionStatuses": {
+        "NORMAL": 1
+      },
+      "outcomeEligibleDecisions": 12000,
+      "censoredDecisions": 0,
+      "mode": "--validate-only",
+      "inputBytes": 7790604
+    }
+  ],
+  "diverseCategories": [
+    {
+      "peakRssKiB": 15948,
+      "seconds": 0.16249872799380682,
+      "cpuSeconds": 0.175818,
+      "spoolAllocatedBytes": 3600384,
+      "runs": 1,
+      "games": 1,
+      "decisions": 1000,
+      "executionStatuses": {
+        "NORMAL": 1
+      },
+      "outcomeEligibleDecisions": 1000,
+      "censoredDecisions": 0,
+      "mode": "--output-dir",
+      "inputBytes": 847956,
+      "datasetBytes": 1357040
+    },
+    {
+      "peakRssKiB": 16744,
+      "seconds": 1.7815918310079724,
+      "cpuSeconds": 1.793943,
+      "spoolAllocatedBytes": 43171840,
+      "runs": 1,
+      "games": 1,
+      "decisions": 12000,
+      "executionStatuses": {
+        "NORMAL": 1
+      },
+      "outcomeEligibleDecisions": 12000,
+      "censoredDecisions": 0,
+      "mode": "--output-dir",
+      "inputBytes": 10279968,
+      "datasetBytes": 16412050
+    }
+  ],
+  "manyGames": [
+    {
+      "peakRssKiB": 15160,
+      "seconds": 0.050135055993450806,
+      "cpuSeconds": 0.063715,
+      "spoolAllocatedBytes": 360448,
+      "runs": 1,
+      "games": 100,
+      "decisions": 100,
+      "executionStatuses": {
+        "NORMAL": 100
+      },
+      "outcomeEligibleDecisions": 100,
+      "censoredDecisions": 0,
+      "mode": "--output-dir",
+      "inputBytes": 105560,
+      "datasetBytes": 113592
+    },
+    {
+      "peakRssKiB": 15852,
+      "seconds": 0.6112058520084247,
+      "cpuSeconds": 0.6228889999999999,
+      "spoolAllocatedBytes": 6320128,
+      "runs": 1,
+      "games": 2000,
+      "decisions": 2000,
+      "executionStatuses": {
+        "NORMAL": 2000
+      },
+      "outcomeEligibleDecisions": 2000,
+      "censoredDecisions": 0,
+      "mode": "--output-dir",
+      "inputBytes": 2118867,
+      "datasetBytes": 2274893
+    }
+  ]
+}

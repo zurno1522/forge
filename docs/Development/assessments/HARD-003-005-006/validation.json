@@ -1,0 +1,163 @@
+{
+  "simple": {
+    "games": 3,
+    "decisions": 173,
+    "status": "NORMAL",
+    "fullFilteredDatasetEqual": true,
+    "pregameShufflesPreserved": true,
+    "outcomeEligibleDecisions": 173,
+    "censoredDecisions": 0,
+    "sourceSha256": {
+      "simple-full.jsonl": "80b22af0303262c0c07852c162a44f0689e0544e1c8ae0dd0444ba4871221c7d",
+      "simple-decisions.jsonl": "235b2971d4c7f276328567d8ea3d7101918feb3aa5daf6bb3d137ee7805760a3"
+    },
+    "priorSeededDecisionExecutionPayloadsEqualExcludingTiming": true
+  },
+  "commander": {
+    "games": 1,
+    "decisions": 49,
+    "status": "NORMAL",
+    "fullFilteredDatasetEqual": true,
+    "pregameShufflesPreserved": true,
+    "outcomeEligibleDecisions": 49,
+    "censoredDecisions": 0,
+    "sourceSha256": {
+      "commander-full.jsonl": "b7042f645280a87fed4aa4a6a24c8b700126d1c928dbc3c1f8e4767bb82ba5aa",
+      "commander-decisions.jsonl": "f0bd52eecb61811452bd18e8185b8298b36d629911328a7a38cd025da808067c"
+    },
+    "priorSeededDecisionExecutionPayloadsEqualExcludingTiming": true
+  },
+  "commander-mc": {
+    "games": 1,
+    "decisions": 54,
+    "status": "NORMAL",
+    "fullFilteredDatasetEqual": true,
+    "pregameShufflesPreserved": true,
+    "outcomeEligibleDecisions": 54,
+    "censoredDecisions": 0,
+    "sourceSha256": {
+      "commander-mc-full.jsonl": "ba093a1c2b5a10fd22fd30c2bb0a9568cc29ac4ecf16b750e69abdbb187a511d",
+      "commander-mc-decisions.jsonl": "1ebda0cc020b8b06bc53d67b092ec9491c8ffd47e54b0f06c9b1f15fbcaba9f9"
+    }
+  },
+  "exception": {
+    "games": 1,
+    "decisions": 1,
+    "status": "EXCEPTION",
+    "fullFilteredDatasetEqual": true,
+    "pregameShufflesPreserved": null,
+    "outcomeEligibleDecisions": 0,
+    "censoredDecisions": 1,
+    "sourceSha256": {
+      "exception-full.jsonl": "366e020da7842c7bce80daad242109424b1a2857e693e2848b163e93e411acf2",
+      "exception-decisions.jsonl": "f51c2fd2d7386c170a7d850bde3166e4dbae5e07c2b054928b5368276d01f5ea"
+    }
+  },
+  "productionRevision": "51fe1e77018eb6f1e6dc01f390dafccbbb3819f0",
+  "workingTreeDirty": true,
+  "javaTests": {
+    "desktop": 2408,
+    "desktopSkipped": 6,
+    "core": 23,
+    "game": 23,
+    "failures": 0,
+    "errors": 0
+  },
+  "pythonTests": {
+    "tests": 55,
+    "failures": 0,
+    "errors": 0
+  },
+  "equivalentExports": [
+    {
+      "source": "/workspace/work/action-detail-completion/modal-red.trace.jsonl",
+      "decisions": 204,
+      "allSixFilesByteEqual": true
+    },
+    {
+      "source": "/workspace/work/action-detail-completion/doctor-urdragon-on.decisions.jsonl",
+      "decisions": 46,
+      "allSixFilesByteEqual": true
+    },
+    {
+      "source": "/workspace/work/action-detail-completion/action-details-red.decisions.jsonl",
+      "decisions": 170,
+      "allSixFilesByteEqual": true
+    },
+    {
+      "source": "/workspace/work/action-detail-completion/doctor-urdragon-on.trace.jsonl",
+      "decisions": 46,
+      "allSixFilesByteEqual": true
+    },
+    {
+      "source": "/workspace/work/action-detail-completion/modal-red.decisions.jsonl",
+      "decisions": 204,
+      "allSixFilesByteEqual": true
+    },
+    {
+      "source": "/workspace/work/action-detail-completion/timeout.decisions.jsonl",
+      "decisions": 7,
+      "allSixFilesByteEqual": true
+    },
+    {
+      "source": "/workspace/work/action-detail-completion/action-details-red.trace.jsonl",
+      "decisions": 170,
+      "allSixFilesByteEqual": true
+    },
+    {
+      "source": "/workspace/work/hard-three/export-equivalence-final/normal.jsonl",
+      "decisions": 1,
+      "allSixFilesByteEqual": true
+    },
+    {
+      "source": "/workspace/work/hard-three/export-equivalence-final/timeout.jsonl",
+      "decisions": 1,
+      "allSixFilesByteEqual": true
+    },
+    {
+      "source": "/workspace/work/hard-three/export-equivalence-final/legacy.jsonl",
+      "decisions": 1,
+      "allSixFilesByteEqual": true
+    },
+    {
+      "source": "/workspace/work/hard-three/export-equivalence-final/targets.jsonl",
+      "decisions": 1,
+      "allSixFilesByteEqual": true
+    },
+    {
+      "source": "/workspace/work/hard-three/export-equivalence-final/payments.jsonl",
+      "decisions": 1,
+      "allSixFilesByteEqual": true
+    },
+    {
+      "source": "/workspace/work/hard-three/export-equivalence-final/terminal-first.jsonl",
+      "decisions": 1,
+      "allSixFilesByteEqual": true
+    },
+    {
+      "source": "/workspace/work/hard-three/export-equivalence-final/exception.jsonl",
+      "decisions": 1,
+      "allSixFilesByteEqual": true
+    },
+    {
+      "source": "/workspace/work/hard-three/export-equivalence-final/nullable.jsonl",
+      "decisions": 1,
+      "allSixFilesByteEqual": true
+    },
+    {
+      "source": "/workspace/work/hard-three/export-equivalence-final/aborted.jsonl",
+      "decisions": 1,
+      "allSixFilesByteEqual": true
+    },
+    {
+      "source": "/workspace/work/hard-three/export-equivalence-final/unicode.jsonl",
+      "decisions": 1,
+      "allSixFilesByteEqual": true
+    },
+    {
+      "source": "/workspace/work/hard-three/export-equivalence-final/opaque.jsonl",
+      "decisions": 1,
+      "allSixFilesByteEqual": true
+    }
+  ]
+}

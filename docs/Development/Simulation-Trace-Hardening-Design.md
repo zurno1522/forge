@@ -1,6 +1,6 @@
 # Remaining trace hardening: design priorities
 
-Status: design draft; no runtime or wire-format changes. Baseline: `ad925214474` on `goldfish-trace`. This follows the [HARD-001 assessment and implemented fixes](Simulation-Trace-Coupling-Assessment.md#implementation-follow-up-2026-11-18).
+Status: implemented for synchronous emission-time capture including same-thread reentrancy, classified engine removals and spooled CLI export. The design baseline was `ad925214474` on `goldfish-trace`. The proposed contracts below are preserved for review; current implementation and validation are recorded in [the assessment](Simulation-Trace-Coupling-Assessment.md#remaining-design-implementation-2026-11-19).
 
 ## Priority and scope
 
@@ -81,6 +81,12 @@ Memory acceptance must include a single huge game, many games/runs, large action
 
 Require equivalent dataset, examples, manifest, coverage and validation output on the successful/timeout/exception/legacy corpus. Add malformed late-input and disk-failure checks proving that invalid input never publishes a valid-looking dataset. Benchmark the existing repeated-run fixtures and longer single-game fixtures. Keep this change independent of Java capture and removal classification.
 
-## Next deliverable
+## Implementation boundaries
 
-Begin with the HARD-006 producer/ordering audit and small nested-dispatch prototype. Resolve administrative cancellation and observer-close ordering before choosing the final API. The design is ready for that bounded investigation; it does not yet declare reentrant or asynchronous support implemented.
+The implementation uses a generic synchronous `EventEmissionObserver` registered with Game. The tracker records actual stack insertion before its helper returns; the collector serializes detached JSON values before deferred dispatch. Collector admission/indexing/output share a monitor, with all tracker lookups and observer retirement outside it. Authoritative termination closes the game-owned registrations, including trackers from controllers that have been replaced, and prevents recording from reopening. Failures remain visible to the run owner. Existing EventBus delivery and rules-event relative ordering are retained.
+
+`MagicStack` supplies exact stack IDs and a final/pending-counter disposition. `CounterEffect` brackets removal through a `finally` completion event. These internal facts do not add JSON fields or reorder removal/counter rows. Current engine producers are classified; the compatibility constructor for external/legacy unknown removals remains conservative until authoritative finish.
+
+The CLI uses a disposable SQLite spool for records, IDs, action state, aggregates and manifest rows, then stages all six outputs. Its memory floor includes the largest record, input arguments, examples and configured database caches. The library's default aggregate-summary return and direct `load_run()` inspection API intentionally materialize Python objects; the CLI uses the compact return. There is no database dependency in game execution.
+
+Asynchronous output, concurrent rules mutation, a single atomic six-file publication, and automatic learning/reward assignment are outside these three changes.

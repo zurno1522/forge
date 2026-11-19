@@ -2,7 +2,7 @@
 
 Assessment date: 2026-11-18. Production baseline: `f2bc148cecf6bae1a499889a8a02551c0f24509e` on `goldfish-trace`. **Complete: retain the architecture and version-1 wire format, with targeted correctness, lifetime, and exporter follow-ups.** This assessment does not declare those follow-ups fixed. No production behavior or schemas were changed for this review.
 
-The findings and measurements below describe that baseline. Subsequent fixes are tracked in [the implementation follow-up](#implementation-follow-up-2026-11-18); historical evidence is preserved.
+The findings and measurements below describe that baseline. Subsequent fixes are tracked in [the first implementation follow-up](#implementation-follow-up-2026-11-18) and [completion of the remaining designs](#remaining-design-implementation-2026-11-19); historical evidence is preserved.
 
 ## Decision
 
@@ -207,6 +207,37 @@ Design order and proposed contracts are recorded in [the remaining hardening des
 - **HARD-003 within-game lifetime:** audit removal/counter/clear call sites and capture a reliable removal classification or intent at mutation time before evicting historical links. Immediate removal or next-event expiry would break delayed counter attribution. Terminal retirement does not bound a single exceptionally long game.
 - **HARD-005 bounded processing:** spool validated per-game/per-run data privately, aggregate coverage without retaining every row, then publish only after all inputs validate. Preserve duplicate-run checks, source hashes, example selection and outcome censoring. An eventual `ABORTED` run censors even earlier games, so game completion alone is insufficient to finalize labels.
 - **HARD-006 capture:** the supported path is serialized game-worker execution initiated outside an EventBus subscriber. Do not rely on subscriber ordering or live aliases for queued reentrant/async delivery. Supporting those paths requires immutable action context and snapshots captured at the engine commit boundary, explicit copy/rollout propagation rules and an ordered handoff. Collector-wide locking cannot repair context already retired before delivery and risks lock inversion. Keep the failing nested reproduction until that contract is implemented; no ordinary CLI occurrence or concurrent index race was established.
+
+## Remaining design implementation (2026-11-19)
+
+The three remaining designs are implemented in separate commits, retaining the V1 JSON contract. The 2026-11-18 findings/status above remain historical evidence.
+
+| Task | Change | Commits |
+| --- | --- | --- |
+| HARD-006 | Generic synchronous observation before EventBus delivery; actual stack IDs reach the tracker before its helper returns; serialization captures values before deferred subscribers can mutate them. Collector admission, indexing and output are serialized, with tracker lookups/retirement outside that monitor. Authoritative termination closes game-owned registrations, including replaced-controller trackers, and prevents recording from reopening. | `aa955c9a5fe`, `51fe1e77018` |
+| HARD-003 | Exact stack identity and explicit final/pending-counter removal disposition; `CounterEffect` closes its pending removal in `finally`, including exceptional exits. Final removals no longer accumulate history. | `99eb694c758` |
+| HARD-005 | Private SQLite-backed validation state, IDs, actions, rows, coverage and manifest; streamed output; complete validation and private staging before exclusive publication. The CLI returns fixed-size counts, with spool cleanup on success/failure. | `a3801cb6885` |
+
+Removal-source audit: resolution, `remove(Card)`, player elimination, stack-exile costs, `GameAction` zone changes, Airbend and single/all-card zone-change effects all reach the final-removal path in `MagicStack`. The only counter-announcement producer, `CounterEffect`, uses the pending-counter path and completion event. Bulk clear removes live mappings while preserving a removed entry's pending counter observation. Both production removal-event constructors are now classified. The legacy constructor retains `UNKNOWN` conservatively; the within-game bound applies to current classified engine producers, not arbitrary external unknown events.
+
+The failed nested Archivist reproduction now has a non-null action reference and terminal `SUCCEEDED/STACKED`. Unit regressions additionally resolve the nested activation and reset targets before deferred delivery, proving that the captured identities and target snapshot survive. Subscriber-order permutations, capture failure visibility, admitted capture versus authoritative close, and replacement-controller retirement are covered. No asynchronous writer or concurrent rules-mutation capability is introduced.
+
+The final Java reactor passes 2,408 desktop cases (six skipped), 23 core cases and 23 game cases, with zero failures/errors. All 55 exporter tests pass. Exporter regressions include genuine SQLite page-capacity exhaustion, late invalid input, staged output failure, exclusive-publication races/rollback, changed sources after validation, terminal-first identity contradictions, duplicate IDs, game ordering, example selection and nullable legacy metadata. All six output files are byte-identical to the prior exporter on 18 real/constructed inputs, including timeout, exception, abort, legacy, opaque-ID, Unicode and snapshot cases.
+
+Five fresh CLI games completed normally: three constructed games (seed 7451), one regular Doctor Who/Ur-Dragon Commander game with Monte Carlo off (31002), and one with it on (31003). They produced 276 validated decisions; full/filtered datasets match byte-for-byte, and all five preserve pregame shuffles before `GAME_STARTED`. The off-mode seeded decision/execution payloads match the previous branch's runs after removing decision timing. The Monte Carlo run reports zero rollout failures and zero unsimulatable-card entries. The injected exception still exports one censored decision without a normal engine finish. These checks establish collection behavior, not strategic performance.
+
+The controlled allocation/CPU workload was rerun with all three recording modes and both board sizes. Allocation remains close to the assessment baseline; timing samples do not establish a throughput improvement. At both 100 and 1,000 operations, resolved, countered, cleared and final-removal controls retain zero historical links before and after authoritative finish; all pending aliases retire, and all eight weak Game fixtures are collected. Failure and pending-counter/bulk-clear regressions separately verify the paths that final map counts alone would miss.
+
+| Export workload | Previous peak RSS | Spooled peak RSS | Private spool allocation | Process CPU, previous → spooled |
+| --- | ---: | ---: | ---: | ---: |
+| 32 copies of the real three-game run, full export (6,528 decisions) | 186,080 KiB | 17,452 KiB | 69,947,392 bytes | 2.116 → 3.605 s |
+| One game, 12k pass decisions, validation | 68,536 KiB | 16,100 KiB | 24,342,528 bytes | 0.320 → 0.981 s |
+
+The additional category-diversity check grows from 1k to 12k distinct rejection categories with full reports: peak RSS is 15,948 → 16,744 KiB and spool allocation 3.6 → 43.2 MB. The 100 → 2,000-game check uses 15,160 → 15,852 KiB. Disk indexing trades CPU and temporary storage for substantially lower process memory. These are single shared-host subprocess samples; RSS, allocated database pages and output bytes measure different resources. The memory floor includes the largest record, input arguments, example budget and database caches. Library callers requesting the full aggregate summary, or using direct `load_run()`, still deliberately materialize those Python values. The game engine does not use SQLite.
+
+All six files are staged before publication. Individual files publish exclusively; rollback preserves unrelated/racing files. This is not a single atomic six-file snapshot. Same-thread reentrant capture is supported; an asynchronous writer and concurrent rules mutation remain separate capabilities. No learning or reward assignment is added.
+
+Evidence: [manifest and source hashes](assessments/HARD-003-005-006/manifest.json), [validation and input hashes](assessments/HARD-003-005-006/validation.json), [correctness probe output](assessments/HARD-003-005-006/correctness-probes.txt), [controlled allocation/retention](assessments/HARD-003-005-006/controlled.json), and [exporter scaling](assessments/HARD-003-005-006/exporter.json). Raw traces, complete exports and logs remain under `/workspace/work/hard-three`.
 
 ## Reproduction and evidence
 

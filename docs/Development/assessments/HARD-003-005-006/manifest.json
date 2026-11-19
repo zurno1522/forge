@@ -1,0 +1,28 @@
+{
+  "productionRevision": "51fe1e77018eb6f1e6dc01f390dafccbbb3819f0",
+  "productionClean": true,
+  "workingTreeContainsDocumentationChanges": true,
+  "javaVersion": "openjdk version \"21.0.12.1\" 2026-08-18\nOpenJDK Runtime Environment (build 21.0.12.1+1-1-deb13u1-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.12.1+1-1-deb13u1-Debian, mixed mode, sharing)",
+  "pythonVersion": "3.12.14",
+  "cgroupCpuMax": "200000 100000",
+  "rawArtifacts": "/workspace/work/hard-three",
+  "gameSeeds": {
+    "simple": 7451,
+    "commander": 31002,
+    "commanderMonteCarlo": 31003
+  },
+  "exporterBenchmarkInputSha256": "3595ae22b14dec2e389fbef7df1ad454b09165d3baf2ea14078b9f30e57e296d",
+  "committedSources": {
+    "tools/decision-records/export.py": "f8014963121e44491f253123823053410eb115eef6261d118361f606b0fc2a57",
+    "tools/decision-records/decision_spool.py": "71745ec19b3fe1901caf5b642459753d10b5c5b3b7ed5fc6ee43916dc91360d6",
+    "tools/decision-records/hardening/measure_schema.py": "a80df89c986f624151541d46836973a8241fcc36885c683ae94c321c57959d28",
+    "tools/decision-records/hardening/HardeningProbe.java": "d8151c3e516cb6f295262af038eb95c18e577ebf9841dcb1da2c8d72651669c4",
+    "tools/decision-records/hardening/ActionCorrelationProbe.java": "432c78b55fb8f54b3479e0772adb73e51a08e1c5d8948eedc8e4eebdfb8602fc"
+  },
+  "notes": [
+    "Controlled Java and exporter measurements ran sequentially without overlapping JVM tests or another benchmark.",
+    "Spool allocation is SQLite page_count times page_size, not process RSS or an exclusive-heap measurement.",
+    "Gameplay checks establish collection integrity; they do not measure deck strength or learning.",
+    "Raw command/probe artifacts remain in the workspace; curated results are committed here."
+  ]
+}
