@@ -202,6 +202,8 @@ The original retention method was rerun for 1,000 operations on each removal pat
 
 The remaining work has distinct boundaries:
 
+Design order and proposed contracts are recorded in [the remaining hardening design](Simulation-Trace-Hardening-Design.md): capture first, removal classification second, exporter spooling third. Exporter implementation is independent and can move ahead when corpus size becomes the practical limit.
+
 - **HARD-003 within-game lifetime:** audit removal/counter/clear call sites and capture a reliable removal classification or intent at mutation time before evicting historical links. Immediate removal or next-event expiry would break delayed counter attribution. Terminal retirement does not bound a single exceptionally long game.
 - **HARD-005 bounded processing:** spool validated per-game/per-run data privately, aggregate coverage without retaining every row, then publish only after all inputs validate. Preserve duplicate-run checks, source hashes, example selection and outcome censoring. An eventual `ABORTED` run censors even earlier games, so game completion alone is insufficient to finalize labels.
 - **HARD-006 capture:** the supported path is serialized game-worker execution initiated outside an EventBus subscriber. Do not rely on subscriber ordering or live aliases for queued reentrant/async delivery. Supporting those paths requires immutable action context and snapshots captured at the engine commit boundary, explicit copy/rollout propagation rules and an ordered handoff. Collector-wide locking cannot repair context already retired before delivery and risks lock inversion. Keep the failing nested reproduction until that contract is implemented; no ordinary CLI occurrence or concurrent index race was established.
