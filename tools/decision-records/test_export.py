@@ -4,6 +4,9 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest import mock
+import hashlib
+import sqlite3
 
 spec = importlib.util.spec_from_file_location('decision_export', Path(__file__).with_name('export.py'))
 module = importlib.util.module_from_spec(spec)
@@ -100,6 +103,145 @@ class ExportTests(unittest.TestCase):
         path=self.root/name
         path.write_text(''.join(json.dumps(r)+'\n' for r in rows))
         return path
+
+    def test_spooled_export_preserves_distinct_examples_then_fills_in_source_order(self):
+        inputs = []
+        for index, rows in enumerate((fixture(), fixture(), fixture('TIMEOUT'),
+                                      linked_fixture('FAILED'), linked_fixture('ABANDONED', 'EXCEPTION'))):
+            rows[0]['runId'] = 'run' + str(index)
+            inputs.append(self.write(rows, f'run{index}.jsonl'))
+        out = self.root / 'out'
+        module.export(inputs, out, examples=5)
+        examples = [json.loads(line) for line in (out / 'examples.jsonl').read_text().splitlines()]
+        self.assertEqual([row['runId'] for row in examples], ['run0', 'run2', 'run3', 'run4', 'run1'])
+
+    def test_spooled_games_materialize_in_game_order_instead_of_creation_order(self):
+        first, second = fixture(), fixture()
+        for row in second[1:-1]:
+            row['game'] = 2
+        first[2]['decision']['decisionId'] = 'first'
+        second[2]['decision']['decisionId'] = 'second'
+        finish = dict(first[-1], gamesAttempted=2, gamesNormal=2)
+        source = self.write([first[0]] + second[1:-1] + first[1:-1] + [finish])
+        out = self.root / 'out'
+        module.export([source], out)
+        rows = [json.loads(line) for line in (out / 'dataset.jsonl').read_text().splitlines()]
+        self.assertEqual([(row['game'], row['decisionId']) for row in rows], [(1, 'first'), (2, 'second')])
+
+    def test_nullable_legacy_pilot_metadata_still_forms_one_coverage_group(self):
+        rows = fixture()
+        rows[0]['pilotMode'] = None
+        extra = copy.deepcopy(rows[2])
+        extra['decision']['decisionId'] = 'another'
+        rows.insert(3, extra)
+        for index, row in enumerate(rows[1:-1], 1):
+            row.update(game=1, eventIndex=index)
+        out = self.root / 'out'
+        summary = module.export([self.write(rows)], out)
+        self.assertEqual(summary['pilotModes'], {None: 2})
+        self.assertEqual(len(summary['groups']), 1)
+        self.assertEqual(summary['groups'][0]['decisions'], 2)
+        self.assertIsNone(summary['groups'][0]['pilotMode'])
+
+    def test_late_invalid_input_publishes_nothing_and_discards_spool(self):
+        valid = self.write(fixture(), 'valid.jsonl')
+        invalid = self.write(fixture(), 'invalid.jsonl')
+        invalid.write_text(invalid.read_text() + '{}\n')
+        directories = []
+        original = module.Spool
+        class TrackedSpool(original):
+            def __enter__(inner):
+                result = super().__enter__()
+                directories.append(Path(inner.directory.name))
+                return result
+        out = self.root / 'out'
+        with mock.patch.object(module, 'Spool', TrackedSpool):
+            with self.assertRaises(module.InvalidData):
+                module.export([valid, invalid], out)
+        self.assertFalse(out.exists())
+        self.assertTrue(directories)
+        self.assertTrue(all(not directory.exists() for directory in directories))
+
+    def test_sqlite_disk_exhaustion_publishes_nothing_and_discards_spool(self):
+        rows = fixture()
+        rows[0]['participants'][0]['deck']['Main'][0]['name'] = 'Large fixture ' * 20000
+        source = self.write(rows)
+        directories = []
+        original = module.Spool
+        class LimitedSpool(original):
+            def __enter__(inner):
+                result = super().__enter__()
+                directories.append(Path(inner.directory.name))
+                inner.db.execute('PRAGMA max_page_count=16')
+                return result
+        out = self.root / 'out'
+        with mock.patch.object(module, 'Spool', LimitedSpool):
+            with self.assertRaisesRegex(sqlite3.OperationalError, 'full'):
+                module.export([source], out)
+        self.assertFalse(out.exists())
+        self.assertTrue(all(not directory.exists() for directory in directories))
+
+    def test_failure_after_staging_dataset_does_not_publish_partial_export(self):
+        source = self.write(fixture())
+        out = self.root / 'out'
+        original = module.write_export
+        def failed_write(stage, *args):
+            original(stage, *args)
+            self.assertTrue((stage / 'dataset.jsonl').exists())
+            raise OSError('simulated output failure')
+        with mock.patch.object(module, 'write_export', failed_write):
+            with self.assertRaisesRegex(OSError, 'output failure'):
+                module.export([source], out)
+        self.assertFalse(out.exists())
+        self.assertFalse(list(self.root.glob('.forge-export-*')))
+
+    def test_publication_failure_rolls_back_own_files_and_preserves_racing_file(self):
+        source = self.write(fixture())
+        out = self.root / 'out'
+        original = module.os.link
+        def raced_link(src, dest):
+            if Path(dest).name == 'examples.jsonl':
+                Path(dest).write_text('external file')
+            return original(src, dest)
+        with mock.patch.object(module.os, 'link', raced_link):
+            with self.assertRaises(FileExistsError):
+                module.export([source], out)
+        self.assertEqual((out / 'examples.jsonl').read_text(), 'external file')
+        self.assertFalse((out / 'dataset.jsonl').exists())
+        self.assertEqual(list(out.iterdir()), [out / 'examples.jsonl'])
+
+    def test_materialization_uses_validated_spool_when_source_changes(self):
+        source = self.write(fixture())
+        source_hash = hashlib.sha256(source.read_bytes()).hexdigest()
+        original = module.Spool
+        class ChangedSourceSpool(original):
+            def add_run(inner, run):
+                super().add_run(run)
+                source.write_text('changed externally after validation')
+        out = self.root / 'out'
+        with mock.patch.object(module, 'Spool', ChangedSourceSpool):
+            module.export([source], out)
+        row = json.loads((out / 'dataset.jsonl').read_text())
+        self.assertEqual(row['outcomeLabel'], 'WIN')
+        manifest = json.loads((out / 'manifest.json').read_text())
+        self.assertEqual(manifest['inputs'][0]['sourceSha256'], source_hash)
+
+    def test_disk_backed_action_state_rejects_late_contradiction_and_duplicate_decision(self):
+        cases = []
+        rows = engine_fixture()
+        rows[4], rows[5] = rows[5], rows[4]
+        rows[4]['execution']['executedAbilityId'] = 99
+        cases.append(rows)
+        rows = fixture()
+        rows.insert(3, copy.deepcopy(rows[2]))
+        cases.append(rows)
+        for index, rows in enumerate(cases):
+            for event_index, row in enumerate(rows[1:-1], 1):
+                row.update(game=1, eventIndex=event_index)
+            out = self.root / f'out{index}'
+            with self.assertRaises(module.InvalidData):
+                module.export([self.write(rows, f'invalid{index}.jsonl')], out)
+            self.assertFalse(out.exists())
 
     def test_export_self_contained_metadata_and_outcome(self):
         source=self.write(fixture())

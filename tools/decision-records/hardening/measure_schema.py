@@ -110,13 +110,26 @@ RUN_EXPORTER = '''\
 import json, resource, runpy, sys, time
 sys.argv.pop(0)
 start = time.perf_counter()
+extra = {}
 try:
-    runpy.run_path(sys.argv[0], run_name='__main__')
+    scope = runpy.run_path(sys.argv[0], run_name='export_benchmark')
+    original = scope.get('Spool')
+    if original is not None:
+        class MeasuredSpool(original):
+            def __exit__(self, *args):
+                try:
+                    pages = self.db.execute('PRAGMA page_count').fetchone()[0]
+                    size = self.db.execute('PRAGMA page_size').fetchone()[0]
+                    extra['spoolAllocatedBytes'] = pages * size
+                finally:
+                    super().__exit__(*args)
+        scope['main'].__globals__['Spool'] = MeasuredSpool
+    sys.exit(scope['main']())
 finally:
     usage = resource.getrusage(resource.RUSAGE_SELF)
     print(json.dumps(dict(peakRssKiB=usage.ru_maxrss,
                           seconds=time.perf_counter() - start,
-                          cpuSeconds=usage.ru_utime + usage.ru_stime)), file=sys.stderr)
+                          cpuSeconds=usage.ru_utime + usage.ru_stime, **extra)), file=sys.stderr)
 '''
 
 
@@ -166,6 +179,45 @@ def long_games(exporter, fixture_dir):
         yield run_exporter(exporter, [path], '--validate-only')
 
 
+def diverse_categories(exporter, fixture_dir):
+    fixture = subprocess.run([sys.executable, '-c',
+        'import json, runpy, sys; print(json.dumps(runpy.run_path(sys.argv[1])["fixture"]()))',
+        str(exporter.with_name('test_export.py'))], capture_output=True, text=True, check=True)
+    header, start, decision, *ending = json.loads(fixture.stdout)
+    for count in (1000, 12000):
+        path = fixture_dir / f'categories-{count}.jsonl'
+        with path.open('wb') as output:
+            output.write(compact(header))
+            output.write(compact(start))
+            for index in range(1, count + 1):
+                candidate = dict(kind='SPELL', sourceId=index, abilityId=index, sourceName=f'Card {index}',
+                                 assessment='CantPlayAi', assessmentDetail=dict(reason=f'Reason {index}',
+                                 handler=f'Handler {index}', handlerAssessment=f'Assessment {index}'))
+                row = dict(decision, eventIndex=index + 1,
+                           decision=dict(decision['decision'], decisionId=f'0:{index}', candidates=[candidate]))
+                output.write(compact(row))
+            for index, row in enumerate(ending[:-1], count + 2):
+                output.write(compact(dict(row, eventIndex=index)))
+            output.write(compact(ending[-1]))
+        yield run_exporter(exporter, [path], '--output-dir', fixture_dir / f'categories-{count}-export')
+
+
+def many_games(exporter, fixture_dir):
+    fixture = subprocess.run([sys.executable, '-c',
+        'import json, runpy, sys; print(json.dumps(runpy.run_path(sys.argv[1])["fixture"]()))',
+        str(exporter.with_name('test_export.py'))], capture_output=True, text=True, check=True)
+    header, *body, ending = json.loads(fixture.stdout)
+    for count in (100, 2000):
+        path = fixture_dir / f'games-{count}.jsonl'
+        with path.open('wb') as output:
+            output.write(compact(header))
+            for game in range(1, count + 1):
+                for row in body:
+                    output.write(compact(dict(row, game=game)))
+            output.write(compact(dict(ending, gamesAttempted=count, gamesNormal=count)))
+        yield run_exporter(exporter, [path], '--output-dir', fixture_dir / f'games-{count}-export')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest='command', required=True)
@@ -183,7 +235,9 @@ def main():
         with tempfile.TemporaryDirectory(prefix='hard001-export-') as scratch:
             fixture_dir = Path(scratch)
             results = dict(repeatedInputs=list(repeated_inputs(export_path, args.sample, fixture_dir)),
-                           longGames=list(long_games(export_path, fixture_dir)))
+                           longGames=list(long_games(export_path, fixture_dir)),
+                           diverseCategories=list(diverse_categories(export_path, fixture_dir)),
+                           manyGames=list(many_games(export_path, fixture_dir)))
     print(json.dumps(results, indent=2))
 
 

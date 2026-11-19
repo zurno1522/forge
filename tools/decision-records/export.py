@@ -6,9 +6,24 @@ Standard library only. This is an analysis dataset, not a complete RL observatio
 import argparse
 import collections
 import hashlib
+import importlib.util
+import itertools
+import os
+import sqlite3
+import tempfile
 import json
 from pathlib import Path
 import sys
+
+# Also support analysis callers that load this standalone script by absolute path.
+_spool_spec = importlib.util.spec_from_file_location('forge_decision_spool', Path(__file__).with_name('decision_spool.py'))
+_spool = importlib.util.module_from_spec(_spool_spec)
+_spool_spec.loader.exec_module(_spool)
+Spool = _spool.Spool
+
+
+def ordered_games(games):
+    return games.ordered_keys() if isinstance(games, _spool.Games) else sorted(games)
 
 
 class InvalidData(ValueError):
@@ -256,6 +271,7 @@ def _accept_action_event(record, game):
     event = {key: record[key] for key in ACTION_EVENT_FIELDS if key in record}
     event['postOutcome'] = game['outcome'] is not None
     action['engineEvents'].append(event)
+    game['actions'][action_id] = action
 
 
 def accept_execution(record, game):
@@ -291,13 +307,14 @@ def accept_execution(record, game):
     event = {key: record[key] for key in ('type', 'game', 'eventIndex', 'turn', 'phase') if key in record}
     event.update(execution=execution, postOutcome=game['outcome'] is not None)
     action['events'].append(event)
+    game['actions'][action_id] = action
 
 
-def load_run(path):
+def load_run(path, *, games=None):
     """Validate completely before returning anything that can be written to the dataset."""
     metadata = None
     finished = None
-    games = {}
+    games = {} if games is None else games
     records = 0
     file_hash = hashlib.sha256()
     with path.open('rb') as source:
@@ -387,6 +404,7 @@ def load_run(path):
                     elif kind == 'GAME_EXECUTION_FINISHED':
                         require(record.get('status') in ('NORMAL', 'TIMEOUT', 'EXCEPTION'), 'invalid execution status')
                         game['execution'] = record
+                    games[number] = game
                 records += 1
             except (InvalidData, ValueError, KeyError, TypeError, AttributeError) as exc:
                 raise InvalidData(f'{path}:{line_number}: {exc}') from exc
@@ -413,7 +431,7 @@ def load_run(path):
                 require(isinstance(winner, dict), f'{path}: malformed winner')
                 require(winner.get('player', {}).get('id') in game['players'], f'{path}: unknown winner')
                 require(game['players'][winner['player']['id']] == winner.get('participantId'), f'{path}: winner participant mismatch')
-    require(sorted(games) == list(range(1, len(games) + 1)), f'{path}: attempted game sequence has gaps')
+    require(all(number == expected for expected, number in enumerate(ordered_games(games), 1)), f'{path}: attempted game sequence has gaps')
     require(finished.get('status') in ('NORMAL', 'TIMEOUT', 'EXCEPTION', 'ABORTED'), f'{path}: invalid run status')
     expected = 'EXCEPTION' if counts['EXCEPTION'] else 'TIMEOUT' if counts['TIMEOUT'] else 'NORMAL'
     require(finished['status'] in (expected, 'ABORTED'), f'{path}: aggregate status disagrees with executions')
@@ -432,7 +450,8 @@ def load_run(path):
 def dataset_rows(run):
     meta = run['metadata']
     participants = {p['participantId']: p for p in meta['participants']}
-    for number, game in sorted(run['games'].items()):
+    for number in ordered_games(run['games']):
+        game = run['games'][number]
         for record in game['decisions']:
             d = record['decision']
             participant_id = game['players'][d['playerId']]
@@ -466,65 +485,121 @@ def matches_selected(action, candidate):
     return action.get('abilityId') == candidate.get('abilityId')
 
 
-def make_coverage(runs, rows):
-    summary = dict(runs=len(runs), games=sum(len(r['games']) for r in runs),
-                   decisions=len(rows), sourceRecords=sum(r['records'] for r in runs), trainingReady=False)
-    summary['executionStatuses'] = dict(collections.Counter(g['execution']['status'] for r in runs for g in r['games'].values()))
-    for key, values in (
-        ('selections', (r['decision']['selection'] for r in rows)),
-        ('selectedActionKinds', (a['kind'] for r in rows for a in r['decision']['selectedActions'])),
-        ('phases', (r['decision']['observation']['phase'] for r in rows)),
-        ('decisionStatuses', (r['decision']['status'] for r in rows)),
-        ('outcomeLabels', (r['outcomeLabel'] or 'CENSORED' for r in rows)),
-        ('pilotModes', (r['pilotMode'] for r in rows)),
-        ('assessments', (c['assessment'] for r in rows for c in r['decision']['candidates'])),
-        ('assessmentDetails', (c['assessmentDetail']['reason'] for r in rows for c in r['decision']['candidates'] if 'assessmentDetail' in c)),
-        ('cardAiHandlers', (c['assessmentDetail']['handler'] for r in rows for c in r['decision']['candidates'] if 'handler' in c.get('assessmentDetail', {}))),
-        ('handlerAssessments', (c['assessmentDetail']['handlerAssessment'] for r in rows for c in r['decision']['candidates'] if 'handlerAssessment' in c.get('assessmentDetail', {}))),
-        ('rejectedCards', (c.get('sourceName', 'IDENTITY_MASKED') for r in rows for c in r['decision']['candidates'] if c['assessment'] not in ('WillPlay', 'LAND_OPTION'))),
-        ('rejectedActionKinds', (c['kind'] for r in rows for c in r['decision']['candidates'] if c['assessment'] not in ('WillPlay', 'LAND_OPTION'))),
-        ('rejectedCardKinds', (c.get('sourceName', 'IDENTITY_MASKED') + ' [' + c['kind'] + ']' for r in rows for c in r['decision']['candidates'] if c['assessment'] not in ('WillPlay', 'LAND_OPTION'))),
-        ('searchReasons', (r['decision']['search']['reason'] for r in rows if 'search' in r['decision'])),
-    ):
-        summary[key] = dict(collections.Counter(values).most_common())
-    summary['outcomeEligibleDecisions'] = sum(r['outcomeEligible'] for r in rows)
-    summary['censoredDecisions'] = len(rows) - summary['outcomeEligibleDecisions']
-    summary['decisionsAfterOutcome'] = sum(r['postOutcome'] for r in rows)
-    summary['decisionsWithAssessments'] = sum(bool(r['decision']['candidates']) for r in rows)
-    summary['selectedActionsWithoutAssessment'] = sum(not any(matches_selected(a, c) for c in r['decision']['candidates']) for r in rows for a in r['decision']['selectedActions'])
-    summary['actionExecutionStatuses'] = dict(collections.Counter(a['status'] for r in rows for a in r['actionExecutions']))
-    summary['linkedEngineEvents'] = dict(collections.Counter(e['type'] for r in rows for a in r['actionExecutions'] for e in a['engineEvents']))
-    summary['actionEngineEventCoverage'] = dict(collections.Counter(a['engineEventCoverage'] for r in rows for a in r['actionExecutions']))
-    additions = [e for r in rows for a in r['actionExecutions'] for e in a['engineEvents'] if e['type'] == 'STACK_ADDED']
-    summary['finalizedTargetSnapshots'] = dict(collections.Counter('OBSERVED' if e.get('finalizedTargets') is not None else 'UNAVAILABLE' for e in additions))
-    summary['finalizedTargetTypes'] = dict(collections.Counter(t['type'] for e in additions if e.get('finalizedTargets') is not None
-                                                             for group in e['finalizedTargets']['abilities'] for t in group['targets']))
-    summary['finalizedModeSnapshots'] = dict(collections.Counter('OBSERVED' if e.get('finalizedModes') is not None else 'UNAVAILABLE' for e in additions))
-    summary['selectedModeCounts'] = dict(collections.Counter(len(e['finalizedModes']['modes']) for e in additions
-                                                           if e.get('finalizedModes') is not None and e['finalizedModes']['modal']))
-    summary['finalizedXSnapshots'] = dict(collections.Counter('OBSERVED' if e.get('finalizedX') is not None else 'UNAVAILABLE' for e in additions))
-    summary['announcedXValues'] = dict(collections.Counter(e['finalizedX']['announcedValue'] for e in additions
-                                                        if e.get('finalizedX') is not None and e['finalizedX']['announcedValue'] is not None))
-    payments = [e['finalizedPayments'] for e in additions if e.get('finalizedPayments') is not None]
-    summary['finalizedPaymentSnapshots'] = dict(collections.Counter('OBSERVED' if e.get('finalizedPayments') is not None else 'UNAVAILABLE' for e in additions))
-    summary['optionalCostSelections'] = dict(collections.Counter(c for p in payments for c in p['optionalCosts']))
-    summary['alternativeCostSelections'] = dict(collections.Counter(p['alternativeCost'] for p in payments if p['alternativeCost'] is not None))
-    summary['cardPaymentGroups'] = dict(collections.Counter(c['type'] for p in payments for c in p['cardPayments']))
-    summary['unrecognizedCardPaymentGroups'] = sum(p['unrecognizedCardPaymentGroups'] for p in payments)
-    summary['searchRecords'] = sum('search' in r['decision'] for r in rows)
-    summary['searchDecidedByRollouts'] = sum(r['decision'].get('search', {}).get('decidedByRollouts', False) for r in rows)
-    summary['runsSummary'] = [dict(runId=r['metadata']['runId'], decks=[p.get('deckName') for p in r['metadata']['participants']],
-                                 pilotMode=r['metadata']['pilotMode'], seed=r['metadata'].get('seed'), status=r['finished']['status'],
-                                 decisions=sum(len(g['decisions']) for g in r['games'].values())) for r in runs]
-    summary['groups'] = []
-    grouped = collections.defaultdict(list)
+def make_coverage(runs, rows, *, spool=None):
+    common = ('selections', 'selectedActionKinds', 'phases', 'decisionStatuses', 'outcomeLabels',
+              'pilotModes', 'assessments', 'assessmentDetails', 'cardAiHandlers', 'handlerAssessments',
+              'rejectedCards', 'rejectedActionKinds', 'rejectedCardKinds', 'searchReasons')
+    other = ('executionStatuses', 'actionExecutionStatuses', 'linkedEngineEvents', 'actionEngineEventCoverage',
+             'finalizedTargetSnapshots', 'finalizedTargetTypes', 'finalizedModeSnapshots', 'selectedModeCounts',
+             'finalizedXSnapshots', 'announcedXValues', 'finalizedPaymentSnapshots', 'optionalCostSelections',
+             'alternativeCostSelections', 'cardPaymentGroups')
+    counters = {name: spool.counter('coverage:' + name, name in common) if spool else collections.Counter()
+                for name in common + other}
+    totals = dict(outcomeEligibleDecisions=0, censoredDecisions=0, decisionsAfterOutcome=0,
+                  decisionsWithAssessments=0, selectedActionsWithoutAssessment=0,
+                  unrecognizedCardPaymentGroups=0, searchRecords=0, searchDecidedByRollouts=0)
+    grouped = {}
+
+    def add(name, value):
+        counters[name].update((value,))
+
+    def count(name):
+        counter = counters[name]
+        return counter if spool else dict(counter.most_common() if name in common else counter.items())
+
+    for run in runs:
+        for game in run['games'].values():
+            add('executionStatuses', game['execution']['status'])
     for row in rows:
-        grouped[(row['deckName'], row['deckSha256'], row['pilotMode'])].append(row)
-    for (name, deck_hash, pilot), group in sorted(grouped.items()):
-        summary['groups'].append(dict(deck=name, deckSha256=deck_hash, pilotMode=pilot, decisions=len(group),
-                                     passes=sum(r['decision']['selection'] == 'PASS_PRIORITY' for r in group),
-                                     withAssessments=sum(bool(r['decision']['candidates']) for r in group),
-                                     censored=sum(not r['outcomeEligible'] for r in group)))
+        d = row['decision']
+        for name, value in (('selections', d['selection']), ('phases', d['observation']['phase']),
+                            ('decisionStatuses', d['status']), ('outcomeLabels', row['outcomeLabel'] or 'CENSORED'),
+                            ('pilotModes', row['pilotMode'])):
+            add(name, value)
+        totals['outcomeEligibleDecisions'] += row['outcomeEligible']
+        totals['censoredDecisions'] += not row['outcomeEligible']
+        totals['decisionsAfterOutcome'] += row['postOutcome']
+        totals['decisionsWithAssessments'] += bool(d['candidates'])
+        for action in d['selectedActions']:
+            add('selectedActionKinds', action['kind'])
+            totals['selectedActionsWithoutAssessment'] += not any(matches_selected(action, c) for c in d['candidates'])
+        for candidate in d['candidates']:
+            add('assessments', candidate['assessment'])
+            detail = candidate.get('assessmentDetail')
+            if detail is not None:
+                add('assessmentDetails', detail['reason'])
+                if 'handler' in detail:
+                    add('cardAiHandlers', detail['handler'])
+                if 'handlerAssessment' in detail:
+                    add('handlerAssessments', detail['handlerAssessment'])
+            if candidate['assessment'] not in ('WillPlay', 'LAND_OPTION'):
+                source = candidate.get('sourceName', 'IDENTITY_MASKED')
+                add('rejectedCards', source)
+                add('rejectedActionKinds', candidate['kind'])
+                add('rejectedCardKinds', source + ' [' + candidate['kind'] + ']')
+        if 'search' in d:
+            totals['searchRecords'] += 1
+            totals['searchDecidedByRollouts'] += d['search'].get('decidedByRollouts', False)
+            add('searchReasons', d['search']['reason'])
+        for action in row['actionExecutions']:
+            add('actionExecutionStatuses', action['status'])
+            add('actionEngineEventCoverage', action['engineEventCoverage'])
+            for event in action['engineEvents']:
+                add('linkedEngineEvents', event['type'])
+                if event['type'] != 'STACK_ADDED':
+                    continue
+                for field, metric in (('finalizedTargets', 'finalizedTargetSnapshots'),
+                                      ('finalizedModes', 'finalizedModeSnapshots'),
+                                      ('finalizedX', 'finalizedXSnapshots'),
+                                      ('finalizedPayments', 'finalizedPaymentSnapshots')):
+                    add(metric, 'OBSERVED' if event.get(field) is not None else 'UNAVAILABLE')
+                targets = event.get('finalizedTargets')
+                if targets is not None:
+                    for group in targets['abilities']:
+                        for target in group['targets']:
+                            add('finalizedTargetTypes', target['type'])
+                modes = event.get('finalizedModes')
+                if modes is not None and modes['modal']:
+                    add('selectedModeCounts', len(modes['modes']))
+                x = event.get('finalizedX')
+                if x is not None and x['announcedValue'] is not None:
+                    add('announcedXValues', x['announcedValue'])
+                payment = event.get('finalizedPayments')
+                if payment is not None:
+                    for cost in payment['optionalCosts']:
+                        add('optionalCostSelections', cost)
+                    if payment['alternativeCost'] is not None:
+                        add('alternativeCostSelections', payment['alternativeCost'])
+                    for group in payment['cardPayments']:
+                        add('cardPaymentGroups', group['type'])
+                    totals['unrecognizedCardPaymentGroups'] += payment['unrecognizedCardPaymentGroups']
+        if spool:
+            spool.group(row)
+        else:
+            key = (row['deckName'], row['deckSha256'], row['pilotMode'])
+            group = grouped.setdefault(key, dict(deck=key[0], deckSha256=key[1], pilotMode=key[2],
+                                               decisions=0, passes=0, withAssessments=0, censored=0))
+            group['decisions'] += 1
+            group['passes'] += d['selection'] == 'PASS_PRIORITY'
+            group['withAssessments'] += bool(d['candidates'])
+            group['censored'] += not row['outcomeEligible']
+    summary = dict(runs=len(runs), games=sum(len(r['games']) for r in runs), decisions=len(rows),
+                   sourceRecords=sum(r['records'] for r in runs), trainingReady=False)
+    summary['executionStatuses'] = count('executionStatuses')
+    for name in common:
+        summary[name] = count(name)
+    for name in ('outcomeEligibleDecisions', 'censoredDecisions', 'decisionsAfterOutcome',
+                 'decisionsWithAssessments', 'selectedActionsWithoutAssessment'):
+        summary[name] = totals[name]
+    for name in other[1:]:
+        summary[name] = count(name)
+    for name in ('unrecognizedCardPaymentGroups', 'searchRecords', 'searchDecidedByRollouts'):
+        summary[name] = totals[name]
+    run_summaries = (dict(runId=r['metadata']['runId'], decks=[p.get('deckName') for p in r['metadata']['participants']],
+                          pilotMode=r['metadata']['pilotMode'], seed=r['metadata'].get('seed'), status=r['finished']['status'],
+                          decisions=sum(len(g['decisions']) for g in r['games'].values())) for r in runs)
+    summary['runsSummary'] = spool.sequence('run_summaries', run_summaries) if spool else list(run_summaries)
+    summary['groups'] = spool.sequence('group_summaries', spool.groups()) if spool else [grouped[key] for key in sorted(grouped)]
     summary['limitations'] = [
         'Main-phase play selection with an empty stack only; no mulligan, combat, reactive-priority or subordinate-choice coverage.',
         'Candidate assessments are partial and may repeat an ability; counts are assessment observations, not unique rejected legal actions.',
@@ -543,104 +618,183 @@ def make_coverage(runs, rows):
     return summary
 
 
-def report_markdown(summary, runs):
+def counter_json_chunks(counter):
+    items = counter.sorted_items() if isinstance(counter, _spool.DiskCounter) else sorted(counter.items())
+    yield '{'
+    for index, (key, value) in enumerate(items):
+        if index:
+            yield ', '
+        text = 'null' if key is None else 'true' if key is True else 'false' if key is False else str(key)
+        yield json.dumps(text) + ': ' + json.dumps(value)
+    yield '}'
+
+
+def report_chunks(summary, runs):
     def cell(value):
         return str(value).replace('|', '\\|').replace('\n', ' ')
-    lines = ['# Decision coverage report', '',
-             f"Validated **{summary['decisions']} decisions** from **{summary['games']} games** in **{summary['runs']} runs**.",
-             f"Execution results: `{json.dumps(summary['executionStatuses'], sort_keys=True)}`. "
-             f"Outcome-eligible decisions: {summary['outcomeEligibleDecisions']}; censored: {summary['censoredDecisions']}.", '',
-             '**This is a coverage and data-integrity report, not a rating of deck strength or strategic correctness.**', '',
-             '| Deck | Pilot | Decisions | Passes | With assessments | Censored |',
-             '| --- | --- | ---: | ---: | ---: | ---: |']
+
+    def lines(*values):
+        for value in values:
+            yield value + '\n'
+
+    def counter_line(prefix, name, suffix='`.'):
+        yield prefix + '`'
+        yield from counter_json_chunks(summary[name])
+        yield suffix + '\n'
+
+    yield from lines('# Decision coverage report', '',
+                     f"Validated **{summary['decisions']} decisions** from **{summary['games']} games** in **{summary['runs']} runs**.")
+    yield from counter_line('Execution results: ', 'executionStatuses',
+                            f"`. Outcome-eligible decisions: {summary['outcomeEligibleDecisions']}; censored: {summary['censoredDecisions']}.")
+    yield from lines('', '**This is a coverage and data-integrity report, not a rating of deck strength or strategic correctness.**', '',
+                     '| Deck | Pilot | Decisions | Passes | With assessments | Censored |',
+                     '| --- | --- | ---: | ---: | ---: | ---: |')
     for group in summary['groups']:
-        lines.append('| ' + ' | '.join(cell(group[k]) for k in ('deck', 'pilotMode', 'decisions', 'passes', 'withAssessments', 'censored')) + ' |')
-    lines += ['', '## Assessment observations', '', '| Assessment | Count |', '| --- | ---: |']
+        yield from lines('| ' + ' | '.join(cell(group[k]) for k in ('deck', 'pilotMode', 'decisions', 'passes', 'withAssessments', 'censored')) + ' |')
+    yield from lines('', '## Assessment observations', '', '| Assessment | Count |', '| --- | ---: |')
     for reason, count in summary['assessments'].items():
-        lines.append(f'| {cell(reason)} | {count} |')
-    lines += ['', 'Counts can include repeated evaluation of the same ability. Passing can reflect a strategic choice or an unapproved action, not necessarily absence of legal plays.', '',
-              '## Rejection details', '',
-              'Where available: `' + json.dumps(summary['assessmentDetails'], sort_keys=True) + '`.',
-              'Card AI handlers: `' + json.dumps(summary['cardAiHandlers'], sort_keys=True) + '`.',
-              'Handler assessments: `' + json.dumps(summary['handlerAssessments'], sort_keys=True) + '`.',
-              'Legacy inputs without detail remain unspecified. LAND_OPTION rows are shortlist entries, not rejections.', '',
-              '## Coverage gaps', '',
-              'Decision statuses: `' + json.dumps(summary['decisionStatuses'], sort_keys=True) + '`.',
-              'Selected action kinds: `' + json.dumps(summary['selectedActionKinds'], sort_keys=True) + '`.',
-              'Phases: `' + json.dumps(summary['phases'], sort_keys=True) + '`.',
-              'Selected action execution results: `' + json.dumps(summary['actionExecutionStatuses'], sort_keys=True) + '`.',
-              'Linked engine events: `' + json.dumps(summary['linkedEngineEvents'], sort_keys=True) + '`.',
-              'Engine-event coverage: `' + json.dumps(summary['actionEngineEventCoverage'], sort_keys=True) + '`.',
-              'Finalized target snapshots: `' + json.dumps(summary['finalizedTargetSnapshots'], sort_keys=True) + '`.',
-              'Finalized target references (including sub-abilities): `' + json.dumps(summary['finalizedTargetTypes'], sort_keys=True) + '`.',
-              'Finalized mode snapshots: `' + json.dumps(summary['finalizedModeSnapshots'], sort_keys=True) + '`.',
-              'Selected mode counts per modal action: `' + json.dumps(summary['selectedModeCounts'], sort_keys=True) + '`.',
-              'Finalized X snapshots: `' + json.dumps(summary['finalizedXSnapshots'], sort_keys=True) + '`.',
-              'Announced X values: `' + json.dumps(summary['announcedXValues'], sort_keys=True) + '`.',
-              'Payment snapshots (recorded engine facts): `' + json.dumps(summary['finalizedPaymentSnapshots'], sort_keys=True) + '`.',
-              'Optional cost selections: `' + json.dumps(summary['optionalCostSelections'], sort_keys=True) + '`.',
-              'Alternative cost selections: `' + json.dumps(summary['alternativeCostSelections'], sort_keys=True) + '`.',
-              'Card payment groups (LKI/current lists are separate, not unique paid-card counts): `' + json.dumps(summary['cardPaymentGroups'], sort_keys=True) + '`.',
-              f"Unrecognized card-payment groups omitted: {summary['unrecognizedCardPaymentGroups']}.",
-              f"{summary['decisionsWithAssessments']} decisions have assessment rows. {summary['selectedActionsWithoutAssessment']} selected actions lack a matching assessment row.",
-              f"{summary['decisionsAfterOutcome']} in-flight decisions completed after an outcome was announced; these are retained in order and censored.",
-              f"{summary['searchRecords']} decisions include search summaries; {summary['searchDecidedByRollouts']} report that rollouts decided the choice.", '',
-              'Search reasons: `' + json.dumps(summary['searchReasons'], sort_keys=True) + '`.', '',
-              'Frequently rejected card assessments: `' + json.dumps(dict(list(summary['rejectedCardKinds'].items())[:15]), ensure_ascii=False) + '`.', '']
-    lines += ['- ' + text for text in summary['limitations']]
-    lines += ['', '## Runs', '', '| Decks | Pilot | Seed | Result | Decisions |', '| --- | --- | --- | --- | ---: |']
+        yield from lines(f'| {cell(reason)} | {count} |')
+    yield from lines('', 'Counts can include repeated evaluation of the same ability. Passing can reflect a strategic choice or an unapproved action, not necessarily absence of legal plays.', '',
+                     '## Rejection details', '')
+    for prefix, name in (('Where available: ', 'assessmentDetails'), ('Card AI handlers: ', 'cardAiHandlers'),
+                         ('Handler assessments: ', 'handlerAssessments')):
+        yield from counter_line(prefix, name)
+    yield from lines('Legacy inputs without detail remain unspecified. LAND_OPTION rows are shortlist entries, not rejections.', '',
+                     '## Coverage gaps', '')
+    for prefix, name in (
+        ('Decision statuses: ', 'decisionStatuses'), ('Selected action kinds: ', 'selectedActionKinds'),
+        ('Phases: ', 'phases'), ('Selected action execution results: ', 'actionExecutionStatuses'),
+        ('Linked engine events: ', 'linkedEngineEvents'), ('Engine-event coverage: ', 'actionEngineEventCoverage'),
+        ('Finalized target snapshots: ', 'finalizedTargetSnapshots'),
+        ('Finalized target references (including sub-abilities): ', 'finalizedTargetTypes'),
+        ('Finalized mode snapshots: ', 'finalizedModeSnapshots'), ('Selected mode counts per modal action: ', 'selectedModeCounts'),
+        ('Finalized X snapshots: ', 'finalizedXSnapshots'), ('Announced X values: ', 'announcedXValues'),
+        ('Payment snapshots (recorded engine facts): ', 'finalizedPaymentSnapshots'),
+        ('Optional cost selections: ', 'optionalCostSelections'), ('Alternative cost selections: ', 'alternativeCostSelections'),
+        ('Card payment groups (LKI/current lists are separate, not unique paid-card counts): ', 'cardPaymentGroups')):
+        yield from counter_line(prefix, name)
+    yield from lines(f"Unrecognized card-payment groups omitted: {summary['unrecognizedCardPaymentGroups']}.",
+                     f"{summary['decisionsWithAssessments']} decisions have assessment rows. {summary['selectedActionsWithoutAssessment']} selected actions lack a matching assessment row.",
+                     f"{summary['decisionsAfterOutcome']} in-flight decisions completed after an outcome was announced; these are retained in order and censored.",
+                     f"{summary['searchRecords']} decisions include search summaries; {summary['searchDecidedByRollouts']} report that rollouts decided the choice.", '')
+    yield from counter_line('Search reasons: ', 'searchReasons')
+    rejected = dict(itertools.islice(summary['rejectedCardKinds'].items(), 15))
+    yield from lines('', 'Frequently rejected card assessments: `' + json.dumps(rejected, ensure_ascii=False) + '`.', '')
+    for text in summary['limitations']:
+        yield from lines('- ' + text)
+    yield from lines('', '## Runs', '', '| Decks | Pilot | Seed | Result | Decisions |', '| --- | --- | --- | --- | ---: |')
     for run in summary['runsSummary']:
-        lines.append('| ' + ' | '.join(cell(' vs. '.join(run['decks']) if k == 'decks' else run[k]) for k in ('decks', 'pilotMode', 'seed', 'status', 'decisions')) + ' |')
-    lines += ['', '## Reproducibility', '', 'The companion manifest contains exact deck snapshots, deck hashes, input hashes and run metadata. The following summary is readable without the input logs.', '',
-              '| Run | Seed | Pilot | Engine revision | Dirty | Source SHA256 |', '| --- | --- | --- | --- | --- | --- |']
+        yield from lines('| ' + ' | '.join(cell(' vs. '.join(run['decks']) if k == 'decks' else run[k]) for k in ('decks', 'pilotMode', 'seed', 'status', 'decisions')) + ' |')
+    yield from lines('', '## Reproducibility', '', 'The companion manifest contains exact deck snapshots, deck hashes, input hashes and run metadata. The following summary is readable without the input logs.', '',
+                     '| Run | Seed | Pilot | Engine revision | Dirty | Source SHA256 |', '| --- | --- | --- | --- | --- | --- |')
     for run in runs:
-        m = run['metadata']
-        lines.append('| ' + ' | '.join(cell(m.get(k)) for k in ('runId', 'seed', 'pilotMode', 'engineRevision', 'engineDirty', 'sourceSha256')) + ' |')
-    return '\n'.join(lines) + '\n'
+        metadata = run['metadata']
+        yield from lines('| ' + ' | '.join(cell(metadata.get(k)) for k in ('runId', 'seed', 'pilotMode', 'engineRevision', 'engineDirty', 'sourceSha256')) + ' |')
 
 
-def export(paths, output_dir=None, examples=12):
-    paths = [Path(p) for p in paths]
-    require(len({p.resolve() for p in paths}) == len(paths), 'same input supplied twice')
-    runs = [load_run(path) for path in paths]
-    ids = [r['metadata']['runId'] for r in runs]
-    require(len(set(ids)) == len(ids), 'duplicate runId: choose either full trace or decision stream, not both')
-    rows = [row for run in runs for row in dataset_rows(run)]
-    summary = make_coverage(runs, rows)
-    if output_dir is not None:
-        out = Path(output_dir)
-        names = ('dataset.jsonl', 'examples.jsonl', 'manifest.json', 'coverage.json', 'coverage.md', 'validation.json')
-        require(not any((out / name).exists() for name in names), 'output files already exist; choose a fresh output directory')
-        require(not any((out / name).resolve() in {p.resolve() for p in paths} for name in names), 'output would overwrite an input')
-        out.mkdir(parents=True, exist_ok=True)
-        with (out / 'dataset.jsonl').open('w', encoding='utf-8') as dataset:
-            for row in rows:
-                dataset.write(json.dumps(row, ensure_ascii=False) + '\n')
-        # Include distinct pilot/selection/outcome/search/execution groups before filling remaining slots.
-        sample = []
-        seen = set()
-        for row in rows:
+def report_markdown(summary, runs):
+    return ''.join(report_chunks(summary, runs))
+
+
+EXPORT_NAMES = ('dataset.jsonl', 'examples.jsonl', 'manifest.json', 'coverage.json', 'coverage.md', 'validation.json')
+COMPACT_KEYS = ('runs', 'games', 'decisions', 'executionStatuses', 'outcomeEligibleDecisions', 'censoredDecisions')
+
+
+def write_export(out, spool, summary, examples):
+    def json_file(name, value):
+        with (out / name).open('w', encoding='utf-8') as sink:
+            # json.dump uses the streaming encoder, including our disk-backed list/dict views.
+            json.dump(value, sink, indent=2, ensure_ascii=False)
+            sink.write('\n')
+
+    with (out / 'dataset.jsonl').open('w', encoding='utf-8') as dataset:
+        for row in spool.rows:
+            dataset.write(json.dumps(row, ensure_ascii=False) + '\n')
+    sample, selected_indices, seen = [], set(), set()
+    if examples:
+        for index, row in enumerate(spool.rows):
             key = (row['pilotMode'], row['decision']['selection'], row['outcomeEligible'], bool(row['decision'].get('search')),
                    tuple(a['status'] for a in row['actionExecutions']))
             if key not in seen:
                 seen.add(key)
                 sample.append(row)
-        for row in rows:
-            if len(sample) >= examples:
-                break
-            if row not in sample:
-                sample.append(row)
-        (out / 'examples.jsonl').write_text(''.join(json.dumps(r, ensure_ascii=False) + '\n' for r in sample[:examples]), encoding='utf-8')
-        contexts = [dict(runId=run['metadata']['runId'], game=number, gameStarted=game['start'],
-                         executionStatus=game['execution']['status'], recordedOutcome=game['outcome'],
-                         administrativeOutcome=game['execution']['status'] != 'NORMAL')
-                    for run in runs for number, game in sorted(run['games'].items())]
-        manifest = dict(datasetSchemaVersion=1, inputs=[r['metadata'] for r in runs], games=contexts)
-        (out / 'manifest.json').write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
-        (out / 'coverage.json').write_text(json.dumps(summary, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
-        (out / 'coverage.md').write_text(report_markdown(summary, runs), encoding='utf-8')
-        (out / 'validation.json').write_text(json.dumps(dict(valid=True, inputs=len(runs), decisions=len(rows), checks=['run/game boundaries', 'event order', 'schemas and identities', 'engine-event references', 'visibility constraints', 'status/outcome agreement', 'timeout/error censoring']), indent=2) + '\n', encoding='utf-8')
-    return summary
+                selected_indices.add(index)
+                if len(sample) == examples:
+                    break
+        if len(sample) < examples:
+            for index, row in enumerate(spool.rows):
+                if index not in selected_indices:
+                    sample.append(row)
+                    if len(sample) == examples:
+                        break
+    with (out / 'examples.jsonl').open('w', encoding='utf-8') as sink:
+        for row in sample:
+            sink.write(json.dumps(row, ensure_ascii=False) + '\n')
+
+    def contexts():
+        for run in spool.runs:
+            for number in ordered_games(run['games']):
+                game = run['games'][number]
+                yield dict(runId=run['metadata']['runId'], game=number, gameStarted=game['start'],
+                           executionStatus=game['execution']['status'], recordedOutcome=game['outcome'],
+                           administrativeOutcome=game['execution']['status'] != 'NORMAL')
+    inputs = spool.sequence('manifest_inputs', (run['metadata'] for run in spool.runs))
+    games = spool.sequence('manifest_games', contexts())
+    json_file('manifest.json', dict(datasetSchemaVersion=1, inputs=inputs, games=games))
+    json_file('coverage.json', summary)
+    with (out / 'coverage.md').open('w', encoding='utf-8') as sink:
+        for chunk in report_chunks(summary, spool.runs):
+            sink.write(chunk)
+    json_file('validation.json', dict(valid=True, inputs=len(spool.runs), decisions=len(spool.rows),
+              checks=['run/game boundaries', 'event order', 'schemas and identities', 'engine-event references',
+                      'visibility constraints', 'status/outcome agreement', 'timeout/error censoring']))
+
+
+def publish_export(out, spool, summary, examples):
+    out.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix='.forge-export-', dir=out.parent) as directory:
+        staged = Path(directory)
+        write_export(staged, spool, summary, examples)
+        created_directory = not out.exists()
+        out.mkdir(exist_ok=True)
+        published = []
+        try:
+            for name in EXPORT_NAMES:
+                # Same-filesystem exclusive publication cannot overwrite an existing/racing file.
+                os.link(staged / name, out / name)
+                published.append(name)
+        except BaseException:
+            for name in published:
+                target = out / name
+                if target.exists() and os.path.samefile(staged / name, target):
+                    target.unlink()
+            if created_directory and not any(out.iterdir()):
+                out.rmdir()
+            raise
+
+
+def export(paths, output_dir=None, examples=12, *, compact_summary=False):
+    paths = [Path(p) for p in paths]
+    require(len({p.resolve() for p in paths}) == len(paths), 'same input supplied twice')
+    with Spool() as spool:
+        for slot, path in enumerate(paths):
+            run = load_run(path, games=spool.games(slot))
+            run_id = run['metadata']['runId']
+            require(run_id not in spool.run_ids, 'duplicate runId: choose either full trace or decision stream, not both')
+            spool.run_ids.add(run_id)
+            spool.add_run(run)
+        for run in spool.runs:
+            for row in dataset_rows(run):
+                spool.rows.append(row)
+        summary = make_coverage(spool.runs, spool.rows, spool=spool)
+        if output_dir is not None:
+            out = Path(output_dir)
+            require(not any((out / name).exists() for name in EXPORT_NAMES), 'output files already exist; choose a fresh output directory')
+            require(not any((out / name).resolve() in {p.resolve() for p in paths} for name in EXPORT_NAMES), 'output would overwrite an input')
+            publish_export(out, spool, summary, examples)
+        # The CLI needs only fixed-size counts. Library users may request the full aggregate report.
+        result = {key: summary[key] for key in COMPACT_KEYS} if compact_summary else summary
+        return _spool.materialize(result)
 
 
 def main():
@@ -655,8 +809,8 @@ def main():
     if args.examples < 1:
         parser.error('--examples must be positive')
     try:
-        summary = export(args.inputs, args.output_dir, args.examples)
-    except (InvalidData, OSError) as exc:
+        summary = export(args.inputs, args.output_dir, args.examples, compact_summary=True)
+    except (InvalidData, OSError, sqlite3.Error) as exc:
         print(f'Validation/export failed: {exc}', file=sys.stderr)
         return 1
     print(json.dumps({k: summary[k] for k in ('runs', 'games', 'decisions', 'executionStatuses', 'outcomeEligibleDecisions', 'censoredDecisions')}, indent=2))
