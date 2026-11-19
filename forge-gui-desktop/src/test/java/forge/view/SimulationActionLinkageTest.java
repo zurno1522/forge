@@ -234,32 +234,35 @@ public class SimulationActionLinkageTest extends AITest {
         constructor.setAccessible(true);
         final var threads = java.util.concurrent.Executors.newFixedThreadPool(2);
         try (SimulationTraceWriter writer = constructor.newInstance(new java.io.BufferedWriter(blocked, 1))) {
-            final var collector = new SimulationTraceCollector(game, writer, 1, Map.of(), null, null, null);
-            collector.attach();
-            final var capture = threads.submit(() -> game.fireEvent(new forge.ai.AiDecisionEvent(Map.of("decisionId", "admitted"))));
-            Assert.assertTrue(entered.await(5, java.util.concurrent.TimeUnit.SECONDS));
-            final var close = threads.submit(() -> {
-                finishing.countDown();
-                collector.executionFinished("TIMEOUT", null);
-                return null;
-            });
-            Assert.assertTrue(finishing.await(5, java.util.concurrent.TimeUnit.SECONDS));
-            Assert.assertFalse(close.isDone());
-            release.countDown();
-            capture.get(5, java.util.concurrent.TimeUnit.SECONDS);
-            close.get(5, java.util.concurrent.TimeUnit.SECONDS);
-            final List<JsonObject> rows = output.toString().lines().map(line -> JsonParser.parseString(line).getAsJsonObject()).toList();
-            Assert.assertEquals(rows.size(), 2);
-            Assert.assertEquals(rows.get(0).getAsJsonObject("decision").get("decisionId").getAsString(), "admitted");
-            Assert.assertEquals(rows.get(0).get("eventIndex").getAsLong(), 1L);
-            Assert.assertEquals(rows.get(1).get("type").getAsString(), "GAME_EXECUTION_FINISHED");
-            Assert.assertEquals(rows.get(1).get("eventIndex").getAsLong(), 2L);
-            final String finalized = output.toString();
-            game.fireEvent(new forge.ai.AiDecisionEvent(Map.of("decisionId", "late")));
-            Assert.assertEquals(output.toString(), finalized);
-        } finally {
-            release.countDown();
-            threads.shutdownNow();
+            try {
+                final var collector = new SimulationTraceCollector(game, writer, 1, Map.of(), null, null, null);
+                collector.attach();
+                final var capture = threads.submit(() -> game.fireEvent(new forge.ai.AiDecisionEvent(Map.of("decisionId", "admitted"))));
+                Assert.assertTrue(entered.await(5, java.util.concurrent.TimeUnit.SECONDS));
+                final var close = threads.submit(() -> {
+                    finishing.countDown();
+                    collector.executionFinished("TIMEOUT", null);
+                    return null;
+                });
+                Assert.assertTrue(finishing.await(5, java.util.concurrent.TimeUnit.SECONDS));
+                Assert.assertFalse(close.isDone());
+                release.countDown();
+                capture.get(5, java.util.concurrent.TimeUnit.SECONDS);
+                close.get(5, java.util.concurrent.TimeUnit.SECONDS);
+                final List<JsonObject> rows = output.toString().lines().map(line -> JsonParser.parseString(line).getAsJsonObject()).toList();
+                Assert.assertEquals(rows.size(), 2);
+                Assert.assertEquals(rows.get(0).getAsJsonObject("decision").get("decisionId").getAsString(), "admitted");
+                Assert.assertEquals(rows.get(0).get("eventIndex").getAsLong(), 1L);
+                Assert.assertEquals(rows.get(1).get("type").getAsString(), "GAME_EXECUTION_FINISHED");
+                Assert.assertEquals(rows.get(1).get("eventIndex").getAsLong(), 2L);
+                final String finalized = output.toString();
+                game.fireEvent(new forge.ai.AiDecisionEvent(Map.of("decisionId", "late")));
+                Assert.assertEquals(output.toString(), finalized);
+            } finally {
+                // Release the delegate before try-with-resources can wait for its writer lock.
+                release.countDown();
+                threads.shutdownNow();
+            }
         }
     }
 
