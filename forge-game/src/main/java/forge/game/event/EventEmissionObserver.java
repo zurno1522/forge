@@ -8,6 +8,9 @@ package forge.game.event;
 public interface EventEmissionObserver {
     void capture(Event event);
 
+    /** Release observational state at authoritative execution termination. */
+    default void close() { }
+
     @FunctionalInterface
     interface Subscription extends AutoCloseable {
         @Override void close();

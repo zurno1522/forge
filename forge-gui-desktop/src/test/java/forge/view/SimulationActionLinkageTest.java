@@ -53,6 +53,30 @@ public class SimulationActionLinkageTest extends AITest {
     }
 
     @Test(groups = {"UnitTest", "fast"})
+    public void terminalRetirementIncludesTrackersOfControllersThatWereReplaced() throws Exception {
+        final Game game = initAndCreateGame();
+        final Player ai = game.getPlayers().get(1);
+        final var temporary = new PlayerControllerAi(game, ai, ai.getLobbyPlayer());
+        final SpellAbility selected = ability(game, "Memnite");
+        try (Trace trace = new Trace(game, false)) {
+            ai.addController(1L, game.getPlayers().get(0), temporary, false);
+            RecordedSelectionTestSupport.select(ai, selected);
+            final var trackerField = temporary.getAi().getClass().getDeclaredField("actionTracker");
+            trackerField.setAccessible(true);
+            final Object tracker = trackerField.get(temporary.getAi());
+            final var actions = tracker.getClass().getDeclaredField("actions");
+            actions.setAccessible(true);
+            Assert.assertEquals(((List<?>) actions.get(tracker)).size(), 1);
+            ai.removeController(1L, false);
+            Assert.assertNotSame(ai.getController(), temporary);
+            trace.collector.executionFinished("TIMEOUT", null);
+            Assert.assertTrue(((List<?>) actions.get(tracker)).isEmpty());
+            game.setRecordAiDecisions(true);
+            Assert.assertFalse(game.isRecordingAiDecisions(), "A terminated observation session cannot reopen");
+        }
+    }
+
+    @Test(groups = {"UnitTest", "fast"})
     public void finalRemovalsRetireHistoryDuringTheGame() throws Exception {
         final Game game = initAndCreateGame();
         final Player ai = game.getPlayers().get(1);

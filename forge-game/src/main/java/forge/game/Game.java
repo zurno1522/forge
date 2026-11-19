@@ -100,6 +100,8 @@ public class Game {
     private final EventBus events = new EventBus("game events");
     private final java.util.concurrent.CopyOnWriteArrayList<EventEmissionObserver> emissionObservers = new java.util.concurrent.CopyOnWriteArrayList<>();
     private final java.util.concurrent.atomic.AtomicReference<RuntimeException> observationFailure = new java.util.concurrent.atomic.AtomicReference<>();
+    private final Object observationLifecycle = new Object();
+    private volatile boolean observationsClosed;
     private final GameLog gameLog = new GameLog();
 
     private final Zone stackZone = new Zone(ZoneType.Stack, this);
@@ -125,7 +127,7 @@ public class Game {
         return ++aiDecisionSequence;
     }
     public boolean isRecordingAiDecisions() {
-        return recordAiDecisions && !simulationCopy;
+        return recordAiDecisions && !simulationCopy && !observationsClosed;
     }
     public void setRecordAiDecisions(final boolean enabled) {
         recordAiDecisions = enabled;
@@ -1164,6 +1166,9 @@ public class Game {
             } catch (RuntimeException error) {
                 observationFailure.compareAndSet(null, error);
                 emissionObservers.remove(observer);
+                try { observer.close(); } catch (RuntimeException closeError) {
+                    if (closeError != error) { error.addSuppressed(closeError); }
+                }
             }
         }
         events.post(event);
@@ -1172,8 +1177,27 @@ public class Game {
     /** Observation does not change the existing EventBus dispatch contract. Not inherited by copies. */
     public EventEmissionObserver.Subscription observeEventEmission(final EventEmissionObserver observer) {
         Objects.requireNonNull(observer);
-        emissionObservers.add(observer);
+        synchronized (observationLifecycle) {
+            if (observationsClosed) { return () -> { }; }
+            emissionObservers.add(observer);
+        }
         return () -> emissionObservers.remove(observer);
+    }
+
+    /** Called after execution termination; callbacks run outside the registration lock. */
+    public void closeEventObservations() {
+        final List<EventEmissionObserver> closing;
+        synchronized (observationLifecycle) {
+            if (observationsClosed) { return; }
+            observationsClosed = true;
+            closing = List.copyOf(emissionObservers);
+            emissionObservers.clear();
+        }
+        for (final EventEmissionObserver observer : closing) {
+            try { observer.close(); } catch (RuntimeException error) {
+                observationFailure.compareAndSet(null, error);
+            }
+        }
     }
 
     public RuntimeException getEventObservationFailure() {

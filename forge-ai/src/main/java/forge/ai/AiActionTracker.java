@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 /** Real-game action attempts. Object aliases are explicit; names/descriptions are never join keys. */
-public final class AiActionTracker {
+public final class AiActionTracker implements EventEmissionObserver {
     private final Game game;
     private final EventEmissionObserver.Subscription observation;
     private final List<Attempt> actions = new ArrayList<>();
@@ -23,7 +23,7 @@ public final class AiActionTracker {
     synchronized void retire() {
         retired = true;
         actions.clear();
-        observation.close();
+        if (observation != null) { observation.close(); }
     }
 
     static final class Attempt {
@@ -39,13 +39,17 @@ public final class AiActionTracker {
 
     AiActionTracker(final Game game) {
         this.game = game;
-        observation = game.observeEventEmission(event -> {
-            if (event instanceof GameEventSpellAbilityCast cast) { stacked(cast); }
-        });
+        observation = game.observeEventEmission(this);
     }
 
+    @Override public void capture(final forge.game.event.Event event) {
+        if (event instanceof GameEventSpellAbilityCast cast) { stacked(cast); }
+    }
+
+    @Override public void close() { retire(); }
+
     synchronized void selected(final AiDecisionEvent event, final List<SpellAbility> chosen) {
-        if (retired || chosen == null) { return; }
+        if (retired || !game.isRecordingAiDecisions() || chosen == null) { return; }
         final List<?> selected = (List<?>) event.data().get("selectedActions");
         for (int index = 0; index < chosen.size(); index++) {
             final Map<?, ?> action = (Map<?, ?>) selected.get(index);

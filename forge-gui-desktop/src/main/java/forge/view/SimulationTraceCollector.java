@@ -277,11 +277,10 @@ final class SimulationTraceCollector {
             // Never acquire tracker monitors while holding the collector monitor.
             if (finishing) {
                 game.setRecordAiDecisions(false);
-                for (final Player player : game.getRegisteredPlayers()) {
-                    if (player.getController() instanceof PlayerControllerAi ai) { ai.getAi().retireRecordedActions(); }
-                }
+                game.closeEventObservations();
             }
         }
+        checkHealthy();
     }
 
     private void finishOutput(final String status, final Throwable error) throws IOException {
