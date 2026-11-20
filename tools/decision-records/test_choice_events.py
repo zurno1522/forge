@@ -126,7 +126,7 @@ class StandaloneChoiceTests(unittest.TestCase):
 
     def test_invalid_choice_lifecycles_context_and_private_data_are_rejected(self):
         for mutation in ('duplicate-start', 'terminal-first', 'duplicate-end', 'missing-end', 'undeclared', 'schema', 'actor',
-                         'stage', 'parent', 'action', 'candidate', 'private', 'private-target', 'target-root', 'negative-time'):
+                         'stage', 'boundary', 'parent', 'action', 'candidate', 'private', 'private-target', 'target-root', 'negative-time'):
             with self.subTest(mutation=mutation):
                 rows = choices_fixture(parent=True)
                 start, end = rows[2]['choice'], rows[3]['choice']
@@ -138,6 +138,7 @@ class StandaloneChoiceTests(unittest.TestCase):
                 elif mutation == 'schema': start['choiceSchemaVersion'] = True
                 elif mutation == 'actor': start['chooserPlayerId'] = 999
                 elif mutation == 'stage': start['stage'] = 'GUESSED'
+                elif mutation == 'boundary': start['boundary'] = 'COPY_TARGETS'
                 elif mutation == 'parent': start['decisionId'] = 'invented'
                 elif mutation == 'action': start['actionId'] = 'invented'
                 elif mutation == 'candidate': start['candidateAbilityId'] = 99

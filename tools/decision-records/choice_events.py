@@ -21,6 +21,21 @@ TYPES = {'PAYMENT_DECISION', 'PAYMENT_CARD_SELECTION', 'PAYMENT_MANA', 'PAYMENT_
 BOUNDARIES = {'COST_VISITOR', 'PAYMENT_SACRIFICE_POOL', 'PAYMENT_DISCARD_POOL', 'PAYMENT_EXILE_POOL', 'AUTO_MANA_PAYMENT', 'MANA_POOL_OPTIONS', 'CONTROLLER_TARGETS', 'COPY_TARGETS', 'CONTROLLER_RETARGET', 'CHARM_MODE_HEURISTIC', 'CONTROLLER_MODES',
               'CONTROLLER_NUMBER_RANGE', 'CONTROLLER_NUMBER_OPTIONS', 'CONTROLLER_ANNOUNCEMENT', 'MAX_X_HEURISTIC', 'X_ANNOUNCEMENT_REFINEMENT', 'MASKED_CHOICE'} | POOL_BOUNDARIES
 
+TYPE_BOUNDARIES = {
+    'TARGET_SELECTION_RESULT': {'CONTROLLER_TARGETS'},
+    'EFFECT_COPY_TARGET_RESULT': {'COPY_TARGETS'},
+    'RETARGET_RESULT': {'CONTROLLER_RETARGET'},
+    'TARGET_POOL_SELECTION': POOL_BOUNDARIES,
+    'MODE_SELECTION': {'CHARM_MODE_HEURISTIC', 'CONTROLLER_MODES'},
+    'NUMBER_SELECTION': {'CONTROLLER_NUMBER_RANGE', 'CONTROLLER_NUMBER_OPTIONS', 'CONTROLLER_ANNOUNCEMENT'},
+    'X_SELECTION': {'MAX_X_HEURISTIC', 'X_ANNOUNCEMENT_REFINEMENT'},
+    'PAYMENT_DECISION': {'COST_VISITOR'},
+    'PAYMENT_CARD_SELECTION': {'PAYMENT_DISCARD_POOL', 'PAYMENT_SACRIFICE_POOL', 'PAYMENT_EXILE_POOL'},
+    'PAYMENT_MANA': {'AUTO_MANA_PAYMENT'},
+    'PAYMENT_MANA_SELECTION': {'MANA_POOL_OPTIONS'},
+    'MASKED_CHOICE': {'MASKED_CHOICE'},
+}
+
 
 def integer(v):
     return isinstance(v, int) and not isinstance(v, bool)
@@ -229,6 +244,7 @@ def accept(record, game):
         fields = {'choiceSchemaVersion', 'choiceId', 'parentChoiceId', 'status', 'choiceType', 'boundary', 'stage', 'chooserPlayerId',
                   'chooserKind', 'abilityId', 'sourceId', 'decisionId', 'actionId', 'candidateAbilityId', 'assessmentId', 'resolvingAbilityId', 'options'}
         require(set(c) == fields and c['choiceType'] in TYPES and c['boundary'] in BOUNDARIES, 'invalid standalone choice start')
+        require(c['boundary'] in TYPE_BOUNDARIES[c['choiceType']], 'choice type/boundary mismatch')
         require(c['stage'] in STAGES and c['chooserKind'] in ('AI', 'OTHER'), 'invalid standalone choice actor/stage')
         require(all(integer(c[k]) for k in ('chooserPlayerId', 'abilityId', 'sourceId')), 'invalid standalone choice identity')
         require(all(c[k] is None or integer(c[k]) for k in ('candidateAbilityId', 'resolvingAbilityId')), 'invalid nullable choice identity')

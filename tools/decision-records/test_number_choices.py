@@ -51,13 +51,14 @@ class NumberChoiceTests(unittest.TestCase):
             with self.assertRaises(module.InvalidData): module.export([self.write(rows, 'bad.jsonl')])
 
     def test_invalid_numeric_shapes_and_evaluated_x_are_rejected_without_legality_inference(self):
-        for mutation in ('bool-value', 'bool-bound', 'index', 'match', 'private', 'unknown-bound', 'candidate-x'):
+        for mutation in ('bool-value', 'bool-bound', 'index', 'match', 'private', 'boundary', 'unknown-bound', 'candidate-x'):
             rows = number_fixture(True)
             if mutation == 'bool-value': rows[3]['choice']['selection']['value'] = True
             elif mutation == 'bool-bound': rows[2]['choice']['options']['maximum'] = True
             elif mutation == 'index': rows[3]['choice']['selection']['optionIndex'] = 0
             elif mutation == 'match': rows[3]['choice']['selection']['domainMatch'] = 'GUESSED'
             elif mutation == 'private': rows[2]['choice']['options']['prompt'] = 'secret'
+            elif mutation == 'boundary': rows[2]['choice']['boundary'] = 'CONTROLLER_MODES'
             elif mutation == 'unknown-bound': rows[2]['choice']['options']['coverage'] = 'OBSERVED_SELECTION_ONLY'
             elif mutation == 'candidate-x':
                 d = next(r['decision'] for r in rows if r['type'] == 'AI_DECISION')
