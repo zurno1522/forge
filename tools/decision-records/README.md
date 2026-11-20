@@ -43,6 +43,10 @@ The CLI streams the dataset, manifest and reports with a bounded SQLite cache. W
 
 All inputs must validate before publication. The six files are first written privately on the output filesystem, then published without overwriting existing files. A publication failure removes files created by that attempt where possible and preserves unrelated files. Publication of all six files is not one atomic filesystem operation.
 
+New parent decisions can declare subordinate target-planning coverage and include `decision.subordinateChoices`. These observe specific damage/removal heuristic pools during candidate evaluation: identities offered, actual return, chooser, assessment and any exact selected-candidate link. They are recommendations/preferences; the actual cast can choose differently. Some records select an opponent whose board to inspect rather than a player to target. See [the subordinate-choice contract](../../docs/Development/Simulation-Decision-Records.md#observed-subordinate-target-planning-choices).
+
+Capture is limited to 128 records per decision and a 256-entry prefix per options/prior-target list, with explicit truncation and budget/interruption omissions. Coverage reports show these limits and unavailable legacy metadata. An empty choice array does not establish that no targeting occurred. The remaining choice types and unsupported target paths are still gaps within priority 1.
+
 Each selected action in new records has an `actionId`; `AI_ACTION_EXECUTION` records join it to an attempt and terminal result, including the actual ability/stack IDs when casting copied the ability. `actionExecutions` retains those events with their original indices. Coverage reports count `SUCCEEDED`, `FAILED`, `ABANDONED`, `ERROR`, and `UNOBSERVED` results. Abnormal games may contain `INCOMPLETE` attempts; legacy inputs remain `UNAVAILABLE`, without guessing by name or engine ability ID. Uncertain, abandoned, and post-outcome executions are censored. Success means the recorded execution boundary was reached, not that a spell resolved or that the choice was strategically good.
 
 Runs declaring `actionEventSchemaVersion: 1` also retain linked existing engine events in `actionExecutions[].engineEvents`: stack addition, resolution (including `fizzled`), countering, removal, bulk clear, and land play. `engineEventCoverage` distinguishes declared coverage from legacy `UNAVAILABLE` data. The counter reference identifies the countered action, and removal can precede the counter event. A bulk clear is projected per linked entry. Coverage reports count linked event types. Missing resolution events do not become inferred failures, and no downstream effects or per-action rewards are assigned. Both full and filtered inputs export the same limited event projection.
@@ -55,7 +59,7 @@ New stack additions also include `finalizedTargets` (nested schema version 1): o
 
 `finalizedPayments` preserves available engine payment facts: spent mana provenance, recorded life-payment fields, optional/alternative costs, repeated keyword amounts, and identity-only paid-card lists. It is explicitly partial. `lastLifePayment` is not a total and must not be added to `phyrexianLifePaid`; LKI/current card lists can describe the same paid card. Effect-copy histories are not counted as new payments. Unknown card-payment labels are omitted and counted. Counter-removal choices, complete life totals, and complete payment alternatives remain uncovered. See [recorded payment facts](../../docs/Development/Simulation-Decision-Records.md#recorded-payment-facts).
 
-Every row has `trainingReady=false`. Version 1 observations are partial and candidate lists are observed heuristic assessments, not complete legal-action sets. Candidate counts can repeat an ability. Old land records and some direct combo selections may lack assessment rows. New land shortlists use `LAND_OPTION` assessments, a `heuristicDefault` flag and a `searchOffered` flag. These options are not counted as rejections. Options without an instantiated ability omit `abilityId` and match selected lands by `sourceId`. Optional `assessmentDetail` preserves more specific rejection causes, card-handler assessments and ratings without changing approval logic. Target alternatives, later retargeting, payment decision records, per-candidate search values and downstream effect attribution remain future work. See [the record schema](../../docs/Development/Simulation-Decision-Records.md).
+Every row has `trainingReady=false`. Version 1 observations are partial and candidate lists are observed heuristic assessments, not complete legal-action sets. Candidate counts can repeat an ability. Old land records and some direct combo selections may lack assessment rows. New land shortlists use `LAND_OPTION` assessments, a `heuristicDefault` flag and a `searchOffered` flag. These options are not counted as rejections. Options without an instantiated ability omit `abilityId` and match selected lands by `sourceId`. Optional `assessmentDetail` preserves more specific rejection causes, card-handler assessments and ratings without changing approval logic. Complete target-choice coverage, later retargeting, mode/X/payment decision records, per-candidate search values and downstream effect attribution remain future work. See [the record schema](../../docs/Development/Simulation-Decision-Records.md).
 
 Pilot metadata records the requested CLI mode and participant profiles; per-decision search summaries show where search actually ran. Runtime preferences, budgets and fallbacks may change whether a given decision uses search. Older traces without pilot/engine revision metadata retain `UNKNOWN` values, rather than guessing from outcomes or filenames. To identify a development build explicitly, add JVM properties before the main class: `-Dforge.simulation.revision=<commit> -Dforge.simulation.dirty=true` (use `false` for a clean build). These are caller-provided provenance, not an engine self-verification mechanism.
 
@@ -64,3 +68,23 @@ Run the exporter tests with:
 ```sh
 python3 -m unittest discover -s tools/decision-records -p 'test_*.py' -v
 ```
+
+The first target-pool increment and its post-commit review are documented in [the schema review](../../docs/Development/Simulation-Decision-Records.md#target-choice-commit-review-2026-11-19), with an [actual message example](../../docs/Development/assessments/Subordinate-Targets/actual-example.json), measured coverage and remaining gaps. Eight final games completed normally, but only removal and damage helper pools are currently observed. Priority 1 remains in progress.
+
+`TargetChoiceProbe.java` is a development-only calling-thread CPU/allocation control. Build test classes and a classpath as described in [the hardening probe guide](hardening/README.md#build-and-classpath), then run from the repository root with JDK 21 and Xvfb:
+
+```sh
+target_probe_cp=$(cat forge-gui-desktop/target/hardening-classpath.txt)
+target_probe_dir=$(mktemp -d)
+javac -cp "$target_probe_cp" -d "$target_probe_dir" tools/decision-records/TargetChoiceProbe.java
+cd forge-gui-desktop
+xvfb-run -a java -Xms256m -Xmx1g -Duser.home=/path/to/seeded-forge-home \
+  --add-opens=java.base/java.util=ALL-UNNAMED \
+  --add-opens=java.base/java.lang=ALL-UNNAMED \
+  --add-opens=java.base/java.lang.reflect=ALL-UNNAMED \
+  --add-opens=java.base/java.text=ALL-UNNAMED \
+  --add-opens=java.base/java.time=ALL-UNNAMED \
+  -cp "$target_probe_dir:$target_probe_cp" forge.ai.TargetChoiceProbe /tmp/target-choice-cost.json
+```
+
+This compares the same ranking and parent capture with and without one pool record. It checks that the chosen object is unchanged. Warmup precedes three rotated 200-iteration samples for four- and 30-object pools; results exclude serialization/file output. The [measured samples](../../docs/Development/assessments/Subordinate-Targets/producer-cost.json) do not establish whole-game throughput or deadline-neutral recording. For real-game reproduction, use `target-choice-black.dck` / `trace-green.dck` from `tools/trace-test-decks`, three constructed games at seed 12031, `-mc off`, `-c 90`, and both output options. Red/Commander decks and the remaining seeds are recorded in [the evidence](../../docs/Development/assessments/Subordinate-Targets/validation.json).

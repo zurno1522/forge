@@ -1,0 +1,319 @@
+{
+  "productionRevision": "2291f2278a1c73d9e9abed2d8b21aae7dea76ba2",
+  "recordedGames": 8,
+  "decisions": 471,
+  "poolRecords": 38,
+  "scenarios": {
+    "black": {
+      "games": 3,
+      "gameStatuses": {
+        "NORMAL": 3
+      },
+      "decisions": 194,
+      "choices": 8,
+      "purposes": {
+        "TARGET_RECOMMENDATION": 8
+      },
+      "boundaries": {
+        "DESTROY_REMOVAL_POOL": 8
+      },
+      "statuses": {
+        "SELECTED": 8
+      },
+      "poolSizes": {
+        "1": 4,
+        "3": 2,
+        "9": 2
+      },
+      "selectedCandidateLinks": 2,
+      "pregameShuffleObserved": {
+        "1": true,
+        "2": true,
+        "3": true
+      },
+      "outputByteParity": {
+        "coverage.json": false,
+        "coverage.md": false,
+        "dataset.jsonl": true,
+        "examples.jsonl": true,
+        "manifest.json": false,
+        "validation.json": true
+      },
+      "sources": {
+        "full": {
+          "sha256": "76b0cce621be7627e8ca5bafdffe1b2d045ab824c6d6e7a20920f69460dcf024",
+          "bytes": 1524996
+        },
+        "decisions": {
+          "sha256": "5544f4321c857986a4e0ca1a006c847bd8aa5cd0a2d2547e8f69e63850876d74",
+          "bytes": 1080208
+        }
+      },
+      "coverageMetrics": {
+        "declaredSelectedTargetedActions": 4,
+        "selectedTargetedActionsWithPoolRecord": 2,
+        "selectedTargetedActionsWithTargetRecommendation": 2,
+        "subordinateChoicesOmittedByBudget": 0,
+        "subordinateChoicesOmittedDuringCapture": 0,
+        "targetChoiceAssessmentLinks": {
+          "INDEXED_ASSESSMENT": 8
+        },
+        "targetPoolCaptureCompleteness": {
+          "OBSERVED_FULL_LIST": 8
+        },
+        "priorTargetsCaptureCompleteness": {
+          "OBSERVED_FULL_LIST": 8
+        },
+        "searchRecords": 0,
+        "searchDecidedByRollouts": 0
+      },
+      "coverageEqualExceptSourceRecordCount": true,
+      "sourceRecordCounts": {
+        "full": 2487,
+        "decisions": 537
+      },
+      "seed": 12031,
+      "runMetadata": {
+        "runId": "ac4b186f-60e8-49b2-ac0f-f671f4d3aeb3",
+        "pilotMode": "HEURISTIC",
+        "engineRevision": "2291f2278a1c73d9e9abed2d8b21aae7dea76ba2",
+        "engineDirty": "true",
+        "gameType": "Constructed"
+      },
+      "exportDatasetSha256": "5203c1edb39308f34135c5ce7f4acbddd1c930fc76eabecce9ddf3766949b03b",
+      "exportExamplesSha256": "0f9f268de79c91da4a94439ebb6a8788a55effa3e7afdfa481ed03be2c07c97b"
+    },
+    "red": {
+      "games": 3,
+      "gameStatuses": {
+        "NORMAL": 3
+      },
+      "decisions": 173,
+      "choices": 30,
+      "purposes": {
+        "OPPONENT_PREFERENCE": 30
+      },
+      "boundaries": {
+        "DAMAGE_OPPONENT_POOL": 30
+      },
+      "statuses": {
+        "SELECTED": 30
+      },
+      "poolSizes": {
+        "1": 30
+      },
+      "selectedCandidateLinks": 1,
+      "pregameShuffleObserved": {
+        "1": true,
+        "2": true,
+        "3": true
+      },
+      "outputByteParity": {
+        "coverage.json": false,
+        "coverage.md": false,
+        "dataset.jsonl": true,
+        "examples.jsonl": true,
+        "manifest.json": false,
+        "validation.json": true
+      },
+      "sources": {
+        "full": {
+          "sha256": "a5e4fa2ecbbc94a4c936e66f78e12e54eafa30fefaba2db604bdffcb19fa4a6e",
+          "bytes": 1296520
+        },
+        "decisions": {
+          "sha256": "19c7f4867d5a5399784acf0474e1537c654376a87399620ad04381b248946516",
+          "bytes": 916235
+        }
+      },
+      "coverageMetrics": {
+        "declaredSelectedTargetedActions": 1,
+        "selectedTargetedActionsWithPoolRecord": 1,
+        "selectedTargetedActionsWithTargetRecommendation": 0,
+        "subordinateChoicesOmittedByBudget": 0,
+        "subordinateChoicesOmittedDuringCapture": 0,
+        "targetChoiceAssessmentLinks": {
+          "INDEXED_ASSESSMENT": 30
+        },
+        "targetPoolCaptureCompleteness": {
+          "OBSERVED_FULL_LIST": 30
+        },
+        "priorTargetsCaptureCompleteness": {
+          "OBSERVED_FULL_LIST": 30
+        },
+        "searchRecords": 0,
+        "searchDecidedByRollouts": 0
+      },
+      "coverageEqualExceptSourceRecordCount": true,
+      "sourceRecordCounts": {
+        "full": 2208,
+        "decisions": 467
+      },
+      "seed": 7451,
+      "runMetadata": {
+        "runId": "69a0fbef-e88b-412b-8628-373b46991084",
+        "pilotMode": "HEURISTIC",
+        "engineRevision": "2291f2278a1c73d9e9abed2d8b21aae7dea76ba2",
+        "engineDirty": "true",
+        "gameType": "Constructed"
+      },
+      "exportDatasetSha256": "f418594b1318afae2eadc7ee7558064a4b52f424b3d0edf003139dfd8e262f97",
+      "exportExamplesSha256": "83fb710e7bb47c21077487b6990d3066defaa29fb32ffc32cf4510e754092e49"
+    },
+    "commander": {
+      "games": 1,
+      "gameStatuses": {
+        "NORMAL": 1
+      },
+      "decisions": 49,
+      "choices": 0,
+      "purposes": {},
+      "boundaries": {},
+      "statuses": {},
+      "poolSizes": {},
+      "selectedCandidateLinks": 0,
+      "pregameShuffleObserved": {
+        "1": true
+      },
+      "outputByteParity": {
+        "coverage.json": false,
+        "coverage.md": false,
+        "dataset.jsonl": true,
+        "examples.jsonl": true,
+        "manifest.json": false,
+        "validation.json": true
+      },
+      "sources": {
+        "full": {
+          "sha256": "06a9962e6a949a1600682e8699215d4db29624a4944287a78776c505a86ca8b4",
+          "bytes": 509394
+        },
+        "decisions": {
+          "sha256": "5697c90db5b9c5e6904d2fabbc8e701df7e7b068aecc5c29b6b3ca7350f6dc89",
+          "bytes": 348892
+        }
+      },
+      "coverageMetrics": {
+        "declaredSelectedTargetedActions": 0,
+        "selectedTargetedActionsWithPoolRecord": 0,
+        "selectedTargetedActionsWithTargetRecommendation": 0,
+        "subordinateChoicesOmittedByBudget": 0,
+        "subordinateChoicesOmittedDuringCapture": 0,
+        "targetChoiceAssessmentLinks": {},
+        "targetPoolCaptureCompleteness": {},
+        "priorTargetsCaptureCompleteness": {},
+        "searchRecords": 0,
+        "searchDecidedByRollouts": 0
+      },
+      "coverageEqualExceptSourceRecordCount": true,
+      "sourceRecordCounts": {
+        "full": 711,
+        "decisions": 133
+      },
+      "seed": 31002,
+      "runMetadata": {
+        "runId": "440854d7-6b01-48e0-8bf3-d4628a804970",
+        "pilotMode": "HEURISTIC",
+        "engineRevision": "2291f2278a1c73d9e9abed2d8b21aae7dea76ba2",
+        "engineDirty": "true",
+        "gameType": "Commander"
+      },
+      "exportDatasetSha256": "af8286e400b3bd022fecbfabcdeb5338213f0999676cb7a54a0a34ff46099fa0",
+      "exportExamplesSha256": "0e39c929cfa50170e3079c9fe1bd08e618c5d8665e4bb002fb5f6f3f98fb199b"
+    },
+    "commander-mc": {
+      "games": 1,
+      "gameStatuses": {
+        "NORMAL": 1
+      },
+      "decisions": 55,
+      "choices": 0,
+      "purposes": {},
+      "boundaries": {},
+      "statuses": {},
+      "poolSizes": {},
+      "selectedCandidateLinks": 0,
+      "pregameShuffleObserved": {
+        "1": true
+      },
+      "outputByteParity": {
+        "coverage.json": false,
+        "coverage.md": false,
+        "dataset.jsonl": true,
+        "examples.jsonl": true,
+        "manifest.json": false,
+        "validation.json": true
+      },
+      "sources": {
+        "full": {
+          "sha256": "60b15b60833e66d95aef7c4e96f2b728a1b37868d73577178879ce293180f338",
+          "bytes": 759720
+        },
+        "decisions": {
+          "sha256": "6ff1ff9f3d6858e8bfb17880c31eb91a824a36de53b9930fd7be841736acb948",
+          "bytes": 461556
+        }
+      },
+      "coverageMetrics": {
+        "declaredSelectedTargetedActions": 1,
+        "selectedTargetedActionsWithPoolRecord": 0,
+        "selectedTargetedActionsWithTargetRecommendation": 0,
+        "subordinateChoicesOmittedByBudget": 0,
+        "subordinateChoicesOmittedDuringCapture": 0,
+        "targetChoiceAssessmentLinks": {},
+        "targetPoolCaptureCompleteness": {},
+        "priorTargetsCaptureCompleteness": {},
+        "searchRecords": 17,
+        "searchDecidedByRollouts": 12
+      },
+      "coverageEqualExceptSourceRecordCount": true,
+      "sourceRecordCounts": {
+        "full": 1024,
+        "decisions": 159
+      },
+      "seed": 31003,
+      "runMetadata": {
+        "runId": "c6876c60-75df-4012-a966-103871a4a731",
+        "pilotMode": "FLAT_MONTE_CARLO",
+        "engineRevision": "2291f2278a1c73d9e9abed2d8b21aae7dea76ba2",
+        "engineDirty": "true",
+        "gameType": "Commander"
+      },
+      "exportDatasetSha256": "1b35d6e620fb9e50d06fb6cc3b0dac301ce7887b9e584a3ff421fecac323eb24",
+      "exportExamplesSha256": "c0be64e51f49523829b7bcd3df6ac23e9980e9cbeadcc19e2b759e59cc24a7d0"
+    }
+  },
+  "unrecordedControl": {
+    "scenario": "black",
+    "games": 3,
+    "seed": 12031,
+    "matchingWinnersAndTurns": true,
+    "outcomes": [
+      "Game Outcome: Turn 8",
+      "Game Outcome: Ai(1)-Target Choice Black has won because all opponents have lost",
+      "Game Outcome: Ai(2)-Trace Green has lost because life total reached 0",
+      "Game Outcome: Turn 12",
+      "Game Outcome: Ai(1)-Target Choice Black has won because all opponents have lost",
+      "Game Outcome: Ai(2)-Trace Green has lost because life total reached 0",
+      "Game Outcome: Turn 8",
+      "Game Outcome: Ai(1)-Target Choice Black has won because all opponents have lost",
+      "Game Outcome: Ai(2)-Trace Green has lost because life total reached 0"
+    ],
+    "limitation": "Matching outcomes do not establish identical action sequences or deadline-neutral recording."
+  },
+  "monteCarloConsole": {
+    "decisions": 18,
+    "rollouts": 37,
+    "failures": 0,
+    "unsimulatableCards": 1,
+    "unsimulatableEntry": "Yasmin Khan [slow]=1",
+    "mainPhaseSearchRecords": 17,
+    "mainPhaseDecidedByRollouts": 12,
+    "note": "Console summaries also include reactive search; parent decision records currently cover main phases only."
+  },
+  "parityNotes": [
+    "Full/filtered dataset, examples and validation files are byte-identical.",
+    "Coverage JSON differs only in sourceRecords; manifests retain their actual source kind/path/hash and coverage text retains the source count.",
+    "All eight full streams contain SHUFFLE before GAME_STARTED. No new wire event was introduced."
+  ]
+}

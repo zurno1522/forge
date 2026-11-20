@@ -1,0 +1,653 @@
+{
+  "sourceFile": "final-black-decisions.jsonl",
+  "record": {
+    "type": "AI_DECISION",
+    "game": 2,
+    "eventIndex": 626,
+    "turn": 14,
+    "phase": "MAIN1",
+    "decision": {
+      "decisionSchemaVersion": 1,
+      "actionExecutionSchemaVersion": 1,
+      "decisionId": "0:51",
+      "playerId": 0,
+      "decisionType": "MAIN_PHASE_PLAY_SELECTION",
+      "candidateCoverage": "OBSERVED_EVALUATIONS_NOT_ALL_LEGAL_ACTIONS",
+      "observationCoverage": "PARTIAL_PLAYER_VIEW_V1",
+      "observation": {
+        "turn": 14,
+        "phase": "MAIN1",
+        "turnPlayerId": 0,
+        "players": [
+          {
+            "id": 0,
+            "life": 6,
+            "handCount": 2,
+            "libraryCount": 44,
+            "cards": [
+              {
+                "id": 4,
+                "zone": "Battlefield",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Swamp",
+                "types": "Basic Land - Swamp",
+                "manaCost": "no cost",
+                "counters": {}
+              },
+              {
+                "id": 15,
+                "zone": "Battlefield",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Swamp",
+                "types": "Basic Land - Swamp",
+                "manaCost": "no cost",
+                "counters": {}
+              },
+              {
+                "id": 13,
+                "zone": "Battlefield",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Swamp",
+                "types": "Basic Land - Swamp",
+                "manaCost": "no cost",
+                "counters": {}
+              },
+              {
+                "id": 18,
+                "zone": "Battlefield",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Swamp",
+                "types": "Basic Land - Swamp",
+                "manaCost": "no cost",
+                "counters": {}
+              },
+              {
+                "id": 12,
+                "zone": "Battlefield",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Swamp",
+                "types": "Basic Land - Swamp",
+                "manaCost": "no cost",
+                "counters": {}
+              },
+              {
+                "id": 60,
+                "zone": "Battlefield",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Walking Corpse",
+                "types": "Creature - Zombie",
+                "manaCost": "{1}{B}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "id": 22,
+                "zone": "Battlefield",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Swamp",
+                "types": "Basic Land - Swamp",
+                "manaCost": "no cost",
+                "counters": {}
+              },
+              {
+                "id": 55,
+                "zone": "Battlefield",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Child of Night",
+                "types": "Creature - Vampire",
+                "manaCost": "{1}{B}",
+                "power": 2,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "id": 21,
+                "zone": "Battlefield",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Swamp",
+                "types": "Basic Land - Swamp",
+                "manaCost": "no cost",
+                "counters": {}
+              },
+              {
+                "id": 29,
+                "zone": "Graveyard",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Disfigure",
+                "types": "Instant",
+                "manaCost": "{B}",
+                "counters": {}
+              },
+              {
+                "id": 27,
+                "zone": "Graveyard",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Murder",
+                "types": "Instant",
+                "manaCost": "{1}{B}{B}",
+                "counters": {}
+              },
+              {
+                "id": 57,
+                "zone": "Graveyard",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Walking Corpse",
+                "types": "Creature - Zombie",
+                "manaCost": "{1}{B}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "id": 34,
+                "zone": "Graveyard",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Sign in Blood",
+                "types": "Sorcery",
+                "manaCost": "{B}{B}",
+                "counters": {}
+              },
+              {
+                "id": 54,
+                "zone": "Graveyard",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Child of Night",
+                "types": "Creature - Vampire",
+                "manaCost": "{1}{B}",
+                "power": 2,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "id": 51,
+                "zone": "Hand",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Befoul",
+                "types": "Sorcery",
+                "manaCost": "{2}{B}{B}",
+                "counters": {}
+              },
+              {
+                "id": 56,
+                "zone": "Hand",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Child of Night",
+                "types": "Creature - Vampire",
+                "manaCost": "{1}{B}",
+                "power": 2,
+                "toughness": 1,
+                "counters": {}
+              }
+            ],
+            "floatingManaColors": []
+          },
+          {
+            "id": 1,
+            "life": 16,
+            "handCount": 0,
+            "libraryCount": 35,
+            "cards": [
+              {
+                "id": 100,
+                "zone": "Battlefield",
+                "tapped": true,
+                "identityKnown": true,
+                "name": "Forest",
+                "types": "Basic Land - Forest",
+                "manaCost": "no cost",
+                "counters": {}
+              },
+              {
+                "id": 88,
+                "zone": "Battlefield",
+                "tapped": true,
+                "identityKnown": true,
+                "name": "Forest",
+                "types": "Basic Land - Forest",
+                "manaCost": "no cost",
+                "counters": {}
+              },
+              {
+                "id": 86,
+                "zone": "Battlefield",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Forest",
+                "types": "Basic Land - Forest",
+                "manaCost": "no cost",
+                "counters": {}
+              },
+              {
+                "id": 79,
+                "zone": "Battlefield",
+                "tapped": true,
+                "identityKnown": true,
+                "name": "Llanowar Elves",
+                "types": "Creature - Elf Druid",
+                "manaCost": "{G}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "id": 107,
+                "zone": "Battlefield",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Forest",
+                "types": "Basic Land - Forest",
+                "manaCost": "no cost",
+                "counters": {}
+              },
+              {
+                "id": 101,
+                "zone": "Battlefield",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Forest",
+                "types": "Basic Land - Forest",
+                "manaCost": "no cost",
+                "counters": {}
+              },
+              {
+                "id": 81,
+                "zone": "Battlefield",
+                "tapped": true,
+                "identityKnown": true,
+                "name": "Rumbling Baloth",
+                "types": "Creature - Beast",
+                "manaCost": "{2}{G}{G}",
+                "power": 4,
+                "toughness": 4,
+                "counters": {}
+              },
+              {
+                "id": 89,
+                "zone": "Battlefield",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Forest",
+                "types": "Basic Land - Forest",
+                "manaCost": "no cost",
+                "counters": {}
+              },
+              {
+                "id": 65,
+                "zone": "Battlefield",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Runeclaw Bear",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "id": 66,
+                "zone": "Graveyard",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Runeclaw Bear",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "id": 80,
+                "zone": "Graveyard",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Llanowar Elves",
+                "types": "Creature - Elf Druid",
+                "manaCost": "{G}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "id": 73,
+                "zone": "Graveyard",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Giant Growth",
+                "types": "Instant",
+                "manaCost": "{G}",
+                "counters": {}
+              },
+              {
+                "id": 77,
+                "zone": "Graveyard",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Llanowar Elves",
+                "types": "Creature - Elf Druid",
+                "manaCost": "{G}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              }
+            ],
+            "floatingManaColors": []
+          }
+        ]
+      },
+      "status": "COMPLETED",
+      "candidates": [
+        {
+          "abilityId": 543,
+          "kind": "SPELL",
+          "sourceId": 51,
+          "sourceName": "Befoul",
+          "zone": "Hand",
+          "description": "Destroy target land or nonblack creature. It can't be regenerated.",
+          "assessment": "WillPlay"
+        }
+      ],
+      "selection": "PLAY",
+      "selectedActions": [
+        {
+          "abilityId": 543,
+          "kind": "SPELL",
+          "sourceId": 51,
+          "sourceName": "Befoul",
+          "zone": "Hand",
+          "description": "Destroy target land or nonblack creature. It can't be regenerated.",
+          "actionId": "0:51:0"
+        }
+      ],
+      "subordinateChoiceSchemaVersion": 1,
+      "subordinateChoiceCoverage": "OBSERVED_HEURISTIC_TARGET_POOLS_V1",
+      "subordinateChoices": [
+        {
+          "choiceSchemaVersion": 1,
+          "choiceType": "TARGET_POOL_SELECTION",
+          "stage": "CANDIDATE_EVALUATION",
+          "chooserPlayerId": 0,
+          "candidateAbilityId": 543,
+          "abilityId": 543,
+          "sourceId": 51,
+          "boundary": "DESTROY_REMOVAL_POOL",
+          "purpose": "TARGET_RECOMMENDATION",
+          "optionCoverage": "OBSERVED_HEURISTIC_POOL_NOT_ALL_LEGAL_TARGET_SETS",
+          "priorTargets": [],
+          "priorTargetsTruncated": false,
+          "options": [
+            {
+              "type": "CARD",
+              "id": 100,
+              "gameTimestamp": 15
+            },
+            {
+              "type": "CARD",
+              "id": 88,
+              "gameTimestamp": 20
+            },
+            {
+              "type": "CARD",
+              "id": 86,
+              "gameTimestamp": 28
+            },
+            {
+              "type": "CARD",
+              "id": 79,
+              "gameTimestamp": 30
+            },
+            {
+              "type": "CARD",
+              "id": 107,
+              "gameTimestamp": 53
+            },
+            {
+              "type": "CARD",
+              "id": 101,
+              "gameTimestamp": 83
+            },
+            {
+              "type": "CARD",
+              "id": 81,
+              "gameTimestamp": 84
+            },
+            {
+              "type": "CARD",
+              "id": 89,
+              "gameTimestamp": 123
+            },
+            {
+              "type": "CARD",
+              "id": 65,
+              "gameTimestamp": 133
+            }
+          ],
+          "optionsTruncated": false,
+          "status": "SELECTED",
+          "selected": {
+            "type": "CARD",
+            "id": 81,
+            "gameTimestamp": 84
+          },
+          "selectedOptionIndex": 6,
+          "choiceId": "0:51:target:0",
+          "candidateIndex": 0,
+          "candidateActionId": "0:51:0"
+        }
+      ],
+      "subordinateChoiceOmissions": {
+        "budget": 0,
+        "interrupted": 0
+      },
+      "elapsedNanos": 41621965
+    }
+  },
+  "sourceSha256": "5544f4321c857986a4e0ca1a006c847bd8aa5cd0a2d2547e8f69e63850876d74",
+  "runMetadata": {
+    "type": "RUN_STARTED",
+    "schemaVersion": 1,
+    "actionEventSchemaVersion": 1,
+    "runId": "ac4b186f-60e8-49b2-ac0f-f671f4d3aeb3",
+    "pilotMode": "HEURISTIC",
+    "engineRevision": "2291f2278a1c73d9e9abed2d8b21aae7dea76ba2",
+    "engineDirty": "true",
+    "forgeVersion": "GIT",
+    "runMode": "GAMES",
+    "gameType": "Constructed",
+    "requestedGames": 3,
+    "seed": 12031,
+    "participants": [
+      {
+        "participantId": 1,
+        "deckName": "Target Choice Black",
+        "aiProfile": "Default",
+        "deck": {
+          "Main": [
+            {
+              "name": "Befoul",
+              "count": 4
+            },
+            {
+              "name": "Child of Night",
+              "count": 4
+            },
+            {
+              "name": "Disfigure",
+              "count": 4
+            },
+            {
+              "name": "Doom Blade",
+              "count": 4
+            },
+            {
+              "name": "Murder",
+              "count": 4
+            },
+            {
+              "name": "Sengir Vampire",
+              "count": 4
+            },
+            {
+              "name": "Sign in Blood",
+              "count": 4
+            },
+            {
+              "name": "Swamp",
+              "count": 24
+            },
+            {
+              "name": "Vampire Nighthawk",
+              "count": 4
+            },
+            {
+              "name": "Walking Corpse",
+              "count": 4
+            }
+          ]
+        }
+      },
+      {
+        "participantId": 2,
+        "deckName": "Trace Green",
+        "aiProfile": "Default",
+        "deck": {
+          "Main": [
+            {
+              "name": "Forest",
+              "count": 24
+            },
+            {
+              "name": "Giant Growth",
+              "count": 4
+            },
+            {
+              "name": "Grizzly Bears",
+              "count": 4
+            },
+            {
+              "name": "Llanowar Elves",
+              "count": 4
+            },
+            {
+              "name": "Nessian Courser",
+              "count": 4
+            },
+            {
+              "name": "Rumbling Baloth",
+              "count": 4
+            },
+            {
+              "name": "Runeclaw Bear",
+              "count": 4
+            }
+          ]
+        }
+      }
+    ],
+    "streamKind": "AI_DECISIONS",
+    "eventIndexMode": "SHARED_WITH_GAME_TRACE"
+  },
+  "linkedStackAddition": {
+    "type": "STACK_ADDED",
+    "game": 2,
+    "eventIndex": 641,
+    "turn": 14,
+    "phase": "MAIN1",
+    "decisionId": "0:51",
+    "actionId": "0:51:0",
+    "stackId": 90,
+    "abilityId": 543,
+    "finalizedTargets": {
+      "schemaVersion": 1,
+      "abilities": [
+        {
+          "abilityId": 543,
+          "usesTargeting": true,
+          "targets": [
+            {
+              "type": "CARD",
+              "id": 81,
+              "gameTimestamp": 84
+            }
+          ]
+        }
+      ]
+    },
+    "finalizedModes": {
+      "modes": [],
+      "schemaVersion": 1,
+      "modal": false
+    },
+    "finalizedX": {
+      "schemaVersion": 1,
+      "announcedValue": null
+    },
+    "finalizedPayments": {
+      "schemaVersion": 1,
+      "coverage": "ENGINE_PAYMENT_FACTS_V1",
+      "mana": [
+        {
+          "color": "B",
+          "playerId": 0,
+          "source": {
+            "id": 4,
+            "gameTimestamp": 18
+          },
+          "snow": false
+        },
+        {
+          "color": "B",
+          "playerId": 0,
+          "source": {
+            "id": 15,
+            "gameTimestamp": 26
+          },
+          "snow": false
+        },
+        {
+          "color": "B",
+          "playerId": 0,
+          "source": {
+            "id": 13,
+            "gameTimestamp": 32
+          },
+          "snow": false
+        },
+        {
+          "color": "B",
+          "playerId": 0,
+          "source": {
+            "id": 18,
+            "gameTimestamp": 69
+          },
+          "snow": false
+        }
+      ],
+      "lastLifePayment": 0,
+      "phyrexianLifePaid": 0,
+      "optionalCosts": [],
+      "alternativeCost": null,
+      "keywordAmounts": [],
+      "withoutManaCost": false,
+      "cardPayments": [],
+      "unrecognizedCardPaymentGroups": 0
+    }
+  },
+  "interpretation": "Actual unmodified parent decision and linked stack projection. The helper chose option 6 from nine observed objects; its exact candidate later stacked with that target. This identity agreement does not generally establish which evaluation caused the committed choice."
+}

@@ -83,6 +83,8 @@ Finalized-target follow-up: stack additions now expose an identity-only snapshot
 
 Upstream [#12180](https://github.com/Card-Forge/forge/pull/12180) proposes opt-in text decision logging and handler ratings. It overlaps the logging goal, but does not replace structured observations, standalone decision streams, datasets, or coverage reports. Coordinate scope before proposing this enhancement. The local Python exporter and report workflow can remain branch-specific unless upstream wants them.
 
+Subordinate-choice follow-up (2026-11-19): the first increment observes existing removal/damage target-planning pools inside parent decisions, with exact candidate links, bounded identity snapshots and explicit capture/coverage limits. The post-commit review fixed cancellation blocking and unbounded pool capture; regressions and eight real games validate the branch's instrumentation. Opponent preferences are distinguished from target recommendations. Execution/delegated targeting, other handlers, modes, X and payment choices remain work; this does not complete the milestone or establish an upstream rules/card defect. Keep it within PR-003's enhancement classification. See [review, measurements and remaining gaps](Simulation-Decision-Records.md#target-choice-commit-review-2026-11-19).
+
 This is a feature proposal, not a prerequisite for PR-001/002. Observations and candidate coverage remain partial; records are not yet training-ready. Do not present handler rejections or deck performance as proof of engine/card bugs.
 
 ## PR-004/005: classification and compatibility review

@@ -1,0 +1,69 @@
+{
+  "reviewDate": "2026-11-19",
+  "featureCommit": "1b15a89e0c3edbb4fe765a7582f610c18ae5664d",
+  "reviewFixCommit": "2291f2278a1c73d9e9abed2d8b21aae7dea76ba2",
+  "productionClean": true,
+  "workingTreeContainsDocumentationChanges": true,
+  "rawArtifacts": "/workspace/work/subordinate-targets",
+  "pythonVersion": "3.12.14",
+  "javaVersion": "openjdk version \"21.0.12.1\" 2026-08-18\nOpenJDK Runtime Environment (build 21.0.12.1+1-1-deb13u1-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.12.1+1-1-deb13u1-Debian, mixed mode, sharing)",
+  "cgroupCpuMax": "200000 100000",
+  "sourcesSha256": {
+    "forge-ai/src/main/java/forge/ai/AiTargetChoiceRecorder.java": "f7572c800f10a3838170725088f42ca9c154230a70197fae27104e200c1bb012",
+    "forge-ai/src/main/java/forge/ai/AiDecisionRecorder.java": "ab34124ff5ce68ad9c3798c3a79ec3e09c279c9ccbb09b68fdb758074a90246a",
+    "forge-ai/src/main/java/forge/ai/ability/DestroyAi.java": "f2ee1ca49c661c806167fc3c00373510eeb5e4cf435d8a344cce6434fbe043e6",
+    "forge-ai/src/main/java/forge/ai/ability/DamageDealAi.java": "45d2e466ce57caf70147b7ee56c24b5a3cec370787c0dff8f2d7aeb3fb9deac2",
+    "forge-game/src/main/java/forge/game/Game.java": "19cc1bdaa2a3e64a15b3e7742571a3edb067c5b9d7805456b7651ed19f0cde9c",
+    "tools/decision-records/export.py": "9c8c553610c56d67e44eb2b2e27f6885d2cbac260d251393cfc169ec66d08759",
+    "tools/decision-records/decision_spool.py": "71745ec19b3fe1901caf5b642459753d10b5c5b3b7ed5fc6ee43916dc91360d6",
+    "tools/decision-records/TargetChoiceProbe.java": "01eb7032f84f36f3626fdd34d56e23836408bbbcd57248e002efbfb8f93a8098",
+    "tools/trace-test-decks/target-choice-black.dck": "1e3268448d71ff9c34ddefc26fcbfb7a9b21e0014142f0d80b259be313f2afc6",
+    "tools/trace-test-decks/trace-green.dck": "84e55f9a2dd8bcfa92a2a56de1143441c8e479ce8bb0c732578d0ff1603527cf",
+    "tools/decision-records/hardening/decks/trace-red.dck": "55745ca75b9da9b1c8f02fd0bba983ec653d44677290a509203797f0315bebae",
+    "tools/decision-records/hardening/decks/trace-green.dck": "84e55f9a2dd8bcfa92a2a56de1143441c8e479ce8bb0c732578d0ff1603527cf",
+    "tools/decision-records/hardening/decks/doctor-who.dck": "7e53bc5153ad98abc9a0eae4aa2a7c6d35b97b5db64af788c0ad99b6d8537f16",
+    "tools/decision-records/hardening/decks/ur-dragon-draconic-domination.dck": "a50909153f7f07ea9077df668e452408b5762cf8fb9a9d43001282fe6deae86c"
+  },
+  "logsSha256": {
+    "full-final-tests.log": "9b71de0e72c9daf8dc99f588e328c5bfaec78225f07a18740161d92e47f0aa05",
+    "export-tests.log": "c051f4a28593fbbe7ba8e2c78ea787d0a1ba653983d4d6624d4a8ca9290e06e0",
+    "review-regressions-before.log": "e0fce75661cd7c0851a5455397268538fad457bd3461bd5c6176a33d4990ab89",
+    "review-regressions-after.log": "e2e154d07d63090132a7eba467982a1f32dc303d7b9d652ae07e16ccbad0c1f0"
+  },
+  "testResults": {
+    "desktop": {
+      "cases": 2426,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 6
+    },
+    "core": {
+      "cases": 23,
+      "failures": 0,
+      "errors": 0
+    },
+    "game": {
+      "cases": 23,
+      "failures": 0,
+      "errors": 0
+    },
+    "pythonExporter": {
+      "cases": 65,
+      "failures": 0,
+      "errors": 0
+    },
+    "reviewRegressionsBeforeFix": {
+      "failures": 3
+    },
+    "focusedAfterFix": {
+      "cases": 25,
+      "failures": 0,
+      "errors": 0
+    }
+  },
+  "notes": [
+    "Final games and cost probe ran sequentially after the Java reactor, using the committed production build.",
+    "This is collection/coverage validation, not learning, deck-strength or strategic-quality evidence.",
+    "Only curated summaries and one actual message example are committed; raw traces/logs remain workspace artifacts."
+  ]
+}

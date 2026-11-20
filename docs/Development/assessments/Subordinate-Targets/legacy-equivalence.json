@@ -1,0 +1,55 @@
+{
+  "baselineRevision": "53710428913",
+  "currentProductionRevision": "2291f2278a1",
+  "cases": [
+    {
+      "case": "normal",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "timeout",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "exception",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "legacy",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "aborted",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "countered",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "targets",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "payments",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "opaque",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "unicode",
+      "allSixFilesByteIdentical": true
+    }
+  ],
+  "files": [
+    "dataset.jsonl",
+    "coverage.json",
+    "coverage.md",
+    "examples.jsonl",
+    "manifest.json",
+    "validation.json"
+  ],
+  "result": "All six files byte-identical on all ten inputs without subordinate-choice capability."
+}

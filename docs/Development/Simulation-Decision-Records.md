@@ -2,7 +2,7 @@
 
 When decision collection (`sim ... -log-decisions decisions.jsonl`) or structured game tracing (`sim ... -log-game path.jsonl`) is enabled, the real game's AI emits an `AiDecisionEvent`. The desktop trace collector writes it as `AI_DECISION` in the same JSONL stream as game events. The AI has no file-writing dependency. These observational events do not use the rules-event visitor or change engine event ordering.
 
-Version 1 covers play selection with an empty stack during the acting player's own first or second main phase. It includes land selection, spells, abilities, and passing. It does not cover mulligans, combat, reactive priority, or subordinate target/mode/payment choices. Recording is off by default outside traced simulations and suppressed for simulation copies. The AI's existing policy and candidate limits remain in place; observation capture occurs before its thinking deadline starts.
+Version 1 covers play selection with an empty stack during the acting player's own first or second main phase. It includes land selection, spells, abilities, and passing. An optional subordinate-choice capability records specific target-planning pools during these evaluations, as described below. Complete target/mode/payment choice coverage, mulligans, combat and reactive-priority decision records remain outside this version's coverage. Recording is off by default outside traced simulations and suppressed for simulation copies. The AI's existing policy and candidate limits remain in place; the initial observation is captured before its thinking deadline starts. Per-pool capture adds bounded work during evaluation.
 
 Each record retains the usual `game`, `eventIndex`, `turn`, and `phase` envelope, with a nested `decision` object:
 
@@ -31,6 +31,70 @@ Candidate assessments can optionally include `assessmentDetail`: a reason code a
 `MissingPhaseRestrictions` is an existing card-handler assessment label for a failed phase check; it does not by itself establish that a card script is missing configuration. Handler assessments explain the handler's return value, while the outer assessment preserves the controller's original result.
 
 Engine IDs and event indices use 64-bit integers; composed decision/action IDs remain strings. See [identifier widths and compatibility](Simulation-Identifier-Widths.md), including multiplayer versioning and consumer integer requirements.
+
+## Observed subordinate target-planning choices
+
+This is the first increment of priority 1, not completion of the subordinate-choice milestone. New `AI_DECISION.decision` objects declare `subordinateChoiceSchemaVersion: 1`, `subordinateChoiceCoverage: OBSERVED_HEURISTIC_TARGET_POOLS_V1`, and a `subordinateChoices` array. The records remain inside the parent decision because the observed operations occur during candidate evaluation, before action IDs exist. No extra engine events are emitted or reordered. Full and filtered output retain identical choice data, and exports preserve it within the existing decision object.
+
+The adapters wrap existing chooser calls in `DestroyAi` and `DamageDealAi`. They observe the list already passed to that chooser and invoke the same chooser once on the same original list. They do not enumerate legal actions, rerun the chooser, add randomness, change scoring or apply new legality checks. Pool references are captured before that wrapped call; later mutations of the list or cards cannot change the emitted snapshot.
+
+| Field | Meaning |
+| --- | --- |
+| `choiceId`, `choiceSchemaVersion` | Opaque choice ID scoped to the parent decision, schema version 1. Current IDs compose the parent ID with a target-choice ordinal; do not parse them for joins. |
+| `choiceType`, `stage` | `TARGET_POOL_SELECTION` at `CANDIDATE_EVALUATION`. This is a planning/heuristic observation, not an execution claim. |
+| `chooserPlayerId` | The AI player making the observed evaluation, matching the parent decision. |
+| `candidateAbilityId`, `candidateIndex` | Candidate identity and nullable index into the parent's assessment array. Repeated evaluations have distinct indices. Cancellation can leave no completed assessment. |
+| `abilityId`, `sourceId` | Actual evaluated ability (which can be a sub-ability) and its source card. |
+| `candidateActionId` | Nullable link only when that exact candidate object is returned in the parent's selected actions. It does not prove the pool recommendation was committed or executed. No root-lineage/card-name matching is attempted. |
+| `boundary`, `purpose` | Identifies the wrapped operation. Current purposes distinguish `TARGET_RECOMMENDATION`, `OPPONENT_PREFERENCE`, and `MASKED_TARGET_PLANNING`. Source-specific boundary/purpose information is masked for hidden source identities. Older choice records may omit `purpose`. |
+| `optionCoverage` | `OBSERVED_HEURISTIC_POOL_NOT_ALL_LEGAL_TARGET_SETS`. This is not a complete legal-action mask or an assertion that every entry is a legal spell target. |
+| `options`, `priorTargets` | Ordered identity-only references for the observed pool and targets already present on this particular ability when the helper was called. Prior targets are not the entire ability-chain history. |
+| `selected`, `selectedOptionIndex` | Actual returned identity and its unique matching index within the captured pool, or null when no unique observed index is available. |
+| `status` | `SELECTED` for one observed match; `DECLINED` when the helper returned null; `OUTSIDE_OBSERVED_POOL` or `AMBIGUOUS_MATCH` when the identity has zero or multiple observed matches; `ERROR` when the helper threw; `INCOMPLETE` if the parent published before return. |
+
+Card references contain `{type: CARD, id, gameTimestamp}`; player references contain `{type: PLAYER, id}`; ability references contain `{type: SPELL_ABILITY, id, stackId}`, with nullable stack ID. They carry no names, descriptions, rendered prompts or raw script text. Choice IDs remain strings, and engine identifiers/timestamps remain 64-bit values.
+
+`DAMAGE_OPPONENT_POOL` observes the existing preference for an opponent whose board/life total the damage heuristic will consider. The preferred player need not become a spell target: the AI may subsequently choose a creature. Removal pools and damage killable/fallback/planeswalker pools similarly record recommendations that later logic may decline or replace. Compare them with `finalizedTargets` to inspect differences; matching identities alone does not establish which of several evaluations caused a committed target.
+
+Capture retains at most 128 pool records per parent and a 256-entry prefix of each options/prior-target list. New records declare boolean `optionsTruncated` and `priorTargetsTruncated`; false means the observed helper list was captured in full, not that all legal target sets were enumerated. A chosen object outside a retained prefix is still recorded, with no invented index. `subordinateChoiceOmissions` records nonnegative `budget` and `interrupted` counts. Missing truncation/omission declarations in earlier choice records remain unavailable rather than inferred complete/zero. These metadata fields are additive to subordinate schema 1.
+
+Pool traversal occurs outside the recorder monitor and stops when the parent closes or the evaluation thread is interrupted. Publication can close a timed-out parent without waiting for pool enumeration; snapshots still in flight at publication are counted as interrupted omissions. A recorded pool whose chooser has not yet returned instead retains `INCOMPLETE`. Late capture results/errors cannot mutate that decision or poison a later one. Active capture failures use the existing Game observation-failure channel without changing the chooser's return/exception. These safeguards bound additional pool-capture state; they do not bound the pre-existing observation/candidate graphs or guarantee an untrusted blocking iterator will terminate.
+
+Exporter validation checks the nested schemas, identity/index consistency, exact selected-candidate links, status/index relationships, masked-source boundaries, truncation and omission metadata. Reports distinguish declared/legacy coverage, pool types/purposes, return statuses, captured sizes, budget/interruption omissions and unavailable metadata. Presence of a pool record on a selected targeted action is counted separately from complete choice coverage. Choices remain `trainingReady=false` through their parent dataset row; no choice reward or downstream-effect attribution is assigned.
+
+Remaining scope: execution-time and delegated target choices; retargeting, triggers and copies; other AI handlers; per-option scores/reasons and complete legal sets; modes, announced-X decisions and payment decisions. Observation timestamps still need their own contract before assuming a complete option-to-observation incarnation join. The [collection/export guide](../../tools/decision-records/README.md) describes standalone analysis.
+
+### Target-choice commit review, 2026-11-19
+
+The first implementation is `1b15a89e0c3`; post-commit review produced `2291f2278a1`. Review found that traversing pools under the parent recorder's monitor could block timeout publication, and that capturing arbitrary pool/record counts could add unbounded state. Three regression cases failed on the first commit and passed after the fix: blocked enumeration with a late snapshot failure, a pool exceeding the reference limit, and more chooser calls than the record budget. All original chooser calls still execute. Review also separated opponent preferences from target recommendations and made example sampling include sparse choice records. No rules fix is claimed.
+
+Final validation passed 2,426 desktop cases (six skipped), 23 core cases, 23 game cases and 65 Python exporter tests, with no failures/errors. Ten legacy inputs produced all six export files byte-for-byte identically to the pre-feature exporter. See [the evidence manifest](assessments/Subordinate-Targets/manifest.json) and [legacy comparison](assessments/Subordinate-Targets/legacy-equivalence.json).
+
+Eight fresh recorded games completed normally, producing 471 decisions and 38 pool records. Full and filtered inputs produced byte-identical datasets, examples and validation files; their coverage JSON differed only in source-record count. Every full game retained pregame shuffles before `GAME_STARTED`. Coverage and provenance reports retain the actual input count/kind/hash. See [runtime validation](assessments/Subordinate-Targets/validation.json).
+
+| Workload | Games | Decisions | Pool records | Exact pool presence / selected targeted actions | Target-recommendation presence |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Black removal / green, heuristic, seed 12031 | 3 | 194 | 8 | 2 / 4 | 2 / 4 |
+| Red / green, heuristic, seed 7451 | 3 | 173 | 30 | 1 / 1 | 0 / 1 |
+| Doctor Who / Ur-Dragon, heuristic, seed 31002 | 1 | 49 | 0 | 0 / 0 | 0 / 0 |
+| Doctor Who / Ur-Dragon, Monte Carlo, seed 31003 | 1 | 55 | 0 | 0 / 1 | 0 / 1 |
+
+These denominators cover selected actions with an observed targeted stack snapshot, not every decision or subordinate operation. The red records are opponent preferences. Uncovered selections include two Sign in Blood player targets and The Reality Chip's reconfigure target. Zero pools in the Commander samples do not establish absence of choices. All recorded pools were captured in full, with no budget/interruption omissions. The three black games also matched an unrecorded control's winners and turns; this does not establish identical action sequences. The Monte Carlo run reported zero rollout failures and one slow-card exclusion for Yasmin Khan. It produced 17 main-phase search summaries; console totals also include reactive search.
+
+An [actual message example](assessments/Subordinate-Targets/actual-example.json) contains the complete parent decision and its linked stack-addition projection. Befoul's helper selected index 6 from nine observed card identities. Its exact candidate later stacked with the same target. This example illustrates the data, not a general inference rule connecting a recommendation to execution.
+
+The [producer-cost control](assessments/Subordinate-Targets/producer-cost.json) measures one pool plus the existing ranking and parent capture/freeze, excluding serialization and file output. Across three rotated samples, a 30-object pool increased median calling-thread CPU from 764.9 to 791.8 microseconds and allocated bytes from 611,356 to 638,663 per iteration. A four-object pool added about 6.1 KB of allocation; its CPU difference was smaller than timing noise. Capture runs inside the AI's evaluation deadline. These shared-host measurements do not guarantee identical search work, bounded whole-game memory, or timing-neutral gameplay.
+
+The remaining priority-1 work is:
+
+| Order | Gap | Completion evidence |
+| --- | --- | --- |
+| 1 | Execution and delegation provenance | Distinguish evaluation recommendations from committed/execution-time choices, record who chooses when control is delegated, and link retarget/copy/trigger choices without inferring causation from matching target IDs. Preserve explicit unknown cases. |
+| 2 | More target handlers and branches | Add observed choice boundaries for uncovered draw/player targeting, attachment/reconfigure, change-zone, pump/fight and special-case paths. Exercise real multi-option choices; report presence separately from complete coverage. |
+| 3 | Modes | Record observed mode options and selections, including repeats/nesting; join the choice to committed modes while retaining changed or abandoned evaluations. Existing finalized snapshots alone are insufficient. |
+| 4 | X and payment decisions | Record the available observed number/range and actual selections, then actual payment choices with provenance. Do not turn spent mana or partial accounting fields into invented alternatives. |
+
+The separate observation/visibility contract must establish how option identities and card incarnations join to the player's state. Per-option values/reasons, complete legal sets and per-choice rewards are also absent. Priority 1 remains **in progress**, and dataset rows remain `trainingReady=false`.
 
 ## Selected action execution
 
@@ -112,7 +176,7 @@ The fields are:
 - `optionalCosts`: selected `OptionalCost` enum names; nullable `alternativeCost`: the selected alternative-cost enum name; `keywordAmounts`: selected keyword names with engine-aggregated counts, including multikicker/replicate amounts; `withoutManaCost`: the engine's explicit mana-cost waiver flag, not a claim that no mana or other costs were paid.
 - `cardPayments`: the engine's known payment-list categories, their `intrinsic` flag, and card `{id, gameTimestamp}` references. LKI and current-card lists remain separate (`Sacrificed` versus `SacrificedCards`, for example); they can refer to the same payment and must not be summed as unique cards. Unknown category labels are omitted and counted in `unrecognizedCardPaymentGroups` rather than exported as arbitrary text.
 
-No card names, script descriptions, or raw cost strings are emitted. Both stream modes and the exporter preserve the same snapshot, and reports count availability, optional/alternative selections, card-payment groups, and unrecognized groups. Empty recorded facts do not prove a zero cost. Counter-removal type/amount choices, complete life-payment totals, non-card payments such as energy, and per-keyword-instance choices require further instrumentation and remain gaps. Choice reasons and available alternatives remain outside this dataset. The adapter introduces no AI callback, rules check, or retained engine reference; HARD-001 is assessed, with implementation follow-ups tracked separately.
+No card names, script descriptions, or raw cost strings are emitted. Both stream modes and the exporter preserve the same snapshot, and reports count availability, optional/alternative selections, card-payment groups, and unrecognized groups. Empty recorded facts do not prove a zero cost. Counter-removal type/amount choices, complete life-payment totals, non-card payments such as energy, and per-keyword-instance choices require further instrumentation and remain gaps. Payment-choice reasons and available payment alternatives remain outside this dataset. The adapter introduces no AI callback, rules check, or retained engine reference; HARD-001 is assessed, with implementation follow-ups tracked separately.
 
 ## Hardening backlog
 
