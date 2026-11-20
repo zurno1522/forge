@@ -1,0 +1,91 @@
+{
+  "productionRevision": "10ee653ef1bf024f16adeb45266c06a70739cc7c",
+  "baselineRevision": "4739d7b469cdcbfd986946bf476b52aa4f6dadc1",
+  "productionWorktreeDirty": false,
+  "tests": {
+    "core": {
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "game": {
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "desktop": {
+      "tests": 2512,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 6
+    },
+    "focusedJava": {
+      "tests": 119,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exporter": {
+      "tests": 102,
+      "failures": 0,
+      "errors": 0
+    }
+  },
+  "simulations": {
+    "games": 8,
+    "decisions": 550,
+    "searchTargetApplications": 46,
+    "explicitSearchOrigins": 13,
+    "explicitEvaluationOrigins": 9,
+    "unknownOrigins": 0,
+    "allNormal": true,
+    "fullFilteredDatasetChoiceExamplesValidationByteIdentical": true,
+    "coverageEqualExceptSourceRecords": true,
+    "pregameShufflesPreserved": true
+  },
+  "compatibility": {
+    "previousFormatInputs": 22,
+    "allExportFilesByteIdentical": true
+  },
+  "logs": {
+    "fullReactor": {
+      "path": "/workspace/work/mc-target-full-tests.log",
+      "sha256": "d7d4d813aca26672a0391c1ef6f0ee1005121c917f0a7d5586977f0d93a05251"
+    },
+    "focusedJava": {
+      "path": "/workspace/work/mc-target-final-focused-tests.log",
+      "sha256": "2b6006a24a43922e5da0c1e868e285cda778e5d6e5194e1dfe8f3bd2d6946c8e"
+    },
+    "exporter": {
+      "path": "/workspace/work/mc-target-export-tests.log",
+      "sha256": "f25173b38759dadc2152bcfe389eddbbfc086d4e2901a9dc4ae5c86e33836c27"
+    }
+  },
+  "artifacts": {
+    "actual-examples.json": {
+      "sha256": "8ed0e6bd1cea8433f270019183c07ccf9ba2e7ccd75ab59207f4182e17a47f4d",
+      "bytes": 106126
+    },
+    "commands.json": {
+      "sha256": "9c79fa3dd5cd111b9864ae64be2e79782c158c0b959624fd50dff660cce59c03",
+      "bytes": 42198
+    },
+    "legacy-equivalence.json": {
+      "sha256": "7339672280aa47f1c68586582c67ea87a76371f50d863ece4e1ae844bbcdb9d8",
+      "bytes": 1902
+    },
+    "validation.json": {
+      "sha256": "37fd24d8c7bf68a1d02f3860d76324a70f2de42faacf0238b6c2bf688b7ccc0f",
+      "bytes": 58573
+    }
+  },
+  "rawWorkspace": "/workspace/work/mc-target-provenance",
+  "limitations": [
+    "Only final search operations owned by main-phase decisions are captured here.",
+    "Live samples exercise heuristic revalidation and approved-target restoration; other operation types have focused controller/engine tests.",
+    "Matching control outcomes do not establish timing-neutral capture or identical Monte Carlo work.",
+    "The observation/visibility contract and complete legal-option/search-value datasets remain separate work."
+  ]
+}

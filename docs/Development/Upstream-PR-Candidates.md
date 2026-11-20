@@ -111,3 +111,8 @@ Unsupported effect-duration copying is a known coverage limit to investigate wit
 ### Subordinate payment observation boundary (2026-11-20)
 
 The learning branch adds `CostDecisionMakerBase.decide(CostPart)` with a default visitor call, used by both `CostPayment` paths. `AiCostDecision` overrides it for observational events; human decision makers retain the default. This is an extension point for telemetry, **not an engine defect**. Any upstream proposal should be classified as infrastructure/observability and review the added engine API independently of learning event schemas. No PR is opened by this entry. Payment proposals, actual routine results and finalized payment facts remain distinct, and no selection/payment policy is changed.
+
+
+### Monte Carlo target-operation provenance (2026-11-20)
+
+Final main-phase search revalidation/restoration/replacement now records its own operation and exact committed target origins. The Reality Chip example exposed missing provenance after a plan rebuild, not an established Forge engine or card-script defect. Keep this work with PR-003's observational feature discussion. The increment changes only AI recording/controllers, exporter validation/reporting and tests; it adds no rules-level API or learning IDs. Target-provenance wire version 2 is explicit for the new operation references, while old records retain version 1. No upstream PR is opened by this entry.

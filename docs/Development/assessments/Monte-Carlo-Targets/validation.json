@@ -1,0 +1,2094 @@
+{
+  "productionRevision": "10ee653ef1bf024f16adeb45266c06a70739cc7c",
+  "games": 8,
+  "decisions": 550,
+  "searchTargetApplications": 46,
+  "searchTargetOperationTypes": {
+    "HEURISTIC_REVALIDATION": 45,
+    "RESTORE_APPROVED_TARGET": 1
+  },
+  "searchTargetApplicationStatuses": {
+    "ACCEPTED": 45,
+    "DECLINED": 1
+  },
+  "committedTargetChoiceOrigins": {
+    "EXPLICIT_SEARCH_APPLICATION": 13,
+    "EXPLICIT_EVALUATION_ADDITION": 9
+  },
+  "scenarios": {
+    "commander-mc": {
+      "games": 1,
+      "executionStatuses": {
+        "NORMAL": 1
+      },
+      "decisions": 57,
+      "searchTargetApplications": 6,
+      "searchTargetOperationTypes": {
+        "HEURISTIC_REVALIDATION": 6
+      },
+      "searchTargetApplicationStatuses": {
+        "ACCEPTED": 6
+      },
+      "committedTargetChoiceOrigins": {
+        "EXPLICIT_SEARCH_APPLICATION": 1
+      },
+      "captureOmissions": {
+        "budget": 0,
+        "interrupted": 0
+      },
+      "pregameShuffles": {
+        "1": 2
+      },
+      "byteIdenticalOutputs": {
+        "dataset.jsonl": true,
+        "choices.jsonl": true,
+        "examples.jsonl": true,
+        "validation.json": true
+      },
+      "coverageEqualExceptSourceRecords": true,
+      "runMetadata": {
+        "type": "RUN_STARTED",
+        "schemaVersion": 1,
+        "actionEventSchemaVersion": 1,
+        "choiceEventSchemaVersion": 1,
+        "runId": "c3850951-619c-4ee4-b56c-08ffc252927a",
+        "pilotMode": "FLAT_MONTE_CARLO",
+        "engineRevision": "10ee653ef1bf024f16adeb45266c06a70739cc7c",
+        "engineDirty": "false",
+        "forgeVersion": "GIT",
+        "runMode": "GAMES",
+        "gameType": "Commander",
+        "requestedGames": 1,
+        "seed": 31003,
+        "participants": [
+          {
+            "participantId": 1,
+            "deckName": "Doctor Who - The Thirteenth Doctor and Yasmin Khan",
+            "aiProfile": "Default",
+            "deck": {
+              "Main": [
+                {
+                  "name": "Arcane Signet",
+                  "count": 1
+                },
+                {
+                  "name": "Beast Within",
+                  "count": 1
+                },
+                {
+                  "name": "Bigger on the Inside",
+                  "count": 1
+                },
+                {
+                  "name": "Birds of Paradise",
+                  "count": 1
+                },
+                {
+                  "name": "Boseiju, Who Endures",
+                  "count": 1
+                },
+                {
+                  "name": "Breeding Pool",
+                  "count": 1
+                },
+                {
+                  "name": "Chaos Warp",
+                  "count": 1
+                },
+                {
+                  "name": "Chimil, the Inner Sun",
+                  "count": 1
+                },
+                {
+                  "name": "Cinder Glade",
+                  "count": 1
+                },
+                {
+                  "name": "City of Brass",
+                  "count": 1
+                },
+                {
+                  "name": "Clara Oswald",
+                  "count": 1
+                },
+                {
+                  "name": "Command Tower",
+                  "count": 1
+                },
+                {
+                  "name": "Confession Dial",
+                  "count": 1
+                },
+                {
+                  "name": "Cryptic Command",
+                  "count": 1
+                },
+                {
+                  "name": "Cultivate",
+                  "count": 1
+                },
+                {
+                  "name": "Cursed Mirror",
+                  "count": 1
+                },
+                {
+                  "name": "Danny Pink",
+                  "count": 1
+                },
+                {
+                  "name": "Decaying Time Loop",
+                  "count": 1
+                },
+                {
+                  "name": "Delayed Blast Fireball",
+                  "count": 1
+                },
+                {
+                  "name": "Desolate Lighthouse",
+                  "count": 1
+                },
+                {
+                  "name": "Doc Aurlock, Grizzled Genius",
+                  "count": 1
+                },
+                {
+                  "name": "Dreamroot Cascade",
+                  "count": 1
+                },
+                {
+                  "name": "Etali, Primal Storm",
+                  "count": 1
+                },
+                {
+                  "name": "Exotic Orchard",
+                  "count": 1
+                },
+                {
+                  "name": "Farseek",
+                  "count": 1
+                },
+                {
+                  "name": "Fiery Islet",
+                  "count": 1
+                },
+                {
+                  "name": "Flaming Tyrannosaurus",
+                  "count": 1
+                },
+                {
+                  "name": "Flatline",
+                  "count": 1
+                },
+                {
+                  "name": "Forest",
+                  "count": 1
+                },
+                {
+                  "name": "Frontier Bivouac",
+                  "count": 1
+                },
+                {
+                  "name": "Frost Fair Lure Fish",
+                  "count": 1
+                },
+                {
+                  "name": "Frostboil Snarl",
+                  "count": 1
+                },
+                {
+                  "name": "Growing Rites of Itlimoc",
+                  "count": 1
+                },
+                {
+                  "name": "Growth Spiral",
+                  "count": 1
+                },
+                {
+                  "name": "Hangarback Walker",
+                  "count": 1
+                },
+                {
+                  "name": "Heaven Sent",
+                  "count": 1
+                },
+                {
+                  "name": "Heroic Intervention",
+                  "count": 1
+                },
+                {
+                  "name": "Hidden Cataract",
+                  "count": 1
+                },
+                {
+                  "name": "Hidden Nursery",
+                  "count": 1
+                },
+                {
+                  "name": "Hidden Volcano",
+                  "count": 1
+                },
+                {
+                  "name": "Hinterland Harbor",
+                  "count": 1
+                },
+                {
+                  "name": "Impending Flux",
+                  "count": 1
+                },
+                {
+                  "name": "Incubation Druid",
+                  "count": 1
+                },
+                {
+                  "name": "Into the Time Vortex",
+                  "count": 1
+                },
+                {
+                  "name": "Iraxxa, Empress of Mars",
+                  "count": 1
+                },
+                {
+                  "name": "Island",
+                  "count": 2
+                },
+                {
+                  "name": "Kami of Celebration",
+                  "count": 1
+                },
+                {
+                  "name": "Kami of Whispered Hopes",
+                  "count": 1
+                },
+                {
+                  "name": "Keeper of Secrets",
+                  "count": 1
+                },
+                {
+                  "name": "Laelia, the Blade Reforged",
+                  "count": 1
+                },
+                {
+                  "name": "Last Night Together",
+                  "count": 1
+                },
+                {
+                  "name": "Maelstrom Wanderer",
+                  "count": 1
+                },
+                {
+                  "name": "Master Biomancer",
+                  "count": 1
+                },
+                {
+                  "name": "Memory Worm",
+                  "count": 1
+                },
+                {
+                  "name": "Mountain",
+                  "count": 2
+                },
+                {
+                  "name": "Nature's Lore",
+                  "count": 1
+                },
+                {
+                  "name": "Ominous Cemetery",
+                  "count": 1
+                },
+                {
+                  "name": "Ouroboroid",
+                  "count": 1
+                },
+                {
+                  "name": "Ponder",
+                  "count": 1
+                },
+                {
+                  "name": "Preordain",
+                  "count": 1
+                },
+                {
+                  "name": "Quantum Misalignment",
+                  "count": 1
+                },
+                {
+                  "name": "Rejuvenating Springs",
+                  "count": 1
+                },
+                {
+                  "name": "Rockfall Vale",
+                  "count": 1
+                },
+                {
+                  "name": "Rogue's Passage",
+                  "count": 1
+                },
+                {
+                  "name": "Rootbound Crag",
+                  "count": 1
+                },
+                {
+                  "name": "Ryan Sinclair",
+                  "count": 1
+                },
+                {
+                  "name": "Scalding Tarn",
+                  "count": 1
+                },
+                {
+                  "name": "Search for Tomorrow",
+                  "count": 1
+                },
+                {
+                  "name": "Sheltered Thicket",
+                  "count": 1
+                },
+                {
+                  "name": "Sisterhood of Karn",
+                  "count": 1
+                },
+                {
+                  "name": "Skyshroud Claim",
+                  "count": 1
+                },
+                {
+                  "name": "Snapcaster Mage",
+                  "count": 1
+                },
+                {
+                  "name": "Sol Ring",
+                  "count": 1
+                },
+                {
+                  "name": "Sonic Screwdriver",
+                  "count": 1
+                },
+                {
+                  "name": "Spire Garden",
+                  "count": 1
+                },
+                {
+                  "name": "Steam Vents",
+                  "count": 1
+                },
+                {
+                  "name": "Stomping Ground",
+                  "count": 1
+                },
+                {
+                  "name": "Stormcarved Coast",
+                  "count": 1
+                },
+                {
+                  "name": "Sulfur Falls",
+                  "count": 1
+                },
+                {
+                  "name": "Surge of Brilliance",
+                  "count": 1
+                },
+                {
+                  "name": "TARDIS",
+                  "count": 1
+                },
+                {
+                  "name": "Talisman of Curiosity",
+                  "count": 1
+                },
+                {
+                  "name": "Talisman of Impulse",
+                  "count": 1
+                },
+                {
+                  "name": "Temple of Abandon",
+                  "count": 1
+                },
+                {
+                  "name": "Temple of Epiphany",
+                  "count": 1
+                },
+                {
+                  "name": "The Flux",
+                  "count": 1
+                },
+                {
+                  "name": "The Foretold Soldier",
+                  "count": 1
+                },
+                {
+                  "name": "The Reality Chip",
+                  "count": 1
+                },
+                {
+                  "name": "The Twelfth Doctor",
+                  "count": 1
+                },
+                {
+                  "name": "Think Twice",
+                  "count": 1
+                },
+                {
+                  "name": "Throes of Chaos",
+                  "count": 1
+                },
+                {
+                  "name": "Waterlogged Grove",
+                  "count": 1
+                },
+                {
+                  "name": "Wooded Foothills",
+                  "count": 1
+                },
+                {
+                  "name": "Wreck and Rebuild",
+                  "count": 1
+                },
+                {
+                  "name": "Yavimaya Coast",
+                  "count": 1
+                },
+                {
+                  "name": "Zimone, Paradox Sculptor",
+                  "count": 1
+                }
+              ],
+              "Commander": [
+                {
+                  "name": "The Thirteenth Doctor",
+                  "count": 1
+                },
+                {
+                  "name": "Yasmin Khan",
+                  "count": 1
+                }
+              ],
+              "Planes": [
+                {
+                  "name": "Besieged Viking Village",
+                  "count": 1
+                },
+                {
+                  "name": "Fixed Point in Time",
+                  "count": 1
+                },
+                {
+                  "name": "Kerblam! Warehouse",
+                  "count": 1
+                },
+                {
+                  "name": "North Pole Research Base",
+                  "count": 1
+                },
+                {
+                  "name": "Singing Towers of Darillium",
+                  "count": 1
+                },
+                {
+                  "name": "Stormcage Containment Facility",
+                  "count": 1
+                },
+                {
+                  "name": "Temple of Atropos",
+                  "count": 1
+                },
+                {
+                  "name": "The Dining Car",
+                  "count": 1
+                },
+                {
+                  "name": "The Doctor's Childhood Barn",
+                  "count": 1
+                },
+                {
+                  "name": "The Drum, Mining Facility",
+                  "count": 1
+                }
+              ]
+            }
+          },
+          {
+            "participantId": 2,
+            "deckName": "Draconic Domination [C17] [2017]",
+            "aiProfile": "Default",
+            "deck": {
+              "Main": [
+                {
+                  "name": "Arcane Sanctum",
+                  "count": 1
+                },
+                {
+                  "name": "Armillary Sphere",
+                  "count": 1
+                },
+                {
+                  "name": "Atarka, World Render",
+                  "count": 1
+                },
+                {
+                  "name": "Bladewing the Risen",
+                  "count": 1
+                },
+                {
+                  "name": "Boneyard Scourge",
+                  "count": 1
+                },
+                {
+                  "name": "Broodmate Dragon",
+                  "count": 1
+                },
+                {
+                  "name": "Command Tower",
+                  "count": 1
+                },
+                {
+                  "name": "Commander's Sphere",
+                  "count": 1
+                },
+                {
+                  "name": "Crosis, the Purger",
+                  "count": 1
+                },
+                {
+                  "name": "Crucible of Fire",
+                  "count": 1
+                },
+                {
+                  "name": "Crucible of the Spirit Dragon",
+                  "count": 1
+                },
+                {
+                  "name": "Crumbling Necropolis",
+                  "count": 1
+                },
+                {
+                  "name": "Crux of Fate",
+                  "count": 1
+                },
+                {
+                  "name": "Cultivate",
+                  "count": 1
+                },
+                {
+                  "name": "Curse of Bounty",
+                  "count": 1
+                },
+                {
+                  "name": "Curse of Opulence",
+                  "count": 1
+                },
+                {
+                  "name": "Curse of Verbosity",
+                  "count": 1
+                },
+                {
+                  "name": "Darksteel Ingot",
+                  "count": 1
+                },
+                {
+                  "name": "Deathbringer Regent",
+                  "count": 1
+                },
+                {
+                  "name": "Dragon Tempest",
+                  "count": 1
+                },
+                {
+                  "name": "Dragonlord's Servant",
+                  "count": 1
+                },
+                {
+                  "name": "Dragonspeaker Shaman",
+                  "count": 1
+                },
+                {
+                  "name": "Dreamstone Hedron",
+                  "count": 1
+                },
+                {
+                  "name": "Dromoka, the Eternal",
+                  "count": 1
+                },
+                {
+                  "name": "Earthquake",
+                  "count": 1
+                },
+                {
+                  "name": "Elemental Bond",
+                  "count": 1
+                },
+                {
+                  "name": "Farseek",
+                  "count": 1
+                },
+                {
+                  "name": "Fist of Suns",
+                  "count": 1
+                },
+                {
+                  "name": "Forest",
+                  "count": 3
+                },
+                {
+                  "name": "Fortunate Few",
+                  "count": 1
+                },
+                {
+                  "name": "Fractured Identity",
+                  "count": 1
+                },
+                {
+                  "name": "Frontier Bivouac",
+                  "count": 1
+                },
+                {
+                  "name": "Frontier Siege",
+                  "count": 1
+                },
+                {
+                  "name": "Haven of the Spirit Dragon",
+                  "count": 1
+                },
+                {
+                  "name": "Hellkite Charger",
+                  "count": 1
+                },
+                {
+                  "name": "Herald's Horn",
+                  "count": 1
+                },
+                {
+                  "name": "Intet, the Dreamer",
+                  "count": 1
+                },
+                {
+                  "name": "Island",
+                  "count": 3
+                },
+                {
+                  "name": "Jungle Shrine",
+                  "count": 1
+                },
+                {
+                  "name": "Kindred Discovery",
+                  "count": 1
+                },
+                {
+                  "name": "Kodama's Reach",
+                  "count": 1
+                },
+                {
+                  "name": "Kolaghan, the Storm's Fury",
+                  "count": 1
+                },
+                {
+                  "name": "Lightning Greaves",
+                  "count": 1
+                },
+                {
+                  "name": "Mirror of the Forebears",
+                  "count": 1
+                },
+                {
+                  "name": "Monastery Siege",
+                  "count": 1
+                },
+                {
+                  "name": "Mountain",
+                  "count": 6
+                },
+                {
+                  "name": "Mystic Monastery",
+                  "count": 1
+                },
+                {
+                  "name": "Nihil Spellbomb",
+                  "count": 1
+                },
+                {
+                  "name": "Niv-Mizzet, Dracogenius",
+                  "count": 1
+                },
+                {
+                  "name": "Nomad Outpost",
+                  "count": 1
+                },
+                {
+                  "name": "O-Kagachi, Vengeful Kami",
+                  "count": 1
+                },
+                {
+                  "name": "Ojutai, Soul of Winter",
+                  "count": 1
+                },
+                {
+                  "name": "Opulent Palace",
+                  "count": 1
+                },
+                {
+                  "name": "Orator of Ojutai",
+                  "count": 1
+                },
+                {
+                  "name": "Painful Truths",
+                  "count": 1
+                },
+                {
+                  "name": "Palace Siege",
+                  "count": 1
+                },
+                {
+                  "name": "Path of Ancestry",
+                  "count": 1
+                },
+                {
+                  "name": "Plains",
+                  "count": 3
+                },
+                {
+                  "name": "Rain of Thorns",
+                  "count": 1
+                },
+                {
+                  "name": "Ramos, Dragon Engine",
+                  "count": 1
+                },
+                {
+                  "name": "Ryusei, the Falling Star",
+                  "count": 1
+                },
+                {
+                  "name": "Sandsteppe Citadel",
+                  "count": 1
+                },
+                {
+                  "name": "Savage Lands",
+                  "count": 1
+                },
+                {
+                  "name": "Savage Ventmaw",
+                  "count": 1
+                },
+                {
+                  "name": "Scalelord Reckoner",
+                  "count": 1
+                },
+                {
+                  "name": "Scion of the Ur-Dragon",
+                  "count": 1
+                },
+                {
+                  "name": "Scourge of Valkas",
+                  "count": 1
+                },
+                {
+                  "name": "Seaside Citadel",
+                  "count": 1
+                },
+                {
+                  "name": "Silumgar, the Drifting Death",
+                  "count": 1
+                },
+                {
+                  "name": "Sol Ring",
+                  "count": 1
+                },
+                {
+                  "name": "Spellbound Dragon",
+                  "count": 1
+                },
+                {
+                  "name": "Steel Hellkite",
+                  "count": 1
+                },
+                {
+                  "name": "Sunscorch Regent",
+                  "count": 1
+                },
+                {
+                  "name": "Swamp",
+                  "count": 3
+                },
+                {
+                  "name": "Taigam, Ojutai Master",
+                  "count": 1
+                },
+                {
+                  "name": "Teneb, the Harvester",
+                  "count": 1
+                },
+                {
+                  "name": "Territorial Hellkite",
+                  "count": 1
+                },
+                {
+                  "name": "Tyrant's Familiar",
+                  "count": 1
+                },
+                {
+                  "name": "Utvara Hellkite",
+                  "count": 1
+                },
+                {
+                  "name": "Vivid Crag",
+                  "count": 1
+                },
+                {
+                  "name": "Vivid Creek",
+                  "count": 1
+                },
+                {
+                  "name": "Vivid Grove",
+                  "count": 1
+                },
+                {
+                  "name": "Vivid Marsh",
+                  "count": 1
+                },
+                {
+                  "name": "Vivid Meadow",
+                  "count": 1
+                },
+                {
+                  "name": "Wasitora, Nekoru Queen",
+                  "count": 1
+                },
+                {
+                  "name": "Wayfarer's Bauble",
+                  "count": 1
+                }
+              ],
+              "Commander": [
+                {
+                  "name": "The Ur-Dragon",
+                  "count": 1
+                }
+              ]
+            }
+          }
+        ],
+        "streamKind": "FULL_GAME_TRACE",
+        "eventIndexMode": "CONTIGUOUS"
+      },
+      "sources": {
+        "full": {
+          "path": "/workspace/work/mc-target-provenance/commander-mc-full.jsonl",
+          "sha256": "3e5830d7ea9949bfa58c72300df24a2220db3c2467bd8bf30bba85e677799223",
+          "bytes": 1132614
+        },
+        "decisions": {
+          "path": "/workspace/work/mc-target-provenance/commander-mc-decisions.jsonl",
+          "sha256": "4f274cd27f788250bcbe889d052ef512faa3f3ce9a4ea42b70f556d4fc948696",
+          "bytes": 828438
+        }
+      },
+      "signature": {
+        "turns": [
+          "8"
+        ],
+        "winners": [
+          "Ai(2)-Draconic Domination [C17] [2017]"
+        ]
+      }
+    },
+    "commander-mc-2": {
+      "games": 1,
+      "executionStatuses": {
+        "NORMAL": 1
+      },
+      "decisions": 77,
+      "searchTargetApplications": 10,
+      "searchTargetOperationTypes": {
+        "HEURISTIC_REVALIDATION": 10
+      },
+      "searchTargetApplicationStatuses": {
+        "ACCEPTED": 10
+      },
+      "committedTargetChoiceOrigins": {},
+      "captureOmissions": {
+        "budget": 0,
+        "interrupted": 0
+      },
+      "pregameShuffles": {
+        "1": 2
+      },
+      "byteIdenticalOutputs": {
+        "dataset.jsonl": true,
+        "choices.jsonl": true,
+        "examples.jsonl": true,
+        "validation.json": true
+      },
+      "coverageEqualExceptSourceRecords": true,
+      "runMetadata": {
+        "type": "RUN_STARTED",
+        "schemaVersion": 1,
+        "actionEventSchemaVersion": 1,
+        "choiceEventSchemaVersion": 1,
+        "runId": "b24af921-1961-4578-8336-fc03ae12d466",
+        "pilotMode": "FLAT_MONTE_CARLO",
+        "engineRevision": "10ee653ef1bf024f16adeb45266c06a70739cc7c",
+        "engineDirty": "false",
+        "forgeVersion": "GIT",
+        "runMode": "GAMES",
+        "gameType": "Commander",
+        "requestedGames": 1,
+        "seed": 31004,
+        "participants": [
+          {
+            "participantId": 1,
+            "deckName": "Doctor Who - The Thirteenth Doctor and Yasmin Khan",
+            "aiProfile": "Default",
+            "deck": {
+              "Main": [
+                {
+                  "name": "Arcane Signet",
+                  "count": 1
+                },
+                {
+                  "name": "Beast Within",
+                  "count": 1
+                },
+                {
+                  "name": "Bigger on the Inside",
+                  "count": 1
+                },
+                {
+                  "name": "Birds of Paradise",
+                  "count": 1
+                },
+                {
+                  "name": "Boseiju, Who Endures",
+                  "count": 1
+                },
+                {
+                  "name": "Breeding Pool",
+                  "count": 1
+                },
+                {
+                  "name": "Chaos Warp",
+                  "count": 1
+                },
+                {
+                  "name": "Chimil, the Inner Sun",
+                  "count": 1
+                },
+                {
+                  "name": "Cinder Glade",
+                  "count": 1
+                },
+                {
+                  "name": "City of Brass",
+                  "count": 1
+                },
+                {
+                  "name": "Clara Oswald",
+                  "count": 1
+                },
+                {
+                  "name": "Command Tower",
+                  "count": 1
+                },
+                {
+                  "name": "Confession Dial",
+                  "count": 1
+                },
+                {
+                  "name": "Cryptic Command",
+                  "count": 1
+                },
+                {
+                  "name": "Cultivate",
+                  "count": 1
+                },
+                {
+                  "name": "Cursed Mirror",
+                  "count": 1
+                },
+                {
+                  "name": "Danny Pink",
+                  "count": 1
+                },
+                {
+                  "name": "Decaying Time Loop",
+                  "count": 1
+                },
+                {
+                  "name": "Delayed Blast Fireball",
+                  "count": 1
+                },
+                {
+                  "name": "Desolate Lighthouse",
+                  "count": 1
+                },
+                {
+                  "name": "Doc Aurlock, Grizzled Genius",
+                  "count": 1
+                },
+                {
+                  "name": "Dreamroot Cascade",
+                  "count": 1
+                },
+                {
+                  "name": "Etali, Primal Storm",
+                  "count": 1
+                },
+                {
+                  "name": "Exotic Orchard",
+                  "count": 1
+                },
+                {
+                  "name": "Farseek",
+                  "count": 1
+                },
+                {
+                  "name": "Fiery Islet",
+                  "count": 1
+                },
+                {
+                  "name": "Flaming Tyrannosaurus",
+                  "count": 1
+                },
+                {
+                  "name": "Flatline",
+                  "count": 1
+                },
+                {
+                  "name": "Forest",
+                  "count": 1
+                },
+                {
+                  "name": "Frontier Bivouac",
+                  "count": 1
+                },
+                {
+                  "name": "Frost Fair Lure Fish",
+                  "count": 1
+                },
+                {
+                  "name": "Frostboil Snarl",
+                  "count": 1
+                },
+                {
+                  "name": "Growing Rites of Itlimoc",
+                  "count": 1
+                },
+                {
+                  "name": "Growth Spiral",
+                  "count": 1
+                },
+                {
+                  "name": "Hangarback Walker",
+                  "count": 1
+                },
+                {
+                  "name": "Heaven Sent",
+                  "count": 1
+                },
+                {
+                  "name": "Heroic Intervention",
+                  "count": 1
+                },
+                {
+                  "name": "Hidden Cataract",
+                  "count": 1
+                },
+                {
+                  "name": "Hidden Nursery",
+                  "count": 1
+                },
+                {
+                  "name": "Hidden Volcano",
+                  "count": 1
+                },
+                {
+                  "name": "Hinterland Harbor",
+                  "count": 1
+                },
+                {
+                  "name": "Impending Flux",
+                  "count": 1
+                },
+                {
+                  "name": "Incubation Druid",
+                  "count": 1
+                },
+                {
+                  "name": "Into the Time Vortex",
+                  "count": 1
+                },
+                {
+                  "name": "Iraxxa, Empress of Mars",
+                  "count": 1
+                },
+                {
+                  "name": "Island",
+                  "count": 2
+                },
+                {
+                  "name": "Kami of Celebration",
+                  "count": 1
+                },
+                {
+                  "name": "Kami of Whispered Hopes",
+                  "count": 1
+                },
+                {
+                  "name": "Keeper of Secrets",
+                  "count": 1
+                },
+                {
+                  "name": "Laelia, the Blade Reforged",
+                  "count": 1
+                },
+                {
+                  "name": "Last Night Together",
+                  "count": 1
+                },
+                {
+                  "name": "Maelstrom Wanderer",
+                  "count": 1
+                },
+                {
+                  "name": "Master Biomancer",
+                  "count": 1
+                },
+                {
+                  "name": "Memory Worm",
+                  "count": 1
+                },
+                {
+                  "name": "Mountain",
+                  "count": 2
+                },
+                {
+                  "name": "Nature's Lore",
+                  "count": 1
+                },
+                {
+                  "name": "Ominous Cemetery",
+                  "count": 1
+                },
+                {
+                  "name": "Ouroboroid",
+                  "count": 1
+                },
+                {
+                  "name": "Ponder",
+                  "count": 1
+                },
+                {
+                  "name": "Preordain",
+                  "count": 1
+                },
+                {
+                  "name": "Quantum Misalignment",
+                  "count": 1
+                },
+                {
+                  "name": "Rejuvenating Springs",
+                  "count": 1
+                },
+                {
+                  "name": "Rockfall Vale",
+                  "count": 1
+                },
+                {
+                  "name": "Rogue's Passage",
+                  "count": 1
+                },
+                {
+                  "name": "Rootbound Crag",
+                  "count": 1
+                },
+                {
+                  "name": "Ryan Sinclair",
+                  "count": 1
+                },
+                {
+                  "name": "Scalding Tarn",
+                  "count": 1
+                },
+                {
+                  "name": "Search for Tomorrow",
+                  "count": 1
+                },
+                {
+                  "name": "Sheltered Thicket",
+                  "count": 1
+                },
+                {
+                  "name": "Sisterhood of Karn",
+                  "count": 1
+                },
+                {
+                  "name": "Skyshroud Claim",
+                  "count": 1
+                },
+                {
+                  "name": "Snapcaster Mage",
+                  "count": 1
+                },
+                {
+                  "name": "Sol Ring",
+                  "count": 1
+                },
+                {
+                  "name": "Sonic Screwdriver",
+                  "count": 1
+                },
+                {
+                  "name": "Spire Garden",
+                  "count": 1
+                },
+                {
+                  "name": "Steam Vents",
+                  "count": 1
+                },
+                {
+                  "name": "Stomping Ground",
+                  "count": 1
+                },
+                {
+                  "name": "Stormcarved Coast",
+                  "count": 1
+                },
+                {
+                  "name": "Sulfur Falls",
+                  "count": 1
+                },
+                {
+                  "name": "Surge of Brilliance",
+                  "count": 1
+                },
+                {
+                  "name": "TARDIS",
+                  "count": 1
+                },
+                {
+                  "name": "Talisman of Curiosity",
+                  "count": 1
+                },
+                {
+                  "name": "Talisman of Impulse",
+                  "count": 1
+                },
+                {
+                  "name": "Temple of Abandon",
+                  "count": 1
+                },
+                {
+                  "name": "Temple of Epiphany",
+                  "count": 1
+                },
+                {
+                  "name": "The Flux",
+                  "count": 1
+                },
+                {
+                  "name": "The Foretold Soldier",
+                  "count": 1
+                },
+                {
+                  "name": "The Reality Chip",
+                  "count": 1
+                },
+                {
+                  "name": "The Twelfth Doctor",
+                  "count": 1
+                },
+                {
+                  "name": "Think Twice",
+                  "count": 1
+                },
+                {
+                  "name": "Throes of Chaos",
+                  "count": 1
+                },
+                {
+                  "name": "Waterlogged Grove",
+                  "count": 1
+                },
+                {
+                  "name": "Wooded Foothills",
+                  "count": 1
+                },
+                {
+                  "name": "Wreck and Rebuild",
+                  "count": 1
+                },
+                {
+                  "name": "Yavimaya Coast",
+                  "count": 1
+                },
+                {
+                  "name": "Zimone, Paradox Sculptor",
+                  "count": 1
+                }
+              ],
+              "Commander": [
+                {
+                  "name": "The Thirteenth Doctor",
+                  "count": 1
+                },
+                {
+                  "name": "Yasmin Khan",
+                  "count": 1
+                }
+              ],
+              "Planes": [
+                {
+                  "name": "Besieged Viking Village",
+                  "count": 1
+                },
+                {
+                  "name": "Fixed Point in Time",
+                  "count": 1
+                },
+                {
+                  "name": "Kerblam! Warehouse",
+                  "count": 1
+                },
+                {
+                  "name": "North Pole Research Base",
+                  "count": 1
+                },
+                {
+                  "name": "Singing Towers of Darillium",
+                  "count": 1
+                },
+                {
+                  "name": "Stormcage Containment Facility",
+                  "count": 1
+                },
+                {
+                  "name": "Temple of Atropos",
+                  "count": 1
+                },
+                {
+                  "name": "The Dining Car",
+                  "count": 1
+                },
+                {
+                  "name": "The Doctor's Childhood Barn",
+                  "count": 1
+                },
+                {
+                  "name": "The Drum, Mining Facility",
+                  "count": 1
+                }
+              ]
+            }
+          },
+          {
+            "participantId": 2,
+            "deckName": "Draconic Domination [C17] [2017]",
+            "aiProfile": "Default",
+            "deck": {
+              "Main": [
+                {
+                  "name": "Arcane Sanctum",
+                  "count": 1
+                },
+                {
+                  "name": "Armillary Sphere",
+                  "count": 1
+                },
+                {
+                  "name": "Atarka, World Render",
+                  "count": 1
+                },
+                {
+                  "name": "Bladewing the Risen",
+                  "count": 1
+                },
+                {
+                  "name": "Boneyard Scourge",
+                  "count": 1
+                },
+                {
+                  "name": "Broodmate Dragon",
+                  "count": 1
+                },
+                {
+                  "name": "Command Tower",
+                  "count": 1
+                },
+                {
+                  "name": "Commander's Sphere",
+                  "count": 1
+                },
+                {
+                  "name": "Crosis, the Purger",
+                  "count": 1
+                },
+                {
+                  "name": "Crucible of Fire",
+                  "count": 1
+                },
+                {
+                  "name": "Crucible of the Spirit Dragon",
+                  "count": 1
+                },
+                {
+                  "name": "Crumbling Necropolis",
+                  "count": 1
+                },
+                {
+                  "name": "Crux of Fate",
+                  "count": 1
+                },
+                {
+                  "name": "Cultivate",
+                  "count": 1
+                },
+                {
+                  "name": "Curse of Bounty",
+                  "count": 1
+                },
+                {
+                  "name": "Curse of Opulence",
+                  "count": 1
+                },
+                {
+                  "name": "Curse of Verbosity",
+                  "count": 1
+                },
+                {
+                  "name": "Darksteel Ingot",
+                  "count": 1
+                },
+                {
+                  "name": "Deathbringer Regent",
+                  "count": 1
+                },
+                {
+                  "name": "Dragon Tempest",
+                  "count": 1
+                },
+                {
+                  "name": "Dragonlord's Servant",
+                  "count": 1
+                },
+                {
+                  "name": "Dragonspeaker Shaman",
+                  "count": 1
+                },
+                {
+                  "name": "Dreamstone Hedron",
+                  "count": 1
+                },
+                {
+                  "name": "Dromoka, the Eternal",
+                  "count": 1
+                },
+                {
+                  "name": "Earthquake",
+                  "count": 1
+                },
+                {
+                  "name": "Elemental Bond",
+                  "count": 1
+                },
+                {
+                  "name": "Farseek",
+                  "count": 1
+                },
+                {
+                  "name": "Fist of Suns",
+                  "count": 1
+                },
+                {
+                  "name": "Forest",
+                  "count": 3
+                },
+                {
+                  "name": "Fortunate Few",
+                  "count": 1
+                },
+                {
+                  "name": "Fractured Identity",
+                  "count": 1
+                },
+                {
+                  "name": "Frontier Bivouac",
+                  "count": 1
+                },
+                {
+                  "name": "Frontier Siege",
+                  "count": 1
+                },
+                {
+                  "name": "Haven of the Spirit Dragon",
+                  "count": 1
+                },
+                {
+                  "name": "Hellkite Charger",
+                  "count": 1
+                },
+                {
+                  "name": "Herald's Horn",
+                  "count": 1
+                },
+                {
+                  "name": "Intet, the Dreamer",
+                  "count": 1
+                },
+                {
+                  "name": "Island",
+                  "count": 3
+                },
+                {
+                  "name": "Jungle Shrine",
+                  "count": 1
+                },
+                {
+                  "name": "Kindred Discovery",
+                  "count": 1
+                },
+                {
+                  "name": "Kodama's Reach",
+                  "count": 1
+                },
+                {
+                  "name": "Kolaghan, the Storm's Fury",
+                  "count": 1
+                },
+                {
+                  "name": "Lightning Greaves",
+                  "count": 1
+                },
+                {
+                  "name": "Mirror of the Forebears",
+                  "count": 1
+                },
+                {
+                  "name": "Monastery Siege",
+                  "count": 1
+                },
+                {
+                  "name": "Mountain",
+                  "count": 6
+                },
+                {
+                  "name": "Mystic Monastery",
+                  "count": 1
+                },
+                {
+                  "name": "Nihil Spellbomb",
+                  "count": 1
+                },
+                {
+                  "name": "Niv-Mizzet, Dracogenius",
+                  "count": 1
+                },
+                {
+                  "name": "Nomad Outpost",
+                  "count": 1
+                },
+                {
+                  "name": "O-Kagachi, Vengeful Kami",
+                  "count": 1
+                },
+                {
+                  "name": "Ojutai, Soul of Winter",
+                  "count": 1
+                },
+                {
+                  "name": "Opulent Palace",
+                  "count": 1
+                },
+                {
+                  "name": "Orator of Ojutai",
+                  "count": 1
+                },
+                {
+                  "name": "Painful Truths",
+                  "count": 1
+                },
+                {
+                  "name": "Palace Siege",
+                  "count": 1
+                },
+                {
+                  "name": "Path of Ancestry",
+                  "count": 1
+                },
+                {
+                  "name": "Plains",
+                  "count": 3
+                },
+                {
+                  "name": "Rain of Thorns",
+                  "count": 1
+                },
+                {
+                  "name": "Ramos, Dragon Engine",
+                  "count": 1
+                },
+                {
+                  "name": "Ryusei, the Falling Star",
+                  "count": 1
+                },
+                {
+                  "name": "Sandsteppe Citadel",
+                  "count": 1
+                },
+                {
+                  "name": "Savage Lands",
+                  "count": 1
+                },
+                {
+                  "name": "Savage Ventmaw",
+                  "count": 1
+                },
+                {
+                  "name": "Scalelord Reckoner",
+                  "count": 1
+                },
+                {
+                  "name": "Scion of the Ur-Dragon",
+                  "count": 1
+                },
+                {
+                  "name": "Scourge of Valkas",
+                  "count": 1
+                },
+                {
+                  "name": "Seaside Citadel",
+                  "count": 1
+                },
+                {
+                  "name": "Silumgar, the Drifting Death",
+                  "count": 1
+                },
+                {
+                  "name": "Sol Ring",
+                  "count": 1
+                },
+                {
+                  "name": "Spellbound Dragon",
+                  "count": 1
+                },
+                {
+                  "name": "Steel Hellkite",
+                  "count": 1
+                },
+                {
+                  "name": "Sunscorch Regent",
+                  "count": 1
+                },
+                {
+                  "name": "Swamp",
+                  "count": 3
+                },
+                {
+                  "name": "Taigam, Ojutai Master",
+                  "count": 1
+                },
+                {
+                  "name": "Teneb, the Harvester",
+                  "count": 1
+                },
+                {
+                  "name": "Territorial Hellkite",
+                  "count": 1
+                },
+                {
+                  "name": "Tyrant's Familiar",
+                  "count": 1
+                },
+                {
+                  "name": "Utvara Hellkite",
+                  "count": 1
+                },
+                {
+                  "name": "Vivid Crag",
+                  "count": 1
+                },
+                {
+                  "name": "Vivid Creek",
+                  "count": 1
+                },
+                {
+                  "name": "Vivid Grove",
+                  "count": 1
+                },
+                {
+                  "name": "Vivid Marsh",
+                  "count": 1
+                },
+                {
+                  "name": "Vivid Meadow",
+                  "count": 1
+                },
+                {
+                  "name": "Wasitora, Nekoru Queen",
+                  "count": 1
+                },
+                {
+                  "name": "Wayfarer's Bauble",
+                  "count": 1
+                }
+              ],
+              "Commander": [
+                {
+                  "name": "The Ur-Dragon",
+                  "count": 1
+                }
+              ]
+            }
+          }
+        ],
+        "streamKind": "FULL_GAME_TRACE",
+        "eventIndexMode": "CONTIGUOUS"
+      },
+      "sources": {
+        "full": {
+          "path": "/workspace/work/mc-target-provenance/commander-mc-2-full.jsonl",
+          "sha256": "9485b2060e4d1f20c226380e3e7bc869ce764752f70acd0716a2e6a5c0f2053d",
+          "bytes": 1211754
+        },
+        "decisions": {
+          "path": "/workspace/work/mc-target-provenance/commander-mc-2-decisions.jsonl",
+          "sha256": "a6f17b837c85e7854921fa3cc6e9a90fb7f8f142dd33f48d9550d3c10d475f55",
+          "bytes": 1003343
+        }
+      },
+      "signature": {
+        "turns": [
+          "11"
+        ],
+        "winners": [
+          "Ai(2)-Draconic Domination [C17] [2017]"
+        ]
+      }
+    },
+    "damage-mc": {
+      "games": 3,
+      "executionStatuses": {
+        "NORMAL": 3
+      },
+      "decisions": 222,
+      "searchTargetApplications": 30,
+      "searchTargetOperationTypes": {
+        "HEURISTIC_REVALIDATION": 29,
+        "RESTORE_APPROVED_TARGET": 1
+      },
+      "searchTargetApplicationStatuses": {
+        "ACCEPTED": 29,
+        "DECLINED": 1
+      },
+      "committedTargetChoiceOrigins": {
+        "EXPLICIT_EVALUATION_ADDITION": 5,
+        "EXPLICIT_SEARCH_APPLICATION": 12
+      },
+      "captureOmissions": {
+        "budget": 0,
+        "interrupted": 0
+      },
+      "pregameShuffles": {
+        "1": 2,
+        "2": 2,
+        "3": 2
+      },
+      "byteIdenticalOutputs": {
+        "dataset.jsonl": true,
+        "choices.jsonl": true,
+        "examples.jsonl": true,
+        "validation.json": true
+      },
+      "coverageEqualExceptSourceRecords": true,
+      "runMetadata": {
+        "type": "RUN_STARTED",
+        "schemaVersion": 1,
+        "actionEventSchemaVersion": 1,
+        "choiceEventSchemaVersion": 1,
+        "runId": "0a6a381a-8ab8-46ae-a83f-f59f8dd285ad",
+        "pilotMode": "FLAT_MONTE_CARLO",
+        "engineRevision": "10ee653ef1bf024f16adeb45266c06a70739cc7c",
+        "engineDirty": "false",
+        "forgeVersion": "GIT",
+        "runMode": "GAMES",
+        "gameType": "Constructed",
+        "requestedGames": 3,
+        "seed": 12032,
+        "participants": [
+          {
+            "participantId": 1,
+            "deckName": "Target Choice Damage",
+            "aiProfile": "Default",
+            "deck": {
+              "Main": [
+                {
+                  "name": "Firebolt",
+                  "count": 4
+                },
+                {
+                  "name": "Flame Slash",
+                  "count": 4
+                },
+                {
+                  "name": "Goblin Piker",
+                  "count": 4
+                },
+                {
+                  "name": "Hill Giant",
+                  "count": 4
+                },
+                {
+                  "name": "Lightning Bolt",
+                  "count": 4
+                },
+                {
+                  "name": "Mountain",
+                  "count": 24
+                },
+                {
+                  "name": "Roast",
+                  "count": 4
+                },
+                {
+                  "name": "Shock",
+                  "count": 4
+                },
+                {
+                  "name": "Tormenting Voice",
+                  "count": 4
+                },
+                {
+                  "name": "Volcanic Hammer",
+                  "count": 4
+                }
+              ]
+            }
+          },
+          {
+            "participantId": 2,
+            "deckName": "Trace Green",
+            "aiProfile": "Default",
+            "deck": {
+              "Main": [
+                {
+                  "name": "Forest",
+                  "count": 24
+                },
+                {
+                  "name": "Giant Growth",
+                  "count": 4
+                },
+                {
+                  "name": "Grizzly Bears",
+                  "count": 4
+                },
+                {
+                  "name": "Llanowar Elves",
+                  "count": 4
+                },
+                {
+                  "name": "Nessian Courser",
+                  "count": 4
+                },
+                {
+                  "name": "Rumbling Baloth",
+                  "count": 4
+                },
+                {
+                  "name": "Runeclaw Bear",
+                  "count": 4
+                }
+              ]
+            }
+          }
+        ],
+        "streamKind": "FULL_GAME_TRACE",
+        "eventIndexMode": "CONTIGUOUS"
+      },
+      "sources": {
+        "full": {
+          "path": "/workspace/work/mc-target-provenance/damage-mc-full.jsonl",
+          "sha256": "94fb890584cb888a95dd71840a5805ba123f880b775e9c4962b2d6d9610886c0",
+          "bytes": 2797494
+        },
+        "decisions": {
+          "path": "/workspace/work/mc-target-provenance/damage-mc-decisions.jsonl",
+          "sha256": "9c0f3bde1dca0f244e805119e5ab01dda3350a0d7f02297d2f9f06af37afce2f",
+          "bytes": 2307695
+        }
+      },
+      "signature": {
+        "turns": [
+          "8",
+          "13",
+          "12"
+        ],
+        "winners": [
+          "Ai(2)-Trace Green",
+          "Ai(2)-Trace Green",
+          "Ai(2)-Trace Green"
+        ]
+      }
+    },
+    "black-control-recorded": {
+      "games": 3,
+      "executionStatuses": {
+        "NORMAL": 3
+      },
+      "decisions": 194,
+      "searchTargetApplications": 0,
+      "searchTargetOperationTypes": {},
+      "searchTargetApplicationStatuses": {},
+      "committedTargetChoiceOrigins": {
+        "EXPLICIT_EVALUATION_ADDITION": 4
+      },
+      "captureOmissions": {
+        "budget": 0,
+        "interrupted": 0
+      },
+      "pregameShuffles": {
+        "1": 2,
+        "2": 2,
+        "3": 2
+      },
+      "byteIdenticalOutputs": {
+        "dataset.jsonl": true,
+        "choices.jsonl": true,
+        "examples.jsonl": true,
+        "validation.json": true
+      },
+      "coverageEqualExceptSourceRecords": true,
+      "runMetadata": {
+        "type": "RUN_STARTED",
+        "schemaVersion": 1,
+        "actionEventSchemaVersion": 1,
+        "choiceEventSchemaVersion": 1,
+        "runId": "e899302d-324d-4821-ab84-7f636c26ec88",
+        "pilotMode": "HEURISTIC",
+        "engineRevision": "10ee653ef1bf024f16adeb45266c06a70739cc7c",
+        "engineDirty": "false",
+        "forgeVersion": "GIT",
+        "runMode": "GAMES",
+        "gameType": "Constructed",
+        "requestedGames": 3,
+        "seed": 12031,
+        "participants": [
+          {
+            "participantId": 1,
+            "deckName": "Target Choice Black",
+            "aiProfile": "Default",
+            "deck": {
+              "Main": [
+                {
+                  "name": "Befoul",
+                  "count": 4
+                },
+                {
+                  "name": "Child of Night",
+                  "count": 4
+                },
+                {
+                  "name": "Disfigure",
+                  "count": 4
+                },
+                {
+                  "name": "Doom Blade",
+                  "count": 4
+                },
+                {
+                  "name": "Murder",
+                  "count": 4
+                },
+                {
+                  "name": "Sengir Vampire",
+                  "count": 4
+                },
+                {
+                  "name": "Sign in Blood",
+                  "count": 4
+                },
+                {
+                  "name": "Swamp",
+                  "count": 24
+                },
+                {
+                  "name": "Vampire Nighthawk",
+                  "count": 4
+                },
+                {
+                  "name": "Walking Corpse",
+                  "count": 4
+                }
+              ]
+            }
+          },
+          {
+            "participantId": 2,
+            "deckName": "Trace Green",
+            "aiProfile": "Default",
+            "deck": {
+              "Main": [
+                {
+                  "name": "Forest",
+                  "count": 24
+                },
+                {
+                  "name": "Giant Growth",
+                  "count": 4
+                },
+                {
+                  "name": "Grizzly Bears",
+                  "count": 4
+                },
+                {
+                  "name": "Llanowar Elves",
+                  "count": 4
+                },
+                {
+                  "name": "Nessian Courser",
+                  "count": 4
+                },
+                {
+                  "name": "Rumbling Baloth",
+                  "count": 4
+                },
+                {
+                  "name": "Runeclaw Bear",
+                  "count": 4
+                }
+              ]
+            }
+          }
+        ],
+        "streamKind": "FULL_GAME_TRACE",
+        "eventIndexMode": "CONTIGUOUS"
+      },
+      "sources": {
+        "full": {
+          "path": "/workspace/work/mc-target-provenance/black-control-recorded-full.jsonl",
+          "sha256": "c68e6b9fd2671735fada29962b6e4a3076e3715cdad213a100cb56c121c94580",
+          "bytes": 1990434
+        },
+        "decisions": {
+          "path": "/workspace/work/mc-target-provenance/black-control-recorded-decisions.jsonl",
+          "sha256": "c1d0dfd1cb3316031c75f8087a260fd2bed92341c456f88a72ad756f28524c94",
+          "bytes": 1545398
+        }
+      },
+      "signature": {
+        "turns": [
+          "8",
+          "12",
+          "8"
+        ],
+        "winners": [
+          "Ai(1)-Target Choice Black",
+          "Ai(1)-Target Choice Black",
+          "Ai(1)-Target Choice Black"
+        ]
+      }
+    }
+  },
+  "blackControlWinnersAndTurnsUnchanged": true,
+  "limitations": [
+    "Elapsed timing changes Monte Carlo work; this sample does not establish strategy or timing neutrality.",
+    "Only owned main-phase final operations gain this capture. Reactive/unowned search and speculative probes are not attributed through this capability."
+  ]
+}
