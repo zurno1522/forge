@@ -106,3 +106,8 @@ Earlier decision-coverage validation passed the desktop reactor: 2,339 tests, ze
 Attachment-detach trace translation, bulk stack-clear handling, subscriber failure reporting, timeout status, and filtered-stream ordering are fixes to this branch's tracing functionality. Keep them out of the engine flashback PR unless an independent upstream reproduction is established.
 
 Unsupported effect-duration copying is a known coverage limit to investigate with a concrete reproduction before proposing another engine fix. No upstream PR has been opened from this log.
+
+
+### Subordinate payment observation boundary (2026-11-20)
+
+The learning branch adds `CostDecisionMakerBase.decide(CostPart)` with a default visitor call, used by both `CostPayment` paths. `AiCostDecision` overrides it for observational events; human decision makers retain the default. This is an extension point for telemetry, **not an engine defect**. Any upstream proposal should be classified as infrastructure/observability and review the added engine API independently of learning event schemas. No PR is opened by this entry. Payment proposals, actual routine results and finalized payment facts remain distinct, and no selection/payment policy is changed.

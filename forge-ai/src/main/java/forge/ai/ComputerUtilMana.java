@@ -628,6 +628,13 @@ public class ComputerUtilMana {
 
     // returns null if unpayable
     private static List<SpellAbility> payManaCost(final ManaCostBeingPaid cost, final SpellAbility sa, final Player ai, final boolean test, boolean checkPlayable, boolean effect) {
+        if (test) { return payManaCostImpl(cost, sa, ai, true, checkPlayable, effect); }
+        return AiPaymentChoiceRecorder.manaPayment(ai, sa, cost, effect,
+                () -> payManaCostImpl(cost, sa, ai, false, checkPlayable, effect));
+    }
+
+    private static List<SpellAbility> payManaCostImpl(final ManaCostBeingPaid cost, final SpellAbility sa, final Player ai,
+            final boolean test, boolean checkPlayable, boolean effect) {
         if ((sa.isOffering() && sa.getSacrificedAsOffering() == null) || (sa.isEmerge() && sa.getSacrificedAsEmerge() == null)) {
             // nothing was chosen
             return null;

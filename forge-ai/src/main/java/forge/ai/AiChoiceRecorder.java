@@ -20,6 +20,12 @@ public final class AiChoiceRecorder {
     private static final ThreadLocal<Observation> ACTIVE = new ThreadLocal<>();
     private AiChoiceRecorder() { }
 
+    static SpellAbility activeAbility(final Player chooser) {
+        final Observation active = ACTIVE.get();
+        return active != null && active.game == chooser.getGame() && active.chooser == chooser && active.open()
+                ? active.ability : null;
+    }
+
     public static String stage(final Player chooser, final SpellAbility ability) {
         final Observation active = ACTIVE.get();
         if (active != null && active.game == chooser.getGame() && active.open()) { return active.stage; }
@@ -86,6 +92,8 @@ public final class AiChoiceRecorder {
 
     private static final class Observation {
         private final Game game;
+        private final Player chooser;
+        private final SpellAbility ability;
         private final AiDecisionRecorder evaluation;
         private final String id;
         private final boolean visible;
@@ -96,6 +104,8 @@ public final class AiChoiceRecorder {
         private Observation(final Player chooser, final SpellAbility ability, final String type,
                 final String requestedStage, final String boundary, final Supplier<Map<String, Object>> options) {
             game = chooser.getGame();
+            this.chooser = chooser;
+            this.ability = ability;
             evaluation = evaluation(chooser, ability);
             id = "choice:" + SEQUENCE.incrementAndGet();
             visible = !ability.getHostCard().isFaceDown() && ability.getHostCard().getView().canBeShownTo(chooser.getView());

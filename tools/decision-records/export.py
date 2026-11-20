@@ -832,6 +832,7 @@ def make_coverage(runs, rows, *, spool=None):
         mode_links, mode_definitions, mode_plans, mode_capture = (collections.Counter() for _ in range(4))
         repeated_mode_refs = 0
         numeric_domains, numeric_matches, numeric_values = (collections.Counter() for _ in range(3))
+        payment_kinds, payment_coverage, payment_details, payment_mana = (collections.Counter() for _ in range(4))
         choice_count = censored_count = 0
         for row in _choices.rows(runs):
             choice_count += 1
@@ -839,6 +840,15 @@ def make_coverage(runs, rows, *, spool=None):
             event_types[row['start']['choice']['choiceType']] += 1
             stages[row['start']['choice']['stage']] += 1
             statuses[row['status']] += 1
+            if row['start']['choice']['choiceType'].startswith('PAYMENT_'):
+                start = row['start']['choice']
+                payment_coverage[start['options']['coverage']] += 1
+                value = row['terminal']['choice']['selection'] if row['terminal'] else None
+                if start['choiceType'] == 'PAYMENT_DECISION':
+                    payment_kinds[start['options']['costKind']] += 1
+                    if value is not None: payment_details.update(value['unrecordedDetails'])
+                if start['choiceType'] == 'PAYMENT_MANA':
+                    payment_mana[row['status'] if value is None else 'COST_SATISFIED' if value['costSatisfied'] else 'COST_REMAINS'] += 1
             if row['start']['choice']['choiceType'] in ('NUMBER_SELECTION', 'X_SELECTION'):
                 numeric_domains[row['start']['choice']['options']['coverage']] += 1
                 value = row['terminal']['choice']['selection'] if row['terminal'] else None
@@ -865,6 +875,9 @@ def make_coverage(runs, rows, *, spool=None):
             summary.update(standaloneModeOptionLinks=dict(mode_links), standaloneModeDefinitionLinks=dict(mode_definitions),
                            standaloneModePlanCoverage=dict(mode_plans), standaloneModePlanCapture=dict(mode_capture),
                            standaloneRepeatedModeReferences=repeated_mode_refs)
+        if payment_coverage:
+            summary.update(standalonePaymentCostKinds=dict(payment_kinds), standalonePaymentCoverage=dict(payment_coverage),
+                           standalonePaymentUnrecordedDetails=dict(payment_details), standaloneManaPaymentResults=dict(payment_mana))
         if numeric_domains:
             summary.update(standaloneNumericDomainCoverage=dict(numeric_domains), standaloneNumericMatches=dict(numeric_matches),
                            standaloneNumericValueStates=dict(numeric_values))
@@ -888,6 +901,11 @@ def make_coverage(runs, rows, *, spool=None):
     if declared_choices:
         summary['limitations'][0] = 'Main-phase play selection with an empty stack only; additional target-planning pool observations are restricted to these candidate evaluations. No mulligan, combat or reactive-priority decision coverage.'
         summary['limitations'].append('Subordinate target records cover selected heuristic pools during candidate evaluation, not every target chooser or all legal target sets. A candidate action link does not establish execution or a committed target; mode, X, payment and delegated/resolution choices remain outside this coverage.')
+    if any(run['metadata'].get('choiceEventSchemaVersion') == 1 for run in runs):
+        summary['limitations'][0] = 'Main-phase play selection plus observed subordinate callbacks. No complete mulligan, combat, reactive-priority or legal-choice coverage.'
+        summary['limitations'] = [v for v in summary['limitations'] if not v.startswith('Subordinate target records cover')]
+        summary['limitations'].append('Standalone choices cover instrumented target, mode, numeric/X and payment boundaries, including execution and resolution callbacks. Unknown parents, copied modes, missing option pools and capped prefixes remain explicit; alternatives are observed inputs, not complete legal plans.')
+        summary['limitations'].append('Completed payment visitors are proposals, not proof of payment. Mana routine outcomes describe that routine only; finalized engine payment facts remain separate. Type text, counter tables and conversion matrices are marked unrecorded. Mana pool choices without an active ability context are not recorded.')
     return summary
 
 
@@ -992,6 +1010,10 @@ def report_chunks(summary, runs):
                                  ('Mode-plan availability: ', 'standaloneModePlanCoverage'), ('Mode-plan capture: ', 'standaloneModePlanCapture')):
                 yield from counter_line(prefix, name)
             yield from lines(f"Repeated captured mode references: {summary['standaloneRepeatedModeReferences']}. Offered indices and original definition indices have separate meanings; neither callback completion nor mode count is a strategic-quality label.")
+        if 'standalonePaymentCoverage' in summary:
+            for prefix, name in (('Payment cost kinds: ', 'standalonePaymentCostKinds'), ('Payment input coverage: ', 'standalonePaymentCoverage'),
+                                 ('Unrecorded payment details: ', 'standalonePaymentUnrecordedDetails'), ('Mana routine outcomes: ', 'standaloneManaPaymentResults')):
+                yield from counter_line(prefix, name)
         if 'standaloneNumericDomainCoverage' in summary:
             for prefix, name in (('Numeric domain coverage: ', 'standaloneNumericDomainCoverage'), ('Numeric return matches: ', 'standaloneNumericMatches'),
                                  ('Numeric value states: ', 'standaloneNumericValueStates')):

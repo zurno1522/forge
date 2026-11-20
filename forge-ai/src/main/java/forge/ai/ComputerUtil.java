@@ -623,6 +623,13 @@ public class ComputerUtil {
             return null;
         }
 
+        final CardCollection observed = typeList;
+        return AiPaymentChoiceRecorder.cards(ai, ability, "PAYMENT_SACRIFICE_POOL", observed, amount, amount,
+                () -> chooseSacrificeFromPool(ai, source, ability, amount, observed));
+    }
+
+    private static CardCollection chooseSacrificeFromPool(final Player ai, final Card source, final SpellAbility ability,
+            final int amount, final CardCollection typeList) {
         final CardCollection sacList = new CardCollection();
         int count = 0;
 
@@ -728,7 +735,9 @@ public class ComputerUtil {
             }); // something that's not on the battlefield should come first
         }
 
-        return typeList.subList(0, amount);
+        final CardCollection observed = typeList;
+        return AiPaymentChoiceRecorder.cards(ai, sa, "PAYMENT_EXILE_POOL", observed, amount, amount,
+                () -> observed.subList(0, amount));
     }
 
     public static CardCollection choosePutToLibraryFrom(final Player ai, final ZoneType zone, final String type, final Card activate,

@@ -1288,6 +1288,11 @@ public class AiController {
     }
 
     public CardCollection getCardsToDiscard(final int min, final int max, final CardCollection validCards, final SpellAbility sa) {
+        return AiPaymentChoiceRecorder.cards(player, sa, "PAYMENT_DISCARD_POOL", validCards, min, max,
+                () -> getCardsToDiscardImpl(min, max, validCards, sa));
+    }
+
+    private CardCollection getCardsToDiscardImpl(final int min, final int max, final CardCollection validCards, final SpellAbility sa) {
         if (validCards.size() > min) {
             final ComboPlan combos = deckPlan(player).combos;
             // a deck that wants creatures in the graveyard throws away the right ones

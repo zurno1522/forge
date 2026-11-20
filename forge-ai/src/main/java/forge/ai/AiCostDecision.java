@@ -27,6 +27,10 @@ import static forge.ai.ComputerUtilCard.getBestCreatureAI;
 import static forge.ai.ComputerUtilCard.getWorstCreatureAI;
 
 public class AiCostDecision extends CostDecisionMakerBase {
+    @Override
+    public PaymentDecision decide(final CostPart part) {
+        return AiPaymentChoiceRecorder.decide(player, ability, part, isEffect(), () -> part.accept(this));
+    }
     private final CardCollection discarded;
     private final CardCollection tapped;
 

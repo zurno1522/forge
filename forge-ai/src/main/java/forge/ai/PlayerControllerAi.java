@@ -793,7 +793,7 @@ public class PlayerControllerAi extends PlayerController {
 
     @Override
     public Mana chooseManaFromPool(List<Mana> manaChoices) {
-        return manaChoices.get(0); // no brains used
+        return AiPaymentChoiceRecorder.manaFromPool(player, manaChoices, () -> manaChoices.get(0)); // no brains used
     }
 
     @Override

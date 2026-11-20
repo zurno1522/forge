@@ -149,7 +149,7 @@ public class CostPayment extends ManaConversionMatrix {
             try {
                 game.costPaymentStack.push(part, this);
 
-                PaymentDecision pd = part.accept(decisionMaker);
+                PaymentDecision pd = decisionMaker.decide(part);
 
                 // Right before we start paying as decided, we need to transfer the CostPayments matrix over?
                 if (pd != null) {
@@ -191,7 +191,7 @@ public class CostPayment extends ManaConversionMatrix {
         final Game game = decisionMaker.getPlayer().getGame();
 
         for (final CostPart part : parts) {
-            PaymentDecision decision = part.accept(decisionMaker);
+            PaymentDecision decision = decisionMaker.decide(part);
             if (null == decision) return false;
 
             try {

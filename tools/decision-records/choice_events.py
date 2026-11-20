@@ -6,8 +6,19 @@ POOL_BOUNDARIES = {'DESTROY_REMOVAL_POOL', 'DESTROY_LAND_POOL', 'DESTROY_POLYMOR
                    'DAMAGE_OPPONENT_POOL', 'DAMAGE_KILLABLES', 'DAMAGE_MANDATORY_OPPONENT_POOL',
                    'DAMAGE_MANDATORY_FALLBACK_POOL', 'DAMAGE_KILLABLE_PLANESWALKERS', 'DAMAGE_PLANESWALKER_POOL',
                    'DRAW_PLAYER_POOL', 'DAMAGE_PLAYER_POOL', 'ATTACH_CARD_POOL', 'ATTACH_PLAYER_POOL', 'MASKED_TARGET_POOL'}
-TYPES = {'TARGET_SELECTION_RESULT', 'EFFECT_COPY_TARGET_RESULT', 'RETARGET_RESULT', 'TARGET_POOL_SELECTION', 'MODE_SELECTION', 'NUMBER_SELECTION', 'X_SELECTION', 'MASKED_CHOICE'}
-BOUNDARIES = {'CONTROLLER_TARGETS', 'COPY_TARGETS', 'CONTROLLER_RETARGET', 'CHARM_MODE_HEURISTIC', 'CONTROLLER_MODES',
+COST_KINDS = {
+    'CostAddMana', 'CostBehold', 'CostBeholdExile', 'CostBlight', 'CostChooseColor',
+    'CostChooseCreatureType', 'CostCollectEvidence', 'CostDamage', 'CostDiscard', 'CostDraw',
+    'CostEnlist', 'CostExert', 'CostExile', 'CostExileFromStack', 'CostExiledMoveToGrave',
+    'CostFlipCoin', 'CostForage', 'CostGainControl', 'CostGainLife', 'CostMill',
+    'CostPartMana', 'CostPayEnergy', 'CostPayLife', 'CostPayShards', 'CostPromiseGift',
+    'CostPutCardToLib', 'CostPutCounter', 'CostPutCounterYou', 'CostRemoveAnyCounter', 'CostRemoveCounter',
+    'CostReturn', 'CostReveal', 'CostRevealChosen', 'CostRollDice', 'CostSacrifice',
+    'CostTap', 'CostTapType', 'CostTeamwork', 'CostUnattach', 'CostUntap',
+    'CostUntapType', 'CostWaterbend', 'OTHER'
+}
+TYPES = {'PAYMENT_DECISION', 'PAYMENT_CARD_SELECTION', 'PAYMENT_MANA', 'PAYMENT_MANA_SELECTION', 'TARGET_SELECTION_RESULT', 'EFFECT_COPY_TARGET_RESULT', 'RETARGET_RESULT', 'TARGET_POOL_SELECTION', 'MODE_SELECTION', 'NUMBER_SELECTION', 'X_SELECTION', 'MASKED_CHOICE'}
+BOUNDARIES = {'COST_VISITOR', 'PAYMENT_SACRIFICE_POOL', 'PAYMENT_DISCARD_POOL', 'PAYMENT_EXILE_POOL', 'AUTO_MANA_PAYMENT', 'MANA_POOL_OPTIONS', 'CONTROLLER_TARGETS', 'COPY_TARGETS', 'CONTROLLER_RETARGET', 'CHARM_MODE_HEURISTIC', 'CONTROLLER_MODES',
               'CONTROLLER_NUMBER_RANGE', 'CONTROLLER_NUMBER_OPTIONS', 'CONTROLLER_ANNOUNCEMENT', 'MAX_X_HEURISTIC', 'X_ANNOUNCEMENT_REFINEMENT', 'MASKED_CHOICE'} | POOL_BOUNDARIES
 
 
@@ -29,6 +40,25 @@ def reference(ref):
     if ref['type'] == 'SPELL_ABILITY': require(ref['stackId'] is None or integer(ref['stackId']), 'invalid choice stack identity')
 
 
+def prefix(value, mapper):
+    require(isinstance(value, dict) and set(value) == {'items', 'truncated'} and isinstance(value['items'], list)
+            and len(value['items']) <= 256 and isinstance(value['truncated'], bool), 'invalid payment prefix')
+    for item in value['items']: mapper(item)
+
+
+def typed_reference(value, kind):
+    reference(value)
+    require(value['type'] == kind, 'wrong payment identity type')
+
+
+def mana_reference(value):
+    require(isinstance(value, dict) and set(value) == {'source', 'player', 'color', 'snow'}
+            and integer(value['color']) and value['color'] in (0, 1, 2, 4, 8, 16, 32)
+            and isinstance(value['snow'], bool), 'invalid payment mana identity')
+    if value['source'] is not None: typed_reference(value['source'], 'CARD')
+    if value['player'] is not None: typed_reference(value['player'], 'PLAYER')
+
+
 def target_plan(plan, ability):
     require(isinstance(plan, dict) and set(plan) == {'abilities', 'abilitiesTruncated'}, 'invalid choice target plan')
     groups = plan['abilities']
@@ -45,6 +75,29 @@ def options(choice):
     option = choice['options']
     if choice['choiceType'] == 'MASKED_CHOICE':
         require(option == {'coverage': 'MASKED'} and choice['boundary'] == 'MASKED_CHOICE', 'unmasked private choice')
+        return
+    if choice['choiceType'] == 'PAYMENT_DECISION':
+        require(isinstance(option, dict) and set(option) == {'coverage', 'costKind', 'effect'}
+                and option['coverage'] == 'PAYMENT_VISITOR_INPUT_NOT_ALTERNATIVES' and option['costKind'] in COST_KINDS
+                and isinstance(option['effect'], bool) and choice['boundary'] == 'COST_VISITOR', 'invalid payment visitor input')
+        return
+    if choice['choiceType'] == 'PAYMENT_CARD_SELECTION':
+        require(isinstance(option, dict) and set(option) == {'coverage', 'cards', 'minimum', 'maximum'}
+                and option['coverage'] == 'OBSERVED_CARD_OPTIONS_NOT_ALL_LEGAL_PAYMENT_PLANS'
+                and integer(option['minimum']) and integer(option['maximum'])
+                and choice['boundary'] in ('PAYMENT_DISCARD_POOL', 'PAYMENT_SACRIFICE_POOL', 'PAYMENT_EXILE_POOL'), 'invalid payment card pool')
+        prefix(option['cards'], lambda v: typed_reference(v, 'CARD'))
+        return
+    if choice['choiceType'] == 'PAYMENT_MANA':
+        require(isinstance(option, dict) and set(option) == {'coverage', 'remainingManaValue', 'effect'}
+                and option['coverage'] == 'OBSERVED_REQUIREMENT_NOT_ALTERNATIVE_PLANS'
+                and integer(option['remainingManaValue']) and isinstance(option['effect'], bool)
+                and choice['boundary'] == 'AUTO_MANA_PAYMENT', 'invalid mana requirement')
+        return
+    if choice['choiceType'] == 'PAYMENT_MANA_SELECTION':
+        require(isinstance(option, dict) and set(option) == {'coverage', 'mana'} and option['coverage'] == 'OBSERVED_MANA_OPTIONS'
+                and choice['boundary'] == 'MANA_POOL_OPTIONS', 'invalid mana options')
+        prefix(option['mana'], mana_reference)
         return
     if choice['choiceType'] in ('NUMBER_SELECTION', 'X_SELECTION'):
         require(isinstance(option, dict), 'invalid numeric options')
@@ -94,6 +147,27 @@ def selection(start, terminal):
     value = terminal['selection']
     if terminal['status'] in ('DECLINED', 'ERROR') or start['choiceType'] == 'MASKED_CHOICE':
         require(value is None, 'unavailable choice carries selection')
+        return
+    if start['choiceType'] == 'PAYMENT_DECISION':
+        require(isinstance(value, dict) and set(value) == {'decisionCount', 'cards', 'mana', 'players', 'abilities', 'colorMask', 'unrecordedDetails'}
+                and integer(value['decisionCount']), 'invalid payment decision')
+        prefix(value['cards'], lambda v: typed_reference(v, 'CARD'))
+        for field, mapper in (('mana', mana_reference), ('players', lambda v: typed_reference(v, 'PLAYER')), ('abilities', lambda v: typed_reference(v, 'SPELL_ABILITY'))):
+            if value[field] is not None: prefix(value[field], mapper)
+        require(value['colorMask'] is None or integer(value['colorMask']) and 0 <= value['colorMask'] <= 31, 'invalid payment colors')
+        require(isinstance(value['unrecordedDetails'], list) and all(v in ('TYPE_TEXT', 'COUNTER_TABLE', 'MANA_CONVERSION_MATRIX') for v in value['unrecordedDetails'])
+                and len(set(value['unrecordedDetails'])) == len(value['unrecordedDetails']), 'invalid payment unavailable details')
+        return
+    if start['choiceType'] == 'PAYMENT_CARD_SELECTION':
+        prefix(value, lambda v: typed_reference(v, 'CARD'))
+        return
+    if start['choiceType'] == 'PAYMENT_MANA':
+        require(isinstance(value, dict) and set(value) == {'paymentRoutineReturned', 'costSatisfied', 'manaAbilities'}
+                and value['paymentRoutineReturned'] is True and isinstance(value['costSatisfied'], bool), 'invalid mana payment return')
+        prefix(value['manaAbilities'], lambda v: typed_reference(v, 'SPELL_ABILITY'))
+        return
+    if start['choiceType'] == 'PAYMENT_MANA_SELECTION':
+        mana_reference(value)
         return
     if start['choiceType'] in ('NUMBER_SELECTION', 'X_SELECTION'):
         require(isinstance(value, dict) and set(value) == {'value', 'optionIndex', 'domainMatch'} and integer(value['value']), 'invalid numeric return')
