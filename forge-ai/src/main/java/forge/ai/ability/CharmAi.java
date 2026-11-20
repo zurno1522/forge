@@ -36,6 +36,12 @@ public class CharmAi extends SpellAbilityAi {
             min = sa.hasParam("MinCharmNum") ? AbilityUtils.calculateAmount(source, sa.getParam("MinCharmNum"), sa) : num;
         }
 
+        return AiModeChoiceRecorder.evaluate(ai, sa, choices, min, num, sa.hasParam("CanRepeatModes"),
+                () -> chooseModePlan(ai, sa, choices, min, num));
+    }
+
+    private AiAbilityDecision chooseModePlan(final Player ai, final SpellAbility sa,
+            final List<AbilitySub> choices, final int min, final int num) {
         boolean timingRight = sa.isTrigger(); //is there a reason to play the charm now?
         boolean choiceForOpp = !ai.equals(sa.getActivatingPlayer());
 

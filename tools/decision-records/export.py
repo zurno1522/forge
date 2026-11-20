@@ -824,6 +824,8 @@ def make_coverage(runs, rows, *, spool=None):
             summary[name] = count(name)
     if any(run['metadata'].get('choiceEventSchemaVersion') == 1 for run in runs):
         event_types, stages, statuses = collections.Counter(), collections.Counter(), collections.Counter()
+        mode_links, mode_definitions, mode_plans, mode_capture = (collections.Counter() for _ in range(4))
+        repeated_mode_refs = 0
         choice_count = censored_count = 0
         for row in _choices.rows(runs):
             choice_count += 1
@@ -831,9 +833,26 @@ def make_coverage(runs, rows, *, spool=None):
             event_types[row['start']['choice']['choiceType']] += 1
             stages[row['start']['choice']['stage']] += 1
             statuses[row['status']] += 1
+            if row['start']['choice']['choiceType'] == 'MODE_SELECTION':
+                value = row['terminal']['choice']['selection'] if row['terminal'] else None
+                if value is None:
+                    mode_plans[row['status']] += 1
+                else:
+                    mode_plans['OBSERVED' if value['available'] else 'UNAVAILABLE'] += 1
+                    mode_capture['PREFIX' if value['truncated'] else 'FULL_LIST'] += 1
+                    seen_modes = set()
+                    for mode in value['modes']:
+                        mode_links['EXACT_CAPTURED_OPTION' if mode['optionIndex'] is not None else 'UNMAPPED'] += 1
+                        mode_definitions['KNOWN' if mode['definitionIndex'] is not None else 'UNAVAILABLE'] += 1
+                        repeated_mode_refs += mode['abilityId'] in seen_modes
+                        seen_modes.add(mode['abilityId'])
         summary.update(standaloneChoiceRecords=choice_count, censoredStandaloneChoices=censored_count,
                        standaloneChoiceTypes=dict(event_types), standaloneChoiceStages=dict(stages),
                        standaloneChoiceStatuses=dict(statuses))
+        if event_types['MODE_SELECTION']:
+            summary.update(standaloneModeOptionLinks=dict(mode_links), standaloneModeDefinitionLinks=dict(mode_definitions),
+                           standaloneModePlanCoverage=dict(mode_plans), standaloneModePlanCapture=dict(mode_capture),
+                           standaloneRepeatedModeReferences=repeated_mode_refs)
     summary['limitations'] = [
         'Main-phase play selection with an empty stack only; no mulligan, combat, reactive-priority or subordinate-choice coverage.',
         'Candidate assessments are partial and may repeat an ability; counts are assessment observations, not unique rejected legal actions.',
@@ -951,6 +970,11 @@ def report_chunks(summary, runs):
                          f"{summary['standaloneChoiceRecords']} choice lifecycles; {summary['censoredStandaloneChoices']} censored. Choices without a main-phase parent remain in choices.jsonl. No identity-based parent or reward is inferred.")
         for prefix, name in (('Choice types: ', 'standaloneChoiceTypes'), ('Stages: ', 'standaloneChoiceStages'), ('Statuses: ', 'standaloneChoiceStatuses')):
             yield from counter_line(prefix, name)
+        if 'standaloneModeOptionLinks' in summary:
+            for prefix, name in (('Mode option links: ', 'standaloneModeOptionLinks'), ('Mode definition links: ', 'standaloneModeDefinitionLinks'),
+                                 ('Mode-plan availability: ', 'standaloneModePlanCoverage'), ('Mode-plan capture: ', 'standaloneModePlanCapture')):
+                yield from counter_line(prefix, name)
+            yield from lines(f"Repeated captured mode references: {summary['standaloneRepeatedModeReferences']}. Offered indices and original definition indices have separate meanings; neither callback completion nor mode count is a strategic-quality label.")
     yield from lines('', '## Reproducibility', '', 'The companion manifest contains exact deck snapshots, deck hashes, input hashes and run metadata. The following summary is readable without the input logs.', '',
                      '| Run | Seed | Pilot | Engine revision | Dirty | Source SHA256 |', '| --- | --- | --- | --- | --- | --- |')
     for run in runs:

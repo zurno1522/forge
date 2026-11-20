@@ -1219,6 +1219,11 @@ public class PlayerControllerAi extends PlayerController {
 
     @Override
     public List<AbilitySub> chooseModeForAbility(SpellAbility sa, List<AbilitySub> possible, int min, int num, boolean allowRepeat) {
+        return AiModeChoiceRecorder.choose(player, sa, possible, min, num, allowRepeat,
+                () -> chooseModeForAbilityImpl(sa, possible, min, num, allowRepeat));
+    }
+
+    private List<AbilitySub> chooseModeForAbilityImpl(SpellAbility sa, List<AbilitySub> possible, int min, int num, boolean allowRepeat) {
         List<AbilitySub> result = brains.chooseModeForAbility(sa, possible, min, num, allowRepeat);
         if (result != null) {
             return result;

@@ -6,8 +6,8 @@ POOL_BOUNDARIES = {'DESTROY_REMOVAL_POOL', 'DESTROY_LAND_POOL', 'DESTROY_POLYMOR
                    'DAMAGE_OPPONENT_POOL', 'DAMAGE_KILLABLES', 'DAMAGE_MANDATORY_OPPONENT_POOL',
                    'DAMAGE_MANDATORY_FALLBACK_POOL', 'DAMAGE_KILLABLE_PLANESWALKERS', 'DAMAGE_PLANESWALKER_POOL',
                    'DRAW_PLAYER_POOL', 'DAMAGE_PLAYER_POOL', 'ATTACH_CARD_POOL', 'ATTACH_PLAYER_POOL', 'MASKED_TARGET_POOL'}
-TYPES = {'TARGET_SELECTION_RESULT', 'EFFECT_COPY_TARGET_RESULT', 'RETARGET_RESULT', 'TARGET_POOL_SELECTION', 'MASKED_CHOICE'}
-BOUNDARIES = {'CONTROLLER_TARGETS', 'COPY_TARGETS', 'CONTROLLER_RETARGET', 'MASKED_CHOICE'} | POOL_BOUNDARIES
+TYPES = {'TARGET_SELECTION_RESULT', 'EFFECT_COPY_TARGET_RESULT', 'RETARGET_RESULT', 'TARGET_POOL_SELECTION', 'MODE_SELECTION', 'MASKED_CHOICE'}
+BOUNDARIES = {'CONTROLLER_TARGETS', 'COPY_TARGETS', 'CONTROLLER_RETARGET', 'CHARM_MODE_HEURISTIC', 'CONTROLLER_MODES', 'MASKED_CHOICE'} | POOL_BOUNDARIES
 
 
 def integer(v):
@@ -45,6 +45,17 @@ def options(choice):
     if choice['choiceType'] == 'MASKED_CHOICE':
         require(option == {'coverage': 'MASKED'} and choice['boundary'] == 'MASKED_CHOICE', 'unmasked private choice')
         return
+    if choice['choiceType'] == 'MODE_SELECTION':
+        require(isinstance(option, dict) and set(option) == {'coverage', 'items', 'truncated', 'min', 'max', 'allowRepeat'}, 'invalid mode options')
+        require(option['coverage'] == 'OBSERVED_MODE_OPTIONS' and choice['boundary'] in ('CHARM_MODE_HEURISTIC', 'CONTROLLER_MODES'), 'invalid mode coverage/boundary')
+        require(isinstance(option['truncated'], bool) and isinstance(option['allowRepeat'], bool)
+                and integer(option['min']) and integer(option['max']), 'invalid observed mode constraints')
+        require(isinstance(option['items'], list) and len(option['items']) <= 256, 'invalid mode option prefix')
+        for i, mode in enumerate(option['items']):
+            require(isinstance(mode, dict) and set(mode) == {'abilityId', 'optionIndex', 'definitionIndex'} and integer(mode['abilityId'])
+                    and integer(mode['optionIndex']) and mode['optionIndex'] == i, 'invalid mode option identity/index')
+            require(mode['definitionIndex'] is None or integer(mode['definitionIndex']) and mode['definitionIndex'] >= 0, 'invalid mode definition index')
+        return
     if choice['choiceType'] == 'TARGET_POOL_SELECTION':
         if option == {'coverage': 'UNAVAILABLE'}: return
         require(isinstance(option, dict) and set(option) == {'coverage', 'items', 'truncated', 'priorTargets', 'priorTargetsTruncated', 'poolSnapshotTiming', 'purpose'}, 'invalid standalone target pool')
@@ -65,6 +76,22 @@ def selection(start, terminal):
     value = terminal['selection']
     if terminal['status'] in ('DECLINED', 'ERROR') or start['choiceType'] == 'MASKED_CHOICE':
         require(value is None, 'unavailable choice carries selection')
+        return
+    if start['choiceType'] == 'MODE_SELECTION':
+        require(isinstance(value, dict) and set(value) == {'available', 'modes', 'selectedCount', 'truncated', 'accepted'}, 'invalid mode selection')
+        require(isinstance(value['available'], bool) and isinstance(value['truncated'], bool)
+                and (value['accepted'] is None or isinstance(value['accepted'], bool)), 'invalid mode selection flags')
+        modes = value['modes']; count = value['selectedCount']
+        require(isinstance(modes, list) and len(modes) <= 256, 'invalid selected mode prefix')
+        require(count is None and not modes and not value['truncated'] if not value['available']
+                else integer(count) and count >= len(modes) and value['truncated'] == (count > len(modes)), 'invalid selected mode count')
+        offered = start['options']['items']
+        for mode in modes:
+            require(isinstance(mode, dict) and set(mode) == {'abilityId', 'optionIndex', 'definitionIndex'} and integer(mode['abilityId']), 'invalid selected mode identity')
+            require(mode['definitionIndex'] is None or integer(mode['definitionIndex']) and mode['definitionIndex'] >= 0, 'invalid selected mode definition index')
+            index = mode['optionIndex']
+            require(index is None or integer(index) and 0 <= index < len(offered) and mode['abilityId'] == offered[index]['abilityId'], 'invalid selected mode option link')
+            require(index is None or mode['definitionIndex'] == offered[index]['definitionIndex'], 'mode definition/offered index mismatch')
         return
     if start['choiceType'] == 'TARGET_POOL_SELECTION':
         require(isinstance(value, dict) and set(value) == {'selected', 'selectedOptionIndex', 'match'}, 'invalid target pool return')
