@@ -140,11 +140,65 @@ class ExportTests(unittest.TestCase):
         for linked in (True, False):
             rows = target_pool_fixture()
             rows[4]['finalizedTargets'] = target_fixture()[4]['finalizedTargets']
+            rows[2]['decision']['subordinateChoices'][0]['purpose'] = 'TARGET_RECOMMENDATION'
             if not linked:
                 rows[2]['decision']['subordinateChoices'][0]['candidateActionId'] = None
             summary = module.export([self.write(rows, f'presence-{linked}.jsonl')])
             self.assertEqual(summary['declaredSelectedTargetedActions'], 1)
             self.assertEqual(summary['selectedTargetedActionsWithPoolRecord'], int(linked))
+            self.assertEqual(summary['selectedTargetedActionsWithTargetRecommendation'], int(linked))
+
+    def test_examples_include_observed_choices_instead_of_only_duplicate_empty_groups(self):
+        inputs = []
+        for index in range(3):
+            rows = fixture()
+            rows[0]['runId'] = f'choice-example-{index}'
+            d = rows[2]['decision']
+            d.update(subordinateChoiceSchemaVersion=1, subordinateChoiceCoverage='OBSERVED_HEURISTIC_TARGET_POOLS_V1', subordinateChoices=[])
+            if index == 2:
+                richer = target_pool_fixture()[2]['decision']
+                d['candidates'] = richer['candidates']
+                d['subordinateChoices'] = richer['subordinateChoices']
+                d['subordinateChoices'][0]['candidateActionId'] = None
+            inputs.append(self.write(rows, f'choice-example-{index}.jsonl'))
+        out = self.root / 'choice-examples'
+        module.export(inputs, out, examples=2)
+        rows = [json.loads(line) for line in (out / 'examples.jsonl').read_text().splitlines()]
+        self.assertEqual([row['runId'] for row in rows], ['choice-example-0', 'choice-example-2'])
+        self.assertTrue(rows[1]['decision']['subordinateChoices'])
+
+    def test_truncated_pools_and_declared_omissions_preserve_the_actual_returned_identity(self):
+        rows = target_pool_fixture()
+        d = rows[2]['decision']
+        d['subordinateChoiceOmissions'] = dict(budget=3, interrupted=1)
+        choice = d['subordinateChoices'][0]
+        choice.update(optionsTruncated=True, priorTargetsTruncated=False, status='OUTSIDE_OBSERVED_POOL', selectedOptionIndex=None)
+        choice['selected']['id'] += 100
+        source = self.write(rows)
+        out = self.root / 'out'
+        summary = module.export([source], out)
+        self.assertEqual(summary['subordinateChoicesOmittedByBudget'], 3)
+        self.assertEqual(summary['subordinateChoicesOmittedDuringCapture'], 1)
+        self.assertEqual(summary['targetPoolCaptureCompleteness'], {'TRUNCATED': 1})
+        self.assertEqual(summary['priorTargetsCaptureCompleteness'], {'OBSERVED_FULL_LIST': 1})
+        record = json.loads((out / 'dataset.jsonl').read_text())['decision']['subordinateChoices'][0]
+        self.assertEqual(record['selected'], choice['selected'])
+        self.assertIsNone(record['selectedOptionIndex'])
+
+    def test_missing_budget_metadata_is_unavailable_and_malformed_metadata_is_rejected(self):
+        summary = module.export([self.write(target_pool_fixture())])
+        self.assertEqual(summary['targetChoiceCaptureBudgetCoverage'], {'UNAVAILABLE': 1})
+        self.assertEqual(summary['targetPoolCaptureCompleteness'], {'UNAVAILABLE': 1})
+        for index, omissions in enumerate((dict(budget=-1, interrupted=0), dict(budget=True, interrupted=0),
+                                           dict(budget=1), dict(budget=0, interrupted=0, detail='raw text'))):
+            rows = target_pool_fixture()
+            rows[2]['decision']['subordinateChoiceOmissions'] = omissions
+            with self.assertRaises(module.InvalidData):
+                module.load_run(self.write(rows, f'omission-{index}.jsonl'))
+        rows = target_pool_fixture()
+        rows[2]['decision']['subordinateChoices'][0]['optionsTruncated'] = 1
+        with self.assertRaises(module.InvalidData):
+            module.load_run(self.write(rows, 'invalid-truncation.jsonl'))
 
     def test_target_pool_identity_status_and_visibility_contradictions_are_rejected(self):
         mutations = [
@@ -164,6 +218,7 @@ class ExportTests(unittest.TestCase):
             lambda d, c: c.update(stage='EXECUTION'),
             lambda d, c: c.update(optionCoverage='ALL_LEGAL_TARGETS'),
             lambda d, c: c.update(boundary='a raw card-script description'),
+            lambda d, c: c.update(purpose='OPPONENT_PREFERENCE'),
             lambda d, c: c['options'][0].update(name='Privileged identity'),
             lambda d, c: c['options'][0].update(gameTimestamp=True),
             lambda d, c: c['priorTargets'].append(dict(type='PLAYER', id=True)),

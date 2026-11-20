@@ -187,6 +187,7 @@ public class AiTargetChoiceRecorderTest extends AITest {
         recorder.evaluated(f.ability, "CantPlayAi");
         final var choice = choices(recorder.finish(null, "COMPLETED", null)).get(0);
         Assert.assertEquals(choice.get("boundary"), "MASKED_TARGET_POOL");
+        Assert.assertEquals(choice.get("purpose"), "MASKED_TARGET_PLANNING");
         Assert.assertEquals(((Map<?, ?>) choice.get("selected")).keySet(), java.util.Set.of("type", "id", "gameTimestamp"));
     }
 
@@ -240,5 +241,80 @@ public class AiTargetChoiceRecorderTest extends AITest {
         Assert.assertEquals(((Map<?, ?>) choice.get("selected")).get("id"), weakest.getId());
         Assert.assertEquals(((Map<?, ?>) choice.get("selected")).get("type"), "PLAYER");
         Assert.assertEquals(choice.get("stage"), "CANDIDATE_EVALUATION");
+        Assert.assertEquals(choice.get("purpose"), "OPPONENT_PREFERENCE");
+    }
+
+    @Test(groups = {"UnitTest", "fast"})
+    public void cancellationDoesNotWaitForPoolEnumerationOrLetLateCaptureFailurePoisonTheGame() throws Exception {
+        final Fixture f = fixture();
+        final AiDecisionRecorder recorder = new AiDecisionRecorder(f.game, f.ai, 1);
+        recorder.beginAssessment(f.ability);
+        final var entered = new java.util.concurrent.CountDownLatch(1);
+        final var release = new java.util.concurrent.CountDownLatch(1);
+        final var threads = java.util.concurrent.Executors.newFixedThreadPool(2);
+        final Iterable<Card> blocked = () -> new java.util.Iterator<>() {
+            @Override public boolean hasNext() { return true; }
+            @Override public Card next() {
+                entered.countDown();
+                try { release.await(); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+                throw new IllegalStateException("late snapshot failure");
+            }
+        };
+        try {
+            final var capture = threads.submit(() -> evaluating(f, recorder,
+                    () -> AiTargetChoiceRecorder.choose(f.ai, f.ability, blocked, "DESTROY_REMOVAL_POOL", ignored -> f.bear)));
+            Assert.assertTrue(entered.await(5, java.util.concurrent.TimeUnit.SECONDS));
+            final var publish = threads.submit(() -> recorder.finish(null, "AI_TIMEOUT", null));
+            final var event = publish.get(1, java.util.concurrent.TimeUnit.SECONDS);
+            Assert.assertTrue(choices(event).isEmpty());
+            Assert.assertEquals(((Map<?, ?>) event.data().get("subordinateChoiceOmissions")).get("interrupted"), 1L);
+            release.countDown();
+            Assert.assertSame(capture.get(5, java.util.concurrent.TimeUnit.SECONDS), f.bear);
+            Assert.assertNull(f.game.getEventObservationFailure(), "A closed decision's late snapshot is no longer an active observation failure");
+        } finally {
+            release.countDown();
+            threads.shutdownNow();
+        }
+    }
+
+    @Test(groups = {"UnitTest", "fast"})
+    public void largeObservedPoolsAreExplicitlyTruncatedWithoutChangingTheChosenObject() throws Exception {
+        final Fixture f = fixture();
+        final AiDecisionRecorder recorder = new AiDecisionRecorder(f.game, f.ai, 1);
+        recorder.beginAssessment(f.ability);
+        final List<Card> pool = new ArrayList<>(java.util.Collections.nCopies(256, f.bear));
+        pool.add(f.dragon);
+        final Card chosen = evaluating(f, recorder,
+                () -> AiTargetChoiceRecorder.choose(f.ai, f.ability, pool, "DESTROY_REMOVAL_POOL", original -> original.get(256)));
+        recorder.evaluated(f.ability, "WillPlay");
+        final var choice = choices(recorder.finish(List.of(f.ability), "COMPLETED", null)).get(0);
+        Assert.assertSame(chosen, f.dragon);
+        Assert.assertEquals(((List<?>) choice.get("options")).size(), 256);
+        Assert.assertEquals(choice.get("optionsTruncated"), true);
+        Assert.assertEquals(choice.get("status"), "OUTSIDE_OBSERVED_POOL");
+        Assert.assertNull(choice.get("selectedOptionIndex"));
+        Assert.assertEquals(((Map<?, ?>) choice.get("selected")).get("id"), f.dragon.getId());
+    }
+
+    @Test(groups = {"UnitTest", "fast"})
+    public void perDecisionBudgetCountsOmissionsWithoutSkippingAnyPickerCalls() throws Exception {
+        final Fixture f = fixture();
+        final AiDecisionRecorder recorder = new AiDecisionRecorder(f.game, f.ai, 1);
+        final AtomicInteger calls = new AtomicInteger();
+        evaluating(f, recorder, () -> {
+            for (int i = 0; i < 129; i++) {
+                recorder.beginAssessment(f.ability);
+                Assert.assertSame(AiTargetChoiceRecorder.choose(f.ai, f.ability, List.of(f.bear), "DESTROY_REMOVAL_POOL", pool -> {
+                    calls.incrementAndGet();
+                    return pool.get(0);
+                }), f.bear);
+                recorder.evaluated(f.ability, "WillPlay");
+            }
+            return null;
+        });
+        final var event = recorder.finish(List.of(f.ability), "COMPLETED", null);
+        Assert.assertEquals(calls.get(), 129);
+        Assert.assertEquals(choices(event).size(), 128);
+        Assert.assertEquals(((Map<?, ?>) event.data().get("subordinateChoiceOmissions")).get("budget"), 1L);
     }
 }

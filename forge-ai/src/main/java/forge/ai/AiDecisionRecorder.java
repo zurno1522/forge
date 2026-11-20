@@ -20,11 +20,20 @@ final class AiDecisionRecorder {
     private final List<Map<String, Object>> candidates = new ArrayList<>();
     private final Map<Long, Map<String, Object>> details = new LinkedHashMap<>();
     private final long started = System.nanoTime();
-    private boolean closed;
+    private volatile boolean closed;
     private String evaluationFailure;
     private final Player viewer;
     private Assessment assessment;
     private final List<TargetChoice> targetChoices = new ArrayList<>();
+    private int targetCapturesInFlight;
+    private long targetChoicesOmittedByBudget;
+    private long interruptedTargetCaptures;
+
+    synchronized void captureFailed(final RuntimeException failure) {
+        if (!closed && viewer.getGame().isRecordingAiDecisions()) {
+            viewer.getGame().recordEventObservationFailure(failure);
+        }
+    }
 
     private static final class Assessment {
         private final SpellAbility candidate;
@@ -62,33 +71,69 @@ final class AiDecisionRecorder {
                 if (!closed) { data.put("status", "ERROR"); }
             }
         }
+
+        void captureFailed(final RuntimeException failure) { AiDecisionRecorder.this.captureFailed(failure); }
     }
 
-    synchronized TargetChoice beginTargetChoice(final SpellAbility ability,
+    TargetChoice beginTargetChoice(final SpellAbility ability,
             final Iterable<? extends GameObject> options, final String boundary) {
-        if (closed || assessment == null || !ability.usesTargeting()
-                || ability.getRootAbility() != assessment.candidate.getRootAbility()) { return null; }
-        final Map<String, Object> choice = new LinkedHashMap<>();
-        choice.put("choiceSchemaVersion", 1);
-        choice.put("choiceId", data.get("decisionId") + ":target:" + targetChoices.size());
-        choice.put("choiceType", "TARGET_POOL_SELECTION");
-        choice.put("stage", "CANDIDATE_EVALUATION");
-        choice.put("chooserPlayerId", viewer.getId());
-        choice.put("candidateAbilityId", assessment.candidate.getId());
-        choice.put("abilityId", ability.getId());
-        choice.put("sourceId", ability.getHostCard().getId());
-        final Card source = ability.getHostCard();
-        choice.put("boundary", !source.isFaceDown() && source.getView().canBeShownTo(viewer.getView())
-                ? boundary : "MASKED_TARGET_POOL");
-        choice.put("optionCoverage", "OBSERVED_HEURISTIC_POOL_NOT_ALL_LEGAL_TARGET_SETS");
-        choice.put("priorTargets", AiTargetChoiceRecorder.references(ability.getTargets()));
-        choice.put("options", AiTargetChoiceRecorder.references(options));
-        choice.put("status", "INCOMPLETE");
-        choice.put("selected", null);
-        choice.put("selectedOptionIndex", null);
-        final TargetChoice result = new TargetChoice(assessment, choice);
-        targetChoices.add(result);
-        return result;
+        final Assessment origin;
+        synchronized (this) {
+            if (closed || assessment == null || !ability.usesTargeting()
+                    || ability.getRootAbility() != assessment.candidate.getRootAbility()) { return null; }
+            if (targetChoices.size() + targetCapturesInFlight >= AiTargetChoiceRecorder.MAX_CHOICES) {
+                targetChoicesOmittedByBudget++;
+                return null;
+            }
+            origin = assessment;
+            targetCapturesInFlight++;
+        }
+        boolean reserved = true;
+        boolean interrupted = false;
+        try {
+            // Pool traversal must not hold the monitor needed to publish a timed-out parent.
+            final java.util.function.BooleanSupplier active = () -> !closed && !Thread.currentThread().isInterrupted();
+            final var prior = AiTargetChoiceRecorder.references(ability.getTargets(), active);
+            final var offered = prior == null ? null : AiTargetChoiceRecorder.references(options, active);
+            if (offered == null) { interrupted = true; return null; }
+            final Map<String, Object> choice = new LinkedHashMap<>();
+            choice.put("choiceSchemaVersion", 1);
+            choice.put("choiceType", "TARGET_POOL_SELECTION");
+            choice.put("stage", "CANDIDATE_EVALUATION");
+            choice.put("chooserPlayerId", viewer.getId());
+            choice.put("candidateAbilityId", origin.candidate.getId());
+            choice.put("abilityId", ability.getId());
+            choice.put("sourceId", ability.getHostCard().getId());
+            final Card source = ability.getHostCard();
+            final boolean visible = !source.isFaceDown() && source.getView().canBeShownTo(viewer.getView());
+            choice.put("boundary", visible ? boundary : "MASKED_TARGET_POOL");
+            choice.put("purpose", !visible ? "MASKED_TARGET_PLANNING" : "DAMAGE_OPPONENT_POOL".equals(boundary)
+                    ? "OPPONENT_PREFERENCE" : "TARGET_RECOMMENDATION");
+            choice.put("optionCoverage", "OBSERVED_HEURISTIC_POOL_NOT_ALL_LEGAL_TARGET_SETS");
+            choice.put("priorTargets", prior.values());
+            choice.put("priorTargetsTruncated", prior.truncated());
+            choice.put("options", offered.values());
+            choice.put("optionsTruncated", offered.truncated());
+            choice.put("status", "INCOMPLETE");
+            choice.put("selected", null);
+            choice.put("selectedOptionIndex", null);
+            synchronized (this) {
+                targetCapturesInFlight--;
+                reserved = false;
+                if (closed) { return null; }
+                choice.put("choiceId", data.get("decisionId") + ":target:" + targetChoices.size());
+                final TargetChoice result = new TargetChoice(origin, choice);
+                targetChoices.add(result);
+                return result;
+            }
+        } finally {
+            if (reserved) {
+                synchronized (this) {
+                    targetCapturesInFlight--;
+                    if (!closed && interrupted) { interruptedTargetCaptures++; }
+                }
+            }
+        }
     }
 
     AiDecisionRecorder(final Game game, final Player viewer, final long sequence) {
@@ -198,6 +243,8 @@ final class AiDecisionRecorder {
             choices.add(choice.data);
         }
         data.put("subordinateChoices", choices);
+        data.put("subordinateChoiceOmissions", Map.of("budget", targetChoicesOmittedByBudget,
+                "interrupted", interruptedTargetCaptures + targetCapturesInFlight));
         data.put("elapsedNanos", System.nanoTime() - started);
         if (search != null) {
             data.put("search", Map.of("method", "FLAT_MONTE_CARLO", "reason", search.reason,

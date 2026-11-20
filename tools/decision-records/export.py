@@ -64,19 +64,25 @@ def validate_choice_reference(ref):
 def validate_subordinate_choices(d, masked_ids):
     version = d.get('subordinateChoiceSchemaVersion')
     if version is None:
-        require('subordinateChoices' not in d and 'subordinateChoiceCoverage' not in d, 'undeclared subordinate choices')
+        require(not any(key in d for key in ('subordinateChoices', 'subordinateChoiceCoverage', 'subordinateChoiceOmissions')), 'undeclared subordinate choices')
         return
     require(integer(version) and version == 1, 'unsupported subordinate choice schema')
     require(d.get('subordinateChoiceCoverage') == 'OBSERVED_HEURISTIC_TARGET_POOLS_V1', 'invalid subordinate choice coverage')
     choices = d.get('subordinateChoices')
     require(isinstance(choices, list), 'missing subordinate choices')
+    if 'subordinateChoiceOmissions' in d:
+        omissions = d['subordinateChoiceOmissions']
+        require(isinstance(omissions, dict) and set(omissions) == {'budget', 'interrupted'}
+                and all(integer(value) and value >= 0 for value in omissions.values()), 'invalid target choice omissions')
     seen = set()
     actions = {action.get('actionId'): action for action in d['selectedActions'] if 'actionId' in action}
     fields = {'choiceSchemaVersion', 'choiceId', 'choiceType', 'stage', 'chooserPlayerId', 'candidateAbilityId',
               'abilityId', 'sourceId', 'boundary', 'optionCoverage', 'priorTargets', 'options', 'status',
               'selected', 'selectedOptionIndex', 'candidateIndex', 'candidateActionId'}
     for choice in choices:
-        require(isinstance(choice, dict) and set(choice) == fields, 'invalid subordinate choice fields')
+        optional = {'optionsTruncated', 'priorTargetsTruncated', 'purpose'}
+        require(isinstance(choice, dict) and fields <= set(choice) <= fields | optional, 'invalid subordinate choice fields')
+        require(all(isinstance(choice[key], bool) for key in ('optionsTruncated', 'priorTargetsTruncated') if key in choice), 'invalid target capture truncation flag')
         require(integer(choice['choiceSchemaVersion']) and choice['choiceSchemaVersion'] == 1, 'invalid target choice schema')
         choice_id = choice['choiceId']
         require(isinstance(choice_id, str) and choice_id and choice_id not in seen, 'invalid or duplicate choice id')
@@ -85,6 +91,9 @@ def validate_subordinate_choices(d, masked_ids):
         require(integer(choice['chooserPlayerId']) and choice['chooserPlayerId'] == d['playerId'], 'choice/decision chooser mismatch')
         require(all(integer(choice[key]) for key in ('candidateAbilityId', 'abilityId', 'sourceId')), 'invalid target choice identity')
         require(choice['boundary'] in TARGET_CHOICE_BOUNDARIES, 'invalid target choice boundary')
+        if 'purpose' in choice:
+            purpose = 'MASKED_TARGET_PLANNING' if choice['boundary'] == 'MASKED_TARGET_POOL' else 'OPPONENT_PREFERENCE' if choice['boundary'] == 'DAMAGE_OPPONENT_POOL' else 'TARGET_RECOMMENDATION'
+            require(choice['purpose'] == purpose, 'choice purpose/boundary mismatch')
         require(choice['sourceId'] not in masked_ids or choice['boundary'] == 'MASKED_TARGET_POOL', 'choice boundary exposes masked source')
         require(choice['optionCoverage'] == 'OBSERVED_HEURISTIC_POOL_NOT_ALL_LEGAL_TARGET_SETS', 'invalid target option coverage')
         index = choice['candidateIndex']
@@ -569,7 +578,8 @@ def make_coverage(runs, rows, *, spool=None):
              'alternativeCostSelections', 'cardPaymentGroups')
     choice_keys = ('subordinateChoiceCoverage', 'subordinateChoiceTypes', 'subordinateChoiceStatuses',
                    'subordinateChoiceBoundaries', 'targetPoolSizes', 'targetChoiceCandidateLinks',
-                   'targetChoiceAssessmentLinks')
+                   'targetChoiceAssessmentLinks', 'targetChoiceCaptureBudgetCoverage',
+                   'targetPoolCaptureCompleteness', 'priorTargetsCaptureCompleteness', 'subordinateChoicePurposes')
     counters = {name: spool.counter('coverage:' + name, name in common) if spool else collections.Counter()
                 for name in common + other + choice_keys}
     totals = dict(outcomeEligibleDecisions=0, censoredDecisions=0, decisionsAfterOutcome=0,
@@ -580,6 +590,9 @@ def make_coverage(runs, rows, *, spool=None):
     choice_records = 0
     declared_targeted_actions = 0
     targeted_actions_with_pool_record = 0
+    targeted_actions_with_recommendation = 0
+    budget_omissions = 0
+    interrupted_captures = 0
 
     def add(name, value):
         counters[name].update((value,))
@@ -595,17 +608,29 @@ def make_coverage(runs, rows, *, spool=None):
         d = row['decision']
         declared = d.get('subordinateChoiceSchemaVersion') == 1
         declared_choices = declared_choices or declared
+        if declared:
+            omissions = d.get('subordinateChoiceOmissions')
+            add('targetChoiceCaptureBudgetCoverage', 'DECLARED' if omissions is not None else 'UNAVAILABLE')
+            if omissions is not None:
+                budget_omissions += omissions['budget']
+                interrupted_captures += omissions['interrupted']
         observed_candidates = {choice['candidateActionId'] for choice in d.get('subordinateChoices', [])
                                if choice['candidateActionId'] is not None}
+        recommended_candidates = {choice['candidateActionId'] for choice in d.get('subordinateChoices', [])
+                                  if choice.get('purpose') == 'TARGET_RECOMMENDATION' and choice['candidateActionId'] is not None}
         add('subordinateChoiceCoverage', d['subordinateChoiceCoverage'] if declared else 'UNAVAILABLE')
         for choice in d.get('subordinateChoices', []):
             choice_records += 1
             add('subordinateChoiceTypes', choice['choiceType'])
             add('subordinateChoiceStatuses', choice['status'])
             add('subordinateChoiceBoundaries', choice['boundary'])
+            add('subordinateChoicePurposes', choice.get('purpose', 'UNAVAILABLE'))
             add('targetPoolSizes', len(choice['options']))
             add('targetChoiceCandidateLinks', 'EXACT_SELECTED_CANDIDATE' if choice['candidateActionId'] is not None else 'NO_EXACT_SELECTED_ACTION_LINK')
             add('targetChoiceAssessmentLinks', 'INDEXED_ASSESSMENT' if choice['candidateIndex'] is not None else 'MISSING_ASSESSMENT')
+            for flag, metric in (('optionsTruncated', 'targetPoolCaptureCompleteness'),
+                                 ('priorTargetsTruncated', 'priorTargetsCaptureCompleteness')):
+                add(metric, 'TRUNCATED' if choice.get(flag) is True else 'OBSERVED_FULL_LIST' if choice.get(flag) is False else 'UNAVAILABLE')
         for name, value in (('selections', d['selection']), ('phases', d['observation']['phase']),
                             ('decisionStatuses', d['status']), ('outcomeLabels', row['outcomeLabel'] or 'CENSORED'),
                             ('pilotModes', row['pilotMode'])):
@@ -645,6 +670,7 @@ def make_coverage(runs, rows, *, spool=None):
                 if declared and event.get('finalizedTargets') is not None and any(group['usesTargeting'] for group in event['finalizedTargets']['abilities']):
                     declared_targeted_actions += 1
                     targeted_actions_with_pool_record += action['actionId'] in observed_candidates
+                    targeted_actions_with_recommendation += action['actionId'] in recommended_candidates
                 for field, metric in (('finalizedTargets', 'finalizedTargetSnapshots'),
                                       ('finalizedModes', 'finalizedModeSnapshots'),
                                       ('finalizedX', 'finalizedXSnapshots'),
@@ -701,6 +727,9 @@ def make_coverage(runs, rows, *, spool=None):
         summary['subordinateChoiceRecords'] = choice_records
         summary['declaredSelectedTargetedActions'] = declared_targeted_actions
         summary['selectedTargetedActionsWithPoolRecord'] = targeted_actions_with_pool_record
+        summary['selectedTargetedActionsWithTargetRecommendation'] = targeted_actions_with_recommendation
+        summary['subordinateChoicesOmittedByBudget'] = budget_omissions
+        summary['subordinateChoicesOmittedDuringCapture'] = interrupted_captures
         for name in choice_keys:
             summary[name] = count(name)
     summary['limitations'] = [
@@ -719,6 +748,7 @@ def make_coverage(runs, rows, *, spool=None):
         'Handler labels are preserved from Forge: MissingPhaseRestrictions means a phase check declined the play, not necessarily missing card configuration.',
     ]
     if declared_choices:
+        summary['limitations'][0] = 'Main-phase play selection with an empty stack only; additional target-planning pool observations are restricted to these candidate evaluations. No mulligan, combat or reactive-priority decision coverage.'
         summary['limitations'].append('Subordinate target records cover selected heuristic pools during candidate evaluation, not every target chooser or all legal target sets. A candidate action link does not establish execution or a committed target; mode, X, payment and delegated/resolution choices remain outside this coverage.')
     return summary
 
@@ -796,12 +826,19 @@ def report_chunks(summary, runs):
         for prefix, name in (('Declaration coverage: ', 'subordinateChoiceCoverage'),
                              ('Selection statuses: ', 'subordinateChoiceStatuses'),
                              ('Observed boundaries: ', 'subordinateChoiceBoundaries'),
+                             ('Observed planning purposes: ', 'subordinateChoicePurposes'),
                              ('Observed pool sizes: ', 'targetPoolSizes'),
                              ('Selected-candidate links: ', 'targetChoiceCandidateLinks'),
-                             ('Assessment links: ', 'targetChoiceAssessmentLinks')):
+                             ('Assessment links: ', 'targetChoiceAssessmentLinks'),
+                             ('Capture-budget declarations: ', 'targetChoiceCaptureBudgetCoverage'),
+                             ('Observed pool capture: ', 'targetPoolCaptureCompleteness'),
+                             ('Prior-target capture: ', 'priorTargetsCaptureCompleteness')):
             yield from counter_line(prefix, name)
         yield from lines('These are heuristic pool observations, not complete legal target sets, committed execution choices or per-choice rewards.')
+        yield from lines('Opponent-preference records choose whose board or life total to consider; the preferred opponent need not be the spell target.')
         yield from lines(f"Among declaring decisions with an observed committed target snapshot, {summary['selectedTargetedActionsWithPoolRecord']} of {summary['declaredSelectedTargetedActions']} selected targeted actions have an exact candidate link to at least one pool record. This measures presence, not complete choice coverage.")
+        yield from lines(f"Of those targeted actions, {summary['selectedTargetedActionsWithTargetRecommendation']} have a declared target-recommendation record; opponent preference alone does not count as that recommendation.")
+        yield from lines(f"Declared omissions: {summary['subordinateChoicesOmittedByBudget']} by capture budget and {summary['subordinateChoicesOmittedDuringCapture']} interrupted captures. Missing declarations remain unavailable, not proof of zero omissions.")
     yield from lines('', '## Reproducibility', '', 'The companion manifest contains exact deck snapshots, deck hashes, input hashes and run metadata. The following summary is readable without the input logs.', '',
                      '| Run | Seed | Pilot | Engine revision | Dirty | Source SHA256 |', '| --- | --- | --- | --- | --- | --- |')
     for run in runs:
@@ -832,6 +869,11 @@ def write_export(out, spool, summary, examples):
         for index, row in enumerate(spool.rows):
             key = (row['pilotMode'], row['decision']['selection'], row['outcomeEligible'], bool(row['decision'].get('search')),
                    tuple(a['status'] for a in row['actionExecutions']))
+            if row['decision'].get('subordinateChoiceSchemaVersion') == 1:
+                key += (tuple(sorted({(choice.get('purpose', 'UNAVAILABLE'), choice['status'],
+                                       choice['candidateActionId'] is not None,
+                                       'TRUNCATED' if choice.get('optionsTruncated') is True else 'FULL' if choice.get('optionsTruncated') is False else 'UNAVAILABLE')
+                                      for choice in row['decision']['subordinateChoices']})),)
             if key not in seen:
                 seen.add(key)
                 sample.append(row)

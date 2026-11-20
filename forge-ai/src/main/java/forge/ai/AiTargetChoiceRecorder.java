@@ -9,10 +9,13 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BooleanSupplier;
 import java.util.function.Function;
 
 /** Observes existing heuristic target-pool selections; does not enumerate or filter legal targets. */
 public final class AiTargetChoiceRecorder {
+    static final int MAX_CHOICES = 128;
+    static final int MAX_REFERENCES = 256;
     private AiTargetChoiceRecorder() { }
 
     public static <T extends GameObject, C extends Iterable<T>> T choose(final Player chooser, final SpellAbility ability,
@@ -22,7 +25,7 @@ public final class AiTargetChoiceRecorder {
             final AiDecisionRecorder recorder = ai.getAi().evaluationRecorder();
             if (recorder != null) {
                 try { observation = recorder.beginTargetChoice(ability, options, boundary); }
-                catch (RuntimeException failure) { chooser.getGame().recordEventObservationFailure(failure); }
+                catch (RuntimeException failure) { recorder.captureFailed(failure); }
             }
         }
         final T result;
@@ -33,15 +36,25 @@ public final class AiTargetChoiceRecorder {
         }
         if (observation != null) {
             try { observation.complete(result); }
-            catch (RuntimeException failure) { chooser.getGame().recordEventObservationFailure(failure); }
+            catch (RuntimeException failure) { observation.captureFailed(failure); }
         }
         return result;
     }
 
-    static List<Map<String, Object>> references(final Iterable<? extends GameObject> objects) {
+    record References(List<Map<String, Object>> values, boolean truncated) { }
+
+    static References references(final Iterable<? extends GameObject> objects, final BooleanSupplier active) {
+        if (!active.getAsBoolean()) { return null; }
         final List<Map<String, Object>> result = new ArrayList<>();
-        for (final GameObject object : objects) { result.add(reference(object)); }
-        return result;
+        final var iterator = objects.iterator();
+        while (active.getAsBoolean()) {
+            if (!iterator.hasNext()) { return new References(result, false); }
+            if (result.size() == MAX_REFERENCES) { return new References(result, true); }
+            final GameObject object = iterator.next();
+            if (object == null) { throw new IllegalArgumentException("Null target-pool entry"); }
+            result.add(reference(object));
+        }
+        return null;
     }
 
     static Map<String, Object> reference(final GameObject object) {
