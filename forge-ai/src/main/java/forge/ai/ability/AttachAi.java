@@ -989,7 +989,7 @@ public class AttachAi extends SpellAbilityAi {
      * @return true, if successful
      */
     private static AiAbilityDecision attachPreference(final SpellAbility sa, final TargetRestrictions tgt, final boolean mandatory) {
-        GameObject o;
+        AiTargetChoiceRecorder.Selection<? extends GameObject> selection;
         boolean spellCanTargetPlayer = false;
         if (isAuraSpell(sa)) {
             Card source = sa.getHostCard();
@@ -1013,16 +1013,17 @@ public class AttachAi extends SpellAbilityAi {
                     targetable.add(player);
                 }
             }
-            o = attachToPlayerAIPreferences(sa.getActivatingPlayer(), sa, mandatory, targetable);
+            selection = AiTargetChoiceRecorder.select(sa.getActivatingPlayer(), sa, targetable, "ATTACH_PLAYER_POOL",
+                    pool -> attachToPlayerAIPreferences(sa.getActivatingPlayer(), sa, mandatory, pool));
         } else {
-            o = attachToCardAIPreferences(sa.getActivatingPlayer(), sa, mandatory);
+            selection = attachToCardAIPreferences(sa.getActivatingPlayer(), sa, mandatory);
         }
 
-        if (o == null) {
+        if (selection.value() == null) {
             return new AiAbilityDecision(0, AiPlayDecision.TargetingFailed);
         }
 
-        sa.getTargets().add(o);
+        selection.addToTargets(sa);
         return new AiAbilityDecision(100, AiPlayDecision.WillPlay);
     }
 
@@ -1284,7 +1285,7 @@ public class AttachAi extends SpellAbilityAi {
      *            the mandatory
      * @return the card
      */
-    private static Card attachToCardAIPreferences(final Player aiPlayer, final SpellAbility sa, final boolean mandatory) {
+    private static AiTargetChoiceRecorder.Selection<Card> attachToCardAIPreferences(final Player aiPlayer, final SpellAbility sa, final boolean mandatory) {
         // TODO AttachSource is currently set for the Source of the Spell, but
         // at some point can support attaching a different card
         Card attachSource = sa.getHostCard();
@@ -1292,7 +1293,7 @@ public class AttachAi extends SpellAbilityAi {
             CardCollection objs = AbilityUtils.getDefinedCards(attachSource, sa.getParam("Object"), sa);
             if (objs.isEmpty()) {
                 if (!mandatory) {
-                    return null;
+                    return AiTargetChoiceRecorder.unobserved(null);
                 }
             } else {
                 attachSource = objs.get(0);
@@ -1301,12 +1302,12 @@ public class AttachAi extends SpellAbilityAi {
 
         // Don't equip if DontEquip SVar is set
         if (attachSource.hasSVar("DontEquip")) {
-            return null;
+            return AiTargetChoiceRecorder.unobserved(null);
         }
 
         // is no attachment so no using attach
         if (!mandatory && !attachSource.isAttachment()) {
-            return null;
+            return AiTargetChoiceRecorder.unobserved(null);
         }
 
         // Is a SA that moves target attachment
@@ -1314,17 +1315,19 @@ public class AttachAi extends SpellAbilityAi {
             CardCollection list = CardLists.filter(CardUtil.getValidCardsToTarget(sa), CardPredicates.isControlledByAnyOf(aiPlayer.getOpponents())
                     .or(card -> ComputerUtilCard.isUselessCreature(aiPlayer, card.getAttachedTo())));
 
-            return !list.isEmpty() ? ComputerUtilCard.getBestAI(list) : null;
+            return AiTargetChoiceRecorder.select(aiPlayer, sa, list, "ATTACH_CARD_POOL", pool -> !pool.isEmpty() ? ComputerUtilCard.getBestAI(pool) : null);
         } else if ("Unenchanted".equals(sa.getParam("AILogic"))) {
             List<Card> list = CardUtil.getValidCardsToTarget(sa);
             CardCollection preferred = CardLists.filter(list, card -> !card.hasCardAttachments());
-            return preferred.isEmpty() ? Aggregates.random(list) : Aggregates.random(preferred);
+            return preferred.isEmpty()
+                    ? AiTargetChoiceRecorder.select(aiPlayer, sa, list, "ATTACH_CARD_POOL", Aggregates::random)
+                    : AiTargetChoiceRecorder.select(aiPlayer, sa, preferred, "ATTACH_CARD_POOL", Aggregates::random);
         }
 
         // Don't fortify if already fortifying
         if (attachSource.isFortification() && attachSource.getAttachedTo() != null
                 && attachSource.getAttachedTo().getController() == aiPlayer) {
-            return null;
+            return AiTargetChoiceRecorder.unobserved(null);
         }
 
         List<Card> list = null;
@@ -1335,14 +1338,17 @@ public class AttachAi extends SpellAbilityAi {
         }
 
         if (list.isEmpty()) {
-            return null;
+            return AiTargetChoiceRecorder.unobserved(null);
         }
         CardCollection prefList = CardLists.filter(list, CardPredicates.canBeAttached(attachSource, sa));
 
         // Filter AI-specific targets if provided
         prefList = ComputerUtil.filterAITgts(sa, aiPlayer, prefList, true);
 
-        Card c = attachGeneralAI(aiPlayer, sa, prefList, mandatory, attachSource, sa.getParam("AILogic"));
+        final Card chosenSource = attachSource;
+        var selection = AiTargetChoiceRecorder.select(aiPlayer, sa, prefList, "ATTACH_CARD_POOL",
+                pool -> attachGeneralAI(aiPlayer, sa, pool, mandatory, chosenSource, sa.getParam("AILogic")));
+        Card c = selection.value();
 
         AiController aic = ((PlayerControllerAi)aiPlayer.getController()).getAi();
         if (c != null && attachSource.isEquipment()
@@ -1350,23 +1356,23 @@ public class AttachAi extends SpellAbilityAi {
                 && attachSource.getEquipping().getController() == aiPlayer) {
             if (c.equals(attachSource.getEquipping()) && !mandatory) {
                 // Do not equip if equipping the same card already
-                return null;
+                return AiTargetChoiceRecorder.unobserved(null);
             }
 
             if ("InstantReequipPowerBuff".equals(sa.getParam("AILogic"))) {
-                return c;
+                return selection;
             }
 
             boolean uselessCreature = ComputerUtilCard.isUselessCreature(aiPlayer, attachSource.getEquipping());
 
             if (aic.getProperty(AiProps.MOVE_EQUIPMENT_TO_BETTER_CREATURES).equals("never") && !mandatory) {
                 // Do not equip other creatures if the AI profile does not allow moving equipment around
-                return null;
+                return AiTargetChoiceRecorder.unobserved(null);
             } else if (aic.getProperty(AiProps.MOVE_EQUIPMENT_TO_BETTER_CREATURES).equals("from_useless_only")) {
                 // Do not equip other creatures if the AI profile only allows moving equipment from useless creatures
                 // and the equipped creature is still useful (not non-untapping+tapped and not set to can't attack/block)
                 if (!uselessCreature && !mandatory) {
-                    return null;
+                    return AiTargetChoiceRecorder.unobserved(null);
                 }
             }
 
@@ -1382,13 +1388,13 @@ public class AttachAi extends SpellAbilityAi {
 
             // avoid randomly moving the equipment back and forth between several creatures in one turn
             if (AiCardMemory.isRememberedCard(aiPlayer, attachSource, AiCardMemory.MemorySet.ATTACHED_THIS_TURN) && !mandatory) {
-                return null;
+                return AiTargetChoiceRecorder.unobserved(null);
             }
 
             // do not equip if the new creature is not significantly better than the previous one (evaluates at least better by evalT)
             int evalT = aic.getIntProperty(AiProps.MOVE_EQUIPMENT_CREATURE_EVAL_THRESHOLD);
             if (!decideMoveFromUseless && ComputerUtilCard.evaluateCreature(c) - ComputerUtilCard.evaluateCreature(attachSource.getEquipping()) < evalT && !mandatory) {
-                return null;
+                return AiTargetChoiceRecorder.unobserved(null);
             }
         }
 
@@ -1397,9 +1403,10 @@ public class AttachAi extends SpellAbilityAi {
         if (c == null && mandatory) {
             CardLists.shuffle(list);
             c = list.get(0);
+            selection = AiTargetChoiceRecorder.selectedFrom(aiPlayer, sa, list, "ATTACH_CARD_POOL", c);
         }
 
-        return c;
+        return selection;
     }
 
     /**

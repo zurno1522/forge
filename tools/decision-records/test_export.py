@@ -128,6 +128,8 @@ class ExportTests(unittest.TestCase):
         rows = target_pool_fixture()
         choice = rows[2]['decision']['subordinateChoices'][0]
         choice.update(boundary='DRAW_PLAYER_POOL', poolSnapshotTiming='AT_TARGET_ADDITION')
+        choice['options'] = [dict(type='PLAYER', id=i) for i in (0, 1)]
+        choice['selected'] = copy.deepcopy(choice['options'][1])
         source = self.write(rows)
         self.assertEqual(module.export([source])['subordinateChoiceBoundaries'], {'DRAW_PLAYER_POOL': 1})
         choice['poolSnapshotTiming'] = 'BEFORE_DECISION'
@@ -137,9 +139,24 @@ class ExportTests(unittest.TestCase):
         rows = target_provenance_fixture()
         choice = rows[2]['decision']['subordinateChoices'][0]
         choice.update(boundary='DAMAGE_PLAYER_POOL', poolSnapshotTiming='AT_TARGET_ADDITION')
+        choice['options'] = [dict(type='PLAYER', id=i) for i in (0, 1)]
+        choice['selected'] = copy.deepcopy(choice['options'][1])
+        rows[4]['finalizedTargets']['abilities'][0]['targets'] = [copy.deepcopy(choice['selected'])]
         summary = module.export([self.write(rows)])
         self.assertEqual(summary['subordinateChoicePurposes'], {'TARGET_RECOMMENDATION': 1})
         self.assertEqual(summary['committedTargetChoiceOrigins'], {'EXPLICIT_EVALUATION_ADDITION': 1})
+
+    def test_attachment_boundaries_preserve_typed_pools_and_reject_mismatched_reference_kinds(self):
+        for kind in ('CARD', 'PLAYER'):
+            rows = target_pool_fixture()
+            choice = rows[2]['decision']['subordinateChoices'][0]
+            choice['boundary'] = 'ATTACH_' + kind + '_POOL'
+            if kind == 'PLAYER':
+                choice['options'] = [dict(type='PLAYER', id=i) for i in (0, 1)]
+                choice['selected'] = copy.deepcopy(choice['options'][1])
+            self.assertEqual(module.export([self.write(rows, kind + '.jsonl')])['subordinateChoiceRecords'], 1)
+            choice['options'][0] = dict(type='PLAYER' if kind == 'CARD' else 'CARD', id=0, **({'gameTimestamp': 1} if kind == 'PLAYER' else {}))
+            with self.assertRaises(module.InvalidData): module.export([self.write(rows, kind + '-wrong.jsonl')])
 
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()

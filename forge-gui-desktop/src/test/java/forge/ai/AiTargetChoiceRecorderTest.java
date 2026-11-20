@@ -274,6 +274,38 @@ public class AiTargetChoiceRecorderTest extends AITest {
         Assert.assertEquals(((Map<?, ?>) ((List<?>) group.get("targetChoices")).get(0)).get("choiceId"), addition.get("choiceId"));
     }
 
+    @DataProvider public Object[][] attachmentSources() { return new Object[][] {{"Swiftfoot Boots"}, {"The Reality Chip"}}; }
+
+    @Test(dataProvider = "attachmentSources", groups = {"UnitTest", "fast"})
+    public void realEquipAndReconfigureChoicesKeepTheirFilteredPoolAndExplicitOrigin(final String name) throws Exception {
+        final Game game = initAndCreateGame();
+        final Player ai = game.getPlayers().get(1);
+        game.getPhaseHandler().devModeSet(PhaseType.MAIN2, ai);
+        for (final Player p : game.getPlayers()) { fillLibrary(p, 20); }
+        for (int i = 0; i < 3; i++) { addCardToZone("Island", ai, ZoneType.Battlefield); }
+        final Card bear = addCardToZone("Grizzly Bears", ai, ZoneType.Battlefield);
+        final Card dragon = addCardToZone("Shivan Dragon", ai, ZoneType.Battlefield);
+        final Card enemy = addCardToZone("Grizzly Bears", game.getPlayers().get(0), ZoneType.Battlefield);
+        final Card source = addCardToZone(name, ai, ZoneType.Battlefield);
+        final SpellAbility attach = source.getSpellAbilities().stream()
+                .filter(sa -> sa.getApi() == forge.game.ability.ApiType.Attach).findFirst().orElseThrow();
+        attach.setActivatingPlayer(ai);
+        game.setRecordAiDecisions(true);
+        final var recorder = new AiDecisionRecorder(game, ai, 44);
+        recorder.beginAssessment(attach);
+        evaluating(new Fixture(game, ai, attach, bear, dragon), recorder,
+                () -> ((PlayerControllerAi) ai.getController()).getAi().canPlaySa(attach));
+        final Card selected = attach.getTargets().getFirstTargetedCard();
+        Assert.assertTrue(selected == bear || selected == dragon);
+        recorder.evaluated(attach, "WillPlay");
+        final var choice = choices(recorder.finish(List.of(attach), "COMPLETED", null)).stream()
+                .filter(c -> c.get("boundary").equals("ATTACH_CARD_POOL")).findFirst().orElseThrow();
+        Assert.assertEquals(((Map<?, ?>) choice.get("selected")).get("id"), selected.getId());
+        Assert.assertTrue(((List<?>) choice.get("options")).stream().noneMatch(ref -> ((Map<?, ?>) ref).get("id").equals(enemy.getId())));
+        final var group = (Map<?, ?>) ((List<?>) recorder.targetProvenance(attach).capture(attach).get("abilities")).get(0);
+        Assert.assertEquals(((Map<?, ?>) ((List<?>) group.get("targetChoices")).get(0)).get("choiceId"), choice.get("choiceId"));
+    }
+
     @Test(groups = {"UnitTest", "fast"})
     public void burnOpponentPreferenceRecordsTheMultiplayerPoolWithoutClaimingACommittedTarget() {
         final Game game = initAndCreateThreePlayerGame();

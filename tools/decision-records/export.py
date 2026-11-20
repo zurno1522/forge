@@ -46,7 +46,7 @@ def digest(value):
 TARGET_CHOICE_BOUNDARIES = {'DESTROY_REMOVAL_POOL', 'DESTROY_LAND_POOL', 'DESTROY_POLYMORPH_POOL',
                             'DAMAGE_OPPONENT_POOL', 'DAMAGE_KILLABLES', 'DAMAGE_MANDATORY_OPPONENT_POOL',
                             'DAMAGE_MANDATORY_FALLBACK_POOL', 'DAMAGE_KILLABLE_PLANESWALKERS',
-                            'DAMAGE_PLANESWALKER_POOL', 'MASKED_TARGET_POOL', 'DRAW_PLAYER_POOL', 'DAMAGE_PLAYER_POOL'}
+                            'DAMAGE_PLANESWALKER_POOL', 'MASKED_TARGET_POOL', 'DRAW_PLAYER_POOL', 'DAMAGE_PLAYER_POOL', 'ATTACH_CARD_POOL', 'ATTACH_PLAYER_POOL'}
 
 
 def validate_choice_reference(ref):
@@ -113,9 +113,14 @@ def validate_subordinate_choices(d, masked_ids):
             require(isinstance(choice[name], list), 'invalid choice target list')
             for ref in choice[name]:
                 validate_choice_reference(ref)
+        expected_type = {'DRAW_PLAYER_POOL': 'PLAYER', 'DAMAGE_PLAYER_POOL': 'PLAYER',
+                         'ATTACH_PLAYER_POOL': 'PLAYER', 'ATTACH_CARD_POOL': 'CARD'}.get(choice['boundary'])
+        if expected_type is not None:
+            require(all(ref['type'] == expected_type for ref in choice['options']), 'target pool boundary/reference mismatch')
         selected, selected_index = choice['selected'], choice['selectedOptionIndex']
         if selected is not None:
             validate_choice_reference(selected)
+            require(expected_type is None or selected['type'] == expected_type, 'target selection boundary/reference mismatch')
         matches = sum(ref == selected for ref in choice['options'])
         status = choice['status']
         if status == 'SELECTED':

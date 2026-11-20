@@ -52,9 +52,14 @@ public final class AiTargetChoiceRecorder {
     /** Observe an existing branch result against its existing pool immediately before its original addition. */
     public static <T extends GameObject, C extends Iterable<T>> boolean addSelected(final Player chooser,
             final SpellAbility ability, final C options, final String boundary, final T selected) {
+        return selectedFrom(chooser, ability, options, boundary, selected).addToTargets(ability);
+    }
+
+    public static <T extends GameObject, C extends Iterable<T>> Selection<T> selectedFrom(final Player chooser,
+            final SpellAbility ability, final C options, final String boundary, final T selected) {
         final Selection<T> result = select(chooser, ability, options, boundary, ignored -> selected);
         if (result.observation != null) { result.observation.atTargetAddition(); }
-        return result.addToTargets(ability);
+        return result;
     }
 
     public static <T extends GameObject, C extends Iterable<T>> Selection<T> select(final Player chooser, final SpellAbility ability,
