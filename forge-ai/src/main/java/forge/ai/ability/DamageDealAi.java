@@ -507,7 +507,7 @@ public class DamageDealAi extends DamageAiBase {
             // check if it is better to target the player instead, the original target is already set in PumpAi.pumpTgtAI()
             if (tgt.canTgtCreature() && tgt.canTgtPlayer() && shouldTgtP(ai, sa, dmg, noPrevention)) {
                 sa.resetTargets();
-                sa.getTargets().add(enemy);
+                AiTargetChoiceRecorder.addSelected(ai, sa, targetableOpps, "DAMAGE_PLAYER_POOL", enemy);
             }
             return true;
         }
@@ -609,7 +609,7 @@ public class DamageDealAi extends DamageAiBase {
 
             if (tgt.canTgtCreature() && tgt.canTgtPlayer()) {
                 if (shouldTgtP(ai, sa, dmg, noPrevention)) {
-                    tcs.add(enemy);
+                    AiTargetChoiceRecorder.addSelected(ai, sa, targetableOpps, "DAMAGE_PLAYER_POOL", enemy);
                     if (divided) {
                         sa.addDividedAllocation(enemy, dmg);
                         break;
@@ -679,7 +679,7 @@ public class DamageDealAi extends DamageAiBase {
             } else if ("OppAtTenLife".equals(logic)) {
                 for (final Player p : ai.getOpponents()) {
                     if (sa.canTarget(p) && p.getLife() == 10) {
-                        tcs.add(p);
+                        AiTargetChoiceRecorder.addSelected(ai, sa, targetableOpps, "DAMAGE_PLAYER_POOL", p);
                         return true;
                     }
                 }
@@ -705,7 +705,7 @@ public class DamageDealAi extends DamageAiBase {
                         || ("BurnCreatures".equals(logic) && !enemy.getCreaturesInPlay().isEmpty()))
                         && ((sa.isPwAbility() && sa.getPayCosts().hasSpecificCostType(CostPutCounter.class))
                         || shouldTgtP(ai, sa, dmg, noPrevention)))) {
-                    tcs.add(enemy);
+                    AiTargetChoiceRecorder.addSelected(ai, sa, targetableOpps, "DAMAGE_PLAYER_POOL", enemy);
                     if (divided) {
                         sa.addDividedAllocation(enemy, dmg);
                         break;

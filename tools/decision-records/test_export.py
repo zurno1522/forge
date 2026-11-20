@@ -133,6 +133,14 @@ class ExportTests(unittest.TestCase):
         choice['poolSnapshotTiming'] = 'BEFORE_DECISION'
         with self.assertRaises(module.InvalidData): module.export([self.write(rows, 'invalid-timing.jsonl')])
 
+    def test_player_burn_addition_is_a_recommendation_and_can_supply_a_committed_origin(self):
+        rows = target_provenance_fixture()
+        choice = rows[2]['decision']['subordinateChoices'][0]
+        choice.update(boundary='DAMAGE_PLAYER_POOL', poolSnapshotTiming='AT_TARGET_ADDITION')
+        summary = module.export([self.write(rows)])
+        self.assertEqual(summary['subordinateChoicePurposes'], {'TARGET_RECOMMENDATION': 1})
+        self.assertEqual(summary['committedTargetChoiceOrigins'], {'EXPLICIT_EVALUATION_ADDITION': 1})
+
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)

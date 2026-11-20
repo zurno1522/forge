@@ -247,6 +247,34 @@ public class AiTargetChoiceRecorderTest extends AITest {
     }
 
     @Test(groups = {"UnitTest", "fast"})
+    public void realPlayerBurnAdditionHasItsOwnOriginInsteadOfReusingTheOpponentPreference() throws Exception {
+        final Game game = initAndCreateThreePlayerGame();
+        final Player ai = game.getPlayers().get(1);
+        final Player weak = game.getPlayers().get(0);
+        weak.setLife(1, null);
+        game.getPhaseHandler().devModeSet(PhaseType.MAIN2, ai);
+        for (final Player p : game.getPlayers()) { fillLibrary(p, 20); }
+        addCardToZone("Mountain", ai, ZoneType.Battlefield);
+        final SpellAbility burn = addCardToZone("Firebolt", ai, ZoneType.Hand).getFirstSpellAbility();
+        burn.setActivatingPlayer(ai);
+        game.setRecordAiDecisions(true);
+        final var recorder = new AiDecisionRecorder(game, ai, 43);
+        recorder.beginAssessment(burn);
+        evaluating(new Fixture(game, ai, burn, null, null), recorder,
+                () -> ((PlayerControllerAi) ai.getController()).getAi().canPlaySa(burn));
+        Assert.assertSame(burn.getTargets().getFirstTargetedPlayer(), weak);
+        recorder.evaluated(burn, "WillPlay");
+        final var choices = choices(recorder.finish(List.of(burn), "COMPLETED", null));
+        final var preference = choices.stream().filter(c -> c.get("boundary").equals("DAMAGE_OPPONENT_POOL")).findFirst().orElseThrow();
+        final var addition = choices.stream().filter(c -> c.get("boundary").equals("DAMAGE_PLAYER_POOL")).findFirst().orElseThrow();
+        Assert.assertEquals(((List<?>) addition.get("options")).size(), 2);
+        Assert.assertNotEquals(addition.get("choiceId"), preference.get("choiceId"));
+        Assert.assertEquals(addition.get("purpose"), "TARGET_RECOMMENDATION");
+        final var group = (Map<?, ?>) ((List<?>) recorder.targetProvenance(burn).capture(burn).get("abilities")).get(0);
+        Assert.assertEquals(((Map<?, ?>) ((List<?>) group.get("targetChoices")).get(0)).get("choiceId"), addition.get("choiceId"));
+    }
+
+    @Test(groups = {"UnitTest", "fast"})
     public void burnOpponentPreferenceRecordsTheMultiplayerPoolWithoutClaimingACommittedTarget() {
         final Game game = initAndCreateThreePlayerGame();
         final Player ai = game.getPlayers().get(1);
