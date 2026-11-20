@@ -1,0 +1,84 @@
+{
+  "reviewDate": "2026-11-20",
+  "productionRevision": "425c5feaa154298e1874dba5a8dda6a2c46979a3",
+  "productionClean": true,
+  "streamsDeclareEngineDirty": false,
+  "rawArtifacts": "/workspace/work/target-provenance",
+  "pythonVersion": "3.12.14",
+  "javaVersion": "openjdk version \"21.0.12.1\" 2026-08-18\nOpenJDK Runtime Environment (build 21.0.12.1+1-1-deb13u1-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.12.1+1-1-deb13u1-Debian, mixed mode, sharing)",
+  "cgroupCpuMax": "200000 100000",
+  "preferencesSha256": "ae6639499ade589e090f0e2f9df5c361fb8bcee5b2752fd6aeee80d5f5d66644",
+  "sourcesSha256": {
+    "forge-ai/src/main/java/forge/ai/AiActionTracker.java": "0f994503b88bcab7d352fd42c5e154af62daf196aca240a5067178900d1d7b9f",
+    "forge-ai/src/main/java/forge/ai/AiController.java": "db0926ebcc83fb777f80dc2d4cc9245bbd5b1eb19332cf1d89271765342c79ed",
+    "forge-ai/src/main/java/forge/ai/AiDecisionRecorder.java": "993119775315a3a6e118bc5e9c467097122ff8006c16b722264aa80a2531c566",
+    "forge-ai/src/main/java/forge/ai/AiTargetChoiceRecorder.java": "5711c7ec1a00dfd14d2d6c0874101766233b96dcb3496c839904841da3d8808e",
+    "forge-ai/src/main/java/forge/ai/AiTargetProvenance.java": "ef1ac2ef86200162872e5ab75d89140134b305355051dea71efe4d1b35ab4a32",
+    "forge-ai/src/main/java/forge/ai/ability/DamageDealAi.java": "2d20f7cc60fbfcf676cf4c096fba346deaa539d82d8a91e0a8eb6b6dc22c0530",
+    "forge-ai/src/main/java/forge/ai/ability/DestroyAi.java": "2aa18fa39b1faff8f21531c2bfa0ec73deb6367e83ce535fc745fdd8e601ae15",
+    "forge-game/src/main/java/forge/game/spellability/TargetChoices.java": "edd9cc1a47a881229a9cd52f9f440d0c0d6c43a921b7d9c5277717c7218c8aca",
+    "forge-gui-desktop/src/main/java/forge/view/SimulationTraceCollector.java": "b00dbb7ebfc36459dcfe755c70642b8eedb943e7117b8cfce26187405f2a050c",
+    "forge-gui-desktop/src/test/java/forge/ai/AiTargetProvenanceTest.java": "c877edf6f676c5dc3e215d94627bf6cc38ec9650c9273a1ac6a34cae77c894b5",
+    "tools/decision-records/TargetChoiceProbe.java": "382573c995ebcf1cb1d0cfb91f94288b269716a7b366c1ff9dacb6173b39e043",
+    "tools/decision-records/export.py": "e97523d0f93fd3f3eefb8db9cd0b8d34f1fa2c84e703a243cb879cdc2c41f205",
+    "tools/decision-records/test_export.py": "b12b843cfef8005f869395c4e948c96a1ac0a150cb683dcc83b921388368088f",
+    "tools/trace-test-decks/target-choice-damage.dck": "7c67fbc9ddd5f1cff74c1ae7dce2de3719d3910d1255e3e7f40e42ec22a9256b"
+  },
+  "logsSha256": {
+    "/workspace/work/target-provenance-final-tests.log": "b12f1349361b2531be6ed336ce4b5ad66aa4edcb64681e8389e7ed69fc0feab0",
+    "/workspace/work/target-provenance-reviewed-tests.log": "0e30fef8ff0bf2434bdcc2e13b037f95a71c137b632ebb33c0cb32da5c5d052d",
+    "/workspace/work/target-provenance-export-tests.log": "264bec11f755222961c1a3a6e909d43b2adb873e136ca260b7fb109dd9e4f9a1"
+  },
+  "testResults": {
+    "desktop": {
+      "cases": 2456,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 6
+    },
+    "core": {
+      "cases": 23,
+      "failures": 0,
+      "errors": 0
+    },
+    "game": {
+      "cases": 23,
+      "failures": 0,
+      "errors": 0
+    },
+    "reviewedFocused": {
+      "cases": 96,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "pythonExporter": {
+      "cases": 70,
+      "failures": 0,
+      "errors": 0
+    }
+  },
+  "monteCarloConsole": [
+    "FLATMC-STATS decisions=17 byRollouts=14 rollouts=38 rolloutsPerDecision=2.24 rolloutsPerSec=3.9 pruned=3 avgMs=566.78 p50Ms=553.41 p95Ms=816.03 p99Ms=816.03 maxMs=816.03 failures=0 unsimulatableCards=0"
+  ],
+  "reviewFindingsAddressed": [
+    "Explicit addition tokens distinguish helper recommendations from actual target additions, including previews that are not used.",
+    "Mutation-attempt invalidation prevents reset/reselect or iterator writes from resurrecting provenance by value equality.",
+    "Selected-candidate filtering prevents a different candidate sharing the same plan from inheriting a rejected candidate origin.",
+    "Opaque target-plan cache is transient; no wire IDs or retained engine graphs are embedded in it.",
+    "Exporter action validation state retains only the required origin fields instead of duplicating the entire option pool."
+  ],
+  "remainingGaps": [
+    "Uninstrumented player targeting: two Sign in Blood selections and two Firebolt player targets are unknown in this sample.",
+    "The Reality Chip reconfigure target remains unknown; other handlers/special branches remain outside coverage.",
+    "New execution-time choices, delegated choice records, retargeting and effect-copy/trigger decisions remain unsupported.",
+    "Modes, X and payment decisions, observation incarnation/state joins, per-option values and per-choice rewards remain separate work."
+  ],
+  "notes": [
+    "Full reactor passed before the final transient-cache modifier; the focused 96-case suite passed after that modifier. No production changes followed those checks.",
+    "The producer-cost probe and real games ran sequentially after tests using committed production code; metadata declared a clean source tree.",
+    "Gameplay checks validate collection and linkage, not learning or comparative deck strength.",
+    "All 20 sampled target slots fit within the capture bounds; 15 have explicit origins and five are unknown. No provenance truncation was observed.",
+    "Raw streams/logs remain workspace artifacts. Curated summaries, commands and one actual example are committed."
+  ]
+}

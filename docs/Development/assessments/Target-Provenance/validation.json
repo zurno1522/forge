@@ -1,0 +1,386 @@
+{
+  "productionRevision": "425c5feaa154298e1874dba5a8dda6a2c46979a3",
+  "scenarios": {
+    "black": {
+      "games": 3,
+      "gameStatuses": {
+        "NORMAL": 3
+      },
+      "decisions": 194,
+      "poolRecords": 8,
+      "purposes": {
+        "TARGET_RECOMMENDATION": 8
+      },
+      "boundaries": {
+        "DESTROY_REMOVAL_POOL": 8
+      },
+      "metrics": {
+        "declaredSelectedTargetedActions": 4,
+        "selectedTargetedActionsWithPoolRecord": 2,
+        "selectedTargetedActionsWithTargetRecommendation": 2,
+        "subordinateChoicesOmittedByBudget": 0,
+        "subordinateChoicesOmittedDuringCapture": 0,
+        "targetChoiceProvenanceSnapshots": {
+          "OBSERVED": 40
+        },
+        "committedTargetChoiceOrigins": {
+          "EXPLICIT_EVALUATION_ADDITION": 2,
+          "UNKNOWN": 2
+        },
+        "searchRecords": 0,
+        "searchDecidedByRollouts": 0
+      },
+      "pregameShuffles": {
+        "1": 2,
+        "2": 2,
+        "3": 2
+      },
+      "byteIdenticalOutputs": {
+        "dataset.jsonl": true,
+        "examples.jsonl": true,
+        "validation.json": true
+      },
+      "coverageEqualExceptSourceRecords": true,
+      "serializedProvenanceMetadataBytes": 15650,
+      "fullStreamBytes": 1540655,
+      "sources": {
+        "full": {
+          "sha256": "98436a2b575042ccbe66ea8921abb383f874a02fd8704f85b7893d3e5a29b264",
+          "bytes": 1540655
+        },
+        "decisions": {
+          "sha256": "4259fb2d23b08a6abdde8efd84faa3fdc5720b9e8ec89ed092a4057e88dd346f",
+          "bytes": 1095867
+        }
+      },
+      "runMetadata": {
+        "type": "RUN_STARTED",
+        "schemaVersion": 1,
+        "actionEventSchemaVersion": 1,
+        "runId": "d77416e7-9b67-48c9-8116-83c3523cdc42",
+        "pilotMode": "HEURISTIC",
+        "engineRevision": "425c5feaa154298e1874dba5a8dda6a2c46979a3",
+        "engineDirty": "false",
+        "forgeVersion": "GIT",
+        "runMode": "GAMES",
+        "gameType": "Constructed",
+        "requestedGames": 3,
+        "seed": 12031,
+        "participants": [
+          {
+            "participantId": 1,
+            "deckName": "Target Choice Black",
+            "aiProfile": "Default"
+          },
+          {
+            "participantId": 2,
+            "deckName": "Trace Green",
+            "aiProfile": "Default"
+          }
+        ],
+        "streamKind": "AI_DECISIONS",
+        "eventIndexMode": "SHARED_WITH_GAME_TRACE"
+      },
+      "deckSources": [
+        {
+          "path": "tools/trace-test-decks/target-choice-black.dck",
+          "sha256": "1e3268448d71ff9c34ddefc26fcbfb7a9b21e0014142f0d80b259be313f2afc6"
+        },
+        {
+          "path": "tools/trace-test-decks/trace-green.dck",
+          "sha256": "84e55f9a2dd8bcfa92a2a56de1143441c8e479ce8bb0c732578d0ff1603527cf"
+        }
+      ]
+    },
+    "damage": {
+      "games": 3,
+      "gameStatuses": {
+        "NORMAL": 3
+      },
+      "decisions": 178,
+      "poolRecords": 79,
+      "purposes": {
+        "OPPONENT_PREFERENCE": 63,
+        "TARGET_RECOMMENDATION": 16
+      },
+      "boundaries": {
+        "DAMAGE_OPPONENT_POOL": 63,
+        "DAMAGE_KILLABLES": 16
+      },
+      "metrics": {
+        "declaredSelectedTargetedActions": 15,
+        "selectedTargetedActionsWithPoolRecord": 15,
+        "selectedTargetedActionsWithTargetRecommendation": 13,
+        "subordinateChoicesOmittedByBudget": 0,
+        "subordinateChoicesOmittedDuringCapture": 0,
+        "targetChoiceProvenanceSnapshots": {
+          "OBSERVED": 42
+        },
+        "committedTargetChoiceOrigins": {
+          "EXPLICIT_EVALUATION_ADDITION": 13,
+          "UNKNOWN": 2
+        },
+        "searchRecords": 0,
+        "searchDecidedByRollouts": 0
+      },
+      "pregameShuffles": {
+        "1": 2,
+        "2": 2,
+        "3": 2
+      },
+      "byteIdenticalOutputs": {
+        "dataset.jsonl": true,
+        "examples.jsonl": true,
+        "validation.json": true
+      },
+      "coverageEqualExceptSourceRecords": true,
+      "serializedProvenanceMetadataBytes": 16136,
+      "fullStreamBytes": 1402912,
+      "sources": {
+        "full": {
+          "sha256": "dcd9a46d1c235a6298a2da5b49d5777e21f1c25e148ea8ba0bf653ef75435be6",
+          "bytes": 1402912
+        },
+        "decisions": {
+          "sha256": "9a29d4228f0e9d93f438a58794c0e69fa211dc6f4af2ceceef4e1f66939ec220",
+          "bytes": 998643
+        }
+      },
+      "runMetadata": {
+        "type": "RUN_STARTED",
+        "schemaVersion": 1,
+        "actionEventSchemaVersion": 1,
+        "runId": "0d89facb-334a-4c0c-9710-4e73de0ba2ce",
+        "pilotMode": "HEURISTIC",
+        "engineRevision": "425c5feaa154298e1874dba5a8dda6a2c46979a3",
+        "engineDirty": "false",
+        "forgeVersion": "GIT",
+        "runMode": "GAMES",
+        "gameType": "Constructed",
+        "requestedGames": 3,
+        "seed": 12032,
+        "participants": [
+          {
+            "participantId": 1,
+            "deckName": "Target Choice Damage",
+            "aiProfile": "Default"
+          },
+          {
+            "participantId": 2,
+            "deckName": "Trace Green",
+            "aiProfile": "Default"
+          }
+        ],
+        "streamKind": "AI_DECISIONS",
+        "eventIndexMode": "SHARED_WITH_GAME_TRACE"
+      },
+      "deckSources": [
+        {
+          "path": "tools/trace-test-decks/target-choice-damage.dck",
+          "sha256": "7c67fbc9ddd5f1cff74c1ae7dce2de3719d3910d1255e3e7f40e42ec22a9256b"
+        },
+        {
+          "path": "tools/trace-test-decks/trace-green.dck",
+          "sha256": "84e55f9a2dd8bcfa92a2a56de1143441c8e479ce8bb0c732578d0ff1603527cf"
+        }
+      ]
+    },
+    "commander": {
+      "games": 1,
+      "gameStatuses": {
+        "NORMAL": 1
+      },
+      "decisions": 49,
+      "poolRecords": 0,
+      "purposes": {},
+      "boundaries": {},
+      "metrics": {
+        "declaredSelectedTargetedActions": 0,
+        "selectedTargetedActionsWithPoolRecord": 0,
+        "selectedTargetedActionsWithTargetRecommendation": 0,
+        "subordinateChoicesOmittedByBudget": 0,
+        "subordinateChoicesOmittedDuringCapture": 0,
+        "targetChoiceProvenanceSnapshots": {
+          "OBSERVED": 9
+        },
+        "committedTargetChoiceOrigins": {},
+        "searchRecords": 0,
+        "searchDecidedByRollouts": 0
+      },
+      "pregameShuffles": {
+        "1": 2
+      },
+      "byteIdenticalOutputs": {
+        "dataset.jsonl": true,
+        "examples.jsonl": true,
+        "validation.json": true
+      },
+      "coverageEqualExceptSourceRecords": true,
+      "serializedProvenanceMetadataBytes": 3671,
+      "fullStreamBytes": 513072,
+      "sources": {
+        "full": {
+          "sha256": "76ba584859fa0607fd4ebd25015aece314ad24430cc53cac6dc64e5b7760d20f",
+          "bytes": 513072
+        },
+        "decisions": {
+          "sha256": "fb843ef75a3724b727584c9cb09695c60d157714bde4255ef704c957b40a25fe",
+          "bytes": 352570
+        }
+      },
+      "runMetadata": {
+        "type": "RUN_STARTED",
+        "schemaVersion": 1,
+        "actionEventSchemaVersion": 1,
+        "runId": "fa8c29ab-f0ba-4078-8577-16cdf5d59af1",
+        "pilotMode": "HEURISTIC",
+        "engineRevision": "425c5feaa154298e1874dba5a8dda6a2c46979a3",
+        "engineDirty": "false",
+        "forgeVersion": "GIT",
+        "runMode": "GAMES",
+        "gameType": "Commander",
+        "requestedGames": 1,
+        "seed": 31002,
+        "participants": [
+          {
+            "participantId": 1,
+            "deckName": "Doctor Who - The Thirteenth Doctor and Yasmin Khan",
+            "aiProfile": "Default"
+          },
+          {
+            "participantId": 2,
+            "deckName": "Draconic Domination [C17] [2017]",
+            "aiProfile": "Default"
+          }
+        ],
+        "streamKind": "AI_DECISIONS",
+        "eventIndexMode": "SHARED_WITH_GAME_TRACE"
+      },
+      "deckSources": [
+        {
+          "path": "tools/decision-records/hardening/decks/doctor-who.dck",
+          "sha256": "7e53bc5153ad98abc9a0eae4aa2a7c6d35b97b5db64af788c0ad99b6d8537f16"
+        },
+        {
+          "path": "tools/decision-records/hardening/decks/ur-dragon-draconic-domination.dck",
+          "sha256": "a50909153f7f07ea9077df668e452408b5762cf8fb9a9d43001282fe6deae86c"
+        }
+      ]
+    },
+    "commander-mc": {
+      "games": 1,
+      "gameStatuses": {
+        "NORMAL": 1
+      },
+      "decisions": 56,
+      "poolRecords": 0,
+      "purposes": {},
+      "boundaries": {},
+      "metrics": {
+        "declaredSelectedTargetedActions": 1,
+        "selectedTargetedActionsWithPoolRecord": 0,
+        "selectedTargetedActionsWithTargetRecommendation": 0,
+        "subordinateChoicesOmittedByBudget": 0,
+        "subordinateChoicesOmittedDuringCapture": 0,
+        "targetChoiceProvenanceSnapshots": {
+          "OBSERVED": 14
+        },
+        "committedTargetChoiceOrigins": {
+          "UNKNOWN": 1
+        },
+        "searchRecords": 17,
+        "searchDecidedByRollouts": 14
+      },
+      "pregameShuffles": {
+        "1": 2
+      },
+      "byteIdenticalOutputs": {
+        "dataset.jsonl": true,
+        "examples.jsonl": true,
+        "validation.json": true
+      },
+      "coverageEqualExceptSourceRecords": true,
+      "serializedProvenanceMetadataBytes": 5180,
+      "fullStreamBytes": 768068,
+      "sources": {
+        "full": {
+          "sha256": "87b80aebfb784de1ee8b0b8b32bc35f12230c6e8c88996c6f5a15813867d5825",
+          "bytes": 768068
+        },
+        "decisions": {
+          "sha256": "b0e3a7be57ff47322055b035a9953394d68bbfa14b591f865ab3aaf917ff5511",
+          "bytes": 476186
+        }
+      },
+      "runMetadata": {
+        "type": "RUN_STARTED",
+        "schemaVersion": 1,
+        "actionEventSchemaVersion": 1,
+        "runId": "9a482e40-8c7e-4a5f-bf0d-5a5183dd3a50",
+        "pilotMode": "FLAT_MONTE_CARLO",
+        "engineRevision": "425c5feaa154298e1874dba5a8dda6a2c46979a3",
+        "engineDirty": "false",
+        "forgeVersion": "GIT",
+        "runMode": "GAMES",
+        "gameType": "Commander",
+        "requestedGames": 1,
+        "seed": 31003,
+        "participants": [
+          {
+            "participantId": 1,
+            "deckName": "Doctor Who - The Thirteenth Doctor and Yasmin Khan",
+            "aiProfile": "Default"
+          },
+          {
+            "participantId": 2,
+            "deckName": "Draconic Domination [C17] [2017]",
+            "aiProfile": "Default"
+          }
+        ],
+        "streamKind": "AI_DECISIONS",
+        "eventIndexMode": "SHARED_WITH_GAME_TRACE"
+      },
+      "deckSources": [
+        {
+          "path": "tools/decision-records/hardening/decks/doctor-who.dck",
+          "sha256": "7e53bc5153ad98abc9a0eae4aa2a7c6d35b97b5db64af788c0ad99b6d8537f16"
+        },
+        {
+          "path": "tools/decision-records/hardening/decks/ur-dragon-draconic-domination.dck",
+          "sha256": "a50909153f7f07ea9077df668e452408b5762cf8fb9a9d43001282fe6deae86c"
+        }
+      ]
+    }
+  },
+  "totals": {
+    "games": 8,
+    "decisions": 477,
+    "poolRecords": 87,
+    "committedTargetSlots": {
+      "EXPLICIT_EVALUATION_ADDITION": 15,
+      "UNKNOWN": 5
+    }
+  },
+  "unrecordedControl": {
+    "scenario": "black",
+    "games": 3,
+    "matchingWinnersAndTurns": true,
+    "outcomes": [
+      "Game Outcome: Turn 8",
+      "Game Outcome: Ai(1)-Target Choice Black has won because all opponents have lost",
+      "Game Outcome: Ai(2)-Trace Green has lost because life total reached 0",
+      "Game Outcome: Turn 12",
+      "Game Outcome: Ai(1)-Target Choice Black has won because all opponents have lost",
+      "Game Outcome: Ai(2)-Trace Green has lost because life total reached 0",
+      "Game Outcome: Turn 8",
+      "Game Outcome: Ai(1)-Target Choice Black has won because all opponents have lost",
+      "Game Outcome: Ai(2)-Trace Green has lost because life total reached 0"
+    ],
+    "limitation": "Matching outcomes are not proof of identical action sequences or deadline-neutral recording."
+  },
+  "parityNotes": [
+    "Full/filtered dataset, examples and validation files are byte-identical.",
+    "Coverage JSON differs only in sourceRecords; provenance manifests retain actual input source metadata."
+  ],
+  "metadataByteMethod": "Counts exact ASCII key/value spans plus one delimiter for the parent declaration and committed snapshot, verified against the compact full stream. Does not include pool records introduced by the prior increment."
+}

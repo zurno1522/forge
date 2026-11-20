@@ -1,0 +1,57 @@
+{
+  "baselineRevision": "0ed35f0c4ee",
+  "cases": [
+    {
+      "case": "normal",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "timeout",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "exception",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "legacy",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "aborted",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "countered",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "targets",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "payments",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "opaque",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "unicode",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "target-pool",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "bounded-pool",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "uncertain-pool",
+      "allSixFilesByteIdentical": true
+    }
+  ]
+}

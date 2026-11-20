@@ -1,0 +1,149 @@
+{
+  "method": "Same ranking, parent observation/capture/freeze, actual target addition and final origin snapshot with or without recorded pool/origin capture. One pool per parent, warmup then three rotated 200-iteration samples for pool sizes 4 and 30.",
+  "medians": [
+    {
+      "poolSize": 4,
+      "enabled": false,
+      "samples": 3,
+      "medianCpuMicrosPerIteration": 466.14902500000005,
+      "medianAllocatedBytesPerIteration": 59744.0
+    },
+    {
+      "poolSize": 4,
+      "enabled": true,
+      "samples": 3,
+      "medianCpuMicrosPerIteration": 667.614685,
+      "medianAllocatedBytesPerIteration": 67408.0
+    },
+    {
+      "poolSize": 30,
+      "enabled": false,
+      "samples": 3,
+      "medianCpuMicrosPerIteration": 1825.2440049999998,
+      "medianAllocatedBytesPerIteration": 618985.32
+    },
+    {
+      "poolSize": 30,
+      "enabled": true,
+      "samples": 3,
+      "medianCpuMicrosPerIteration": 2153.42604,
+      "medianAllocatedBytesPerIteration": 647725.12
+    }
+  ],
+  "raw": [
+    {
+      "poolSize": 4,
+      "enabled": false,
+      "round": 0,
+      "iterations": 200,
+      "wallNanos": 124435475,
+      "cpuNanos": 93351973,
+      "allocatedBytes": 11948800
+    },
+    {
+      "poolSize": 4,
+      "enabled": true,
+      "round": 0,
+      "iterations": 200,
+      "wallNanos": 178717215,
+      "cpuNanos": 133522937,
+      "allocatedBytes": 13482144
+    },
+    {
+      "poolSize": 4,
+      "enabled": true,
+      "round": 1,
+      "iterations": 200,
+      "wallNanos": 220124694,
+      "cpuNanos": 152663028,
+      "allocatedBytes": 13481600
+    },
+    {
+      "poolSize": 4,
+      "enabled": false,
+      "round": 1,
+      "iterations": 200,
+      "wallNanos": 110340755,
+      "cpuNanos": 93229805,
+      "allocatedBytes": 11948800
+    },
+    {
+      "poolSize": 4,
+      "enabled": false,
+      "round": 2,
+      "iterations": 200,
+      "wallNanos": 98602322,
+      "cpuNanos": 89457455,
+      "allocatedBytes": 11910448
+    },
+    {
+      "poolSize": 4,
+      "enabled": true,
+      "round": 2,
+      "iterations": 200,
+      "wallNanos": 112072309,
+      "cpuNanos": 105043412,
+      "allocatedBytes": 13366400
+    },
+    {
+      "poolSize": 30,
+      "enabled": false,
+      "round": 0,
+      "iterations": 200,
+      "wallNanos": 361129849,
+      "cpuNanos": 347989631,
+      "allocatedBytes": 126777384
+    },
+    {
+      "poolSize": 30,
+      "enabled": true,
+      "round": 0,
+      "iterations": 200,
+      "wallNanos": 428813291,
+      "cpuNanos": 416440148,
+      "allocatedBytes": 129624792
+    },
+    {
+      "poolSize": 30,
+      "enabled": true,
+      "round": 1,
+      "iterations": 200,
+      "wallNanos": 535194951,
+      "cpuNanos": 430685208,
+      "allocatedBytes": 129545024
+    },
+    {
+      "poolSize": 30,
+      "enabled": false,
+      "round": 1,
+      "iterations": 200,
+      "wallNanos": 458778994,
+      "cpuNanos": 365048801,
+      "allocatedBytes": 123797064
+    },
+    {
+      "poolSize": 30,
+      "enabled": false,
+      "round": 2,
+      "iterations": 200,
+      "wallNanos": 447491524,
+      "cpuNanos": 429744993,
+      "allocatedBytes": 122949944
+    },
+    {
+      "poolSize": 30,
+      "enabled": true,
+      "round": 2,
+      "iterations": 200,
+      "wallNanos": 503984903,
+      "cpuNanos": 480743854,
+      "allocatedBytes": 127672096
+    }
+  ],
+  "limits": [
+    "Calling-thread CPU/allocation on a shared host. JSON serialization, file output, engine execution copies and whole-game throughput are excluded.",
+    "The control disables pool and origin recording together; this does not isolate provenance overhead from the preceding target-pool feature.",
+    "Small sample count and variable CPU timings; no timing-neutral or worst-case latency guarantee.",
+    "Capture occurs within evaluation deadlines. Prefix and record budgets bound added state, not all engine or parent-recorder memory."
+  ]
+}

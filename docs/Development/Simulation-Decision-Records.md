@@ -117,6 +117,27 @@ A null origin means unknown, not that no decision occurred. A missing/null prove
 
 Remaining scope includes new execution-time selections, delegated choice records, retargeting, effect copies/triggers, other handlers and removal special branches, mode/X/payment choices, and the observation-state identity contract. This closes recommendation-to-commit attribution for unchanged plans at the instrumented additions; it does not complete target-choice coverage or priority 1.
 
+#### Target-provenance commit review, 2026-11-20
+
+Implementation commit: `425c5feaa15`. Review exercised repeated equal recommendations, reset/reselect, substitutions, target incarnation changes, engine execution copies, list/iterator mutations, cancellation, delegated targeting and shared plans from a different selected candidate. The shared-plan case required restricting origins to the exact selected candidate. The opaque engine cache is transient. Export validation retains only the required origin fields in action state instead of copying entire option pools again. No further correctness defect was reproduced in the final validation; the coverage gaps below remain explicit.
+
+The full desktop reactor passed 2,456 cases (six skipped), plus 23 core and 23 game cases, with zero failures/errors. After the final transient-cache modifier, the focused suite passed all 96 cases. All 70 exporter tests pass. Against `0ed35f0c4ee`, all six export files remained byte-identical on 13 pre-provenance input cases, including the earlier target-pool capability. See [the evidence manifest](assessments/Target-Provenance/manifest.json) and [compatibility results](assessments/Target-Provenance/compatibility.json).
+
+Eight final games completed normally, with 477 decisions, 87 pool records and 20 committed target slots. Fifteen slots have an explicit evaluation-addition origin; five are unknown. These are sample counts, not a complete-coverage rate. No provenance prefix was truncated. Full/filtered inputs produced byte-identical datasets, examples and validation files, and coverage JSON differed only in source-record counts. All eight full streams retained shuffles before `GAME_STARTED`. See [runtime validation and exact seeds](assessments/Target-Provenance/validation.json).
+
+| Workload | Games | Decisions | Pool records | Explicit target origins | Unknown target slots |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Black removal / green, heuristic | 3 | 194 | 8 | 2 | 2 |
+| Sorcery damage / green, heuristic | 3 | 178 | 79 | 13 | 2 |
+| Doctor Who / Ur-Dragon, heuristic | 1 | 49 | 0 | 0 | 0 |
+| Doctor Who / Ur-Dragon, Monte Carlo | 1 | 56 | 0 | 0 | 1 |
+
+The unknown slots are two Sign in Blood player targets, two Firebolt player targets and The Reality Chip's reconfigure target. They identify concrete next coverage work: draw/player targeting, actual player-burn selections and attachment/reconfigure targeting. Opponent preferences alone still do not establish an origin. The Monte Carlo run reported zero rollout failures and zero unsimulatable-card entries; that single result does not establish complete simulator support. The black games matched unrecorded controls' winners and turns. An [actual Befoul message and linked stack addition](assessments/Target-Provenance/actual-example.json) show the explicit choice ID on the committed target slot.
+
+The [producer-cost control](assessments/Target-Provenance/producer-cost.json) compares the same ranking, parent capture, actual addition and final origin snapshot with and without recorded pool/origin capture. Median calling-thread CPU was 466.1 versus 667.6 microseconds for four options, and 1,825.2 versus 2,153.4 microseconds for 30 options. Additional allocation was about 7.7 KB and 28.7 KB per iteration. This small shared-host probe excludes serialization/file output and engine execution copies. It measures the whole pool/origin capture feature, not provenance alone, and does not guarantee timing-neutral gameplay or worst-case latency. The exact new declaration/snapshot fields accounted for 0.67–1.15% of sampled full-stream bytes, excluding the preceding increment's pool records.
+
+Next is broader target coverage at the concrete uncovered sites above. Recording a new execution-time or delegated selection, retargeting, effect copies/triggers, modes, X, payments and complete observation-state joins remain separate gaps. The marker adds an engine API and iterator wrappers, so an upstream proposal still needs API/performance review even though the engine holds no learning IDs. Priority 1 remains in progress.
+
 ## Selected action execution
 
 `AI_ACTION_EXECUTION` is a separate observational event in both full and decision-only streams. Its normal envelope contains the actual emission turn, phase, and event index. The nested `execution` object has `executionSchemaVersion: 1`, `decisionId`, `actionId`, `playerId`, the selected `abilityId`, `sourceId`, and `kind`, plus `status` and `reason`. Action IDs are the decision ID plus a zero-based selected-action ordinal; join them within their run and game. Candidate evaluations do not get action IDs.
