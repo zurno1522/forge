@@ -125,6 +125,31 @@ public class AiTargetChoiceRecorderTest extends AITest {
     @DataProvider public Object[][] disabledModes() { return new Object[][] {{false}, {true}}; }
 
     @Test(dataProvider = "disabledModes", groups = {"UnitTest", "fast"})
+    public void realDrawBranchRecordsSelfAndLethalOpponentTargetsWithoutInventingAnOptionPool(final boolean lethal) throws Exception {
+        final Fixture f = fixture();
+        f.game.getPhaseHandler().devModeSet(PhaseType.MAIN2, f.ai);
+        for (final Player p : f.game.getPlayers()) { fillLibrary(p, 20); }
+        if (lethal) { f.game.getPlayers().get(0).setLife(2, null); }
+        addCardToZone("Swamp", f.ai, ZoneType.Battlefield);
+        addCardToZone("Swamp", f.ai, ZoneType.Battlefield);
+        final SpellAbility draw = addCardToZone("Sign in Blood", f.ai, ZoneType.Hand).getFirstSpellAbility();
+        draw.setActivatingPlayer(f.ai);
+        final var recorder = new AiDecisionRecorder(f.game, f.ai, 42);
+        recorder.beginAssessment(draw);
+        evaluating(f, recorder, () -> ((PlayerControllerAi) f.ai.getController()).getAi().canPlaySa(draw));
+        final Player expected = lethal ? f.game.getPlayers().get(0) : f.ai;
+        Assert.assertSame(draw.getTargets().getFirstTargetedPlayer(), expected);
+        recorder.evaluated(draw, "WillPlay");
+        final var choice = choices(recorder.finish(List.of(draw), "COMPLETED", null)).get(0);
+        Assert.assertEquals(choice.get("boundary"), "DRAW_PLAYER_POOL");
+        Assert.assertEquals(choice.get("poolSnapshotTiming"), "AT_TARGET_ADDITION");
+        Assert.assertEquals(((List<?>) choice.get("options")).size(), 2);
+        Assert.assertEquals(((Map<?, ?>) choice.get("selected")).get("id"), expected.getId());
+        final var group = (Map<?, ?>) ((List<?>) recorder.targetProvenance(draw).capture(draw).get("abilities")).get(0);
+        Assert.assertNotNull(((List<?>) group.get("targetChoices")).get(0));
+    }
+
+    @Test(dataProvider = "disabledModes", groups = {"UnitTest", "fast"})
     public void disabledRecordingAndRolloutsDoNotInspectThePool(final boolean rollout) {
         final Fixture f = fixture();
         if (rollout) { f.game.markAsSimulationCopy(); } else { f.game.setRecordAiDecisions(false); }

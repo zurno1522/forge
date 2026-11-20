@@ -138,6 +138,12 @@ The [producer-cost control](assessments/Target-Provenance/producer-cost.json) co
 
 Next is broader target coverage at the concrete uncovered sites above. Recording a new execution-time or delegated selection, retargeting, effect copies/triggers, modes, X, payments and complete observation-state joins remain separate gaps. The marker adds an engine API and iterator wrappers, so an upstream proposal still needs API/performance review even though the engine holds no learning IDs. Priority 1 remains in progress.
 
+### Five-task implementation follow-up, 2026-11-20
+
+The authorized order is broader targeting, additional choice stages, modes, X, then payments. Each increment is committed separately and the combined build will receive simulation validation.
+
+Draw/player targeting now records `DRAW_PLAYER_POOL` at the existing addition branches, including self, opponent/ally, lethal draw/life/poison and mandatory fallbacks. It observes the existing `players` list without enumerating targets again. `poolSnapshotTiming: AT_TARGET_ADDITION` distinguishes a snapshot taken after the heuristic chose its result from the older before-chooser pool snapshots. This records available identities, not evidence that every option was scored. Real Sign in Blood regressions cover self-draw and lethal opponent targeting, with explicit target origins. The focused 50-case Java suite and 71 exporter tests pass.
+
 ## Selected action execution
 
 `AI_ACTION_EXECUTION` is a separate observational event in both full and decision-only streams. Its normal envelope contains the actual emission turn, phase, and event index. The nested `execution` object has `executionSchemaVersion: 1`, `decisionId`, `actionId`, `playerId`, the selected `abilityId`, `sourceId`, and `kind`, plus `status` and `reason`. Action IDs are the decision ID plus a zero-based selected-action ordinal; join them within their run and game. Candidate evaluations do not get action IDs.

@@ -46,7 +46,7 @@ def digest(value):
 TARGET_CHOICE_BOUNDARIES = {'DESTROY_REMOVAL_POOL', 'DESTROY_LAND_POOL', 'DESTROY_POLYMORPH_POOL',
                             'DAMAGE_OPPONENT_POOL', 'DAMAGE_KILLABLES', 'DAMAGE_MANDATORY_OPPONENT_POOL',
                             'DAMAGE_MANDATORY_FALLBACK_POOL', 'DAMAGE_KILLABLE_PLANESWALKERS',
-                            'DAMAGE_PLANESWALKER_POOL', 'MASKED_TARGET_POOL'}
+                            'DAMAGE_PLANESWALKER_POOL', 'MASKED_TARGET_POOL', 'DRAW_PLAYER_POOL'}
 
 
 def validate_choice_reference(ref):
@@ -83,8 +83,9 @@ def validate_subordinate_choices(d, masked_ids):
               'abilityId', 'sourceId', 'boundary', 'optionCoverage', 'priorTargets', 'options', 'status',
               'selected', 'selectedOptionIndex', 'candidateIndex', 'candidateActionId'}
     for choice in choices:
-        optional = {'optionsTruncated', 'priorTargetsTruncated', 'purpose'}
+        optional = {'optionsTruncated', 'priorTargetsTruncated', 'purpose', 'poolSnapshotTiming'}
         require(isinstance(choice, dict) and fields <= set(choice) <= fields | optional, 'invalid subordinate choice fields')
+        require('poolSnapshotTiming' not in choice or choice['poolSnapshotTiming'] == 'AT_TARGET_ADDITION', 'invalid pool snapshot timing')
         require(all(isinstance(choice[key], bool) for key in ('optionsTruncated', 'priorTargetsTruncated') if key in choice), 'invalid target capture truncation flag')
         require(integer(choice['choiceSchemaVersion']) and choice['choiceSchemaVersion'] == 1, 'invalid target choice schema')
         choice_id = choice['choiceId']

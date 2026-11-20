@@ -49,6 +49,14 @@ public final class AiTargetChoiceRecorder {
 
     public static <T extends GameObject> Selection<T> unobserved(final T value) { return new Selection<>(value, null); }
 
+    /** Observe an existing branch result against its existing pool immediately before its original addition. */
+    public static <T extends GameObject, C extends Iterable<T>> boolean addSelected(final Player chooser,
+            final SpellAbility ability, final C options, final String boundary, final T selected) {
+        final Selection<T> result = select(chooser, ability, options, boundary, ignored -> selected);
+        if (result.observation != null) { result.observation.atTargetAddition(); }
+        return result.addToTargets(ability);
+    }
+
     public static <T extends GameObject, C extends Iterable<T>> Selection<T> select(final Player chooser, final SpellAbility ability,
             final C options, final String boundary, final Function<C, T> selection) {
         AiDecisionRecorder.TargetChoice observation = null;

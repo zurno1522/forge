@@ -85,6 +85,12 @@ final class AiDecisionRecorder {
 
         void captureFailed(final RuntimeException failure) { AiDecisionRecorder.this.captureFailed(failure); }
 
+        void atTargetAddition() {
+            synchronized (AiDecisionRecorder.this) {
+                if (!closed) { data.put("poolSnapshotTiming", "AT_TARGET_ADDITION"); }
+            }
+        }
+
         TargetAddition prepareAddition(final SpellAbility ability, final GameObject actual, final GameObject returned) {
             synchronized (AiDecisionRecorder.this) {
                 if (closed || ability != evaluatedAbility

@@ -395,11 +395,11 @@ public class DrawAi extends SpellAbilityAi {
                 if (sa.isCurse() && ai.canDraw() && oppA.canLoseLife()) { // Risk Factor
                     if (numCards >= computerLibrarySize - 3) {
                         if (ai.isCardInPlay("Laboratory Maniac")) {
-                            sa.getTargets().add(oppA);
+                            AiTargetChoiceRecorder.addSelected(ai, sa, players, "DRAW_PLAYER_POOL", oppA);
                             return true;
                         }
                     } else if (computerHandSize + numCards <= computerMaxHandSize) {
-                        sa.getTargets().add(oppA);
+                        AiTargetChoiceRecorder.addSelected(ai, sa, players, "DRAW_PLAYER_POOL", oppA);
                         return true;
                     }
                 }
@@ -417,7 +417,7 @@ public class DrawAi extends SpellAbilityAi {
                         continue;
                     }
 
-                    sa.getTargets().add(oppA);
+                    AiTargetChoiceRecorder.addSelected(ai, sa, players, "DRAW_PLAYER_POOL", oppA);
                     return true;
                 }
 
@@ -431,7 +431,7 @@ public class DrawAi extends SpellAbilityAi {
                             if (xPaid) {
                                 root.setXManaCostPaid(oppA.getLife());
                             }
-                            sa.getTargets().add(oppA);
+                            AiTargetChoiceRecorder.addSelected(ai, sa, players, "DRAW_PLAYER_POOL", oppA);
                             return true;
                         }
                     }
@@ -444,7 +444,7 @@ public class DrawAi extends SpellAbilityAi {
                             if (xPaid) {
                                 root.setXManaCostPaid(oppA.getLife());
                             }
-                            sa.getTargets().add(oppA);
+                            AiTargetChoiceRecorder.addSelected(ai, sa, players, "DRAW_PLAYER_POOL", oppA);
                             return true;
                         }
                     }
@@ -454,7 +454,7 @@ public class DrawAi extends SpellAbilityAi {
                 // currently only Caress of Phyrexia
                 if (getPoison != null && oppA.canReceiveCounters(CounterEnumType.POISON)) {
                     if (oppA.getPoisonCounters() + numCards > 9) {
-                        sa.getTargets().add(oppA);
+                        AiTargetChoiceRecorder.addSelected(ai, sa, players, "DRAW_PLAYER_POOL", oppA);
                         return true;
                     }
                 }
@@ -462,7 +462,7 @@ public class DrawAi extends SpellAbilityAi {
                 // (e.g. Bargain), so target the opp anyway
                 if (logic.startsWith("LifeLessThan.")) {
                     int threshold = Integer.parseInt(logic.substring(logic.indexOf(".") + 1));
-                    sa.getTargets().add(oppA);
+                    AiTargetChoiceRecorder.addSelected(ai, sa, players, "DRAW_PLAYER_POOL", oppA);
                     return ai.getLife() < threshold;
                 }
             }
@@ -523,7 +523,7 @@ public class DrawAi extends SpellAbilityAi {
                     }
                 }
 
-                sa.getTargets().add(ai);
+                AiTargetChoiceRecorder.addSelected(ai, sa, players, "DRAW_PLAYER_POOL", ai);
                 return true;
             }
 
@@ -558,7 +558,7 @@ public class DrawAi extends SpellAbilityAi {
                         continue;
                 }
 
-                sa.getTargets().add(ally);
+                AiTargetChoiceRecorder.addSelected(ai, sa, players, "DRAW_PLAYER_POOL", ally);
                 return true;
             }
 
@@ -570,14 +570,14 @@ public class DrawAi extends SpellAbilityAi {
             // still try to target opponent first
             Player oppMin = opps.min(PlayerPredicates.compareByLife());
             if (oppMin != null) {
-                sa.getTargets().add(oppMin);
+                AiTargetChoiceRecorder.addSelected(ai, sa, players, "DRAW_PLAYER_POOL", oppMin);
                 return true;
             }
 
             // final solution for a possible target
             Player result = players.min(PlayerPredicates.compareByLife());
             if (result != null) {
-                sa.getTargets().add(result);
+                AiTargetChoiceRecorder.addSelected(ai, sa, players, "DRAW_PLAYER_POOL", result);
                 return true;
             }
         } else if (!mandatory) {

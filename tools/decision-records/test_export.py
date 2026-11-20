@@ -124,6 +124,15 @@ def target_provenance_fixture():
 
 
 class ExportTests(unittest.TestCase):
+    def test_draw_addition_boundary_and_timing_are_retained_and_validated(self):
+        rows = target_pool_fixture()
+        choice = rows[2]['decision']['subordinateChoices'][0]
+        choice.update(boundary='DRAW_PLAYER_POOL', poolSnapshotTiming='AT_TARGET_ADDITION')
+        source = self.write(rows)
+        self.assertEqual(module.export([source])['subordinateChoiceBoundaries'], {'DRAW_PLAYER_POOL': 1})
+        choice['poolSnapshotTiming'] = 'BEFORE_DECISION'
+        with self.assertRaises(module.InvalidData): module.export([self.write(rows, 'invalid-timing.jsonl')])
+
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
