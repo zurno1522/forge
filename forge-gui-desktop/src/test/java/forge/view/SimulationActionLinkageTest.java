@@ -27,6 +27,31 @@ import java.util.List;
 import java.util.Map;
 
 public class SimulationActionLinkageTest extends AITest {
+    @Test(groups = {"UnitTest", "fast"})
+    public void standaloneChoicesRetainTheirEmissionOrderAndMatchBothStreams() throws Exception {
+        final Game game = initAndCreateGame();
+        final Player ai = game.getPlayers().get(1);
+        final SpellAbility sa = ability(game, "Shock");
+        sa.setActivatingPlayer(ai);
+        game.setRecordAiDecisions(true);
+        try (Trace trace = new Trace(game, true)) {
+            game.fireEvent(new GameEventShuffle(ai.getView()));
+            forge.ai.AiChoiceRecorder.targeting(ai, sa, "EXECUTION", () -> {
+                sa.getTargets().add(game.getPlayers().get(0));
+                game.fireEvent(new GameEventShuffle(ai.getView()));
+                return true;
+            });
+            final var full = trace.full();
+            final var choices = full.stream().filter(r -> r.get("type").getAsString().equals("AI_SUBORDINATE_CHOICE")).toList();
+            Assert.assertEquals(choices, trace.decisions());
+            Assert.assertEquals(choices.size(), 2);
+            Assert.assertEquals(choices.get(0).get("eventIndex").getAsLong(), 2L);
+            Assert.assertEquals(choices.get(1).get("eventIndex").getAsLong(), 4L);
+            Assert.assertEquals(choices.get(0).getAsJsonObject("choice").get("status").getAsString(), "STARTED");
+            Assert.assertEquals(choices.get(1).getAsJsonObject("choice").get("status").getAsString(), "COMPLETED");
+        }
+    }
+
     private record NestedPlay(Runnable play) implements Event { }
 
     public static final class NestedSubscriber {

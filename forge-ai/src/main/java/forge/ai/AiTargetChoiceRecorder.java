@@ -57,20 +57,29 @@ public final class AiTargetChoiceRecorder {
 
     public static <T extends GameObject, C extends Iterable<T>> Selection<T> selectedFrom(final Player chooser,
             final SpellAbility ability, final C options, final String boundary, final T selected) {
-        final Selection<T> result = select(chooser, ability, options, boundary, ignored -> selected);
+        final Selection<T> result = select(chooser, ability, options, boundary, ignored -> selected, "AT_TARGET_ADDITION");
         if (result.observation != null) { result.observation.atTargetAddition(); }
         return result;
     }
 
     public static <T extends GameObject, C extends Iterable<T>> Selection<T> select(final Player chooser, final SpellAbility ability,
             final C options, final String boundary, final Function<C, T> selection) {
+        return select(chooser, ability, options, boundary, selection, "BEFORE_CHOOSER");
+    }
+
+    private static <T extends GameObject, C extends Iterable<T>> Selection<T> select(final Player chooser, final SpellAbility ability,
+            final C options, final String boundary, final Function<C, T> selection, final String timing) {
         AiDecisionRecorder.TargetChoice observation = null;
+        AiDecisionRecorder recorder = null;
         if (chooser.getGame().isRecordingAiDecisions() && chooser.getController() instanceof PlayerControllerAi ai) {
-            final AiDecisionRecorder recorder = ai.getAi().evaluationRecorder();
+            recorder = ai.getAi().evaluationRecorder();
             if (recorder != null) {
                 try { observation = recorder.beginTargetChoice(ability, options, boundary); }
                 catch (RuntimeException failure) { recorder.captureFailed(failure); }
             }
+        }
+        if (recorder == null && chooser.getGame().isRecordingAiDecisions() && ability.usesTargeting()) {
+            return new Selection<>(AiChoiceRecorder.targetPool(chooser, ability, options, boundary, timing, selection), null);
         }
         final T result;
         try { result = selection.apply(options); }

@@ -1040,7 +1040,14 @@ public class PlayerControllerAi extends PlayerController {
                     while (cur != null) {
                         if (cur.hasParam("TargetingPlayer") && cur.getTargetingPlayer() != null) {
                             cur.clearTargets();
-                            cur.getTargetingPlayer().getController().chooseTargetsFor(cur);
+                            final SpellAbility delegated = cur;
+                            final Player targetChooser = cur.getTargetingPlayer();
+                            if (targetChooser.getController() instanceof PlayerControllerAi) {
+                                targetChooser.getController().chooseTargetsFor(cur);
+                            } else {
+                                AiChoiceRecorder.targeting(targetChooser, cur, "DELEGATED_TARGET_SELECTION",
+                                        () -> targetChooser.getController().chooseTargetsFor(delegated));
+                            }
                             // there's a chance a target gets selected that makes the cost unaffordable
                             if (!ComputerUtilCost.canPayCost(root, root.getActivatingPlayer(), false)) {
                                 cur.resetTargets();
@@ -1507,6 +1514,13 @@ public class PlayerControllerAi extends PlayerController {
     }
 
     void chooseNewTargetsForCopy(final SpellAbility copy) {
+        AiChoiceRecorder.observe(player, copy, "EFFECT_COPY_TARGET_RESULT", "EFFECT_COPY_TARGET_SELECTION", "COPY_TARGETS",
+                () -> Map.of("coverage", "PRIOR_TARGET_PLAN_ONLY", "priorTargets", AiChoiceRecorder.targetPlan(copy)),
+                () -> { chooseNewTargetsForCopyImpl(copy); return true; },
+                ignored -> Map.of("targets", AiChoiceRecorder.targetPlan(copy)));
+    }
+
+    private void chooseNewTargetsForCopyImpl(final SpellAbility copy) {
         List<TargetChoices> oldTargets = new ArrayList<>();
         boolean targetingPlayer = false;
         for (SpellAbility s = copy; s != null; s = s.getSubAbility()) {
@@ -1600,13 +1614,18 @@ public class PlayerControllerAi extends PlayerController {
 
     @Override
     public boolean chooseTargetsFor(SpellAbility currentAbility) {
-        return brains.doTrigger(currentAbility, true);
+        return AiChoiceRecorder.targeting(player, currentAbility,
+                currentAbility.getActivatingPlayer() != null && currentAbility.getActivatingPlayer() != player
+                        ? "DELEGATED_TARGET_SELECTION" : currentAbility.isTrigger() ? "TRIGGER_TARGET_SELECTION" : null,
+                () -> brains.doTrigger(currentAbility, true));
     }
 
     @Override
     public TargetChoices chooseNewTargetsFor(SpellAbility ability, Predicate<GameObject> filter, boolean optional) {
-        // AI currently can't do this. But when it can it will need to be based on Ability API
-        return null;
+        // The existing controller declines this operation; retain that result without adding AI policy.
+        return AiChoiceRecorder.observe(player, ability, "RETARGET_RESULT", "RETARGET_SELECTION", "CONTROLLER_RETARGET",
+                () -> Map.of("coverage", "PRIOR_TARGET_PLAN_ONLY", "priorTargets", AiChoiceRecorder.targetPlan(ability)),
+                () -> null, ignored -> null);
     }
 
     @Override

@@ -21,6 +21,10 @@ _spool = importlib.util.module_from_spec(_spool_spec)
 _spool_spec.loader.exec_module(_spool)
 Spool = _spool.Spool
 
+_choice_spec = importlib.util.spec_from_file_location('forge_choice_events', Path(__file__).with_name('choice_events.py'))
+_choices = importlib.util.module_from_spec(_choice_spec)
+_choice_spec.loader.exec_module(_choices)
+
 
 def ordered_games(games):
     return games.ordered_keys() if isinstance(games, _spool.Games) else sorted(games)
@@ -196,6 +200,9 @@ def validate_decision(record, game):
             require(not any(k != 'reason' for k in action.get('assessmentDetail', {})), 'handler detail exposes masked card identity')
     for candidate in candidates:
         require(isinstance(candidate.get('assessment'), str) and candidate['assessment'], 'candidate lacks assessment')
+        require('assessmentId' not in candidate or isinstance(candidate['assessmentId'], str) and candidate['assessmentId'], 'invalid candidate assessment id')
+    assessment_ids = [c['assessmentId'] for c in candidates if 'assessmentId' in c]
+    require(len(set(assessment_ids)) == len(assessment_ids), 'duplicate candidate assessment id')
     require(bool(selected) == (d['selection'] == 'PLAY'), 'selection/action count mismatch')
     if d.get('actionExecutionSchemaVersion') == 1:
         require(all(isinstance(a.get('actionId'), str) and a['actionId'] for a in selected), 'selected action lacks actionId')
@@ -461,6 +468,7 @@ def load_run(path, *, games=None):
                     require(kind == 'RUN_STARTED' and record.get('schemaVersion') == 1, 'file must start with supported RUN_STARTED')
                     require(record.get('streamKind') in (None, 'FULL_GAME_TRACE', 'AI_DECISIONS'), 'unsupported stream kind')
                     require(record.get('actionEventSchemaVersion') in (None, 1), 'unsupported action event schema')
+                    require(record.get('choiceEventSchemaVersion') is None or integer(record['choiceEventSchemaVersion']) and record['choiceEventSchemaVersion'] == 1, 'unsupported standalone choice capability')
                     require(record.get('eventIndexMode', 'CONTIGUOUS') in ('CONTIGUOUS', 'SHARED_WITH_GAME_TRACE'), 'unsupported event index mode')
                     require(record.get('eventIndexMode') != 'SHARED_WITH_GAME_TRACE' or record.get('streamKind') == 'AI_DECISIONS', 'shared indices require a filtered decision stream')
                     require('runId' not in record or isinstance(record['runId'], str) and record['runId'], 'invalid runId')
@@ -485,7 +493,7 @@ def load_run(path, *, games=None):
                 else:
                     number = record.get('game')
                     require(integer(number) and number > 0, 'missing game number')
-                    game = games.setdefault(number, dict(lastIndex=0, start=None, outcome=None, finish=None, execution=None, decisions=[], decisionIds=set(), players={}, actions={}))
+                    game = games.setdefault(number, dict(lastIndex=0, start=None, outcome=None, finish=None, execution=None, decisions=[], decisionIds=set(), players={}, actions={}, choices={}, decisionContexts={}, choiceCandidates=set(), choiceAssessments={}))
                     require(game['execution'] is None, 'scoped event after GAME_EXECUTION_FINISHED')
                     index = record.get('eventIndex')
                     require(integer(index) and index > game['lastIndex'], 'event indices not strictly increasing')
@@ -493,7 +501,7 @@ def load_run(path, *, games=None):
                         require(index == game['lastIndex'] + 1, 'event index gap')
                     game['lastIndex'] = index
                     if metadata.get('streamKind') == 'AI_DECISIONS':
-                        require(kind in ('GAME_STARTED', 'AI_DECISION', 'AI_ACTION_EXECUTION', 'GAME_OUTCOME', 'GAME_FINISHED', 'GAME_EXECUTION_FINISHED') + ACTION_EVENT_TYPES, 'unexpected full game event in decision stream')
+                        require(kind in ('GAME_STARTED', 'AI_DECISION', 'AI_ACTION_EXECUTION', 'AI_SUBORDINATE_CHOICE', 'GAME_OUTCOME', 'GAME_FINISHED', 'GAME_EXECUTION_FINISHED') + ACTION_EVENT_TYPES, 'unexpected full game event in decision stream')
                         if kind in ACTION_EVENT_TYPES:
                             require(metadata.get('actionEventSchemaVersion') == 1, 'linked event in undeclared decision stream')
                             require(set(record) <= set(ACTION_EVENT_FIELDS) | {'clearedActions'}, 'unexpected diagnostic field in linked event')
@@ -516,6 +524,12 @@ def load_run(path, *, games=None):
                         game['decisionIds'].add(d['decisionId'])
                         require(d['playerId'] in game['players'], 'unknown deciding player')
                         game['decisions'].append(record)
+                        game['decisionContexts'][d['decisionId']] = dict(status=d['status'])
+                        for candidate in d['candidates']:
+                            identity = (d['decisionId'], candidate.get('abilityId'), candidate['sourceId'])
+                            game['choiceCandidates'].add(identity)
+                            if 'assessmentId' in candidate:
+                                game['choiceAssessments'][(d['decisionId'], candidate['assessmentId'])] = list(identity[1:])
                         if d.get('actionExecutionSchemaVersion') == 1:
                             for selected in d['selectedActions']:
                                 action_id = selected['actionId']
@@ -527,6 +541,9 @@ def load_run(path, *, games=None):
                                                              for c in d.get('subordinateChoices', []) if c['candidateActionId'] == action_id})
                     elif kind == 'AI_ACTION_EXECUTION':
                         accept_execution(record, game)
+                    elif kind == 'AI_SUBORDINATE_CHOICE':
+                        require(metadata.get('choiceEventSchemaVersion') == 1, 'undeclared standalone choice event')
+                        _choices.accept(record, game)
                     elif kind in ACTION_EVENT_TYPES:
                         accept_action_event(record, game)
                     elif kind == 'GAME_OUTCOME':
@@ -548,6 +565,10 @@ def load_run(path, *, games=None):
     for number, game in games.items():
         execution, outcome = game['execution'], game['outcome']
         require(execution is not None, f'{path}: game {number} lacks execution finish')
+        try:
+            for state in game['choices'].values(): _choices.context(state, game)
+        except ValueError as error:
+            raise InvalidData(f'{path}: game {number}: {error}') from error
         counts[execution['status']] += 1
         if execution['status'] == 'NORMAL':
             require(all(a['terminal'] is not None for a in game['actions'].values()), f'{path}: normally completed game has unfinished selected actions')
@@ -801,6 +822,18 @@ def make_coverage(runs, rows, *, spool=None):
     if declared_provenance:
         for name in ('targetChoiceProvenanceSnapshots', 'committedTargetChoiceOrigins'):
             summary[name] = count(name)
+    if any(run['metadata'].get('choiceEventSchemaVersion') == 1 for run in runs):
+        event_types, stages, statuses = collections.Counter(), collections.Counter(), collections.Counter()
+        choice_count = censored_count = 0
+        for row in _choices.rows(runs):
+            choice_count += 1
+            censored_count += row['censored']
+            event_types[row['start']['choice']['choiceType']] += 1
+            stages[row['start']['choice']['stage']] += 1
+            statuses[row['status']] += 1
+        summary.update(standaloneChoiceRecords=choice_count, censoredStandaloneChoices=censored_count,
+                       standaloneChoiceTypes=dict(event_types), standaloneChoiceStages=dict(stages),
+                       standaloneChoiceStatuses=dict(statuses))
     summary['limitations'] = [
         'Main-phase play selection with an empty stack only; no mulligan, combat, reactive-priority or subordinate-choice coverage.',
         'Candidate assessments are partial and may repeat an ability; counts are assessment observations, not unique rejected legal actions.',
@@ -913,6 +946,11 @@ def report_chunks(summary, runs):
                          'Origins identify explicit target additions to an unchanged stored plan, carried through engine clones. Unknown origins are not inferred by matching target identities. This does not attribute divided allocations, delegated choices, or downstream effects.')
         for prefix, name in (('Snapshot coverage: ', 'targetChoiceProvenanceSnapshots'), ('Committed target slots: ', 'committedTargetChoiceOrigins')):
             yield from counter_line(prefix, name)
+    if 'standaloneChoiceRecords' in summary:
+        yield from lines('', '## Standalone subordinate choices', '',
+                         f"{summary['standaloneChoiceRecords']} choice lifecycles; {summary['censoredStandaloneChoices']} censored. Choices without a main-phase parent remain in choices.jsonl. No identity-based parent or reward is inferred.")
+        for prefix, name in (('Choice types: ', 'standaloneChoiceTypes'), ('Stages: ', 'standaloneChoiceStages'), ('Statuses: ', 'standaloneChoiceStatuses')):
+            yield from counter_line(prefix, name)
     yield from lines('', '## Reproducibility', '', 'The companion manifest contains exact deck snapshots, deck hashes, input hashes and run metadata. The following summary is readable without the input logs.', '',
                      '| Run | Seed | Pilot | Engine revision | Dirty | Source SHA256 |', '| --- | --- | --- | --- | --- | --- |')
     for run in runs:
@@ -928,6 +966,10 @@ EXPORT_NAMES = ('dataset.jsonl', 'examples.jsonl', 'manifest.json', 'coverage.js
 COMPACT_KEYS = ('runs', 'games', 'decisions', 'executionStatuses', 'outcomeEligibleDecisions', 'censoredDecisions')
 
 
+def export_names(runs):
+    return EXPORT_NAMES + (('choices.jsonl',) if any(r['metadata'].get('choiceEventSchemaVersion') == 1 for r in runs) else ())
+
+
 def write_export(out, spool, summary, examples):
     def json_file(name, value):
         with (out / name).open('w', encoding='utf-8') as sink:
@@ -938,6 +980,10 @@ def write_export(out, spool, summary, examples):
     with (out / 'dataset.jsonl').open('w', encoding='utf-8') as dataset:
         for row in spool.rows:
             dataset.write(json.dumps(row, ensure_ascii=False) + '\n')
+    if 'choices.jsonl' in export_names(spool.runs):
+        with (out / 'choices.jsonl').open('w', encoding='utf-8') as choices:
+            for row in _choices.rows(spool.runs):
+                choices.write(json.dumps(row, ensure_ascii=False) + '\n')
     sample, selected_indices, seen = [], set(), set()
     if examples:
         for index, row in enumerate(spool.rows):
@@ -991,7 +1037,9 @@ def write_export(out, spool, summary, examples):
                            administrativeOutcome=game['execution']['status'] != 'NORMAL')
     inputs = spool.sequence('manifest_inputs', (run['metadata'] for run in spool.runs))
     games = spool.sequence('manifest_games', contexts())
-    json_file('manifest.json', dict(datasetSchemaVersion=1, inputs=inputs, games=games))
+    manifest = dict(datasetSchemaVersion=1, inputs=inputs, games=games)
+    if 'standaloneChoiceRecords' in summary: manifest['choiceDatasetSchemaVersion'] = 1
+    json_file('manifest.json', manifest)
     json_file('coverage.json', summary)
     with (out / 'coverage.md').open('w', encoding='utf-8') as sink:
         for chunk in report_chunks(summary, spool.runs):
@@ -1010,7 +1058,7 @@ def publish_export(out, spool, summary, examples):
         out.mkdir(exist_ok=True)
         published = []
         try:
-            for name in EXPORT_NAMES:
+            for name in export_names(spool.runs):
                 # Same-filesystem exclusive publication cannot overwrite an existing/racing file.
                 os.link(staged / name, out / name)
                 published.append(name)
@@ -1040,8 +1088,9 @@ def export(paths, output_dir=None, examples=12, *, compact_summary=False):
         summary = make_coverage(spool.runs, spool.rows, spool=spool)
         if output_dir is not None:
             out = Path(output_dir)
-            require(not any((out / name).exists() for name in EXPORT_NAMES), 'output files already exist; choose a fresh output directory')
-            require(not any((out / name).resolve() in {p.resolve() for p in paths} for name in EXPORT_NAMES), 'output would overwrite an input')
+            names = export_names(spool.runs)
+            require(not any((out / name).exists() for name in names), 'output files already exist; choose a fresh output directory')
+            require(not any((out / name).resolve() in {p.resolve() for p in paths} for name in names), 'output would overwrite an input')
             publish_export(out, spool, summary, examples)
         # The CLI needs only fixed-size counts. Library users may request the full aggregate report.
         result = {key: summary[key] for key in COMPACT_KEYS} if compact_summary else summary

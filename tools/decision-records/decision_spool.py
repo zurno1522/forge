@@ -84,11 +84,15 @@ class Games(DiskMap):
         prefix = self.namespace + ':' + str(key)
         game.update(decisions=DiskList(self.store, prefix + ':decisions'),
                     decisionIds=DiskSet(self.store, prefix + ':decisionIds'),
+                    decisionContexts=DiskMap(self.store, prefix + ':decisionContexts'),
+                    choiceCandidates=DiskSet(self.store, prefix + ':choiceCandidates'),
+                    choiceAssessments=DiskMap(self.store, prefix + ':choiceAssessments'),
+                    choices=DiskMap(self.store, prefix + ':choices'),
                     actions=DiskMap(self.store, prefix + ':actions'))
         return game
 
     def __setitem__(self, key, value):
-        super().__setitem__(key, {k: v for k, v in value.items() if k not in ('decisions', 'decisionIds', 'actions')})
+        super().__setitem__(key, {k: v for k, v in value.items() if k not in ('decisions', 'decisionIds', 'actions', 'choices', 'decisionContexts', 'choiceCandidates', 'choiceAssessments')})
 
     def setdefault(self, key, default=None):
         if key not in self:

@@ -5,6 +5,7 @@ import forge.LobbyPlayer;
 import forge.ai.AiDecisionEvent;
 import forge.ai.AiActionExecutionEvent;
 import forge.ai.AiActionReference;
+import forge.ai.AiChoiceEvent;
 import forge.ai.PlayerControllerAi;
 import forge.card.GamePieceType;
 import forge.game.Game;
@@ -83,6 +84,7 @@ final class SimulationTraceCollector {
             if (event instanceof GameEvent e) { onGameEvent(e); }
             else if (event instanceof AiDecisionEvent e) { onAiDecision(e); }
             else if (event instanceof AiActionExecutionEvent e) { onAiActionExecution(e); }
+            else if (event instanceof AiChoiceEvent e) { onAiChoice(e); }
         });
     }
 
@@ -232,6 +234,18 @@ final class SimulationTraceCollector {
             }
         } catch (IOException | RuntimeException e) {
             failure = new IOException("Unable to collect simulation trace event AiDecisionEvent", e);
+        }
+    }
+
+    @Subscribe
+    public synchronized void onAiChoice(final AiChoiceEvent event) {
+        if (closed || failure != null) { return; }
+        try {
+            final Map<String, Object> record = scoped("AI_SUBORDINATE_CHOICE", true);
+            record.put("choice", event.data());
+            write(record);
+        } catch (IOException | RuntimeException error) {
+            failure = new IOException("Unable to collect simulation choice", error);
         }
     }
 
@@ -934,7 +948,7 @@ final class SimulationTraceCollector {
         if (writer != null) {
             writer.write(record);
         }
-        if (decisionWriter != null && List.of("GAME_STARTED", "AI_DECISION", "AI_ACTION_EXECUTION", "GAME_OUTCOME",
+        if (decisionWriter != null && List.of("GAME_STARTED", "AI_DECISION", "AI_ACTION_EXECUTION", "AI_SUBORDINATE_CHOICE", "GAME_OUTCOME",
                 "GAME_FINISHED", "GAME_EXECUTION_FINISHED").contains(record.get("type"))) {
             decisionWriter.write(record);
         } else if (decisionWriter != null && (record.get("actionId") != null

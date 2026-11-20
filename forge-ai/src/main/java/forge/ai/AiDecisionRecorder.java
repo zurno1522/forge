@@ -24,11 +24,23 @@ final class AiDecisionRecorder {
     private String evaluationFailure;
     private final Player viewer;
     private Assessment assessment;
+    private long assessmentSequence;
     private final List<TargetChoice> targetChoices = new ArrayList<>();
     private int targetCapturesInFlight;
     private long targetChoicesOmittedByBudget;
     private long interruptedTargetCaptures;
     private final AiTargetProvenance targetProvenance = new AiTargetProvenance();
+
+    synchronized Map<String, Object> choiceContext(final SpellAbility ability) {
+        if (closed || assessment == null || ability.getRootAbility() != assessment.candidate.getRootAbility()) { return null; }
+        if (assessment.id == null) {
+            assessment.id = data.get("decisionId") + ":assessment:" + assessment.ordinal;
+            if (assessment.index != null) { candidates.get(assessment.index).put("assessmentId", assessment.id); }
+        }
+        return Map.of("decisionId", data.get("decisionId"), "candidateAbilityId", assessment.candidate.getId(), "assessmentId", assessment.id);
+    }
+
+    boolean choiceCaptureOpen() { return !closed; }
 
     synchronized AiTargetProvenance targetProvenance(final SpellAbility selected) {
         final java.util.Set<String> allowed = new java.util.HashSet<>();
@@ -46,8 +58,10 @@ final class AiDecisionRecorder {
 
     private static final class Assessment {
         private final SpellAbility candidate;
+        private String id;
+        private final long ordinal;
         private Integer index;
-        private Assessment(final SpellAbility candidate) { this.candidate = candidate; }
+        private Assessment(final SpellAbility candidate, final long ordinal) { this.candidate = candidate; this.ordinal = ordinal; }
     }
 
     final class TargetChoice {
@@ -202,7 +216,7 @@ final class AiDecisionRecorder {
     synchronized void beginAssessment(final SpellAbility sa) {
         if (!closed) {
             details.remove(sa.getRootAbility().getId());
-            assessment = new Assessment(sa);
+            assessment = new Assessment(sa, ++assessmentSequence);
         }
     }
 
@@ -242,6 +256,7 @@ final class AiDecisionRecorder {
             final Map<String, Object> candidate = action(sa);
             if (assessment != null && assessment.candidate == sa && assessment.index == null) {
                 assessment.index = candidates.size();
+                if (assessment.id != null) { candidate.put("assessmentId", assessment.id); }
             }
             candidate.put("assessment", reason);
             final Map<String, Object> detail = details.remove(sa.getRootAbility().getId());

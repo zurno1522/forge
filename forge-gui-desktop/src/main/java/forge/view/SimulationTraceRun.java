@@ -108,6 +108,7 @@ final class SimulationTraceRun implements AutoCloseable {
         record.put("type", "RUN_STARTED");
         record.put("schemaVersion", 1);
         record.put("actionEventSchemaVersion", 1);
+        record.put("choiceEventSchemaVersion", 1);
         record.put("runId", runId);
         record.put("pilotMode", pilotMode);
         record.put("engineRevision", System.getProperty("forge.simulation.revision", "UNKNOWN"));

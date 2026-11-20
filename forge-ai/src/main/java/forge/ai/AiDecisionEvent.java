@@ -14,7 +14,7 @@ public record AiDecisionEvent(Map<String, Object> data) implements Event {
         data = freezeMap(data);
     }
 
-    private static Map<String, Object> freezeMap(final Map<?, ?> source) {
+    static Map<String, Object> freezeMap(final Map<?, ?> source) {
         final Map<String, Object> result = new LinkedHashMap<>();
         for (final Map.Entry<?, ?> entry : source.entrySet()) {
             result.put((String) entry.getKey(), freeze(entry.getValue()));
