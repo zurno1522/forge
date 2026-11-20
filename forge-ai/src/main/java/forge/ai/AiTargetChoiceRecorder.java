@@ -20,6 +20,37 @@ public final class AiTargetChoiceRecorder {
 
     public static <T extends GameObject, C extends Iterable<T>> T choose(final Player chooser, final SpellAbility ability,
             final C options, final String boundary, final Function<C, T> selection) {
+        return select(chooser, ability, options, boundary, selection).value();
+    }
+
+    /** A result token carries the specific invocation to the existing target-addition site. */
+    public static final class Selection<T extends GameObject> {
+        private final T value;
+        private final AiDecisionRecorder.TargetChoice observation;
+        private boolean provenanceConsumed;
+        private Selection(T value, AiDecisionRecorder.TargetChoice observation) { this.value = value; this.observation = observation; }
+        public T value() { return value; }
+        public boolean addToTargets(final SpellAbility ability) { return addToTargets(ability, value); }
+        public boolean addToTargets(final SpellAbility ability, final T actual) {
+            AiDecisionRecorder.TargetAddition addition = null;
+            if (observation != null && !provenanceConsumed) {
+                provenanceConsumed = true;
+                try { addition = observation.prepareAddition(ability, actual, value); }
+                catch (RuntimeException failure) { observation.captureFailed(failure); }
+            }
+            final boolean added = ability.getTargets().add(actual);
+            if (added && addition != null) {
+                try { addition.added(); }
+                catch (RuntimeException failure) { observation.captureFailed(failure); }
+            }
+            return added;
+        }
+    }
+
+    public static <T extends GameObject> Selection<T> unobserved(final T value) { return new Selection<>(value, null); }
+
+    public static <T extends GameObject, C extends Iterable<T>> Selection<T> select(final Player chooser, final SpellAbility ability,
+            final C options, final String boundary, final Function<C, T> selection) {
         AiDecisionRecorder.TargetChoice observation = null;
         if (chooser.getGame().isRecordingAiDecisions() && chooser.getController() instanceof PlayerControllerAi ai) {
             final AiDecisionRecorder recorder = ai.getAi().evaluationRecorder();
@@ -38,7 +69,7 @@ public final class AiTargetChoiceRecorder {
             try { observation.complete(result); }
             catch (RuntimeException failure) { observation.captureFailed(failure); }
         }
-        return result;
+        return new Selection<>(result, observation);
     }
 
     record References(List<Map<String, Object>> values, boolean truncated) { }

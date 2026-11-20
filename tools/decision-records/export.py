@@ -62,6 +62,9 @@ def validate_choice_reference(ref):
 
 
 def validate_subordinate_choices(d, masked_ids):
+    if 'targetChoiceProvenanceSchemaVersion' in d:
+        require(integer(d['targetChoiceProvenanceSchemaVersion']) and d['targetChoiceProvenanceSchemaVersion'] == 1
+                and d.get('subordinateChoiceSchemaVersion') == 1, 'invalid target provenance declaration')
     version = d.get('subordinateChoiceSchemaVersion')
     if version is None:
         require(not any(key in d for key in ('subordinateChoices', 'subordinateChoiceCoverage', 'subordinateChoiceOmissions')), 'undeclared subordinate choices')
@@ -202,7 +205,7 @@ def validate_decision(record, game):
 
 
 ACTION_EVENT_TYPES = ('STACK_ADDED', 'STACK_RESOLVED', 'STACK_REMOVED', 'STACK_COUNTERED', 'STACK_CLEARED', 'LAND_PLAYED')
-ACTION_EVENT_FIELDS = ('type', 'game', 'eventIndex', 'turn', 'phase', 'decisionId', 'actionId', 'stackId', 'abilityId', 'fizzled', 'finalizedTargets', 'finalizedModes', 'finalizedX', 'finalizedPayments')
+ACTION_EVENT_FIELDS = ('type', 'game', 'eventIndex', 'turn', 'phase', 'decisionId', 'actionId', 'stackId', 'abilityId', 'fizzled', 'finalizedTargets', 'finalizedModes', 'finalizedX', 'finalizedPayments', 'targetChoiceProvenance')
 
 
 def validate_finalized_payments(snapshot):
@@ -300,6 +303,42 @@ def validate_finalized_targets(snapshot, ability_id):
     require(groups[0]['abilityId'] == ability_id, 'finalized target root/stack ability mismatch')
 
 
+def validate_target_provenance(record, action):
+    snapshot = record['targetChoiceProvenance']
+    if snapshot is None:
+        return
+    require(action.get('targetChoiceProvenanceSchemaVersion') == 1, 'undeclared target provenance')
+    require(isinstance(snapshot, dict) and set(snapshot) == {'schemaVersion', 'coverage', 'abilities', 'abilitiesTruncated'}, 'invalid target provenance fields')
+    require(integer(snapshot['schemaVersion']) and snapshot['schemaVersion'] == 1
+            and snapshot['coverage'] == 'EXPLICIT_TARGET_ADDITIONS_V1', 'invalid target provenance schema/coverage')
+    targets = record.get('finalizedTargets')
+    require(targets is not None, 'target provenance lacks committed targets')
+    groups = snapshot['abilities']
+    require(isinstance(groups, list) and len(groups) == min(128, len(targets['abilities']))
+            and isinstance(snapshot['abilitiesTruncated'], bool)
+            and snapshot['abilitiesTruncated'] == (len(groups) < len(targets['abilities'])), 'target provenance ability coverage mismatch')
+    choices = action['targetChoiceOrigins']
+    for group, committed in zip(groups, targets['abilities']):
+        require(isinstance(group, dict) and set(group) == {'abilityId', 'targetChoices', 'targetsTruncated'}, 'invalid target provenance ability fields')
+        require(integer(group['abilityId']) and group['abilityId'] == committed['abilityId'], 'target provenance ability mismatch')
+        origins = group['targetChoices']
+        require(isinstance(origins, list) and len(origins) == min(256, len(committed['targets']))
+                and isinstance(group['targetsTruncated'], bool)
+                and group['targetsTruncated'] == (len(origins) < len(committed['targets'])), 'target provenance slot coverage mismatch')
+        for origin, target in zip(origins, committed['targets']):
+            if origin is None:
+                continue
+            require(isinstance(origin, dict) and set(origin) == {'choiceId', 'chooserPlayerId', 'stage'}, 'invalid target origin fields')
+            choice_id = origin['choiceId']
+            require(isinstance(choice_id, str) and choice_id in choices, 'target origin has no exact selected-candidate choice')
+            choice = choices[choice_id]
+            require(integer(origin['chooserPlayerId']) and origin['chooserPlayerId'] == choice['chooserPlayerId']
+                    and origin['stage'] == choice['stage'], 'target origin chooser/stage mismatch')
+            require(choice.get('purpose') != 'OPPONENT_PREFERENCE' and choice['boundary'] != 'DAMAGE_OPPONENT_POOL'
+                    and choice['selected'] is not None, 'target origin is not an observed target recommendation')
+            require(choice['selected'] == {k: v for k, v in target.items() if k != 'dividedAmount'}, 'target origin/committed identity mismatch')
+
+
 def accept_action_event(record, game):
     """Join explicit references only; preserve observed events without inferring a result."""
     if record['type'] == 'STACK_CLEARED':
@@ -323,6 +362,9 @@ def _accept_action_event(record, game):
     if 'finalizedTargets' in record:
         require(kind == 'STACK_ADDED', 'finalized target snapshot outside stack addition')
         validate_finalized_targets(record['finalizedTargets'], record.get('abilityId'))
+    if 'targetChoiceProvenance' in record:
+        require(kind == 'STACK_ADDED', 'target provenance outside stack addition')
+        validate_target_provenance(record, action)
     if 'finalizedModes' in record:
         require(kind == 'STACK_ADDED', 'finalized mode snapshot outside stack addition')
         validate_finalized_modes(record['finalizedModes'])
@@ -473,7 +515,10 @@ def load_run(path, *, games=None):
                                 action_id = selected['actionId']
                                 require(action_id not in game['actions'], 'duplicate selected actionId')
                                 identity = dict(selected, decisionId=d['decisionId'], playerId=d['playerId'])
-                                game['actions'][action_id] = dict(identity=identity, events=[], terminal=None, engineEvents=[], stackIdentity=None)
+                                game['actions'][action_id] = dict(identity=identity, events=[], terminal=None, engineEvents=[], stackIdentity=None,
+                                        targetChoiceProvenanceSchemaVersion=d.get('targetChoiceProvenanceSchemaVersion'),
+                                        targetChoiceOrigins={c['choiceId']: {k: c[k] for k in ('chooserPlayerId', 'stage', 'selected', 'boundary', 'purpose') if k in c}
+                                                             for c in d.get('subordinateChoices', []) if c['candidateActionId'] == action_id})
                     elif kind == 'AI_ACTION_EXECUTION':
                         accept_execution(record, game)
                     elif kind in ACTION_EVENT_TYPES:
@@ -579,7 +624,8 @@ def make_coverage(runs, rows, *, spool=None):
     choice_keys = ('subordinateChoiceCoverage', 'subordinateChoiceTypes', 'subordinateChoiceStatuses',
                    'subordinateChoiceBoundaries', 'targetPoolSizes', 'targetChoiceCandidateLinks',
                    'targetChoiceAssessmentLinks', 'targetChoiceCaptureBudgetCoverage',
-                   'targetPoolCaptureCompleteness', 'priorTargetsCaptureCompleteness', 'subordinateChoicePurposes')
+                   'targetPoolCaptureCompleteness', 'priorTargetsCaptureCompleteness', 'subordinateChoicePurposes',
+                   'targetChoiceProvenanceSnapshots', 'committedTargetChoiceOrigins')
     counters = {name: spool.counter('coverage:' + name, name in common) if spool else collections.Counter()
                 for name in common + other + choice_keys}
     totals = dict(outcomeEligibleDecisions=0, censoredDecisions=0, decisionsAfterOutcome=0,
@@ -587,6 +633,7 @@ def make_coverage(runs, rows, *, spool=None):
                   unrecognizedCardPaymentGroups=0, searchRecords=0, searchDecidedByRollouts=0)
     grouped = {}
     declared_choices = False
+    declared_provenance = False
     choice_records = 0
     declared_targeted_actions = 0
     targeted_actions_with_pool_record = 0
@@ -608,6 +655,7 @@ def make_coverage(runs, rows, *, spool=None):
         d = row['decision']
         declared = d.get('subordinateChoiceSchemaVersion') == 1
         declared_choices = declared_choices or declared
+        declared_provenance = declared_provenance or d.get('targetChoiceProvenanceSchemaVersion') == 1
         if declared:
             omissions = d.get('subordinateChoiceOmissions')
             add('targetChoiceCaptureBudgetCoverage', 'DECLARED' if omissions is not None else 'UNAVAILABLE')
@@ -677,6 +725,16 @@ def make_coverage(runs, rows, *, spool=None):
                                       ('finalizedPayments', 'finalizedPaymentSnapshots')):
                     add(metric, 'OBSERVED' if event.get(field) is not None else 'UNAVAILABLE')
                 targets = event.get('finalizedTargets')
+                if d.get('targetChoiceProvenanceSchemaVersion') == 1:
+                    provenance = event.get('targetChoiceProvenance')
+                    add('targetChoiceProvenanceSnapshots', 'OBSERVED' if provenance is not None else 'UNAVAILABLE')
+                    if provenance is not None:
+                        for group in provenance['abilities']:
+                            for origin in group['targetChoices']:
+                                add('committedTargetChoiceOrigins', 'EXPLICIT_EVALUATION_ADDITION' if origin is not None else 'UNKNOWN')
+                        if targets is not None:
+                            omitted = sum(len(group['targets']) for group in targets['abilities']) - sum(len(group['targetChoices']) for group in provenance['abilities'])
+                            counters['committedTargetChoiceOrigins'].update({'TRUNCATED': omitted} if omitted else {})
                 if targets is not None:
                     for group in targets['abilities']:
                         for target in group['targets']:
@@ -731,6 +789,11 @@ def make_coverage(runs, rows, *, spool=None):
         summary['subordinateChoicesOmittedByBudget'] = budget_omissions
         summary['subordinateChoicesOmittedDuringCapture'] = interrupted_captures
         for name in choice_keys:
+            if name in ('targetChoiceProvenanceSnapshots', 'committedTargetChoiceOrigins'):
+                continue
+            summary[name] = count(name)
+    if declared_provenance:
+        for name in ('targetChoiceProvenanceSnapshots', 'committedTargetChoiceOrigins'):
             summary[name] = count(name)
     summary['limitations'] = [
         'Main-phase play selection with an empty stack only; no mulligan, combat, reactive-priority or subordinate-choice coverage.',
@@ -839,6 +902,11 @@ def report_chunks(summary, runs):
         yield from lines(f"Among declaring decisions with an observed committed target snapshot, {summary['selectedTargetedActionsWithPoolRecord']} of {summary['declaredSelectedTargetedActions']} selected targeted actions have an exact candidate link to at least one pool record. This measures presence, not complete choice coverage.")
         yield from lines(f"Of those targeted actions, {summary['selectedTargetedActionsWithTargetRecommendation']} have a declared target-recommendation record; opponent preference alone does not count as that recommendation.")
         yield from lines(f"Declared omissions: {summary['subordinateChoicesOmittedByBudget']} by capture budget and {summary['subordinateChoicesOmittedDuringCapture']} interrupted captures. Missing declarations remain unavailable, not proof of zero omissions.")
+    if 'targetChoiceProvenanceSnapshots' in summary:
+        yield from lines('', '## Committed target-choice provenance', '',
+                         'Origins identify explicit target additions to an unchanged stored plan, carried through engine clones. Unknown origins are not inferred by matching target identities. This does not attribute divided allocations, delegated choices, or downstream effects.')
+        for prefix, name in (('Snapshot coverage: ', 'targetChoiceProvenanceSnapshots'), ('Committed target slots: ', 'committedTargetChoiceOrigins')):
+            yield from counter_line(prefix, name)
     yield from lines('', '## Reproducibility', '', 'The companion manifest contains exact deck snapshots, deck hashes, input hashes and run metadata. The following summary is readable without the input logs.', '',
                      '| Run | Seed | Pilot | Engine revision | Dirty | Source SHA256 |', '| --- | --- | --- | --- | --- | --- |')
     for run in runs:
@@ -874,6 +942,24 @@ def write_export(out, spool, summary, examples):
                                        choice['candidateActionId'] is not None,
                                        'TRUNCATED' if choice.get('optionsTruncated') is True else 'FULL' if choice.get('optionsTruncated') is False else 'UNAVAILABLE')
                                       for choice in row['decision']['subordinateChoices']})),)
+            if row['decision'].get('targetChoiceProvenanceSchemaVersion') == 1:
+                origin_kinds = set()
+                for action in row['actionExecutions']:
+                    for event in action['engineEvents']:
+                        if event['type'] != 'STACK_ADDED':
+                            continue
+                        provenance = event.get('targetChoiceProvenance')
+                        if provenance is None:
+                            origin_kinds.add('UNAVAILABLE')
+                            continue
+                        if provenance['abilitiesTruncated']:
+                            origin_kinds.add('TRUNCATED')
+                        for group in provenance['abilities']:
+                            if group['targetsTruncated']:
+                                origin_kinds.add('TRUNCATED')
+                            origin_kinds.update('EXPLICIT_EVALUATION_ADDITION' if origin is not None else 'UNKNOWN'
+                                                for origin in group['targetChoices'])
+                key += (tuple(sorted(origin_kinds)),)
             if key not in seen:
                 seen.add(key)
                 sample.append(row)

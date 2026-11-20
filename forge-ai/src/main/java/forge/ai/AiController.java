@@ -173,6 +173,10 @@ public class AiController {
         return actionTracker == null ? null : actionTracker.referenceFor(actual);
     }
 
+    public Map<String, Object> getTargetChoiceProvenance(final SpellAbility actual) {
+        return actionTracker == null ? null : actionTracker.targetChoiceProvenanceFor(actual);
+    }
+
     /** Land events carry a card identity rather than a spell ability. */
     public AiActionReference getLandActionReference(final long sourceId) {
         return actionTracker == null ? null : actionTracker.landReferenceFor(sourceId);
@@ -186,7 +190,7 @@ public class AiController {
             final String status, final FlatMonteCarloPicker.Result search) {
         final AiDecisionEvent event = recorder.finish(chosen, status, search);
         if (actionTracker == null) { actionTracker = new AiActionTracker(game); }
-        actionTracker.selected(event, chosen);
+        actionTracker.selected(event, chosen, recorder);
         game.fireEvent(event);
     }
 

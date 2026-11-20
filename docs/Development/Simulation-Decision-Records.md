@@ -34,7 +34,7 @@ Engine IDs and event indices use 64-bit integers; composed decision/action IDs r
 
 ## Observed subordinate target-planning choices
 
-This is the first increment of priority 1, not completion of the subordinate-choice milestone. New `AI_DECISION.decision` objects declare `subordinateChoiceSchemaVersion: 1`, `subordinateChoiceCoverage: OBSERVED_HEURISTIC_TARGET_POOLS_V1`, and a `subordinateChoices` array. The records remain inside the parent decision because the observed operations occur during candidate evaluation, before action IDs exist. No extra engine events are emitted or reordered. Full and filtered output retain identical choice data, and exports preserve it within the existing decision object.
+Priority 1 remains in progress. New `AI_DECISION.decision` objects declare `subordinateChoiceSchemaVersion: 1`, `subordinateChoiceCoverage: OBSERVED_HEURISTIC_TARGET_POOLS_V1`, and a `subordinateChoices` array. The records remain inside the parent decision because the observed operations occur during candidate evaluation, before action IDs exist. No extra engine events are emitted or reordered. Full and filtered output retain identical choice data, and exports preserve it within the existing decision object.
 
 The adapters wrap existing chooser calls in `DestroyAi` and `DamageDealAi`. They observe the list already passed to that chooser and invoke the same chooser once on the same original list. They do not enumerate legal actions, rerun the chooser, add randomness, change scoring or apply new legality checks. Pool references are captured before that wrapped call; later mutations of the list or cards cannot change the emitted snapshot.
 
@@ -95,6 +95,27 @@ The remaining priority-1 work is:
 | 4 | X and payment decisions | Record the available observed number/range and actual selections, then actual payment choices with provenance. Do not turn spent mana or partial accounting fields into invented alternatives. |
 
 The separate observation/visibility contract must establish how option identities and card incarnations join to the player's state. Per-option values/reasons, complete legal sets and per-choice rewards are also absent. Priority 1 remains **in progress**, and dataset rows remain `trainingReady=false`.
+
+### Committed target-choice provenance
+
+The 2026-11-20 follow-up links explicit target additions from the observed removal/damage helper results to the committed stored plan. New parent decisions declare `targetChoiceProvenanceSchemaVersion: 1`. A linked `STACK_ADDED` can include a `targetChoiceProvenance` snapshot alongside the unchanged `finalizedTargets`. The snapshot is captured synchronously at event emission and retained in both streams and exported engine-event projections. No additional event is emitted, and no legality check or chooser is rerun.
+
+| Field | Meaning |
+| --- | --- |
+| `schemaVersion`, `coverage` | Version 1, `EXPLICIT_TARGET_ADDITIONS_V1`. Coverage is limited to instrumented additions, not all target choices. |
+| `abilities` | Ordered root/sub-ability prefix aligned with `finalizedTargets.abilities`. Each `abilityId` is the executed ability ID, which can differ from the evaluated ID after copying. |
+| `abilities[].targetChoices` | Ordered prefix aligned with that ability's finalized target slots. An entry is null when no explicit origin is established, or `{choiceId, chooserPlayerId, stage}` when one is established. |
+| `choiceId` | References an existing subordinate choice on this action's parent decision, scoped by run and game. The exact candidate must have been selected. Repeated assessments retain distinct choice IDs. |
+| `chooserPlayerId`, `stage` | The origin's recorded chooser and `CANDIDATE_EVALUATION` stage. This identifies the evaluation that supplied the stored target; it does not claim a new execution-time choice occurred. |
+| `abilitiesTruncated`, `abilities[].targetsTruncated` | Explicit prefix flags: at most 128 ability groups and 256 target slots per group. Omitted slots remain unobserved. |
+
+The AI passes a token for the particular helper invocation to the existing target-addition site. The token can establish provenance once; it cannot attribute repeated additions by matching an object ID. Substituted targets, uninstrumented additions, known delegation and changed incarnations remain unknown. Direct player preferences do not become target origins. Without an observed stack addition, no committed-stack snapshot is inferred.
+
+`TargetChoices` supplies an opaque, lazily allocated identity for its ordered list state. Its engine clone preserves that identity until a mutation attempt, including iterator writes, invalidates it. Resetting targets or removing and readding the same object cannot restore an origin by value equality. Divided allocations do not change this marker: it describes ordered target identities, not allocation choices. The marker contains no IDs, metadata, or references to an AI, recorder, game or previous plan. All choice data lives in a bounded AI-owned registry. On selection, only origins belonging to that exact candidate and its current plan are retained; a different candidate sharing the same target list does not inherit an origin. The action tracker releases its registry when the attempt terminates or the observation session retires.
+
+A null origin means unknown, not that no decision occurred. A missing/null provenance snapshot means unavailable/legacy data. The exporter checks declarations, prefix flags, ability/slot alignment, chooser/stage, exact selected-candidate ownership, and the committed identity including card incarnation. Identity comparison validates an explicit link; it never creates one. Reports count `EXPLICIT_EVALUATION_ADDITION`, `UNKNOWN` and `TRUNCATED` target slots separately from earlier pool-presence metrics. Dataset rows remain `trainingReady=false`.
+
+Remaining scope includes new execution-time selections, delegated choice records, retargeting, effect copies/triggers, other handlers and removal special branches, mode/X/payment choices, and the observation-state identity contract. This closes recommendation-to-commit attribution for unchanged plans at the instrumented additions; it does not complete target-choice coverage or priority 1.
 
 ## Selected action execution
 

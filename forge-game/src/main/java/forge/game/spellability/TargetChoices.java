@@ -19,6 +19,8 @@ package forge.game.spellability;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Iterator;
+import java.util.ListIterator;
 import java.util.Map;
 
 import com.google.common.collect.ForwardingList;
@@ -46,6 +48,16 @@ public class TargetChoices extends ForwardingList<GameObject> implements Cloneab
 
     private final FCollection<GameObject> targets = new FCollection<>();
 
+    // Optional observational identity of the ordered target list. No engine objects or wire IDs.
+    // Clones share an unchanged state's identity; every mutation attempt invalidates it.
+    private transient Object selectionStateIdentity;
+
+    /** Opaque ordered-list identity for observers; excludes divided-allocation accounting. */
+    public final Object getSelectionStateIdentity() {
+        if (selectionStateIdentity == null) { selectionStateIdentity = new Object(); }
+        return selectionStateIdentity;
+    }
+
     private final Map<Card, Player> cardControllers = Maps.newHashMap();
 
     private final Map<GameObject, Integer> dividedMap = Maps.newHashMap();
@@ -55,6 +67,7 @@ public class TargetChoices extends ForwardingList<GameObject> implements Cloneab
     }
 
     public final boolean add(final GameObject o) {
+        selectionStateIdentity = null;
         if (o instanceof Player || o instanceof Card || o instanceof SpellAbility) {
             if (o instanceof Card c) {
                 cardControllers.put(c, c.getController());
@@ -66,6 +79,7 @@ public class TargetChoices extends ForwardingList<GameObject> implements Cloneab
 
     @Override
     public boolean removeAll(Collection<?> collection) {
+        selectionStateIdentity = null;
         boolean result = super.removeAll(collection);
         for (Object e : collection) {
             this.dividedMap.remove(e);
@@ -78,6 +92,7 @@ public class TargetChoices extends ForwardingList<GameObject> implements Cloneab
 
     @Override
     public boolean remove(Object object) {
+        selectionStateIdentity = null;
         boolean result = super.remove(object);
         dividedMap.remove(object);
         cardControllers.remove(object);
@@ -125,6 +140,7 @@ public class TargetChoices extends ForwardingList<GameObject> implements Cloneab
     }
 
     public final void replaceTargetCard(final Card old, final CardCollectionView replace) {
+        selectionStateIdentity = null;
         targets.remove(old);
         targets.addAll(replace);
     }
@@ -135,11 +151,65 @@ public class TargetChoices extends ForwardingList<GameObject> implements Cloneab
         tc.targets.addAll(targets);
         tc.dividedMap.putAll(dividedMap);
         tc.cardControllers.putAll(cardControllers);
+        tc.selectionStateIdentity = selectionStateIdentity;
         return tc;
     }
     @Override
     protected List<GameObject> delegate() {
         return targets;
+    }
+
+    @Override public void add(int index, GameObject target) {
+        selectionStateIdentity = null;
+        super.add(index, target);
+    }
+    @Override public boolean addAll(Collection<? extends GameObject> values) {
+        selectionStateIdentity = null;
+        return super.addAll(values);
+    }
+    @Override public boolean addAll(int index, Collection<? extends GameObject> values) {
+        selectionStateIdentity = null;
+        return super.addAll(index, values);
+    }
+    @Override public GameObject set(int index, GameObject target) {
+        selectionStateIdentity = null;
+        return super.set(index, target);
+    }
+    @Override public GameObject remove(int index) {
+        selectionStateIdentity = null;
+        return super.remove(index);
+    }
+    @Override public boolean retainAll(Collection<?> values) {
+        selectionStateIdentity = null;
+        return super.retainAll(values);
+    }
+    @Override public void clear() {
+        selectionStateIdentity = null;
+        super.clear();
+    }
+
+    @Override public Iterator<GameObject> iterator() {
+        final Iterator<GameObject> source = super.iterator();
+        return new Iterator<>() {
+            @Override public boolean hasNext() { return source.hasNext(); }
+            @Override public GameObject next() { return source.next(); }
+            @Override public void remove() { selectionStateIdentity = null; source.remove(); }
+        };
+    }
+    @Override public ListIterator<GameObject> listIterator() { return listIterator(0); }
+    @Override public ListIterator<GameObject> listIterator(int index) {
+        final ListIterator<GameObject> source = super.listIterator(index);
+        return new ListIterator<>() {
+            @Override public boolean hasNext() { return source.hasNext(); }
+            @Override public GameObject next() { return source.next(); }
+            @Override public boolean hasPrevious() { return source.hasPrevious(); }
+            @Override public GameObject previous() { return source.previous(); }
+            @Override public int nextIndex() { return source.nextIndex(); }
+            @Override public int previousIndex() { return source.previousIndex(); }
+            @Override public void remove() { selectionStateIdentity = null; source.remove(); }
+            @Override public void set(GameObject value) { selectionStateIdentity = null; source.set(value); }
+            @Override public void add(GameObject value) { selectionStateIdentity = null; source.add(value); }
+        };
     }
 
     @Override

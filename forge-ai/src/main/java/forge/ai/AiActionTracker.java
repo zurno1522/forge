@@ -33,6 +33,7 @@ public final class AiActionTracker implements EventEmissionObserver {
         private int activationsBefore;
         private Long executedAbilityId;
         private Long stackId;
+        private AiTargetProvenance targetProvenance;
 
         private Attempt(final Map<String, Object> identity) { this.identity = identity; }
     }
@@ -48,7 +49,7 @@ public final class AiActionTracker implements EventEmissionObserver {
 
     @Override public void close() { retire(); }
 
-    synchronized void selected(final AiDecisionEvent event, final List<SpellAbility> chosen) {
+    synchronized void selected(final AiDecisionEvent event, final List<SpellAbility> chosen, final AiDecisionRecorder recorder) {
         if (retired || !game.isRecordingAiDecisions() || chosen == null) { return; }
         final List<?> selected = (List<?>) event.data().get("selectedActions");
         for (int index = 0; index < chosen.size(); index++) {
@@ -62,6 +63,7 @@ public final class AiActionTracker implements EventEmissionObserver {
             }
             final Attempt attempt = new Attempt(identity);
             attempt.aliases.add(chosen.get(index));
+            attempt.targetProvenance = recorder.targetProvenance(chosen.get(index));
             actions.add(attempt);
         }
     }
@@ -100,6 +102,11 @@ public final class AiActionTracker implements EventEmissionObserver {
 
     synchronized AiActionReference referenceFor(final SpellAbility actual) {
         return reference(startedAttempt(actual));
+    }
+
+    synchronized Map<String, Object> targetChoiceProvenanceFor(final SpellAbility actual) {
+        final Attempt attempt = startedAttempt(actual);
+        return attempt == null ? null : attempt.targetProvenance.capture(actual);
     }
 
     synchronized AiActionReference landReferenceFor(final long sourceId) {

@@ -53,11 +53,19 @@ public final class TargetChoiceProbe extends AITest {
                     recorder.beginAssessment(sa);
                     context.set(recorder);
                     try {
-                        final Card chosen = AiTargetChoiceRecorder.choose(ai, sa, pool, "DESTROY_REMOVAL_POOL",
+                        sa.resetTargets();
+                        final var selection = AiTargetChoiceRecorder.select(ai, sa, pool, "DESTROY_REMOVAL_POOL",
                                 options -> ComputerUtilCard.getBestRemovalTargetAI(ai, options));
+                        final Card chosen = selection.value();
                         if (chosen != expected) { throw new IllegalStateException("Ranking result changed"); }
+                        if (!selection.addToTargets(sa)) { throw new IllegalStateException("Target addition failed"); }
                         recorder.evaluated(sa, "WillPlay");
                         consumed = recorder.finish(List.of(sa), "COMPLETED", null);
+                        final var provenance = recorder.targetProvenance(sa).capture(sa);
+                        final var group = (Map<?, ?>) ((List<?>) provenance.get("abilities")).get(0);
+                        if ((((List<?>) group.get("targetChoices")).get(0) != null) != enabled) {
+                            throw new IllegalStateException("Target origin did not match capture mode");
+                        }
                         if (((List<?>) consumed.data().get("subordinateChoices")).size() != (enabled ? 1 : 0)) {
                             throw new IllegalStateException("Capture mode did not match payload");
                         }

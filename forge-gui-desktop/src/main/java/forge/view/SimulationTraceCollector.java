@@ -92,12 +92,14 @@ final class SimulationTraceCollector {
         // Resolve tracker identity before taking our monitor. Tracker emission already holds
         // its own monitor; no collector -> tracker lock edge may exist.
         AiActionReference action = null;
+        Map<String, Object> targetChoiceProvenance = null;
         if (event instanceof GameEventSpellAbilityCast cast) {
             final SpellAbilityStackInstance live = findStackItem(cast.si().getId());
             final SpellAbility actual = live == null ? null : live.getSpellAbility();
             if (actual != null && actual.getActivatingPlayer() != null
                     && actual.getActivatingPlayer().getController() instanceof PlayerControllerAi ai) {
                 action = ai.getAi().getActionReference(actual);
+                targetChoiceProvenance = ai.getAi().getTargetChoiceProvenance(actual);
             }
         } else if (event instanceof GameEventLandPlayed land) {
             final Player player = land.player() == null ? null : game.getPlayer(land.player());
@@ -105,10 +107,11 @@ final class SimulationTraceCollector {
                 action = ai.getAi().getLandActionReference(land.land().getId());
             }
         }
-        synchronized (this) { captureGameEvent(event, action); }
+        synchronized (this) { captureGameEvent(event, action, targetChoiceProvenance); }
     }
 
-    private void captureGameEvent(final GameEvent event, final AiActionReference action) {
+    private void captureGameEvent(final GameEvent event, final AiActionReference action,
+            final Map<String, Object> targetChoiceProvenance) {
         if (closed || failure != null) {
             return;
         }
@@ -136,7 +139,7 @@ final class SimulationTraceCollector {
             } else if (event instanceof GameEventTurnEnded) {
                 turnEnded();
             } else if (event instanceof GameEventSpellAbilityCast e) {
-                stackAdded(e, action);
+                stackAdded(e, action, targetChoiceProvenance);
             } else if (event instanceof GameEventSpellResolved e) {
                 stackResolved(e);
             } else if (event instanceof GameEventSpellRemovedFromStack e) {
@@ -434,7 +437,8 @@ final class SimulationTraceCollector {
         write(record);
     }
 
-    private void stackAdded(final GameEventSpellAbilityCast event, final AiActionReference action) throws IOException {
+    private void stackAdded(final GameEventSpellAbilityCast event, final AiActionReference action,
+            final Map<String, Object> targetChoiceProvenance) throws IOException {
         final StackItemView item = event.si();
         final SpellAbilityStackInstance live = findStackItem(item.getId());
         if (action == null) { stackActions.remove(item.getId()); }
@@ -450,6 +454,7 @@ final class SimulationTraceCollector {
         record.put("player", playerRef(item.getActivatingPlayer()));
         record.put("source", cardRef(item.getSourceCard()));
         record.put("finalizedTargets", SimulationTargetSnapshot.capture(live, game.getStack()));
+        if (action != null) { record.put("targetChoiceProvenance", targetChoiceProvenance); }
         record.put("finalizedModes", SimulationChoiceSnapshot.modes(live));
         record.put("finalizedX", SimulationChoiceSnapshot.x(live));
         record.put("finalizedPayments", SimulationChoiceSnapshot.payments(live));
@@ -937,7 +942,7 @@ final class SimulationTraceCollector {
             // Preserve the existing event and its position without exporting privileged cast details.
             final Map<String, Object> projection = new LinkedHashMap<>();
             for (final String key : List.of("type", "game", "eventIndex", "turn", "phase", "decisionId", "actionId",
-                    "stackId", "abilityId", "fizzled", "clearedActions", "finalizedTargets", "finalizedModes", "finalizedX", "finalizedPayments")) {
+                    "stackId", "abilityId", "fizzled", "clearedActions", "finalizedTargets", "finalizedModes", "finalizedX", "finalizedPayments", "targetChoiceProvenance")) {
                 if (record.containsKey(key)) { projection.put(key, record.get(key)); }
             }
             decisionWriter.write(projection);

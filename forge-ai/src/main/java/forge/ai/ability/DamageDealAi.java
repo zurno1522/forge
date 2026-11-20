@@ -320,7 +320,7 @@ public class DamageDealAi extends DamageAiBase {
      *            a boolean.
      * @return a {@link forge.game.card.Card} object.
      */
-    private Card dealDamageChooseTgtC(final Player ai, final SpellAbility sa, final int d, final boolean noPrevention,
+    private AiTargetChoiceRecorder.Selection<Card> dealDamageChooseTgtC(final Player ai, final SpellAbility sa, final int d, final boolean noPrevention,
             final Player pl, final boolean mandatory) {
         // wait until stack is empty (prevents duplicate kills)
         if (!sa.isTrigger() && !ai.getGame().getStack().isEmpty()) {
@@ -329,7 +329,7 @@ public class DamageDealAi extends DamageAiBase {
             //      (ComputerUtil.filterCreaturesThatWillDieThisTurn), but other removal APIs don't yet (e.g. curse
             //      pumps, -1/-1 counters, gain control). Also missing: determine if something above the earlier removal
             //      on the stack invalidates it (shroud effect, pump against damage) so a new removal can/should be applied.
-            //return null;
+            //return AiTargetChoiceRecorder.unobserved(null);
         }
         final TargetRestrictions tgt = sa.getTargetRestrictions();
         final Player activator = sa.getActivatingPlayer();
@@ -352,13 +352,13 @@ public class DamageDealAi extends DamageAiBase {
         // Try not to target anything which will already be dead by the time the spell resolves
         killables = ComputerUtil.filterCreaturesThatWillDieThisTurn(ai, killables);
 
-        Card targetCard = null;
+        AiTargetChoiceRecorder.Selection<Card> targetCard = AiTargetChoiceRecorder.unobserved(null);
         if (pl.isOpponentOf(ai) && activator.equals(ai) && !killables.isEmpty()) {
-            return AiTargetChoiceRecorder.choose(ai, sa, killables, "DAMAGE_KILLABLES", pool -> ComputerUtilCard.getBestRemovalTargetAI(ai, pool));
+            return AiTargetChoiceRecorder.select(ai, sa, killables, "DAMAGE_KILLABLES", pool -> ComputerUtilCard.getBestRemovalTargetAI(ai, pool));
         }
 
         if (!mandatory) {
-            return null;
+            return AiTargetChoiceRecorder.unobserved(null);
         }
 
         // try unfiltered now
@@ -367,16 +367,16 @@ public class DamageDealAi extends DamageAiBase {
 
         if (!hPlay.isEmpty()) {
             if (pl.isOpponentOf(ai) && activator.equals(ai)) {
-                targetCard = AiTargetChoiceRecorder.choose(ai, sa, controlledByOpps, "DAMAGE_MANDATORY_OPPONENT_POOL", pool -> ComputerUtilCard.getBestRemovalTargetAI(ai, pool));
+                targetCard = AiTargetChoiceRecorder.select(ai, sa, controlledByOpps, "DAMAGE_MANDATORY_OPPONENT_POOL", pool -> ComputerUtilCard.getBestRemovalTargetAI(ai, pool));
             }
-            if (targetCard == null) {
-                targetCard = AiTargetChoiceRecorder.choose(ai, sa, hPlay, "DAMAGE_MANDATORY_FALLBACK_POOL", ComputerUtilCard::getWorstCreatureAI);
+            if (targetCard.value() == null) {
+                targetCard = AiTargetChoiceRecorder.select(ai, sa, hPlay, "DAMAGE_MANDATORY_FALLBACK_POOL", ComputerUtilCard::getWorstCreatureAI);
             }
 
             return targetCard;
         }
 
-        return null;
+        return AiTargetChoiceRecorder.unobserved(null);
     }
 
     /**
@@ -394,7 +394,7 @@ public class DamageDealAi extends DamageAiBase {
      *            a boolean.
      * @return a {@link forge.game.card.Card} object.
      */
-    private Card dealDamageChooseTgtPW(final Player ai, final SpellAbility sa, final int d, final boolean noPrevention,
+    private AiTargetChoiceRecorder.Selection<Card> dealDamageChooseTgtPW(final Player ai, final SpellAbility sa, final int d, final boolean noPrevention,
                                        final Player pl, final boolean mandatory) {
         final TargetRestrictions tgt = sa.getTargetRestrictions();
         final Player activator = sa.getActivatingPlayer();
@@ -412,18 +412,18 @@ public class DamageDealAi extends DamageAiBase {
 
         // We can kill a planeswalker, so go for it
         if (pl.isOpponentOf(ai) && activator.equals(ai) && !killables.isEmpty()) {
-            return AiTargetChoiceRecorder.choose(ai, sa, killables, "DAMAGE_KILLABLE_PLANESWALKERS", ComputerUtilCard::getBestPlaneswalkerAI);
+            return AiTargetChoiceRecorder.select(ai, sa, killables, "DAMAGE_KILLABLE_PLANESWALKERS", ComputerUtilCard::getBestPlaneswalkerAI);
         }
 
         // We can hurt a planeswalker, so rank the one which is the best target
         if (!hPlay.isEmpty() && pl.isOpponentOf(ai) && activator.equals(ai)) {
-            return AiTargetChoiceRecorder.choose(ai, sa, hPlay, "DAMAGE_PLANESWALKER_POOL", pool -> {
+            return AiTargetChoiceRecorder.select(ai, sa, hPlay, "DAMAGE_PLANESWALKER_POOL", pool -> {
                 Card pw = ComputerUtilCard.getBestPlaneswalkerToDamage(pool);
                 return pw == null && mandatory ? pool.get(0) : pw;
             });
         }
 
-        return null;
+        return AiTargetChoiceRecorder.unobserved(null);
     }
 
     private List<Card> getTargetableCards(Player ai, SpellAbility sa, Player pl, TargetRestrictions tgt, Player activator, Card source, Game game) {
@@ -590,9 +590,10 @@ public class DamageDealAi extends DamageAiBase {
 
             if (tgt.canTgtPlaneswalker()) {
                 // We can damage planeswalkers with this, consider targeting.
-                Card c = dealDamageChooseTgtPW(ai, sa, dmg, noPrevention, enemy, false);
+                final AiTargetChoiceRecorder.Selection<Card> targetSelection = dealDamageChooseTgtPW(ai, sa, dmg, noPrevention, enemy, false);
+                Card c = targetSelection.value();
                 if (c != null && !shouldTgtP(ai, sa, dmg, noPrevention)) {
-                    tcs.add(c);
+                    targetSelection.addToTargets(sa);
                     if (divided) {
                         int assignedDamage = ComputerUtilCombat.getEnoughDamageToKill(c, dmg, source, false, noPrevention);
                         assignedDamage = Math.min(dmg, assignedDamage);
@@ -620,7 +621,8 @@ public class DamageDealAi extends DamageAiBase {
                 }
 
                 // look for creature targets; currently also catches planeswalkers that can be killed immediately
-                Card c = dealDamageChooseTgtC(ai, sa, dmg, noPrevention, enemy, false);
+                final AiTargetChoiceRecorder.Selection<Card> targetSelection = dealDamageChooseTgtC(ai, sa, dmg, noPrevention, enemy, false);
+                Card c = targetSelection.value();
                 if (c != null) {
                     //option to hold removal instead only applies for single targeted removal
                     if (sa.isSpell() && !divided && !immediately && sa.getMaxTargets() == 1) {
@@ -628,7 +630,7 @@ public class DamageDealAi extends DamageAiBase {
                             return false;
                         }
                     }
-                    tcs.add(c);
+                    targetSelection.addToTargets(sa);
                     if (divided) {
                         final int assignedDamage = ComputerUtilCombat.getEnoughDamageToKill(c, dmg, source, false, noPrevention);
                         if (assignedDamage <= dmg) {
@@ -648,7 +650,8 @@ public class DamageDealAi extends DamageAiBase {
                 // TODO: add check here if card is about to die from something
                 // on the stack or from taking combat damage
             } else if (tgt.canTgtCreature() || tgt.canTgtPlaneswalker()) {
-                final Card c = dealDamageChooseTgtC(ai, sa, dmg, noPrevention, enemy, mandatory);
+                final AiTargetChoiceRecorder.Selection<Card> targetSelection = dealDamageChooseTgtC(ai, sa, dmg, noPrevention, enemy, mandatory);
+                final Card c = targetSelection.value();
                 if (c != null) {
                     //option to hold removal instead only applies for single targeted removal
                     if (!immediately && sa.getMaxTargets() == 1 && !divided) {
@@ -656,10 +659,10 @@ public class DamageDealAi extends DamageAiBase {
                             return false;
                         }
                     }
-                    tcs.add(c);
+                    targetSelection.addToTargets(sa);
                     if (divided) {
                         // if only other legal targets hurt own stuff just dump all dmg into this
-                        final Card nextTarget = dealDamageChooseTgtC(ai, sa, dmg, noPrevention, enemy, mandatory);
+                        final Card nextTarget = dealDamageChooseTgtC(ai, sa, dmg, noPrevention, enemy, mandatory).value();
                         boolean dump = false;
                         if (nextTarget != null && nextTarget.getController().equals(ai)) {
                             dump = true;
@@ -826,9 +829,10 @@ public class DamageDealAi extends DamageAiBase {
 
         while (sa.canAddMoreTarget()) {
             if (tgt.canTgtPlaneswalker()) {
-                final Card c = dealDamageChooseTgtPW(ai, sa, dmg, noPrevention, ai, true);
+                final AiTargetChoiceRecorder.Selection<Card> targetSelection = dealDamageChooseTgtPW(ai, sa, dmg, noPrevention, ai, true);
+                final Card c = targetSelection.value();
                 if (c != null) {
-                    sa.getTargets().add(c);
+                    targetSelection.addToTargets(sa);
                     if (divided) {
                         sa.addDividedAllocation(c, dmg);
                         break;
@@ -839,9 +843,10 @@ public class DamageDealAi extends DamageAiBase {
 
             // TODO: This currently also catches planeswalkers that can be killed (still necessary? Or can be removed?)
             if (tgt.canTgtCreature()) {
-                final Card c = dealDamageChooseTgtC(ai, sa, dmg, noPrevention, ai, true);
+                final AiTargetChoiceRecorder.Selection<Card> targetSelection = dealDamageChooseTgtC(ai, sa, dmg, noPrevention, ai, true);
+                final Card c = targetSelection.value();
                 if (c != null) {
-                    sa.getTargets().add(c);
+                    targetSelection.addToTargets(sa);
                     if (divided) {
                         sa.addDividedAllocation(c, dmg);
                         break;

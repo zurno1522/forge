@@ -109,6 +109,20 @@ def target_pool_fixture():
     return rows
 
 
+def target_provenance_fixture():
+    rows = target_pool_fixture()
+    decision = rows[2]['decision']
+    decision['targetChoiceProvenanceSchemaVersion'] = 1
+    choice = decision['subordinateChoices'][0]
+    choice['purpose'] = 'TARGET_RECOMMENDATION'
+    rows[4]['finalizedTargets'] = dict(schemaVersion=1, abilities=[dict(abilityId=rows[4]['abilityId'], usesTargeting=True,
+                                                       targets=[copy.deepcopy(choice['selected'])])])
+    rows[4]['targetChoiceProvenance'] = dict(schemaVersion=1, coverage='EXPLICIT_TARGET_ADDITIONS_V1', abilitiesTruncated=False,
+            abilities=[dict(abilityId=rows[4]['abilityId'], targetChoices=[dict(choiceId=choice['choiceId'], chooserPlayerId=0,
+                           stage='CANDIDATE_EVALUATION')], targetsTruncated=False)])
+    return rows
+
+
 class ExportTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
@@ -119,6 +133,87 @@ class ExportTests(unittest.TestCase):
         path=self.root/name
         path.write_text(''.join(json.dumps(r)+'\n' for r in rows))
         return path
+
+    def test_explicit_target_origin_survives_export_and_spooling_without_inferred_origins(self):
+        rows = target_provenance_fixture()
+        # A second equal recommendation exists, but the explicit origin identifies the first invocation.
+        duplicate = copy.deepcopy(rows[2]['decision']['subordinateChoices'][0])
+        duplicate['choiceId'] = 'later-equal-recommendation'
+        rows[2]['decision']['subordinateChoices'].append(duplicate)
+        source = self.write(rows)
+        out = self.root / 'provenance'
+        summary = module.export([source], out)
+        self.assertEqual(summary['committedTargetChoiceOrigins'], {'EXPLICIT_EVALUATION_ADDITION': 1})
+        exported = json.loads((out / 'dataset.jsonl').read_text())
+        provenance = exported['actionExecutions'][0]['engineEvents'][0]['targetChoiceProvenance']
+        self.assertEqual(provenance, rows[4]['targetChoiceProvenance'])
+        self.assertEqual(provenance['abilities'][0]['targetChoices'][0]['choiceId'], 'opaque-choice')
+        self.assertFalse(exported['trainingReady'])
+        self.assertIn('Unknown origins are not inferred', (out / 'coverage.md').read_text())
+        self.assertEqual(module.make_coverage([module.load_run(source)], [exported])['committedTargetChoiceOrigins'],
+                         summary['committedTargetChoiceOrigins'])
+
+    def test_matching_target_without_an_explicit_origin_remains_unknown_and_legacy_is_unavailable(self):
+        for variant in ('unknown', 'unavailable', 'legacy'):
+            rows = target_provenance_fixture()
+            if variant == 'unknown': rows[4]['targetChoiceProvenance']['abilities'][0]['targetChoices'][0] = None
+            elif variant == 'unavailable': rows[4]['targetChoiceProvenance'] = None
+            else:
+                del rows[2]['decision']['targetChoiceProvenanceSchemaVersion']
+                del rows[4]['targetChoiceProvenance']
+            summary = module.export([self.write(rows, variant + '.jsonl')])
+            if variant == 'legacy': self.assertNotIn('committedTargetChoiceOrigins', summary)
+            else:
+                self.assertEqual(summary['committedTargetChoiceOrigins'], {'UNKNOWN': 1} if variant == 'unknown' else {})
+                self.assertEqual(summary['targetChoiceProvenanceSnapshots'], {'OBSERVED' if variant == 'unknown' else 'UNAVAILABLE': 1})
+
+    def test_target_origin_rejects_fabricated_links_identity_mismatches_and_private_fields(self):
+        for mutation in ('choice', 'action', 'chooser', 'stage', 'target', 'ability', 'slot', 'schema', 'bool-schema',
+                         'undeclared', 'missing-targets', 'event', 'private', 'truncation', 'group-truncation', 'preference'):
+            with self.subTest(mutation=mutation):
+                rows = target_provenance_fixture()
+                snapshot = rows[4]['targetChoiceProvenance']; group = snapshot['abilities'][0]; origin = group['targetChoices'][0]
+                if mutation == 'choice': origin['choiceId'] = 'invented'
+                elif mutation == 'action': rows[2]['decision']['subordinateChoices'][0]['candidateActionId'] = None
+                elif mutation == 'chooser': origin['chooserPlayerId'] = True
+                elif mutation == 'stage': origin['stage'] = 'EXECUTION'
+                elif mutation == 'target': rows[4]['finalizedTargets']['abilities'][0]['targets'][0]['gameTimestamp'] += 1
+                elif mutation == 'ability': group['abilityId'] += 1
+                elif mutation == 'slot': group['targetChoices'] = []
+                elif mutation == 'schema': snapshot['schemaVersion'] = 2
+                elif mutation == 'bool-schema': snapshot['schemaVersion'] = True
+                elif mutation == 'undeclared': del rows[2]['decision']['targetChoiceProvenanceSchemaVersion']
+                elif mutation == 'missing-targets': rows[4]['finalizedTargets'] = None
+                elif mutation == 'event': rows[6]['targetChoiceProvenance'] = rows[4].pop('targetChoiceProvenance')
+                elif mutation == 'private': origin['prompt'] = 'hidden information'
+                elif mutation == 'truncation': group['targetsTruncated'] = True
+                elif mutation == 'group-truncation': snapshot['abilitiesTruncated'] = True
+                elif mutation == 'preference':
+                    choice = rows[2]['decision']['subordinateChoices'][0]
+                    choice['boundary'] = 'DAMAGE_OPPONENT_POOL'; choice['purpose'] = 'OPPONENT_PREFERENCE'
+                with self.assertRaises(module.InvalidData):
+                    module.export([self.write(rows, mutation + '.jsonl')])
+
+    def test_target_provenance_bounds_have_explicit_unknown_and_truncated_coverage(self):
+        rows = target_provenance_fixture()
+        target = rows[4]['finalizedTargets']['abilities'][0]['targets'][0]
+        rows[4]['finalizedTargets']['abilities'][0]['targets'] = [copy.deepcopy(target) for _ in range(257)]
+        group = rows[4]['targetChoiceProvenance']['abilities'][0]
+        group.update(targetChoices=[group['targetChoices'][0]] + [None] * 255, targetsTruncated=True)
+        summary = module.export([self.write(rows)])
+        self.assertEqual(summary['committedTargetChoiceOrigins'], {'EXPLICIT_EVALUATION_ADDITION': 1, 'UNKNOWN': 255, 'TRUNCATED': 1})
+
+    def test_examples_distinguish_unknown_origins_from_explicit_links_on_equal_target_recommendations(self):
+        inputs = []
+        for index in range(3):
+            rows = target_provenance_fixture()
+            rows[0]['runId'] = 'provenance-' + str(index)
+            if index < 2: rows[4]['targetChoiceProvenance']['abilities'][0]['targetChoices'][0] = None
+            inputs.append(self.write(rows, 'provenance-' + str(index) + '.jsonl'))
+        out = self.root / 'provenance-examples'
+        module.export(inputs, out, examples=2)
+        examples = [json.loads(line) for line in (out / 'examples.jsonl').read_text().splitlines()]
+        self.assertEqual([row['runId'] for row in examples], ['provenance-0', 'provenance-2'])
 
     def test_target_pool_records_export_with_explicit_partial_coverage(self):
         source = self.write(target_pool_fixture())

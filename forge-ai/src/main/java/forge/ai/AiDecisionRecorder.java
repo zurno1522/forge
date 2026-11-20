@@ -28,6 +28,15 @@ final class AiDecisionRecorder {
     private int targetCapturesInFlight;
     private long targetChoicesOmittedByBudget;
     private long interruptedTargetCaptures;
+    private final AiTargetProvenance targetProvenance = new AiTargetProvenance();
+
+    synchronized AiTargetProvenance targetProvenance(final SpellAbility selected) {
+        final java.util.Set<String> allowed = new java.util.HashSet<>();
+        for (final TargetChoice choice : targetChoices) {
+            if (choice.origin.candidate == selected) { allowed.add((String) choice.data.get("choiceId")); }
+        }
+        return targetProvenance.selected(selected, allowed);
+    }
 
     synchronized void captureFailed(final RuntimeException failure) {
         if (!closed && viewer.getGame().isRecordingAiDecisions()) {
@@ -43,9 +52,11 @@ final class AiDecisionRecorder {
 
     final class TargetChoice {
         private final Assessment origin;
+        private final SpellAbility evaluatedAbility;
         private final Map<String, Object> data;
-        private TargetChoice(final Assessment origin, final Map<String, Object> data) {
+        private TargetChoice(final Assessment origin, final SpellAbility evaluatedAbility, final Map<String, Object> data) {
             this.origin = origin;
+            this.evaluatedAbility = evaluatedAbility;
             this.data = data;
         }
 
@@ -73,6 +84,39 @@ final class AiDecisionRecorder {
         }
 
         void captureFailed(final RuntimeException failure) { AiDecisionRecorder.this.captureFailed(failure); }
+
+        TargetAddition prepareAddition(final SpellAbility ability, final GameObject actual, final GameObject returned) {
+            synchronized (AiDecisionRecorder.this) {
+                if (closed || ability != evaluatedAbility
+                        || ability.getTargets().size() >= AiTargetChoiceRecorder.MAX_REFERENCES) { return null; }
+                final var targets = ability.getTargets();
+                final var previous = targetProvenance.before(targets.getSelectionStateIdentity(), targets.size());
+                final boolean delegated = ability.getTargetingPlayer() != null && ability.getTargetingPlayer() != viewer;
+                final var origin = actual == returned && !delegated && ability.getActivatingPlayer() == viewer && data.get("selected") != null
+                        && data.get("selected").equals(AiTargetChoiceRecorder.reference(returned))
+                        && !"OPPONENT_PREFERENCE".equals(data.get("purpose"))
+                        ? new AiTargetProvenance.Origin((String) data.get("choiceId"), viewer.getId(),
+                                AiTargetChoiceRecorder.reference(returned)) : null;
+                return new TargetAddition(targets, previous, origin);
+            }
+        }
+    }
+
+    final class TargetAddition {
+        private final forge.game.spellability.TargetChoices targets;
+        private final List<AiTargetProvenance.Origin> previous;
+        private final AiTargetProvenance.Origin origin;
+        private TargetAddition(final forge.game.spellability.TargetChoices targets,
+                final List<AiTargetProvenance.Origin> previous, final AiTargetProvenance.Origin origin) {
+            this.targets = targets; this.previous = previous; this.origin = origin;
+        }
+        void added() {
+            synchronized (AiDecisionRecorder.this) {
+                if (!closed && targets.size() == previous.size() + 1) {
+                    targetProvenance.added(targets.getSelectionStateIdentity(), previous, origin);
+                }
+            }
+        }
     }
 
     TargetChoice beginTargetChoice(final SpellAbility ability,
@@ -122,7 +166,7 @@ final class AiDecisionRecorder {
                 reserved = false;
                 if (closed) { return null; }
                 choice.put("choiceId", data.get("decisionId") + ":target:" + targetChoices.size());
-                final TargetChoice result = new TargetChoice(origin, choice);
+                final TargetChoice result = new TargetChoice(origin, ability, choice);
                 targetChoices.add(result);
                 return result;
             }
@@ -226,6 +270,7 @@ final class AiDecisionRecorder {
         data.put("selection", "ERROR".equals(status) ? "NO_ACTION" : selected.isEmpty() ? "PASS_PRIORITY" : "PLAY");
         data.put("selectedActions", selected);
         data.put("subordinateChoiceSchemaVersion", 1);
+        data.put("targetChoiceProvenanceSchemaVersion", 1);
         data.put("subordinateChoiceCoverage", "OBSERVED_HEURISTIC_TARGET_POOLS_V1");
         final List<Map<String, Object>> choices = new ArrayList<>();
         for (final TargetChoice choice : targetChoices) {
