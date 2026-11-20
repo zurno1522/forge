@@ -2523,7 +2523,7 @@ public class AiController {
         if (extras.contains(result.choice)) {
             // A discovered play: the heuristics never approved it, so there is nothing for them to re-check. Make sure
             // it is still aimed where the rollouts liked it, and that it can still be paid for.
-            if (result.target != null && !FlatMonteCarloPicker.applyTarget(result.choice, result.target)) {
+            if (result.target != null && !applySearchTarget(result.choice, result.target, AiDecisionRecorder.SearchTargetOperation.DISCOVERED_TARGET)) {
                 return approved.isEmpty() ? null : approved.get(0);
             }
             if (guardProblem(result.choice, null, saveCantrips) != null) {
@@ -2554,20 +2554,20 @@ public class AiController {
                     approvedTargets++;
                 }
             }
-            final boolean willPlay = playDecisionStable(sa) == AiPlayDecision.WillPlay; // asked once: the answer can roll dice
+            final boolean willPlay = revalidateSearchTarget(sa); // asked once: the answer can roll dice
             if (!willPlay && sa == result.choice) {
                 // The heuristics are not deterministic (several of them roll dice, some remember what they planned) and
                 // said yes a moment ago when they approved this play, and the rollouts confirmed it: Monte Carlo's
                 // verdict stands, aimed where it was (a single target, still legal) if the play aims at all.
                 final boolean aimOk = !sa.usesTargeting()
-                        || (result.target == null && approvedTargets == 1 && FlatMonteCarloPicker.applyTarget(sa, approvedTarget));
+                        || (result.target == null && approvedTargets == 1 && applySearchTarget(sa, approvedTarget, AiDecisionRecorder.SearchTargetOperation.RESTORE_APPROVED_TARGET));
                 if (aimOk && isStillCastable(sa) && guardProblem(sa, null, saveCantrips) == null) {
                     return sa;
                 }
             }
             if (willPlay) {
-                if (sa == result.choice && result.target != null && !FlatMonteCarloPicker.applyTarget(sa, result.target)
-                        && playDecisionStable(sa) != AiPlayDecision.WillPlay) {
+                if (sa == result.choice && result.target != null && !applySearchTarget(sa, result.target, AiDecisionRecorder.SearchTargetOperation.ROLLOUT_TARGET_OVERRIDE)
+                        && !revalidateSearchTarget(sa)) {
                     continue; // the other target is no longer legal and the heuristics gave the play up as well
                 }
                 if (guardProblem(sa, null, saveCantrips) != null && !reaimedWithoutProblem(sa, saveCantrips)) {
@@ -2583,11 +2583,25 @@ public class AiController {
     /** Another target for a play the heuristics aimed at a legend the AI already has: the first one the guard accepts. */
     private boolean reaimedWithoutProblem(final SpellAbility sa, final boolean saveCantrips) {
         for (final GameObject target : FlatMonteCarloPicker.alternativeTargets(player, sa, 3)) {
-            if (FlatMonteCarloPicker.applyTarget(sa, target) && guardProblem(sa, null, saveCantrips) == null) {
+            if (applySearchTarget(sa, target, AiDecisionRecorder.SearchTargetOperation.GUARD_REAIM) && guardProblem(sa, null, saveCantrips) == null) {
                 return true;
             }
         }
         return false;
+    }
+
+    private boolean applySearchTarget(final SpellAbility sa, final GameObject target,
+            final AiDecisionRecorder.SearchTargetOperation operation) {
+        final AiDecisionRecorder recorder = decisionRecorder;
+        return recorder == null ? FlatMonteCarloPicker.applyTarget(sa, target)
+                : recorder.searchTargets(sa, operation, target, () -> FlatMonteCarloPicker.applyTarget(sa, target));
+    }
+
+    private boolean revalidateSearchTarget(final SpellAbility sa) {
+        final AiDecisionRecorder recorder = decisionRecorder;
+        return recorder == null ? playDecisionStable(sa) == AiPlayDecision.WillPlay
+                : recorder.searchTargets(sa, AiDecisionRecorder.SearchTargetOperation.HEURISTIC_REVALIDATION, null,
+                        () -> playDecisionStable(sa) == AiPlayDecision.WillPlay);
     }
 
     /** Forces Monte Carlo on or off for this player only (null: follow the game setting). Used for A/B comparisons. */

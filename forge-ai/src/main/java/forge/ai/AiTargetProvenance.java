@@ -12,8 +12,14 @@ import java.util.Set;
 
 /** Bounded AI-owned origins of explicit additions to an unchanged ordered target plan. */
 final class AiTargetProvenance {
-    record Origin(String choiceId, long chooserPlayerId, Map<String, Object> selected) { }
+    record Origin(String choiceId, long chooserPlayerId, Map<String, Object> selected,
+                  Integer abilityIndex, Integer targetIndex) {
+        Origin(String choiceId, long chooserPlayerId, Map<String, Object> selected) {
+            this(choiceId, chooserPlayerId, selected, null, null);
+        }
+    }
     private final Map<Object, List<Origin>> states = new IdentityHashMap<>();
+    private int schemaVersion = 1;
 
     List<Origin> before(final Object state, final int size) {
         final List<Origin> known = states.get(state);
@@ -25,8 +31,13 @@ final class AiTargetProvenance {
         states.put(state, Collections.unmodifiableList(origins));
     }
 
-    AiTargetProvenance selected(final SpellAbility root, final Set<String> allowedChoices) {
+    void applied(final Object state, final List<Origin> origins) {
+        states.put(state, List.copyOf(origins));
+    }
+
+    AiTargetProvenance selected(final SpellAbility root, final Set<String> allowedChoices, final int version) {
         final AiTargetProvenance result = new AiTargetProvenance();
+        result.schemaVersion = version;
         if (states.isEmpty()) { return result; }
         int groups = 0;
         for (SpellAbility sa = root; sa != null && groups++ < AiTargetChoiceRecorder.MAX_CHOICES; sa = sa.getSubAbility()) {
@@ -53,9 +64,17 @@ final class AiTargetProvenance {
             for (int i = 0; i < count; i++) {
                 final Origin origin = known == null || i >= known.size() ? null : known.get(i);
                 // The target object itself may have changed incarnation without a list mutation.
-                origins.add(origin != null && origin.selected().equals(AiTargetChoiceRecorder.reference(targets.get(i)))
-                        ? Map.of("choiceId", origin.choiceId(), "chooserPlayerId", origin.chooserPlayerId(),
-                                "stage", "CANDIDATE_EVALUATION") : null);
+                Map<String, Object> reference = null;
+                if (origin != null && origin.selected().equals(AiTargetChoiceRecorder.reference(targets.get(i)))) {
+                    if (origin.abilityIndex() == null) {
+                        reference = Map.of("choiceId", origin.choiceId(), "chooserPlayerId", origin.chooserPlayerId(),
+                                "stage", "CANDIDATE_EVALUATION");
+                    } else if (origin.abilityIndex() == abilities.size() && origin.targetIndex() == i) {
+                        reference = Map.of("choiceId", origin.choiceId(), "chooserPlayerId", origin.chooserPlayerId(),
+                                "stage", "SEARCH_TARGET_APPLICATION", "abilityIndex", origin.abilityIndex(), "targetIndex", i);
+                    }
+                }
+                origins.add(reference);
             }
             final Map<String, Object> group = new LinkedHashMap<>();
             group.put("abilityId", current.getId());
@@ -63,7 +82,8 @@ final class AiTargetProvenance {
             group.put("targetsTruncated", count < targets.size());
             abilities.add(group);
         }
-        return Map.of("schemaVersion", 1, "coverage", "EXPLICIT_TARGET_ADDITIONS_V1",
+        return Map.of("schemaVersion", schemaVersion, "coverage", schemaVersion == 1
+                        ? "EXPLICIT_TARGET_ADDITIONS_V1" : "EXPLICIT_TARGET_OPERATIONS_V2",
                 "abilities", abilities, "abilitiesTruncated", current != null);
     }
 }

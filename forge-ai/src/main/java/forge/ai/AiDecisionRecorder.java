@@ -47,7 +47,165 @@ final class AiDecisionRecorder {
         for (final TargetChoice choice : targetChoices) {
             if (choice.origin.candidate == selected) { allowed.add((String) choice.data.get("choiceId")); }
         }
-        return targetProvenance.selected(selected, allowed);
+        for (final SearchTargetApplication application : searchTargetApplications) {
+            if (application.candidate == selected) { allowed.add((String) application.record.get("choiceId")); }
+        }
+        return targetProvenance.selected(selected, allowed, searchTargetCaptureDeclared ? 2 : 1);
+    }
+
+    enum SearchTargetOperation {
+        HEURISTIC_REVALIDATION, RESTORE_APPROVED_TARGET, ROLLOUT_TARGET_OVERRIDE, DISCOVERED_TARGET, GUARD_REAIM
+    }
+
+    private final List<SearchTargetApplication> searchTargetApplications = new ArrayList<>();
+    private boolean searchTargetCaptureDeclared;
+    private int searchTargetCapturesInFlight;
+    private long searchTargetBudgetOmissions;
+    private long searchTargetInterruptedCaptures;
+
+    /** Wrap only the actual final search application/revalidation, never speculative rollout target changes. */
+    boolean searchTargets(final SpellAbility candidate, final SearchTargetOperation operation, final GameObject requested,
+            final java.util.function.BooleanSupplier callback) {
+        SearchTargetApplication application = null;
+        if (viewer.getGame().isRecordingAiDecisions() && candidate.getHostCard() != null
+                && candidate.getHostCard().getGame() == viewer.getGame()) {
+            try { application = beginSearchTargetApplication(candidate, operation, requested); }
+            catch (RuntimeException failure) { captureFailed(failure); }
+        }
+        final boolean accepted;
+        try { accepted = callback.getAsBoolean(); }
+        catch (RuntimeException | Error failure) {
+            if (application != null) { application.complete("ERROR"); }
+            throw failure;
+        }
+        if (application != null) { application.complete(accepted ? "ACCEPTED" : "DECLINED"); }
+        return accepted;
+    }
+
+    private record SearchPlanGroup(SpellAbility ability, Object state, List<Map<String, Object>> targets,
+                                   boolean truncated) { }
+    private record SearchPlan(List<SearchPlanGroup> groups, boolean truncated) {
+        Map<String, Object> wire() {
+            final List<Map<String, Object>> result = new ArrayList<>();
+            for (final var group : groups) {
+                result.add(Map.of("abilityId", group.ability.getId(), "targets", group.targets, "targetsTruncated", group.truncated));
+            }
+            return Map.of("abilities", result, "abilitiesTruncated", truncated);
+        }
+    }
+
+    private SearchPlan searchPlan(final SpellAbility candidate) {
+        final List<SearchPlanGroup> groups = new ArrayList<>();
+        SpellAbility current = candidate;
+        final java.util.function.BooleanSupplier active = () -> !closed && !Thread.currentThread().isInterrupted()
+                && viewer.getGame().isRecordingAiDecisions();
+        for (; current != null && groups.size() < AiTargetChoiceRecorder.MAX_CHOICES; current = current.getSubAbility()) {
+            final var refs = AiTargetChoiceRecorder.references(current.getTargets(), active);
+            if (refs == null) { return null; }
+            groups.add(new SearchPlanGroup(current, current.getTargets().getSelectionStateIdentity(), refs.values(), refs.truncated()));
+        }
+        return active.getAsBoolean() ? new SearchPlan(groups, current != null) : null;
+    }
+
+    private SearchTargetApplication beginSearchTargetApplication(final SpellAbility candidate,
+            final SearchTargetOperation operation, final GameObject requested) {
+        synchronized (this) {
+            if (closed) { return null; }
+            searchTargetCaptureDeclared = true;
+            if (searchTargetApplications.size() + searchTargetCapturesInFlight >= AiTargetChoiceRecorder.MAX_CHOICES) {
+                searchTargetBudgetOmissions++; return null;
+            }
+            searchTargetCapturesInFlight++;
+        }
+        boolean reserved = true;
+        try {
+            final Card source = candidate.getHostCard();
+            final boolean visible = !source.isFaceDown() && source.getView().canBeShownTo(viewer.getView());
+            final SearchPlan before = visible ? searchPlan(candidate) : null;
+            if (visible && before == null) {
+                synchronized (this) { if (!closed) { searchTargetInterruptedCaptures++; } }
+                return null;
+            }
+            final Map<String, Object> record = new LinkedHashMap<>();
+            record.put("applicationSchemaVersion", 1);
+            record.put("choiceType", "SEARCH_TARGET_APPLICATION");
+            record.put("stage", "SEARCH_TARGET_APPLICATION");
+            record.put("chooserPlayerId", viewer.getId());
+            record.put("candidateAbilityId", candidate.getId());
+            record.put("sourceId", source.getId());
+            record.put("operation", visible ? operation.name() : "MASKED");
+            record.put("optionCoverage", visible ? "OBSERVED_OPERATION_NOT_ALTERNATIVES" : "MASKED");
+            record.put("requestedTarget", visible ? AiTargetChoiceRecorder.reference(requested) : null);
+            record.put("beforeTargets", before == null ? null : before.wire());
+            record.put("afterTargets", null);
+            record.put("changedAbilities", List.of());
+            record.put("status", "INCOMPLETE");
+            synchronized (this) {
+                if (closed) { return null; }
+                record.put("choiceId", data.get("decisionId") + ":search-target:" + searchTargetApplications.size());
+                final var application = new SearchTargetApplication(candidate, record, before, visible);
+                searchTargetApplications.add(application);
+                searchTargetCapturesInFlight--;
+                reserved = false;
+                return application;
+            }
+        } finally {
+            synchronized (this) { if (reserved) { searchTargetCapturesInFlight--; } }
+        }
+    }
+
+    private final class SearchTargetApplication {
+        private final SpellAbility candidate;
+        private final Map<String, Object> record;
+        private SearchPlan before;
+        private final boolean visible;
+        private SearchTargetApplication(SpellAbility candidate, Map<String, Object> record, SearchPlan before, boolean visible) {
+            this.candidate = candidate; this.record = record; this.before = before; this.visible = visible;
+        }
+        void complete(final String status) {
+            try {
+                final SearchPlan after = visible ? searchPlan(candidate) : null;
+                synchronized (AiDecisionRecorder.this) {
+                    if (closed) { return; }
+                    if (visible && after == null) {
+                        record.put("status", "CAPTURE_INTERRUPTED");
+                        searchTargetInterruptedCaptures++;
+                        return;
+                    }
+                    record.put("status", visible ? status : "MASKED");
+                    if (!visible) { return; }
+                    record.put("afterTargets", after.wire());
+                    final List<Integer> changed = new ArrayList<>();
+                    final Map<Object, List<AiTargetProvenance.Origin>> pending = new java.util.IdentityHashMap<>();
+                    for (int i = 0; i < after.groups.size(); i++) {
+                        final var group = after.groups.get(i);
+                        if (i < before.groups.size() && group.ability == before.groups.get(i).ability
+                                && group.state == before.groups.get(i).state) { continue; }
+                        changed.add(i);
+                        // No origin for a declined callback, a different actor, or a delegated target chooser.
+                        if (!"ACCEPTED".equals(status) || group.ability.getActivatingPlayer() != viewer
+                                || group.ability.getTargetingPlayer() != null && group.ability.getTargetingPlayer() != viewer) { continue; }
+                        final List<AiTargetProvenance.Origin> origins = new ArrayList<>();
+                        for (int j = 0; j < group.targets.size(); j++) {
+                            origins.add(new AiTargetProvenance.Origin((String) record.get("choiceId"), viewer.getId(), group.targets.get(j), i, j));
+                        }
+                        pending.put(group.state, origins);
+                    }
+                    record.put("changedAbilities", changed);
+                    pending.forEach(targetProvenance::applied);
+                }
+            } catch (RuntimeException failure) {
+                synchronized (AiDecisionRecorder.this) {
+                    if (!closed) {
+                        record.put("status", "CAPTURE_FAILED");
+                        record.put("afterTargets", null);
+                        record.put("changedAbilities", List.of());
+                    }
+                }
+                captureFailed(failure);
+            }
+            finally { before = null; }
+        }
     }
 
     synchronized void captureFailed(final RuntimeException failure) {
@@ -291,7 +449,7 @@ final class AiDecisionRecorder {
         data.put("selection", "ERROR".equals(status) ? "NO_ACTION" : selected.isEmpty() ? "PASS_PRIORITY" : "PLAY");
         data.put("selectedActions", selected);
         data.put("subordinateChoiceSchemaVersion", 1);
-        data.put("targetChoiceProvenanceSchemaVersion", 1);
+        data.put("targetChoiceProvenanceSchemaVersion", searchTargetCaptureDeclared ? 2 : 1);
         data.put("subordinateChoiceCoverage", "OBSERVED_HEURISTIC_TARGET_POOLS_V1");
         final List<Map<String, Object>> choices = new ArrayList<>();
         for (final TargetChoice choice : targetChoices) {
@@ -309,6 +467,23 @@ final class AiDecisionRecorder {
             choices.add(choice.data);
         }
         data.put("subordinateChoices", choices);
+        if (searchTargetCaptureDeclared) {
+            final List<Map<String, Object>> applications = new ArrayList<>();
+            for (final SearchTargetApplication application : searchTargetApplications) {
+                String actionId = null;
+                if (chosen != null) {
+                    for (int i = 0; i < chosen.size(); i++) {
+                        if (chosen.get(i) == application.candidate) { actionId = (String) selected.get(i).get("actionId"); break; }
+                    }
+                }
+                application.record.put("candidateActionId", actionId);
+                applications.add(application.record);
+            }
+            data.put("searchTargetApplicationSchemaVersion", 1);
+            data.put("searchTargetApplications", applications);
+            data.put("searchTargetApplicationOmissions", Map.of("budget", searchTargetBudgetOmissions,
+                    "interrupted", searchTargetInterruptedCaptures + searchTargetCapturesInFlight));
+        }
         data.put("subordinateChoiceOmissions", Map.of("budget", targetChoicesOmittedByBudget,
                 "interrupted", interruptedTargetCaptures + targetCapturesInFlight));
         data.put("elapsedNanos", System.nanoTime() - started);

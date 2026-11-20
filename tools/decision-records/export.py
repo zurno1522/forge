@@ -65,10 +65,65 @@ def validate_choice_reference(ref):
         require(ref['stackId'] is None or integer(ref['stackId']), 'invalid choice stack identifier')
 
 
+def validate_search_target_applications(d, masked_ids):
+    version = d.get('searchTargetApplicationSchemaVersion')
+    if version is None:
+        require(not any(k in d for k in ('searchTargetApplications', 'searchTargetApplicationOmissions')), 'undeclared search target applications')
+        require(d.get('targetChoiceProvenanceSchemaVersion') != 2, 'search provenance without application declaration')
+        return
+    require(integer(version) and version == 1 and d.get('targetChoiceProvenanceSchemaVersion') == 2, 'invalid search target application declaration')
+    records, omissions = d.get('searchTargetApplications'), d.get('searchTargetApplicationOmissions')
+    require(isinstance(records, list) and len(records) <= 128, 'invalid search application budget')
+    require(isinstance(omissions, dict) and set(omissions) == {'budget', 'interrupted'}
+            and all(integer(v) and v >= 0 for v in omissions.values()), 'invalid search application omissions')
+    actions = {a['actionId']: a for a in d['selectedActions']}
+    seen = {c['choiceId'] for c in d.get('subordinateChoices', [])}
+    operations = {'HEURISTIC_REVALIDATION', 'RESTORE_APPROVED_TARGET', 'ROLLOUT_TARGET_OVERRIDE', 'DISCOVERED_TARGET', 'GUARD_REAIM'}
+    fields = {'applicationSchemaVersion', 'choiceId', 'choiceType', 'stage', 'chooserPlayerId', 'candidateAbilityId', 'sourceId',
+              'operation', 'optionCoverage', 'requestedTarget', 'beforeTargets', 'afterTargets', 'changedAbilities', 'status', 'candidateActionId'}
+    for c in records:
+        require(isinstance(c, dict) and set(c) == fields, 'invalid search application fields')
+        require(integer(c['applicationSchemaVersion']) and c['applicationSchemaVersion'] == 1
+                and c['choiceType'] == c['stage'] == 'SEARCH_TARGET_APPLICATION', 'invalid search application type/stage')
+        require(isinstance(c['choiceId'], str) and c['choiceId'] and c['choiceId'] not in seen, 'duplicate search application id')
+        seen.add(c['choiceId'])
+        require(all(integer(c[k]) for k in ('chooserPlayerId', 'candidateAbilityId', 'sourceId'))
+                and c['chooserPlayerId'] == d['playerId'], 'invalid search application actor/identity')
+        action_id = c['candidateActionId']
+        require(action_id is None or isinstance(action_id, str) and action_id in actions, 'search application lacks selected action')
+        if action_id is not None:
+            require(actions[action_id].get('abilityId') == c['candidateAbilityId'] and actions[action_id]['sourceId'] == c['sourceId'], 'search application selected candidate mismatch')
+        changed = c['changedAbilities']
+        require(isinstance(changed, list) and len(changed) <= 128 and all(integer(v) and v >= 0 for v in changed)
+                and changed == sorted(set(changed)), 'invalid changed search target abilities')
+        if c['operation'] == 'MASKED':
+            require(c['optionCoverage'] == 'MASKED' and c['requestedTarget'] is None and c['beforeTargets'] is None
+                    and c['afterTargets'] is None and not changed and c['status'] in ('MASKED', 'INCOMPLETE'), 'unmasked private search operation')
+            continue
+        require(c['sourceId'] not in masked_ids and c['operation'] in operations
+                and c['optionCoverage'] == 'OBSERVED_OPERATION_NOT_ALTERNATIVES', 'invalid search operation/coverage')
+        require(c['status'] in ('ACCEPTED', 'DECLINED', 'ERROR', 'INCOMPLETE', 'CAPTURE_FAILED', 'CAPTURE_INTERRUPTED'), 'invalid search application status')
+        if c['requestedTarget'] is not None: validate_choice_reference(c['requestedTarget'])
+        require(c['operation'] != 'HEURISTIC_REVALIDATION' or c['requestedTarget'] is None, 'heuristic revalidation claims a requested target')
+        _choices.target_plan(c['beforeTargets'], c['candidateAbilityId'])
+        if c['afterTargets'] is None:
+            require(not changed and (c['status'] == 'CAPTURE_FAILED' or c['status'] == 'CAPTURE_INTERRUPTED' and omissions['interrupted'] > 0
+                    or c['status'] == 'INCOMPLETE' and d['status'] != 'COMPLETED'), 'completed search application lacks result')
+            continue
+        require(c['status'] in ('ACCEPTED', 'DECLINED', 'ERROR'), 'unavailable search application has a result')
+        _choices.target_plan(c['afterTargets'], c['candidateAbilityId'])
+        groups = c['afterTargets']['abilities']
+        require(all(i < len(groups) for i in changed), 'changed search target ability outside result')
+        if c['status'] == 'ACCEPTED' and c['operation'] != 'HEURISTIC_REVALIDATION':
+            require(c['requestedTarget'] is not None and len(changed) == 1
+                    and groups[changed[0]]['targets'] == [c['requestedTarget']] and not groups[changed[0]]['targetsTruncated'], 'accepted target application differs from its request')
+
+
 def validate_subordinate_choices(d, masked_ids):
     if 'targetChoiceProvenanceSchemaVersion' in d:
-        require(integer(d['targetChoiceProvenanceSchemaVersion']) and d['targetChoiceProvenanceSchemaVersion'] == 1
+        require(integer(d['targetChoiceProvenanceSchemaVersion']) and d['targetChoiceProvenanceSchemaVersion'] in (1, 2)
                 and d.get('subordinateChoiceSchemaVersion') == 1, 'invalid target provenance declaration')
+    validate_search_target_applications(d, masked_ids)
     version = d.get('subordinateChoiceSchemaVersion')
     if version is None:
         require(not any(key in d for key in ('subordinateChoices', 'subordinateChoiceCoverage', 'subordinateChoiceOmissions')), 'undeclared subordinate choices')
@@ -321,10 +376,11 @@ def validate_target_provenance(record, action):
     snapshot = record['targetChoiceProvenance']
     if snapshot is None:
         return
-    require(action.get('targetChoiceProvenanceSchemaVersion') == 1, 'undeclared target provenance')
+    require(action.get('targetChoiceProvenanceSchemaVersion') in (1, 2), 'undeclared target provenance')
     require(isinstance(snapshot, dict) and set(snapshot) == {'schemaVersion', 'coverage', 'abilities', 'abilitiesTruncated'}, 'invalid target provenance fields')
-    require(integer(snapshot['schemaVersion']) and snapshot['schemaVersion'] == 1
-            and snapshot['coverage'] == 'EXPLICIT_TARGET_ADDITIONS_V1', 'invalid target provenance schema/coverage')
+    version = snapshot['schemaVersion']
+    require(integer(version) and version == action['targetChoiceProvenanceSchemaVersion']
+            and snapshot['coverage'] == ('EXPLICIT_TARGET_ADDITIONS_V1' if version == 1 else 'EXPLICIT_TARGET_OPERATIONS_V2'), 'invalid target provenance schema/coverage')
     targets = record.get('finalizedTargets')
     require(targets is not None, 'target provenance lacks committed targets')
     groups = snapshot['abilities']
@@ -332,22 +388,35 @@ def validate_target_provenance(record, action):
             and isinstance(snapshot['abilitiesTruncated'], bool)
             and snapshot['abilitiesTruncated'] == (len(groups) < len(targets['abilities'])), 'target provenance ability coverage mismatch')
     choices = action['targetChoiceOrigins']
-    for group, committed in zip(groups, targets['abilities']):
+    for ability_index, (group, committed) in enumerate(zip(groups, targets['abilities'])):
         require(isinstance(group, dict) and set(group) == {'abilityId', 'targetChoices', 'targetsTruncated'}, 'invalid target provenance ability fields')
         require(integer(group['abilityId']) and group['abilityId'] == committed['abilityId'], 'target provenance ability mismatch')
         origins = group['targetChoices']
         require(isinstance(origins, list) and len(origins) == min(256, len(committed['targets']))
                 and isinstance(group['targetsTruncated'], bool)
                 and group['targetsTruncated'] == (len(origins) < len(committed['targets'])), 'target provenance slot coverage mismatch')
-        for origin, target in zip(origins, committed['targets']):
+        for target_index, (origin, target) in enumerate(zip(origins, committed['targets'])):
             if origin is None:
                 continue
-            require(isinstance(origin, dict) and set(origin) == {'choiceId', 'chooserPlayerId', 'stage'}, 'invalid target origin fields')
+            require(isinstance(origin, dict), 'invalid target origin')
+            search_origin = origin.get('stage') == 'SEARCH_TARGET_APPLICATION'
+            fields = {'choiceId', 'chooserPlayerId', 'stage'} | ({'abilityIndex', 'targetIndex'} if search_origin else set())
+            require(set(origin) == fields and (not search_origin or version == 2), 'invalid target origin fields')
             choice_id = origin['choiceId']
             require(isinstance(choice_id, str) and choice_id in choices, 'target origin has no exact selected-candidate choice')
             choice = choices[choice_id]
             require(integer(origin['chooserPlayerId']) and origin['chooserPlayerId'] == choice['chooserPlayerId']
                     and origin['stage'] == choice['stage'], 'target origin chooser/stage mismatch')
+            if search_origin:
+                require(choice.get('choiceType') == 'SEARCH_TARGET_APPLICATION' and choice['status'] == 'ACCEPTED'
+                        and integer(origin['abilityIndex']) and origin['abilityIndex'] == ability_index
+                        and integer(origin['targetIndex']) and origin['targetIndex'] == target_index
+                        and ability_index in choice['changedAbilities'], 'invalid search target origin operation/slot')
+                applied = choice['afterTargets']['abilities']
+                require(ability_index < len(applied) and target_index < len(applied[ability_index]['targets'])
+                        and applied[ability_index]['targets'][target_index] == {k: v for k, v in target.items() if k != 'dividedAmount'}, 'search target origin/committed identity mismatch')
+                continue
+            require(choice.get('choiceType') != 'SEARCH_TARGET_APPLICATION', 'search operation used as evaluation origin')
             require(choice.get('purpose') != 'OPPONENT_PREFERENCE' and choice['boundary'] != 'DAMAGE_OPPONENT_POOL'
                     and choice['selected'] is not None, 'target origin is not an observed target recommendation')
             require(choice['selected'] == {k: v for k, v in target.items() if k != 'dividedAmount'}, 'target origin/committed identity mismatch')
@@ -539,7 +608,9 @@ def load_run(path, *, games=None):
                                 game['actions'][action_id] = dict(identity=identity, events=[], terminal=None, engineEvents=[], stackIdentity=None,
                                         targetChoiceProvenanceSchemaVersion=d.get('targetChoiceProvenanceSchemaVersion'),
                                         targetChoiceOrigins={c['choiceId']: {k: c[k] for k in ('chooserPlayerId', 'stage', 'selected', 'boundary', 'purpose') if k in c}
-                                                             for c in d.get('subordinateChoices', []) if c['candidateActionId'] == action_id})
+                                                             for c in d.get('subordinateChoices', []) if c['candidateActionId'] == action_id}
+                                        | {c['choiceId']: {k: c[k] for k in ('choiceType', 'chooserPlayerId', 'stage', 'status', 'changedAbilities', 'afterTargets')}
+                                           for c in d.get('searchTargetApplications', []) if c['candidateActionId'] == action_id})
                     elif kind == 'AI_ACTION_EXECUTION':
                         accept_execution(record, game)
                     elif kind == 'AI_SUBORDINATE_CHOICE':
@@ -662,6 +733,8 @@ def make_coverage(runs, rows, *, spool=None):
     grouped = {}
     declared_choices = False
     declared_provenance = False
+    search_operations, search_statuses = collections.Counter(), collections.Counter()
+    search_declared = search_count = search_selected = search_budget = search_interrupted = 0
     choice_records = 0
     declared_targeted_actions = 0
     targeted_actions_with_pool_record = 0
@@ -684,7 +757,16 @@ def make_coverage(runs, rows, *, spool=None):
         d = row['decision']
         declared = d.get('subordinateChoiceSchemaVersion') == 1
         declared_choices = declared_choices or declared
-        declared_provenance = declared_provenance or d.get('targetChoiceProvenanceSchemaVersion') == 1
+        declared_provenance = declared_provenance or d.get('targetChoiceProvenanceSchemaVersion') in (1, 2)
+        if d.get('searchTargetApplicationSchemaVersion') == 1:
+            search_declared += 1
+            search_budget += d['searchTargetApplicationOmissions']['budget']
+            search_interrupted += d['searchTargetApplicationOmissions']['interrupted']
+            for application in d['searchTargetApplications']:
+                search_count += 1
+                search_selected += application['candidateActionId'] is not None
+                search_operations[application['operation']] += 1
+                search_statuses[application['status']] += 1
         if declared:
             omissions = d.get('subordinateChoiceOmissions')
             add('targetChoiceCaptureBudgetCoverage', 'DECLARED' if omissions is not None else 'UNAVAILABLE')
@@ -757,13 +839,13 @@ def make_coverage(runs, rows, *, spool=None):
                                       ('finalizedPayments', 'finalizedPaymentSnapshots')):
                     add(metric, 'OBSERVED' if event.get(field) is not None else 'UNAVAILABLE')
                 targets = event.get('finalizedTargets')
-                if d.get('targetChoiceProvenanceSchemaVersion') == 1:
+                if d.get('targetChoiceProvenanceSchemaVersion') in (1, 2):
                     provenance = event.get('targetChoiceProvenance')
                     add('targetChoiceProvenanceSnapshots', 'OBSERVED' if provenance is not None else 'UNAVAILABLE')
                     if provenance is not None:
                         for group in provenance['abilities']:
                             for origin in group['targetChoices']:
-                                add('committedTargetChoiceOrigins', 'EXPLICIT_EVALUATION_ADDITION' if origin is not None else 'UNKNOWN')
+                                add('committedTargetChoiceOrigins', 'UNKNOWN' if origin is None else 'EXPLICIT_SEARCH_APPLICATION' if origin['stage'] == 'SEARCH_TARGET_APPLICATION' else 'EXPLICIT_EVALUATION_ADDITION')
                         if targets is not None:
                             omitted = sum(len(group['targets']) for group in targets['abilities']) - sum(len(group['targetChoices']) for group in provenance['abilities'])
                             counters['committedTargetChoiceOrigins'].update({'TRUNCATED': omitted} if omitted else {})
@@ -881,6 +963,11 @@ def make_coverage(runs, rows, *, spool=None):
         if numeric_domains:
             summary.update(standaloneNumericDomainCoverage=dict(numeric_domains), standaloneNumericMatches=dict(numeric_matches),
                            standaloneNumericValueStates=dict(numeric_values))
+    if search_declared:
+        summary.update(searchTargetDeclaredDecisions=search_declared, searchTargetApplications=search_count,
+                       searchTargetOperationTypes=dict(search_operations), searchTargetApplicationStatuses=dict(search_statuses),
+                       searchTargetApplicationsOnSelectedCandidates=search_selected,
+                       searchTargetApplicationsOmittedByBudget=search_budget, searchTargetApplicationsOmittedDuringCapture=search_interrupted)
     if evaluated_x:
         summary['evaluatedXAssessmentStates'] = dict(evaluated_x)
     summary['limitations'] = [
@@ -1021,6 +1108,12 @@ def report_chunks(summary, runs):
             yield from lines('Numeric domains are observed inputs or heuristic bounds, not reconstructed legal values or mana spent. Outside-prefix/domain returns are retained without changing the AI result.')
     if 'evaluatedXAssessmentStates' in summary:
         yield from counter_line('Evaluated X assessment snapshots: ', 'evaluatedXAssessmentStates')
+    if 'searchTargetApplications' in summary:
+        yield from lines('', '## Search target operations', '',
+                         f"Recorded {summary['searchTargetApplications']} final search operations; {summary['searchTargetApplicationsOnSelectedCandidates']} concern selected candidates. These are actual revalidation/application observations, not complete target alternatives.")
+        yield from counter_line('Operations: ', 'searchTargetOperationTypes')
+        yield from counter_line('Outcomes: ', 'searchTargetApplicationStatuses')
+        yield from lines(f"Capture omissions: {summary['searchTargetApplicationsOmittedByBudget']} by budget, {summary['searchTargetApplicationsOmittedDuringCapture']} interrupted. Accepted operations do not prove execution or strategic value.")
     yield from lines('', '## Reproducibility', '', 'The companion manifest contains exact deck snapshots, deck hashes, input hashes and run metadata. The following summary is readable without the input logs.', '',
                      '| Run | Seed | Pilot | Engine revision | Dirty | Source SHA256 |', '| --- | --- | --- | --- | --- | --- |')
     for run in runs:
@@ -1064,7 +1157,10 @@ def write_export(out, spool, summary, examples):
                                        choice['candidateActionId'] is not None,
                                        'TRUNCATED' if choice.get('optionsTruncated') is True else 'FULL' if choice.get('optionsTruncated') is False else 'UNAVAILABLE')
                                       for choice in row['decision']['subordinateChoices']})),)
-            if row['decision'].get('targetChoiceProvenanceSchemaVersion') == 1:
+            if row['decision'].get('searchTargetApplicationSchemaVersion') == 1:
+                key += (tuple(sorted({(c['operation'], c['status'], c['candidateActionId'] is not None)
+                                      for c in row['decision']['searchTargetApplications']})),)
+            if row['decision'].get('targetChoiceProvenanceSchemaVersion') in (1, 2):
                 origin_kinds = set()
                 for action in row['actionExecutions']:
                     for event in action['engineEvents']:
@@ -1079,7 +1175,7 @@ def write_export(out, spool, summary, examples):
                         for group in provenance['abilities']:
                             if group['targetsTruncated']:
                                 origin_kinds.add('TRUNCATED')
-                            origin_kinds.update('EXPLICIT_EVALUATION_ADDITION' if origin is not None else 'UNKNOWN'
+                            origin_kinds.update('UNKNOWN' if origin is None else 'EXPLICIT_SEARCH_APPLICATION' if origin['stage'] == 'SEARCH_TARGET_APPLICATION' else 'EXPLICIT_EVALUATION_ADDITION'
                                                 for origin in group['targetChoices'])
                 key += (tuple(sorted(origin_kinds)),)
             if key not in seen:
