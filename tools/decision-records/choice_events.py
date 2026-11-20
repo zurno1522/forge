@@ -6,8 +6,9 @@ POOL_BOUNDARIES = {'DESTROY_REMOVAL_POOL', 'DESTROY_LAND_POOL', 'DESTROY_POLYMOR
                    'DAMAGE_OPPONENT_POOL', 'DAMAGE_KILLABLES', 'DAMAGE_MANDATORY_OPPONENT_POOL',
                    'DAMAGE_MANDATORY_FALLBACK_POOL', 'DAMAGE_KILLABLE_PLANESWALKERS', 'DAMAGE_PLANESWALKER_POOL',
                    'DRAW_PLAYER_POOL', 'DAMAGE_PLAYER_POOL', 'ATTACH_CARD_POOL', 'ATTACH_PLAYER_POOL', 'MASKED_TARGET_POOL'}
-TYPES = {'TARGET_SELECTION_RESULT', 'EFFECT_COPY_TARGET_RESULT', 'RETARGET_RESULT', 'TARGET_POOL_SELECTION', 'MODE_SELECTION', 'MASKED_CHOICE'}
-BOUNDARIES = {'CONTROLLER_TARGETS', 'COPY_TARGETS', 'CONTROLLER_RETARGET', 'CHARM_MODE_HEURISTIC', 'CONTROLLER_MODES', 'MASKED_CHOICE'} | POOL_BOUNDARIES
+TYPES = {'TARGET_SELECTION_RESULT', 'EFFECT_COPY_TARGET_RESULT', 'RETARGET_RESULT', 'TARGET_POOL_SELECTION', 'MODE_SELECTION', 'NUMBER_SELECTION', 'X_SELECTION', 'MASKED_CHOICE'}
+BOUNDARIES = {'CONTROLLER_TARGETS', 'COPY_TARGETS', 'CONTROLLER_RETARGET', 'CHARM_MODE_HEURISTIC', 'CONTROLLER_MODES',
+              'CONTROLLER_NUMBER_RANGE', 'CONTROLLER_NUMBER_OPTIONS', 'CONTROLLER_ANNOUNCEMENT', 'MAX_X_HEURISTIC', 'X_ANNOUNCEMENT_REFINEMENT', 'MASKED_CHOICE'} | POOL_BOUNDARIES
 
 
 def integer(v):
@@ -45,6 +46,23 @@ def options(choice):
     if choice['choiceType'] == 'MASKED_CHOICE':
         require(option == {'coverage': 'MASKED'} and choice['boundary'] == 'MASKED_CHOICE', 'unmasked private choice')
         return
+    if choice['choiceType'] in ('NUMBER_SELECTION', 'X_SELECTION'):
+        require(isinstance(option, dict), 'invalid numeric options')
+        coverage = option.get('coverage')
+        if choice['choiceType'] == 'X_SELECTION':
+            require(set(option) == {'coverage', 'minimum', 'maximum', 'previousValue'} and coverage in ('OBSERVED_SELECTION_ONLY', 'HEURISTIC_BOUND_NOT_LEGAL_SET'), 'invalid X options')
+            require(option['previousValue'] is None or integer(option['previousValue']), 'invalid previous X value')
+            if coverage == 'OBSERVED_SELECTION_ONLY':
+                require(option['minimum'] is None and option['maximum'] is None, 'unavailable X alternatives claim a bound')
+            else:
+                require(option['minimum'] == 0 and integer(option['minimum']) and integer(option['maximum']), 'invalid X heuristic bound')
+        elif coverage == 'OBSERVED_RANGE':
+            require(set(option) == {'coverage', 'minimum', 'maximum'} and integer(option['minimum']) and integer(option['maximum']), 'invalid observed numeric range')
+        else:
+            require(set(option) == {'coverage', 'items', 'truncated'} and coverage == 'OBSERVED_DISCRETE_OPTIONS'
+                    and isinstance(option['items'], list) and len(option['items']) <= 256
+                    and all(integer(v) for v in option['items']) and isinstance(option['truncated'], bool), 'invalid numeric option prefix')
+        return
     if choice['choiceType'] == 'MODE_SELECTION':
         require(isinstance(option, dict) and set(option) == {'coverage', 'items', 'truncated', 'min', 'max', 'allowRepeat'}, 'invalid mode options')
         require(option['coverage'] == 'OBSERVED_MODE_OPTIONS' and choice['boundary'] in ('CHARM_MODE_HEURISTIC', 'CONTROLLER_MODES'), 'invalid mode coverage/boundary')
@@ -76,6 +94,19 @@ def selection(start, terminal):
     value = terminal['selection']
     if terminal['status'] in ('DECLINED', 'ERROR') or start['choiceType'] == 'MASKED_CHOICE':
         require(value is None, 'unavailable choice carries selection')
+        return
+    if start['choiceType'] in ('NUMBER_SELECTION', 'X_SELECTION'):
+        require(isinstance(value, dict) and set(value) == {'value', 'optionIndex', 'domainMatch'} and integer(value['value']), 'invalid numeric return')
+        option, index = start['options'], value['optionIndex']
+        require(index is None or integer(index), 'invalid numeric option index')
+        if option['coverage'] == 'OBSERVED_DISCRETE_OPTIONS':
+            matches = sum(v == value['value'] for v in option['items'])
+            expected = 'UNIQUE_CAPTURED_OPTION' if matches == 1 else 'OUTSIDE_CAPTURED_OPTIONS' if matches == 0 else 'AMBIGUOUS_CAPTURED_OPTIONS'
+            require(index is not None and 0 <= index < len(option['items']) and option['items'][index] == value['value'] if matches == 1 else index is None, 'numeric return/option mismatch')
+        else:
+            require(index is None, 'range/unknown numeric result claims an index')
+            expected = 'UNAVAILABLE' if option['coverage'] == 'OBSERVED_SELECTION_ONLY' else 'WITHIN_OBSERVED_DOMAIN' if option['minimum'] <= value['value'] <= option['maximum'] else 'OUTSIDE_OBSERVED_DOMAIN'
+        require(value['domainMatch'] == expected, 'invalid numeric domain match')
         return
     if start['choiceType'] == 'MODE_SELECTION':
         require(isinstance(value, dict) and set(value) == {'available', 'modes', 'selectedCount', 'truncated', 'accepted'}, 'invalid mode selection')

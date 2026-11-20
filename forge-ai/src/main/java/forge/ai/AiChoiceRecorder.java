@@ -78,7 +78,7 @@ public final class AiChoiceRecorder {
             throw failure;
         }
         if (observation != null && observation.open()) {
-            try { observation.finish(result == null ? "DECLINED" : "COMPLETED", observation.visible ? selection.apply(result) : null); }
+            try { observation.finish(result == null ? "DECLINED" : "COMPLETED", observation.visible && result != null ? selection.apply(result) : null); }
             catch (RuntimeException failure) { game.recordEventObservationFailure(failure); }
         }
         return result;

@@ -327,7 +327,12 @@ final class AiDecisionRecorder {
         result.put("kind", sa.isLandAbility() ? "LAND" : sa.isSpell() ? "SPELL" : "ABILITY");
         if (sa.getHostCard() != null) {
             result.putAll(cardAction(sa.getHostCard()));
-            if (result.containsKey("sourceName")) { result.put("description", sa.getDescription()); }
+            if (result.containsKey("sourceName")) {
+                result.put("description", sa.getDescription());
+                if (sa.getRootAbility().getPayCosts() != null && sa.getRootAbility().costHasManaX()) {
+                    result.put("evaluatedX", sa.getRootAbility().getXManaCostPaid());
+                }
+            }
         }
         return result;
     }

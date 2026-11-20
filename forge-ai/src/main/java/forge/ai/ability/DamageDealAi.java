@@ -217,7 +217,7 @@ public class DamageDealAi extends DamageAiBase {
                     if (dmg > loyalty || dmg < 1) {
                         continue;   // in case the calculation gets messed up somewhere
                     }
-                    sa.setXManaCostPaid(dmg);
+                    AiNumberChoiceRecorder.refineX(ai, sa, dmg);
                     return new AiAbilityDecision(100, AiPlayDecision.WillPlay);
                 }
             }
@@ -291,7 +291,7 @@ public class DamageDealAi extends DamageAiBase {
                 if (sourceName.equals("Crater's Claws") && ai.hasFerocious()) {
                     actualPay = actualPay > 2 ? actualPay - 2 : 0;
                 }
-                sa.setXManaCostPaid(actualPay);
+                AiNumberChoiceRecorder.refineX(ai, sa, actualPay);
             }
         }
 
@@ -959,7 +959,7 @@ public class DamageDealAi extends DamageAiBase {
                 }
             }
 
-            sa.setXManaCostPaid(actualPay);
+            AiNumberChoiceRecorder.refineX(ai, sa, actualPay);
         }
 
         return new AiAbilityDecision(100, AiPlayDecision.WillPlay);
@@ -1026,7 +1026,7 @@ public class DamageDealAi extends DamageAiBase {
         saTgt.resetTargets();
         saTgt.getTargets().add(tgtCreature != null && dmg < opponent.getLife() ? tgtCreature : opponent);
 
-        saTgt.setXManaCostPaid(dmg);
+        AiNumberChoiceRecorder.refineX(ai, saTgt, dmg);
         return true;
     }
 

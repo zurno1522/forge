@@ -184,6 +184,7 @@ def validate_decision(record, game):
     candidates, selected = d.get('candidates'), d.get('selectedActions')
     require(isinstance(candidates, list) and isinstance(selected, list), 'missing candidates/selectedActions')
     for action in candidates + selected:
+        require('evaluatedX' not in action or action['evaluatedX'] is None or integer(action['evaluatedX']), 'invalid evaluated X value')
         land_option = action.get('kind') == 'LAND' and action.get('assessment') == 'LAND_OPTION' and action.get('assessmentStage') == 'LAND_SHORTLIST'
         require(integer(action.get('sourceId')) and (integer(action.get('abilityId')) or land_option and action not in selected), 'invalid action identifiers')
         if land_option:
@@ -667,6 +668,7 @@ def make_coverage(runs, rows, *, spool=None):
     targeted_actions_with_recommendation = 0
     budget_omissions = 0
     interrupted_captures = 0
+    evaluated_x = collections.Counter()
 
     def add(name, value):
         counters[name].update((value,))
@@ -718,6 +720,9 @@ def make_coverage(runs, rows, *, spool=None):
             add('selectedActionKinds', action['kind'])
             totals['selectedActionsWithoutAssessment'] += not any(matches_selected(action, c) for c in d['candidates'])
         for candidate in d['candidates']:
+            if 'evaluatedX' in candidate:
+                x = candidate['evaluatedX']
+                evaluated_x['UNANNOUNCED' if x is None else 'ZERO' if x == 0 else 'POSITIVE' if x > 0 else 'NEGATIVE'] += 1
             add('assessments', candidate['assessment'])
             detail = candidate.get('assessmentDetail')
             if detail is not None:
@@ -826,6 +831,7 @@ def make_coverage(runs, rows, *, spool=None):
         event_types, stages, statuses = collections.Counter(), collections.Counter(), collections.Counter()
         mode_links, mode_definitions, mode_plans, mode_capture = (collections.Counter() for _ in range(4))
         repeated_mode_refs = 0
+        numeric_domains, numeric_matches, numeric_values = (collections.Counter() for _ in range(3))
         choice_count = censored_count = 0
         for row in _choices.rows(runs):
             choice_count += 1
@@ -833,6 +839,12 @@ def make_coverage(runs, rows, *, spool=None):
             event_types[row['start']['choice']['choiceType']] += 1
             stages[row['start']['choice']['stage']] += 1
             statuses[row['status']] += 1
+            if row['start']['choice']['choiceType'] in ('NUMBER_SELECTION', 'X_SELECTION'):
+                numeric_domains[row['start']['choice']['options']['coverage']] += 1
+                value = row['terminal']['choice']['selection'] if row['terminal'] else None
+                if value is not None:
+                    numeric_matches[value['domainMatch']] += 1
+                    numeric_values['ZERO' if value['value'] == 0 else 'POSITIVE' if value['value'] > 0 else 'NEGATIVE'] += 1
             if row['start']['choice']['choiceType'] == 'MODE_SELECTION':
                 value = row['terminal']['choice']['selection'] if row['terminal'] else None
                 if value is None:
@@ -853,6 +865,11 @@ def make_coverage(runs, rows, *, spool=None):
             summary.update(standaloneModeOptionLinks=dict(mode_links), standaloneModeDefinitionLinks=dict(mode_definitions),
                            standaloneModePlanCoverage=dict(mode_plans), standaloneModePlanCapture=dict(mode_capture),
                            standaloneRepeatedModeReferences=repeated_mode_refs)
+        if numeric_domains:
+            summary.update(standaloneNumericDomainCoverage=dict(numeric_domains), standaloneNumericMatches=dict(numeric_matches),
+                           standaloneNumericValueStates=dict(numeric_values))
+    if evaluated_x:
+        summary['evaluatedXAssessmentStates'] = dict(evaluated_x)
     summary['limitations'] = [
         'Main-phase play selection with an empty stack only; no mulligan, combat, reactive-priority or subordinate-choice coverage.',
         'Candidate assessments are partial and may repeat an ability; counts are assessment observations, not unique rejected legal actions.',
@@ -975,6 +992,13 @@ def report_chunks(summary, runs):
                                  ('Mode-plan availability: ', 'standaloneModePlanCoverage'), ('Mode-plan capture: ', 'standaloneModePlanCapture')):
                 yield from counter_line(prefix, name)
             yield from lines(f"Repeated captured mode references: {summary['standaloneRepeatedModeReferences']}. Offered indices and original definition indices have separate meanings; neither callback completion nor mode count is a strategic-quality label.")
+        if 'standaloneNumericDomainCoverage' in summary:
+            for prefix, name in (('Numeric domain coverage: ', 'standaloneNumericDomainCoverage'), ('Numeric return matches: ', 'standaloneNumericMatches'),
+                                 ('Numeric value states: ', 'standaloneNumericValueStates')):
+                yield from counter_line(prefix, name)
+            yield from lines('Numeric domains are observed inputs or heuristic bounds, not reconstructed legal values or mana spent. Outside-prefix/domain returns are retained without changing the AI result.')
+    if 'evaluatedXAssessmentStates' in summary:
+        yield from counter_line('Evaluated X assessment snapshots: ', 'evaluatedXAssessmentStates')
     yield from lines('', '## Reproducibility', '', 'The companion manifest contains exact deck snapshots, deck hashes, input hashes and run metadata. The following summary is readable without the input logs.', '',
                      '| Run | Seed | Pilot | Engine revision | Dirty | Source SHA256 |', '| --- | --- | --- | --- | --- | --- |')
     for run in runs:

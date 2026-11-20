@@ -319,6 +319,11 @@ public class PlayerControllerAi extends PlayerController {
 
     @Override
     public Integer announceRequirements(SpellAbility ability, int min, int max, String announce) {
+        return AiNumberChoiceRecorder.range(player, ability, "CONTROLLER_ANNOUNCEMENT", min, max,
+                () -> announceRequirementsImpl(ability, min, max, announce));
+    }
+
+    private Integer announceRequirementsImpl(SpellAbility ability, int min, int max, String announce) {
         // For now, these "announcements" are made within the AI classes of the appropriate SA effects
         if (ability.getApi() != null) {
             switch (ability.getApi()) {
@@ -1103,17 +1108,20 @@ public class PlayerControllerAi extends PlayerController {
 
     @Override
     public int chooseNumber(SpellAbility sa, String title, int min, int max) {
-        return brains.chooseNumber(sa, title, min, max);
+        return AiNumberChoiceRecorder.range(player, sa, "CONTROLLER_NUMBER_RANGE", min, max,
+                () -> brains.chooseNumber(sa, title, min, max));
     }
 
     @Override
     public int chooseNumber(SpellAbility sa, String string, int min, int max, Map<String, Object> params) {
-        return SpellApiToAi.Converter.get(sa).chooseNumber(player, sa, min, max, params);
+        return AiNumberChoiceRecorder.range(player, sa, "CONTROLLER_NUMBER_RANGE", min, max,
+                () -> SpellApiToAi.Converter.get(sa).chooseNumber(player, sa, min, max, params));
     }
 
     @Override
     public int chooseNumber(SpellAbility sa, String title, List<Integer> options, Player relatedPlayer) {
-        return brains.chooseNumber(sa, title, options, relatedPlayer);
+        return AiNumberChoiceRecorder.discrete(player, sa, options,
+                () -> brains.chooseNumber(sa, title, options, relatedPlayer));
     }
 
     /* (non-Javadoc)

@@ -330,7 +330,7 @@ public class DrawAi extends SpellAbilityAi {
         if (sa.costHasManaX() && sa.getRootAbility().getXManaCostPaid() == null && source != null
                 && forge.ai.simulation.AiCardLists.has(forge.ai.simulation.AiCardLists.Role.DREDGE_REFILL, source)) {
             // Breakthrough for the dredge line: X=0 draws four and throws the hand away, which is the point.
-            sa.getRootAbility().setXManaCostPaid(0);
+            AiNumberChoiceRecorder.refineX(ai, sa.getRootAbility(), 0);
         }
 
         boolean xPaid = false;
@@ -357,7 +357,7 @@ public class DrawAi extends SpellAbilityAi {
                         }
                     }
 
-                    root.setXManaCostPaid(numCards);
+                    AiNumberChoiceRecorder.refineX(ai, root, numCards);
                     assumeSafeX = true;
                 }
                 xPaid = true;
@@ -429,7 +429,7 @@ public class DrawAi extends SpellAbilityAi {
                         // for drawing and losing life
                         if (numCards >= oppA.getLife()) {
                             if (xPaid) {
-                                root.setXManaCostPaid(oppA.getLife());
+                                AiNumberChoiceRecorder.refineX(ai, root, oppA.getLife());
                             }
                             AiTargetChoiceRecorder.addSelected(ai, sa, players, "DRAW_PLAYER_POOL", oppA);
                             return true;
@@ -442,7 +442,7 @@ public class DrawAi extends SpellAbilityAi {
                     if (gainLife.hasParam("Defined") && "Targeted".equals(gainLife.getParam("Defined"))) {
                         if (numCards >= oppA.getLife()) {
                             if (xPaid) {
-                                root.setXManaCostPaid(oppA.getLife());
+                                AiNumberChoiceRecorder.refineX(ai, root, oppA.getLife());
                             }
                             AiTargetChoiceRecorder.addSelected(ai, sa, players, "DRAW_PLAYER_POOL", oppA);
                             return true;
@@ -503,7 +503,7 @@ public class DrawAi extends SpellAbilityAi {
                 }
 
                 if (xPaid) {
-                    root.setXManaCostPaid(numCards);
+                    AiNumberChoiceRecorder.refineX(ai, root, numCards);
                 }
             }
 
@@ -514,7 +514,7 @@ public class DrawAi extends SpellAbilityAi {
                         if (source.isInZone(ZoneType.Hand)) {
                             numCards++; // the card will be spent
                         }
-                        root.setXManaCostPaid(numCards);
+                        AiNumberChoiceRecorder.refineX(ai, root, numCards);
                     } else {
                         // Don't draw too many cards and then risk discarding cards at EOT
                         if (!drawback && !mandatory) {

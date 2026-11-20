@@ -717,6 +717,7 @@ public class ComputerUtilCost {
 
         val = ObjectUtils.min(val, abCost.getMaxForNonManaX(root, ai, effect));
 
+        final Integer observedBound = val;
         if (val != null && val > 0) {
             // filter cost parts for preferences, don't choose X > than possible preferences
             for (final CostPart part : abCost.getCostParts()) {
@@ -745,8 +746,7 @@ public class ComputerUtilCost {
         }
 
         int x = ObjectUtils.getIfNull(val, 0);
-        root.setXManaCostPaid(x);
-        return x;
+        return AiNumberChoiceRecorder.announceX(ai, root, observedBound, x, "MAX_X_HEURISTIC");
     }
 
     public static CardCollection paymentChoicesWithoutTargets(Iterable<Card> choices, SpellAbility source, Player ai) {
