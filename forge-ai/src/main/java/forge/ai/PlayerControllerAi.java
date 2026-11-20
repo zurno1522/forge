@@ -1572,6 +1572,11 @@ public class PlayerControllerAi extends PlayerController {
     }
 
     private boolean prepareSingleSa(final Card host, SpellAbility sa, boolean isMandatory) {
+        return AiChoiceRecorder.triggerPreparation(player, sa,
+                () -> prepareSingleSaImpl(host, sa, isMandatory));
+    }
+
+    private boolean prepareSingleSaImpl(final Card host, SpellAbility sa, boolean isMandatory) {
         if (sa.getApi() == ApiType.Charm) {
             if (!CharmEffect.makeChoices(sa)) {
                 return false;
@@ -1584,7 +1589,12 @@ public class PlayerControllerAi extends PlayerController {
         if (sa.hasParam("TargetingPlayer")) {
             Player targetingPlayer = AbilityUtils.getDefinedPlayers(host, sa.getParam("TargetingPlayer"), sa).get(0);
             sa.setTargetingPlayer(targetingPlayer);
-            return targetingPlayer.getController().chooseTargetsFor(sa);
+            if (targetingPlayer.getController() instanceof PlayerControllerAi) {
+                return targetingPlayer.getController().chooseTargetsFor(sa);
+            }
+            final SpellAbility delegated = sa;
+            return AiChoiceRecorder.targeting(targetingPlayer, delegated, "DELEGATED_TARGET_SELECTION",
+                    () -> targetingPlayer.getController().chooseTargetsFor(delegated));
         }
         return brains.doTrigger(sa, isMandatory);
     }

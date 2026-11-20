@@ -170,6 +170,13 @@ public final class AiChoiceRecorder {
                 accepted -> Map.of("accepted", accepted, "targets", targetPlan(ability)));
     }
 
+    public static boolean triggerPreparation(final Player chooser, final SpellAbility ability,
+            final Supplier<Boolean> callback) {
+        return observe(chooser, ability, "TRIGGER_PREPARATION_RESULT", "TRIGGER_PREPARATION", "TRIGGER_PREPARATION",
+                () -> Map.of("coverage", "PRIOR_TARGET_PLAN_ONLY", "priorTargets", targetPlan(ability)), callback,
+                accepted -> Map.of("accepted", accepted, "targets", targetPlan(ability)));
+    }
+
     public static <T extends GameObject, C extends Iterable<T>> T targetPool(final Player chooser, final SpellAbility ability,
             final C pool, final String boundary, final String timing, final Function<C, T> callback) {
         final AtomicReference<List<Map<String, Object>>> offered = new AtomicReference<>();

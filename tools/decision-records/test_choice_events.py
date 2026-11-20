@@ -124,6 +124,13 @@ class StandaloneChoiceTests(unittest.TestCase):
         self.assertTrue(choice['censored'])
         self.assertEqual(summary['censoredStandaloneChoices'], 1)
 
+    def test_trigger_preparation_preserves_accepted_plan_without_claiming_target_alternatives(self):
+        rows = choices_fixture()
+        rows[2]['choice'].update(choiceType='TRIGGER_PREPARATION_RESULT', boundary='TRIGGER_PREPARATION', stage='TRIGGER_PREPARATION')
+        self.assertEqual(module.export([self.write(rows)])['standaloneChoiceTypes'], {'TRIGGER_PREPARATION_RESULT': 1})
+        del rows[3]['choice']['selection']['accepted']
+        with self.assertRaises(module.InvalidData): module.export([self.write(rows, 'bad-trigger.jsonl')])
+
     def test_invalid_choice_lifecycles_context_and_private_data_are_rejected(self):
         for mutation in ('duplicate-start', 'terminal-first', 'duplicate-end', 'missing-end', 'undeclared', 'schema', 'actor',
                          'stage', 'boundary', 'parent', 'action', 'candidate', 'private', 'private-target', 'target-root', 'negative-time'):

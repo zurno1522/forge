@@ -209,6 +209,35 @@ public class AiChoiceRecorderTest extends AITest {
     }
 
     @Test(groups = {"UnitTest", "fast"})
+    public void normalSimultaneousTriggerPreparationRetainsItsStageAndActualTargetPlan() {
+        final Fixture f = fixture();
+        final Card host = addCardToZone("Flametongue Kavu", f.ai, ZoneType.Battlefield);
+        final Player opponent = f.game.getPlayers().get(0);
+        final Card bear = addCardToZone("Grizzly Bears", opponent, ZoneType.Battlefield);
+        final Card courser = addCardToZone("Nessian Courser", opponent, ZoneType.Battlefield);
+        final var trigger = host.getTriggers().get(0);
+        final SpellAbility inner = trigger.ensureAbility();
+        inner.setActivatingPlayer(f.ai);
+        final var wrapper = new forge.game.trigger.WrappedAbility(trigger, inner, null);
+        f.ai.getController().orderAndPlaySimultaneousSa(List.of(wrapper));
+        final var start = f.events.stream().filter(e -> "TRIGGER_PREPARATION".equals(e.get("boundary"))
+                && "TRIGGER_PREPARATION".equals(e.get("stage"))).findFirst().orElseThrow();
+        final var terminal = f.events.stream().filter(e -> start.get("choiceId").equals(e.get("choiceId"))
+                && "COMPLETED".equals(e.get("status"))).findFirst().orElseThrow();
+        Assert.assertEquals(((Map<?, ?>) terminal.get("selection")).get("accepted"), true);
+        Assert.assertEquals(wrapper.getTargets().size(), 1);
+        Assert.assertTrue(wrapper.getTargets().getTargetCards().contains(bear) || wrapper.getTargets().getTargetCards().contains(courser));
+        final var targetPlan = (Map<?, ?>) ((Map<?, ?>) terminal.get("selection")).get("targets");
+        final var group = (Map<?, ?>) ((List<?>) targetPlan.get("abilities")).get(0);
+        Assert.assertEquals(((List<?>) group.get("targets")).size(), 1);
+        Assert.assertFalse(f.game.getStack().isEmpty());
+        Assert.assertNull(start.get("actionId"));
+        Assert.assertTrue(f.events.stream().anyMatch(e -> start.get("choiceId").equals(e.get("parentChoiceId"))
+                && "TRIGGER_PREPARATION".equals(e.get("stage"))));
+        Assert.assertNull(f.game.getEventObservationFailure());
+    }
+
+    @Test(groups = {"UnitTest", "fast"})
     public void existingUnsupportedRetargetCallbackRemainsADeclineRatherThanInventedAiBehavior() {
         final Fixture f = fixture();
         Assert.assertNull(f.ai.getController().chooseNewTargetsFor(f.ability, ignored -> true, true));
