@@ -1,0 +1,3745 @@
+{
+  "PAYMENT_DECISION": {
+    "scenario": "black",
+    "source": {
+      "path": "/workspace/work/five-tasks/black-full.jsonl",
+      "sha256": "47e0e272f151936534d2c7d51675a00544c34a3a5fdb83b4e4d661e8dd2a11d8",
+      "bytes": 1990492
+    },
+    "runMetadata": {
+      "type": "RUN_STARTED",
+      "schemaVersion": 1,
+      "actionEventSchemaVersion": 1,
+      "choiceEventSchemaVersion": 1,
+      "runId": "e130c676-36d4-4229-a93c-5be58b3943c7",
+      "pilotMode": "HEURISTIC",
+      "engineRevision": "77bbd39dd7bf6d4e9b4526aa96942c74519b2288",
+      "engineDirty": "false",
+      "forgeVersion": "GIT",
+      "runMode": "GAMES",
+      "gameType": "Constructed",
+      "requestedGames": 3,
+      "seed": 12031,
+      "participants": [
+        {
+          "participantId": 1,
+          "deckName": "Target Choice Black",
+          "aiProfile": "Default",
+          "deck": {
+            "Main": [
+              {
+                "name": "Befoul",
+                "count": 4
+              },
+              {
+                "name": "Child of Night",
+                "count": 4
+              },
+              {
+                "name": "Disfigure",
+                "count": 4
+              },
+              {
+                "name": "Doom Blade",
+                "count": 4
+              },
+              {
+                "name": "Murder",
+                "count": 4
+              },
+              {
+                "name": "Sengir Vampire",
+                "count": 4
+              },
+              {
+                "name": "Sign in Blood",
+                "count": 4
+              },
+              {
+                "name": "Swamp",
+                "count": 24
+              },
+              {
+                "name": "Vampire Nighthawk",
+                "count": 4
+              },
+              {
+                "name": "Walking Corpse",
+                "count": 4
+              }
+            ]
+          }
+        },
+        {
+          "participantId": 2,
+          "deckName": "Trace Green",
+          "aiProfile": "Default",
+          "deck": {
+            "Main": [
+              {
+                "name": "Forest",
+                "count": 24
+              },
+              {
+                "name": "Giant Growth",
+                "count": 4
+              },
+              {
+                "name": "Grizzly Bears",
+                "count": 4
+              },
+              {
+                "name": "Llanowar Elves",
+                "count": 4
+              },
+              {
+                "name": "Nessian Courser",
+                "count": 4
+              },
+              {
+                "name": "Rumbling Baloth",
+                "count": 4
+              },
+              {
+                "name": "Runeclaw Bear",
+                "count": 4
+              }
+            ]
+          }
+        }
+      ],
+      "streamKind": "FULL_GAME_TRACE",
+      "eventIndexMode": "CONTIGUOUS"
+    },
+    "start": {
+      "type": "AI_SUBORDINATE_CHOICE",
+      "game": 1,
+      "eventIndex": 92,
+      "turn": 3,
+      "phase": "MAIN2",
+      "choice": {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:1",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "PAYMENT_DECISION",
+        "boundary": "COST_VISITOR",
+        "stage": "PAYMENT",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 183,
+        "sourceId": 64,
+        "decisionId": "1:9",
+        "actionId": "1:9:0",
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "options": {
+          "effect": false,
+          "coverage": "PAYMENT_VISITOR_INPUT_NOT_ALTERNATIVES",
+          "costKind": "CostPartMana"
+        }
+      }
+    },
+    "terminal": {
+      "type": "AI_SUBORDINATE_CHOICE",
+      "game": 1,
+      "eventIndex": 93,
+      "turn": 3,
+      "phase": "MAIN2",
+      "choice": {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:1",
+        "status": "COMPLETED",
+        "selection": {
+          "decisionCount": 0,
+          "cards": {
+            "items": [],
+            "truncated": false
+          },
+          "mana": null,
+          "players": null,
+          "abilities": null,
+          "colorMask": null,
+          "unrecordedDetails": []
+        },
+        "elapsedNanos": 6059455
+      }
+    },
+    "trainingReady": false
+  },
+  "PAYMENT_MANA": {
+    "scenario": "black",
+    "source": {
+      "path": "/workspace/work/five-tasks/black-full.jsonl",
+      "sha256": "47e0e272f151936534d2c7d51675a00544c34a3a5fdb83b4e4d661e8dd2a11d8",
+      "bytes": 1990492
+    },
+    "runMetadata": {
+      "type": "RUN_STARTED",
+      "schemaVersion": 1,
+      "actionEventSchemaVersion": 1,
+      "choiceEventSchemaVersion": 1,
+      "runId": "e130c676-36d4-4229-a93c-5be58b3943c7",
+      "pilotMode": "HEURISTIC",
+      "engineRevision": "77bbd39dd7bf6d4e9b4526aa96942c74519b2288",
+      "engineDirty": "false",
+      "forgeVersion": "GIT",
+      "runMode": "GAMES",
+      "gameType": "Constructed",
+      "requestedGames": 3,
+      "seed": 12031,
+      "participants": [
+        {
+          "participantId": 1,
+          "deckName": "Target Choice Black",
+          "aiProfile": "Default",
+          "deck": {
+            "Main": [
+              {
+                "name": "Befoul",
+                "count": 4
+              },
+              {
+                "name": "Child of Night",
+                "count": 4
+              },
+              {
+                "name": "Disfigure",
+                "count": 4
+              },
+              {
+                "name": "Doom Blade",
+                "count": 4
+              },
+              {
+                "name": "Murder",
+                "count": 4
+              },
+              {
+                "name": "Sengir Vampire",
+                "count": 4
+              },
+              {
+                "name": "Sign in Blood",
+                "count": 4
+              },
+              {
+                "name": "Swamp",
+                "count": 24
+              },
+              {
+                "name": "Vampire Nighthawk",
+                "count": 4
+              },
+              {
+                "name": "Walking Corpse",
+                "count": 4
+              }
+            ]
+          }
+        },
+        {
+          "participantId": 2,
+          "deckName": "Trace Green",
+          "aiProfile": "Default",
+          "deck": {
+            "Main": [
+              {
+                "name": "Forest",
+                "count": 24
+              },
+              {
+                "name": "Giant Growth",
+                "count": 4
+              },
+              {
+                "name": "Grizzly Bears",
+                "count": 4
+              },
+              {
+                "name": "Llanowar Elves",
+                "count": 4
+              },
+              {
+                "name": "Nessian Courser",
+                "count": 4
+              },
+              {
+                "name": "Rumbling Baloth",
+                "count": 4
+              },
+              {
+                "name": "Runeclaw Bear",
+                "count": 4
+              }
+            ]
+          }
+        }
+      ],
+      "streamKind": "FULL_GAME_TRACE",
+      "eventIndexMode": "CONTIGUOUS"
+    },
+    "start": {
+      "type": "AI_SUBORDINATE_CHOICE",
+      "game": 1,
+      "eventIndex": 94,
+      "turn": 3,
+      "phase": "MAIN2",
+      "choice": {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:2",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "PAYMENT_MANA",
+        "boundary": "AUTO_MANA_PAYMENT",
+        "stage": "PAYMENT",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 183,
+        "sourceId": 64,
+        "decisionId": "1:9",
+        "actionId": "1:9:0",
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "options": {
+          "remainingManaValue": 2,
+          "coverage": "OBSERVED_REQUIREMENT_NOT_ALTERNATIVE_PLANS",
+          "effect": false
+        }
+      }
+    },
+    "terminal": {
+      "type": "AI_SUBORDINATE_CHOICE",
+      "game": 1,
+      "eventIndex": 113,
+      "turn": 3,
+      "phase": "MAIN2",
+      "choice": {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:2",
+        "status": "COMPLETED",
+        "selection": {
+          "manaAbilities": {
+            "items": [
+              {
+                "type": "SPELL_ABILITY",
+                "id": 182,
+                "stackId": null
+              },
+              {
+                "type": "SPELL_ABILITY",
+                "id": 185,
+                "stackId": null
+              }
+            ],
+            "truncated": false
+          },
+          "paymentRoutineReturned": true,
+          "costSatisfied": true
+        },
+        "elapsedNanos": 24457152
+      }
+    },
+    "trainingReady": false
+  },
+  "TARGET_POOL_SELECTION": {
+    "scenario": "black",
+    "source": {
+      "path": "/workspace/work/five-tasks/black-full.jsonl",
+      "sha256": "47e0e272f151936534d2c7d51675a00544c34a3a5fdb83b4e4d661e8dd2a11d8",
+      "bytes": 1990492
+    },
+    "runMetadata": {
+      "type": "RUN_STARTED",
+      "schemaVersion": 1,
+      "actionEventSchemaVersion": 1,
+      "choiceEventSchemaVersion": 1,
+      "runId": "e130c676-36d4-4229-a93c-5be58b3943c7",
+      "pilotMode": "HEURISTIC",
+      "engineRevision": "77bbd39dd7bf6d4e9b4526aa96942c74519b2288",
+      "engineDirty": "false",
+      "forgeVersion": "GIT",
+      "runMode": "GAMES",
+      "gameType": "Constructed",
+      "requestedGames": 3,
+      "seed": 12031,
+      "participants": [
+        {
+          "participantId": 1,
+          "deckName": "Target Choice Black",
+          "aiProfile": "Default",
+          "deck": {
+            "Main": [
+              {
+                "name": "Befoul",
+                "count": 4
+              },
+              {
+                "name": "Child of Night",
+                "count": 4
+              },
+              {
+                "name": "Disfigure",
+                "count": 4
+              },
+              {
+                "name": "Doom Blade",
+                "count": 4
+              },
+              {
+                "name": "Murder",
+                "count": 4
+              },
+              {
+                "name": "Sengir Vampire",
+                "count": 4
+              },
+              {
+                "name": "Sign in Blood",
+                "count": 4
+              },
+              {
+                "name": "Swamp",
+                "count": 24
+              },
+              {
+                "name": "Vampire Nighthawk",
+                "count": 4
+              },
+              {
+                "name": "Walking Corpse",
+                "count": 4
+              }
+            ]
+          }
+        },
+        {
+          "participantId": 2,
+          "deckName": "Trace Green",
+          "aiProfile": "Default",
+          "deck": {
+            "Main": [
+              {
+                "name": "Forest",
+                "count": 24
+              },
+              {
+                "name": "Giant Growth",
+                "count": 4
+              },
+              {
+                "name": "Grizzly Bears",
+                "count": 4
+              },
+              {
+                "name": "Llanowar Elves",
+                "count": 4
+              },
+              {
+                "name": "Nessian Courser",
+                "count": 4
+              },
+              {
+                "name": "Rumbling Baloth",
+                "count": 4
+              },
+              {
+                "name": "Runeclaw Bear",
+                "count": 4
+              }
+            ]
+          }
+        }
+      ],
+      "streamKind": "FULL_GAME_TRACE",
+      "eventIndexMode": "CONTIGUOUS"
+    },
+    "start": {
+      "type": "AI_SUBORDINATE_CHOICE",
+      "game": 1,
+      "eventIndex": 120,
+      "turn": 3,
+      "phase": "MAIN2",
+      "choice": {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:9",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "TARGET_POOL_SELECTION",
+        "boundary": "DESTROY_REMOVAL_POOL",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 0,
+        "chooserKind": "AI",
+        "abilityId": 177,
+        "sourceId": 26,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "options": {
+          "coverage": "OBSERVED_HEURISTIC_POOL_NOT_ALL_LEGAL_TARGET_SETS",
+          "purpose": "TARGET_RECOMMENDATION",
+          "priorTargetsTruncated": false,
+          "priorTargets": [],
+          "truncated": false,
+          "items": [
+            {
+              "type": "CARD",
+              "id": 64,
+              "gameTimestamp": 20
+            }
+          ],
+          "poolSnapshotTiming": "BEFORE_CHOOSER"
+        }
+      }
+    },
+    "terminal": {
+      "type": "AI_SUBORDINATE_CHOICE",
+      "game": 1,
+      "eventIndex": 121,
+      "turn": 3,
+      "phase": "MAIN2",
+      "choice": {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:9",
+        "status": "COMPLETED",
+        "selection": {
+          "selected": {
+            "type": "CARD",
+            "id": 64,
+            "gameTimestamp": 20
+          },
+          "selectedOptionIndex": 0,
+          "match": "UNIQUE"
+        },
+        "elapsedNanos": 33378617
+      }
+    },
+    "trainingReady": false
+  },
+  "PAYMENT_CARD_SELECTION": {
+    "scenario": "damage",
+    "source": {
+      "path": "/workspace/work/five-tasks/damage-full.jsonl",
+      "sha256": "9d134b182b0f45da8038cd1f24da0856cd7a8dd679a63aba36fdf2dff8ff9360",
+      "bytes": 1944133
+    },
+    "runMetadata": {
+      "type": "RUN_STARTED",
+      "schemaVersion": 1,
+      "actionEventSchemaVersion": 1,
+      "choiceEventSchemaVersion": 1,
+      "runId": "3e9711b5-9429-4135-8e26-9f7a6dafb2ea",
+      "pilotMode": "HEURISTIC",
+      "engineRevision": "77bbd39dd7bf6d4e9b4526aa96942c74519b2288",
+      "engineDirty": "false",
+      "forgeVersion": "GIT",
+      "runMode": "GAMES",
+      "gameType": "Constructed",
+      "requestedGames": 3,
+      "seed": 12032,
+      "participants": [
+        {
+          "participantId": 1,
+          "deckName": "Target Choice Damage",
+          "aiProfile": "Default",
+          "deck": {
+            "Main": [
+              {
+                "name": "Firebolt",
+                "count": 4
+              },
+              {
+                "name": "Flame Slash",
+                "count": 4
+              },
+              {
+                "name": "Goblin Piker",
+                "count": 4
+              },
+              {
+                "name": "Hill Giant",
+                "count": 4
+              },
+              {
+                "name": "Lightning Bolt",
+                "count": 4
+              },
+              {
+                "name": "Mountain",
+                "count": 24
+              },
+              {
+                "name": "Roast",
+                "count": 4
+              },
+              {
+                "name": "Shock",
+                "count": 4
+              },
+              {
+                "name": "Tormenting Voice",
+                "count": 4
+              },
+              {
+                "name": "Volcanic Hammer",
+                "count": 4
+              }
+            ]
+          }
+        },
+        {
+          "participantId": 2,
+          "deckName": "Trace Green",
+          "aiProfile": "Default",
+          "deck": {
+            "Main": [
+              {
+                "name": "Forest",
+                "count": 24
+              },
+              {
+                "name": "Giant Growth",
+                "count": 4
+              },
+              {
+                "name": "Grizzly Bears",
+                "count": 4
+              },
+              {
+                "name": "Llanowar Elves",
+                "count": 4
+              },
+              {
+                "name": "Nessian Courser",
+                "count": 4
+              },
+              {
+                "name": "Rumbling Baloth",
+                "count": 4
+              },
+              {
+                "name": "Runeclaw Bear",
+                "count": 4
+              }
+            ]
+          }
+        }
+      ],
+      "streamKind": "FULL_GAME_TRACE",
+      "eventIndexMode": "CONTIGUOUS"
+    },
+    "start": {
+      "type": "AI_SUBORDINATE_CHOICE",
+      "game": 1,
+      "eventIndex": 177,
+      "turn": 4,
+      "phase": "MAIN2",
+      "choice": {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:17",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "PAYMENT_CARD_SELECTION",
+        "boundary": "PAYMENT_DISCARD_POOL",
+        "stage": "CANDIDATE_EVALUATION",
+        "chooserPlayerId": 0,
+        "chooserKind": "AI",
+        "abilityId": 176,
+        "sourceId": 55,
+        "decisionId": "0:14",
+        "actionId": null,
+        "candidateAbilityId": 176,
+        "assessmentId": "0:14:assessment:2",
+        "resolvingAbilityId": null,
+        "options": {
+          "minimum": 1,
+          "coverage": "OBSERVED_CARD_OPTIONS_NOT_ALL_LEGAL_PAYMENT_PLANS",
+          "maximum": 1,
+          "cards": {
+            "truncated": false,
+            "items": [
+              {
+                "type": "CARD",
+                "id": 31,
+                "gameTimestamp": 3
+              },
+              {
+                "type": "CARD",
+                "id": 35,
+                "gameTimestamp": 4
+              },
+              {
+                "type": "CARD",
+                "id": 27,
+                "gameTimestamp": 5
+              },
+              {
+                "type": "CARD",
+                "id": 55,
+                "gameTimestamp": 7
+              },
+              {
+                "type": "CARD",
+                "id": 6,
+                "gameTimestamp": 16
+              },
+              {
+                "type": "CARD",
+                "id": 39,
+                "gameTimestamp": 21
+              }
+            ]
+          }
+        }
+      }
+    },
+    "terminal": {
+      "type": "AI_SUBORDINATE_CHOICE",
+      "game": 1,
+      "eventIndex": 178,
+      "turn": 4,
+      "phase": "MAIN2",
+      "choice": {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:17",
+        "status": "COMPLETED",
+        "selection": {
+          "truncated": false,
+          "items": [
+            {
+              "type": "CARD",
+              "id": 31,
+              "gameTimestamp": 3
+            }
+          ]
+        },
+        "elapsedNanos": 4426216
+      }
+    },
+    "trainingReady": false
+  },
+  "TRIGGER_PREPARATION_RESULT": {
+    "scenario": "commander",
+    "source": {
+      "path": "/workspace/work/five-tasks/commander-full.jsonl",
+      "sha256": "17ba9784ab25244aa7bd90a88d2610f0e4dfab7282044ff54016951481673f21",
+      "bytes": 721775
+    },
+    "runMetadata": {
+      "type": "RUN_STARTED",
+      "schemaVersion": 1,
+      "actionEventSchemaVersion": 1,
+      "choiceEventSchemaVersion": 1,
+      "runId": "185ba7a4-defa-486b-b354-de7fb1acfe67",
+      "pilotMode": "HEURISTIC",
+      "engineRevision": "77bbd39dd7bf6d4e9b4526aa96942c74519b2288",
+      "engineDirty": "false",
+      "forgeVersion": "GIT",
+      "runMode": "GAMES",
+      "gameType": "Commander",
+      "requestedGames": 1,
+      "seed": 31002,
+      "participants": [
+        {
+          "participantId": 1,
+          "deckName": "Doctor Who - The Thirteenth Doctor and Yasmin Khan",
+          "aiProfile": "Default",
+          "deck": {
+            "Main": [
+              {
+                "name": "Arcane Signet",
+                "count": 1
+              },
+              {
+                "name": "Beast Within",
+                "count": 1
+              },
+              {
+                "name": "Bigger on the Inside",
+                "count": 1
+              },
+              {
+                "name": "Birds of Paradise",
+                "count": 1
+              },
+              {
+                "name": "Boseiju, Who Endures",
+                "count": 1
+              },
+              {
+                "name": "Breeding Pool",
+                "count": 1
+              },
+              {
+                "name": "Chaos Warp",
+                "count": 1
+              },
+              {
+                "name": "Chimil, the Inner Sun",
+                "count": 1
+              },
+              {
+                "name": "Cinder Glade",
+                "count": 1
+              },
+              {
+                "name": "City of Brass",
+                "count": 1
+              },
+              {
+                "name": "Clara Oswald",
+                "count": 1
+              },
+              {
+                "name": "Command Tower",
+                "count": 1
+              },
+              {
+                "name": "Confession Dial",
+                "count": 1
+              },
+              {
+                "name": "Cryptic Command",
+                "count": 1
+              },
+              {
+                "name": "Cultivate",
+                "count": 1
+              },
+              {
+                "name": "Cursed Mirror",
+                "count": 1
+              },
+              {
+                "name": "Danny Pink",
+                "count": 1
+              },
+              {
+                "name": "Decaying Time Loop",
+                "count": 1
+              },
+              {
+                "name": "Delayed Blast Fireball",
+                "count": 1
+              },
+              {
+                "name": "Desolate Lighthouse",
+                "count": 1
+              },
+              {
+                "name": "Doc Aurlock, Grizzled Genius",
+                "count": 1
+              },
+              {
+                "name": "Dreamroot Cascade",
+                "count": 1
+              },
+              {
+                "name": "Etali, Primal Storm",
+                "count": 1
+              },
+              {
+                "name": "Exotic Orchard",
+                "count": 1
+              },
+              {
+                "name": "Farseek",
+                "count": 1
+              },
+              {
+                "name": "Fiery Islet",
+                "count": 1
+              },
+              {
+                "name": "Flaming Tyrannosaurus",
+                "count": 1
+              },
+              {
+                "name": "Flatline",
+                "count": 1
+              },
+              {
+                "name": "Forest",
+                "count": 1
+              },
+              {
+                "name": "Frontier Bivouac",
+                "count": 1
+              },
+              {
+                "name": "Frost Fair Lure Fish",
+                "count": 1
+              },
+              {
+                "name": "Frostboil Snarl",
+                "count": 1
+              },
+              {
+                "name": "Growing Rites of Itlimoc",
+                "count": 1
+              },
+              {
+                "name": "Growth Spiral",
+                "count": 1
+              },
+              {
+                "name": "Hangarback Walker",
+                "count": 1
+              },
+              {
+                "name": "Heaven Sent",
+                "count": 1
+              },
+              {
+                "name": "Heroic Intervention",
+                "count": 1
+              },
+              {
+                "name": "Hidden Cataract",
+                "count": 1
+              },
+              {
+                "name": "Hidden Nursery",
+                "count": 1
+              },
+              {
+                "name": "Hidden Volcano",
+                "count": 1
+              },
+              {
+                "name": "Hinterland Harbor",
+                "count": 1
+              },
+              {
+                "name": "Impending Flux",
+                "count": 1
+              },
+              {
+                "name": "Incubation Druid",
+                "count": 1
+              },
+              {
+                "name": "Into the Time Vortex",
+                "count": 1
+              },
+              {
+                "name": "Iraxxa, Empress of Mars",
+                "count": 1
+              },
+              {
+                "name": "Island",
+                "count": 2
+              },
+              {
+                "name": "Kami of Celebration",
+                "count": 1
+              },
+              {
+                "name": "Kami of Whispered Hopes",
+                "count": 1
+              },
+              {
+                "name": "Keeper of Secrets",
+                "count": 1
+              },
+              {
+                "name": "Laelia, the Blade Reforged",
+                "count": 1
+              },
+              {
+                "name": "Last Night Together",
+                "count": 1
+              },
+              {
+                "name": "Maelstrom Wanderer",
+                "count": 1
+              },
+              {
+                "name": "Master Biomancer",
+                "count": 1
+              },
+              {
+                "name": "Memory Worm",
+                "count": 1
+              },
+              {
+                "name": "Mountain",
+                "count": 2
+              },
+              {
+                "name": "Nature's Lore",
+                "count": 1
+              },
+              {
+                "name": "Ominous Cemetery",
+                "count": 1
+              },
+              {
+                "name": "Ouroboroid",
+                "count": 1
+              },
+              {
+                "name": "Ponder",
+                "count": 1
+              },
+              {
+                "name": "Preordain",
+                "count": 1
+              },
+              {
+                "name": "Quantum Misalignment",
+                "count": 1
+              },
+              {
+                "name": "Rejuvenating Springs",
+                "count": 1
+              },
+              {
+                "name": "Rockfall Vale",
+                "count": 1
+              },
+              {
+                "name": "Rogue's Passage",
+                "count": 1
+              },
+              {
+                "name": "Rootbound Crag",
+                "count": 1
+              },
+              {
+                "name": "Ryan Sinclair",
+                "count": 1
+              },
+              {
+                "name": "Scalding Tarn",
+                "count": 1
+              },
+              {
+                "name": "Search for Tomorrow",
+                "count": 1
+              },
+              {
+                "name": "Sheltered Thicket",
+                "count": 1
+              },
+              {
+                "name": "Sisterhood of Karn",
+                "count": 1
+              },
+              {
+                "name": "Skyshroud Claim",
+                "count": 1
+              },
+              {
+                "name": "Snapcaster Mage",
+                "count": 1
+              },
+              {
+                "name": "Sol Ring",
+                "count": 1
+              },
+              {
+                "name": "Sonic Screwdriver",
+                "count": 1
+              },
+              {
+                "name": "Spire Garden",
+                "count": 1
+              },
+              {
+                "name": "Steam Vents",
+                "count": 1
+              },
+              {
+                "name": "Stomping Ground",
+                "count": 1
+              },
+              {
+                "name": "Stormcarved Coast",
+                "count": 1
+              },
+              {
+                "name": "Sulfur Falls",
+                "count": 1
+              },
+              {
+                "name": "Surge of Brilliance",
+                "count": 1
+              },
+              {
+                "name": "TARDIS",
+                "count": 1
+              },
+              {
+                "name": "Talisman of Curiosity",
+                "count": 1
+              },
+              {
+                "name": "Talisman of Impulse",
+                "count": 1
+              },
+              {
+                "name": "Temple of Abandon",
+                "count": 1
+              },
+              {
+                "name": "Temple of Epiphany",
+                "count": 1
+              },
+              {
+                "name": "The Flux",
+                "count": 1
+              },
+              {
+                "name": "The Foretold Soldier",
+                "count": 1
+              },
+              {
+                "name": "The Reality Chip",
+                "count": 1
+              },
+              {
+                "name": "The Twelfth Doctor",
+                "count": 1
+              },
+              {
+                "name": "Think Twice",
+                "count": 1
+              },
+              {
+                "name": "Throes of Chaos",
+                "count": 1
+              },
+              {
+                "name": "Waterlogged Grove",
+                "count": 1
+              },
+              {
+                "name": "Wooded Foothills",
+                "count": 1
+              },
+              {
+                "name": "Wreck and Rebuild",
+                "count": 1
+              },
+              {
+                "name": "Yavimaya Coast",
+                "count": 1
+              },
+              {
+                "name": "Zimone, Paradox Sculptor",
+                "count": 1
+              }
+            ],
+            "Commander": [
+              {
+                "name": "The Thirteenth Doctor",
+                "count": 1
+              },
+              {
+                "name": "Yasmin Khan",
+                "count": 1
+              }
+            ],
+            "Planes": [
+              {
+                "name": "Besieged Viking Village",
+                "count": 1
+              },
+              {
+                "name": "Fixed Point in Time",
+                "count": 1
+              },
+              {
+                "name": "Kerblam! Warehouse",
+                "count": 1
+              },
+              {
+                "name": "North Pole Research Base",
+                "count": 1
+              },
+              {
+                "name": "Singing Towers of Darillium",
+                "count": 1
+              },
+              {
+                "name": "Stormcage Containment Facility",
+                "count": 1
+              },
+              {
+                "name": "Temple of Atropos",
+                "count": 1
+              },
+              {
+                "name": "The Dining Car",
+                "count": 1
+              },
+              {
+                "name": "The Doctor's Childhood Barn",
+                "count": 1
+              },
+              {
+                "name": "The Drum, Mining Facility",
+                "count": 1
+              }
+            ]
+          }
+        },
+        {
+          "participantId": 2,
+          "deckName": "Draconic Domination [C17] [2017]",
+          "aiProfile": "Default",
+          "deck": {
+            "Main": [
+              {
+                "name": "Arcane Sanctum",
+                "count": 1
+              },
+              {
+                "name": "Armillary Sphere",
+                "count": 1
+              },
+              {
+                "name": "Atarka, World Render",
+                "count": 1
+              },
+              {
+                "name": "Bladewing the Risen",
+                "count": 1
+              },
+              {
+                "name": "Boneyard Scourge",
+                "count": 1
+              },
+              {
+                "name": "Broodmate Dragon",
+                "count": 1
+              },
+              {
+                "name": "Command Tower",
+                "count": 1
+              },
+              {
+                "name": "Commander's Sphere",
+                "count": 1
+              },
+              {
+                "name": "Crosis, the Purger",
+                "count": 1
+              },
+              {
+                "name": "Crucible of Fire",
+                "count": 1
+              },
+              {
+                "name": "Crucible of the Spirit Dragon",
+                "count": 1
+              },
+              {
+                "name": "Crumbling Necropolis",
+                "count": 1
+              },
+              {
+                "name": "Crux of Fate",
+                "count": 1
+              },
+              {
+                "name": "Cultivate",
+                "count": 1
+              },
+              {
+                "name": "Curse of Bounty",
+                "count": 1
+              },
+              {
+                "name": "Curse of Opulence",
+                "count": 1
+              },
+              {
+                "name": "Curse of Verbosity",
+                "count": 1
+              },
+              {
+                "name": "Darksteel Ingot",
+                "count": 1
+              },
+              {
+                "name": "Deathbringer Regent",
+                "count": 1
+              },
+              {
+                "name": "Dragon Tempest",
+                "count": 1
+              },
+              {
+                "name": "Dragonlord's Servant",
+                "count": 1
+              },
+              {
+                "name": "Dragonspeaker Shaman",
+                "count": 1
+              },
+              {
+                "name": "Dreamstone Hedron",
+                "count": 1
+              },
+              {
+                "name": "Dromoka, the Eternal",
+                "count": 1
+              },
+              {
+                "name": "Earthquake",
+                "count": 1
+              },
+              {
+                "name": "Elemental Bond",
+                "count": 1
+              },
+              {
+                "name": "Farseek",
+                "count": 1
+              },
+              {
+                "name": "Fist of Suns",
+                "count": 1
+              },
+              {
+                "name": "Forest",
+                "count": 3
+              },
+              {
+                "name": "Fortunate Few",
+                "count": 1
+              },
+              {
+                "name": "Fractured Identity",
+                "count": 1
+              },
+              {
+                "name": "Frontier Bivouac",
+                "count": 1
+              },
+              {
+                "name": "Frontier Siege",
+                "count": 1
+              },
+              {
+                "name": "Haven of the Spirit Dragon",
+                "count": 1
+              },
+              {
+                "name": "Hellkite Charger",
+                "count": 1
+              },
+              {
+                "name": "Herald's Horn",
+                "count": 1
+              },
+              {
+                "name": "Intet, the Dreamer",
+                "count": 1
+              },
+              {
+                "name": "Island",
+                "count": 3
+              },
+              {
+                "name": "Jungle Shrine",
+                "count": 1
+              },
+              {
+                "name": "Kindred Discovery",
+                "count": 1
+              },
+              {
+                "name": "Kodama's Reach",
+                "count": 1
+              },
+              {
+                "name": "Kolaghan, the Storm's Fury",
+                "count": 1
+              },
+              {
+                "name": "Lightning Greaves",
+                "count": 1
+              },
+              {
+                "name": "Mirror of the Forebears",
+                "count": 1
+              },
+              {
+                "name": "Monastery Siege",
+                "count": 1
+              },
+              {
+                "name": "Mountain",
+                "count": 6
+              },
+              {
+                "name": "Mystic Monastery",
+                "count": 1
+              },
+              {
+                "name": "Nihil Spellbomb",
+                "count": 1
+              },
+              {
+                "name": "Niv-Mizzet, Dracogenius",
+                "count": 1
+              },
+              {
+                "name": "Nomad Outpost",
+                "count": 1
+              },
+              {
+                "name": "O-Kagachi, Vengeful Kami",
+                "count": 1
+              },
+              {
+                "name": "Ojutai, Soul of Winter",
+                "count": 1
+              },
+              {
+                "name": "Opulent Palace",
+                "count": 1
+              },
+              {
+                "name": "Orator of Ojutai",
+                "count": 1
+              },
+              {
+                "name": "Painful Truths",
+                "count": 1
+              },
+              {
+                "name": "Palace Siege",
+                "count": 1
+              },
+              {
+                "name": "Path of Ancestry",
+                "count": 1
+              },
+              {
+                "name": "Plains",
+                "count": 3
+              },
+              {
+                "name": "Rain of Thorns",
+                "count": 1
+              },
+              {
+                "name": "Ramos, Dragon Engine",
+                "count": 1
+              },
+              {
+                "name": "Ryusei, the Falling Star",
+                "count": 1
+              },
+              {
+                "name": "Sandsteppe Citadel",
+                "count": 1
+              },
+              {
+                "name": "Savage Lands",
+                "count": 1
+              },
+              {
+                "name": "Savage Ventmaw",
+                "count": 1
+              },
+              {
+                "name": "Scalelord Reckoner",
+                "count": 1
+              },
+              {
+                "name": "Scion of the Ur-Dragon",
+                "count": 1
+              },
+              {
+                "name": "Scourge of Valkas",
+                "count": 1
+              },
+              {
+                "name": "Seaside Citadel",
+                "count": 1
+              },
+              {
+                "name": "Silumgar, the Drifting Death",
+                "count": 1
+              },
+              {
+                "name": "Sol Ring",
+                "count": 1
+              },
+              {
+                "name": "Spellbound Dragon",
+                "count": 1
+              },
+              {
+                "name": "Steel Hellkite",
+                "count": 1
+              },
+              {
+                "name": "Sunscorch Regent",
+                "count": 1
+              },
+              {
+                "name": "Swamp",
+                "count": 3
+              },
+              {
+                "name": "Taigam, Ojutai Master",
+                "count": 1
+              },
+              {
+                "name": "Teneb, the Harvester",
+                "count": 1
+              },
+              {
+                "name": "Territorial Hellkite",
+                "count": 1
+              },
+              {
+                "name": "Tyrant's Familiar",
+                "count": 1
+              },
+              {
+                "name": "Utvara Hellkite",
+                "count": 1
+              },
+              {
+                "name": "Vivid Crag",
+                "count": 1
+              },
+              {
+                "name": "Vivid Creek",
+                "count": 1
+              },
+              {
+                "name": "Vivid Grove",
+                "count": 1
+              },
+              {
+                "name": "Vivid Marsh",
+                "count": 1
+              },
+              {
+                "name": "Vivid Meadow",
+                "count": 1
+              },
+              {
+                "name": "Wasitora, Nekoru Queen",
+                "count": 1
+              },
+              {
+                "name": "Wayfarer's Bauble",
+                "count": 1
+              }
+            ],
+            "Commander": [
+              {
+                "name": "The Ur-Dragon",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ],
+      "streamKind": "FULL_GAME_TRACE",
+      "eventIndexMode": "CONTIGUOUS"
+    },
+    "start": {
+      "type": "AI_SUBORDINATE_CHOICE",
+      "game": 1,
+      "eventIndex": 210,
+      "turn": 6,
+      "phase": "MAIN2",
+      "choice": {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:16",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "TRIGGER_PREPARATION_RESULT",
+        "boundary": "TRIGGER_PREPARATION",
+        "stage": "TRIGGER_PREPARATION",
+        "chooserPlayerId": 0,
+        "chooserKind": "AI",
+        "abilityId": 865,
+        "sourceId": 27,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "options": {
+          "priorTargets": {
+            "abilitiesTruncated": false,
+            "abilities": [
+              {
+                "abilityId": 865,
+                "targets": [],
+                "targetsTruncated": false
+              }
+            ]
+          },
+          "coverage": "PRIOR_TARGET_PLAN_ONLY"
+        }
+      }
+    },
+    "terminal": {
+      "type": "AI_SUBORDINATE_CHOICE",
+      "game": 1,
+      "eventIndex": 211,
+      "turn": 6,
+      "phase": "MAIN2",
+      "choice": {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:16",
+        "status": "COMPLETED",
+        "selection": {
+          "targets": {
+            "abilitiesTruncated": false,
+            "abilities": [
+              {
+                "abilityId": 865,
+                "targets": [],
+                "targetsTruncated": false
+              }
+            ]
+          },
+          "accepted": true
+        },
+        "elapsedNanos": 1774529
+      }
+    },
+    "trainingReady": false
+  },
+  "X_SELECTION": {
+    "scenario": "modal-x",
+    "source": {
+      "path": "/workspace/work/five-tasks/modal-x-full.jsonl",
+      "sha256": "651be8784828cecf9ed63fb65b4a736dffcb1f6f44ac9b345dc8628778c6735a",
+      "bytes": 2169087
+    },
+    "runMetadata": {
+      "type": "RUN_STARTED",
+      "schemaVersion": 1,
+      "actionEventSchemaVersion": 1,
+      "choiceEventSchemaVersion": 1,
+      "runId": "b4595d35-6668-47b4-ac64-4a16b050e5aa",
+      "pilotMode": "HEURISTIC",
+      "engineRevision": "77bbd39dd7bf6d4e9b4526aa96942c74519b2288",
+      "engineDirty": "false",
+      "forgeVersion": "GIT",
+      "runMode": "GAMES",
+      "gameType": "Constructed",
+      "requestedGames": 3,
+      "seed": 13001,
+      "participants": [
+        {
+          "participantId": 1,
+          "deckName": "Choice Modal X Payment",
+          "aiProfile": "Default",
+          "deck": {
+            "Main": [
+              {
+                "name": "Divination",
+                "count": 4
+              },
+              {
+                "name": "Fireball",
+                "count": 4
+              },
+              {
+                "name": "Goblin Piker",
+                "count": 4
+              },
+              {
+                "name": "Hangarback Walker",
+                "count": 4
+              },
+              {
+                "name": "Island",
+                "count": 12
+              },
+              {
+                "name": "Izzet Charm",
+                "count": 4
+              },
+              {
+                "name": "Mind Stone",
+                "count": 4
+              },
+              {
+                "name": "Mountain",
+                "count": 12
+              },
+              {
+                "name": "Prismari Command",
+                "count": 4
+              },
+              {
+                "name": "Tormenting Voice",
+                "count": 4
+              },
+              {
+                "name": "Yusri, Fortune's Flame",
+                "count": 4
+              }
+            ]
+          }
+        },
+        {
+          "participantId": 2,
+          "deckName": "Trace Green",
+          "aiProfile": "Default",
+          "deck": {
+            "Main": [
+              {
+                "name": "Forest",
+                "count": 24
+              },
+              {
+                "name": "Giant Growth",
+                "count": 4
+              },
+              {
+                "name": "Grizzly Bears",
+                "count": 4
+              },
+              {
+                "name": "Llanowar Elves",
+                "count": 4
+              },
+              {
+                "name": "Nessian Courser",
+                "count": 4
+              },
+              {
+                "name": "Rumbling Baloth",
+                "count": 4
+              },
+              {
+                "name": "Runeclaw Bear",
+                "count": 4
+              }
+            ]
+          }
+        }
+      ],
+      "streamKind": "FULL_GAME_TRACE",
+      "eventIndexMode": "CONTIGUOUS"
+    },
+    "start": {
+      "type": "AI_SUBORDINATE_CHOICE",
+      "game": 1,
+      "eventIndex": 30,
+      "turn": 1,
+      "phase": "MAIN1",
+      "choice": {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:1",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "X_SELECTION",
+        "boundary": "MAX_X_HEURISTIC",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 0,
+        "chooserKind": "AI",
+        "abilityId": 253,
+        "sourceId": 33,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "options": {
+          "coverage": "HEURISTIC_BOUND_NOT_LEGAL_SET",
+          "minimum": 0,
+          "maximum": 0,
+          "previousValue": null
+        }
+      }
+    },
+    "terminal": {
+      "type": "AI_SUBORDINATE_CHOICE",
+      "game": 1,
+      "eventIndex": 31,
+      "turn": 1,
+      "phase": "MAIN1",
+      "choice": {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:1",
+        "status": "COMPLETED",
+        "selection": {
+          "value": 0,
+          "optionIndex": null,
+          "domainMatch": "WITHIN_OBSERVED_DOMAIN"
+        },
+        "elapsedNanos": 2191530
+      }
+    },
+    "trainingReady": false
+  },
+  "MODE_SELECTION": {
+    "scenario": "modal-x",
+    "source": {
+      "path": "/workspace/work/five-tasks/modal-x-full.jsonl",
+      "sha256": "651be8784828cecf9ed63fb65b4a736dffcb1f6f44ac9b345dc8628778c6735a",
+      "bytes": 2169087
+    },
+    "runMetadata": {
+      "type": "RUN_STARTED",
+      "schemaVersion": 1,
+      "actionEventSchemaVersion": 1,
+      "choiceEventSchemaVersion": 1,
+      "runId": "b4595d35-6668-47b4-ac64-4a16b050e5aa",
+      "pilotMode": "HEURISTIC",
+      "engineRevision": "77bbd39dd7bf6d4e9b4526aa96942c74519b2288",
+      "engineDirty": "false",
+      "forgeVersion": "GIT",
+      "runMode": "GAMES",
+      "gameType": "Constructed",
+      "requestedGames": 3,
+      "seed": 13001,
+      "participants": [
+        {
+          "participantId": 1,
+          "deckName": "Choice Modal X Payment",
+          "aiProfile": "Default",
+          "deck": {
+            "Main": [
+              {
+                "name": "Divination",
+                "count": 4
+              },
+              {
+                "name": "Fireball",
+                "count": 4
+              },
+              {
+                "name": "Goblin Piker",
+                "count": 4
+              },
+              {
+                "name": "Hangarback Walker",
+                "count": 4
+              },
+              {
+                "name": "Island",
+                "count": 12
+              },
+              {
+                "name": "Izzet Charm",
+                "count": 4
+              },
+              {
+                "name": "Mind Stone",
+                "count": 4
+              },
+              {
+                "name": "Mountain",
+                "count": 12
+              },
+              {
+                "name": "Prismari Command",
+                "count": 4
+              },
+              {
+                "name": "Tormenting Voice",
+                "count": 4
+              },
+              {
+                "name": "Yusri, Fortune's Flame",
+                "count": 4
+              }
+            ]
+          }
+        },
+        {
+          "participantId": 2,
+          "deckName": "Trace Green",
+          "aiProfile": "Default",
+          "deck": {
+            "Main": [
+              {
+                "name": "Forest",
+                "count": 24
+              },
+              {
+                "name": "Giant Growth",
+                "count": 4
+              },
+              {
+                "name": "Grizzly Bears",
+                "count": 4
+              },
+              {
+                "name": "Llanowar Elves",
+                "count": 4
+              },
+              {
+                "name": "Nessian Courser",
+                "count": 4
+              },
+              {
+                "name": "Rumbling Baloth",
+                "count": 4
+              },
+              {
+                "name": "Runeclaw Bear",
+                "count": 4
+              }
+            ]
+          }
+        }
+      ],
+      "streamKind": "FULL_GAME_TRACE",
+      "eventIndexMode": "CONTIGUOUS"
+    },
+    "start": {
+      "type": "AI_SUBORDINATE_CHOICE",
+      "game": 1,
+      "eventIndex": 199,
+      "turn": 5,
+      "phase": "DRAW",
+      "choice": {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:22",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "MODE_SELECTION",
+        "boundary": "CHARM_MODE_HEURISTIC",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 0,
+        "chooserKind": "AI",
+        "abilityId": 305,
+        "sourceId": 9,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "options": {
+          "min": 2,
+          "max": 2,
+          "truncated": false,
+          "coverage": "OBSERVED_MODE_OPTIONS",
+          "items": [
+            {
+              "abilityId": 306,
+              "optionIndex": 0,
+              "definitionIndex": 0
+            },
+            {
+              "abilityId": 307,
+              "optionIndex": 1,
+              "definitionIndex": 1
+            },
+            {
+              "abilityId": 309,
+              "optionIndex": 2,
+              "definitionIndex": 2
+            },
+            {
+              "abilityId": 310,
+              "optionIndex": 3,
+              "definitionIndex": 3
+            }
+          ],
+          "allowRepeat": false
+        }
+      }
+    },
+    "terminal": {
+      "type": "AI_SUBORDINATE_CHOICE",
+      "game": 1,
+      "eventIndex": 204,
+      "turn": 5,
+      "phase": "DRAW",
+      "choice": {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:22",
+        "status": "COMPLETED",
+        "selection": {
+          "available": false,
+          "modes": [],
+          "selectedCount": null,
+          "truncated": false,
+          "accepted": false
+        },
+        "elapsedNanos": 73354894
+      }
+    },
+    "trainingReady": false
+  },
+  "NUMBER_SELECTION": {
+    "scenario": "modal-x",
+    "source": {
+      "path": "/workspace/work/five-tasks/modal-x-full.jsonl",
+      "sha256": "651be8784828cecf9ed63fb65b4a736dffcb1f6f44ac9b345dc8628778c6735a",
+      "bytes": 2169087
+    },
+    "runMetadata": {
+      "type": "RUN_STARTED",
+      "schemaVersion": 1,
+      "actionEventSchemaVersion": 1,
+      "choiceEventSchemaVersion": 1,
+      "runId": "b4595d35-6668-47b4-ac64-4a16b050e5aa",
+      "pilotMode": "HEURISTIC",
+      "engineRevision": "77bbd39dd7bf6d4e9b4526aa96942c74519b2288",
+      "engineDirty": "false",
+      "forgeVersion": "GIT",
+      "runMode": "GAMES",
+      "gameType": "Constructed",
+      "requestedGames": 3,
+      "seed": 13001,
+      "participants": [
+        {
+          "participantId": 1,
+          "deckName": "Choice Modal X Payment",
+          "aiProfile": "Default",
+          "deck": {
+            "Main": [
+              {
+                "name": "Divination",
+                "count": 4
+              },
+              {
+                "name": "Fireball",
+                "count": 4
+              },
+              {
+                "name": "Goblin Piker",
+                "count": 4
+              },
+              {
+                "name": "Hangarback Walker",
+                "count": 4
+              },
+              {
+                "name": "Island",
+                "count": 12
+              },
+              {
+                "name": "Izzet Charm",
+                "count": 4
+              },
+              {
+                "name": "Mind Stone",
+                "count": 4
+              },
+              {
+                "name": "Mountain",
+                "count": 12
+              },
+              {
+                "name": "Prismari Command",
+                "count": 4
+              },
+              {
+                "name": "Tormenting Voice",
+                "count": 4
+              },
+              {
+                "name": "Yusri, Fortune's Flame",
+                "count": 4
+              }
+            ]
+          }
+        },
+        {
+          "participantId": 2,
+          "deckName": "Trace Green",
+          "aiProfile": "Default",
+          "deck": {
+            "Main": [
+              {
+                "name": "Forest",
+                "count": 24
+              },
+              {
+                "name": "Giant Growth",
+                "count": 4
+              },
+              {
+                "name": "Grizzly Bears",
+                "count": 4
+              },
+              {
+                "name": "Llanowar Elves",
+                "count": 4
+              },
+              {
+                "name": "Nessian Courser",
+                "count": 4
+              },
+              {
+                "name": "Rumbling Baloth",
+                "count": 4
+              },
+              {
+                "name": "Runeclaw Bear",
+                "count": 4
+              }
+            ]
+          }
+        }
+      ],
+      "streamKind": "FULL_GAME_TRACE",
+      "eventIndexMode": "CONTIGUOUS"
+    },
+    "start": {
+      "type": "AI_SUBORDINATE_CHOICE",
+      "game": 1,
+      "eventIndex": 801,
+      "turn": 9,
+      "phase": "COMBAT_DECLARE_ATTACKERS",
+      "choice": {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:212",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "NUMBER_SELECTION",
+        "boundary": "CONTROLLER_NUMBER_RANGE",
+        "stage": "RESOLUTION",
+        "chooserPlayerId": 0,
+        "chooserKind": "AI",
+        "abilityId": 614,
+        "sourceId": 54,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": 620,
+        "options": {
+          "coverage": "OBSERVED_RANGE",
+          "minimum": 1,
+          "maximum": 5
+        }
+      }
+    },
+    "terminal": {
+      "type": "AI_SUBORDINATE_CHOICE",
+      "game": 1,
+      "eventIndex": 802,
+      "turn": 9,
+      "phase": "COMBAT_DECLARE_ATTACKERS",
+      "choice": {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:212",
+        "status": "COMPLETED",
+        "selection": {
+          "value": 5,
+          "optionIndex": null,
+          "domainMatch": "WITHIN_OBSERVED_DOMAIN"
+        },
+        "elapsedNanos": 165388
+      }
+    },
+    "trainingReady": false
+  },
+  "PAYMENT_DECISION:CARD_PROPOSAL": {
+    "scenario": "damage",
+    "source": {
+      "path": "/workspace/work/five-tasks/damage-full.jsonl",
+      "sha256": "9d134b182b0f45da8038cd1f24da0856cd7a8dd679a63aba36fdf2dff8ff9360",
+      "bytes": 1944133
+    },
+    "runMetadata": {
+      "type": "RUN_STARTED",
+      "schemaVersion": 1,
+      "actionEventSchemaVersion": 1,
+      "choiceEventSchemaVersion": 1,
+      "runId": "3e9711b5-9429-4135-8e26-9f7a6dafb2ea",
+      "pilotMode": "HEURISTIC",
+      "engineRevision": "77bbd39dd7bf6d4e9b4526aa96942c74519b2288",
+      "engineDirty": "false",
+      "forgeVersion": "GIT",
+      "runMode": "GAMES",
+      "gameType": "Constructed",
+      "requestedGames": 3,
+      "seed": 12032,
+      "participants": [
+        {
+          "participantId": 1,
+          "deckName": "Target Choice Damage",
+          "aiProfile": "Default",
+          "deck": {
+            "Main": [
+              {
+                "name": "Firebolt",
+                "count": 4
+              },
+              {
+                "name": "Flame Slash",
+                "count": 4
+              },
+              {
+                "name": "Goblin Piker",
+                "count": 4
+              },
+              {
+                "name": "Hill Giant",
+                "count": 4
+              },
+              {
+                "name": "Lightning Bolt",
+                "count": 4
+              },
+              {
+                "name": "Mountain",
+                "count": 24
+              },
+              {
+                "name": "Roast",
+                "count": 4
+              },
+              {
+                "name": "Shock",
+                "count": 4
+              },
+              {
+                "name": "Tormenting Voice",
+                "count": 4
+              },
+              {
+                "name": "Volcanic Hammer",
+                "count": 4
+              }
+            ]
+          }
+        },
+        {
+          "participantId": 2,
+          "deckName": "Trace Green",
+          "aiProfile": "Default",
+          "deck": {
+            "Main": [
+              {
+                "name": "Forest",
+                "count": 24
+              },
+              {
+                "name": "Giant Growth",
+                "count": 4
+              },
+              {
+                "name": "Grizzly Bears",
+                "count": 4
+              },
+              {
+                "name": "Llanowar Elves",
+                "count": 4
+              },
+              {
+                "name": "Nessian Courser",
+                "count": 4
+              },
+              {
+                "name": "Rumbling Baloth",
+                "count": 4
+              },
+              {
+                "name": "Runeclaw Bear",
+                "count": 4
+              }
+            ]
+          }
+        }
+      ],
+      "streamKind": "FULL_GAME_TRACE",
+      "eventIndexMode": "CONTIGUOUS"
+    },
+    "start": {
+      "type": "AI_SUBORDINATE_CHOICE",
+      "game": 1,
+      "eventIndex": 447,
+      "turn": 8,
+      "phase": "MAIN2",
+      "choice": {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:60",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "PAYMENT_DECISION",
+        "boundary": "COST_VISITOR",
+        "stage": "PAYMENT",
+        "chooserPlayerId": 0,
+        "chooserKind": "AI",
+        "abilityId": 176,
+        "sourceId": 55,
+        "decisionId": "0:30",
+        "actionId": "0:30:0",
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "options": {
+          "costKind": "CostDiscard",
+          "coverage": "PAYMENT_VISITOR_INPUT_NOT_ALTERNATIVES",
+          "effect": false
+        }
+      }
+    },
+    "terminal": {
+      "type": "AI_SUBORDINATE_CHOICE",
+      "game": 1,
+      "eventIndex": 450,
+      "turn": 8,
+      "phase": "MAIN2",
+      "choice": {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:60",
+        "status": "COMPLETED",
+        "selection": {
+          "decisionCount": 0,
+          "cards": {
+            "truncated": false,
+            "items": [
+              {
+                "type": "CARD",
+                "id": 27,
+                "gameTimestamp": 5
+              }
+            ]
+          },
+          "mana": null,
+          "players": null,
+          "abilities": null,
+          "colorMask": null,
+          "unrecordedDetails": []
+        },
+        "elapsedNanos": 538598
+      }
+    },
+    "trainingReady": false
+  },
+  "PAYMENT_DECISION:COUNT_PROPOSAL": {
+    "scenario": "commander",
+    "source": {
+      "path": "/workspace/work/five-tasks/commander-full.jsonl",
+      "sha256": "17ba9784ab25244aa7bd90a88d2610f0e4dfab7282044ff54016951481673f21",
+      "bytes": 721775
+    },
+    "runMetadata": {
+      "type": "RUN_STARTED",
+      "schemaVersion": 1,
+      "actionEventSchemaVersion": 1,
+      "choiceEventSchemaVersion": 1,
+      "runId": "185ba7a4-defa-486b-b354-de7fb1acfe67",
+      "pilotMode": "HEURISTIC",
+      "engineRevision": "77bbd39dd7bf6d4e9b4526aa96942c74519b2288",
+      "engineDirty": "false",
+      "forgeVersion": "GIT",
+      "runMode": "GAMES",
+      "gameType": "Commander",
+      "requestedGames": 1,
+      "seed": 31002,
+      "participants": [
+        {
+          "participantId": 1,
+          "deckName": "Doctor Who - The Thirteenth Doctor and Yasmin Khan",
+          "aiProfile": "Default",
+          "deck": {
+            "Main": [
+              {
+                "name": "Arcane Signet",
+                "count": 1
+              },
+              {
+                "name": "Beast Within",
+                "count": 1
+              },
+              {
+                "name": "Bigger on the Inside",
+                "count": 1
+              },
+              {
+                "name": "Birds of Paradise",
+                "count": 1
+              },
+              {
+                "name": "Boseiju, Who Endures",
+                "count": 1
+              },
+              {
+                "name": "Breeding Pool",
+                "count": 1
+              },
+              {
+                "name": "Chaos Warp",
+                "count": 1
+              },
+              {
+                "name": "Chimil, the Inner Sun",
+                "count": 1
+              },
+              {
+                "name": "Cinder Glade",
+                "count": 1
+              },
+              {
+                "name": "City of Brass",
+                "count": 1
+              },
+              {
+                "name": "Clara Oswald",
+                "count": 1
+              },
+              {
+                "name": "Command Tower",
+                "count": 1
+              },
+              {
+                "name": "Confession Dial",
+                "count": 1
+              },
+              {
+                "name": "Cryptic Command",
+                "count": 1
+              },
+              {
+                "name": "Cultivate",
+                "count": 1
+              },
+              {
+                "name": "Cursed Mirror",
+                "count": 1
+              },
+              {
+                "name": "Danny Pink",
+                "count": 1
+              },
+              {
+                "name": "Decaying Time Loop",
+                "count": 1
+              },
+              {
+                "name": "Delayed Blast Fireball",
+                "count": 1
+              },
+              {
+                "name": "Desolate Lighthouse",
+                "count": 1
+              },
+              {
+                "name": "Doc Aurlock, Grizzled Genius",
+                "count": 1
+              },
+              {
+                "name": "Dreamroot Cascade",
+                "count": 1
+              },
+              {
+                "name": "Etali, Primal Storm",
+                "count": 1
+              },
+              {
+                "name": "Exotic Orchard",
+                "count": 1
+              },
+              {
+                "name": "Farseek",
+                "count": 1
+              },
+              {
+                "name": "Fiery Islet",
+                "count": 1
+              },
+              {
+                "name": "Flaming Tyrannosaurus",
+                "count": 1
+              },
+              {
+                "name": "Flatline",
+                "count": 1
+              },
+              {
+                "name": "Forest",
+                "count": 1
+              },
+              {
+                "name": "Frontier Bivouac",
+                "count": 1
+              },
+              {
+                "name": "Frost Fair Lure Fish",
+                "count": 1
+              },
+              {
+                "name": "Frostboil Snarl",
+                "count": 1
+              },
+              {
+                "name": "Growing Rites of Itlimoc",
+                "count": 1
+              },
+              {
+                "name": "Growth Spiral",
+                "count": 1
+              },
+              {
+                "name": "Hangarback Walker",
+                "count": 1
+              },
+              {
+                "name": "Heaven Sent",
+                "count": 1
+              },
+              {
+                "name": "Heroic Intervention",
+                "count": 1
+              },
+              {
+                "name": "Hidden Cataract",
+                "count": 1
+              },
+              {
+                "name": "Hidden Nursery",
+                "count": 1
+              },
+              {
+                "name": "Hidden Volcano",
+                "count": 1
+              },
+              {
+                "name": "Hinterland Harbor",
+                "count": 1
+              },
+              {
+                "name": "Impending Flux",
+                "count": 1
+              },
+              {
+                "name": "Incubation Druid",
+                "count": 1
+              },
+              {
+                "name": "Into the Time Vortex",
+                "count": 1
+              },
+              {
+                "name": "Iraxxa, Empress of Mars",
+                "count": 1
+              },
+              {
+                "name": "Island",
+                "count": 2
+              },
+              {
+                "name": "Kami of Celebration",
+                "count": 1
+              },
+              {
+                "name": "Kami of Whispered Hopes",
+                "count": 1
+              },
+              {
+                "name": "Keeper of Secrets",
+                "count": 1
+              },
+              {
+                "name": "Laelia, the Blade Reforged",
+                "count": 1
+              },
+              {
+                "name": "Last Night Together",
+                "count": 1
+              },
+              {
+                "name": "Maelstrom Wanderer",
+                "count": 1
+              },
+              {
+                "name": "Master Biomancer",
+                "count": 1
+              },
+              {
+                "name": "Memory Worm",
+                "count": 1
+              },
+              {
+                "name": "Mountain",
+                "count": 2
+              },
+              {
+                "name": "Nature's Lore",
+                "count": 1
+              },
+              {
+                "name": "Ominous Cemetery",
+                "count": 1
+              },
+              {
+                "name": "Ouroboroid",
+                "count": 1
+              },
+              {
+                "name": "Ponder",
+                "count": 1
+              },
+              {
+                "name": "Preordain",
+                "count": 1
+              },
+              {
+                "name": "Quantum Misalignment",
+                "count": 1
+              },
+              {
+                "name": "Rejuvenating Springs",
+                "count": 1
+              },
+              {
+                "name": "Rockfall Vale",
+                "count": 1
+              },
+              {
+                "name": "Rogue's Passage",
+                "count": 1
+              },
+              {
+                "name": "Rootbound Crag",
+                "count": 1
+              },
+              {
+                "name": "Ryan Sinclair",
+                "count": 1
+              },
+              {
+                "name": "Scalding Tarn",
+                "count": 1
+              },
+              {
+                "name": "Search for Tomorrow",
+                "count": 1
+              },
+              {
+                "name": "Sheltered Thicket",
+                "count": 1
+              },
+              {
+                "name": "Sisterhood of Karn",
+                "count": 1
+              },
+              {
+                "name": "Skyshroud Claim",
+                "count": 1
+              },
+              {
+                "name": "Snapcaster Mage",
+                "count": 1
+              },
+              {
+                "name": "Sol Ring",
+                "count": 1
+              },
+              {
+                "name": "Sonic Screwdriver",
+                "count": 1
+              },
+              {
+                "name": "Spire Garden",
+                "count": 1
+              },
+              {
+                "name": "Steam Vents",
+                "count": 1
+              },
+              {
+                "name": "Stomping Ground",
+                "count": 1
+              },
+              {
+                "name": "Stormcarved Coast",
+                "count": 1
+              },
+              {
+                "name": "Sulfur Falls",
+                "count": 1
+              },
+              {
+                "name": "Surge of Brilliance",
+                "count": 1
+              },
+              {
+                "name": "TARDIS",
+                "count": 1
+              },
+              {
+                "name": "Talisman of Curiosity",
+                "count": 1
+              },
+              {
+                "name": "Talisman of Impulse",
+                "count": 1
+              },
+              {
+                "name": "Temple of Abandon",
+                "count": 1
+              },
+              {
+                "name": "Temple of Epiphany",
+                "count": 1
+              },
+              {
+                "name": "The Flux",
+                "count": 1
+              },
+              {
+                "name": "The Foretold Soldier",
+                "count": 1
+              },
+              {
+                "name": "The Reality Chip",
+                "count": 1
+              },
+              {
+                "name": "The Twelfth Doctor",
+                "count": 1
+              },
+              {
+                "name": "Think Twice",
+                "count": 1
+              },
+              {
+                "name": "Throes of Chaos",
+                "count": 1
+              },
+              {
+                "name": "Waterlogged Grove",
+                "count": 1
+              },
+              {
+                "name": "Wooded Foothills",
+                "count": 1
+              },
+              {
+                "name": "Wreck and Rebuild",
+                "count": 1
+              },
+              {
+                "name": "Yavimaya Coast",
+                "count": 1
+              },
+              {
+                "name": "Zimone, Paradox Sculptor",
+                "count": 1
+              }
+            ],
+            "Commander": [
+              {
+                "name": "The Thirteenth Doctor",
+                "count": 1
+              },
+              {
+                "name": "Yasmin Khan",
+                "count": 1
+              }
+            ],
+            "Planes": [
+              {
+                "name": "Besieged Viking Village",
+                "count": 1
+              },
+              {
+                "name": "Fixed Point in Time",
+                "count": 1
+              },
+              {
+                "name": "Kerblam! Warehouse",
+                "count": 1
+              },
+              {
+                "name": "North Pole Research Base",
+                "count": 1
+              },
+              {
+                "name": "Singing Towers of Darillium",
+                "count": 1
+              },
+              {
+                "name": "Stormcage Containment Facility",
+                "count": 1
+              },
+              {
+                "name": "Temple of Atropos",
+                "count": 1
+              },
+              {
+                "name": "The Dining Car",
+                "count": 1
+              },
+              {
+                "name": "The Doctor's Childhood Barn",
+                "count": 1
+              },
+              {
+                "name": "The Drum, Mining Facility",
+                "count": 1
+              }
+            ]
+          }
+        },
+        {
+          "participantId": 2,
+          "deckName": "Draconic Domination [C17] [2017]",
+          "aiProfile": "Default",
+          "deck": {
+            "Main": [
+              {
+                "name": "Arcane Sanctum",
+                "count": 1
+              },
+              {
+                "name": "Armillary Sphere",
+                "count": 1
+              },
+              {
+                "name": "Atarka, World Render",
+                "count": 1
+              },
+              {
+                "name": "Bladewing the Risen",
+                "count": 1
+              },
+              {
+                "name": "Boneyard Scourge",
+                "count": 1
+              },
+              {
+                "name": "Broodmate Dragon",
+                "count": 1
+              },
+              {
+                "name": "Command Tower",
+                "count": 1
+              },
+              {
+                "name": "Commander's Sphere",
+                "count": 1
+              },
+              {
+                "name": "Crosis, the Purger",
+                "count": 1
+              },
+              {
+                "name": "Crucible of Fire",
+                "count": 1
+              },
+              {
+                "name": "Crucible of the Spirit Dragon",
+                "count": 1
+              },
+              {
+                "name": "Crumbling Necropolis",
+                "count": 1
+              },
+              {
+                "name": "Crux of Fate",
+                "count": 1
+              },
+              {
+                "name": "Cultivate",
+                "count": 1
+              },
+              {
+                "name": "Curse of Bounty",
+                "count": 1
+              },
+              {
+                "name": "Curse of Opulence",
+                "count": 1
+              },
+              {
+                "name": "Curse of Verbosity",
+                "count": 1
+              },
+              {
+                "name": "Darksteel Ingot",
+                "count": 1
+              },
+              {
+                "name": "Deathbringer Regent",
+                "count": 1
+              },
+              {
+                "name": "Dragon Tempest",
+                "count": 1
+              },
+              {
+                "name": "Dragonlord's Servant",
+                "count": 1
+              },
+              {
+                "name": "Dragonspeaker Shaman",
+                "count": 1
+              },
+              {
+                "name": "Dreamstone Hedron",
+                "count": 1
+              },
+              {
+                "name": "Dromoka, the Eternal",
+                "count": 1
+              },
+              {
+                "name": "Earthquake",
+                "count": 1
+              },
+              {
+                "name": "Elemental Bond",
+                "count": 1
+              },
+              {
+                "name": "Farseek",
+                "count": 1
+              },
+              {
+                "name": "Fist of Suns",
+                "count": 1
+              },
+              {
+                "name": "Forest",
+                "count": 3
+              },
+              {
+                "name": "Fortunate Few",
+                "count": 1
+              },
+              {
+                "name": "Fractured Identity",
+                "count": 1
+              },
+              {
+                "name": "Frontier Bivouac",
+                "count": 1
+              },
+              {
+                "name": "Frontier Siege",
+                "count": 1
+              },
+              {
+                "name": "Haven of the Spirit Dragon",
+                "count": 1
+              },
+              {
+                "name": "Hellkite Charger",
+                "count": 1
+              },
+              {
+                "name": "Herald's Horn",
+                "count": 1
+              },
+              {
+                "name": "Intet, the Dreamer",
+                "count": 1
+              },
+              {
+                "name": "Island",
+                "count": 3
+              },
+              {
+                "name": "Jungle Shrine",
+                "count": 1
+              },
+              {
+                "name": "Kindred Discovery",
+                "count": 1
+              },
+              {
+                "name": "Kodama's Reach",
+                "count": 1
+              },
+              {
+                "name": "Kolaghan, the Storm's Fury",
+                "count": 1
+              },
+              {
+                "name": "Lightning Greaves",
+                "count": 1
+              },
+              {
+                "name": "Mirror of the Forebears",
+                "count": 1
+              },
+              {
+                "name": "Monastery Siege",
+                "count": 1
+              },
+              {
+                "name": "Mountain",
+                "count": 6
+              },
+              {
+                "name": "Mystic Monastery",
+                "count": 1
+              },
+              {
+                "name": "Nihil Spellbomb",
+                "count": 1
+              },
+              {
+                "name": "Niv-Mizzet, Dracogenius",
+                "count": 1
+              },
+              {
+                "name": "Nomad Outpost",
+                "count": 1
+              },
+              {
+                "name": "O-Kagachi, Vengeful Kami",
+                "count": 1
+              },
+              {
+                "name": "Ojutai, Soul of Winter",
+                "count": 1
+              },
+              {
+                "name": "Opulent Palace",
+                "count": 1
+              },
+              {
+                "name": "Orator of Ojutai",
+                "count": 1
+              },
+              {
+                "name": "Painful Truths",
+                "count": 1
+              },
+              {
+                "name": "Palace Siege",
+                "count": 1
+              },
+              {
+                "name": "Path of Ancestry",
+                "count": 1
+              },
+              {
+                "name": "Plains",
+                "count": 3
+              },
+              {
+                "name": "Rain of Thorns",
+                "count": 1
+              },
+              {
+                "name": "Ramos, Dragon Engine",
+                "count": 1
+              },
+              {
+                "name": "Ryusei, the Falling Star",
+                "count": 1
+              },
+              {
+                "name": "Sandsteppe Citadel",
+                "count": 1
+              },
+              {
+                "name": "Savage Lands",
+                "count": 1
+              },
+              {
+                "name": "Savage Ventmaw",
+                "count": 1
+              },
+              {
+                "name": "Scalelord Reckoner",
+                "count": 1
+              },
+              {
+                "name": "Scion of the Ur-Dragon",
+                "count": 1
+              },
+              {
+                "name": "Scourge of Valkas",
+                "count": 1
+              },
+              {
+                "name": "Seaside Citadel",
+                "count": 1
+              },
+              {
+                "name": "Silumgar, the Drifting Death",
+                "count": 1
+              },
+              {
+                "name": "Sol Ring",
+                "count": 1
+              },
+              {
+                "name": "Spellbound Dragon",
+                "count": 1
+              },
+              {
+                "name": "Steel Hellkite",
+                "count": 1
+              },
+              {
+                "name": "Sunscorch Regent",
+                "count": 1
+              },
+              {
+                "name": "Swamp",
+                "count": 3
+              },
+              {
+                "name": "Taigam, Ojutai Master",
+                "count": 1
+              },
+              {
+                "name": "Teneb, the Harvester",
+                "count": 1
+              },
+              {
+                "name": "Territorial Hellkite",
+                "count": 1
+              },
+              {
+                "name": "Tyrant's Familiar",
+                "count": 1
+              },
+              {
+                "name": "Utvara Hellkite",
+                "count": 1
+              },
+              {
+                "name": "Vivid Crag",
+                "count": 1
+              },
+              {
+                "name": "Vivid Creek",
+                "count": 1
+              },
+              {
+                "name": "Vivid Grove",
+                "count": 1
+              },
+              {
+                "name": "Vivid Marsh",
+                "count": 1
+              },
+              {
+                "name": "Vivid Meadow",
+                "count": 1
+              },
+              {
+                "name": "Wasitora, Nekoru Queen",
+                "count": 1
+              },
+              {
+                "name": "Wayfarer's Bauble",
+                "count": 1
+              }
+            ],
+            "Commander": [
+              {
+                "name": "The Ur-Dragon",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ],
+      "streamKind": "FULL_GAME_TRACE",
+      "eventIndexMode": "CONTIGUOUS"
+    },
+    "start": {
+      "type": "AI_SUBORDINATE_CHOICE",
+      "game": 1,
+      "eventIndex": 374,
+      "turn": 8,
+      "phase": "MAIN1",
+      "choice": {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:54",
+        "parentChoiceId": "choice:46",
+        "status": "STARTED",
+        "choiceType": "PAYMENT_DECISION",
+        "boundary": "COST_VISITOR",
+        "stage": "PAYMENT",
+        "chooserPlayerId": 0,
+        "chooserKind": "AI",
+        "abilityId": 833,
+        "sourceId": 17,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "options": {
+          "effect": false,
+          "costKind": "CostPayLife",
+          "coverage": "PAYMENT_VISITOR_INPUT_NOT_ALTERNATIVES"
+        }
+      }
+    },
+    "terminal": {
+      "type": "AI_SUBORDINATE_CHOICE",
+      "game": 1,
+      "eventIndex": 375,
+      "turn": 8,
+      "phase": "MAIN1",
+      "choice": {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:54",
+        "status": "COMPLETED",
+        "selection": {
+          "decisionCount": 1,
+          "cards": {
+            "truncated": false,
+            "items": []
+          },
+          "mana": null,
+          "players": null,
+          "abilities": null,
+          "colorMask": null,
+          "unrecordedDetails": []
+        },
+        "elapsedNanos": 437657
+      }
+    },
+    "trainingReady": false
+  },
+  "X_SELECTION:ZERO": {
+    "scenario": "modal-x",
+    "source": {
+      "path": "/workspace/work/five-tasks/modal-x-full.jsonl",
+      "sha256": "651be8784828cecf9ed63fb65b4a736dffcb1f6f44ac9b345dc8628778c6735a",
+      "bytes": 2169087
+    },
+    "runMetadata": {
+      "type": "RUN_STARTED",
+      "schemaVersion": 1,
+      "actionEventSchemaVersion": 1,
+      "choiceEventSchemaVersion": 1,
+      "runId": "b4595d35-6668-47b4-ac64-4a16b050e5aa",
+      "pilotMode": "HEURISTIC",
+      "engineRevision": "77bbd39dd7bf6d4e9b4526aa96942c74519b2288",
+      "engineDirty": "false",
+      "forgeVersion": "GIT",
+      "runMode": "GAMES",
+      "gameType": "Constructed",
+      "requestedGames": 3,
+      "seed": 13001,
+      "participants": [
+        {
+          "participantId": 1,
+          "deckName": "Choice Modal X Payment",
+          "aiProfile": "Default",
+          "deck": {
+            "Main": [
+              {
+                "name": "Divination",
+                "count": 4
+              },
+              {
+                "name": "Fireball",
+                "count": 4
+              },
+              {
+                "name": "Goblin Piker",
+                "count": 4
+              },
+              {
+                "name": "Hangarback Walker",
+                "count": 4
+              },
+              {
+                "name": "Island",
+                "count": 12
+              },
+              {
+                "name": "Izzet Charm",
+                "count": 4
+              },
+              {
+                "name": "Mind Stone",
+                "count": 4
+              },
+              {
+                "name": "Mountain",
+                "count": 12
+              },
+              {
+                "name": "Prismari Command",
+                "count": 4
+              },
+              {
+                "name": "Tormenting Voice",
+                "count": 4
+              },
+              {
+                "name": "Yusri, Fortune's Flame",
+                "count": 4
+              }
+            ]
+          }
+        },
+        {
+          "participantId": 2,
+          "deckName": "Trace Green",
+          "aiProfile": "Default",
+          "deck": {
+            "Main": [
+              {
+                "name": "Forest",
+                "count": 24
+              },
+              {
+                "name": "Giant Growth",
+                "count": 4
+              },
+              {
+                "name": "Grizzly Bears",
+                "count": 4
+              },
+              {
+                "name": "Llanowar Elves",
+                "count": 4
+              },
+              {
+                "name": "Nessian Courser",
+                "count": 4
+              },
+              {
+                "name": "Rumbling Baloth",
+                "count": 4
+              },
+              {
+                "name": "Runeclaw Bear",
+                "count": 4
+              }
+            ]
+          }
+        }
+      ],
+      "streamKind": "FULL_GAME_TRACE",
+      "eventIndexMode": "CONTIGUOUS"
+    },
+    "start": {
+      "type": "AI_SUBORDINATE_CHOICE",
+      "game": 1,
+      "eventIndex": 30,
+      "turn": 1,
+      "phase": "MAIN1",
+      "choice": {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:1",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "X_SELECTION",
+        "boundary": "MAX_X_HEURISTIC",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 0,
+        "chooserKind": "AI",
+        "abilityId": 253,
+        "sourceId": 33,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "options": {
+          "coverage": "HEURISTIC_BOUND_NOT_LEGAL_SET",
+          "minimum": 0,
+          "maximum": 0,
+          "previousValue": null
+        }
+      }
+    },
+    "terminal": {
+      "type": "AI_SUBORDINATE_CHOICE",
+      "game": 1,
+      "eventIndex": 31,
+      "turn": 1,
+      "phase": "MAIN1",
+      "choice": {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:1",
+        "status": "COMPLETED",
+        "selection": {
+          "value": 0,
+          "optionIndex": null,
+          "domainMatch": "WITHIN_OBSERVED_DOMAIN"
+        },
+        "elapsedNanos": 2191530
+      }
+    },
+    "trainingReady": false
+  },
+  "X_SELECTION:POSITIVE": {
+    "scenario": "modal-x",
+    "source": {
+      "path": "/workspace/work/five-tasks/modal-x-full.jsonl",
+      "sha256": "651be8784828cecf9ed63fb65b4a736dffcb1f6f44ac9b345dc8628778c6735a",
+      "bytes": 2169087
+    },
+    "runMetadata": {
+      "type": "RUN_STARTED",
+      "schemaVersion": 1,
+      "actionEventSchemaVersion": 1,
+      "choiceEventSchemaVersion": 1,
+      "runId": "b4595d35-6668-47b4-ac64-4a16b050e5aa",
+      "pilotMode": "HEURISTIC",
+      "engineRevision": "77bbd39dd7bf6d4e9b4526aa96942c74519b2288",
+      "engineDirty": "false",
+      "forgeVersion": "GIT",
+      "runMode": "GAMES",
+      "gameType": "Constructed",
+      "requestedGames": 3,
+      "seed": 13001,
+      "participants": [
+        {
+          "participantId": 1,
+          "deckName": "Choice Modal X Payment",
+          "aiProfile": "Default",
+          "deck": {
+            "Main": [
+              {
+                "name": "Divination",
+                "count": 4
+              },
+              {
+                "name": "Fireball",
+                "count": 4
+              },
+              {
+                "name": "Goblin Piker",
+                "count": 4
+              },
+              {
+                "name": "Hangarback Walker",
+                "count": 4
+              },
+              {
+                "name": "Island",
+                "count": 12
+              },
+              {
+                "name": "Izzet Charm",
+                "count": 4
+              },
+              {
+                "name": "Mind Stone",
+                "count": 4
+              },
+              {
+                "name": "Mountain",
+                "count": 12
+              },
+              {
+                "name": "Prismari Command",
+                "count": 4
+              },
+              {
+                "name": "Tormenting Voice",
+                "count": 4
+              },
+              {
+                "name": "Yusri, Fortune's Flame",
+                "count": 4
+              }
+            ]
+          }
+        },
+        {
+          "participantId": 2,
+          "deckName": "Trace Green",
+          "aiProfile": "Default",
+          "deck": {
+            "Main": [
+              {
+                "name": "Forest",
+                "count": 24
+              },
+              {
+                "name": "Giant Growth",
+                "count": 4
+              },
+              {
+                "name": "Grizzly Bears",
+                "count": 4
+              },
+              {
+                "name": "Llanowar Elves",
+                "count": 4
+              },
+              {
+                "name": "Nessian Courser",
+                "count": 4
+              },
+              {
+                "name": "Rumbling Baloth",
+                "count": 4
+              },
+              {
+                "name": "Runeclaw Bear",
+                "count": 4
+              }
+            ]
+          }
+        }
+      ],
+      "streamKind": "FULL_GAME_TRACE",
+      "eventIndexMode": "CONTIGUOUS"
+    },
+    "start": {
+      "type": "AI_SUBORDINATE_CHOICE",
+      "game": 1,
+      "eventIndex": 105,
+      "turn": 3,
+      "phase": "MAIN1",
+      "choice": {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:8",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "X_SELECTION",
+        "boundary": "MAX_X_HEURISTIC",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 0,
+        "chooserKind": "AI",
+        "abilityId": 253,
+        "sourceId": 33,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "options": {
+          "coverage": "HEURISTIC_BOUND_NOT_LEGAL_SET",
+          "minimum": 0,
+          "maximum": 1,
+          "previousValue": 0
+        }
+      }
+    },
+    "terminal": {
+      "type": "AI_SUBORDINATE_CHOICE",
+      "game": 1,
+      "eventIndex": 106,
+      "turn": 3,
+      "phase": "MAIN1",
+      "choice": {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:8",
+        "status": "COMPLETED",
+        "selection": {
+          "value": 1,
+          "optionIndex": null,
+          "domainMatch": "WITHIN_OBSERVED_DOMAIN"
+        },
+        "elapsedNanos": 185641
+      }
+    },
+    "trainingReady": false
+  },
+  "MODE_SELECTION:NONEMPTY_PLAN": {
+    "scenario": "modal-x",
+    "source": {
+      "path": "/workspace/work/five-tasks/modal-x-full.jsonl",
+      "sha256": "651be8784828cecf9ed63fb65b4a736dffcb1f6f44ac9b345dc8628778c6735a",
+      "bytes": 2169087
+    },
+    "runMetadata": {
+      "type": "RUN_STARTED",
+      "schemaVersion": 1,
+      "actionEventSchemaVersion": 1,
+      "choiceEventSchemaVersion": 1,
+      "runId": "b4595d35-6668-47b4-ac64-4a16b050e5aa",
+      "pilotMode": "HEURISTIC",
+      "engineRevision": "77bbd39dd7bf6d4e9b4526aa96942c74519b2288",
+      "engineDirty": "false",
+      "forgeVersion": "GIT",
+      "runMode": "GAMES",
+      "gameType": "Constructed",
+      "requestedGames": 3,
+      "seed": 13001,
+      "participants": [
+        {
+          "participantId": 1,
+          "deckName": "Choice Modal X Payment",
+          "aiProfile": "Default",
+          "deck": {
+            "Main": [
+              {
+                "name": "Divination",
+                "count": 4
+              },
+              {
+                "name": "Fireball",
+                "count": 4
+              },
+              {
+                "name": "Goblin Piker",
+                "count": 4
+              },
+              {
+                "name": "Hangarback Walker",
+                "count": 4
+              },
+              {
+                "name": "Island",
+                "count": 12
+              },
+              {
+                "name": "Izzet Charm",
+                "count": 4
+              },
+              {
+                "name": "Mind Stone",
+                "count": 4
+              },
+              {
+                "name": "Mountain",
+                "count": 12
+              },
+              {
+                "name": "Prismari Command",
+                "count": 4
+              },
+              {
+                "name": "Tormenting Voice",
+                "count": 4
+              },
+              {
+                "name": "Yusri, Fortune's Flame",
+                "count": 4
+              }
+            ]
+          }
+        },
+        {
+          "participantId": 2,
+          "deckName": "Trace Green",
+          "aiProfile": "Default",
+          "deck": {
+            "Main": [
+              {
+                "name": "Forest",
+                "count": 24
+              },
+              {
+                "name": "Giant Growth",
+                "count": 4
+              },
+              {
+                "name": "Grizzly Bears",
+                "count": 4
+              },
+              {
+                "name": "Llanowar Elves",
+                "count": 4
+              },
+              {
+                "name": "Nessian Courser",
+                "count": 4
+              },
+              {
+                "name": "Rumbling Baloth",
+                "count": 4
+              },
+              {
+                "name": "Runeclaw Bear",
+                "count": 4
+              }
+            ]
+          }
+        }
+      ],
+      "streamKind": "FULL_GAME_TRACE",
+      "eventIndexMode": "CONTIGUOUS"
+    },
+    "start": {
+      "type": "AI_SUBORDINATE_CHOICE",
+      "game": 1,
+      "eventIndex": 297,
+      "turn": 5,
+      "phase": "MAIN2",
+      "choice": {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:54",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "MODE_SELECTION",
+        "boundary": "CHARM_MODE_HEURISTIC",
+        "stage": "CANDIDATE_EVALUATION",
+        "chooserPlayerId": 0,
+        "chooserKind": "AI",
+        "abilityId": 305,
+        "sourceId": 9,
+        "decisionId": "0:18",
+        "actionId": null,
+        "candidateAbilityId": 305,
+        "assessmentId": "0:18:assessment:2",
+        "resolvingAbilityId": null,
+        "options": {
+          "min": 2,
+          "max": 2,
+          "truncated": false,
+          "coverage": "OBSERVED_MODE_OPTIONS",
+          "items": [
+            {
+              "abilityId": 306,
+              "optionIndex": 0,
+              "definitionIndex": 0
+            },
+            {
+              "abilityId": 307,
+              "optionIndex": 1,
+              "definitionIndex": 1
+            },
+            {
+              "abilityId": 309,
+              "optionIndex": 2,
+              "definitionIndex": 2
+            },
+            {
+              "abilityId": 310,
+              "optionIndex": 3,
+              "definitionIndex": 3
+            }
+          ],
+          "allowRepeat": false
+        }
+      }
+    },
+    "terminal": {
+      "type": "AI_SUBORDINATE_CHOICE",
+      "game": 1,
+      "eventIndex": 298,
+      "turn": 5,
+      "phase": "MAIN2",
+      "choice": {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:54",
+        "status": "COMPLETED",
+        "selection": {
+          "available": true,
+          "modes": [
+            {
+              "abilityId": 306,
+              "optionIndex": 0,
+              "definitionIndex": 0
+            },
+            {
+              "abilityId": 307,
+              "optionIndex": 1,
+              "definitionIndex": 1
+            }
+          ],
+          "selectedCount": 2,
+          "truncated": false,
+          "accepted": true
+        },
+        "elapsedNanos": 15705757
+      }
+    },
+    "trainingReady": false
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "baselineRevision": "b6209962090",
+  "cases": [
+    {
+      "case": "normal",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "timeout",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "exception",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "legacy",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "aborted",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "countered",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "targets",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "payments",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "opaque",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "unicode",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "target-pool",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "bounded-pool",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "uncertain-pool",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "black-real",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "damage-real",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "commander-real",
+      "allSixFilesByteIdentical": true
+    },
+    {
+      "case": "commander-mc-real",
+      "allSixFilesByteIdentical": true
+    }
+  ]
+}

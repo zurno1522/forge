@@ -1,0 +1,106 @@
+{
+  "productionRevision": "77bbd39dd7bf6d4e9b4526aa96942c74519b2288",
+  "exporterRevision": "27da639153c6cfb873bfef36c2b913fecd5814a7",
+  "baselineRevision": "b620996209064f618b1829e08d79133d74f9d7f9",
+  "productionWorktreeDirty": false,
+  "tests": {
+    "core": {
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "game": {
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "desktop": {
+      "tests": 2495,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 6
+    },
+    "exporter": {
+      "tests": 95,
+      "failures": 0,
+      "errors": 0
+    }
+  },
+  "reviewRegressions": {
+    "normalTriggerPreparation": {
+      "beforeFix": "1 test, 1 failure: missing enclosing preparation event",
+      "afterFix": "56 focused Java tests passed"
+    },
+    "unavailableModePlan": {
+      "beforeFix": "1 failure in 4 exporter mode tests: unavailable counted as full list",
+      "afterFix": "all 95 exporter tests passed"
+    }
+  },
+  "simulations": {
+    "recordedGames": 11,
+    "unrecordedControlGames": 3,
+    "allRecordedGamesNormal": true,
+    "decisions": 609,
+    "standaloneChoices": 2701,
+    "fullFilteredDatasetChoiceExamplesValidationByteIdentical": true,
+    "coverageEqualExceptSourceRecords": true,
+    "pregameShufflesPreserved": true
+  },
+  "legacy": {
+    "inputs": 17,
+    "allSixFilesByteIdentical": true
+  },
+  "logs": {
+    "fullReactor": {
+      "path": "/workspace/work/five-tasks-final-full-tests.log",
+      "sha256": "bf05677d6ef536b466f65d6837b5641f7347a796f3fac13c23cff06199697838"
+    },
+    "exporter": {
+      "path": "/workspace/work/five-tasks-export-tests.log",
+      "sha256": "ab58c51cd62eae25dae1cda665ff51468a2058a6916a9a965f3a076cb765dd00"
+    },
+    "triggerBefore": {
+      "path": "/workspace/work/five-tasks/trigger-baseline.log",
+      "sha256": "5ef05ca1d405c65f9cf8357a938d7edd322bb3a2a9075ba83b4d63121058befc"
+    },
+    "triggerAfter": {
+      "path": "/workspace/work/trigger-followup-tests.log",
+      "sha256": "31dfea3060ab96c6ff52fc12e00e4d6b2f1e596a0f5cd08ba66d8fd7a77aa1a8"
+    },
+    "modeReportBefore": {
+      "path": "/workspace/work/five-tasks/mode-report-before.log",
+      "sha256": "c3cb57f1768ef3bb383c0ac4035fcb925f30cbc01f8f41e2fcd5ef14abeb841a"
+    }
+  },
+  "artifacts": {
+    "actual-examples.json": {
+      "sha256": "36ab257e8e583bf4c4560320b3754633fe3f12bc754145309e1d7e274e685696",
+      "bytes": 97304
+    },
+    "commands.json": {
+      "sha256": "6059718bf3b102f551d5f26fe36adf6627de191d3f56054d0ffb59567e80f453",
+      "bytes": 62888
+    },
+    "legacy-equivalence.json": {
+      "sha256": "0f95aad6ad5adef503ff925f614171c7a751007ff651d8a29c359779151b2292",
+      "bytes": 1408
+    },
+    "unknown-target-example.json": {
+      "sha256": "61f8816b2768aa5aadad5815fffed34c8c4ffb8a687cf985857a92ef0b4a3bdd",
+      "bytes": 46787
+    },
+    "validation.json": {
+      "sha256": "ab36333544224ecceb496ca155906ea8868ccdc58c848df665fe016ab7d13ce6",
+      "bytes": 70556
+    }
+  },
+  "rawWorkspace": "/workspace/work/five-tasks",
+  "limitations": [
+    "Observational coverage is partial; trainingReady remains false.",
+    "One Monte Carlo reconfigure slot retains unknown provenance after target-plan revalidation/rebuilding.",
+    "Runtime samples do not exercise every delegated, copy, unsupported-retarget or mana-pool callback; these have focused tests.",
+    "Outcome/control agreement and serialized byte counts do not establish deadline-neutral capture or comparative pilot strength."
+  ]
+}

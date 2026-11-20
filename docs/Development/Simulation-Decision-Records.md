@@ -2,7 +2,7 @@
 
 When decision collection (`sim ... -log-decisions decisions.jsonl`) or structured game tracing (`sim ... -log-game path.jsonl`) is enabled, the real game's AI emits an `AiDecisionEvent`. The desktop trace collector writes it as `AI_DECISION` in the same JSONL stream as game events. The AI has no file-writing dependency. These observational events do not use the rules-event visitor or change engine event ordering.
 
-Version 1 covers play selection with an empty stack during the acting player's own first or second main phase. It includes land selection, spells, abilities, and passing. An optional subordinate-choice capability records specific target-planning pools during these evaluations, as described below. Complete target/mode/payment choice coverage, mulligans, combat and reactive-priority decision records remain outside this version's coverage. Recording is off by default outside traced simulations and suppressed for simulation copies. The AI's existing policy and candidate limits remain in place; the initial observation is captured before its thinking deadline starts. Per-pool capture adds bounded work during evaluation.
+The version 1 parent decision covers play selection with an empty stack during the acting player's own first or second main phase, including lands, spells, abilities and passing. Optional capabilities add evaluation target pools and standalone target, trigger, mode, numeric/X and payment observations, including callbacks outside the parent decision's phase. Coverage remains partial: there is no complete target/mode/payment, mulligan, combat or reactive-priority decision space. Recording is off by default outside traced simulations and suppressed for simulation copies. The AI's existing policy and candidate limits remain in place; the initial observation is captured before its thinking deadline starts. Per-pool capture adds bounded work during evaluation.
 
 Each record retains the usual `game`, `eventIndex`, `turn`, and `phase` envelope, with a nested `decision` object:
 
@@ -85,7 +85,7 @@ An [actual message example](assessments/Subordinate-Targets/actual-example.json)
 
 The [producer-cost control](assessments/Subordinate-Targets/producer-cost.json) measures one pool plus the existing ranking and parent capture/freeze, excluding serialization and file output. Across three rotated samples, a 30-object pool increased median calling-thread CPU from 764.9 to 791.8 microseconds and allocated bytes from 611,356 to 638,663 per iteration. A four-object pool added about 6.1 KB of allocation; its CPU difference was smaller than timing noise. Capture runs inside the AI's evaluation deadline. These shared-host measurements do not guarantee identical search work, bounded whole-game memory, or timing-neutral gameplay.
 
-The remaining priority-1 work is:
+At the first target-pool review, the remaining priority-1 work was (see the combined batch review below for current status):
 
 | Order | Gap | Completion evidence |
 | --- | --- | --- |
@@ -140,7 +140,7 @@ Next is broader target coverage at the concrete uncovered sites above. Recording
 
 ### Five-task implementation follow-up, 2026-11-20
 
-The authorized order is broader targeting, additional choice stages, modes, X, then payments. Each increment is committed separately and the combined build will receive simulation validation.
+The authorized order is broader targeting, additional choice stages, modes, X, then payments. Those five increments are implemented in separate commits. The combined validation and gap review below distinguishes completed contracts from remaining coverage.
 
 Draw/player targeting now records `DRAW_PLAYER_POOL` at the existing addition branches, including self, opponent/ally, lethal draw/life/poison and mandatory fallbacks. It observes the existing `players` list without enumerating targets again. `poolSnapshotTiming: AT_TARGET_ADDITION` distinguishes a snapshot taken after the heuristic chose its result from the older before-chooser pool snapshots. This records available identities, not evidence that every option was scored. Real Sign in Blood regressions cover self-draw and lethal opponent targeting, with explicit target origins. The focused 50-case Java suite and 71 exporter tests pass.
 
@@ -191,6 +191,42 @@ Task 3 validation: 54 focused Java cases and all 86 exporter tests pass. Tests c
 Visible mana-X candidate/selected-action snapshots also retain nullable `evaluatedX`, the observed root X field at that boundary. This records outcomes of selectors outside the instrumented common helpers without inventing their options. Hidden source identities do not gain an X-presence/value leak. The committed `finalizedX` snapshot remains authoritative for the eventual stack value; no event is linked to it by numeric equality. Reports count observed numeric domains, return matches, zero/nonzero values and evaluated-X availability.
 
 Task 4 validation: 61 focused Java cases and 89 exporter tests pass. Real Fireball and Hangarback Walker tests distinguish available mana from selected X, including two mana-cost X symbols and an explicit zero. Other cases cover actual refinement setters, final evaluation snapshots, nullable announcements, unexpected range returns, truncated discrete offers and duplicate values. Full legal numeric sets and exact provenance for every card-specific setter remain outside these observed-boundary contracts. Payment decisions are the final increment in this batch.
+
+### Combined batch validation and gap review, 2026-11-20
+
+The five agreed increments are complete for their stated observation boundaries. Priority 1 still has broader coverage and observation-contract work; it is **not** a complete legal decision space or a learning pilot. Each task has its own commits, and fixes found in the combined review are separate commits.
+
+| Task | Implementation commits | Completed contract | Remaining coverage |
+| --- | --- | --- | --- |
+| Broader targeting | `7d000609459`, `3a783d997ff`, `6c97734c35c` | Existing draw/player, burn-player and attachment/reconfigure pools; actual additions carry their specific evaluation origins. Real card regressions exercise each path. | Other target handlers and special branches; direct search target replacement/restoration. |
+| Additional stages | `209ab4812ed`, review fix `77bbd39dd7b` | Independent start/terminal lifecycles, exact assessment/action context, actual delegated chooser, nested callbacks, trigger preparation and copy/retarget results. Interrupted parents and missing context remain explicit. | Not every controller/heuristic boundary is instrumented. `CONTROLLER_CALLBACK` is the fallback context, not evidence of execution. Unsupported generic AI retargeting still declines. |
+| Modes | `aaf44f061d4`, report fix `27da639153c` | Existing offered options and actual stored/returned plans, distinct offered/definition indices, repeats, null/empty/unmapped plans and capped prefixes. | No guessed commit origin for copied or replaced plans, exhaustive mode combinations or per-option values. |
+| Numeric/X | `46ebe3ffcec` | Supplied numeric ranges/options, common actual X bounds/setters and selected draw/damage refinements, including zero and unknown alternatives. | Other card-specific setters and full legal numeric domains; equal X values are not causal links. |
+| Payments | `1afa3cc90dc` | Cost-visitor proposals, existing card pools, actual auto-mana routine outcomes and context-backed mana-pool callbacks. Proposal, routine outcome and finalized payment facts remain distinct. | Full alternative plans, all card-selection helpers, typed counter allocations/type text/conversion matrices and mana-pool calls without an ability context. |
+
+Combined review also found and fixed a protocol-validation gap (`0589ecb30d5`): a valid choice type could be paired with another callback's boundary. The mode-report regression failed before its fix: an unavailable plan was counted as `FULL_LIST`. It now reports `UNAVAILABLE`; a valid empty plan still reports a fully captured list. The normal-trigger regression likewise failed before `77bbd39dd7b` and passed afterward; it exercises Flametongue Kavu through the simultaneous-trigger controller path, rather than calling the recorder alone. These were defects in the branch's observational feature, not new upstream engine defects.
+
+Final validation passed **2,495 desktop tests (six skipped), 23 core tests, 23 game tests and 95 exporter tests**, with no failures or errors. The [evidence manifest](assessments/Subordinate-Choices/manifest.json) records source versions and log/artifact hashes.
+
+[Runtime evidence](assessments/Subordinate-Choices/validation.json) covers **11 recorded games, 609 decisions and 2,701 standalone choices** on clean production revision `77bbd39dd7b`. All games finished normally. All full/filtered pairs produced byte-identical `dataset.jsonl`, `choices.jsonl`, `examples.jsonl` and `validation.json`; coverage reports agree except for source-record count. Every full game retained two pregame shuffles before `GAME_STARTED`. There were no censored/incomplete/error choices, truncated standalone prefixes or target-pool budget/interruption omissions in this sample. There were 14 declined callbacks, retained separately from errors. These are sampled observations, not an exhaustive coverage rate.
+
+| Scenario | Games / seed / pilot | Decisions | Standalone choices | Explicit / unknown committed target slots |
+| --- | --- | ---: | ---: | ---: |
+| Black / green | 3 / 12031 / heuristic | 194 | 491 | 4 / 0 |
+| Damage / green | 3 / 12032 / heuristic | 178 | 587 | 15 / 0 |
+| Doctor Who / Ur-Dragon | 1 / 31002 / heuristic | 49 | 236 | 0 / 0 |
+| Doctor Who / Ur-Dragon | 1 / 31003 / Monte Carlo | 56 | 334 | 0 / 1 |
+| Modal-X-payment / green | 3 / 13001 / heuristic | 132 | 1,053 | 4 / 0 |
+
+The last deck is [the committed fixture](../../tools/trace-test-decks/choice-modal-x.dck). It produced 237 mode observations (92 available plans, 145 unavailable), 35 X selections including 12 explicit zeros, and five numeric choices. The complete sample contains 1,089 cost-visitor proposals, 680 auto-mana routine observations, ten existing card-pool selections and 57 trigger-preparation results. Zero standalone mana-pool selections appeared; those and delegation/copy/unsupported-retarget callbacks have focused test coverage, not demonstrated live coverage in these games. Multiple observations may describe the same planned action; counts do not represent unique executed choices.
+
+The remaining unknown slot is [The Reality Chip's reconfigure target](assessments/Subordinate-Choices/unknown-target-example.json) in the Monte Carlo run. Its initial attachment recommendation is recorded. Search revalidation and fallback can rebuild a target list through direct `FlatMonteCarloPicker.applyTarget` calls, which invalidate the old plan marker. The trace establishes that the origin is unavailable; identifying the particular rebuilding boundary requires additional capture. The final matching identity does not establish its origin. Keep it unknown until the actual replacement/restoration boundary is recorded; this is an outstanding coverage gap, not evidence of dropped trace events. Existing mutation regressions require that equal target IDs never resurrect an earlier origin.
+
+The black control's three winners and turn counts match the recorded run. The Monte Carlo console reports zero rollout failures and no unsimulatable-card entries; its main-phase dataset has 18 search summaries, 17 decided by rollouts. Matching outcomes do not prove identical action sequences or timing-neutral capture. Standalone events add roughly 2.53 MB across these full traces, about 0.23 MB per recorded game. This is serialized volume, not a CPU/allocation benchmark; expanded callbacks still need performance measurements before making stronger overhead claims.
+
+[Actual messages](assessments/Subordinate-Choices/actual-examples.json) retain unmodified start/terminal events and their run metadata/source hashes, including a nonempty mode plan, zero/positive X and card/count payment proposals. [Exact workspace commands](assessments/Subordinate-Choices/commands.json) and deck metadata preserve seeds/pilots. [Legacy equivalence](assessments/Subordinate-Choices/legacy-equivalence.json) compares all six old outputs byte-for-byte on 17 pre-capability inputs, including four real trace corpora. Full logs/traces remain under `/workspace/work/five-tasks`; curated evidence is committed here.
+
+The next design dependency is the observation/visibility contract: define when each choice sees state and how option IDs/incarnations join to that state. Per-option assessments/search values, complete legal sets, downstream-effect attribution and training/reward policy remain separate work. The engine extension for payment observation is logged as infrastructure, not an engine bug, in [the upstream PR candidates](Upstream-PR-Candidates.md#subordinate-payment-observation-boundary-2026-11-20). Engine code stores no learning IDs; callback context exists only during the synchronous call. Dataset rows remain `trainingReady=false`.
 
 ## Selected action execution
 

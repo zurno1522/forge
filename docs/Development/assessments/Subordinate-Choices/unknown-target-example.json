@@ -1,0 +1,1727 @@
+{
+  "source": {
+    "path": "/workspace/work/five-tasks/commander-mc-full.jsonl",
+    "sha256": "abaae2d957091a17fabe6a767cc3d8ff7dba9268b430e1aff6d8281e35a7251a"
+  },
+  "runMetadata": {
+    "type": "RUN_STARTED",
+    "schemaVersion": 1,
+    "actionEventSchemaVersion": 1,
+    "choiceEventSchemaVersion": 1,
+    "runId": "fd98a09a-18e4-4ebc-9575-c964583cfe23",
+    "pilotMode": "FLAT_MONTE_CARLO",
+    "engineRevision": "77bbd39dd7bf6d4e9b4526aa96942c74519b2288",
+    "engineDirty": "false",
+    "forgeVersion": "GIT",
+    "runMode": "GAMES",
+    "gameType": "Commander",
+    "requestedGames": 1,
+    "seed": 31003,
+    "participants": [
+      {
+        "participantId": 1,
+        "deckName": "Doctor Who - The Thirteenth Doctor and Yasmin Khan",
+        "aiProfile": "Default",
+        "deck": {
+          "Main": [
+            {
+              "name": "Arcane Signet",
+              "count": 1
+            },
+            {
+              "name": "Beast Within",
+              "count": 1
+            },
+            {
+              "name": "Bigger on the Inside",
+              "count": 1
+            },
+            {
+              "name": "Birds of Paradise",
+              "count": 1
+            },
+            {
+              "name": "Boseiju, Who Endures",
+              "count": 1
+            },
+            {
+              "name": "Breeding Pool",
+              "count": 1
+            },
+            {
+              "name": "Chaos Warp",
+              "count": 1
+            },
+            {
+              "name": "Chimil, the Inner Sun",
+              "count": 1
+            },
+            {
+              "name": "Cinder Glade",
+              "count": 1
+            },
+            {
+              "name": "City of Brass",
+              "count": 1
+            },
+            {
+              "name": "Clara Oswald",
+              "count": 1
+            },
+            {
+              "name": "Command Tower",
+              "count": 1
+            },
+            {
+              "name": "Confession Dial",
+              "count": 1
+            },
+            {
+              "name": "Cryptic Command",
+              "count": 1
+            },
+            {
+              "name": "Cultivate",
+              "count": 1
+            },
+            {
+              "name": "Cursed Mirror",
+              "count": 1
+            },
+            {
+              "name": "Danny Pink",
+              "count": 1
+            },
+            {
+              "name": "Decaying Time Loop",
+              "count": 1
+            },
+            {
+              "name": "Delayed Blast Fireball",
+              "count": 1
+            },
+            {
+              "name": "Desolate Lighthouse",
+              "count": 1
+            },
+            {
+              "name": "Doc Aurlock, Grizzled Genius",
+              "count": 1
+            },
+            {
+              "name": "Dreamroot Cascade",
+              "count": 1
+            },
+            {
+              "name": "Etali, Primal Storm",
+              "count": 1
+            },
+            {
+              "name": "Exotic Orchard",
+              "count": 1
+            },
+            {
+              "name": "Farseek",
+              "count": 1
+            },
+            {
+              "name": "Fiery Islet",
+              "count": 1
+            },
+            {
+              "name": "Flaming Tyrannosaurus",
+              "count": 1
+            },
+            {
+              "name": "Flatline",
+              "count": 1
+            },
+            {
+              "name": "Forest",
+              "count": 1
+            },
+            {
+              "name": "Frontier Bivouac",
+              "count": 1
+            },
+            {
+              "name": "Frost Fair Lure Fish",
+              "count": 1
+            },
+            {
+              "name": "Frostboil Snarl",
+              "count": 1
+            },
+            {
+              "name": "Growing Rites of Itlimoc",
+              "count": 1
+            },
+            {
+              "name": "Growth Spiral",
+              "count": 1
+            },
+            {
+              "name": "Hangarback Walker",
+              "count": 1
+            },
+            {
+              "name": "Heaven Sent",
+              "count": 1
+            },
+            {
+              "name": "Heroic Intervention",
+              "count": 1
+            },
+            {
+              "name": "Hidden Cataract",
+              "count": 1
+            },
+            {
+              "name": "Hidden Nursery",
+              "count": 1
+            },
+            {
+              "name": "Hidden Volcano",
+              "count": 1
+            },
+            {
+              "name": "Hinterland Harbor",
+              "count": 1
+            },
+            {
+              "name": "Impending Flux",
+              "count": 1
+            },
+            {
+              "name": "Incubation Druid",
+              "count": 1
+            },
+            {
+              "name": "Into the Time Vortex",
+              "count": 1
+            },
+            {
+              "name": "Iraxxa, Empress of Mars",
+              "count": 1
+            },
+            {
+              "name": "Island",
+              "count": 2
+            },
+            {
+              "name": "Kami of Celebration",
+              "count": 1
+            },
+            {
+              "name": "Kami of Whispered Hopes",
+              "count": 1
+            },
+            {
+              "name": "Keeper of Secrets",
+              "count": 1
+            },
+            {
+              "name": "Laelia, the Blade Reforged",
+              "count": 1
+            },
+            {
+              "name": "Last Night Together",
+              "count": 1
+            },
+            {
+              "name": "Maelstrom Wanderer",
+              "count": 1
+            },
+            {
+              "name": "Master Biomancer",
+              "count": 1
+            },
+            {
+              "name": "Memory Worm",
+              "count": 1
+            },
+            {
+              "name": "Mountain",
+              "count": 2
+            },
+            {
+              "name": "Nature's Lore",
+              "count": 1
+            },
+            {
+              "name": "Ominous Cemetery",
+              "count": 1
+            },
+            {
+              "name": "Ouroboroid",
+              "count": 1
+            },
+            {
+              "name": "Ponder",
+              "count": 1
+            },
+            {
+              "name": "Preordain",
+              "count": 1
+            },
+            {
+              "name": "Quantum Misalignment",
+              "count": 1
+            },
+            {
+              "name": "Rejuvenating Springs",
+              "count": 1
+            },
+            {
+              "name": "Rockfall Vale",
+              "count": 1
+            },
+            {
+              "name": "Rogue's Passage",
+              "count": 1
+            },
+            {
+              "name": "Rootbound Crag",
+              "count": 1
+            },
+            {
+              "name": "Ryan Sinclair",
+              "count": 1
+            },
+            {
+              "name": "Scalding Tarn",
+              "count": 1
+            },
+            {
+              "name": "Search for Tomorrow",
+              "count": 1
+            },
+            {
+              "name": "Sheltered Thicket",
+              "count": 1
+            },
+            {
+              "name": "Sisterhood of Karn",
+              "count": 1
+            },
+            {
+              "name": "Skyshroud Claim",
+              "count": 1
+            },
+            {
+              "name": "Snapcaster Mage",
+              "count": 1
+            },
+            {
+              "name": "Sol Ring",
+              "count": 1
+            },
+            {
+              "name": "Sonic Screwdriver",
+              "count": 1
+            },
+            {
+              "name": "Spire Garden",
+              "count": 1
+            },
+            {
+              "name": "Steam Vents",
+              "count": 1
+            },
+            {
+              "name": "Stomping Ground",
+              "count": 1
+            },
+            {
+              "name": "Stormcarved Coast",
+              "count": 1
+            },
+            {
+              "name": "Sulfur Falls",
+              "count": 1
+            },
+            {
+              "name": "Surge of Brilliance",
+              "count": 1
+            },
+            {
+              "name": "TARDIS",
+              "count": 1
+            },
+            {
+              "name": "Talisman of Curiosity",
+              "count": 1
+            },
+            {
+              "name": "Talisman of Impulse",
+              "count": 1
+            },
+            {
+              "name": "Temple of Abandon",
+              "count": 1
+            },
+            {
+              "name": "Temple of Epiphany",
+              "count": 1
+            },
+            {
+              "name": "The Flux",
+              "count": 1
+            },
+            {
+              "name": "The Foretold Soldier",
+              "count": 1
+            },
+            {
+              "name": "The Reality Chip",
+              "count": 1
+            },
+            {
+              "name": "The Twelfth Doctor",
+              "count": 1
+            },
+            {
+              "name": "Think Twice",
+              "count": 1
+            },
+            {
+              "name": "Throes of Chaos",
+              "count": 1
+            },
+            {
+              "name": "Waterlogged Grove",
+              "count": 1
+            },
+            {
+              "name": "Wooded Foothills",
+              "count": 1
+            },
+            {
+              "name": "Wreck and Rebuild",
+              "count": 1
+            },
+            {
+              "name": "Yavimaya Coast",
+              "count": 1
+            },
+            {
+              "name": "Zimone, Paradox Sculptor",
+              "count": 1
+            }
+          ],
+          "Commander": [
+            {
+              "name": "The Thirteenth Doctor",
+              "count": 1
+            },
+            {
+              "name": "Yasmin Khan",
+              "count": 1
+            }
+          ],
+          "Planes": [
+            {
+              "name": "Besieged Viking Village",
+              "count": 1
+            },
+            {
+              "name": "Fixed Point in Time",
+              "count": 1
+            },
+            {
+              "name": "Kerblam! Warehouse",
+              "count": 1
+            },
+            {
+              "name": "North Pole Research Base",
+              "count": 1
+            },
+            {
+              "name": "Singing Towers of Darillium",
+              "count": 1
+            },
+            {
+              "name": "Stormcage Containment Facility",
+              "count": 1
+            },
+            {
+              "name": "Temple of Atropos",
+              "count": 1
+            },
+            {
+              "name": "The Dining Car",
+              "count": 1
+            },
+            {
+              "name": "The Doctor's Childhood Barn",
+              "count": 1
+            },
+            {
+              "name": "The Drum, Mining Facility",
+              "count": 1
+            }
+          ]
+        }
+      },
+      {
+        "participantId": 2,
+        "deckName": "Draconic Domination [C17] [2017]",
+        "aiProfile": "Default",
+        "deck": {
+          "Main": [
+            {
+              "name": "Arcane Sanctum",
+              "count": 1
+            },
+            {
+              "name": "Armillary Sphere",
+              "count": 1
+            },
+            {
+              "name": "Atarka, World Render",
+              "count": 1
+            },
+            {
+              "name": "Bladewing the Risen",
+              "count": 1
+            },
+            {
+              "name": "Boneyard Scourge",
+              "count": 1
+            },
+            {
+              "name": "Broodmate Dragon",
+              "count": 1
+            },
+            {
+              "name": "Command Tower",
+              "count": 1
+            },
+            {
+              "name": "Commander's Sphere",
+              "count": 1
+            },
+            {
+              "name": "Crosis, the Purger",
+              "count": 1
+            },
+            {
+              "name": "Crucible of Fire",
+              "count": 1
+            },
+            {
+              "name": "Crucible of the Spirit Dragon",
+              "count": 1
+            },
+            {
+              "name": "Crumbling Necropolis",
+              "count": 1
+            },
+            {
+              "name": "Crux of Fate",
+              "count": 1
+            },
+            {
+              "name": "Cultivate",
+              "count": 1
+            },
+            {
+              "name": "Curse of Bounty",
+              "count": 1
+            },
+            {
+              "name": "Curse of Opulence",
+              "count": 1
+            },
+            {
+              "name": "Curse of Verbosity",
+              "count": 1
+            },
+            {
+              "name": "Darksteel Ingot",
+              "count": 1
+            },
+            {
+              "name": "Deathbringer Regent",
+              "count": 1
+            },
+            {
+              "name": "Dragon Tempest",
+              "count": 1
+            },
+            {
+              "name": "Dragonlord's Servant",
+              "count": 1
+            },
+            {
+              "name": "Dragonspeaker Shaman",
+              "count": 1
+            },
+            {
+              "name": "Dreamstone Hedron",
+              "count": 1
+            },
+            {
+              "name": "Dromoka, the Eternal",
+              "count": 1
+            },
+            {
+              "name": "Earthquake",
+              "count": 1
+            },
+            {
+              "name": "Elemental Bond",
+              "count": 1
+            },
+            {
+              "name": "Farseek",
+              "count": 1
+            },
+            {
+              "name": "Fist of Suns",
+              "count": 1
+            },
+            {
+              "name": "Forest",
+              "count": 3
+            },
+            {
+              "name": "Fortunate Few",
+              "count": 1
+            },
+            {
+              "name": "Fractured Identity",
+              "count": 1
+            },
+            {
+              "name": "Frontier Bivouac",
+              "count": 1
+            },
+            {
+              "name": "Frontier Siege",
+              "count": 1
+            },
+            {
+              "name": "Haven of the Spirit Dragon",
+              "count": 1
+            },
+            {
+              "name": "Hellkite Charger",
+              "count": 1
+            },
+            {
+              "name": "Herald's Horn",
+              "count": 1
+            },
+            {
+              "name": "Intet, the Dreamer",
+              "count": 1
+            },
+            {
+              "name": "Island",
+              "count": 3
+            },
+            {
+              "name": "Jungle Shrine",
+              "count": 1
+            },
+            {
+              "name": "Kindred Discovery",
+              "count": 1
+            },
+            {
+              "name": "Kodama's Reach",
+              "count": 1
+            },
+            {
+              "name": "Kolaghan, the Storm's Fury",
+              "count": 1
+            },
+            {
+              "name": "Lightning Greaves",
+              "count": 1
+            },
+            {
+              "name": "Mirror of the Forebears",
+              "count": 1
+            },
+            {
+              "name": "Monastery Siege",
+              "count": 1
+            },
+            {
+              "name": "Mountain",
+              "count": 6
+            },
+            {
+              "name": "Mystic Monastery",
+              "count": 1
+            },
+            {
+              "name": "Nihil Spellbomb",
+              "count": 1
+            },
+            {
+              "name": "Niv-Mizzet, Dracogenius",
+              "count": 1
+            },
+            {
+              "name": "Nomad Outpost",
+              "count": 1
+            },
+            {
+              "name": "O-Kagachi, Vengeful Kami",
+              "count": 1
+            },
+            {
+              "name": "Ojutai, Soul of Winter",
+              "count": 1
+            },
+            {
+              "name": "Opulent Palace",
+              "count": 1
+            },
+            {
+              "name": "Orator of Ojutai",
+              "count": 1
+            },
+            {
+              "name": "Painful Truths",
+              "count": 1
+            },
+            {
+              "name": "Palace Siege",
+              "count": 1
+            },
+            {
+              "name": "Path of Ancestry",
+              "count": 1
+            },
+            {
+              "name": "Plains",
+              "count": 3
+            },
+            {
+              "name": "Rain of Thorns",
+              "count": 1
+            },
+            {
+              "name": "Ramos, Dragon Engine",
+              "count": 1
+            },
+            {
+              "name": "Ryusei, the Falling Star",
+              "count": 1
+            },
+            {
+              "name": "Sandsteppe Citadel",
+              "count": 1
+            },
+            {
+              "name": "Savage Lands",
+              "count": 1
+            },
+            {
+              "name": "Savage Ventmaw",
+              "count": 1
+            },
+            {
+              "name": "Scalelord Reckoner",
+              "count": 1
+            },
+            {
+              "name": "Scion of the Ur-Dragon",
+              "count": 1
+            },
+            {
+              "name": "Scourge of Valkas",
+              "count": 1
+            },
+            {
+              "name": "Seaside Citadel",
+              "count": 1
+            },
+            {
+              "name": "Silumgar, the Drifting Death",
+              "count": 1
+            },
+            {
+              "name": "Sol Ring",
+              "count": 1
+            },
+            {
+              "name": "Spellbound Dragon",
+              "count": 1
+            },
+            {
+              "name": "Steel Hellkite",
+              "count": 1
+            },
+            {
+              "name": "Sunscorch Regent",
+              "count": 1
+            },
+            {
+              "name": "Swamp",
+              "count": 3
+            },
+            {
+              "name": "Taigam, Ojutai Master",
+              "count": 1
+            },
+            {
+              "name": "Teneb, the Harvester",
+              "count": 1
+            },
+            {
+              "name": "Territorial Hellkite",
+              "count": 1
+            },
+            {
+              "name": "Tyrant's Familiar",
+              "count": 1
+            },
+            {
+              "name": "Utvara Hellkite",
+              "count": 1
+            },
+            {
+              "name": "Vivid Crag",
+              "count": 1
+            },
+            {
+              "name": "Vivid Creek",
+              "count": 1
+            },
+            {
+              "name": "Vivid Grove",
+              "count": 1
+            },
+            {
+              "name": "Vivid Marsh",
+              "count": 1
+            },
+            {
+              "name": "Vivid Meadow",
+              "count": 1
+            },
+            {
+              "name": "Wasitora, Nekoru Queen",
+              "count": 1
+            },
+            {
+              "name": "Wayfarer's Bauble",
+              "count": 1
+            }
+          ],
+          "Commander": [
+            {
+              "name": "The Ur-Dragon",
+              "count": 1
+            }
+          ]
+        }
+      }
+    ],
+    "streamKind": "FULL_GAME_TRACE",
+    "eventIndexMode": "CONTIGUOUS"
+  },
+  "decision": {
+    "type": "AI_DECISION",
+    "game": 1,
+    "eventIndex": 1105,
+    "turn": 13,
+    "phase": "MAIN1",
+    "decision": {
+      "decisionSchemaVersion": 1,
+      "actionExecutionSchemaVersion": 1,
+      "decisionId": "0:42",
+      "playerId": 0,
+      "decisionType": "MAIN_PHASE_PLAY_SELECTION",
+      "candidateCoverage": "OBSERVED_EVALUATIONS_NOT_ALL_LEGAL_ACTIONS",
+      "observationCoverage": "PARTIAL_PLAYER_VIEW_V1",
+      "observation": {
+        "turn": 13,
+        "phase": "MAIN1",
+        "turnPlayerId": 0,
+        "players": [
+          {
+            "id": 0,
+            "life": 20,
+            "handCount": 6,
+            "libraryCount": 83,
+            "cards": [
+              {
+                "id": 37,
+                "zone": "Battlefield",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Command Tower",
+                "types": "Land",
+                "manaCost": "no cost",
+                "counters": {}
+              },
+              {
+                "id": 78,
+                "zone": "Battlefield",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Temple of Epiphany",
+                "types": "Land",
+                "manaCost": "no cost",
+                "counters": {}
+              },
+              {
+                "id": 27,
+                "zone": "Battlefield",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "City of Brass",
+                "types": "Land",
+                "manaCost": "no cost",
+                "counters": {}
+              },
+              {
+                "id": 49,
+                "zone": "Battlefield",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Laelia, the Blade Reforged",
+                "types": "Legendary Creature - Spirit Warrior",
+                "manaCost": "{2}{R}",
+                "power": 4,
+                "toughness": 4,
+                "counters": {
+                  "P1P1": 2
+                }
+              },
+              {
+                "id": 24,
+                "zone": "Battlefield",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "The Reality Chip",
+                "types": "Legendary Artifact Creature - Equipment Jellyfish",
+                "manaCost": "{1}{U}",
+                "power": 0,
+                "toughness": 4,
+                "counters": {}
+              },
+              {
+                "id": 62,
+                "zone": "Battlefield",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Forest",
+                "types": "Basic Land - Forest",
+                "manaCost": "no cost",
+                "counters": {}
+              },
+              {
+                "id": 40,
+                "zone": "Battlefield",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Danny Pink",
+                "types": "Legendary Creature - Human Soldier Advisor",
+                "manaCost": "{3}{U}",
+                "power": 4,
+                "toughness": 3,
+                "counters": {}
+              },
+              {
+                "id": 101,
+                "zone": "Battlefield",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Yasmin Khan",
+                "types": "Legendary Creature - Human Detective",
+                "manaCost": "{3}{R}",
+                "power": 3,
+                "toughness": 3,
+                "counters": {}
+              },
+              {
+                "id": 99,
+                "zone": "Command",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "The Thirteenth Doctor",
+                "types": "Legendary Creature - Time Lord Doctor",
+                "manaCost": "{1}{G}{U}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "id": 100,
+                "zone": "Command",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Commander Effect",
+                "types": "",
+                "manaCost": "no cost",
+                "counters": {}
+              },
+              {
+                "id": 91,
+                "zone": "Exile",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Skyshroud Claim",
+                "types": "Sorcery",
+                "manaCost": "{3}{G}",
+                "counters": {}
+              },
+              {
+                "id": 90,
+                "zone": "Exile",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Growing Rites of Itlimoc",
+                "types": "Legendary Enchantment",
+                "manaCost": "{2}{G}",
+                "counters": {}
+              },
+              {
+                "id": 58,
+                "zone": "Hand",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Bigger on the Inside",
+                "types": "Enchantment - Aura",
+                "manaCost": "{3}{R}{G}",
+                "counters": {}
+              },
+              {
+                "id": 85,
+                "zone": "Hand",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Ryan Sinclair",
+                "types": "Legendary Creature - Human",
+                "manaCost": "{2}{R}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "id": 51,
+                "zone": "Hand",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Quantum Misalignment",
+                "types": "Sorcery",
+                "manaCost": "{4}{U}",
+                "counters": {}
+              },
+              {
+                "id": 74,
+                "zone": "Hand",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Decaying Time Loop",
+                "types": "Instant",
+                "manaCost": "{3}{R}",
+                "counters": {}
+              },
+              {
+                "id": 63,
+                "zone": "Hand",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Keeper of Secrets",
+                "types": "Creature - Demon",
+                "manaCost": "{5}{R}",
+                "power": 6,
+                "toughness": 4,
+                "counters": {}
+              },
+              {
+                "id": 38,
+                "zone": "Hand",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Frost Fair Lure Fish",
+                "types": "Creature - Fish",
+                "manaCost": "{5}{U}{R}",
+                "power": 7,
+                "toughness": 7,
+                "counters": {}
+              }
+            ],
+            "floatingManaColors": []
+          },
+          {
+            "id": 1,
+            "life": 33,
+            "handCount": 4,
+            "libraryCount": 86,
+            "cards": [
+              {
+                "id": 288,
+                "zone": "Battlefield",
+                "tapped": true,
+                "identityKnown": true,
+                "name": "Plains",
+                "types": "Basic Land - Plains",
+                "manaCost": "no cost",
+                "counters": {}
+              },
+              {
+                "id": 264,
+                "zone": "Battlefield",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Sol Ring",
+                "types": "Artifact",
+                "manaCost": "{1}",
+                "counters": {}
+              },
+              {
+                "id": 246,
+                "zone": "Battlefield",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Forest",
+                "types": "Basic Land - Forest",
+                "manaCost": "no cost",
+                "counters": {}
+              },
+              {
+                "id": 239,
+                "zone": "Battlefield",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Frontier Siege",
+                "types": "Enchantment",
+                "manaCost": "{3}{G}",
+                "counters": {}
+              },
+              {
+                "id": 211,
+                "zone": "Battlefield",
+                "tapped": true,
+                "identityKnown": true,
+                "name": "Opulent Palace",
+                "types": "Land",
+                "manaCost": "no cost",
+                "counters": {}
+              },
+              {
+                "id": 220,
+                "zone": "Battlefield",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Sandsteppe Citadel",
+                "types": "Land",
+                "manaCost": "no cost",
+                "counters": {}
+              },
+              {
+                "id": 248,
+                "zone": "Battlefield",
+                "tapped": true,
+                "identityKnown": true,
+                "name": "Teneb, the Harvester",
+                "types": "Legendary Creature - Dragon",
+                "manaCost": "{3}{W}{B}{G}",
+                "power": 6,
+                "toughness": 6,
+                "counters": {}
+              },
+              {
+                "id": 243,
+                "zone": "Battlefield",
+                "tapped": true,
+                "identityKnown": true,
+                "name": "Deathbringer Regent",
+                "types": "Creature - Dragon",
+                "manaCost": "{5}{B}{B}",
+                "power": 5,
+                "toughness": 6,
+                "counters": {}
+              },
+              {
+                "id": 277,
+                "zone": "Battlefield",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Taigam, Ojutai Master",
+                "types": "Legendary Creature - Human Monk",
+                "manaCost": "{2}{W}{U}",
+                "power": 3,
+                "toughness": 4,
+                "counters": {}
+              },
+              {
+                "id": 301,
+                "zone": "Command",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "The Ur-Dragon",
+                "types": "Legendary Creature - Dragon Avatar",
+                "manaCost": "{4}{W}{U}{B}{R}{G}",
+                "power": 10,
+                "toughness": 10,
+                "counters": {}
+              },
+              {
+                "id": 302,
+                "zone": "Command",
+                "tapped": false,
+                "identityKnown": true,
+                "name": "Commander Effect",
+                "types": "",
+                "manaCost": "no cost",
+                "counters": {}
+              }
+            ],
+            "floatingManaColors": []
+          }
+        ]
+      },
+      "status": "COMPLETED",
+      "candidates": [
+        {
+          "abilityId": 19115,
+          "kind": "ABILITY",
+          "sourceId": 101,
+          "sourceName": "Yasmin Khan",
+          "zone": "Battlefield",
+          "description": "{T}: Exile the top card of your library. Until your next end step, you may play it.",
+          "assessment": "CantPlayAi",
+          "assessmentDetail": {
+            "handlerAssessment": "CantPlayAi",
+            "reason": "CARD_AI_DECLINED",
+            "handler": "DigAi",
+            "handlerRating": 0
+          }
+        },
+        {
+          "abilityId": 19183,
+          "kind": "SPELL",
+          "sourceId": 38,
+          "sourceName": "Frost Fair Lure Fish",
+          "zone": "Hand",
+          "description": "Frost Fair Lure Fish - Creature 7 / 7",
+          "assessment": "CantAfford",
+          "assessmentDetail": {
+            "reason": "CANNOT_PAY_COST"
+          }
+        },
+        {
+          "abilityId": 16603,
+          "kind": "SPELL",
+          "sourceId": 63,
+          "sourceName": "Keeper of Secrets",
+          "zone": "Hand",
+          "description": "Keeper of Secrets - Creature 6 / 4",
+          "assessment": "CantAfford",
+          "assessmentDetail": {
+            "reason": "CANNOT_PAY_COST"
+          }
+        },
+        {
+          "abilityId": 1219,
+          "kind": "SPELL",
+          "sourceId": 58,
+          "sourceName": "Bigger on the Inside",
+          "zone": "Hand",
+          "description": "Bigger on the Inside",
+          "assessment": "CantAfford",
+          "assessmentDetail": {
+            "reason": "CANNOT_PAY_COST"
+          }
+        },
+        {
+          "abilityId": 1241,
+          "kind": "SPELL",
+          "sourceId": 51,
+          "sourceName": "Quantum Misalignment",
+          "zone": "Hand",
+          "description": "Create a token that's a copy of target creature you control, except it isn't legendary.",
+          "assessment": "CantAfford",
+          "assessmentDetail": {
+            "reason": "CANNOT_PAY_COST"
+          }
+        },
+        {
+          "abilityId": 1231,
+          "kind": "SPELL",
+          "sourceId": 85,
+          "sourceName": "Ryan Sinclair",
+          "zone": "Hand",
+          "description": "Ryan Sinclair - Creature 2 / 2",
+          "assessment": "CantPlayAi",
+          "assessmentDetail": {
+            "handlerAssessment": "MissingPhaseRestrictions",
+            "reason": "CARD_AI_DECLINED",
+            "handler": "PermanentCreatureAi",
+            "handlerRating": 0
+          }
+        },
+        {
+          "abilityId": 8318,
+          "kind": "SPELL",
+          "sourceId": 74,
+          "sourceName": "Decaying Time Loop",
+          "zone": "Hand",
+          "description": "Discard all the cards in your hand, then draw that many cards.",
+          "assessment": "CantPlayAi",
+          "assessmentDetail": {
+            "handlerAssessment": "CantPlayAi",
+            "reason": "CARD_AI_DECLINED",
+            "handler": "DiscardAi",
+            "handlerRating": 0
+          }
+        },
+        {
+          "abilityId": 19185,
+          "kind": "SPELL",
+          "sourceId": 99,
+          "sourceName": "The Thirteenth Doctor",
+          "zone": "Command",
+          "description": "The Thirteenth Doctor - Creature 2 / 2",
+          "assessment": "CantPlayAi",
+          "assessmentDetail": {
+            "handlerAssessment": "MissingPhaseRestrictions",
+            "reason": "CARD_AI_DECLINED",
+            "handler": "PermanentCreatureAi",
+            "handlerRating": 0
+          }
+        },
+        {
+          "abilityId": 19186,
+          "kind": "SPELL",
+          "sourceId": 99,
+          "sourceName": "The Thirteenth Doctor",
+          "zone": "Command",
+          "description": "The Thirteenth Doctor - Creature 2 / 2",
+          "assessment": "CantPlayAi",
+          "assessmentDetail": {
+            "handlerAssessment": "MissingPhaseRestrictions",
+            "reason": "CARD_AI_DECLINED",
+            "handler": "PermanentCreatureAi",
+            "handlerRating": 0
+          }
+        },
+        {
+          "abilityId": 8326,
+          "kind": "ABILITY",
+          "sourceId": 24,
+          "sourceName": "The Reality Chip",
+          "zone": "Battlefield",
+          "description": "Reconfigure {2}{U}: Attach",
+          "assessment": "WillPlay"
+        },
+        {
+          "abilityId": 8327,
+          "kind": "ABILITY",
+          "sourceId": 24,
+          "sourceName": "The Reality Chip",
+          "zone": "Battlefield",
+          "description": "Reconfigure {2}{U}: Unattach",
+          "assessment": "CantPlaySa"
+        },
+        {
+          "abilityId": 19182,
+          "kind": "ABILITY",
+          "sourceId": 38,
+          "sourceName": "Frost Fair Lure Fish",
+          "zone": "Hand",
+          "description": "Foretell (During your turn, you may pay {2} and exile this card from your hand face down. Cast it on a later turn for its foretell cost.)",
+          "assessment": "WaitForMain2"
+        },
+        {
+          "abilityId": 1225,
+          "kind": "ABILITY",
+          "sourceId": 37,
+          "sourceName": "Command Tower",
+          "zone": "Battlefield",
+          "description": "{T}: Add one mana of any color in your commander's color identity.",
+          "assessment": "CantPlayAi",
+          "assessmentDetail": {
+            "handlerAssessment": "MissingPhaseRestrictions",
+            "reason": "CARD_AI_DECLINED",
+            "handler": "ManaAi",
+            "handlerRating": 0
+          }
+        },
+        {
+          "abilityId": 1234,
+          "kind": "ABILITY",
+          "sourceId": 78,
+          "sourceName": "Temple of Epiphany",
+          "zone": "Battlefield",
+          "description": "{T}: Add {U} or {R}.",
+          "assessment": "CantPlayAi",
+          "assessmentDetail": {
+            "handlerAssessment": "MissingPhaseRestrictions",
+            "reason": "CARD_AI_DECLINED",
+            "handler": "ManaAi",
+            "handlerRating": 0
+          }
+        },
+        {
+          "abilityId": 1223,
+          "kind": "ABILITY",
+          "sourceId": 27,
+          "sourceName": "City of Brass",
+          "zone": "Battlefield",
+          "description": "{T}: Add one mana of any color.",
+          "assessment": "CantPlayAi",
+          "assessmentDetail": {
+            "handlerAssessment": "MissingPhaseRestrictions",
+            "reason": "CARD_AI_DECLINED",
+            "handler": "ManaAi",
+            "handlerRating": 0
+          }
+        },
+        {
+          "abilityId": 10902,
+          "kind": "ABILITY",
+          "sourceId": 62,
+          "sourceName": "Forest",
+          "zone": "Battlefield",
+          "description": "{T}: Add {G}.",
+          "assessment": "CantPlayAi",
+          "assessmentDetail": {
+            "handlerAssessment": "MissingPhaseRestrictions",
+            "reason": "CARD_AI_DECLINED",
+            "handler": "ManaAi",
+            "handlerRating": 0
+          }
+        }
+      ],
+      "selection": "PLAY",
+      "selectedActions": [
+        {
+          "abilityId": 8326,
+          "kind": "ABILITY",
+          "sourceId": 24,
+          "sourceName": "The Reality Chip",
+          "zone": "Battlefield",
+          "description": "Reconfigure {2}{U}: Attach",
+          "actionId": "0:42:0"
+        }
+      ],
+      "subordinateChoiceSchemaVersion": 1,
+      "targetChoiceProvenanceSchemaVersion": 1,
+      "subordinateChoiceCoverage": "OBSERVED_HEURISTIC_TARGET_POOLS_V1",
+      "subordinateChoices": [
+        {
+          "choiceSchemaVersion": 1,
+          "choiceType": "TARGET_POOL_SELECTION",
+          "stage": "CANDIDATE_EVALUATION",
+          "chooserPlayerId": 0,
+          "candidateAbilityId": 1219,
+          "abilityId": 1219,
+          "sourceId": 58,
+          "boundary": "ATTACH_CARD_POOL",
+          "purpose": "TARGET_RECOMMENDATION",
+          "optionCoverage": "OBSERVED_HEURISTIC_POOL_NOT_ALL_LEGAL_TARGET_SETS",
+          "priorTargets": [],
+          "priorTargetsTruncated": false,
+          "options": [
+            {
+              "type": "CARD",
+              "id": 37,
+              "gameTimestamp": 15
+            },
+            {
+              "type": "CARD",
+              "id": 78,
+              "gameTimestamp": 20
+            },
+            {
+              "type": "CARD",
+              "id": 27,
+              "gameTimestamp": 27
+            },
+            {
+              "type": "CARD",
+              "id": 24,
+              "gameTimestamp": 34
+            },
+            {
+              "type": "CARD",
+              "id": 62,
+              "gameTimestamp": 41
+            },
+            {
+              "type": "CARD",
+              "id": 288,
+              "gameTimestamp": 17
+            },
+            {
+              "type": "CARD",
+              "id": 264,
+              "gameTimestamp": 18
+            },
+            {
+              "type": "CARD",
+              "id": 246,
+              "gameTimestamp": 23
+            },
+            {
+              "type": "CARD",
+              "id": 211,
+              "gameTimestamp": 32
+            },
+            {
+              "type": "CARD",
+              "id": 220,
+              "gameTimestamp": 38
+            }
+          ],
+          "optionsTruncated": false,
+          "status": "SELECTED",
+          "selected": {
+            "type": "CARD",
+            "id": 37,
+            "gameTimestamp": 15
+          },
+          "selectedOptionIndex": 0,
+          "choiceId": "0:42:target:0",
+          "candidateIndex": 3,
+          "candidateActionId": null
+        },
+        {
+          "choiceSchemaVersion": 1,
+          "choiceType": "TARGET_POOL_SELECTION",
+          "stage": "CANDIDATE_EVALUATION",
+          "chooserPlayerId": 0,
+          "candidateAbilityId": 8326,
+          "abilityId": 8326,
+          "sourceId": 24,
+          "boundary": "ATTACH_CARD_POOL",
+          "purpose": "TARGET_RECOMMENDATION",
+          "optionCoverage": "OBSERVED_HEURISTIC_POOL_NOT_ALL_LEGAL_TARGET_SETS",
+          "priorTargets": [],
+          "priorTargetsTruncated": false,
+          "options": [
+            {
+              "type": "CARD",
+              "id": 49,
+              "gameTimestamp": 28
+            },
+            {
+              "type": "CARD",
+              "id": 40,
+              "gameTimestamp": 42
+            },
+            {
+              "type": "CARD",
+              "id": 101,
+              "gameTimestamp": 46
+            }
+          ],
+          "optionsTruncated": false,
+          "status": "SELECTED",
+          "selected": {
+            "type": "CARD",
+            "id": 49,
+            "gameTimestamp": 28
+          },
+          "selectedOptionIndex": 0,
+          "choiceId": "0:42:target:1",
+          "candidateIndex": 9,
+          "candidateActionId": "0:42:0"
+        }
+      ],
+      "subordinateChoiceOmissions": {
+        "interrupted": 0,
+        "budget": 0
+      },
+      "elapsedNanos": 665780702,
+      "search": {
+        "reason": "kept-heuristic",
+        "rollouts": 2,
+        "decidedByRollouts": true,
+        "method": "FLAT_MONTE_CARLO",
+        "elapsedNanos": 599265678,
+        "candidatesEvaluated": 2
+      }
+    }
+  },
+  "stackAdded": {
+    "type": "STACK_ADDED",
+    "game": 1,
+    "eventIndex": 1138,
+    "turn": 13,
+    "phase": "MAIN1",
+    "decisionId": "0:42",
+    "actionId": "0:42:0",
+    "stackId": 135,
+    "abilityId": 20478,
+    "kind": "ACTIVATED_ABILITY",
+    "copied": false,
+    "player": {
+      "id": 0,
+      "name": "Ai(1)-Doctor Who - The Thirteenth Doctor and Yasmin Khan"
+    },
+    "source": {
+      "id": 24,
+      "name": "The Reality Chip",
+      "gamePieceType": "CARD"
+    },
+    "finalizedTargets": {
+      "abilities": [
+        {
+          "abilityId": 20478,
+          "usesTargeting": true,
+          "targets": [
+            {
+              "type": "CARD",
+              "id": 49,
+              "gameTimestamp": 28
+            }
+          ]
+        }
+      ],
+      "schemaVersion": 1
+    },
+    "targetChoiceProvenance": {
+      "abilitiesTruncated": false,
+      "abilities": [
+        {
+          "abilityId": 20478,
+          "targetChoices": [
+            null
+          ],
+          "targetsTruncated": false
+        }
+      ],
+      "coverage": "EXPLICIT_TARGET_ADDITIONS_V1",
+      "schemaVersion": 1
+    },
+    "finalizedModes": {
+      "modal": false,
+      "schemaVersion": 1,
+      "modes": []
+    },
+    "finalizedX": {
+      "schemaVersion": 1,
+      "announcedValue": null
+    },
+    "finalizedPayments": {
+      "schemaVersion": 1,
+      "coverage": "ENGINE_PAYMENT_FACTS_V1",
+      "mana": [
+        {
+          "color": "U",
+          "playerId": 0,
+          "source": {
+            "gameTimestamp": 20,
+            "id": 78
+          },
+          "snow": false
+        },
+        {
+          "color": "G",
+          "playerId": 0,
+          "source": {
+            "gameTimestamp": 41,
+            "id": 62
+          },
+          "snow": false
+        },
+        {
+          "color": "R",
+          "playerId": 0,
+          "source": {
+            "gameTimestamp": 15,
+            "id": 37
+          },
+          "snow": false
+        }
+      ],
+      "lastLifePayment": 0,
+      "phyrexianLifePaid": 0,
+      "optionalCosts": [],
+      "alternativeCost": null,
+      "keywordAmounts": [],
+      "withoutManaCost": false,
+      "cardPayments": [],
+      "unrecognizedCardPaymentGroups": 0
+    },
+    "targets": [
+      {
+        "type": "CARD",
+        "card": {
+          "id": 49,
+          "name": "Laelia, the Blade Reforged",
+          "gamePieceType": "CARD"
+        }
+      }
+    ],
+    "targetDescription": "[Laelia, the Blade Reforged (49)]",
+    "manaSpent": [
+      {
+        "payer": {
+          "id": 0,
+          "name": "Ai(1)-Doctor Who - The Thirteenth Doctor and Yasmin Khan"
+        },
+        "color": "U",
+        "source": {
+          "id": 78,
+          "name": "Temple of Epiphany",
+          "gamePieceType": "CARD"
+        },
+        "snow": false,
+        "manaRestriction": "",
+        "extraManaRestriction": "",
+        "persistent": false,
+        "combatOnly": false,
+        "cannotCounterPaidSpell": false,
+        "addsCounters": false,
+        "addsKeywords": false,
+        "triggersWhenSpent": false
+      },
+      {
+        "payer": {
+          "id": 0,
+          "name": "Ai(1)-Doctor Who - The Thirteenth Doctor and Yasmin Khan"
+        },
+        "color": "G",
+        "source": {
+          "id": 62,
+          "name": "Forest",
+          "gamePieceType": "CARD"
+        },
+        "snow": false,
+        "manaRestriction": "",
+        "extraManaRestriction": "",
+        "persistent": false,
+        "combatOnly": false,
+        "cannotCounterPaidSpell": false,
+        "addsCounters": false,
+        "addsKeywords": false,
+        "triggersWhenSpent": false
+      },
+      {
+        "payer": {
+          "id": 0,
+          "name": "Ai(1)-Doctor Who - The Thirteenth Doctor and Yasmin Khan"
+        },
+        "color": "R",
+        "source": {
+          "id": 37,
+          "name": "Command Tower",
+          "gamePieceType": "CARD"
+        },
+        "snow": false,
+        "manaRestriction": "",
+        "extraManaRestriction": "",
+        "persistent": false,
+        "combatOnly": false,
+        "cannotCounterPaidSpell": false,
+        "addsCounters": false,
+        "addsKeywords": false,
+        "triggersWhenSpent": false
+      }
+    ]
+  },
+  "limitation": "The matching target identity does not establish which evaluation caused the final rebuilt target plan. Per-slot provenance remains unknown."
+}
