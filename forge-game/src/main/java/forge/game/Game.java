@@ -1203,6 +1203,11 @@ public class Game {
     public RuntimeException getEventObservationFailure() {
         return observationFailure.get();
     }
+
+    /** Observational adapters outside EventBus use the same non-rules failure channel. */
+    public void recordEventObservationFailure(final RuntimeException failure) {
+        observationFailure.compareAndSet(null, Objects.requireNonNull(failure));
+    }
     public void subscribeToEvents(final Object subscriber) {
         events.register(subscriber);
     }

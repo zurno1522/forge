@@ -354,7 +354,7 @@ public class DamageDealAi extends DamageAiBase {
 
         Card targetCard = null;
         if (pl.isOpponentOf(ai) && activator.equals(ai) && !killables.isEmpty()) {
-            return ComputerUtilCard.getBestRemovalTargetAI(ai, killables);
+            return AiTargetChoiceRecorder.choose(ai, sa, killables, "DAMAGE_KILLABLES", pool -> ComputerUtilCard.getBestRemovalTargetAI(ai, pool));
         }
 
         if (!mandatory) {
@@ -367,10 +367,10 @@ public class DamageDealAi extends DamageAiBase {
 
         if (!hPlay.isEmpty()) {
             if (pl.isOpponentOf(ai) && activator.equals(ai)) {
-                targetCard = ComputerUtilCard.getBestRemovalTargetAI(ai, controlledByOpps);
+                targetCard = AiTargetChoiceRecorder.choose(ai, sa, controlledByOpps, "DAMAGE_MANDATORY_OPPONENT_POOL", pool -> ComputerUtilCard.getBestRemovalTargetAI(ai, pool));
             }
             if (targetCard == null) {
-                targetCard = ComputerUtilCard.getWorstCreatureAI(hPlay);
+                targetCard = AiTargetChoiceRecorder.choose(ai, sa, hPlay, "DAMAGE_MANDATORY_FALLBACK_POOL", ComputerUtilCard::getWorstCreatureAI);
             }
 
             return targetCard;
@@ -412,13 +412,15 @@ public class DamageDealAi extends DamageAiBase {
 
         // We can kill a planeswalker, so go for it
         if (pl.isOpponentOf(ai) && activator.equals(ai) && !killables.isEmpty()) {
-            return ComputerUtilCard.getBestPlaneswalkerAI(killables);
+            return AiTargetChoiceRecorder.choose(ai, sa, killables, "DAMAGE_KILLABLE_PLANESWALKERS", ComputerUtilCard::getBestPlaneswalkerAI);
         }
 
         // We can hurt a planeswalker, so rank the one which is the best target
         if (!hPlay.isEmpty() && pl.isOpponentOf(ai) && activator.equals(ai)) {
-            Card pw = ComputerUtilCard.getBestPlaneswalkerToDamage(hPlay);
-            return pw == null && mandatory ? hPlay.get(0) : pw;
+            return AiTargetChoiceRecorder.choose(ai, sa, hPlay, "DAMAGE_PLANESWALKER_POOL", pool -> {
+                Card pw = ComputerUtilCard.getBestPlaneswalkerToDamage(pool);
+                return pw == null && mandatory ? pool.get(0) : pw;
+            });
         }
 
         return null;
@@ -495,7 +497,8 @@ public class DamageDealAi extends DamageAiBase {
         final String logic = sa.getParamOrDefault("AILogic", "");
 
         PlayerCollection targetableOpps = ai.getOpponents().filter(PlayerPredicates.isTargetableBy(sa));
-        Player enemy = targetableOpps.min(PlayerPredicates.compareByLife());
+        Player enemy = AiTargetChoiceRecorder.choose(ai, sa, targetableOpps, "DAMAGE_OPPONENT_POOL",
+                pool -> pool.min(PlayerPredicates.compareByLife()));
         if (enemy == null) {
             enemy = ai.getWeakestOpponent();
         }

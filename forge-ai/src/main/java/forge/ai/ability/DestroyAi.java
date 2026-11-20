@@ -47,7 +47,7 @@ public class DestroyAi extends SpellAbilityAi {
                         return true;
                     }
                 }
-                Card worst = ComputerUtilCard.getWorstAI(list);
+                Card worst = AiTargetChoiceRecorder.choose(ai, sa, list, "DESTROY_POLYMORPH_POOL", ComputerUtilCard::getWorstAI);
                 if (worst.isCreature() && ComputerUtilCard.evaluateCreature(worst) >= 200) {
                     return false;
                 }
@@ -90,7 +90,7 @@ public class DestroyAi extends SpellAbilityAi {
                         && ((ph.is(PhaseType.END_OF_TURN)) || (ph.is(PhaseType.COMBAT_DECLARE_BLOCKERS)))
                         && (ai.getOpponents().getCreaturesInPlay().size() > 0)) {
                     CardCollection list = CardLists.getTargetableCards(ai.getCardsIn(ZoneType.Battlefield), sa);
-                    Card worst = ComputerUtilCard.getWorstAI(list);
+                    Card worst = AiTargetChoiceRecorder.choose(ai, sa, list, "DESTROY_POLYMORPH_POOL", ComputerUtilCard::getWorstAI);
                     if (worst != null) {
                         sa.getTargets().add(worst);
                         return true;
@@ -216,7 +216,7 @@ public class DestroyAi extends SpellAbilityAi {
                 Card choice;
                 // If the targets are only of one type, take the best
                 if (CardLists.getNotType(list, "Creature").isEmpty()) {
-                    choice = ComputerUtilCard.getBestRemovalTargetAI(ai, list);
+                    choice = AiTargetChoiceRecorder.choose(ai, sa, list, "DESTROY_REMOVAL_POOL", pool -> ComputerUtilCard.getBestRemovalTargetAI(ai, pool));
                     if ("OppDestroyYours".equals(logic)) {
                         Card aiBest = ComputerUtilCard.getBestCreatureAI(ai.getCreaturesInPlay());
                         if (ComputerUtilCard.evaluateCreature(aiBest) > ComputerUtilCard.evaluateCreature(choice) - 40) {
@@ -224,7 +224,7 @@ public class DestroyAi extends SpellAbilityAi {
                         }
                     }
                 } else if (CardLists.getNotType(list, "Land").isEmpty()) {
-                    choice = ComputerUtilCard.getBestLandToRemoveAI(ai, list, sa);
+                    choice = AiTargetChoiceRecorder.choose(ai, sa, list, "DESTROY_LAND_POOL", pool -> ComputerUtilCard.getBestLandToRemoveAI(ai, pool, sa));
 
                     if (shouldApplyLandRemovalLogic(sa, logic)) {
                         // Strip Mine, Wasteland, Dust Bowl, and similar lands.
@@ -234,7 +234,7 @@ public class DestroyAi extends SpellAbilityAi {
                     }
                 } else {
                     // TODO look for "exiled until leaves" of own stuff
-                    choice = ComputerUtilCard.getBestRemovalTargetAI(ai, list);
+                    choice = AiTargetChoiceRecorder.choose(ai, sa, list, "DESTROY_REMOVAL_POOL", pool -> ComputerUtilCard.getBestRemovalTargetAI(ai, pool));
                 }
                 //option to hold removal instead only applies for single targeted removal
                 if (!sa.isTrigger() && sa.getMaxTargets() == 1) {

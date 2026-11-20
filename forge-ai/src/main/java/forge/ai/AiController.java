@@ -161,6 +161,8 @@ public class AiController {
 
     AiActionTracker actionTracker() { return actionTracker; }
 
+    AiDecisionRecorder evaluationRecorder() { return evaluationDecision.get(); }
+
     /** Called only after the real game worker has terminated, without holding observer locks. */
     public void retireRecordedActions() {
         if (actionTracker != null) { actionTracker.retire(); }

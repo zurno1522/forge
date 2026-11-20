@@ -93,6 +93,22 @@ def payment_fixture():
     return rows
 
 
+def target_pool_fixture():
+    rows = engine_fixture()
+    d = rows[2]['decision']
+    d['candidates'] = [dict(abilityId=7, sourceId=8, kind='SPELL', assessment='WillPlay')]
+    options = [dict(type='CARD', id=(1 << 41) + index, gameTimestamp=(1 << 51) + index) for index in (1, 2)]
+    choice = dict(choiceSchemaVersion=1, choiceId='opaque-choice', choiceType='TARGET_POOL_SELECTION',
+                  stage='CANDIDATE_EVALUATION', chooserPlayerId=0, candidateAbilityId=7,
+                  abilityId=7, sourceId=8, boundary='DESTROY_REMOVAL_POOL',
+                  optionCoverage='OBSERVED_HEURISTIC_POOL_NOT_ALL_LEGAL_TARGET_SETS',
+                  priorTargets=[], options=options, status='SELECTED', selected=copy.deepcopy(options[1]),
+                  selectedOptionIndex=1, candidateIndex=0, candidateActionId='0:1:0')
+    d.update(subordinateChoiceSchemaVersion=1, subordinateChoiceCoverage='OBSERVED_HEURISTIC_TARGET_POOLS_V1',
+             subordinateChoices=[choice])
+    return rows
+
+
 class ExportTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
@@ -103,6 +119,109 @@ class ExportTests(unittest.TestCase):
         path=self.root/name
         path.write_text(''.join(json.dumps(r)+'\n' for r in rows))
         return path
+
+    def test_target_pool_records_export_with_explicit_partial_coverage(self):
+        source = self.write(target_pool_fixture())
+        out = self.root / 'out'
+        summary = module.export([source], out)
+        self.assertEqual(summary['subordinateChoiceRecords'], 1)
+        self.assertEqual(summary['subordinateChoiceStatuses'], {'SELECTED': 1})
+        self.assertEqual(summary['targetPoolSizes'], {2: 1})
+        self.assertEqual(summary['targetChoiceCandidateLinks'], {'EXACT_SELECTED_CANDIDATE': 1})
+        row = json.loads((out / 'dataset.jsonl').read_text())
+        choice = row['decision']['subordinateChoices'][0]
+        self.assertEqual(choice['selected']['id'], (1 << 41) + 2)
+        self.assertEqual(choice['selected']['gameTimestamp'], (1 << 51) + 2)
+        self.assertEqual(choice['candidateActionId'], row['decision']['selectedActions'][0]['actionId'])
+        self.assertFalse(row['trainingReady'])
+        self.assertIn('not complete legal target sets', (out / 'coverage.md').read_text())
+
+    def test_pool_presence_coverage_does_not_equate_recommendations_with_committed_targets(self):
+        for linked in (True, False):
+            rows = target_pool_fixture()
+            rows[4]['finalizedTargets'] = target_fixture()[4]['finalizedTargets']
+            if not linked:
+                rows[2]['decision']['subordinateChoices'][0]['candidateActionId'] = None
+            summary = module.export([self.write(rows, f'presence-{linked}.jsonl')])
+            self.assertEqual(summary['declaredSelectedTargetedActions'], 1)
+            self.assertEqual(summary['selectedTargetedActionsWithPoolRecord'], int(linked))
+
+    def test_target_pool_identity_status_and_visibility_contradictions_are_rejected(self):
+        mutations = [
+            lambda d, c: d.pop('subordinateChoiceSchemaVersion'),
+            lambda d, c: d.update(subordinateChoiceSchemaVersion=True),
+            lambda d, c: d.update(subordinateChoiceCoverage='ALL_LEGAL_TARGETS'),
+            lambda d, c: d['subordinateChoices'].append(copy.deepcopy(c)),
+            lambda d, c: c.update(choiceSchemaVersion=True),
+            lambda d, c: c.update(chooserPlayerId=99),
+            lambda d, c: c.update(candidateIndex=99),
+            lambda d, c: c.update(candidateAbilityId=99),
+            lambda d, c: c.update(candidateActionId='unknown-action'),
+            lambda d, c: c.update(sourceId=99),
+            lambda d, c: c.update(selectedOptionIndex=0),
+            lambda d, c: c.update(selectedOptionIndex=True),
+            lambda d, c: c.update(status='DECLINED'),
+            lambda d, c: c.update(stage='EXECUTION'),
+            lambda d, c: c.update(optionCoverage='ALL_LEGAL_TARGETS'),
+            lambda d, c: c.update(boundary='a raw card-script description'),
+            lambda d, c: c['options'][0].update(name='Privileged identity'),
+            lambda d, c: c['options'][0].update(gameTimestamp=True),
+            lambda d, c: c['priorTargets'].append(dict(type='PLAYER', id=True)),
+        ]
+        for index, mutate in enumerate(mutations):
+            with self.subTest(index=index):
+                rows = target_pool_fixture()
+                d = rows[2]['decision']
+                mutate(d, d['subordinateChoices'][0])
+                with self.assertRaises(module.InvalidData):
+                    module.export([self.write(rows, f'bad-choice-{index}.jsonl')], self.root / f'bad-out-{index}')
+
+    def test_explicit_uncertain_pool_outcomes_and_interrupted_assessments_are_preserved(self):
+        for status in ('DECLINED', 'ERROR', 'INCOMPLETE', 'OUTSIDE_OBSERVED_POOL', 'AMBIGUOUS_MATCH'):
+            with self.subTest(status=status):
+                rows = target_pool_fixture()
+                choice = rows[2]['decision']['subordinateChoices'][0]
+                choice.update(status=status, selectedOptionIndex=None, candidateIndex=None, candidateActionId=None)
+                if status in ('DECLINED', 'ERROR', 'INCOMPLETE'):
+                    choice['selected'] = None
+                elif status == 'OUTSIDE_OBSERVED_POOL':
+                    choice['selected']['id'] += 100
+                else:
+                    choice['options'].append(copy.deepcopy(choice['selected']))
+                run = module.load_run(self.write(rows, status + '.jsonl'))
+                data = list(module.dataset_rows(run))
+                self.assertEqual(data[0]['decision']['subordinateChoices'][0], choice)
+                coverage = module.make_coverage([run], data)
+                self.assertEqual(coverage['targetChoiceCandidateLinks'], {'NO_EXACT_SELECTED_ACTION_LINK': 1})
+                self.assertEqual(coverage['targetChoiceAssessmentLinks'], {'MISSING_ASSESSMENT': 1})
+
+    def test_unselected_candidate_choice_does_not_invent_an_action_link(self):
+        rows = fixture()
+        d = rows[2]['decision']
+        with_choice = target_pool_fixture()[2]['decision']
+        d.update({key: copy.deepcopy(with_choice[key]) for key in ('candidates', 'subordinateChoiceSchemaVersion',
+                    'subordinateChoiceCoverage', 'subordinateChoices')})
+        d['subordinateChoices'][0]['candidateActionId'] = None
+        data = list(module.dataset_rows(module.load_run(self.write(rows))))
+        self.assertEqual(data[0]['actionExecutions'], [])
+        self.assertEqual(data[0]['decision']['subordinateChoices'][0]['status'], 'SELECTED')
+        self.assertIsNone(data[0]['decision']['subordinateChoices'][0]['candidateActionId'])
+
+    def test_masked_source_requires_masked_choice_boundary(self):
+        rows = target_pool_fixture()
+        d = rows[2]['decision']
+        d['observation']['players'][0]['cards'] = [dict(id=8, zone='Hand', identityKnown=False)]
+        with self.assertRaises(module.InvalidData):
+            module.load_run(self.write(rows))
+        d['subordinateChoices'][0]['boundary'] = 'MASKED_TARGET_POOL'
+        module.load_run(self.write(rows, 'masked.jsonl'))
+
+    def test_legacy_output_does_not_claim_subordinate_choice_coverage(self):
+        out = self.root / 'legacy-out'
+        summary = module.export([self.write(fixture())], out)
+        self.assertNotIn('subordinateChoiceRecords', summary)
+        self.assertNotIn('subordinateChoiceCoverage', summary)
+        self.assertNotIn('Subordinate target-pool selections', (out / 'coverage.md').read_text())
 
     def test_spooled_export_preserves_distinct_examples_then_fills_in_source_order(self):
         inputs = []

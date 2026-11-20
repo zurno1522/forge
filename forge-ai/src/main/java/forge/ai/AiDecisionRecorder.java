@@ -2,6 +2,7 @@ package forge.ai;
 
 import forge.ai.simulation.FlatMonteCarloPicker;
 import forge.game.Game;
+import forge.game.GameObject;
 import forge.game.card.Card;
 import forge.game.mana.Mana;
 import forge.game.player.Player;
@@ -22,6 +23,73 @@ final class AiDecisionRecorder {
     private boolean closed;
     private String evaluationFailure;
     private final Player viewer;
+    private Assessment assessment;
+    private final List<TargetChoice> targetChoices = new ArrayList<>();
+
+    private static final class Assessment {
+        private final SpellAbility candidate;
+        private Integer index;
+        private Assessment(final SpellAbility candidate) { this.candidate = candidate; }
+    }
+
+    final class TargetChoice {
+        private final Assessment origin;
+        private final Map<String, Object> data;
+        private TargetChoice(final Assessment origin, final Map<String, Object> data) {
+            this.origin = origin;
+            this.data = data;
+        }
+
+        void complete(final GameObject chosen) {
+            synchronized (AiDecisionRecorder.this) {
+                if (closed) { return; }
+                final Map<String, Object> selected = AiTargetChoiceRecorder.reference(chosen);
+                data.put("selected", selected);
+                final List<?> options = (List<?>) data.get("options");
+                int matches = 0;
+                Integer index = null;
+                for (int i = 0; i < options.size(); i++) {
+                    if (options.get(i).equals(selected)) { matches++; index = i; }
+                }
+                data.put("selectedOptionIndex", matches == 1 ? index : null);
+                data.put("status", selected == null ? "DECLINED" : matches == 1 ? "SELECTED"
+                        : matches == 0 ? "OUTSIDE_OBSERVED_POOL" : "AMBIGUOUS_MATCH");
+            }
+        }
+
+        void failed() {
+            synchronized (AiDecisionRecorder.this) {
+                if (!closed) { data.put("status", "ERROR"); }
+            }
+        }
+    }
+
+    synchronized TargetChoice beginTargetChoice(final SpellAbility ability,
+            final Iterable<? extends GameObject> options, final String boundary) {
+        if (closed || assessment == null || !ability.usesTargeting()
+                || ability.getRootAbility() != assessment.candidate.getRootAbility()) { return null; }
+        final Map<String, Object> choice = new LinkedHashMap<>();
+        choice.put("choiceSchemaVersion", 1);
+        choice.put("choiceId", data.get("decisionId") + ":target:" + targetChoices.size());
+        choice.put("choiceType", "TARGET_POOL_SELECTION");
+        choice.put("stage", "CANDIDATE_EVALUATION");
+        choice.put("chooserPlayerId", viewer.getId());
+        choice.put("candidateAbilityId", assessment.candidate.getId());
+        choice.put("abilityId", ability.getId());
+        choice.put("sourceId", ability.getHostCard().getId());
+        final Card source = ability.getHostCard();
+        choice.put("boundary", !source.isFaceDown() && source.getView().canBeShownTo(viewer.getView())
+                ? boundary : "MASKED_TARGET_POOL");
+        choice.put("optionCoverage", "OBSERVED_HEURISTIC_POOL_NOT_ALL_LEGAL_TARGET_SETS");
+        choice.put("priorTargets", AiTargetChoiceRecorder.references(ability.getTargets()));
+        choice.put("options", AiTargetChoiceRecorder.references(options));
+        choice.put("status", "INCOMPLETE");
+        choice.put("selected", null);
+        choice.put("selectedOptionIndex", null);
+        final TargetChoice result = new TargetChoice(assessment, choice);
+        targetChoices.add(result);
+        return result;
+    }
 
     AiDecisionRecorder(final Game game, final Player viewer, final long sequence) {
         this.viewer = viewer;
@@ -37,7 +105,10 @@ final class AiDecisionRecorder {
 
     // Evaluation can run on a worker which outlives cancellation. Never write into another decision.
     synchronized void beginAssessment(final SpellAbility sa) {
-        if (!closed) { details.remove(sa.getRootAbility().getId()); }
+        if (!closed) {
+            details.remove(sa.getRootAbility().getId());
+            assessment = new Assessment(sa);
+        }
     }
 
     synchronized void detail(final SpellAbility sa, final Map<String, Object> reason) {
@@ -74,6 +145,9 @@ final class AiDecisionRecorder {
     synchronized void evaluated(final SpellAbility sa, final String reason) {
         if (!closed) {
             final Map<String, Object> candidate = action(sa);
+            if (assessment != null && assessment.candidate == sa && assessment.index == null) {
+                assessment.index = candidates.size();
+            }
             candidate.put("assessment", reason);
             final Map<String, Object> detail = details.remove(sa.getRootAbility().getId());
             if (detail != null && !"WillPlay".equals(reason) && !"MONTE_CARLO_ONLY_WillPlay".equals(reason)) {
@@ -106,6 +180,24 @@ final class AiDecisionRecorder {
         }
         data.put("selection", "ERROR".equals(status) ? "NO_ACTION" : selected.isEmpty() ? "PASS_PRIORITY" : "PLAY");
         data.put("selectedActions", selected);
+        data.put("subordinateChoiceSchemaVersion", 1);
+        data.put("subordinateChoiceCoverage", "OBSERVED_HEURISTIC_TARGET_POOLS_V1");
+        final List<Map<String, Object>> choices = new ArrayList<>();
+        for (final TargetChoice choice : targetChoices) {
+            choice.data.put("candidateIndex", choice.origin.index);
+            String candidateActionId = null;
+            if (chosen != null) {
+                for (int i = 0; i < chosen.size(); i++) {
+                    if (chosen.get(i) == choice.origin.candidate) {
+                        candidateActionId = (String) selected.get(i).get("actionId");
+                        break;
+                    }
+                }
+            }
+            choice.data.put("candidateActionId", candidateActionId);
+            choices.add(choice.data);
+        }
+        data.put("subordinateChoices", choices);
         data.put("elapsedNanos", System.nanoTime() - started);
         if (search != null) {
             data.put("search", Map.of("method", "FLAT_MONTE_CARLO", "reason", search.reason,

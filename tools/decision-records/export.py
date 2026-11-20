@@ -43,6 +43,79 @@ def digest(value):
     return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(',', ':'), ensure_ascii=False).encode()).hexdigest()
 
 
+TARGET_CHOICE_BOUNDARIES = {'DESTROY_REMOVAL_POOL', 'DESTROY_LAND_POOL', 'DESTROY_POLYMORPH_POOL',
+                            'DAMAGE_OPPONENT_POOL', 'DAMAGE_KILLABLES', 'DAMAGE_MANDATORY_OPPONENT_POOL',
+                            'DAMAGE_MANDATORY_FALLBACK_POOL', 'DAMAGE_KILLABLE_PLANESWALKERS',
+                            'DAMAGE_PLANESWALKER_POOL', 'MASKED_TARGET_POOL'}
+
+
+def validate_choice_reference(ref):
+    require(isinstance(ref, dict), 'invalid choice reference')
+    required = {'CARD': {'type', 'id', 'gameTimestamp'}, 'PLAYER': {'type', 'id'},
+                'SPELL_ABILITY': {'type', 'id', 'stackId'}}.get(ref.get('type'))
+    require(required is not None and set(ref) == required, 'invalid choice reference fields')
+    require(integer(ref['id']), 'invalid choice reference identifier')
+    if ref['type'] == 'CARD':
+        require(integer(ref['gameTimestamp']), 'invalid choice card timestamp')
+    if ref['type'] == 'SPELL_ABILITY':
+        require(ref['stackId'] is None or integer(ref['stackId']), 'invalid choice stack identifier')
+
+
+def validate_subordinate_choices(d, masked_ids):
+    version = d.get('subordinateChoiceSchemaVersion')
+    if version is None:
+        require('subordinateChoices' not in d and 'subordinateChoiceCoverage' not in d, 'undeclared subordinate choices')
+        return
+    require(integer(version) and version == 1, 'unsupported subordinate choice schema')
+    require(d.get('subordinateChoiceCoverage') == 'OBSERVED_HEURISTIC_TARGET_POOLS_V1', 'invalid subordinate choice coverage')
+    choices = d.get('subordinateChoices')
+    require(isinstance(choices, list), 'missing subordinate choices')
+    seen = set()
+    actions = {action.get('actionId'): action for action in d['selectedActions'] if 'actionId' in action}
+    fields = {'choiceSchemaVersion', 'choiceId', 'choiceType', 'stage', 'chooserPlayerId', 'candidateAbilityId',
+              'abilityId', 'sourceId', 'boundary', 'optionCoverage', 'priorTargets', 'options', 'status',
+              'selected', 'selectedOptionIndex', 'candidateIndex', 'candidateActionId'}
+    for choice in choices:
+        require(isinstance(choice, dict) and set(choice) == fields, 'invalid subordinate choice fields')
+        require(integer(choice['choiceSchemaVersion']) and choice['choiceSchemaVersion'] == 1, 'invalid target choice schema')
+        choice_id = choice['choiceId']
+        require(isinstance(choice_id, str) and choice_id and choice_id not in seen, 'invalid or duplicate choice id')
+        seen.add(choice_id)
+        require(choice['choiceType'] == 'TARGET_POOL_SELECTION' and choice['stage'] == 'CANDIDATE_EVALUATION', 'invalid target choice stage/type')
+        require(integer(choice['chooserPlayerId']) and choice['chooserPlayerId'] == d['playerId'], 'choice/decision chooser mismatch')
+        require(all(integer(choice[key]) for key in ('candidateAbilityId', 'abilityId', 'sourceId')), 'invalid target choice identity')
+        require(choice['boundary'] in TARGET_CHOICE_BOUNDARIES, 'invalid target choice boundary')
+        require(choice['sourceId'] not in masked_ids or choice['boundary'] == 'MASKED_TARGET_POOL', 'choice boundary exposes masked source')
+        require(choice['optionCoverage'] == 'OBSERVED_HEURISTIC_POOL_NOT_ALL_LEGAL_TARGET_SETS', 'invalid target option coverage')
+        index = choice['candidateIndex']
+        if index is not None:
+            require(integer(index) and 0 <= index < len(d['candidates']), 'invalid choice candidate index')
+            candidate = d['candidates'][index]
+            require(candidate.get('abilityId') == choice['candidateAbilityId'] and candidate.get('sourceId') == choice['sourceId'], 'choice/candidate identity mismatch')
+        action_id = choice['candidateActionId']
+        if action_id is not None:
+            require(isinstance(action_id, str) and action_id in actions, 'choice has no selected candidate action')
+            require(actions[action_id]['abilityId'] == choice['candidateAbilityId'] and actions[action_id]['sourceId'] == choice['sourceId'], 'choice/action identity mismatch')
+        for name in ('options', 'priorTargets'):
+            require(isinstance(choice[name], list), 'invalid choice target list')
+            for ref in choice[name]:
+                validate_choice_reference(ref)
+        selected, selected_index = choice['selected'], choice['selectedOptionIndex']
+        if selected is not None:
+            validate_choice_reference(selected)
+        matches = sum(ref == selected for ref in choice['options'])
+        status = choice['status']
+        if status == 'SELECTED':
+            require(selected is not None and integer(selected_index) and 0 <= selected_index < len(choice['options'])
+                    and choice['options'][selected_index] == selected and matches == 1, 'choice selection/options mismatch')
+        elif status in ('DECLINED', 'ERROR', 'INCOMPLETE'):
+            require(selected is None and selected_index is None, 'unobserved choice carries a selection')
+        elif status in ('OUTSIDE_OBSERVED_POOL', 'AMBIGUOUS_MATCH'):
+            require(selected is not None and selected_index is None and (matches == 0 if status == 'OUTSIDE_OBSERVED_POOL' else matches > 1), 'invalid uncertain target choice')
+        else:
+            require(False, 'invalid target choice status')
+
+
 def validate_decision(record, game):
     d = record.get('decision')
     require(isinstance(d, dict), 'AI_DECISION lacks decision object')
@@ -115,6 +188,7 @@ def validate_decision(record, game):
         require(isinstance(search.get('reason'), str), 'missing search reason')
         for key in ('rollouts', 'candidatesEvaluated', 'elapsedNanos'):
             require(integer(search.get(key)) and search[key] >= 0, 'invalid search count/duration')
+    validate_subordinate_choices(d, masked_ids)
     return d
 
 
@@ -493,12 +567,19 @@ def make_coverage(runs, rows, *, spool=None):
              'finalizedTargetSnapshots', 'finalizedTargetTypes', 'finalizedModeSnapshots', 'selectedModeCounts',
              'finalizedXSnapshots', 'announcedXValues', 'finalizedPaymentSnapshots', 'optionalCostSelections',
              'alternativeCostSelections', 'cardPaymentGroups')
+    choice_keys = ('subordinateChoiceCoverage', 'subordinateChoiceTypes', 'subordinateChoiceStatuses',
+                   'subordinateChoiceBoundaries', 'targetPoolSizes', 'targetChoiceCandidateLinks',
+                   'targetChoiceAssessmentLinks')
     counters = {name: spool.counter('coverage:' + name, name in common) if spool else collections.Counter()
-                for name in common + other}
+                for name in common + other + choice_keys}
     totals = dict(outcomeEligibleDecisions=0, censoredDecisions=0, decisionsAfterOutcome=0,
                   decisionsWithAssessments=0, selectedActionsWithoutAssessment=0,
                   unrecognizedCardPaymentGroups=0, searchRecords=0, searchDecidedByRollouts=0)
     grouped = {}
+    declared_choices = False
+    choice_records = 0
+    declared_targeted_actions = 0
+    targeted_actions_with_pool_record = 0
 
     def add(name, value):
         counters[name].update((value,))
@@ -512,6 +593,19 @@ def make_coverage(runs, rows, *, spool=None):
             add('executionStatuses', game['execution']['status'])
     for row in rows:
         d = row['decision']
+        declared = d.get('subordinateChoiceSchemaVersion') == 1
+        declared_choices = declared_choices or declared
+        observed_candidates = {choice['candidateActionId'] for choice in d.get('subordinateChoices', [])
+                               if choice['candidateActionId'] is not None}
+        add('subordinateChoiceCoverage', d['subordinateChoiceCoverage'] if declared else 'UNAVAILABLE')
+        for choice in d.get('subordinateChoices', []):
+            choice_records += 1
+            add('subordinateChoiceTypes', choice['choiceType'])
+            add('subordinateChoiceStatuses', choice['status'])
+            add('subordinateChoiceBoundaries', choice['boundary'])
+            add('targetPoolSizes', len(choice['options']))
+            add('targetChoiceCandidateLinks', 'EXACT_SELECTED_CANDIDATE' if choice['candidateActionId'] is not None else 'NO_EXACT_SELECTED_ACTION_LINK')
+            add('targetChoiceAssessmentLinks', 'INDEXED_ASSESSMENT' if choice['candidateIndex'] is not None else 'MISSING_ASSESSMENT')
         for name, value in (('selections', d['selection']), ('phases', d['observation']['phase']),
                             ('decisionStatuses', d['status']), ('outcomeLabels', row['outcomeLabel'] or 'CENSORED'),
                             ('pilotModes', row['pilotMode'])):
@@ -548,6 +642,9 @@ def make_coverage(runs, rows, *, spool=None):
                 add('linkedEngineEvents', event['type'])
                 if event['type'] != 'STACK_ADDED':
                     continue
+                if declared and event.get('finalizedTargets') is not None and any(group['usesTargeting'] for group in event['finalizedTargets']['abilities']):
+                    declared_targeted_actions += 1
+                    targeted_actions_with_pool_record += action['actionId'] in observed_candidates
                 for field, metric in (('finalizedTargets', 'finalizedTargetSnapshots'),
                                       ('finalizedModes', 'finalizedModeSnapshots'),
                                       ('finalizedX', 'finalizedXSnapshots'),
@@ -600,6 +697,12 @@ def make_coverage(runs, rows, *, spool=None):
                           decisions=sum(len(g['decisions']) for g in r['games'].values())) for r in runs)
     summary['runsSummary'] = spool.sequence('run_summaries', run_summaries) if spool else list(run_summaries)
     summary['groups'] = spool.sequence('group_summaries', spool.groups()) if spool else [grouped[key] for key in sorted(grouped)]
+    if declared_choices:
+        summary['subordinateChoiceRecords'] = choice_records
+        summary['declaredSelectedTargetedActions'] = declared_targeted_actions
+        summary['selectedTargetedActionsWithPoolRecord'] = targeted_actions_with_pool_record
+        for name in choice_keys:
+            summary[name] = count(name)
     summary['limitations'] = [
         'Main-phase play selection with an empty stack only; no mulligan, combat, reactive-priority or subordinate-choice coverage.',
         'Candidate assessments are partial and may repeat an ability; counts are assessment observations, not unique rejected legal actions.',
@@ -615,6 +718,8 @@ def make_coverage(runs, rows, *, spool=None):
         'UNKNOWN engine/pilot metadata in legacy inputs is retained explicitly rather than guessed.',
         'Handler labels are preserved from Forge: MissingPhaseRestrictions means a phase check declined the play, not necessarily missing card configuration.',
     ]
+    if declared_choices:
+        summary['limitations'].append('Subordinate target records cover selected heuristic pools during candidate evaluation, not every target chooser or all legal target sets. A candidate action link does not establish execution or a committed target; mode, X, payment and delegated/resolution choices remain outside this coverage.')
     return summary
 
 
@@ -685,6 +790,18 @@ def report_chunks(summary, runs):
     yield from lines('', '## Runs', '', '| Decks | Pilot | Seed | Result | Decisions |', '| --- | --- | --- | --- | ---: |')
     for run in summary['runsSummary']:
         yield from lines('| ' + ' | '.join(cell(' vs. '.join(run['decks']) if k == 'decks' else run[k]) for k in ('decks', 'pilotMode', 'seed', 'status', 'decisions')) + ' |')
+    if 'subordinateChoiceRecords' in summary:
+        yield from lines('', '## Subordinate target-pool selections', '',
+                         f"Recorded {summary['subordinateChoiceRecords']} observed selections during candidate evaluation.")
+        for prefix, name in (('Declaration coverage: ', 'subordinateChoiceCoverage'),
+                             ('Selection statuses: ', 'subordinateChoiceStatuses'),
+                             ('Observed boundaries: ', 'subordinateChoiceBoundaries'),
+                             ('Observed pool sizes: ', 'targetPoolSizes'),
+                             ('Selected-candidate links: ', 'targetChoiceCandidateLinks'),
+                             ('Assessment links: ', 'targetChoiceAssessmentLinks')):
+            yield from counter_line(prefix, name)
+        yield from lines('These are heuristic pool observations, not complete legal target sets, committed execution choices or per-choice rewards.')
+        yield from lines(f"Among declaring decisions with an observed committed target snapshot, {summary['selectedTargetedActionsWithPoolRecord']} of {summary['declaredSelectedTargetedActions']} selected targeted actions have an exact candidate link to at least one pool record. This measures presence, not complete choice coverage.")
     yield from lines('', '## Reproducibility', '', 'The companion manifest contains exact deck snapshots, deck hashes, input hashes and run metadata. The following summary is readable without the input logs.', '',
                      '| Run | Seed | Pilot | Engine revision | Dirty | Source SHA256 |', '| --- | --- | --- | --- | --- | --- |')
     for run in runs:
