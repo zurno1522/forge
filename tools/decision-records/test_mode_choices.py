@@ -48,6 +48,15 @@ class ModeChoiceTests(unittest.TestCase):
         value.update(modes=value['modes'] * 128, selectedCount=300, truncated=True)
         self.assertEqual(module.export([self.write(rows)])['standaloneChoiceRecords'], 1)
 
+    def test_unavailable_mode_plan_is_not_counted_as_a_captured_empty_plan(self):
+        for available in (False, True):
+            rows = mode_fixture()
+            rows[3]['choice']['selection'].update(available=available, modes=[], selectedCount=0 if available else None,
+                                                 truncated=False, accepted=available)
+            summary = module.export([self.write(rows, str(available) + '.jsonl')])
+            self.assertEqual(summary['standaloneModePlanCoverage'], {'OBSERVED' if available else 'UNAVAILABLE': 1})
+            self.assertEqual(summary['standaloneModePlanCapture'], {'FULL_LIST' if available else 'UNAVAILABLE': 1})
+
     def test_mode_identity_flags_and_private_fields_are_validated(self):
         for mutation in ('option-index', 'identity', 'bool-index', 'count', 'private', 'available', 'flags'):
             with self.subTest(mutation=mutation):

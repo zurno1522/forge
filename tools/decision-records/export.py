@@ -861,7 +861,7 @@ def make_coverage(runs, rows, *, spool=None):
                     mode_plans[row['status']] += 1
                 else:
                     mode_plans['OBSERVED' if value['available'] else 'UNAVAILABLE'] += 1
-                    mode_capture['PREFIX' if value['truncated'] else 'FULL_LIST'] += 1
+                    mode_capture['UNAVAILABLE' if not value['available'] else 'PREFIX' if value['truncated'] else 'FULL_LIST'] += 1
                     seen_modes = set()
                     for mode in value['modes']:
                         mode_links['EXACT_CAPTURED_OPTION' if mode['optionIndex'] is not None else 'UNMAPPED'] += 1
