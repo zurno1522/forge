@@ -110,3 +110,6 @@ Main-phase Monte Carlo final revalidation, restoration and target overrides addi
 
 
 The [Monte Carlo validation follow-up](../../docs/Development/Simulation-Decision-Records.md#monte-carlo-target-validation-and-remaining-scope-2026-11-20) resolves the previously unknown Reality Chip target through an actual final heuristic-revalidation record. Eight fresh games validated 46 search operations and 22 linked committed target origins, including a declined revalidation followed by accepted restoration. [Actual messages](../../docs/Development/assessments/Monte-Carlo-Targets/actual-examples.json) and version-1 compatibility checks are committed with the evidence. This closes the reproduced main-phase search gap; the observation/visibility design remains pending.
+
+
+The [choice input-context contract and boundary inventory](../../docs/Development/Simulation-Observation-Contract.md) specifies the next observation capability. It inventories 61 recording entry sites and distinguishes actual selector inputs from cached results, assignments and whole operations. This is a design document: inline contexts, disclosure capture and new policy projections are not implemented or emitted by this stage.
