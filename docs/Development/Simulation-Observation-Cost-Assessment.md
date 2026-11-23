@@ -61,6 +61,8 @@ The retained 32-fact buffer is 19,896 reachable bytes; the empty-list sample is 
 
 OPT-001 has delivered phase attribution and sampled retention evidence. Exact transient retention and broader validation targets remain open as assigned above; this is not full closure of every measurement target. Pause here before COV-002 or an optimization implementation. Coverage gaps remain with their [existing owners](Simulation-Observation-Coverage-Plan.md#assigned-cov-001-gaps-and-scheduling); invocation accounting is not inferred from this probe.
 
+Assignment review before COV-002: no outstanding accounting/encoder-check defect was found in OPT-001's implementation. Its delivered measurement is scoped to the documented phase spans and sampled payload graphs. Exact transient-retention/calibration/end-to-end targets remain open under OPT-005; writer hot spots under OPT-004; projection residual attribution under OPT-003. These remain open measurement targets rather than being treated as completed. COV-002 may proceed using the explicit limits above, without implementing a runtime optimization.
+
 ## Reproduction and artifacts
 
 Use the [phase-probe instructions](../../tools/decision-records/input-context-benchmark/README.md#opt-001-phase-probe). Raw measurements are standard gzip-compressed JSON objects containing `control` and `profiled` arrays. Extract each array to the named JSON file in a temporary directory and run `summarize-phases.py` to reconstruct complete per-mode distributions and phase summaries.

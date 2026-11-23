@@ -2,6 +2,8 @@
 
 COV-001 is complete. Its [assigned gaps](Simulation-Observation-Coverage-Plan.md#assigned-cov-001-gaps-and-scheduling) do not block measurement of known captured operations. OPT-001 now has [phase results and a gap review](Simulation-Observation-Cost-Assessment.md); COV-002 is next after that review. Coverage and optimization continue to use separate implementation commits and a gap review before proceeding to the subsequent item.
 
+The OPT-001 assignment review is complete: implementation checks have no outstanding defect; the open measurement targets stay assigned to OPT-003/004/005. Proceed with COV-002, then pause for its own gap review before COV-003.
+
 | Order | Item | Scheduling reason |
 | --- | --- | --- |
 | 1 | OPT-001 | Representative phase attribution delivered; exact transient retention and broader validation remain assigned to OPT-005. Review these limits before proceeding. Invocation-loss rates are outside this measurement. |
