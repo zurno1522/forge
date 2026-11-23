@@ -1,0 +1,16 @@
+{
+  "forge-ai/src/main/java/forge/ai/AiPromptInput.java": "1cd88fe0f28a2f4248be75b827a0052174cece42977224bfe9e6ab571913bdd4",
+  "forge-ai/src/main/java/forge/ai/AiInputContext.java": "f550826724e6e0ab0eaadcf3f688117376283ccf3d2f18a615b7a4ee7a328268",
+  "forge-ai/src/main/java/forge/ai/AiChoiceRecorder.java": "9bd6ccc209fce7e10db45798db4e32206294910a310cf20affb0c6b865ede437",
+  "forge-ai/src/main/java/forge/ai/AiEffectChoiceRecorder.java": "a60229e0f7cd2c076be881058e1146aac9b12210107354e753faf0bf8d1647ce",
+  "forge-ai/src/main/java/forge/ai/AiNumberChoiceRecorder.java": "b663c7180e6f268bb84b8238ad5ffa8840a4d4b6f221f4239a014e99c9f0d6a2",
+  "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java": "1bd2ae7efa622db896697750ebc0060e213d9767c75bd7b3f0c6a90899e2ceb6",
+  "forge-gui-desktop/src/test/java/forge/ai/AiPromptInputContextTest.java": "96e93567c35ad9b4cdda4e7a48be3ec9791f79213eb5339d115698457372d779",
+  "forge-gui-desktop/src/test/java/forge/ai/AiStackInputContextTest.java": "db6209f58af746d03303822376895652ed050697eea2bb0fba1203146abf37bb",
+  "tools/decision-records/input_context.py": "573d83e2e9faabff9b628c37c968178ec8c592918983986bc101a36cb4919ac5",
+  "tools/decision-records/choice_events.py": "d4a1b2c0dd9da1325ce25b70595d7abdfea8618d17b580af62f4d71ffecb1a29",
+  "tools/decision-records/export.py": "af55eaa35835aed211a71c7a41687bc909fdd92442ba84ad162eeb04dc5302b3",
+  "tools/decision-records/test_input_context.py": "ec44249631950b1de0ebd2084d91fc8ec2c0c4890864583c9a6d0ad879b5d73c",
+  "tools/decision-records/test_prompt_input_context.py": "ea029a22167e5c5bc82eae3c1affa0a1df62fd65fd251996c041b80e01427cf7",
+  "tools/trace-test-decks/choice-numeric-prompts.dck": "502e68bb409f4d15666264208229fb47b136deb5adb28d47cff31560955f8f50"
+}

@@ -1,0 +1,1585 @@
+{
+  "SINGLE_ENTITY": {
+    "scenario": "complex",
+    "sourceSha256": "de916dde40c1cb1e3bba3f5fa5210dde3f3fa9f44deb5459150f595ec25da9d0",
+    "eventType": "AI_SUBORDINATE_CHOICE",
+    "eventIndex": 688,
+    "location": "/choice",
+    "excerpt": true,
+    "inputContext": {
+      "schemaVersion": 3,
+      "profile": "PERMITTED_CHOICE_VIEW_V3",
+      "timing": "BEFORE_SELECTOR",
+      "stateBasis": "RULES_STATE",
+      "perspective": {
+        "controllingPlayerId": 0,
+        "chooserPlayerId": 0
+      },
+      "status": "CAPTURED",
+      "coverage": {
+        "history": "INCOMPLETE",
+        "options": "DIAGNOSTIC_ONLY",
+        "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+        "prompt": "CONTROLLER_REQUEST_V1",
+        "disclosures": "STACK_RESOLUTION",
+        "stack": "PUBLIC_ROOT_STACK_V1"
+      },
+      "policy": {
+        "turn": 9,
+        "phase": "MAIN1",
+        "turnPlayer": "p0",
+        "chooser": "p0",
+        "players": [
+          {
+            "entityRef": "p0",
+            "life": 39,
+            "handCount": 5,
+            "libraryCount": 85,
+            "floatingManaColors": []
+          },
+          {
+            "entityRef": "p1",
+            "life": 33,
+            "handCount": 4,
+            "libraryCount": 88,
+            "floatingManaColors": []
+          }
+        ],
+        "cards": [
+          {
+            "entityRef": "c0",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Battlefield",
+            "tapped": true,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Command Tower",
+            "types": "Land",
+            "manaCost": "no cost",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c1",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Battlefield",
+            "tapped": true,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Temple of Epiphany",
+            "types": "Land",
+            "manaCost": "no cost",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c2",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Battlefield",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "City of Brass",
+            "types": "Land",
+            "manaCost": "no cost",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c3",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Battlefield",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Laelia, the Blade Reforged",
+            "types": "Legendary Creature - Spirit Warrior",
+            "manaCost": "{2}{R}",
+            "power": 4,
+            "toughness": 4,
+            "counters": {
+              "P1P1": 2
+            }
+          },
+          {
+            "entityRef": "c4",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Battlefield",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "The Reality Chip",
+            "types": "Legendary Artifact Creature - Equipment Jellyfish",
+            "manaCost": "{1}{U}",
+            "power": 0,
+            "toughness": 4,
+            "counters": {}
+          },
+          {
+            "entityRef": "c5",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Battlefield",
+            "tapped": true,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Forest",
+            "types": "Basic Land - Forest",
+            "manaCost": "no cost",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c6",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Command",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "The Thirteenth Doctor",
+            "types": "Legendary Creature - Time Lord Doctor",
+            "manaCost": "{1}{G}{U}",
+            "power": 2,
+            "toughness": 2,
+            "counters": {}
+          },
+          {
+            "entityRef": "c7",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Command",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Commander Effect",
+            "types": "",
+            "manaCost": "no cost",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c8",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Command",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Yasmin Khan",
+            "types": "Legendary Creature - Human Detective",
+            "manaCost": "{3}{R}",
+            "power": 3,
+            "toughness": 3,
+            "counters": {}
+          },
+          {
+            "entityRef": "c9",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Exile",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Growing Rites of Itlimoc",
+            "types": "Legendary Enchantment",
+            "manaCost": "{2}{G}",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c10",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Exile",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Skyshroud Claim",
+            "types": "Sorcery",
+            "manaCost": "{3}{G}",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c11",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Hand",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Bigger on the Inside",
+            "types": "Enchantment - Aura",
+            "manaCost": "{3}{R}{G}",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c12",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Hand",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Danny Pink",
+            "types": "Legendary Creature - Human Soldier Advisor",
+            "manaCost": "{3}{U}",
+            "power": 4,
+            "toughness": 3,
+            "counters": {}
+          },
+          {
+            "entityRef": "c13",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Hand",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Decaying Time Loop",
+            "types": "Instant",
+            "manaCost": "{3}{R}",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c14",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Hand",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Quantum Misalignment",
+            "types": "Sorcery",
+            "manaCost": "{4}{U}",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c15",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Hand",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Ryan Sinclair",
+            "types": "Legendary Creature - Human",
+            "manaCost": "{2}{R}",
+            "power": 2,
+            "toughness": 2,
+            "counters": {}
+          },
+          {
+            "entityRef": "c16",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Library",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Keeper of Secrets",
+            "types": "Creature - Demon",
+            "manaCost": "{5}{R}",
+            "power": 6,
+            "toughness": 4,
+            "counters": {}
+          },
+          {
+            "entityRef": "c17",
+            "owner": "p1",
+            "controller": "p1",
+            "zone": "Battlefield",
+            "tapped": true,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Plains",
+            "types": "Basic Land - Plains",
+            "manaCost": "no cost",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c18",
+            "owner": "p1",
+            "controller": "p1",
+            "zone": "Battlefield",
+            "tapped": true,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Sol Ring",
+            "types": "Artifact",
+            "manaCost": "{1}",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c19",
+            "owner": "p1",
+            "controller": "p1",
+            "zone": "Battlefield",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Forest",
+            "types": "Basic Land - Forest",
+            "manaCost": "no cost",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c20",
+            "owner": "p1",
+            "controller": "p1",
+            "zone": "Battlefield",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Frontier Siege",
+            "types": "Enchantment",
+            "manaCost": "{3}{G}",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c21",
+            "owner": "p1",
+            "controller": "p1",
+            "zone": "Battlefield",
+            "tapped": true,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Opulent Palace",
+            "types": "Land",
+            "manaCost": "no cost",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c22",
+            "owner": "p1",
+            "controller": "p1",
+            "zone": "Battlefield",
+            "tapped": true,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Sandsteppe Citadel",
+            "types": "Land",
+            "manaCost": "no cost",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c23",
+            "owner": "p1",
+            "controller": "p1",
+            "zone": "Battlefield",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Teneb, the Harvester",
+            "types": "Legendary Creature - Dragon",
+            "manaCost": "{3}{W}{B}{G}",
+            "power": 6,
+            "toughness": 6,
+            "counters": {}
+          },
+          {
+            "entityRef": "c24",
+            "owner": "p1",
+            "controller": "p1",
+            "zone": "Command",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "The Ur-Dragon",
+            "types": "Legendary Creature - Dragon Avatar",
+            "manaCost": "{4}{W}{U}{B}{R}{G}",
+            "power": 10,
+            "toughness": 10,
+            "counters": {}
+          },
+          {
+            "entityRef": "c25",
+            "owner": "p1",
+            "controller": "p1",
+            "zone": "Command",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Commander Effect",
+            "types": "",
+            "manaCost": "no cost",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          }
+        ],
+        "stack": {
+          "entries": [
+            {
+              "entityRef": "s0",
+              "kind": "ABILITY",
+              "controller": "p0",
+              "source": "c4",
+              "rootX": null,
+              "targets": [
+                {
+                  "entityRef": "c3",
+                  "dividedAmount": null
+                }
+              ],
+              "targetsCoverage": "ROOT_TARGETS_ONLY"
+            }
+          ],
+          "truncated": false,
+          "isResolving": true,
+          "resolving": "s0",
+          "resolvingCoverage": "CAPTURED"
+        },
+        "prompt": {
+          "kind": "SINGLE_ENTITY",
+          "minimumPicks": 1,
+          "maximumPicks": 1,
+          "optional": false,
+          "relatedPlayer": null
+        },
+        "disclosedFacts": []
+      },
+      "diagnostics": {
+        "playerBindings": [
+          {
+            "entityRef": "p0",
+            "id": 0
+          },
+          {
+            "entityRef": "p1",
+            "id": 1
+          }
+        ],
+        "stackBindings": [
+          {
+            "abilityId": 9061,
+            "id": 53,
+            "entityRef": "s0"
+          }
+        ],
+        "cardBindings": [
+          {
+            "id": 37,
+            "gameTimestamp": 15,
+            "entityRef": "c0"
+          },
+          {
+            "id": 78,
+            "gameTimestamp": 20,
+            "entityRef": "c1"
+          },
+          {
+            "id": 27,
+            "gameTimestamp": 27,
+            "entityRef": "c2"
+          },
+          {
+            "id": 49,
+            "gameTimestamp": 28,
+            "entityRef": "c3"
+          },
+          {
+            "id": 24,
+            "gameTimestamp": 34,
+            "entityRef": "c4"
+          },
+          {
+            "id": 62,
+            "gameTimestamp": 41,
+            "entityRef": "c5"
+          },
+          {
+            "id": 99,
+            "gameTimestamp": -1,
+            "entityRef": "c6"
+          },
+          {
+            "id": 100,
+            "gameTimestamp": -1,
+            "entityRef": "c7"
+          },
+          {
+            "id": 101,
+            "gameTimestamp": -1,
+            "entityRef": "c8"
+          },
+          {
+            "id": 90,
+            "gameTimestamp": 35,
+            "entityRef": "c9"
+          },
+          {
+            "id": 91,
+            "gameTimestamp": 29,
+            "entityRef": "c10"
+          },
+          {
+            "id": 58,
+            "gameTimestamp": 1,
+            "entityRef": "c11"
+          },
+          {
+            "id": 40,
+            "gameTimestamp": 19,
+            "entityRef": "c12"
+          },
+          {
+            "id": 74,
+            "gameTimestamp": 33,
+            "entityRef": "c13"
+          },
+          {
+            "id": 51,
+            "gameTimestamp": 7,
+            "entityRef": "c14"
+          },
+          {
+            "id": 85,
+            "gameTimestamp": 4,
+            "entityRef": "c15"
+          },
+          {
+            "id": 63,
+            "gameTimestamp": -1,
+            "entityRef": "c16"
+          },
+          {
+            "id": 288,
+            "gameTimestamp": 17,
+            "entityRef": "c17"
+          },
+          {
+            "id": 264,
+            "gameTimestamp": 18,
+            "entityRef": "c18"
+          },
+          {
+            "id": 246,
+            "gameTimestamp": 23,
+            "entityRef": "c19"
+          },
+          {
+            "id": 239,
+            "gameTimestamp": 25,
+            "entityRef": "c20"
+          },
+          {
+            "id": 211,
+            "gameTimestamp": 32,
+            "entityRef": "c21"
+          },
+          {
+            "id": 220,
+            "gameTimestamp": 38,
+            "entityRef": "c22"
+          },
+          {
+            "id": 248,
+            "gameTimestamp": 39,
+            "entityRef": "c23"
+          },
+          {
+            "id": 301,
+            "gameTimestamp": -1,
+            "entityRef": "c24"
+          },
+          {
+            "id": 302,
+            "gameTimestamp": -1,
+            "entityRef": "c25"
+          }
+        ]
+      },
+      "omissions": []
+    }
+  },
+  "NUMBER_RANGE": {
+    "scenario": "modal",
+    "sourceSha256": "394bb4dc338bb145d5f24a8c244332e491d8e5718742161aa16174fc5a1f51e1",
+    "eventType": "AI_SUBORDINATE_CHOICE",
+    "eventIndex": 440,
+    "location": "/choice",
+    "excerpt": true,
+    "inputContext": {
+      "schemaVersion": 3,
+      "profile": "PERMITTED_CHOICE_VIEW_V3",
+      "timing": "BEFORE_SELECTOR",
+      "stateBasis": "RULES_STATE",
+      "perspective": {
+        "chooserPlayerId": 0,
+        "controllingPlayerId": 0
+      },
+      "status": "CAPTURED",
+      "coverage": {
+        "stack": "PUBLIC_ROOT_STACK_V1",
+        "history": "INCOMPLETE",
+        "options": "DIAGNOSTIC_ONLY",
+        "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+        "prompt": "CONTROLLER_REQUEST_V1",
+        "disclosures": "STACK_RESOLUTION"
+      },
+      "policy": {
+        "turn": 8,
+        "phase": "COMBAT_DECLARE_ATTACKERS",
+        "turnPlayer": "p0",
+        "chooser": "p0",
+        "players": [
+          {
+            "entityRef": "p0",
+            "life": 15,
+            "handCount": 5,
+            "libraryCount": 49,
+            "floatingManaColors": []
+          },
+          {
+            "entityRef": "p1",
+            "life": 20,
+            "handCount": 3,
+            "libraryCount": 38,
+            "floatingManaColors": []
+          }
+        ],
+        "cards": [
+          {
+            "entityRef": "c0",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Battlefield",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Mountain",
+            "types": "Basic Land - Mountain",
+            "manaCost": "no cost",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c1",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Battlefield",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Island",
+            "types": "Basic Land - Island",
+            "manaCost": "no cost",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c2",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Battlefield",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Mind Stone",
+            "types": "Artifact",
+            "manaCost": "{2}",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c3",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Battlefield",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Mountain",
+            "types": "Basic Land - Mountain",
+            "manaCost": "no cost",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c4",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Battlefield",
+            "tapped": true,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Yusri, Fortune's Flame",
+            "types": "Legendary Creature - Efreet",
+            "manaCost": "{1}{U}{R}",
+            "power": 2,
+            "toughness": 3,
+            "counters": {}
+          },
+          {
+            "entityRef": "c5",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Battlefield",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Island",
+            "types": "Basic Land - Island",
+            "manaCost": "no cost",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c6",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Hand",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Divination",
+            "types": "Sorcery",
+            "manaCost": "{2}{U}",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c7",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Hand",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Fireball",
+            "types": "Sorcery",
+            "manaCost": "{X}{R}",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c8",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Hand",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Fireball",
+            "types": "Sorcery",
+            "manaCost": "{X}{R}",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c9",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Hand",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Mountain",
+            "types": "Basic Land - Mountain",
+            "manaCost": "no cost",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c10",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Hand",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Yusri, Fortune's Flame",
+            "types": "Legendary Creature - Efreet",
+            "manaCost": "{1}{U}{R}",
+            "power": 2,
+            "toughness": 3,
+            "counters": {}
+          },
+          {
+            "entityRef": "c11",
+            "owner": "p1",
+            "controller": "p1",
+            "zone": "Battlefield",
+            "tapped": true,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Forest",
+            "types": "Basic Land - Forest",
+            "manaCost": "no cost",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c12",
+            "owner": "p1",
+            "controller": "p1",
+            "zone": "Battlefield",
+            "tapped": true,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Forest",
+            "types": "Basic Land - Forest",
+            "manaCost": "no cost",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c13",
+            "owner": "p1",
+            "controller": "p1",
+            "zone": "Battlefield",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Grizzly Bears",
+            "types": "Creature - Bear",
+            "manaCost": "{1}{G}",
+            "power": 2,
+            "toughness": 2,
+            "counters": {}
+          },
+          {
+            "entityRef": "c14",
+            "owner": "p1",
+            "controller": "p1",
+            "zone": "Battlefield",
+            "tapped": true,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Forest",
+            "types": "Basic Land - Forest",
+            "manaCost": "no cost",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c15",
+            "owner": "p1",
+            "controller": "p1",
+            "zone": "Battlefield",
+            "tapped": true,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Nessian Courser",
+            "types": "Creature - Centaur Warrior",
+            "manaCost": "{2}{G}",
+            "power": 3,
+            "toughness": 3,
+            "counters": {}
+          },
+          {
+            "entityRef": "c16",
+            "owner": "p1",
+            "controller": "p1",
+            "zone": "Battlefield",
+            "tapped": true,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Forest",
+            "types": "Basic Land - Forest",
+            "manaCost": "no cost",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c17",
+            "owner": "p1",
+            "controller": "p1",
+            "zone": "Battlefield",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Rumbling Baloth",
+            "types": "Creature - Beast",
+            "manaCost": "{2}{G}{G}",
+            "power": 4,
+            "toughness": 4,
+            "counters": {}
+          }
+        ],
+        "stack": {
+          "entries": [
+            {
+              "entityRef": "s0",
+              "kind": "ABILITY",
+              "controller": "p0",
+              "source": "c4",
+              "rootX": null,
+              "targets": [],
+              "targetsCoverage": "ROOT_TARGETS_ONLY"
+            }
+          ],
+          "truncated": false,
+          "isResolving": true,
+          "resolving": "s0",
+          "resolvingCoverage": "CAPTURED"
+        },
+        "prompt": {
+          "kind": "NUMBER_RANGE",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "disclosedFacts": []
+      },
+      "diagnostics": {
+        "playerBindings": [
+          {
+            "id": 0,
+            "entityRef": "p0"
+          },
+          {
+            "id": 1,
+            "entityRef": "p1"
+          }
+        ],
+        "stackBindings": [
+          {
+            "entityRef": "s0",
+            "abilityId": 305,
+            "id": 20
+          }
+        ],
+        "cardBindings": [
+          {
+            "entityRef": "c0",
+            "id": 26,
+            "gameTimestamp": 17
+          },
+          {
+            "entityRef": "c1",
+            "id": 47,
+            "gameTimestamp": 22
+          },
+          {
+            "entityRef": "c2",
+            "id": 57,
+            "gameTimestamp": 23
+          },
+          {
+            "entityRef": "c3",
+            "id": 32,
+            "gameTimestamp": 28
+          },
+          {
+            "entityRef": "c4",
+            "id": 55,
+            "gameTimestamp": 29
+          },
+          {
+            "entityRef": "c5",
+            "id": 42,
+            "gameTimestamp": 34
+          },
+          {
+            "entityRef": "c6",
+            "id": 4,
+            "gameTimestamp": 1
+          },
+          {
+            "entityRef": "c7",
+            "id": 16,
+            "gameTimestamp": 2
+          },
+          {
+            "entityRef": "c8",
+            "id": 15,
+            "gameTimestamp": 33
+          },
+          {
+            "entityRef": "c9",
+            "id": 31,
+            "gameTimestamp": 16
+          },
+          {
+            "entityRef": "c10",
+            "id": 54,
+            "gameTimestamp": 27
+          },
+          {
+            "entityRef": "c11",
+            "id": 103,
+            "gameTimestamp": 15
+          },
+          {
+            "entityRef": "c12",
+            "id": 107,
+            "gameTimestamp": 19
+          },
+          {
+            "entityRef": "c13",
+            "id": 62,
+            "gameTimestamp": 20
+          },
+          {
+            "entityRef": "c14",
+            "id": 108,
+            "gameTimestamp": 25
+          },
+          {
+            "entityRef": "c15",
+            "id": 69,
+            "gameTimestamp": 26
+          },
+          {
+            "entityRef": "c16",
+            "id": 98,
+            "gameTimestamp": 31
+          },
+          {
+            "entityRef": "c17",
+            "id": 81,
+            "gameTimestamp": 32
+          }
+        ]
+      },
+      "omissions": []
+    }
+  },
+  "NUMBER_OPTIONS": {
+    "scenario": "numeric",
+    "sourceSha256": "2c2004cc98c6d1a0d5ce355a78f4d4965ecc9d3ca95d29717769fa874ab7f5db",
+    "eventType": "AI_SUBORDINATE_CHOICE",
+    "eventIndex": 680,
+    "location": "/choice",
+    "excerpt": true,
+    "inputContext": {
+      "schemaVersion": 3,
+      "profile": "PERMITTED_CHOICE_VIEW_V3",
+      "timing": "BEFORE_SELECTOR",
+      "stateBasis": "RULES_STATE",
+      "perspective": {
+        "controllingPlayerId": 0,
+        "chooserPlayerId": 0
+      },
+      "status": "CAPTURED",
+      "coverage": {
+        "stack": "PUBLIC_ROOT_STACK_V1",
+        "disclosures": "STACK_RESOLUTION",
+        "prompt": "CONTROLLER_REQUEST_V1",
+        "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+        "options": "DIAGNOSTIC_ONLY",
+        "history": "INCOMPLETE"
+      },
+      "policy": {
+        "turn": 11,
+        "phase": "UPKEEP",
+        "turnPlayer": "p0",
+        "chooser": "p0",
+        "players": [
+          {
+            "entityRef": "p0",
+            "life": 19,
+            "handCount": 0,
+            "libraryCount": 49,
+            "floatingManaColors": []
+          },
+          {
+            "entityRef": "p1",
+            "life": 14,
+            "handCount": 2,
+            "libraryCount": 37,
+            "floatingManaColors": []
+          }
+        ],
+        "cards": [
+          {
+            "entityRef": "c0",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Battlefield",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Swamp",
+            "types": "Basic Land - Swamp",
+            "manaCost": "no cost",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c1",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Battlefield",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Swamp",
+            "types": "Basic Land - Swamp",
+            "manaCost": "no cost",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c2",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Battlefield",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Walking Corpse",
+            "types": "Creature - Zombie",
+            "manaCost": "{1}{B}",
+            "power": 2,
+            "toughness": 2,
+            "counters": {}
+          },
+          {
+            "entityRef": "c3",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Battlefield",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Swamp",
+            "types": "Basic Land - Swamp",
+            "manaCost": "no cost",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c4",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Battlefield",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Vampire Nighthawk",
+            "types": "Creature - Vampire Shaman",
+            "manaCost": "{1}{B}{B}",
+            "power": 2,
+            "toughness": 3,
+            "counters": {}
+          },
+          {
+            "entityRef": "c5",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Battlefield",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Swamp",
+            "types": "Basic Land - Swamp",
+            "manaCost": "no cost",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c6",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Battlefield",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Vampire Nighthawk",
+            "types": "Creature - Vampire Shaman",
+            "manaCost": "{1}{B}{B}",
+            "power": 2,
+            "toughness": 3,
+            "counters": {}
+          },
+          {
+            "entityRef": "c7",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Battlefield",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Swamp",
+            "types": "Basic Land - Swamp",
+            "manaCost": "no cost",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c8",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Battlefield",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "The Toymaker's Trap",
+            "types": "Enchantment",
+            "manaCost": "{2}{B}",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c9",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Battlefield",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Walking Corpse",
+            "types": "Creature - Zombie",
+            "manaCost": "{1}{B}",
+            "power": 2,
+            "toughness": 2,
+            "counters": {}
+          },
+          {
+            "entityRef": "c10",
+            "owner": "p0",
+            "controller": "p0",
+            "zone": "Graveyard",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Disfigure",
+            "types": "Instant",
+            "manaCost": "{B}",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c11",
+            "owner": "p1",
+            "controller": "p1",
+            "zone": "Battlefield",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Forest",
+            "types": "Basic Land - Forest",
+            "manaCost": "no cost",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c12",
+            "owner": "p1",
+            "controller": "p1",
+            "zone": "Battlefield",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Forest",
+            "types": "Basic Land - Forest",
+            "manaCost": "no cost",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c13",
+            "owner": "p1",
+            "controller": "p1",
+            "zone": "Battlefield",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Runeclaw Bear",
+            "types": "Creature - Bear",
+            "manaCost": "{1}{G}",
+            "power": 2,
+            "toughness": 2,
+            "counters": {}
+          },
+          {
+            "entityRef": "c14",
+            "owner": "p1",
+            "controller": "p1",
+            "zone": "Battlefield",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Forest",
+            "types": "Basic Land - Forest",
+            "manaCost": "no cost",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c15",
+            "owner": "p1",
+            "controller": "p1",
+            "zone": "Battlefield",
+            "tapped": true,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Nessian Courser",
+            "types": "Creature - Centaur Warrior",
+            "manaCost": "{2}{G}",
+            "power": 3,
+            "toughness": 3,
+            "counters": {}
+          },
+          {
+            "entityRef": "c16",
+            "owner": "p1",
+            "controller": "p1",
+            "zone": "Battlefield",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Forest",
+            "types": "Basic Land - Forest",
+            "manaCost": "no cost",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c17",
+            "owner": "p1",
+            "controller": "p1",
+            "zone": "Battlefield",
+            "tapped": true,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Rumbling Baloth",
+            "types": "Creature - Beast",
+            "manaCost": "{2}{G}{G}",
+            "power": 4,
+            "toughness": 4,
+            "counters": {}
+          },
+          {
+            "entityRef": "c18",
+            "owner": "p1",
+            "controller": "p1",
+            "zone": "Battlefield",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Forest",
+            "types": "Basic Land - Forest",
+            "manaCost": "no cost",
+            "power": null,
+            "toughness": null,
+            "counters": {}
+          },
+          {
+            "entityRef": "c19",
+            "owner": "p1",
+            "controller": "p1",
+            "zone": "Graveyard",
+            "tapped": false,
+            "faceDown": false,
+            "identityKnown": true,
+            "name": "Llanowar Elves",
+            "types": "Creature - Elf Druid",
+            "manaCost": "{G}",
+            "power": 1,
+            "toughness": 1,
+            "counters": {}
+          }
+        ],
+        "stack": {
+          "entries": [
+            {
+              "entityRef": "s0",
+              "kind": "ABILITY",
+              "controller": "p0",
+              "source": "c8",
+              "rootX": null,
+              "targets": [],
+              "targetsCoverage": "ROOT_TARGETS_ONLY"
+            }
+          ],
+          "truncated": false,
+          "isResolving": true,
+          "resolving": "s0",
+          "resolvingCoverage": "CAPTURED"
+        },
+        "prompt": {
+          "kind": "NUMBER_OPTIONS",
+          "values": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "relatedPlayer": null
+        },
+        "disclosedFacts": []
+      },
+      "diagnostics": {
+        "cardBindings": [
+          {
+            "gameTimestamp": 30,
+            "id": 22,
+            "entityRef": "c0"
+          },
+          {
+            "gameTimestamp": 38,
+            "id": 4,
+            "entityRef": "c1"
+          },
+          {
+            "gameTimestamp": 39,
+            "id": 57,
+            "entityRef": "c2"
+          },
+          {
+            "gameTimestamp": 44,
+            "id": 9,
+            "entityRef": "c3"
+          },
+          {
+            "gameTimestamp": 45,
+            "id": 52,
+            "entityRef": "c4"
+          },
+          {
+            "gameTimestamp": 50,
+            "id": 19,
+            "entityRef": "c5"
+          },
+          {
+            "gameTimestamp": 51,
+            "id": 51,
+            "entityRef": "c6"
+          },
+          {
+            "gameTimestamp": 56,
+            "id": 21,
+            "entityRef": "c7"
+          },
+          {
+            "gameTimestamp": 57,
+            "id": 33,
+            "entityRef": "c8"
+          },
+          {
+            "gameTimestamp": 58,
+            "id": 58,
+            "entityRef": "c9"
+          },
+          {
+            "gameTimestamp": 35,
+            "id": 31,
+            "entityRef": "c10"
+          },
+          {
+            "gameTimestamp": 32,
+            "id": 102,
+            "entityRef": "c11"
+          },
+          {
+            "gameTimestamp": 41,
+            "id": 88,
+            "entityRef": "c12"
+          },
+          {
+            "gameTimestamp": 42,
+            "id": 65,
+            "entityRef": "c13"
+          },
+          {
+            "gameTimestamp": 47,
+            "id": 99,
+            "entityRef": "c14"
+          },
+          {
+            "gameTimestamp": 48,
+            "id": 69,
+            "entityRef": "c15"
+          },
+          {
+            "gameTimestamp": 53,
+            "id": 100,
+            "entityRef": "c16"
+          },
+          {
+            "gameTimestamp": 54,
+            "id": 82,
+            "entityRef": "c17"
+          },
+          {
+            "gameTimestamp": 60,
+            "id": 103,
+            "entityRef": "c18"
+          },
+          {
+            "gameTimestamp": 36,
+            "id": 79,
+            "entityRef": "c19"
+          }
+        ],
+        "stackBindings": [
+          {
+            "id": 35,
+            "abilityId": 280,
+            "entityRef": "s0"
+          }
+        ],
+        "playerBindings": [
+          {
+            "entityRef": "p0",
+            "id": 0
+          },
+          {
+            "entityRef": "p1",
+            "id": 1
+          }
+        ]
+      },
+      "omissions": []
+    }
+  }
+}

@@ -2,7 +2,7 @@
 
 Optional inline choice contexts are documented in [the implemented partial-view profile](../../docs/Development/Simulation-Input-Context.md).
 
-New contexts use schema/profile version 2 for [bounded active-stack metadata](../../docs/Development/Simulation-Stack-Input-Context.md). The exporter accepts version 1 unchanged and rejects unknown versions. Root-only targets, hidden/working-state omissions and unresolved bindings remain explicit; stack references do not make option bindings or learning examples complete.
+New contexts use schema/profile version 3 for [typed controller request constraints](../../docs/Development/Simulation-Prompt-Input-Context.md), retaining version 2's [bounded active-stack metadata](../../docs/Development/Simulation-Stack-Input-Context.md). The exporter accepts versions 1 and 2 unchanged and rejects unknown versions. Only audited numeric domains and local single-entity pick constraints enter `policy.prompt`; original entity pools remain diagnostic-only. Neither request nor stack metadata makes learning examples complete.
 
 Coverage reports include a versioned `inputCoverageAudit`, even for legacy inputs: observed-record denominators, component coverage, omission reasons and boundary/turn groups. Unobserved choices and complete learning-example counts remain unknown. See [definitions and limits](../../docs/Development/Simulation-Coverage-Reporting.md). Dataset schemas and capture budgets are unchanged.
 

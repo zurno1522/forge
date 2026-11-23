@@ -6,7 +6,7 @@ from a privileged trace or prove that an uninstrumented heuristic used this view
 """
 
 PROFILE = 'PERMITTED_CHOICE_VIEW_V1'
-PROFILES = {1: PROFILE, 2: 'PERMITTED_CHOICE_VIEW_V2'}
+PROFILES = {1: PROFILE, 2: 'PERMITTED_CHOICE_VIEW_V2', 3: 'PERMITTED_CHOICE_VIEW_V3'}
 TIMINGS = {'BEFORE_SELECTOR', 'BEFORE_OPERATION', 'AFTER_SELECTION_BEFORE_APPLICATION', 'UNESTABLISHED'}
 STATE_BASES = {'RULES_STATE', 'PLANNING_WORKING_STATE', 'UNESTABLISHED'}
 REASONS = {'HIDDEN', 'UNSUPPORTED', 'OUTSIDE_CAPTURED_PREFIX', 'UNRESOLVED_BINDING',
@@ -55,7 +55,7 @@ def validate(value, chooser_id, known_players=None):
     if known_players is not None:
         require(all(perspective[k] in known_players for k in perspective), 'unknown perspective player')
     coverage = value['coverage']
-    fields(coverage, 'playerView stack disclosures history options', 'invalid coverage fields')
+    fields(coverage, 'playerView stack disclosures history options' + (' prompt' if version >= 3 else ''), 'invalid coverage fields')
     require(coverage['playerView'] in ('PERMITTED_CURRENT_FIELDS_V1', 'UNAVAILABLE'), 'unknown player-view coverage')
     require(coverage['stack'] in ({'UNSUPPORTED'} if version == 1 else {'PUBLIC_ROOT_STACK_V1', 'UNAVAILABLE'}) and coverage['history'] == 'INCOMPLETE'
             and coverage['options'] == 'DIAGNOSTIC_ONLY', 'unsupported coverage claim')
@@ -65,10 +65,11 @@ def validate(value, chooser_id, known_players=None):
     require(isinstance(omissions, list) and len(omissions) <= 16, 'invalid omissions')
     for omission in omissions:
         fields(omission, 'component reason', 'invalid omission fields')
-        require(omission['component'] in COMPONENTS | ({'STACK'} if version == 2 else set()) and omission['reason'] in REASONS, 'unknown omission')
+        require(omission['component'] in COMPONENTS | ({'STACK'} if version >= 2 else set()) | ({'PROMPT'} if version >= 3 else set())
+                and omission['reason'] in REASONS, 'unknown omission')
     require(bool(omissions) == (value['status'] != 'CAPTURED'), 'capture status/omission mismatch')
     diagnostic = value['diagnostics']
-    fields(diagnostic, 'playerBindings cardBindings' + (' stackBindings' if version == 2 else ''), 'invalid diagnostic fields')
+    fields(diagnostic, 'playerBindings cardBindings' + (' stackBindings' if version >= 2 else ''), 'invalid diagnostic fields')
     require(isinstance(diagnostic['playerBindings'], list) and isinstance(diagnostic['cardBindings'], list),
             'invalid binding collections')
     policy = value['policy']
@@ -77,12 +78,14 @@ def validate(value, chooser_id, known_players=None):
     require((coverage['disclosures'] == 'UNAVAILABLE') == (policy is None), 'disclosure coverage/policy mismatch')
     if policy is None:
         require(not diagnostic['playerBindings'] and not diagnostic['cardBindings'], 'unavailable context has bindings')
-        if version == 2:
+        if version >= 2:
             require(coverage['stack'] == 'UNAVAILABLE' and diagnostic['stackBindings'] == [], 'unavailable stack has bindings')
+        if version >= 3: require(coverage['prompt'] == 'UNAVAILABLE', 'unavailable prompt claims coverage')
         return
-    if version == 2: require(coverage['stack'] == 'PUBLIC_ROOT_STACK_V1', 'stack coverage/policy mismatch')
+    if version >= 2: require(coverage['stack'] == 'PUBLIC_ROOT_STACK_V1', 'stack coverage/policy mismatch')
     require(perspective['controllingPlayerId'] == chooser_id, 'unsupported controlled perspective has policy')
-    fields(policy, 'turn phase turnPlayer chooser players cards disclosedFacts' + (' stack' if version == 2 else ''), 'invalid policy fields')
+    fields(policy, 'turn phase turnPlayer chooser players cards disclosedFacts' + (' stack' if version >= 2 else '')
+           + (' prompt' if version >= 3 else ''), 'invalid policy fields')
     require(integer(policy['turn']) and policy['turn'] >= 0 and text(policy['phase']), 'invalid turn/phase')
     players = policy['players']
     require(isinstance(players, list) and 0 < len(players) <= 16, 'invalid player prefix')
@@ -152,8 +155,39 @@ def validate(value, chooser_id, known_players=None):
         require(all(text(fact[k]) for k in ('name', 'types', 'manaCost')), 'invalid disclosed face text')
         require(fact['currentObjectAssociation'] == 'UNRESOLVED', 'unsupported disclosure object association')
         require(coverage['disclosures'] == fact['scope'], 'disclosure scope/coverage mismatch')
-    if version == 2:
+    if version >= 2:
         validate_stack(policy['stack'], diagnostic['stackBindings'], players, cards, omissions, value['stateBasis'])
+    if version >= 3:
+        validate_prompt(policy['prompt'], coverage['prompt'], refs, omissions, value['stateBasis'])
+
+
+def validate_prompt(prompt, coverage, player_refs, omissions, state_basis):
+    require(coverage in ('CONTROLLER_REQUEST_V1', 'UNSUPPORTED', 'UNAVAILABLE'), 'invalid prompt coverage')
+    require((prompt is not None) == (coverage == 'CONTROLLER_REQUEST_V1'), 'prompt coverage/policy mismatch')
+    if prompt is None:
+        require(coverage != 'UNAVAILABLE' or any(item['component'] == 'PROMPT' for item in omissions),
+                'unavailable prompt has no omission')
+        return
+    require(state_basis == 'RULES_STATE', 'planning prompt claims committed request arguments')
+    require(not any(item['component'] == 'PROMPT' for item in omissions), 'captured prompt has an omission')
+    require(isinstance(prompt, dict), 'invalid typed prompt')
+    kind = prompt.get('kind')
+    if kind == 'NUMBER_RANGE':
+        fields(prompt, 'kind minimum maximum', 'invalid range prompt fields')
+        require(integer(prompt['minimum']) and integer(prompt['maximum']), 'invalid request range')
+    elif kind == 'NUMBER_OPTIONS':
+        fields(prompt, 'kind values relatedPlayer', 'invalid number options prompt fields')
+        require(isinstance(prompt['values'], list) and len(prompt['values']) <= 64
+                and all(integer(value) for value in prompt['values']), 'invalid request numeric list')
+    elif kind == 'SINGLE_ENTITY':
+        fields(prompt, 'kind minimumPicks maximumPicks optional relatedPlayer', 'invalid single entity prompt fields')
+        require(isinstance(prompt['optional'], bool) and integer(prompt['minimumPicks']) and integer(prompt['maximumPicks'])
+                and prompt['minimumPicks'] == (0 if prompt['optional'] else 1) and prompt['maximumPicks'] == 1,
+                'invalid single entity pick constraints')
+    else:
+        require(False, 'unsupported typed prompt kind')
+    if 'relatedPlayer' in prompt:
+        require(prompt['relatedPlayer'] is None or prompt['relatedPlayer'] in player_refs, 'unknown request player')
 
 
 def validate_stack(stack, bindings, players, cards, omissions, state_basis):

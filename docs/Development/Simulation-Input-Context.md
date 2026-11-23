@@ -2,7 +2,7 @@
 
 This implements the first representative increment of the [observation contract](Simulation-Observation-Contract.md). Optional `inputContext` fields freeze a permitted partial player view at audited AI boundaries. Existing decision, choice, target-provenance and observation versions retain their meanings. All datasets remain `trainingReady=false`.
 
-COV-002 adds the explicitly versioned [active-stack profile, version 2](Simulation-Stack-Input-Context.md). New producers emit version 2; this document's version-1 schema and earlier measurements remain historical. The exporter accepts both versions and keeps their semantics separate.
+COV-002 adds the explicitly versioned [active-stack profile, version 2](Simulation-Stack-Input-Context.md). New producers emit [version 3 with typed controller request constraints](Simulation-Prompt-Input-Context.md); this document's version-1 schema and earlier measurements remain historical. The exporter accepts all three versions and keeps their semantics separate.
 
 ## Version 1
 

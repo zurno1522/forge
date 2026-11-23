@@ -1,12 +1,12 @@
 # Observation coverage design priorities
 
-Status: COV-001 and COV-002 implemented; later designs proposed. The [version-1 input-context profile](Simulation-Input-Context.md) is the baseline at `f115c6f2843`; [version 2 adds bounded active-stack inputs](Simulation-Stack-Input-Context.md).
+Status: COV-001 through COV-003 implemented for their documented scopes; later designs proposed. The [version-1 input-context profile](Simulation-Input-Context.md) is the baseline at `f115c6f2843`; [version 2 adds bounded active-stack inputs](Simulation-Stack-Input-Context.md) and [version 3 adds audited controller request constraints](Simulation-Prompt-Input-Context.md).
 
-COV-001 is implemented: see [definitions, validation and gap review](Simulation-Coverage-Reporting.md). OPT-001 has [phase results and its own gap review](Simulation-Observation-Cost-Assessment.md). COV-002's [validation and gap review](Simulation-Stack-Input-Context.md#validation-and-gap-review) assigns typed semantics, source associations, planning contracts and larger-profile costs to their respective later items. Pause before COV-003.
+COV-001 is implemented: see [definitions, validation and gap review](Simulation-Coverage-Reporting.md). OPT-001 has [phase results and its own gap review](Simulation-Observation-Cost-Assessment.md). COV-002's [validation and gap review](Simulation-Stack-Input-Context.md#validation-and-gap-review) assigns typed semantics, source associations, planning contracts and larger-profile costs to their respective later items. COV-003 defines [supported request fields and remaining family requirements](Simulation-Prompt-Input-Context.md). Pause before COV-004.
 
 Coverage work determines which decisions and permitted inputs the dataset represents, when they are captured, and how a selected option can be interpreted. CPU, allocation, retention and storage optimization have a [separate design track](Simulation-Observation-Optimization-Plan.md). Coverage reporting belongs here; performance profiling belongs there.
 
-The [combined execution order](Simulation-Observation-Roadmap.md) keeps COV-003 next after COV-002 review and schedules COV-001A after the additional boundary audit and before COV-006's broad selector rollout.
+The [combined execution order](Simulation-Observation-Roadmap.md) keeps COV-004 next after COV-003 review and schedules COV-001A after the additional boundary audit and before COV-006's broad selector rollout.
 
 ## Ordered backlog
 
@@ -32,7 +32,7 @@ Each item begins with a field/boundary design and ends with meaningful unit or i
 | G3: complete learning examples cannot be certified | COV-002/003 define required information; COV-004 owns per-family completeness criteria | Demonstrate required inputs, safe option bindings and valid example lifecycle for each supported family. No global readiness flag based on context presence; current datasets remain unready. |
 | G4: reporting cannot prove engine visibility or all heuristic inputs | COV-005 coordinates the audit; COV-002 through COV-007 retain producer-side regression gates | Test actual supported delivery/permission and planning paths, including paired hidden worlds. Report only supported claims; structural exporter checks do not certify every heuristic. |
 
-COV-001 remains closed. These are assigned follow-ups, not unfinished report fixes. COV-001A has a separate design/commit boundary and no dependency edge to OPT-001, which measures costs per captured operation without claiming a global capture-loss rate. OPT-001 and COV-002 have since completed their implementation scopes; keep the pause and gap review before COV-003 and between subsequent items.
+COV-001 remains closed. These are assigned follow-ups, not unfinished report fixes. COV-001A has a separate design/commit boundary and no dependency edge to OPT-001, which measures costs per captured operation without claiming a global capture-loss rate. OPT-001, COV-002 and COV-003 have since completed their documented implementation scopes; keep the pause and gap review before COV-004 and between subsequent items.
 
 ## Separate later designs
 

@@ -52,7 +52,8 @@ final class AiEffectChoiceRecorder {
                     result.put("optional", optional);
                     result.put("relatedPlayerId", relatedPlayer == null ? null : relatedPlayer.getId());
                     return result;
-                }, callback, value -> selected(value, offered.get()));
+                }, callback, value -> selected(value, offered.get()),
+                () -> AiPromptInput.single(optional, relatedPlayer));
     }
 
     static Card zoneChange(final Player chooser, final SpellAbility ability, final ZoneType destination,

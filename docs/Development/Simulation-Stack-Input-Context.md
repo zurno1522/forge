@@ -1,6 +1,8 @@
 # COV-002: bounded active-stack inputs
 
-New producers emit `inputContext.schemaVersion:2`, `profile:PERMITTED_CHOICE_VIEW_V2`. The exporter retains explicit version-1 support; version 1 never acquires stack semantics by inference. Existing parent/choice/event/provenance schemas, legacy `observation`, IDs and capture budgets are unchanged. Older exporters that reject version 2 need updating.
+The validation below records the V2 increment. New producers use [profile V3](Simulation-Prompt-Input-Context.md), retaining these stack semantics and adding typed controller request fields. The exporter still accepts V1 and V2 without upgrading their data.
+
+The V2 increment introduced `inputContext.schemaVersion:2`, `profile:PERMITTED_CHOICE_VIEW_V2`. The exporter retains explicit version-1 support; version 1 never acquires stack semantics by inference. Existing parent/choice/event/provenance schemas, legacy `observation`, IDs and capture budgets are unchanged. Older exporters that reject version 2 need updating.
 
 ## Scope and schema
 
@@ -51,8 +53,8 @@ The remaining scope has explicit owners:
 
 | Gap | Owner and next requirement |
 | --- | --- |
-| Which printed/granted ability, effect semantics, typed amounts and subability roles/targets | COV-003 defines authorized typed inputs/semantics; COV-006 integrates broader target/mode families. Root-only metadata is not the full ability. |
-| Private, LKI, historical and ambiguous source/target associations; virtual spell-copy sources without current zone membership; public sources across zone incarnations | COV-004 proves supported local bindings; COV-003 defines any separately permitted presented-source fields. Durable knowledge/continuity stays a later design. Do not invent current-card bindings or infer associations from IDs or names. |
+| Which printed/granted ability, effect semantics, typed amounts and subability roles/targets | COV-003 now defines the supported typed request fields and family requirements. COV-006 owns remaining effect-specific inputs/semantics and broader target/mode families; COV-004 proves any ability/option associations. Root-only metadata is not the full ability. |
+| Private, LKI, historical and ambiguous source/target associations; virtual spell-copy sources without current zone membership; public sources across zone incarnations | COV-004 proves supported local bindings; any separate presented-source projection needs an explicit family contract under COV-006. Durable knowledge/continuity stays a later design. Do not invent current-card bindings or infer associations from IDs or names. |
 | Publicly committed stack inputs during temporary AI work | COV-005 defines the separate evidence/boundary contract; COV-006 integrates it. Current working-state root parameters remain unavailable. |
 | Frozen/staged operations and direct/nonstack resolving lifetimes | COV-005 audits boundaries; direct/nonstack scopes remain their separate lifetime design. Active-stack coverage must not be relabeled as full engine execution coverage. |
 | More data per context can affect budget exhaustion, CPU and retention | OPT-005 validates larger/multiplayer/long-game workloads using the new profile. The previous OPT-001 measurements apply to version 1; no optimization speedup or budget increase is claimed here. |

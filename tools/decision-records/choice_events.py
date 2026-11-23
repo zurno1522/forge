@@ -76,6 +76,29 @@ def input_boundary(value, boundary, stage=None):
         require(value['stateBasis'] != 'UNESTABLISHED', 'captured context has no state basis')
         if stage == 'CANDIDATE_EVALUATION':
             require(value['stateBasis'] == 'PLANNING_WORKING_STATE', 'evaluation context claims rules state')
+        prompt = value['policy'].get('prompt')
+        if prompt is not None:
+            require(boundary == {'NUMBER_RANGE': 'CONTROLLER_NUMBER_RANGE', 'NUMBER_OPTIONS': 'CONTROLLER_NUMBER_OPTIONS',
+                                 'SINGLE_ENTITY': 'CONTROLLER_EFFECT_ENTITY'}[prompt['kind']], 'typed prompt at unaudited boundary')
+
+
+def prompt_arguments(choice):
+    context = choice['inputContext']
+    prompt = (context['policy'] or {}).get('prompt')
+    if prompt is None: return
+    option = choice['options']
+    if prompt['kind'] == 'NUMBER_RANGE':
+        require(option['coverage'] == 'OBSERVED_RANGE', 'prompt range lacks range arguments')
+        require((prompt['minimum'], prompt['maximum']) == (option['minimum'], option['maximum']), 'prompt range differs from callback arguments')
+    elif prompt['kind'] == 'NUMBER_OPTIONS':
+        require(option['coverage'] == 'OBSERVED_DISCRETE_OPTIONS', 'prompt numeric list lacks list arguments')
+        require(not option['truncated'] and prompt['values'] == option['items'], 'prompt numeric list differs from callback arguments')
+    else:
+        require(prompt['optional'] == option['optional'], 'prompt optionality differs from callback arguments')
+    if prompt['kind'] == 'SINGLE_ENTITY':
+        related = prompt['relatedPlayer']
+        by_ref = {binding['entityRef']: binding['id'] for binding in context['diagnostics']['playerBindings']}
+        require((None if related is None else by_ref[related]) == option['relatedPlayerId'], 'prompt player differs from callback arguments')
 
 
 def input_envelope(value, record):
@@ -331,6 +354,7 @@ def accept(record, game):
             validate_input_context(c['inputContext'], c['chooserPlayerId'])
             input_boundary(c['inputContext'], c['boundary'], c['stage'])
             input_envelope(c['inputContext'], record)
+            prompt_arguments(c)
         states[cid] = dict(start=record, terminal=None, postOutcome=game['outcome'] is not None)
     else:
         require(cid in states, 'choice terminal lacks start')

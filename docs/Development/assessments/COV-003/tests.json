@@ -1,0 +1,50 @@
+{
+  "focused": {
+    "tests": 65,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "full": {
+    "desktop": {
+      "tests": 2571,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 6
+    },
+    "core": {
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "game": {
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "python": {
+    "tests": 141,
+    "failures": 0
+  },
+  "logs": {
+    "focused": {
+      "path": "/workspace/work/cov003/focused-tests.log",
+      "sha256": "e2f88a9b1a8b8ed3d6188daeef1d0f2bcb016742a0cee6d164aa816a25c8cfb8"
+    },
+    "full": {
+      "path": "/workspace/work/cov003/full-tests.log",
+      "sha256": "220191c9631ffe2e9a7f138373a78c4ee869b03dad1c7bf70768b2a962b991e0"
+    },
+    "python": {
+      "path": "/workspace/work/cov003/python-final.log",
+      "sha256": "8c5f712fdc6bd7893ca9957fafca6e4904b09d11385d2a3bb8b9fb5b6a29ee3a"
+    },
+    "compatibility": {
+      "path": "/workspace/work/cov003/compatibility-final.log",
+      "sha256": "f7e92034bc84adb23d80121de20f6711876ec045c186668620ee4295b1c959a9"
+    }
+  }
+}

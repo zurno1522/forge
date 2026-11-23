@@ -16,14 +16,30 @@ public final class AiNumberChoiceRecorder {
 
     public static Integer range(final Player chooser, final SpellAbility ability, final String boundary,
             final int min, final int max, final Supplier<Integer> callback) {
+        return range(chooser, ability, boundary, min, max, callback, null);
+    }
+
+    static int controllerRange(final Player chooser, final SpellAbility ability,
+            final int min, final int max, final Supplier<Integer> callback) {
+        return range(chooser, ability, "CONTROLLER_NUMBER_RANGE", min, max, callback,
+                () -> AiPromptInput.range(min, max));
+    }
+
+    private static Integer range(final Player chooser, final SpellAbility ability, final String boundary,
+            final int min, final int max, final Supplier<Integer> callback, final Supplier<AiPromptInput> prompt) {
         return AiChoiceRecorder.observeInput(chooser, ability, "NUMBER_SELECTION", null, boundary,
                 "CONTROLLER_ANNOUNCEMENT".equals(boundary) ? "BEFORE_OPERATION" : "BEFORE_SELECTOR",
                 () -> Map.of("coverage", "OBSERVED_RANGE", "minimum", min, "maximum", max), callback,
-                value -> numeric(value, null, value >= min && value <= max ? "WITHIN_OBSERVED_DOMAIN" : "OUTSIDE_OBSERVED_DOMAIN"));
+                value -> numeric(value, null, value >= min && value <= max ? "WITHIN_OBSERVED_DOMAIN" : "OUTSIDE_OBSERVED_DOMAIN"), prompt);
     }
 
     public static int discrete(final Player chooser, final SpellAbility ability, final List<Integer> possible,
             final Supplier<Integer> callback) {
+        return discrete(chooser, ability, possible, null, callback);
+    }
+
+    public static int discrete(final Player chooser, final SpellAbility ability, final List<Integer> possible,
+            final Player relatedPlayer, final Supplier<Integer> callback) {
         final AtomicReference<List<Integer>> captured = new AtomicReference<>();
         return AiChoiceRecorder.observeInput(chooser, ability, "NUMBER_SELECTION", null, "CONTROLLER_NUMBER_OPTIONS", "BEFORE_SELECTOR", () -> {
             final List<Integer> values = new ArrayList<>();
@@ -39,7 +55,7 @@ public final class AiNumberChoiceRecorder {
             }
             return numeric(value, count == 1 ? index : null, count == 1 ? "UNIQUE_CAPTURED_OPTION"
                     : count == 0 ? "OUTSIDE_CAPTURED_OPTIONS" : "AMBIGUOUS_CAPTURED_OPTIONS");
-        });
+        }, () -> AiPromptInput.numbers(possible, relatedPlayer));
     }
 
     public static int announceX(final Player chooser, final SpellAbility ability, final Integer bound,

@@ -1,6 +1,6 @@
 # Choice input context: contract and boundary inventory
 
-Implementation status: the first representative increment is described in [Inline choice input contexts](Simulation-Input-Context.md); [profile V2 adds bounded active-stack inputs](Simulation-Stack-Input-Context.md). The contract below remains the broader acceptance target.
+Implementation status: the first representative increment is described in [Inline choice input contexts](Simulation-Input-Context.md); [profile V2 adds bounded active-stack inputs](Simulation-Stack-Input-Context.md) and [V3 adds typed controller request constraints](Simulation-Prompt-Input-Context.md). The contract below remains the broader acceptance target.
 
 Status: design and source inventory only. This document does not implement a producer, change the wire format, widen current visibility, or mark data training-ready. Audited source baseline: `cb852fe2ea73fed1a2e5e2eda848eb05dc890afe` on `goldfish-trace`. Source line links refer to that baseline; function and boundary names are the durable inventory keys.
 

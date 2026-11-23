@@ -1127,19 +1127,19 @@ public class PlayerControllerAi extends PlayerController {
 
     @Override
     public int chooseNumber(SpellAbility sa, String title, int min, int max) {
-        return AiNumberChoiceRecorder.range(player, sa, "CONTROLLER_NUMBER_RANGE", min, max,
+        return AiNumberChoiceRecorder.controllerRange(player, sa, min, max,
                 () -> brains.chooseNumber(sa, title, min, max));
     }
 
     @Override
     public int chooseNumber(SpellAbility sa, String string, int min, int max, Map<String, Object> params) {
-        return AiNumberChoiceRecorder.range(player, sa, "CONTROLLER_NUMBER_RANGE", min, max,
+        return AiNumberChoiceRecorder.controllerRange(player, sa, min, max,
                 () -> SpellApiToAi.Converter.get(sa).chooseNumber(player, sa, min, max, params));
     }
 
     @Override
     public int chooseNumber(SpellAbility sa, String title, List<Integer> options, Player relatedPlayer) {
-        return AiNumberChoiceRecorder.discrete(player, sa, options,
+        return AiNumberChoiceRecorder.discrete(player, sa, options, relatedPlayer,
                 () -> brains.chooseNumber(sa, title, options, relatedPlayer));
     }
 

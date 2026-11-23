@@ -214,9 +214,12 @@ def validate_decision(record, game):
         require(d['inputContext']['stateBasis'] == 'RULES_STATE', 'main-phase baseline is not rules state')
         policy = d['inputContext']['policy']
         require(policy is None or policy['turnPlayer'] == policy['chooser'], 'main-phase context outside chooser turn')
-        if policy is not None and d['inputContext']['schemaVersion'] == 2:
+        if policy is not None and d['inputContext']['schemaVersion'] >= 2:
             require(not policy['stack']['entries'] and not policy['stack']['isResolving'] and not policy['stack']['truncated'],
                     'main-phase baseline contains a pending stack')
+        if policy is not None and d['inputContext']['schemaVersion'] >= 3:
+            require(policy['prompt'] is None and d['inputContext']['coverage']['prompt'] == 'UNSUPPORTED',
+                    'main-phase baseline claims a selector request')
     require(d.get('status') in ('COMPLETED', 'AI_TIMEOUT', 'EVALUATION_TIMEOUT', 'EVALUATION_ERROR', 'ERROR'), 'invalid decision status')
     require(d.get('selection') in ('PLAY', 'PASS_PRIORITY', 'NO_ACTION'), 'invalid selection')
     require(integer(d.get('elapsedNanos')) and d['elapsedNanos'] >= 0, 'invalid decision duration')
@@ -1051,6 +1054,8 @@ def make_coverage(runs, rows, *, spool=None):
         summary['limitations'].append('Completed payment visitors are proposals, not proof of payment. Mana routine outcomes describe that routine only; finalized engine payment facts remain separate. Type text, counter tables and conversion matrices are marked unrecorded. Mana pool choices without an active ability context are not recorded.')
     if input_records:
         summary['limitations'].append('Inline input contexts cover audited boundaries only. CAPTURED means the named partial profile was captured, not complete Magic knowledge or every AI input. ABSENT means unavailable capability, not an empty view. Only inputContext.policy is the permitted feature projection; diagnostic joins, original option membership/order, manifests, outcomes and legacy observation fields are excluded. Disclosed facts have unresolved current-object associations. Stack coverage is profile-declared and bounded where supported; long-term historical knowledge remains incomplete. trainingReady remains false.')
+    if 'PERMITTED_CHOICE_VIEW_V3' in input_profiles:
+        summary['limitations'].append('V3 separately permits audited numeric domains and local single-entity pick constraints in policy.prompt. Original entity pools remain diagnostic-only. Request coverage does not certify effect semantics, outer multi-pick history, option bindings or a complete legal action set.')
     return summary
 
 

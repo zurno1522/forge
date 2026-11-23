@@ -79,8 +79,15 @@ public final class AiChoiceRecorder {
     public static <T> T observeInput(final Player chooser, final SpellAbility ability, final String type,
             final String requestedStage, final String boundary, final String timing,
             final Supplier<Map<String, Object>> options, final Supplier<T> callback, final Function<T, Object> selection) {
+        return observeInput(chooser, ability, type, requestedStage, boundary, timing, options, callback, selection, null);
+    }
+
+    static <T> T observeInput(final Player chooser, final SpellAbility ability, final String type,
+            final String requestedStage, final String boundary, final String timing,
+            final Supplier<Map<String, Object>> options, final Supplier<T> callback, final Function<T, Object> selection,
+            final Supplier<AiPromptInput> prompt) {
         return observe(chooser, ability, type, requestedStage, boundary, options, callback, selection, timing,
-                open -> AiInputContext.capture(chooser, ability, timing, stateBasis(chooser, ability), open));
+                open -> AiInputContext.capture(chooser, ability, timing, stateBasis(chooser, ability), open, prompt));
     }
 
     private static String stateBasis(final Player chooser, final SpellAbility ability) {
