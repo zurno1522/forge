@@ -2,7 +2,7 @@
 
 Status: proposed follow-up to the implemented [input-context profile](Simulation-Input-Context.md), baseline `f115c6f2843`. This plan changes no runtime behavior or coverage claims.
 
-Coverage work determines which decisions and permitted inputs the dataset represents, when they are captured, and how a selected option can be interpreted. CPU, allocation, retention and storage optimization have a separate design track. Coverage reporting belongs here; performance profiling belongs there.
+Coverage work determines which decisions and permitted inputs the dataset represents, when they are captured, and how a selected option can be interpreted. CPU, allocation, retention and storage optimization have a [separate design track](Simulation-Observation-Optimization-Plan.md). Coverage reporting belongs here; performance profiling belongs there.
 
 ## Ordered backlog
 

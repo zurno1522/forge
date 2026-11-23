@@ -52,7 +52,7 @@ The contract remains broader than this increment. T01 has separate fresh resourc
 
 Coverage has its own [ordered design backlog](Simulation-Observation-Coverage-Plan.md): reporting definitions, stack/resolving inputs, typed prompt constraints, safe option bindings, planning audits and broader selector families. Control/team permissions, direct/nonstack lifetimes and historical knowledge require separate focused designs.
 
-Optimization has an independent prioritization and commit boundary. Existing measurements below are a baseline, not a requirement to bundle performance changes into coverage work. Two real games and bounded fixtures cannot establish universal overhead or timeout neutrality. Changing budgets or sampling changes data availability and requires an explicit coverage review.
+Optimization has an independent [ordered design backlog](Simulation-Observation-Optimization-Plan.md): cost attribution, immutable-copy reduction, construction/ordering allocation, storage/serialization and broader workload validation. Existing measurements below are a baseline, not a requirement to bundle performance changes into coverage work. Two real games and bounded fixtures cannot establish universal overhead or timeout neutrality. Changing budgets or sampling changes data availability and requires an explicit coverage review.
 
 ## Validation and measured cost
 
