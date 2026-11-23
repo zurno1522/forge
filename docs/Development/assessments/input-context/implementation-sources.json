@@ -1,0 +1,9 @@
+{
+  "baseline": "f4297b74d7decb875f2b4e353438af82e5755ede",
+  "sources": {
+    "forge-ai/src/main/java/forge/ai/AiInputContext.java": "ee68b974954232a23ef0eaeed2f852461259d707997bb144837ecb9366aa9d2f",
+    "forge-ai/src/main/java/forge/ai/AiContextDisclosures.java": "2b662aebef7ce34b2fcd3ea94dbeb1972f4716c154c788b7d3a96618f673ae2d",
+    "forge-ai/src/main/java/forge/ai/AiEffectChoiceRecorder.java": "744ee68fad7be2c0fb89f647b87714fe3bc0a5ed1b93b1089deffbfd2dbfbb96",
+    "forge-ai/src/main/java/forge/ai/AiChoiceRecorder.java": "ef5b2108e837fd7b2e51df889f275b6124f20271e608093917887133eaa59982"
+  }
+}

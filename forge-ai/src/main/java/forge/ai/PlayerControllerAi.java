@@ -63,6 +63,19 @@ import java.util.stream.Collectors;
  */
 public class PlayerControllerAi extends PlayerController {
     private final AiController brains;
+    private AiInputContext.State inputContextState;
+
+    /** Allocated only on an enabled observation path, never by copied-game policy. */
+    synchronized AiInputContext.State inputContextState() {
+        if (inputContextState == null) { inputContextState = new AiInputContext.State(player); }
+        return inputContextState;
+    }
+
+    private void disclosureFailed(final RuntimeException failure) {
+        player.getGame().recordEventObservationFailure(failure);
+        try { inputContextState().disclosures().failed(); }
+        catch (RuntimeException cleanupFailure) { player.getGame().recordEventObservationFailure(cleanupFailure); }
+    }
 
     private boolean pilotsNonAggroDeck = false;
 
@@ -417,30 +430,28 @@ public class PlayerControllerAi extends PlayerController {
 
     @Override
     public <T extends GameEntity> T chooseSingleEntityForEffect(FCollectionView<T> optionList, DelayedReveal delayedReveal, SpellAbility sa, String title, boolean isOptional, Player targetedPlayer, Map<String, Object> params) {
-        if (delayedReveal != null) {
-            reveal(delayedReveal);
-        }
-        return SpellApiToAi.Converter.get(sa).chooseSingleEntity(player, sa, optionList, isOptional, targetedPlayer, params);
+        return AiEffectChoiceRecorder.prompt(player, () -> {
+            if (delayedReveal != null) { reveal(delayedReveal); }
+            return AiEffectChoiceRecorder.single(player, sa, optionList, isOptional, targetedPlayer,
+                    () -> SpellApiToAi.Converter.get(sa).chooseSingleEntity(player, sa, optionList, isOptional, targetedPlayer, params));
+        });
     }
 
     @Override
     public <T extends GameEntity> List<T> chooseEntitiesForEffect(
             FCollectionView<T> optionList, int min, int max, DelayedReveal delayedReveal, SpellAbility sa, String title,
             Player targetedPlayer, Map<String, Object> params) {
-        if (delayedReveal != null) {
-            reveal(delayedReveal);
-        }
-        FCollection<T> remaining = new FCollection<>(optionList);
-        List<T> selecteds = new ArrayList<>();
-        T selected;
-        do {
-            selected = chooseSingleEntityForEffect(remaining, null, sa, title, selecteds.size()>=min, targetedPlayer, params);
-            if ( selected != null ) {
-                remaining.remove(selected);
-                selecteds.add(selected);
-            }
-        } while ( (selected != null ) && (selecteds.size() < max) );
-        return selecteds;
+        return AiEffectChoiceRecorder.prompt(player, () -> {
+            if (delayedReveal != null) { reveal(delayedReveal); }
+            FCollection<T> remaining = new FCollection<>(optionList);
+            List<T> selecteds = new ArrayList<>();
+            T selected;
+            do {
+                selected = chooseSingleEntityForEffect(remaining, null, sa, title, selecteds.size()>=min, targetedPlayer, params);
+                if (selected != null) { remaining.remove(selected); selecteds.add(selected); }
+            } while ((selected != null) && (selecteds.size() < max));
+            return selecteds;
+        });
     }
 
     @Override
@@ -580,6 +591,10 @@ public class PlayerControllerAi extends PlayerController {
 
     @Override
     public void reveal(CardCollectionView cards, ZoneType zone, Player owner, String messagePrefix, boolean addSuffix) {
+        if (player.getGame().isRecordingAiDecisions()) {
+            try { inputContextState().disclosures().cards(cards, zone); }
+            catch (RuntimeException failure) { disclosureFailed(failure); }
+        }
         for (Card c : cards) {
             AiCardMemory.rememberCard(player, c, AiCardMemory.MemorySet.REVEALED_CARDS);
         }
@@ -587,6 +602,10 @@ public class PlayerControllerAi extends PlayerController {
 
     @Override
     public void reveal(List<CardView> cards, ZoneType zone, PlayerView owner, String messagePrefix, boolean addSuffix) {
+        if (player.getGame().isRecordingAiDecisions()) {
+            try { inputContextState().disclosures().views(cards, zone); }
+            catch (RuntimeException failure) { disclosureFailed(failure); }
+        }
         for (CardView cv : cards) {
             AiCardMemory.rememberCard(player, player.getGame().findByView(cv), AiCardMemory.MemorySet.REVEALED_CARDS);
         }
@@ -1879,10 +1898,11 @@ public class PlayerControllerAi extends PlayerController {
     public Card chooseSingleCardForZoneChange(ZoneType destination,
             List<ZoneType> origin, SpellAbility sa, CardCollection fetchList, DelayedReveal delayedReveal,
             String selectPrompt, boolean isOptional, Player decider) {
-        if (delayedReveal != null) {
-            reveal(delayedReveal);
-        }
-        return brains.chooseCardToHiddenOriginChangeZone(destination, origin, sa, fetchList, player, decider);
+        return AiEffectChoiceRecorder.prompt(player, () -> {
+            if (delayedReveal != null) { reveal(delayedReveal); }
+            return AiEffectChoiceRecorder.zoneChange(player, sa, destination, origin, fetchList, isOptional, decider,
+                    () -> brains.chooseCardToHiddenOriginChangeZone(destination, origin, sa, fetchList, player, decider));
+        });
     }
 
     @Override

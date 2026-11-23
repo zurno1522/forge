@@ -116,3 +116,7 @@ The learning branch adds `CostDecisionMakerBase.decide(CostPart)` with a default
 ### Monte Carlo target-operation provenance (2026-11-20)
 
 Final main-phase search revalidation/restoration/replacement now records its own operation and exact committed target origins. The Reality Chip example exposed missing provenance after a plan rebuild, not an established Forge engine or card-script defect. Keep this work with PR-003's observational feature discussion. The increment changes only AI recording/controllers, exporter validation/reporting and tests; it adds no rules-level API or learning IDs. Target-provenance wire version 2 is explicit for the new operation references, while old records retain version 1. No upstream PR is opened by this entry.
+
+### Inline choice-context follow-up
+
+Representative inline player-view contexts, scoped delivered facts, and exporter validation belong with PR-003 as an observability enhancement. They do not establish a Forge rules or card defect. This increment adds no engine API or learning identifiers to forge-game. Review the optional wire capability and its privacy/coverage limits if proposing it upstream; no PR is opened by this entry. See [the implemented profile and remaining gaps](Simulation-Input-Context.md).

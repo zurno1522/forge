@@ -66,7 +66,7 @@ public final class AiPaymentChoiceRecorder {
 
     public static PaymentDecision decide(final Player chooser, final SpellAbility ability, final CostPart part,
             final boolean effect, final Supplier<PaymentDecision> callback) {
-        return AiChoiceRecorder.observe(chooser, ability, "PAYMENT_DECISION", "PAYMENT", "COST_VISITOR",
+        return AiChoiceRecorder.observeInput(chooser, ability, "PAYMENT_DECISION", "PAYMENT", "COST_VISITOR", "BEFORE_OPERATION",
                 () -> Map.of("coverage", "PAYMENT_VISITOR_INPUT_NOT_ALTERNATIVES", "costKind",
                         COST_KINDS.contains(part.getClass().getSimpleName()) ? part.getClass().getSimpleName() : "OTHER", "effect", effect),
                 callback, AiPaymentChoiceRecorder::decision);
@@ -74,6 +74,11 @@ public final class AiPaymentChoiceRecorder {
 
     public static CardCollection cards(final Player chooser, final SpellAbility ability, final String boundary,
             final CardCollection options, final int min, final int max, final Supplier<CardCollection> callback) {
+        if ("PAYMENT_DISCARD_POOL".equals(boundary) || "PAYMENT_SACRIFICE_POOL".equals(boundary)) {
+            return AiChoiceRecorder.observeInput(chooser, ability, "PAYMENT_CARD_SELECTION", null, boundary, "BEFORE_SELECTOR",
+                    () -> Map.of("coverage", "OBSERVED_CARD_OPTIONS_NOT_ALL_LEGAL_PAYMENT_PLANS", "cards", refs(options),
+                            "minimum", min, "maximum", max), callback, AiPaymentChoiceRecorder::refs);
+        }
         return AiChoiceRecorder.observe(chooser, ability, "PAYMENT_CARD_SELECTION", null, boundary,
                 () -> Map.of("coverage", "OBSERVED_CARD_OPTIONS_NOT_ALL_LEGAL_PAYMENT_PLANS", "cards", refs(options),
                         "minimum", min, "maximum", max), callback, AiPaymentChoiceRecorder::refs);
@@ -81,7 +86,7 @@ public final class AiPaymentChoiceRecorder {
 
     public static List<SpellAbility> manaPayment(final Player chooser, final SpellAbility ability,
             final ManaCostBeingPaid cost, final boolean effect, final Supplier<List<SpellAbility>> callback) {
-        return AiChoiceRecorder.observe(chooser, ability, "PAYMENT_MANA", "PAYMENT", "AUTO_MANA_PAYMENT",
+        return AiChoiceRecorder.observeInput(chooser, ability, "PAYMENT_MANA", "PAYMENT", "AUTO_MANA_PAYMENT", "BEFORE_OPERATION",
                 () -> Map.of("coverage", "OBSERVED_REQUIREMENT_NOT_ALTERNATIVE_PLANS", "remainingManaValue", cost.getConvertedManaCost(),
                         "effect", effect), callback,
                 result -> Map.of("paymentRoutineReturned", true, "costSatisfied", cost.isPaid(), "manaAbilities", refs(result)));

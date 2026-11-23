@@ -1,4 +1,13 @@
 """Standalone subordinate-choice validation and streaming export. No inferred identity joins."""
+import importlib.util
+from pathlib import Path
+
+_context_spec = importlib.util.spec_from_file_location('forge_input_context', Path(__file__).with_name('input_context.py'))
+_contexts = importlib.util.module_from_spec(_context_spec)
+_context_spec.loader.exec_module(_contexts)
+
+validate_input_context = _contexts.validate
+
 STAGES = {'CANDIDATE_EVALUATION', 'EXECUTION', 'RESOLUTION', 'CONTROLLER_CALLBACK',
           'DELEGATED_TARGET_SELECTION', 'TRIGGER_TARGET_SELECTION', 'EFFECT_COPY_TARGET_SELECTION',
           'RETARGET_SELECTION', 'PAYMENT', 'TRIGGER_PREPARATION'}
@@ -17,9 +26,9 @@ COST_KINDS = {
     'CostTap', 'CostTapType', 'CostTeamwork', 'CostUnattach', 'CostUntap',
     'CostUntapType', 'CostWaterbend', 'OTHER'
 }
-TYPES = {'TRIGGER_PREPARATION_RESULT', 'PAYMENT_DECISION', 'PAYMENT_CARD_SELECTION', 'PAYMENT_MANA', 'PAYMENT_MANA_SELECTION', 'TARGET_SELECTION_RESULT', 'EFFECT_COPY_TARGET_RESULT', 'RETARGET_RESULT', 'TARGET_POOL_SELECTION', 'MODE_SELECTION', 'NUMBER_SELECTION', 'X_SELECTION', 'MASKED_CHOICE'}
+TYPES = {'TRIGGER_PREPARATION_RESULT', 'PAYMENT_DECISION', 'PAYMENT_CARD_SELECTION', 'PAYMENT_MANA', 'PAYMENT_MANA_SELECTION', 'TARGET_SELECTION_RESULT', 'EFFECT_COPY_TARGET_RESULT', 'RETARGET_RESULT', 'TARGET_POOL_SELECTION', 'MODE_SELECTION', 'NUMBER_SELECTION', 'X_SELECTION', 'MASKED_CHOICE', 'EFFECT_ENTITY_SELECTION', 'ZONE_CHANGE_CARD_SELECTION'}
 BOUNDARIES = {'TRIGGER_PREPARATION', 'COST_VISITOR', 'PAYMENT_SACRIFICE_POOL', 'PAYMENT_DISCARD_POOL', 'PAYMENT_EXILE_POOL', 'AUTO_MANA_PAYMENT', 'MANA_POOL_OPTIONS', 'CONTROLLER_TARGETS', 'COPY_TARGETS', 'CONTROLLER_RETARGET', 'CHARM_MODE_HEURISTIC', 'CONTROLLER_MODES',
-              'CONTROLLER_NUMBER_RANGE', 'CONTROLLER_NUMBER_OPTIONS', 'CONTROLLER_ANNOUNCEMENT', 'MAX_X_HEURISTIC', 'X_ANNOUNCEMENT_REFINEMENT', 'MASKED_CHOICE'} | POOL_BOUNDARIES
+              'CONTROLLER_NUMBER_RANGE', 'CONTROLLER_NUMBER_OPTIONS', 'CONTROLLER_ANNOUNCEMENT', 'MAX_X_HEURISTIC', 'X_ANNOUNCEMENT_REFINEMENT', 'MASKED_CHOICE', 'CONTROLLER_EFFECT_ENTITY', 'CONTROLLER_ZONE_CHANGE_CARD'} | POOL_BOUNDARIES
 
 TYPE_BOUNDARIES = {
     'TRIGGER_PREPARATION_RESULT': {'TRIGGER_PREPARATION'},
@@ -35,7 +44,44 @@ TYPE_BOUNDARIES = {
     'PAYMENT_MANA': {'AUTO_MANA_PAYMENT'},
     'PAYMENT_MANA_SELECTION': {'MANA_POOL_OPTIONS'},
     'MASKED_CHOICE': {'MASKED_CHOICE'},
+    'EFFECT_ENTITY_SELECTION': {'CONTROLLER_EFFECT_ENTITY'},
+    'ZONE_CHANGE_CARD_SELECTION': {'CONTROLLER_ZONE_CHANGE_CARD'},
 }
+
+CONTEXT_TIMING = {
+    'MAIN_PHASE_PLAY_SELECTION': 'BEFORE_OPERATION',
+    'CONTROLLER_TARGETS': 'BEFORE_OPERATION',
+    'COST_VISITOR': 'BEFORE_OPERATION',
+    'AUTO_MANA_PAYMENT': 'BEFORE_OPERATION',
+    'CONTROLLER_NUMBER_RANGE': 'BEFORE_SELECTOR',
+    'CONTROLLER_NUMBER_OPTIONS': 'BEFORE_SELECTOR',
+    'PAYMENT_DISCARD_POOL': 'BEFORE_SELECTOR',
+    'PAYMENT_SACRIFICE_POOL': 'BEFORE_SELECTOR',
+    'CONTROLLER_EFFECT_ENTITY': 'BEFORE_SELECTOR',
+    'CONTROLLER_ZONE_CHANGE_CARD': 'BEFORE_SELECTOR',
+}
+
+
+def input_boundary(value, boundary, stage=None):
+    expected = CONTEXT_TIMING.get(boundary)
+    if expected is None:
+        require(value['status'] == 'UNAVAILABLE'
+                and {'component': 'CONTEXT', 'reason': 'NO_AUDITED_INPUT_BOUNDARY'} in value['omissions'],
+                'input context claims an unaudited boundary')
+    else:
+        require(value['timing'] == expected, 'input context boundary/timing mismatch')
+    if value['status'] != 'UNAVAILABLE':
+        require(value['stateBasis'] != 'UNESTABLISHED', 'captured context has no state basis')
+        if stage == 'CANDIDATE_EVALUATION':
+            require(value['stateBasis'] == 'PLANNING_WORKING_STATE', 'evaluation context claims rules state')
+
+
+def input_envelope(value, record):
+    policy = value['policy']
+    if policy is not None:
+        for field in ('turn', 'phase'):
+            if field in record:
+                require(policy[field] == record[field], 'input context/envelope ' + field + ' mismatch')
 
 
 def integer(v):
@@ -91,6 +137,26 @@ def options(choice):
     option = choice['options']
     if choice['choiceType'] == 'MASKED_CHOICE':
         require(option == {'coverage': 'MASKED'} and choice['boundary'] == 'MASKED_CHOICE', 'unmasked private choice')
+        return
+    if choice['choiceType'] in ('EFFECT_ENTITY_SELECTION', 'ZONE_CHANGE_CARD_SELECTION'):
+        common = {'coverage', 'items', 'truncated', 'optional'}
+        zone = choice['choiceType'] == 'ZONE_CHANGE_CARD_SELECTION'
+        expected = common | ({'destination', 'origins', 'deciderPlayerId'} if zone else {'relatedPlayerId'})
+        require(isinstance(option, dict) and set(option) == expected
+                and option['coverage'] in ('UNAVAILABLE', 'OBSERVED_ZONE_CHANGE_OPTIONS_DIAGNOSTIC_ONLY' if zone else 'OBSERVED_EFFECT_OPTIONS_DIAGNOSTIC_ONLY'),
+                'invalid effect choice options')
+        require(isinstance(option['items'], list) and len(option['items']) <= 256
+                and isinstance(option['truncated'], bool) and isinstance(option['optional'], bool), 'invalid effect option prefix')
+        if option['coverage'] == 'UNAVAILABLE':
+            require(not option['items'] and option['truncated'], 'unavailable effect pool claims captured options')
+        for ref in option['items']:
+            typed_reference(ref, 'CARD') if zone else reference(ref)
+        related = option['deciderPlayerId' if zone else 'relatedPlayerId']
+        require(related is None or integer(related), 'invalid related choice player')
+        if zone:
+            require(option['destination'] in _contexts.ZONES and isinstance(option['origins'], list)
+                    and len(option['origins']) <= len(_contexts.ZONES)
+                    and all(origin in _contexts.ZONES for origin in option['origins']), 'invalid zone-change origin/destination')
         return
     if choice['choiceType'] == 'PAYMENT_DECISION':
         require(isinstance(option, dict) and set(option) == {'coverage', 'costKind', 'effect'}
@@ -214,9 +280,9 @@ def selection(start, terminal):
             require(index is None or integer(index) and 0 <= index < len(offered) and mode['abilityId'] == offered[index]['abilityId'], 'invalid selected mode option link')
             require(index is None or mode['definitionIndex'] == offered[index]['definitionIndex'], 'mode definition/offered index mismatch')
         return
-    if start['choiceType'] == 'TARGET_POOL_SELECTION':
+    if start['choiceType'] in ('TARGET_POOL_SELECTION', 'EFFECT_ENTITY_SELECTION', 'ZONE_CHANGE_CARD_SELECTION'):
         require(isinstance(value, dict) and set(value) == {'selected', 'selectedOptionIndex', 'match'}, 'invalid target pool return')
-        reference(value['selected'])
+        typed_reference(value['selected'], 'CARD') if start['choiceType'] == 'ZONE_CHANGE_CARD_SELECTION' else reference(value['selected'])
         index, kind = value['selectedOptionIndex'], value['match']
         require(index is None or integer(index), 'invalid target pool index')
         if start['options']['coverage'] == 'UNAVAILABLE':
@@ -244,7 +310,7 @@ def accept(record, game):
     if status == 'STARTED':
         fields = {'choiceSchemaVersion', 'choiceId', 'parentChoiceId', 'status', 'choiceType', 'boundary', 'stage', 'chooserPlayerId',
                   'chooserKind', 'abilityId', 'sourceId', 'decisionId', 'actionId', 'candidateAbilityId', 'assessmentId', 'resolvingAbilityId', 'options'}
-        require(set(c) == fields and c['choiceType'] in TYPES and c['boundary'] in BOUNDARIES, 'invalid standalone choice start')
+        require(set(c) in (fields, fields | {'inputContext'}) and c['choiceType'] in TYPES and c['boundary'] in BOUNDARIES, 'invalid standalone choice start')
         require(c['boundary'] in TYPE_BOUNDARIES[c['choiceType']], 'choice type/boundary mismatch')
         require(c['stage'] in STAGES and c['chooserKind'] in ('AI', 'OTHER'), 'invalid standalone choice actor/stage')
         require(all(integer(c[k]) for k in ('chooserPlayerId', 'abilityId', 'sourceId')), 'invalid standalone choice identity')
@@ -259,6 +325,10 @@ def accept(record, game):
         if parent_choice is not None:
             require(states[parent_choice]['terminal'] is None, 'choice began after its parent choice finished')
         options(c)
+        if 'inputContext' in c:
+            validate_input_context(c['inputContext'], c['chooserPlayerId'])
+            input_boundary(c['inputContext'], c['boundary'], c['stage'])
+            input_envelope(c['inputContext'], record)
         states[cid] = dict(start=record, terminal=None, postOutcome=game['outcome'] is not None)
     else:
         require(cid in states, 'choice terminal lacks start')
@@ -294,7 +364,9 @@ def context(state, game):
         require(action['identity']['decisionId'] == c['decisionId'] and action['identity']['sourceId'] == c['sourceId'], 'choice parent action mismatch')
         require(action['events'] and action['events'][0]['execution']['status'] == 'STARTED'
                 and action['events'][0]['eventIndex'] < state['start']['eventIndex'], 'choice precedes parent attempt')
-    if game['start'] is not None: require(c['chooserPlayerId'] in game['players'], 'unknown standalone choice chooser')
+    if game['start'] is not None:
+        require(c['chooserPlayerId'] in game['players'], 'unknown standalone choice chooser')
+        if 'inputContext' in c: validate_input_context(c['inputContext'], c['chooserPlayerId'], game['players'])
     if state['terminal'] is None:
         require(game['execution']['status'] != 'NORMAL' or parent is not None and parent['status'] != 'COMPLETED', 'normal choice lacks terminal result')
     return parent

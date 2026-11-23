@@ -203,6 +203,13 @@ def validate_decision(record, game):
     require(d.get('decisionType') == 'MAIN_PHASE_PLAY_SELECTION', 'unsupported decision type')
     require(d.get('candidateCoverage') == 'OBSERVED_EVALUATIONS_NOT_ALL_LEGAL_ACTIONS', 'unknown candidate coverage')
     require(d.get('observationCoverage') == 'PARTIAL_PLAYER_VIEW_V1', 'unknown observation coverage')
+    if 'inputContext' in d:
+        _choices.validate_input_context(d['inputContext'], d['playerId'], game['players'])
+        _choices.input_boundary(d['inputContext'], d['decisionType'])
+        _choices.input_envelope(d['inputContext'], record)
+        require(d['inputContext']['stateBasis'] == 'RULES_STATE', 'main-phase baseline is not rules state')
+        policy = d['inputContext']['policy']
+        require(policy is None or policy['turnPlayer'] == policy['chooser'], 'main-phase context outside chooser turn')
     require(d.get('status') in ('COMPLETED', 'AI_TIMEOUT', 'EVALUATION_TIMEOUT', 'EVALUATION_ERROR', 'ERROR'), 'invalid decision status')
     require(d.get('selection') in ('PLAY', 'PASS_PRIORITY', 'NO_ACTION'), 'invalid selection')
     require(integer(d.get('elapsedNanos')) and d['elapsedNanos'] >= 0, 'invalid decision duration')
@@ -742,6 +749,22 @@ def make_coverage(runs, rows, *, spool=None):
     budget_omissions = 0
     interrupted_captures = 0
     evaluated_x = collections.Counter()
+    input_statuses, input_owners, input_timings, input_bases, input_omissions, input_coverage = (collections.Counter() for _ in range(6))
+    input_records = 0
+
+    def add_input_context(value, owner):
+        nonlocal input_records
+        status = 'ABSENT' if value is None else value['status']
+        input_statuses[status] += 1
+        input_owners[owner + ':' + status] += 1
+        if value is None: return
+        input_records += 1
+        input_timings[value['timing']] += 1
+        input_bases[value['stateBasis']] += 1
+        for omission in value['omissions']:
+            input_omissions[omission['component'] + ':' + omission['reason']] += 1
+        for component, coverage in value['coverage'].items():
+            input_coverage[component + ':' + coverage] += 1
 
     def add(name, value):
         counters[name].update((value,))
@@ -755,6 +778,7 @@ def make_coverage(runs, rows, *, spool=None):
             add('executionStatuses', game['execution']['status'])
     for row in rows:
         d = row['decision']
+        add_input_context(d.get('inputContext'), 'DECISION')
         declared = d.get('subordinateChoiceSchemaVersion') == 1
         declared_choices = declared_choices or declared
         declared_provenance = declared_provenance or d.get('targetChoiceProvenanceSchemaVersion') in (1, 2)
@@ -918,6 +942,7 @@ def make_coverage(runs, rows, *, spool=None):
         choice_count = censored_count = 0
         for row in _choices.rows(runs):
             choice_count += 1
+            add_input_context(row['start']['choice'].get('inputContext'), 'CHOICE')
             censored_count += row['censored']
             event_types[row['start']['choice']['choiceType']] += 1
             stages[row['start']['choice']['stage']] += 1
@@ -970,6 +995,11 @@ def make_coverage(runs, rows, *, spool=None):
                        searchTargetApplicationsOmittedByBudget=search_budget, searchTargetApplicationsOmittedDuringCapture=search_interrupted)
     if evaluated_x:
         summary['evaluatedXAssessmentStates'] = dict(evaluated_x)
+    if input_records:
+        summary.update(inputContextRecords=input_records, inputContextStatuses=dict(input_statuses),
+                       inputContextOwnerStatuses=dict(input_owners), inputContextTimings=dict(input_timings),
+                       inputContextStateBases=dict(input_bases), inputContextOmissions=dict(input_omissions),
+                       inputContextCoverage=dict(input_coverage))
     summary['limitations'] = [
         'Main-phase play selection with an empty stack only; no mulligan, combat, reactive-priority or subordinate-choice coverage.',
         'Candidate assessments are partial and may repeat an ability; counts are assessment observations, not unique rejected legal actions.',
@@ -993,6 +1023,8 @@ def make_coverage(runs, rows, *, spool=None):
         summary['limitations'] = [v for v in summary['limitations'] if not v.startswith('Subordinate target records cover')]
         summary['limitations'].append('Standalone choices cover instrumented target, mode, numeric/X and payment boundaries, including execution and resolution callbacks. Unknown parents, copied modes, missing option pools and capped prefixes remain explicit; alternatives are observed inputs, not complete legal plans.')
         summary['limitations'].append('Completed payment visitors are proposals, not proof of payment. Mana routine outcomes describe that routine only; finalized engine payment facts remain separate. Type text, counter tables and conversion matrices are marked unrecorded. Mana pool choices without an active ability context are not recorded.')
+    if input_records:
+        summary['limitations'].append('Inline input contexts cover audited boundaries only. CAPTURED means the named partial profile was captured, not complete Magic knowledge or every AI input. ABSENT means unavailable capability, not an empty view. Only inputContext.policy is the permitted feature projection; diagnostic joins, original option membership/order, manifests, outcomes and legacy observation fields are excluded. Disclosed facts have unresolved current-object associations. Stack and long-term historical knowledge remain unsupported/incomplete; trainingReady remains false.')
     return summary
 
 
@@ -1106,6 +1138,14 @@ def report_chunks(summary, runs):
                                  ('Numeric value states: ', 'standaloneNumericValueStates')):
                 yield from counter_line(prefix, name)
             yield from lines('Numeric domains are observed inputs or heuristic bounds, not reconstructed legal values or mana spent. Outside-prefix/domain returns are retained without changing the AI result.')
+    if 'inputContextRecords' in summary:
+        yield from lines('', '## Inline choice input contexts', '',
+                         f"Recorded {summary['inputContextRecords']} versioned input contexts. Statuses are relative to PERMITTED_CHOICE_VIEW_V1, a partial profile. ABSENT means unavailable capability, not an empty view.")
+        for prefix, name in (('Capture statuses: ', 'inputContextStatuses'), ('Owners and statuses: ', 'inputContextOwnerStatuses'),
+                             ('Boundary timing: ', 'inputContextTimings'), ('State basis: ', 'inputContextStateBases'),
+                             ('Omissions: ', 'inputContextOmissions'), ('Component coverage: ', 'inputContextCoverage')):
+            yield from counter_line(prefix, name)
+        yield from lines('Only inputContext.policy is the permitted feature projection. Diagnostic IDs, timestamps, offered-pool membership/order and future trace facts are excluded; unresolved disclosure facts do not establish current-object identity. Stack and long-term history remain unsupported/incomplete. trainingReady remains false.')
     if 'evaluatedXAssessmentStates' in summary:
         yield from counter_line('Evaluated X assessment snapshots: ', 'evaluatedXAssessmentStates')
     if 'searchTargetApplications' in summary:

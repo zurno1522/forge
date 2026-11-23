@@ -1,0 +1,212 @@
+{
+  "simple": {
+    "contexts": 174,
+    "statuses": {
+      "PARTIAL": 174
+    },
+    "omissions": {
+      "DISCLOSURES:UNSUPPORTED": 174
+    },
+    "boundaries": {
+      "PARENT_BASELINE": 58,
+      "COST_VISITOR": 73,
+      "AUTO_MANA_PAYMENT": 43
+    },
+    "timings": {
+      "BEFORE_OPERATION": 174
+    },
+    "stateBases": {
+      "RULES_STATE": 174
+    },
+    "coverage": {
+      "stack:UNSUPPORTED": 174,
+      "history:INCOMPLETE": 174,
+      "options:DIAGNOSTIC_ONLY": 174,
+      "disclosures:UNSUPPORTED_PRIOR_SCOPE": 174,
+      "playerView:PERMITTED_CURRENT_FIELDS_V1": 174
+    },
+    "contextRawBytes": 970218,
+    "contextGzipBytes": 11847,
+    "maxContextRawBytes": 9220,
+    "traceSizes": {
+      "baseline": {
+        "full": {
+          "rawBytes": 563137,
+          "gzipBytes": 31336,
+          "sha256": "1bdd695f01f0fb11e4c0b10d3b24a7ab444ac981ef65089ca8a39234102f2624"
+        },
+        "decisions": {
+          "rawBytes": 442114,
+          "gzipBytes": 19331,
+          "sha256": "8bb10afcb7011577f702db453e14871296c130eccd9c435514b2064b3fd38080"
+        }
+      },
+      "new": {
+        "full": {
+          "rawBytes": 1536070,
+          "gzipBytes": 58019,
+          "sha256": "d20470a281cd4e264ad84fc3e0097e456d6bf632fbac9ef626672048507270e3"
+        },
+        "decisions": {
+          "rawBytes": 1415047,
+          "gzipBytes": 44578,
+          "sha256": "8bdec3e793ef05e7cab41a5e47fa6bd6c45e8715e378d197322da7e6ffdf9906"
+        }
+      }
+    },
+    "legacyByteCompatibility": {
+      "manifest.json": true,
+      "coverage.md": true,
+      "coverage.json": true,
+      "examples.jsonl": true,
+      "validation.json": true,
+      "dataset.jsonl": true,
+      "choices.jsonl": true
+    },
+    "fullFilteredByteParity": {
+      "examples.jsonl": true,
+      "validation.json": true,
+      "dataset.jsonl": true,
+      "choices.jsonl": true
+    },
+    "coverageEqualExceptSourceRecords": true,
+    "executionStatuses": {
+      "NORMAL": 1
+    },
+    "pregameShuffles": {
+      "1": 2
+    },
+    "baselineSignature": {
+      "turns": [
+        "8"
+      ],
+      "winners": [
+        "Ai(1)-Target Choice Black"
+      ]
+    },
+    "newSignature": {
+      "turns": [
+        "8"
+      ],
+      "winners": [
+        "Ai(1)-Target Choice Black"
+      ]
+    },
+    "sameEngineTypeSequence": true,
+    "sameNormalizedEngineEvents": true,
+    "engineEvents": {
+      "baseline": 596,
+      "new": 596
+    }
+  },
+  "complex": {
+    "contexts": 340,
+    "statuses": {
+      "PARTIAL": 270,
+      "CAPTURED": 70
+    },
+    "omissions": {
+      "DISCLOSURES:UNSUPPORTED": 270
+    },
+    "boundaries": {
+      "PARENT_BASELINE": 56,
+      "COST_VISITOR": 158,
+      "AUTO_MANA_PAYMENT": 120,
+      "CONTROLLER_EFFECT_ENTITY": 6
+    },
+    "timings": {
+      "BEFORE_OPERATION": 334,
+      "BEFORE_SELECTOR": 6
+    },
+    "stateBases": {
+      "RULES_STATE": 340
+    },
+    "coverage": {
+      "playerView:PERMITTED_CURRENT_FIELDS_V1": 340,
+      "stack:UNSUPPORTED": 340,
+      "history:INCOMPLETE": 340,
+      "options:DIAGNOSTIC_ONLY": 340,
+      "disclosures:UNSUPPORTED_PRIOR_SCOPE": 270,
+      "disclosures:STACK_RESOLUTION": 70
+    },
+    "contextRawBytes": 2857035,
+    "contextGzipBytes": 31173,
+    "maxContextRawBytes": 12223,
+    "traceSizes": {
+      "baseline": {
+        "full": {
+          "rawBytes": 1098352,
+          "gzipBytes": 72882,
+          "sha256": "d8b17aa6ae929113cd507021f8e89e082e52c3db22f3625bc052b3d754303ca1"
+        },
+        "decisions": {
+          "rawBytes": 806176,
+          "gzipBytes": 45807,
+          "sha256": "2852490c28eb0ebd19f444d2b537695a0f41de80feb6bff2a2300a1496dc6cc1"
+        }
+      },
+      "new": {
+        "full": {
+          "rawBytes": 3968359,
+          "gzipBytes": 149023,
+          "sha256": "4c6da9e873c29957b1c2a9c85213993294bed47daafb79f5a6622b5fb22a9a96"
+        },
+        "decisions": {
+          "rawBytes": 3673068,
+          "gzipBytes": 115238,
+          "sha256": "0b4634080c71aa4ea8c62fd494a1dd369cd2d455ae67ff01bffee69ddf80b5c1"
+        }
+      }
+    },
+    "legacyByteCompatibility": {
+      "manifest.json": true,
+      "coverage.md": true,
+      "coverage.json": true,
+      "examples.jsonl": true,
+      "validation.json": true,
+      "dataset.jsonl": true,
+      "choices.jsonl": true
+    },
+    "fullFilteredByteParity": {
+      "examples.jsonl": true,
+      "validation.json": true,
+      "dataset.jsonl": true,
+      "choices.jsonl": true
+    },
+    "coverageEqualExceptSourceRecords": true,
+    "executionStatuses": {
+      "NORMAL": 1
+    },
+    "pregameShuffles": {
+      "1": 2
+    },
+    "baselineSignature": {
+      "turns": [
+        "8"
+      ],
+      "winners": [
+        "Ai(2)-Draconic Domination [C17] [2017]"
+      ]
+    },
+    "newSignature": {
+      "turns": [
+        "8"
+      ],
+      "winners": [
+        "Ai(2)-Draconic Domination [C17] [2017]"
+      ]
+    },
+    "sameEngineTypeSequence": false,
+    "sameNormalizedEngineEvents": false,
+    "engineEvents": {
+      "baseline": 908,
+      "new": 914
+    }
+  },
+  "_limitations": [
+    "Real-game comparison is two games, not a performance distribution.",
+    "Simple normalized engine events match exactly. Monte Carlo comparison differs in events; same seed does not guarantee replay under thinking deadlines.",
+    "Frozen graph size is not peak transient capture retention; benchmark disclosure buffers are empty.",
+    "The profile excludes stack content, authorized option bindings and historical knowledge."
+  ]
+}

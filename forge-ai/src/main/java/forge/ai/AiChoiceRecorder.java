@@ -13,12 +13,26 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.function.BooleanSupplier;
 
 /** Observes a callback once. No policy reruns, inferred legal alternatives, or diagnostic strings. */
 public final class AiChoiceRecorder {
     private static final AtomicLong SEQUENCE = new AtomicLong();
     private static final ThreadLocal<Observation> ACTIVE = new ThreadLocal<>();
+    private static final ThreadLocal<Game> PLANNING = new ThreadLocal<>();
     private AiChoiceRecorder() { }
+
+    /** Marks audited hypothetical policy work without changing or restoring that work. */
+    public static <T> T planning(final Player chooser, final Supplier<T> callback) {
+        final Game game = chooser.getGame();
+        if (!game.isRecordingAiDecisions()) { return callback.get(); }
+        final Game previous = PLANNING.get();
+        PLANNING.set(game);
+        try { return callback.get(); }
+        finally {
+            if (previous == null) { PLANNING.remove(); } else { PLANNING.set(previous); }
+        }
+    }
 
     static SpellAbility activeAbility(final Player chooser) {
         final Observation active = ACTIVE.get();
@@ -58,6 +72,28 @@ public final class AiChoiceRecorder {
     public static <T> T observe(final Player chooser, final SpellAbility ability, final String type,
             final String requestedStage, final String boundary, final Supplier<Map<String, Object>> options,
             final Supplier<T> callback, final Function<T, Object> selection) {
+        return observe(chooser, ability, type, requestedStage, boundary, options, callback, selection, null, null);
+    }
+
+    /** Only audited scopes opt in. Merely wrapping a callback does not establish preselection timing. */
+    public static <T> T observeInput(final Player chooser, final SpellAbility ability, final String type,
+            final String requestedStage, final String boundary, final String timing,
+            final Supplier<Map<String, Object>> options, final Supplier<T> callback, final Function<T, Object> selection) {
+        return observe(chooser, ability, type, requestedStage, boundary, options, callback, selection, timing,
+                open -> AiInputContext.capture(chooser, ability, timing, stateBasis(chooser, ability), open));
+    }
+
+    private static String stateBasis(final Player chooser, final SpellAbility ability) {
+        final Observation active = ACTIVE.get();
+        return PLANNING.get() == chooser.getGame() || evaluation(chooser, ability) != null || active != null && active.game == chooser.getGame()
+                && "PLANNING_WORKING_STATE".equals(active.basis)
+                ? "PLANNING_WORKING_STATE" : "RULES_STATE";
+    }
+
+    static <T> T observe(final Player chooser, final SpellAbility ability, final String type,
+            final String requestedStage, final String boundary, final Supplier<Map<String, Object>> options,
+            final Supplier<T> callback, final Function<T, Object> selection, final String timing,
+            final Function<BooleanSupplier, Map<String, Object>> inputCapture) {
         final Game game = chooser.getGame();
         Observation observation = null;
         if (game.isRecordingAiDecisions() && ability != null) {
@@ -65,7 +101,7 @@ public final class AiChoiceRecorder {
                 final AiController chooserBrain = chooser.getController() instanceof PlayerControllerAi ai ? ai.getAi() : null;
                 if (ability.getHostCard() != null && ability.getHostCard().getGame() == game
                         && !closedEvaluation(owner(ability)) && !closedEvaluation(chooserBrain)) {
-                    observation = new Observation(chooser, ability, type, requestedStage, boundary, options);
+                    observation = new Observation(chooser, ability, type, requestedStage, boundary, options, timing, inputCapture);
                 }
             }
             catch (RuntimeException failure) { game.recordEventObservationFailure(failure); }
@@ -98,11 +134,13 @@ public final class AiChoiceRecorder {
         private final String id;
         private final boolean visible;
         private final String stage;
+        private final String basis;
         private boolean finished;
         private final long started = System.nanoTime();
 
         private Observation(final Player chooser, final SpellAbility ability, final String type,
-                final String requestedStage, final String boundary, final Supplier<Map<String, Object>> options) {
+                final String requestedStage, final String boundary, final Supplier<Map<String, Object>> options,
+                final String timing, final Function<BooleanSupplier, Map<String, Object>> inputCapture) {
             game = chooser.getGame();
             this.chooser = chooser;
             this.ability = ability;
@@ -120,6 +158,7 @@ public final class AiChoiceRecorder {
             record.put("choiceType", visible ? type : "MASKED_CHOICE");
             record.put("boundary", visible ? boundary : "MASKED_CHOICE");
             stage = requestedStage == null ? AiChoiceRecorder.stage(chooser, ability) : requestedStage;
+            basis = stateBasis(chooser, ability);
             record.put("stage", stage);
             record.put("chooserPlayerId", chooser.getId());
             record.put("chooserKind", chooser.getController() instanceof PlayerControllerAi ? "AI" : "OTHER");
@@ -132,6 +171,17 @@ public final class AiChoiceRecorder {
             final SpellAbility resolving = game.getStack().getResolvingAbility();
             record.put("resolvingAbilityId", resolving == null ? null : resolving.getId());
             record.put("options", visible ? options.get() : Map.of("coverage", "MASKED"));
+            if (inputCapture != null) {
+                Map<String, Object> input;
+                try {
+                    input = visible ? inputCapture.apply(this::open)
+                            : AiInputContext.unavailable(chooser, timing, basis, "HIDDEN");
+                } catch (RuntimeException failure) {
+                    game.recordEventObservationFailure(failure);
+                    input = AiInputContext.unavailable(chooser, timing, basis, "CAPTURE_FAILED");
+                }
+                record.put("inputContext", input);
+            }
             if (open()) { game.fireEvent(new AiChoiceEvent(record)); }
         }
 
@@ -165,7 +215,7 @@ public final class AiChoiceRecorder {
 
     public static boolean targeting(final Player chooser, final SpellAbility ability, final String stage,
             final Supplier<Boolean> callback) {
-        return observe(chooser, ability, "TARGET_SELECTION_RESULT", stage, "CONTROLLER_TARGETS",
+        return observeInput(chooser, ability, "TARGET_SELECTION_RESULT", stage, "CONTROLLER_TARGETS", "BEFORE_OPERATION",
                 () -> Map.of("coverage", "PRIOR_TARGET_PLAN_ONLY", "priorTargets", targetPlan(ability)), callback,
                 accepted -> Map.of("accepted", accepted, "targets", targetPlan(ability)));
     }

@@ -1,5 +1,7 @@
 # Simulation decision records
 
+Optional inline choice contexts are documented in [the implemented partial-view profile](Simulation-Input-Context.md).
+
 When decision collection (`sim ... -log-decisions decisions.jsonl`) or structured game tracing (`sim ... -log-game path.jsonl`) is enabled, the real game's AI emits an `AiDecisionEvent`. The desktop trace collector writes it as `AI_DECISION` in the same JSONL stream as game events. The AI has no file-writing dependency. These observational events do not use the rules-event visitor or change engine event ordering.
 
 The version 1 parent decision covers play selection with an empty stack during the acting player's own first or second main phase, including lands, spells, abilities and passing. Optional capabilities add evaluation target pools and standalone target, trigger, mode, numeric/X and payment observations, including callbacks outside the parent decision's phase. Coverage remains partial: there is no complete target/mode/payment, mulligan, combat or reactive-priority decision space. Recording is off by default outside traced simulations and suppressed for simulation copies. The AI's existing policy and candidate limits remain in place; the initial observation is captured before its thinking deadline starts. Per-pool capture adds bounded work during evaluation.

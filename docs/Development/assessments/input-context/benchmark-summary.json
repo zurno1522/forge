@@ -1,0 +1,225 @@
+{
+  "method": "Four rotated measured rounds;200operations perround after75warmup;fresh game pertrial. CallingthreadCPU/allocation;no policyselectionwork. Basechoice vsinputchoice includes synchronous event freeze and Gson serialization. Reachablebytes are detached frozencontext graph, not wholeJVM peakheap.",
+  "fixtures": {
+    "4": {
+      "DISABLED": {
+        "medianCpuMicrosPerCall": 0.5481024999999999,
+        "medianAllocatedBytesPerCall": 88.0,
+        "cpuMicrosPerCall": [
+          2.344085,
+          0.47818,
+          0.6180249999999999,
+          0.391155
+        ],
+        "allocatedBytesPerCall": [
+          88.0,
+          88.0,
+          88.0,
+          88.0
+        ],
+        "maxFrozenContextReachableBytes": 0,
+        "oneContextRawBytes": 0,
+        "oneContextGzipBytes": 20,
+        "captureStatuses": {}
+      },
+      "BASE_CHOICE": {
+        "medianCpuMicrosPerCall": 11.25602,
+        "medianAllocatedBytesPerCall": 9392.0,
+        "cpuMicrosPerCall": [
+          21.980285,
+          12.39532,
+          9.104135,
+          10.116719999999999
+        ],
+        "allocatedBytesPerCall": [
+          9392.0,
+          9392.0,
+          9392.0,
+          9392.0
+        ],
+        "maxFrozenContextReachableBytes": 0,
+        "oneContextRawBytes": 0,
+        "oneContextGzipBytes": 20,
+        "captureStatuses": {}
+      },
+      "INPUT_CHOICE": {
+        "medianCpuMicrosPerCall": 228.76422000000002,
+        "medianAllocatedBytesPerCall": 172408.96,
+        "cpuMicrosPerCall": [
+          252.84476500000002,
+          277.60716499999995,
+          204.683675,
+          156.886185
+        ],
+        "allocatedBytesPerCall": [
+          172408.96,
+          172408.96,
+          172408.96,
+          172408.96
+        ],
+        "maxFrozenContextReachableBytes": 30984,
+        "oneContextRawBytes": 5000,
+        "oneContextGzipBytes": 900,
+        "captureStatuses": {
+          "PARTIAL": 800
+        }
+      },
+      "LEGACY_VIEW": {
+        "medianCpuMicrosPerCall": 58.3171525,
+        "medianAllocatedBytesPerCall": 40400.0,
+        "cpuMicrosPerCall": [
+          59.816559999999996,
+          116.256845,
+          56.817745,
+          43.42827
+        ],
+        "allocatedBytesPerCall": [
+          40400.0,
+          40400.0,
+          40400.0,
+          40400.0
+        ],
+        "maxFrozenContextReachableBytes": 0,
+        "oneContextRawBytes": 0,
+        "oneContextGzipBytes": 20,
+        "captureStatuses": {}
+      },
+      "INPUT_VIEW": {
+        "medianCpuMicrosPerCall": 172.6471575,
+        "medianAllocatedBytesPerCall": 129441.08,
+        "cpuMicrosPerCall": [
+          210.99399,
+          200.717825,
+          144.57648999999998,
+          120.715815
+        ],
+        "allocatedBytesPerCall": [
+          129440.96,
+          129441.2,
+          129440.96,
+          129441.52
+        ],
+        "maxFrozenContextReachableBytes": 30984,
+        "oneContextRawBytes": 5000,
+        "oneContextGzipBytes": 900,
+        "captureStatuses": {
+          "PARTIAL": 800
+        }
+      },
+      "incrementalChoiceCapture": {
+        "cpuMicrosPerCall": 217.50820000000002,
+        "allocatedBytesPerCall": 163016.96
+      }
+    },
+    "30": {
+      "DISABLED": {
+        "medianCpuMicrosPerCall": 0.368215,
+        "medianAllocatedBytesPerCall": 88.0,
+        "cpuMicrosPerCall": [
+          0.35648,
+          0.35977,
+          0.408985,
+          0.37666000000000005
+        ],
+        "allocatedBytesPerCall": [
+          88.0,
+          88.0,
+          88.0,
+          88.0
+        ],
+        "maxFrozenContextReachableBytes": 0,
+        "oneContextRawBytes": 0,
+        "oneContextGzipBytes": 20,
+        "captureStatuses": {}
+      },
+      "BASE_CHOICE": {
+        "medianCpuMicrosPerCall": 8.9172875,
+        "medianAllocatedBytesPerCall": 9416.0,
+        "cpuMicrosPerCall": [
+          40.625415000000004,
+          8.974695,
+          8.859879999999999,
+          8.19709
+        ],
+        "allocatedBytesPerCall": [
+          9416.32,
+          9416.0,
+          9416.0,
+          9416.0
+        ],
+        "maxFrozenContextReachableBytes": 0,
+        "oneContextRawBytes": 0,
+        "oneContextGzipBytes": 20,
+        "captureStatuses": {}
+      },
+      "INPUT_CHOICE": {
+        "medianCpuMicrosPerCall": 368.923655,
+        "medianAllocatedBytesPerCall": 604024.96,
+        "cpuMicrosPerCall": [
+          428.30536,
+          391.10396999999995,
+          346.74334000000005,
+          339.8696
+        ],
+        "allocatedBytesPerCall": [
+          607166.56,
+          604024.96,
+          604024.96,
+          604024.96
+        ],
+        "maxFrozenContextReachableBytes": 104808,
+        "oneContextRawBytes": 19710,
+        "oneContextGzipBytes": 1536,
+        "captureStatuses": {
+          "PARTIAL": 800
+        }
+      },
+      "LEGACY_VIEW": {
+        "medianCpuMicrosPerCall": 113.34612,
+        "medianAllocatedBytesPerCall": 173880.0,
+        "cpuMicrosPerCall": [
+          104.985865,
+          121.706375,
+          173.43498000000002,
+          101.36617
+        ],
+        "allocatedBytesPerCall": [
+          173880.0,
+          173880.0,
+          173880.0,
+          173880.0
+        ],
+        "maxFrozenContextReachableBytes": 0,
+        "oneContextRawBytes": 0,
+        "oneContextGzipBytes": 20,
+        "captureStatuses": {}
+      },
+      "INPUT_VIEW": {
+        "medianCpuMicrosPerCall": 286.47244,
+        "medianAllocatedBytesPerCall": 467320.96,
+        "cpuMicrosPerCall": [
+          274.92611999999997,
+          303.999195,
+          298.01876,
+          239.49711499999998
+        ],
+        "allocatedBytesPerCall": [
+          467320.96,
+          467320.96,
+          467321.28,
+          467320.96
+        ],
+        "maxFrozenContextReachableBytes": 104808,
+        "oneContextRawBytes": 19710,
+        "oneContextGzipBytes": 1536,
+        "captureStatuses": {
+          "PARTIAL": 800
+        }
+      },
+      "incrementalChoiceCapture": {
+        "cpuMicrosPerCall": 360.0063675,
+        "allocatedBytesPerCall": 594608.96
+      }
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "baselineRevision": "f4297b74d7decb875f2b4e353438af82e5755ede",
+  "valid": true,
+  "inputs": [
+    {
+      "input": "/workspace/work/input-context/baseline/complex-decisions.jsonl",
+      "inputSha256": "2852490c28eb0ebd19f444d2b537695a0f41de80feb6bff2a2300a1496dc6cc1",
+      "identicalOutputs": {
+        "choices.jsonl": "583008e60b401abf24bd7b2c68df060a79fc15776ea3886896ce5012eb54436c",
+        "coverage.json": "f1ab457a1a45749389fe35a0d5419ead09ed078a8e47690c0d838462e75e4613",
+        "coverage.md": "ed996b0b894fa6180e84a66923a04f6a373f36ccdfcf59a08ff3f0773878df02",
+        "dataset.jsonl": "5be45c36b774ecc801dfb23f5069055f088c7f5ca48c6bff756d927bc2cd415b",
+        "examples.jsonl": "6f100208fbe123ae27ed2ebb33ccf8c4862b001c6f52349b4a252e08053296e7",
+        "manifest.json": "e205b360db7c8ad95c002ab5aa3113c08a213d62fb6b97215c276b819cc08cb9",
+        "validation.json": "fee184151cdb65beaf3415bd9c445dc35da25ecf570d53e655934efb18327819"
+      }
+    },
+    {
+      "input": "/workspace/work/input-context/baseline/complex-full.jsonl",
+      "inputSha256": "d8b17aa6ae929113cd507021f8e89e082e52c3db22f3625bc052b3d754303ca1",
+      "identicalOutputs": {
+        "choices.jsonl": "583008e60b401abf24bd7b2c68df060a79fc15776ea3886896ce5012eb54436c",
+        "coverage.json": "88e12d8df86f43d5ee94957f55832316c75c9a64d1bf90f870a5379c57eedb5f",
+        "coverage.md": "96eca34f9e8ace17f11805039328daf98f688f16ae6331eeb4ad8b2349b3cc0a",
+        "dataset.jsonl": "5be45c36b774ecc801dfb23f5069055f088c7f5ca48c6bff756d927bc2cd415b",
+        "examples.jsonl": "6f100208fbe123ae27ed2ebb33ccf8c4862b001c6f52349b4a252e08053296e7",
+        "manifest.json": "c6d8ae8c95f40ab1481d242a6a5870ebbfe06da5294b5b481be0aae2a7e4f115",
+        "validation.json": "fee184151cdb65beaf3415bd9c445dc35da25ecf570d53e655934efb18327819"
+      }
+    },
+    {
+      "input": "/workspace/work/input-context/baseline/simple-decisions.jsonl",
+      "inputSha256": "8bb10afcb7011577f702db453e14871296c130eccd9c435514b2064b3fd38080",
+      "identicalOutputs": {
+        "choices.jsonl": "1633919f4bbe1a466637b39999770430204d2233af7c0db4df4c05c9f6ab5ed5",
+        "coverage.json": "dd817087d1aef27b9d1f8348c9d617cfbc2d97edbeed521a49aad427b4fdd6cf",
+        "coverage.md": "fdc531f73bf2cc2e5223895c4e9055f600fb5ceba884ffe621888c0dcb43eb33",
+        "dataset.jsonl": "1fc9d81ec8a23f1e8694026dd2d247ecb904a26160e51bc2348858d051702b21",
+        "examples.jsonl": "614b87990f5a0d00da56cfe7a962a35e0b1237b434404ab146a2b0f009cde0f8",
+        "manifest.json": "b04cb9adf71b2dbe51df3b1f0aa3b32a85ac9ac170a9fc889d7529f808f1dea8",
+        "validation.json": "f9d78722fa985cfcacc61e40a6ef73feab6820fb6210d96fa9451a9ed74dd835"
+      }
+    },
+    {
+      "input": "/workspace/work/input-context/baseline/simple-full.jsonl",
+      "inputSha256": "1bdd695f01f0fb11e4c0b10d3b24a7ab444ac981ef65089ca8a39234102f2624",
+      "identicalOutputs": {
+        "choices.jsonl": "1633919f4bbe1a466637b39999770430204d2233af7c0db4df4c05c9f6ab5ed5",
+        "coverage.json": "7cd9a67fa0ac6c12450d6d43b9eea1042e748f238d9e8a16994a97da1564f2d3",
+        "coverage.md": "07d05253712f2faad76292bde864a344f6d14d9c23c024bb7c3504afbcb8a7fb",
+        "dataset.jsonl": "1fc9d81ec8a23f1e8694026dd2d247ecb904a26160e51bc2348858d051702b21",
+        "examples.jsonl": "614b87990f5a0d00da56cfe7a962a35e0b1237b434404ab146a2b0f009cde0f8",
+        "manifest.json": "ade65510dc8c7d8a5dd715413dd1a8fafb00c118a36316b6ed98434bb0798846",
+        "validation.json": "f9d78722fa985cfcacc61e40a6ef73feab6820fb6210d96fa9451a9ed74dd835"
+      }
+    }
+  ]
+}

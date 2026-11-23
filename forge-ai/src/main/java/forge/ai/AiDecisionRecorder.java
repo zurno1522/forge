@@ -4,10 +4,8 @@ import forge.ai.simulation.FlatMonteCarloPicker;
 import forge.game.Game;
 import forge.game.GameObject;
 import forge.game.card.Card;
-import forge.game.mana.Mana;
 import forge.game.player.Player;
 import forge.game.spellability.SpellAbility;
-import forge.game.zone.ZoneType;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -367,7 +365,14 @@ final class AiDecisionRecorder {
         data.put("decisionType", "MAIN_PHASE_PLAY_SELECTION");
         data.put("candidateCoverage", "OBSERVED_EVALUATIONS_NOT_ALL_LEGAL_ACTIONS");
         data.put("observationCoverage", "PARTIAL_PLAYER_VIEW_V1");
-        data.put("observation", observation(game, viewer));
+        data.put("observation", AiInputContext.legacyObservation(game, viewer));
+        try {
+            data.put("inputContext", AiInputContext.capture(viewer, null, "BEFORE_OPERATION", "RULES_STATE",
+                    () -> !closed && game.isRecordingAiDecisions()));
+        } catch (RuntimeException failure) {
+            game.recordEventObservationFailure(failure);
+            data.put("inputContext", AiInputContext.unavailable(viewer, "BEFORE_OPERATION", "RULES_STATE", "CAPTURE_FAILED"));
+        }
     }
 
     // Evaluation can run on a worker which outlives cancellation. Never write into another decision.
@@ -522,58 +527,4 @@ final class AiDecisionRecorder {
         return result;
     }
 
-    private static Map<String, Object> observation(final Game game, final Player viewer) {
-        final Map<String, Object> result = new LinkedHashMap<>();
-        result.put("turn", game.getPhaseHandler().getTurn());
-        result.put("phase", game.getPhaseHandler().getPhase().name());
-        result.put("turnPlayerId", game.getPhaseHandler().getPlayerTurn().getId());
-        final List<Map<String, Object>> players = new ArrayList<>();
-        for (final Player player : game.getPlayers()) {
-            final Map<String, Object> state = new LinkedHashMap<>();
-            state.put("id", player.getId());
-            state.put("life", player.getLife());
-            state.put("handCount", player.getCardsIn(ZoneType.Hand).size());
-            state.put("libraryCount", player.getCardsIn(ZoneType.Library).size());
-            final List<Map<String, Object>> cards = new ArrayList<>();
-            for (final ZoneType zone : List.of(ZoneType.Battlefield, ZoneType.Command,
-                    ZoneType.Graveyard, ZoneType.Exile, ZoneType.Hand)) {
-                if (zone == ZoneType.Hand && player != viewer) {
-                    continue; // Even revealed opponent hands are omitted in this initial, conservative observation.
-                }
-                for (final Card card : player.getCardsIn(zone)) {
-                    final Map<String, Object> ref = new LinkedHashMap<>();
-                    ref.put("id", card.getId());
-                    ref.put("zone", zone.name());
-                    ref.put("tapped", card.isTapped());
-                    // Face-down identity is hidden even when this player could inspect it.
-                    final boolean visible = !card.isFaceDown() && card.getView().canBeShownTo(viewer.getView());
-                    ref.put("identityKnown", visible);
-                    if (visible) {
-                        ref.put("name", card.getName());
-                        ref.put("types", card.getType().toString());
-                        ref.put("manaCost", card.getManaCost().toString());
-                        if (card.isCreature()) {
-                            ref.put("power", card.getNetPower());
-                            ref.put("toughness", card.getNetToughness());
-                        }
-                    }
-                    final Map<String, Object> counters = new LinkedHashMap<>();
-                    for (final var entry : card.getCounters().entrySet()) {
-                        counters.put(entry.getElement().toString(), entry.getCount());
-                    }
-                    ref.put("counters", counters);
-                    cards.add(ref);
-                }
-            }
-            state.put("cards", cards);
-            final List<Integer> mana = new ArrayList<>();
-            for (final Mana unit : player.getManaPool()) {
-                mana.add((int) unit.getColor());
-            }
-            state.put("floatingManaColors", mana);
-            players.add(state);
-        }
-        result.put("players", players);
-        return result;
-    }
 }

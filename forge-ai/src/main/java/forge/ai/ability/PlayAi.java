@@ -150,6 +150,12 @@ public class PlayAi extends SpellAbilityAi {
     @Override
     public Card chooseSingleCard(final Player ai, final SpellAbility sa, Iterable<Card> options,
             final boolean isOptional, Player targetedPlayer, Map<String, Object> params) {
+        return AiChoiceRecorder.planning(ai,
+                () -> chooseSingleCardInPlanning(ai, sa, options, isOptional, targetedPlayer, params));
+    }
+
+    private Card chooseSingleCardInPlanning(final Player ai, final SpellAbility sa, Iterable<Card> options,
+            final boolean isOptional, Player targetedPlayer, Map<String, Object> params) {
         final CardStateName state;
         if (sa.hasParam("CastTransformed")) {
             state = CardStateName.Backside;

@@ -1,0 +1,34 @@
+{
+  "java": {
+    "targeted": {
+      "tests": 79,
+      "failures": 0
+    },
+    "full": {
+      "desktop": {
+        "tests": 2548,
+        "skipped": 6,
+        "failures": 0
+      },
+      "core": {
+        "tests": 23,
+        "failures": 0
+      },
+      "game": {
+        "tests": 23,
+        "failures": 0
+      },
+      "build": "SUCCESS"
+    }
+  },
+  "python": {
+    "tests": 112,
+    "failures": 0
+  },
+  "realGames": {
+    "normal": 2,
+    "fullFilteredParity": true,
+    "legacyExportFilesByteIdentical": 28
+  },
+  "limits": "Representative partial profile; broader gates remain documented in Simulation-Input-Context.md."
+}

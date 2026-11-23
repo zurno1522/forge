@@ -16,7 +16,8 @@ public final class AiNumberChoiceRecorder {
 
     public static Integer range(final Player chooser, final SpellAbility ability, final String boundary,
             final int min, final int max, final Supplier<Integer> callback) {
-        return AiChoiceRecorder.observe(chooser, ability, "NUMBER_SELECTION", null, boundary,
+        return AiChoiceRecorder.observeInput(chooser, ability, "NUMBER_SELECTION", null, boundary,
+                "CONTROLLER_ANNOUNCEMENT".equals(boundary) ? "BEFORE_OPERATION" : "BEFORE_SELECTOR",
                 () -> Map.of("coverage", "OBSERVED_RANGE", "minimum", min, "maximum", max), callback,
                 value -> numeric(value, null, value >= min && value <= max ? "WITHIN_OBSERVED_DOMAIN" : "OUTSIDE_OBSERVED_DOMAIN"));
     }
@@ -24,7 +25,7 @@ public final class AiNumberChoiceRecorder {
     public static int discrete(final Player chooser, final SpellAbility ability, final List<Integer> possible,
             final Supplier<Integer> callback) {
         final AtomicReference<List<Integer>> captured = new AtomicReference<>();
-        return AiChoiceRecorder.observe(chooser, ability, "NUMBER_SELECTION", null, "CONTROLLER_NUMBER_OPTIONS", () -> {
+        return AiChoiceRecorder.observeInput(chooser, ability, "NUMBER_SELECTION", null, "CONTROLLER_NUMBER_OPTIONS", "BEFORE_SELECTOR", () -> {
             final List<Integer> values = new ArrayList<>();
             for (int i = 0; i < possible.size() && i < AiTargetChoiceRecorder.MAX_REFERENCES; i++) { values.add(possible.get(i)); }
             captured.set(values);

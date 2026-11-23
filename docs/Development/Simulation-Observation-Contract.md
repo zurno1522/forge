@@ -1,5 +1,7 @@
 # Choice input context: contract and boundary inventory
 
+Implementation status: the first representative increment is described in [Inline choice input contexts](Simulation-Input-Context.md). The contract below remains the broader acceptance target.
+
 Status: design and source inventory only. This document does not implement a producer, change the wire format, widen current visibility, or mark data training-ready. Audited source baseline: `cb852fe2ea73fed1a2e5e2eda848eb05dc890afe` on `goldfish-trace`. Source line links refer to that baseline; function and boundary names are the durable inventory keys.
 
 This is stage 1 of the agreed sequence: contract and inventory; representative inline capture; broader coverage and measured optimization. Existing behavior and validation remain documented in [Simulation decision records](Simulation-Decision-Records.md). Existing conservative masks remain unchanged; a richer view in a future capability does not silently declassify old options, result or handler fields. In particular, version 1 deliberately omits opponent hands, library identities and inspected face-down identities. Those are declared limitations, not newly reproduced engine defects.
