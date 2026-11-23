@@ -1,0 +1,51 @@
+{
+  "focused": {
+    "tests": 87,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "full": {
+    "desktop": {
+      "tests": 2559,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 6
+    },
+    "core": {
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "game": {
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "python": {
+    "tests": 134,
+    "failures": 0
+  },
+  "history": "An earlier full run failed one FlatMonteCarloVintageDoomsdayTest assertion: Doomsday should have been cast. That test has decision tracing disabled. It passed in the final focused and full runs; no root cause or universal timeout neutrality is established. No AI policy was changed to address it.",
+  "logs": {
+    "focused": {
+      "path": "/workspace/work/cov002/final-focused-tests.log",
+      "sha256": "577a2e02ac5a78fcf708094c8994fbce5119781ca4456e2344c48157d28a4859"
+    },
+    "full": {
+      "path": "/workspace/work/cov002/final-full-tests.log",
+      "sha256": "0362570b6b04fd640dbdcb75176f4cd299e894d0654cafffc3719ec803d8e57b"
+    },
+    "python": {
+      "path": "/workspace/work/cov002/final-python-tests.log",
+      "sha256": "c1a21cb34a4d79c17e300bcd4f600427646c4d1316f17ed9d2b5010eb060a6c5"
+    },
+    "earlierFullFailure": {
+      "path": "/workspace/work/cov002/full-tests.log",
+      "sha256": "381c0eb48df43483cd91f91cccf707fda080b4ce5acf9dfce84f6405f47ece9c"
+    }
+  }
+}

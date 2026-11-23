@@ -214,6 +214,9 @@ def validate_decision(record, game):
         require(d['inputContext']['stateBasis'] == 'RULES_STATE', 'main-phase baseline is not rules state')
         policy = d['inputContext']['policy']
         require(policy is None or policy['turnPlayer'] == policy['chooser'], 'main-phase context outside chooser turn')
+        if policy is not None and d['inputContext']['schemaVersion'] == 2:
+            require(not policy['stack']['entries'] and not policy['stack']['isResolving'] and not policy['stack']['truncated'],
+                    'main-phase baseline contains a pending stack')
     require(d.get('status') in ('COMPLETED', 'AI_TIMEOUT', 'EVALUATION_TIMEOUT', 'EVALUATION_ERROR', 'ERROR'), 'invalid decision status')
     require(d.get('selection') in ('PLAY', 'PASS_PRIORITY', 'NO_ACTION'), 'invalid selection')
     require(integer(d.get('elapsedNanos')) and d['elapsedNanos'] >= 0, 'invalid decision duration')
@@ -758,6 +761,7 @@ def make_coverage(runs, rows, *, spool=None):
     evaluated_x = collections.Counter()
     input_statuses, input_owners, input_timings, input_bases, input_omissions, input_coverage = (collections.Counter() for _ in range(6))
     input_records = 0
+    input_profiles = collections.Counter()
 
     def add_input_context(value, owner):
         nonlocal input_records
@@ -766,6 +770,7 @@ def make_coverage(runs, rows, *, spool=None):
         input_owners[owner + ':' + status] += 1
         if value is None: return
         input_records += 1
+        input_profiles[value['profile']] += 1
         input_timings[value['timing']] += 1
         input_bases[value['stateBasis']] += 1
         for omission in value['omissions']:
@@ -1016,6 +1021,7 @@ def make_coverage(runs, rows, *, spool=None):
         summary['evaluatedXAssessmentStates'] = dict(evaluated_x)
     if input_records:
         summary.update(inputContextRecords=input_records, inputContextStatuses=dict(input_statuses),
+                       inputContextProfiles=dict(input_profiles),
                        inputContextOwnerStatuses=dict(input_owners), inputContextTimings=dict(input_timings),
                        inputContextStateBases=dict(input_bases), inputContextOmissions=dict(input_omissions),
                        inputContextCoverage=dict(input_coverage))
@@ -1044,7 +1050,7 @@ def make_coverage(runs, rows, *, spool=None):
         summary['limitations'].append('Standalone choices cover instrumented target, mode, numeric/X and payment boundaries, including execution and resolution callbacks. Unknown parents, copied modes, missing option pools and capped prefixes remain explicit; alternatives are observed inputs, not complete legal plans.')
         summary['limitations'].append('Completed payment visitors are proposals, not proof of payment. Mana routine outcomes describe that routine only; finalized engine payment facts remain separate. Type text, counter tables and conversion matrices are marked unrecorded. Mana pool choices without an active ability context are not recorded.')
     if input_records:
-        summary['limitations'].append('Inline input contexts cover audited boundaries only. CAPTURED means the named partial profile was captured, not complete Magic knowledge or every AI input. ABSENT means unavailable capability, not an empty view. Only inputContext.policy is the permitted feature projection; diagnostic joins, original option membership/order, manifests, outcomes and legacy observation fields are excluded. Disclosed facts have unresolved current-object associations. Stack and long-term historical knowledge remain unsupported/incomplete; trainingReady remains false.')
+        summary['limitations'].append('Inline input contexts cover audited boundaries only. CAPTURED means the named partial profile was captured, not complete Magic knowledge or every AI input. ABSENT means unavailable capability, not an empty view. Only inputContext.policy is the permitted feature projection; diagnostic joins, original option membership/order, manifests, outcomes and legacy observation fields are excluded. Disclosed facts have unresolved current-object associations. Stack coverage is profile-declared and bounded where supported; long-term historical knowledge remains incomplete. trainingReady remains false.')
     return summary
 
 
@@ -1160,12 +1166,12 @@ def report_chunks(summary, runs):
             yield from lines('Numeric domains are observed inputs or heuristic bounds, not reconstructed legal values or mana spent. Outside-prefix/domain returns are retained without changing the AI result.')
     if 'inputContextRecords' in summary:
         yield from lines('', '## Inline choice input contexts', '',
-                         f"Recorded {summary['inputContextRecords']} versioned input contexts. Statuses are relative to PERMITTED_CHOICE_VIEW_V1, a partial profile. ABSENT means unavailable capability, not an empty view.")
-        for prefix, name in (('Capture statuses: ', 'inputContextStatuses'), ('Owners and statuses: ', 'inputContextOwnerStatuses'),
+                         f"Recorded {summary['inputContextRecords']} versioned input contexts. Statuses are relative to each declared partial profile. ABSENT means unavailable capability, not an empty view.")
+        for prefix, name in (('Profiles: ', 'inputContextProfiles'), ('Capture statuses: ', 'inputContextStatuses'), ('Owners and statuses: ', 'inputContextOwnerStatuses'),
                              ('Boundary timing: ', 'inputContextTimings'), ('State basis: ', 'inputContextStateBases'),
                              ('Omissions: ', 'inputContextOmissions'), ('Component coverage: ', 'inputContextCoverage')):
             yield from counter_line(prefix, name)
-        yield from lines('Only inputContext.policy is the permitted feature projection. Diagnostic IDs, timestamps, offered-pool membership/order and future trace facts are excluded; unresolved disclosure facts do not establish current-object identity. Stack and long-term history remain unsupported/incomplete. trainingReady remains false.')
+        yield from lines('Only inputContext.policy is the permitted feature projection. Diagnostic IDs, timestamps, offered-pool membership/order and future trace facts are excluded; unresolved disclosure facts do not establish current-object identity. Stack coverage is profile-declared and bounded where supported; long-term history remains incomplete. trainingReady remains false.')
     yield from _audit.markdown(summary['inputCoverageAudit'])
     if 'evaluatedXAssessmentStates' in summary:
         yield from counter_line('Evaluated X assessment snapshots: ', 'evaluatedXAssessmentStates')

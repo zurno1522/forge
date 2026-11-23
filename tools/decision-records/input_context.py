@@ -6,6 +6,7 @@ from a privileged trace or prove that an uninstrumented heuristic used this view
 """
 
 PROFILE = 'PERMITTED_CHOICE_VIEW_V1'
+PROFILES = {1: PROFILE, 2: 'PERMITTED_CHOICE_VIEW_V2'}
 TIMINGS = {'BEFORE_SELECTOR', 'BEFORE_OPERATION', 'AFTER_SELECTION_BEFORE_APPLICATION', 'UNESTABLISHED'}
 STATE_BASES = {'RULES_STATE', 'PLANNING_WORKING_STATE', 'UNESTABLISHED'}
 REASONS = {'HIDDEN', 'UNSUPPORTED', 'OUTSIDE_CAPTURED_PREFIX', 'UNRESOLVED_BINDING',
@@ -41,8 +42,9 @@ def validate(value, chooser_id, known_players=None):
     """Validate a present context, never substituting a default for legacy absence."""
     fields(value, 'schemaVersion profile status timing stateBasis perspective coverage policy diagnostics omissions',
            'invalid envelope fields')
-    require(integer(value['schemaVersion']) and value['schemaVersion'] == 1, 'unsupported schema version')
-    require(value['profile'] == PROFILE, 'unsupported profile')
+    version = value['schemaVersion']
+    require(integer(version) and version in PROFILES, 'unsupported schema version')
+    require(value['profile'] == PROFILES[version], 'unsupported profile')
     require(value['status'] in ('CAPTURED', 'PARTIAL', 'UNAVAILABLE'), 'invalid capture status')
     require(value['timing'] in TIMINGS and value['stateBasis'] in STATE_BASES, 'invalid timing/state basis')
     perspective = value['perspective']
@@ -55,7 +57,7 @@ def validate(value, chooser_id, known_players=None):
     coverage = value['coverage']
     fields(coverage, 'playerView stack disclosures history options', 'invalid coverage fields')
     require(coverage['playerView'] in ('PERMITTED_CURRENT_FIELDS_V1', 'UNAVAILABLE'), 'unknown player-view coverage')
-    require(coverage['stack'] == 'UNSUPPORTED' and coverage['history'] == 'INCOMPLETE'
+    require(coverage['stack'] in ({'UNSUPPORTED'} if version == 1 else {'PUBLIC_ROOT_STACK_V1', 'UNAVAILABLE'}) and coverage['history'] == 'INCOMPLETE'
             and coverage['options'] == 'DIAGNOSTIC_ONLY', 'unsupported coverage claim')
     require(coverage['disclosures'] in ('STACK_RESOLUTION', 'CURRENT_PROMPT', 'UNSUPPORTED_PRIOR_SCOPE', 'UNAVAILABLE'),
             'unknown disclosure coverage')
@@ -63,10 +65,10 @@ def validate(value, chooser_id, known_players=None):
     require(isinstance(omissions, list) and len(omissions) <= 16, 'invalid omissions')
     for omission in omissions:
         fields(omission, 'component reason', 'invalid omission fields')
-        require(omission['component'] in COMPONENTS and omission['reason'] in REASONS, 'unknown omission')
+        require(omission['component'] in COMPONENTS | ({'STACK'} if version == 2 else set()) and omission['reason'] in REASONS, 'unknown omission')
     require(bool(omissions) == (value['status'] != 'CAPTURED'), 'capture status/omission mismatch')
     diagnostic = value['diagnostics']
-    fields(diagnostic, 'playerBindings cardBindings', 'invalid diagnostic fields')
+    fields(diagnostic, 'playerBindings cardBindings' + (' stackBindings' if version == 2 else ''), 'invalid diagnostic fields')
     require(isinstance(diagnostic['playerBindings'], list) and isinstance(diagnostic['cardBindings'], list),
             'invalid binding collections')
     policy = value['policy']
@@ -75,9 +77,12 @@ def validate(value, chooser_id, known_players=None):
     require((coverage['disclosures'] == 'UNAVAILABLE') == (policy is None), 'disclosure coverage/policy mismatch')
     if policy is None:
         require(not diagnostic['playerBindings'] and not diagnostic['cardBindings'], 'unavailable context has bindings')
+        if version == 2:
+            require(coverage['stack'] == 'UNAVAILABLE' and diagnostic['stackBindings'] == [], 'unavailable stack has bindings')
         return
+    if version == 2: require(coverage['stack'] == 'PUBLIC_ROOT_STACK_V1', 'stack coverage/policy mismatch')
     require(perspective['controllingPlayerId'] == chooser_id, 'unsupported controlled perspective has policy')
-    fields(policy, 'turn phase turnPlayer chooser players cards disclosedFacts', 'invalid policy fields')
+    fields(policy, 'turn phase turnPlayer chooser players cards disclosedFacts' + (' stack' if version == 2 else ''), 'invalid policy fields')
     require(integer(policy['turn']) and policy['turn'] >= 0 and text(policy['phase']), 'invalid turn/phase')
     players = policy['players']
     require(isinstance(players, list) and 0 < len(players) <= 16, 'invalid player prefix')
@@ -147,3 +152,53 @@ def validate(value, chooser_id, known_players=None):
         require(all(text(fact[k]) for k in ('name', 'types', 'manaCost')), 'invalid disclosed face text')
         require(fact['currentObjectAssociation'] == 'UNRESOLVED', 'unsupported disclosure object association')
         require(coverage['disclosures'] == fact['scope'], 'disclosure scope/coverage mismatch')
+    if version == 2:
+        validate_stack(policy['stack'], diagnostic['stackBindings'], players, cards, omissions, value['stateBasis'])
+
+
+def validate_stack(stack, bindings, players, cards, omissions, state_basis):
+    fields(stack, 'entries truncated isResolving resolving resolvingCoverage', 'invalid stack fields')
+    entries = stack['entries']
+    require(isinstance(entries, list) and len(entries) <= 8 and isinstance(stack['truncated'], bool), 'invalid stack prefix')
+    require(isinstance(bindings, list) and len(bindings) == len(entries), 'invalid stack bindings')
+    missing = {item['reason'] for item in omissions if item['component'] == 'STACK'}
+    require(not stack['truncated'] or 'OUTSIDE_CAPTURED_PREFIX' in missing, 'stack prefix has no omission')
+    player_refs = {p['entityRef'] for p in players}
+    public_cards = {c['entityRef']: c for c in cards if c['zone'] in ('Battlefield', 'Command', 'Graveyard', 'Stack')
+                    or c['zone'] == 'Exile' and not c['faceDown']}
+    stack_refs = {'s' + str(i) for i in range(len(entries))}
+    ids = set()
+    for i, (entry, binding) in enumerate(zip(entries, bindings)):
+        ref = 's' + str(i)
+        fields(binding, 'entityRef id abilityId', 'invalid stack binding fields')
+        require(binding['entityRef'] == ref and integer(binding['id']) and integer(binding['abilityId'])
+                and binding['id'] not in ids, 'invalid stack binding identity')
+        ids.add(binding['id'])
+        fields(entry, 'entityRef kind controller source rootX targets targetsCoverage', 'invalid stack entry fields')
+        require(entry['entityRef'] == ref and entry['kind'] in ('SPELL', 'ABILITY'), 'invalid stack entry')
+        require(entry['controller'] is None or isinstance(entry['controller'], str) and entry['controller'] in player_refs, 'unknown stack controller')
+        require(entry['controller'] is not None or 'UNRESOLVED_BINDING' in missing, 'missing controller has no omission')
+        source = entry['source']
+        require(source is None or isinstance(source, str) and source in public_cards, 'private or unresolved stack source')
+        known = source is not None and public_cards[source]['identityKnown']
+        if not known:
+            require(entry['rootX'] is None and entry['targets'] is None, 'hidden source leaks ability details')
+        if state_basis != 'RULES_STATE':
+            require(entry['rootX'] is None and entry['targets'] is None, 'planning stack claims committed parameters')
+        require(entry['rootX'] is None or integer(entry['rootX']), 'invalid stack X value')
+        targets = entry['targets']
+        require(entry['targetsCoverage'] == ('UNAVAILABLE' if targets is None else 'ROOT_TARGETS_ONLY'), 'invalid root target coverage')
+        if targets is None:
+            require(bool(missing), 'unavailable targets have no omission')
+            continue
+        require(isinstance(targets, list) and len(targets) <= 16, 'invalid root target prefix')
+        for target in targets:
+            fields(target, 'entityRef dividedAmount', 'invalid stack target fields')
+            require(isinstance(target['entityRef'], str) and target['entityRef'] in player_refs | public_cards.keys() | stack_refs, 'unknown or private stack target')
+            require(target['dividedAmount'] is None or integer(target['dividedAmount']), 'invalid target allocation')
+    require(isinstance(stack['isResolving'], bool), 'invalid resolving flag')
+    resolving = stack['resolving']
+    require(resolving is None or isinstance(resolving, str) and resolving in stack_refs, 'unknown resolving entry')
+    require(stack['resolvingCoverage'] == ('UNAVAILABLE' if stack['isResolving'] and resolving is None else 'CAPTURED'), 'invalid resolving coverage')
+    require(stack['isResolving'] or resolving is None, 'inactive resolving entry')
+    require(not stack['isResolving'] or resolving is not None or 'UNRESOLVED_BINDING' in missing, 'missing resolving omission')

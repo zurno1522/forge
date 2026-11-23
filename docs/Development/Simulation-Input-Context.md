@@ -2,6 +2,8 @@
 
 This implements the first representative increment of the [observation contract](Simulation-Observation-Contract.md). Optional `inputContext` fields freeze a permitted partial player view at audited AI boundaries. Existing decision, choice, target-provenance and observation versions retain their meanings. All datasets remain `trainingReady=false`.
 
+COV-002 adds the explicitly versioned [active-stack profile, version 2](Simulation-Stack-Input-Context.md). New producers emit version 2; this document's version-1 schema and earlier measurements remain historical. The exporter accepts both versions and keeps their semantics separate.
+
 ## Version 1
 
 The envelope contains `schemaVersion:1`, `profile:PERMITTED_CHOICE_VIEW_V1`, `status`, `timing`, `stateBasis`, `perspective`, `coverage`, `policy`, `diagnostics` and `omissions`. `CAPTURED` means the named partial profile was captured; it does not mean complete Magic knowledge. `PARTIAL` identifies typed omissions. `UNAVAILABLE` has null policy and empty diagnostic bindings. Old records without a context remain unavailable; unknown versions are rejected.

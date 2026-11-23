@@ -13,7 +13,7 @@ def add(count, context, audited, parent_omissions=None):
     count['records'] += 1
     count['inputBoundaries']['KNOWN_INPUT_BOUNDARY_V1' if audited else 'NO_ESTABLISHED_INPUT_BOUNDARY_V1'] += 1
     count['contextStatuses']['ABSENT' if context is None else context['status']] += 1
-    count['optionBindings']['NO_CONTEXT' if context is None else 'DIAGNOSTIC_ONLY_V1'] += 1
+    count['optionBindings']['NO_CONTEXT' if context is None else 'DIAGNOSTIC_ONLY_V' + str(context['schemaVersion'])] += 1
     for kind, metadata in (parent_omissions or {}).items():
         count['captureOmissionMetadata'][kind + (':UNAVAILABLE' if metadata is None else ':DECLARED')] += 1
         if metadata is not None:
@@ -64,7 +64,7 @@ class CoverageAudit:
                         inputBoundaries='Current version-1 audited boundary inventory for parent/standalone owners, not proof that a legacy producer captured it or every branch selected an option. A missing group means no observed record, not no choices.',
                         components='Declarations per present context, including unsupported stack/history/options. Missing contexts supply no component declarations.',
                         omissionReasons='Records carrying each explicit reason; one record can have multiple reasons. Component/reason pairs are also deduplicated within a record.',
-                        optionBindings='V1 has diagnostic options only; no model-facing selectable-option bindings are established. This does not describe diagnostic joins or target provenance.',
+                        optionBindings='Supported profiles have diagnostic options only; no model-facing selectable-option bindings are established. This does not describe diagnostic joins or target provenance.',
                         knownUnrecordedCaptures='Explicit parent target/search capture-omission counts, separate from observed-record denominators. Missing declarations mean unknown, not zero. Actual missing selector boundaries/times are unknown; attribution is to the parent container only.',
                         byTurn='Parent baseline or choice-start turn where available; nested/search records use their parent container, not an independently captured selector time. Null turn means unknown.'),
                     observedOwners=dict(self.owners), totals=self.total,
@@ -79,7 +79,7 @@ def markdown(audit):
            'nested target records and search operations. These overlap; they are not unique gameplay decisions. '
            'Unobserved decision count and complete learning-example count are unknown.\n\n')
     yield ('CAPTURED means the named partial profile was captured. Components are declarations per present context. '
-           'Omission reasons count affected records and can overlap. V1 option bindings remain diagnostic-only. '
+           'Omission reasons count affected records and can overlap. Option bindings remain diagnostic-only. '
            'A known input boundary is the current audit inventory, not proof of fresh selection on every branch.\n\n')
     columns = '| Records | Absent | Captured | Partial | Unavailable | Unsupported reason | Truncated reason | Budget reason | Interrupted reason |\n'
     def values(row):

@@ -1,0 +1,10 @@
+{
+  "forge-ai/src/main/java/forge/ai/AiInputContext.java": "874b2f6cb38adb0f20fcbe20baea21d0eb4f7ec293a13057881b97d014ffd0c5",
+  "forge-gui-desktop/src/test/java/forge/ai/AiStackInputContextTest.java": "f30c202e718789e8ae96d404c211f440f092f892b05c109f48189f921686a44d",
+  "forge-gui-desktop/src/test/java/forge/ai/AiInputContextTest.java": "1568c02e2affe32f3fd40105767b4ee082ee59ae69cbc6eeb5d1f76e8d6e5c9f",
+  "tools/decision-records/input_context.py": "3d55cfab9047b18c3460b32b60993bec1d9b57ee0ffc0570a09f5d7ef848bbd1",
+  "tools/decision-records/export.py": "adfaf619664f9f8d9c92b1888f7a1c2acdec24bd5bfca721b9f6b217f5883fe2",
+  "tools/decision-records/coverage_audit.py": "5955e378c34f2978d49faef49b3fe5f85ea55519b89aa53638d9be966c3a4fff",
+  "tools/decision-records/test_input_context.py": "db5031af8f26947c2ee300d8962e5ebe0ca9e354f6f6ccb2d9b4d2746d6b3704",
+  "tools/decision-records/test_stack_input_context.py": "5f83c9dc0c86cc30fb77d6f8befb9231a768a7158432be5ebe6500d0b98bca67"
+}

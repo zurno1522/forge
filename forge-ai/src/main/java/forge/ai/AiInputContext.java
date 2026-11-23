@@ -3,6 +3,9 @@ package forge.ai;
 import forge.game.Game;
 import forge.game.card.Card;
 import forge.game.card.CardView;
+import forge.game.GameObject;
+import forge.game.spellability.SpellAbilityStackInstance;
+import java.util.IdentityHashMap;
 import forge.game.mana.Mana;
 import forge.game.player.Player;
 import forge.game.spellability.SpellAbility;
@@ -19,6 +22,8 @@ import java.util.function.BooleanSupplier;
 
 /** Detached, deliberately partial input at an explicitly audited boundary. Never calls policy. */
 final class AiInputContext {
+    static final int MAX_STACK = 8;
+    static final int MAX_STACK_TARGETS = 16;
     static final int MAX_PLAYERS = 16;
     static final int MAX_CARDS = 128;
     static final int MAX_VISITS = 512;
@@ -26,7 +31,7 @@ final class AiInputContext {
     static final int MAX_COUNTERS = 32;
     static final int MAX_TEXT = 256;
     static final long MAX_GAME_WORK = 256_000;
-    private static final String PROFILE = "PERMITTED_CHOICE_VIEW_V1";
+    private static final String PROFILE = "PERMITTED_CHOICE_VIEW_V2";
     private static final List<ZoneType> ZONES = List.of(ZoneType.Battlefield, ZoneType.Command,
             ZoneType.Graveyard, ZoneType.Exile, ZoneType.Hand, ZoneType.Library);
 
@@ -81,14 +86,14 @@ final class AiInputContext {
         result.put("status", "UNAVAILABLE");
         result.put("coverage", coverage("UNAVAILABLE", "UNAVAILABLE"));
         result.put("policy", null);
-        result.put("diagnostics", Map.of("playerBindings", List.of(), "cardBindings", List.of()));
+        result.put("diagnostics", Map.of("playerBindings", List.of(), "cardBindings", List.of(), "stackBindings", List.of()));
         result.put("omissions", List.of(Map.of("component", "UNSUPPORTED".equals(reason) ? "PERSPECTIVE" : "CONTEXT", "reason", reason)));
         return AiDecisionEvent.freezeMap(result);
     }
 
     private static Map<String, Object> envelope(final Player chooser, final String timing, final String stateBasis) {
         final Map<String, Object> result = new LinkedHashMap<>();
-        result.put("schemaVersion", 1);
+        result.put("schemaVersion", 2);
         result.put("profile", PROFILE);
         result.put("timing", timing);
         result.put("stateBasis", stateBasis);
@@ -99,11 +104,11 @@ final class AiInputContext {
     }
 
     private static Map<String, Object> coverage(final String view, final String disclosures) {
-        return Map.of("playerView", view, "stack", "UNSUPPORTED", "disclosures", disclosures,
+        return Map.of("playerView", view, "stack", "UNAVAILABLE".equals(view) ? "UNAVAILABLE" : "PUBLIC_ROOT_STACK_V1", "disclosures", disclosures,
                 "history", "INCOMPLETE", "options", "DIAGNOSTIC_ONLY");
     }
 
-    private record CardSnapshot(Map<String, Object> permitted, long id, long timestamp) { }
+    private record CardSnapshot(Map<String, Object> permitted, Card card, long id, long timestamp) { }
 
     private static final class Capture {
         private final Player chooser;
@@ -116,6 +121,9 @@ final class AiInputContext {
         private final List<Map<String, Object>> playerBindings = new ArrayList<>();
         private final List<Map<String, Object>> cards = new ArrayList<>();
         private final List<Map<String, Object>> cardBindings = new ArrayList<>();
+        private final List<Map<String, Object>> stackBindings = new ArrayList<>();
+        private final Map<Card, String> currentCardRefs = new IdentityHashMap<>();
+        private final Map<Card, Long> cardIncarnations = new IdentityHashMap<>();
         private final Map<Long, String> playerRefs = new LinkedHashMap<>();
         private int visits;
 
@@ -149,6 +157,140 @@ final class AiInputContext {
             if (value.length() <= MAX_TEXT) { return value; }
             omit("TEXT", "OUTSIDE_CAPTURED_PREFIX");
             return value.substring(0, MAX_TEXT);
+        }
+
+        private Map<String, Object> permittedCard(final Card card, final ZoneType zone) {
+            final CardView view = card.getView();
+            if (!view.canBeShownTo(chooser.getView())) { return null; }
+            // A face-up hidden library card does not pass this test merely by being face up.
+            final boolean identity = !view.isFaceDown() || view.canFaceDownBeShownTo(chooser.getView());
+            final Map<String, Object> visible = new LinkedHashMap<>();
+            visible.put("owner", card.getOwner() == null ? null : playerRefs.get(card.getOwner().getId()));
+            visible.put("controller", card.getController() == null ? null : playerRefs.get(card.getController().getId()));
+            visible.put("zone", zone.name());
+            visible.put("tapped", card.isTapped());
+            visible.put("faceDown", view.isFaceDown());
+            // Inspected name is separate from the characteristics of the current public face.
+            String name = identity ? card.getName() : null;
+            if (identity && view.isFaceDown()) {
+                if (view.getAlternateState() != null) { name = view.getAlternateState().getName(); }
+                else { name = null; omit("ENTITIES", "UNSUPPORTED"); }
+            }
+            visible.put("identityKnown", name != null);
+            visible.put("name", name == null ? null : text(name));
+            visible.put("types", text(card.getType().toString()));
+            visible.put("manaCost", text(card.getManaCost().toString()));
+            visible.put("power", card.isCreature() ? card.getNetPower() : null);
+            visible.put("toughness", card.isCreature() ? card.getNetToughness() : null);
+            final Map<String, Object> counters = new TreeMap<>();
+            for (final var entry : card.getCounters().entrySet()) {
+                if (counters.size() >= MAX_COUNTERS) { omit("COUNTERS", "OUTSIDE_CAPTURED_PREFIX"); break; }
+                if (!work("COUNTERS")) { break; }
+                counters.put(text(entry.getElement().toString()), entry.getCount());
+            }
+            visible.put("counters", counters);
+            return visible;
+        }
+
+        private String publicCardRef(final Card card) {
+            if (card == null || card.getZone() == null) { return null; }
+            final ZoneType zone = card.getZone().getZoneType();
+            if (zone != ZoneType.Battlefield && zone != ZoneType.Command && zone != ZoneType.Graveyard
+                    && zone != ZoneType.Stack && !(zone == ZoneType.Exile && !card.isFaceDown())) { return null; }
+            final Long timestamp = cardIncarnations.get(card);
+            return timestamp != null && timestamp == card.getGameTimestamp() ? currentCardRefs.get(card) : null;
+        }
+
+        /** Top first. Only scalar metadata and currently represented public objects are bound. */
+        private Map<String, Object> stack() {
+            final Game game = chooser.getGame();
+            final List<SpellAbilityStackInstance> instances = new ArrayList<>();
+            final Map<SpellAbility, String> abilityRefs = new IdentityHashMap<>();
+            boolean truncated = false;
+            for (final SpellAbilityStackInstance instance : game.getStack()) {
+                if (instances.size() == MAX_STACK || !work("STACK")) {
+                    truncated = true; omit("STACK", "OUTSIDE_CAPTURED_PREFIX"); break;
+                }
+                final String ref = "s" + instances.size();
+                final SpellAbility ability = instance.getSpellAbility();
+                if (abilityRefs.containsKey(ability)) { abilityRefs.put(ability, null); }
+                else { abilityRefs.put(ability, ref); }
+                instances.add(instance);
+                stackBindings.add(Map.of("entityRef", ref, "id", instance.getId(), "abilityId", ability.getId()));
+            }
+            // Inspect only represented active sources, never enumerate the staging queue.
+            // Retired objects can retain their zone pointer: require exact stored identity too.
+            for (final SpellAbilityStackInstance instance : instances) {
+                final Card card = instance.getSourceCard();
+                if (card == null || card.isLKI() || card.getZone() != game.getStackZone()
+                        || currentCardRefs.containsKey(card)) { continue; }
+                final var currentStackCards = game.getStackZone().getCards();
+                if (!currentStackCards.contains(card) || currentStackCards.get(card) != card) { continue; }
+                if (visits >= MAX_VISITS || cards.size() >= MAX_CARDS) {
+                    omit("STACK", "OUTSIDE_CAPTURED_PREFIX"); break;
+                }
+                if (!work("STACK")) { break; }
+                visits++;
+                final Map<String, Object> projection = permittedCard(card, ZoneType.Stack);
+                if (projection == null) { continue; }
+                final String ref = "c" + cards.size();
+                projection.put("entityRef", ref);
+                cards.add(projection);
+                cardBindings.add(Map.of("entityRef", ref, "id", card.getId(), "gameTimestamp", card.getGameTimestamp()));
+                currentCardRefs.put(card, ref); cardIncarnations.put(card, card.getGameTimestamp());
+            }
+            final List<Map<String, Object>> entries = new ArrayList<>();
+            for (final SpellAbilityStackInstance instance : instances) {
+                if (!work("STACK")) { truncated = true; break; }
+                final SpellAbility ability = instance.getSpellAbility();
+                final String source = publicCardRef(instance.getSourceCard());
+                final boolean known = source != null && Boolean.TRUE.equals(cards.get(Integer.parseInt(source.substring(1))).get("identityKnown"));
+                // A working SA's live target/X fields need not be a publicly committed plan.
+                final boolean details = known && "RULES_STATE".equals(stateBasis);
+                final Map<String, Object> entry = new LinkedHashMap<>();
+                entry.put("entityRef", "s" + entries.size());
+                entry.put("kind", instance.isSpell() ? "SPELL" : "ABILITY");
+                final Player controller = instance.getActivatingPlayer();
+                entry.put("controller", controller == null ? null : playerRefs.get(controller.getId()));
+                if (entry.get("controller") == null) { omit("STACK", "UNRESOLVED_BINDING"); }
+                entry.put("source", source);
+                entry.put("rootX", details ? ability.getXManaCostPaid() : null);
+                List<Map<String, Object>> targets = details ? new ArrayList<>() : null;
+                if (!known) { omit("STACK", source == null ? "UNRESOLVED_BINDING" : "HIDDEN"); }
+                else if (!details) { omit("STACK", "UNSUPPORTED"); }
+                if (details) {
+                    for (final GameObject target : ability.getTargets()) {
+                        if (targets.size() == MAX_STACK_TARGETS) {
+                            omit("STACK", "OUTSIDE_CAPTURED_PREFIX"); targets = null; break;
+                        }
+                        if (!work("STACK")) { targets = null; break; }
+                        final String ref;
+                        if (target instanceof Player player) { ref = playerRefs.get(player.getId()); }
+                        else if (target instanceof Card card) { ref = publicCardRef(card); }
+                        else if (target instanceof SpellAbility spell) { ref = abilityRefs.get(spell); }
+                        else { ref = null; }
+                        if (ref == null) { omit("STACK", "UNRESOLVED_BINDING"); targets = null; break; }
+                        final Map<String, Object> value = new LinkedHashMap<>();
+                        value.put("entityRef", ref);
+                        value.put("dividedAmount", ability.getTargets().getDividedValue(target));
+                        targets.add(value);
+                    }
+                }
+                entry.put("targets", targets);
+                entry.put("targetsCoverage", targets == null ? "UNAVAILABLE" : "ROOT_TARGETS_ONLY");
+                entries.add(entry);
+            }
+            // Cancellation/budget exhaustion causes the entire context to become unavailable at the outer gate.
+            if (entries.size() != stackBindings.size()) { stackBindings.subList(entries.size(), stackBindings.size()).clear(); }
+            final Map<String, Object> result = new LinkedHashMap<>();
+            result.put("entries", entries); result.put("truncated", truncated);
+            final boolean resolving = game.getStack().isResolving();
+            final String resolvingRef = abilityRefs.get(game.getStack().getResolvingAbility());
+            result.put("isResolving", resolving);
+            result.put("resolving", resolving ? resolvingRef : null);
+            result.put("resolvingCoverage", resolving && resolvingRef == null ? "UNAVAILABLE" : "CAPTURED");
+            if (resolving && resolvingRef == null) { omit("STACK", "UNRESOLVED_BINDING"); }
+            return result;
         }
 
         private Map<String, Object> build() {
@@ -196,36 +338,9 @@ final class AiInputContext {
                         }
                         if (!work("ENTITIES")) { complete = false; break; }
                         visits++;
-                        final CardView view = card.getView();
-                        if (!view.canBeShownTo(chooser.getView())) { continue; }
-                        // A face-up hidden library card does not pass this test merely by being face up.
-                        final boolean identity = !view.isFaceDown() || view.canFaceDownBeShownTo(chooser.getView());
-                        final Map<String, Object> visible = new LinkedHashMap<>();
-                        visible.put("owner", card.getOwner() == null ? null : playerRefs.get(card.getOwner().getId()));
-                        visible.put("controller", card.getController() == null ? null : playerRefs.get(card.getController().getId()));
-                        visible.put("zone", zone.name());
-                        visible.put("tapped", card.isTapped());
-                        visible.put("faceDown", view.isFaceDown());
-                        // Inspected name is separate from the characteristics of the current public face.
-                        String name = identity ? card.getName() : null;
-                        if (identity && view.isFaceDown()) {
-                            if (view.getAlternateState() != null) { name = view.getAlternateState().getName(); }
-                            else { name = null; omit("ENTITIES", "UNSUPPORTED"); }
-                        }
-                        visible.put("identityKnown", name != null);
-                        visible.put("name", name == null ? null : text(name));
-                        visible.put("types", text(card.getType().toString()));
-                        visible.put("manaCost", text(card.getManaCost().toString()));
-                        visible.put("power", card.isCreature() ? card.getNetPower() : null);
-                        visible.put("toughness", card.isCreature() ? card.getNetToughness() : null);
-                        final Map<String, Object> counters = new TreeMap<>();
-                        for (final var entry : card.getCounters().entrySet()) {
-                            if (counters.size() >= MAX_COUNTERS) { omit("COUNTERS", "OUTSIDE_CAPTURED_PREFIX"); break; }
-                            if (!work("COUNTERS")) { break; }
-                            counters.put(text(entry.getElement().toString()), entry.getCount());
-                        }
-                        visible.put("counters", counters);
-                        permitted.add(new CardSnapshot(visible, card.getId(), card.getGameTimestamp()));
+                        final Map<String, Object> visible = permittedCard(card, zone);
+                        if (visible == null) { continue; }
+                        permitted.add(new CardSnapshot(visible, card, card.getId(), card.getGameTimestamp()));
                     }
                     if (hiddenOrder && !complete) { permitted.clear(); }
                     // A viewing grant does not necessarily disclose positions within a hidden library.
@@ -239,10 +354,13 @@ final class AiInputContext {
                         visible.putAll(snapshot.permitted());
                         cards.add(visible);
                         cardBindings.add(Map.of("entityRef", ref, "id", snapshot.id(), "gameTimestamp", snapshot.timestamp()));
+                        currentCardRefs.put(snapshot.card(), ref);
+                        cardIncarnations.put(snapshot.card(), snapshot.timestamp());
                     }
                     if (!complete) { break; }
                 }
             }
+            final Map<String, Object> stack = stack();
             if (state.remainingWork() <= 0) { return unavailable(chooser, timing, stateBasis, "BUDGET_EXHAUSTED"); }
             final AiContextDisclosures.Snapshot disclosed = state.disclosures().snapshot();
             final List<Map<String, Object>> facts = new ArrayList<>();
@@ -264,12 +382,13 @@ final class AiInputContext {
             policy.put("chooser", playerRefs.get(chooser.getId()));
             policy.put("players", players);
             policy.put("cards", cards);
+            policy.put("stack", stack);
             policy.put("disclosedFacts", facts);
             final Map<String, Object> result = envelope(chooser, timing, stateBasis);
             result.put("status", omissions.isEmpty() ? "CAPTURED" : "PARTIAL");
             result.put("coverage", coverage("PERMITTED_CURRENT_FIELDS_V1", disclosed.coverage()));
             result.put("policy", policy);
-            result.put("diagnostics", Map.of("playerBindings", playerBindings, "cardBindings", cardBindings));
+            result.put("diagnostics", Map.of("playerBindings", playerBindings, "cardBindings", cardBindings, "stackBindings", stackBindings));
             result.put("omissions", omissions);
             return AiDecisionEvent.freezeMap(result);
         }

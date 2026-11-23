@@ -59,7 +59,7 @@ public class AiInputContextTest extends AITest {
         Assert.assertEquals(card(before, bear).get("tapped"), false);
         Assert.assertEquals(card(after, bear).get("tapped"), true);
         Assert.assertEquals(card(before, bear).get("entityRef"), "c0");
-        Assert.assertEquals(((Map<?, ?>) before.get("coverage")).get("stack"), "UNSUPPORTED");
+        Assert.assertEquals(((Map<?, ?>) before.get("coverage")).get("stack"), "PUBLIC_ROOT_STACK_V1");
         Assert.assertEquals(((Map<?, ?>) before.get("coverage")).get("history"), "INCOMPLETE");
         Assert.assertEquals(((Map<?, ?>) before.get("coverage")).get("options"), "DIAGNOSTIC_ONLY");
         Assert.assertFalse(policy(before).toString().contains("gameTimestamp"));

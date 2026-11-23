@@ -1,0 +1,106 @@
+{
+  "simple": {
+    "contexts": 174,
+    "statuses": {
+      "PARTIAL": 174
+    },
+    "omissions": {
+      "DISCLOSURES:UNSUPPORTED": 174
+    },
+    "stateBases": {
+      "RULES_STATE": 174
+    },
+    "stack": {
+      "nonempty": 0,
+      "resolving": 0,
+      "truncated": 0
+    },
+    "pregameShuffles": [
+      2
+    ],
+    "executionStatuses": {
+      "NORMAL": 1
+    },
+    "fullFilteredByteParity": {
+      "dataset.jsonl": true,
+      "choices.jsonl": true,
+      "examples.jsonl": true,
+      "validation.json": true
+    },
+    "coverageEqualExceptSourceRecords": true,
+    "sourceSha256": {
+      "full": "b596e22975eaae415fd7ed2954f9ec16c1e321f7642708b9475a908e6c79be2e",
+      "decisions": "e3ad98f589178c25b513140f1eaaf3897a05c874edc8844de7234b3a9cb87766"
+    },
+    "previousV1SourceSha256": "d20470a281cd4e264ad84fc3e0097e456d6bf632fbac9ef626672048507270e3",
+    "sameNormalizedEngineEventsAsV1": true,
+    "exporterValidation": {
+      "valid": true,
+      "inputs": 1,
+      "decisions": 58,
+      "checks": [
+        "run/game boundaries",
+        "event order",
+        "schemas and identities",
+        "engine-event references",
+        "visibility constraints",
+        "status/outcome agreement",
+        "timeout/error censoring"
+      ]
+    }
+  },
+  "complex": {
+    "contexts": 341,
+    "statuses": {
+      "PARTIAL": 269,
+      "CAPTURED": 72
+    },
+    "omissions": {
+      "DISCLOSURES:UNSUPPORTED": 269
+    },
+    "stateBases": {
+      "RULES_STATE": 341
+    },
+    "stack": {
+      "nonempty": 93,
+      "resolving": 72,
+      "truncated": 0,
+      "entries": 119,
+      "sourceBound": 119,
+      "rootTargetsCaptured": 119
+    },
+    "pregameShuffles": [
+      2
+    ],
+    "executionStatuses": {
+      "NORMAL": 1
+    },
+    "fullFilteredByteParity": {
+      "dataset.jsonl": true,
+      "choices.jsonl": true,
+      "examples.jsonl": true,
+      "validation.json": true
+    },
+    "coverageEqualExceptSourceRecords": true,
+    "sourceSha256": {
+      "full": "0a1e4ca6a152b6dcca6a327d9fe6639f4e45ada171c53fe2c4632aa87a39a035",
+      "decisions": "6bf21823fbfeae637d3f04c0cc3c3c0334f71867195adf808d723af4000eb119"
+    },
+    "previousV1SourceSha256": "4c6da9e873c29957b1c2a9c85213993294bed47daafb79f5a6622b5fb22a9a96",
+    "sameNormalizedEngineEventsAsV1": false,
+    "exporterValidation": {
+      "valid": true,
+      "inputs": 1,
+      "decisions": 55,
+      "checks": [
+        "run/game boundaries",
+        "event order",
+        "schemas and identities",
+        "engine-event references",
+        "visibility constraints",
+        "status/outcome agreement",
+        "timeout/error censoring"
+      ]
+    }
+  }
+}

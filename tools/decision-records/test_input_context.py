@@ -100,7 +100,7 @@ class InputContextTests(unittest.TestCase):
     def test_unknown_versions_and_malformed_policy_bindings_perspectives_and_coverage_are_rejected(self):
         mutations = {
             'boolean-version': lambda c: c.update(schemaVersion=True),
-            'future-version': lambda c: c.update(schemaVersion=2),
+            'future-version': lambda c: c.update(schemaVersion=3),
             'future-profile': lambda c: c.update(profile='PERMITTED_CHOICE_VIEW_V2'),
             'wrong-chooser': lambda c: c['perspective'].update(chooserPlayerId=0),
             'controlled-policy': lambda c: c['perspective'].update(controllingPlayerId=0),

@@ -2,6 +2,8 @@
 
 Optional inline choice contexts are documented in [the implemented partial-view profile](../../docs/Development/Simulation-Input-Context.md).
 
+New contexts use schema/profile version 2 for [bounded active-stack metadata](../../docs/Development/Simulation-Stack-Input-Context.md). The exporter accepts version 1 unchanged and rejects unknown versions. Root-only targets, hidden/working-state omissions and unresolved bindings remain explicit; stack references do not make option bindings or learning examples complete.
+
 Coverage reports include a versioned `inputCoverageAudit`, even for legacy inputs: observed-record denominators, component coverage, omission reasons and boundary/turn groups. Unobserved choices and complete learning-example counts remain unknown. See [definitions and limits](../../docs/Development/Simulation-Coverage-Reporting.md). Dataset schemas and capture budgets are unchanged.
 
 Decision collection is independent of full game tracing. With your usual Forge launcher, run:
