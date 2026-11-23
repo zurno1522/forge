@@ -58,6 +58,8 @@ Optimization has an independent [ordered design backlog](Simulation-Observation-
 
 ## Validation and measured cost
 
+The timings in this section are historical Gson-probe results. See [OPT-001's production streaming-writer measurements and limits](Simulation-Observation-Cost-Assessment.md) for updated phase attribution; the two serialization paths must not be treated as interchangeable.
+
 The targeted Java run passed 79 tests, including real Intuition resolution with three/fewer available cards, delegated private views, delayed disclosure supersets/stale-zone filtering, immutable face facts, poisoned/closed scopes, paired hidden worlds, game budgets and blocked timeout publication. The full reactor passed: desktop 2,548 tests (six skipped), core 23 and game 23, with no failures. Python passed 112 tests. All 28 exported files across four legacy real traces were byte-identical to the prior exporter.
 
 New simple (seed 12031, Monte Carlo off) and Doctor Who/Ur-Dragon (seed 31003, Monte Carlo on) games completed normally. Both retain two shuffles before GAME_STARTED. Full/filtered datasets, choices, examples and validation outputs match byte-for-byte; coverage differs only in source-record count. The simple game exactly matches normalized baseline engine events. The Monte Carlo game keeps the same winner and turn count but differs in events; timing-limited search is not a deterministic replay guarantee.

@@ -2,7 +2,7 @@
 
 Status: COV-001 implemented; remaining designs proposed. The implemented [input-context profile](Simulation-Input-Context.md) is the baseline at `f115c6f2843`. This plan changes no runtime behavior or coverage claims.
 
-COV-001 is implemented: see [definitions, validation and gap review](Simulation-Coverage-Reporting.md). Subsequent items remain proposed; pause for review before OPT-001.
+COV-001 is implemented: see [definitions, validation and gap review](Simulation-Coverage-Reporting.md). OPT-001 has [phase results and its own gap review](Simulation-Observation-Cost-Assessment.md). COV-002 is next after that review; later coverage items remain proposed.
 
 Coverage work determines which decisions and permitted inputs the dataset represents, when they are captured, and how a selected option can be interpreted. CPU, allocation, retention and storage optimization have a [separate design track](Simulation-Observation-Optimization-Plan.md). Coverage reporting belongs here; performance profiling belongs there.
 

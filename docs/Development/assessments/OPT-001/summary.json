@@ -1,0 +1,1244 @@
+{
+  "schemaVersion": 1,
+  "method": "Production SimulationTraceWriter.write to buffered character-counting sink; two sequential-JVM experiment pairs in reversed order; six measured rounds of 400 operations, 200 warmups per trial plus discarded initial round; separate memory-only samples.",
+  "fixtures": [
+    {
+      "boardCardsPerPlayer": 4,
+      "disclosureFacts": 0,
+      "policySha256": "d151ed1892718ce652294762e0b12121e86e90a159fe22019bf22f65287e6e0d",
+      "controlChoiceCpuMicros": [
+        387.50340125,
+        858.80786
+      ],
+      "controlIncrementalChoiceCpuMicros": [
+        352.6433025,
+        776.7408025
+      ],
+      "controlChoiceAllocatedBytes": [
+        132157.77000000002,
+        131936.48
+      ],
+      "profileChoiceCpuMicros": [
+        353.70101375,
+        353.64309249999997
+      ],
+      "profileChoiceAllocatedBytes": [
+        131936.48,
+        131610.94
+      ],
+      "profilePhaseCpuMicros": {
+        "capture": [
+          108.95240875,
+          87.49898875
+        ],
+        "canonicalOrdering": [
+          13.7579425,
+          11.30876375
+        ],
+        "contextFreeze": [
+          30.55403,
+          23.6700325
+        ],
+        "eventFreeze": [
+          25.071530000000003,
+          32.1255825
+        ],
+        "publication": [
+          207.852085,
+          221.032515
+        ],
+        "serialization": [
+          200.26061875,
+          215.83882375000002
+        ],
+        "disclosureDelivery": [
+          0.0,
+          0.0
+        ]
+      },
+      "profilePhaseAllocatedBytes": {
+        "capture": [
+          82920.0,
+          82024.0
+        ],
+        "canonicalOrdering": [
+          13752.0,
+          13752.0
+        ],
+        "contextFreeze": [
+          28592.0,
+          28592.0
+        ],
+        "eventFreeze": [
+          37232.0,
+          37232.0
+        ],
+        "publication": [
+          10264.48,
+          10466.939999999999
+        ],
+        "serialization": [
+          9592.0,
+          9794.46
+        ],
+        "disclosureDelivery": [
+          0.0,
+          0.0
+        ]
+      },
+      "projectionResidualCpuMicros": [
+        63.51026,
+        51.98383375
+      ],
+      "projectionResidualAllocatedBytes": [
+        40576.0,
+        39680.0
+      ],
+      "disclosureDeliveryCpuMicros": [
+        0.5714825,
+        2.4229725
+      ],
+      "disclosureDeliveryAllocatedBytes": [
+        112.0,
+        112.0
+      ],
+      "frozenContextReachableBytes": [
+        30984,
+        30984
+      ],
+      "disclosureBufferReachableBytes": [
+        40,
+        40
+      ],
+      "sampledPayloadPeakBytes": [
+        57272,
+        57272
+      ],
+      "representativeRawBytes": [
+        5240,
+        5240
+      ],
+      "representativeGzipBytes": [
+        911,
+        918
+      ],
+      "allModesGcWindows": [
+        {
+          "DISABLED": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "COPY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "BASE_CHOICE": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "INPUT_CHOICE": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 1,
+              "gcMillis": 2
+            }
+          },
+          "CAPTURE_ONLY": {
+            "control": {
+              "gcCollections": 1,
+              "gcMillis": 8
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "FREEZE_ONLY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "PUBLISH_ONLY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "SERIALIZE_ONLY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "DISCLOSURE_ONLY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          }
+        },
+        {
+          "DISABLED": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "COPY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "BASE_CHOICE": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "INPUT_CHOICE": {
+            "control": {
+              "gcCollections": 1,
+              "gcMillis": 7
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "CAPTURE_ONLY": {
+            "control": {
+              "gcCollections": 1,
+              "gcMillis": 12
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "FREEZE_ONLY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "PUBLISH_ONLY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "SERIALIZE_ONLY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "DISCLOSURE_ONLY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "boardCardsPerPlayer": 4,
+      "disclosureFacts": 32,
+      "policySha256": "cec0244ae2e88aa5d966d6202a3a3b57b7705e726c2b237eda974ee56d5fcaba",
+      "controlChoiceCpuMicros": [
+        778.62475375,
+        1208.2345675000001
+      ],
+      "controlIncrementalChoiceCpuMicros": [
+        756.1729849999999,
+        1143.77797875
+      ],
+      "controlChoiceAllocatedBytes": [
+        201636.78999999998,
+        201624.48
+      ],
+      "profileChoiceCpuMicros": [
+        717.298545,
+        1009.31525
+      ],
+      "profileChoiceAllocatedBytes": [
+        201696.48,
+        201657.53999999998
+      ],
+      "profilePhaseCpuMicros": {
+        "capture": [
+          142.04257625,
+          216.63184375
+        ],
+        "canonicalOrdering": [
+          11.64104375,
+          18.860318749999998
+        ],
+        "contextFreeze": [
+          42.186095,
+          72.45524499999999
+        ],
+        "eventFreeze": [
+          52.32281125,
+          87.33469
+        ],
+        "publication": [
+          497.59979375,
+          689.16826625
+        ],
+        "serialization": [
+          492.48409625,
+          681.85303375
+        ],
+        "disclosureDelivery": [
+          0.0,
+          0.0
+        ]
+      },
+      "profilePhaseAllocatedBytes": {
+        "capture": [
+          124832.0,
+          124816.45999999999
+        ],
+        "canonicalOrdering": [
+          13752.0,
+          13752.0
+        ],
+        "contextFreeze": [
+          47528.0,
+          47528.0
+        ],
+        "eventFreeze": [
+          62016.0,
+          62016.0
+        ],
+        "publication": [
+          13216.48,
+          13193.08
+        ],
+        "serialization": [
+          12568.0,
+          12568.0
+        ],
+        "disclosureDelivery": [
+          0.0,
+          0.0
+        ]
+      },
+      "projectionResidualCpuMicros": [
+        86.666255,
+        130.37932625000002
+      ],
+      "projectionResidualAllocatedBytes": [
+        63552.0,
+        63536.46
+      ],
+      "disclosureDeliveryCpuMicros": [
+        14.70051125,
+        41.42185375
+      ],
+      "disclosureDeliveryAllocatedBytes": [
+        16336.0,
+        16336.0
+      ],
+      "frozenContextReachableBytes": [
+        52912,
+        52912
+      ],
+      "disclosureBufferReachableBytes": [
+        19896,
+        19896
+      ],
+      "sampledPayloadPeakBytes": [
+        96192,
+        96192
+      ],
+      "representativeRawBytes": [
+        12595,
+        12595
+      ],
+      "representativeGzipBytes": [
+        1100,
+        1097
+      ],
+      "allModesGcWindows": [
+        {
+          "DISABLED": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "COPY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "BASE_CHOICE": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "INPUT_CHOICE": {
+            "control": {
+              "gcCollections": 1,
+              "gcMillis": 8
+            },
+            "profiled": {
+              "gcCollections": 3,
+              "gcMillis": 18
+            }
+          },
+          "CAPTURE_ONLY": {
+            "control": {
+              "gcCollections": 1,
+              "gcMillis": 7
+            },
+            "profiled": {
+              "gcCollections": 3,
+              "gcMillis": 26
+            }
+          },
+          "FREEZE_ONLY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "PUBLISH_ONLY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "SERIALIZE_ONLY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "DISCLOSURE_ONLY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          }
+        },
+        {
+          "DISABLED": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "COPY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "BASE_CHOICE": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "INPUT_CHOICE": {
+            "control": {
+              "gcCollections": 1,
+              "gcMillis": 11
+            },
+            "profiled": {
+              "gcCollections": 3,
+              "gcMillis": 18
+            }
+          },
+          "CAPTURE_ONLY": {
+            "control": {
+              "gcCollections": 3,
+              "gcMillis": 27
+            },
+            "profiled": {
+              "gcCollections": 1,
+              "gcMillis": 13
+            }
+          },
+          "FREEZE_ONLY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "PUBLISH_ONLY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "SERIALIZE_ONLY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "DISCLOSURE_ONLY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "boardCardsPerPlayer": 30,
+      "disclosureFacts": 0,
+      "policySha256": "29c076dcc6a78bf3ffc96b4573bb13b4e3471598e53e0cb74fc3f6c87d0293a7",
+      "controlChoiceCpuMicros": [
+        1196.08286375,
+        2039.6472937500002
+      ],
+      "controlIncrementalChoiceCpuMicros": [
+        1167.24742625,
+        1957.7382000000002
+      ],
+      "controlChoiceAllocatedBytes": [
+        459224.48,
+        459224.48
+      ],
+      "profileChoiceCpuMicros": [
+        1171.40106125,
+        1683.7558087500001
+      ],
+      "profileChoiceAllocatedBytes": [
+        459272.48,
+        459248.48
+      ],
+      "profilePhaseCpuMicros": {
+        "capture": [
+          273.66759,
+          416.241275
+        ],
+        "canonicalOrdering": [
+          11.368906249999998,
+          20.979747500000002
+        ],
+        "contextFreeze": [
+          94.51065875,
+          122.25706249999999
+        ],
+        "eventFreeze": [
+          94.47327625,
+          168.64921625
+        ],
+        "publication": [
+          795.34119875,
+          1098.80358875
+        ],
+        "serialization": [
+          786.6628275,
+          1086.5337212499999
+        ],
+        "disclosureDelivery": [
+          0.0,
+          0.0
+        ]
+      },
+      "profilePhaseAllocatedBytes": {
+        "capture": [
+          291496.0,
+          291472.0
+        ],
+        "canonicalOrdering": [
+          13752.0,
+          13752.0
+        ],
+        "contextFreeze": [
+          105248.0,
+          105248.0
+        ],
+        "eventFreeze": [
+          130944.0,
+          130944.0
+        ],
+        "publication": [
+          35176.48,
+          35176.48
+        ],
+        "serialization": [
+          34552.0,
+          34552.0
+        ],
+        "disclosureDelivery": [
+          0.0,
+          0.0
+        ]
+      },
+      "projectionResidualCpuMicros": [
+        164.71694250000002,
+        270.41738250000003
+      ],
+      "projectionResidualAllocatedBytes": [
+        172496.0,
+        172472.0
+      ],
+      "disclosureDeliveryCpuMicros": [
+        0.13419625,
+        0.32782875
+      ],
+      "disclosureDeliveryAllocatedBytes": [
+        112.0,
+        112.0
+      ],
+      "frozenContextReachableBytes": [
+        104904,
+        104904
+      ],
+      "disclosureBufferReachableBytes": [
+        40,
+        40
+      ],
+      "sampledPayloadPeakBytes": [
+        191536,
+        191536
+      ],
+      "representativeRawBytes": [
+        19954,
+        19954
+      ],
+      "representativeGzipBytes": [
+        1541,
+        1545
+      ],
+      "allModesGcWindows": [
+        {
+          "DISABLED": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "COPY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "BASE_CHOICE": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "INPUT_CHOICE": {
+            "control": {
+              "gcCollections": 2,
+              "gcMillis": 17
+            },
+            "profiled": {
+              "gcCollections": 4,
+              "gcMillis": 32
+            }
+          },
+          "CAPTURE_ONLY": {
+            "control": {
+              "gcCollections": 1,
+              "gcMillis": 5
+            },
+            "profiled": {
+              "gcCollections": 3,
+              "gcMillis": 15
+            }
+          },
+          "FREEZE_ONLY": {
+            "control": {
+              "gcCollections": 1,
+              "gcMillis": 9
+            },
+            "profiled": {
+              "gcCollections": 1,
+              "gcMillis": 7
+            }
+          },
+          "PUBLISH_ONLY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "SERIALIZE_ONLY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "DISCLOSURE_ONLY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          }
+        },
+        {
+          "DISABLED": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "COPY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "BASE_CHOICE": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "INPUT_CHOICE": {
+            "control": {
+              "gcCollections": 4,
+              "gcMillis": 53
+            },
+            "profiled": {
+              "gcCollections": 3,
+              "gcMillis": 28
+            }
+          },
+          "CAPTURE_ONLY": {
+            "control": {
+              "gcCollections": 1,
+              "gcMillis": 14
+            },
+            "profiled": {
+              "gcCollections": 2,
+              "gcMillis": 25
+            }
+          },
+          "FREEZE_ONLY": {
+            "control": {
+              "gcCollections": 1,
+              "gcMillis": 16
+            },
+            "profiled": {
+              "gcCollections": 1,
+              "gcMillis": 18
+            }
+          },
+          "PUBLISH_ONLY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "SERIALIZE_ONLY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "DISCLOSURE_ONLY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "boardCardsPerPlayer": 30,
+      "disclosureFacts": 32,
+      "policySha256": "76043f49d18bc6b81ba2d575114f85f65c5da85fdea506e9874171a0dc72bfb4",
+      "controlChoiceCpuMicros": [
+        1525.0949975,
+        1963.093075
+      ],
+      "controlIncrementalChoiceCpuMicros": [
+        1499.66412625,
+        1930.11724125
+      ],
+      "controlChoiceAllocatedBytes": [
+        529792.48,
+        529792.48
+      ],
+      "profileChoiceCpuMicros": [
+        1407.14468125,
+        2046.6507187500001
+      ],
+      "profileChoiceAllocatedBytes": [
+        529840.48,
+        529816.48
+      ],
+      "profilePhaseCpuMicros": {
+        "capture": [
+          289.00173874999996,
+          463.60147875
+        ],
+        "canonicalOrdering": [
+          11.15147,
+          19.9566825
+        ],
+        "contextFreeze": [
+          94.91872624999999,
+          148.92654625
+        ],
+        "eventFreeze": [
+          109.38903250000001,
+          191.49451125
+        ],
+        "publication": [
+          998.9770424999999,
+          1378.3408249999998
+        ],
+        "serialization": [
+          992.7647525,
+          1368.8357125
+        ],
+        "disclosureDelivery": [
+          0.0,
+          0.0
+        ]
+      },
+      "profilePhaseAllocatedBytes": {
+        "capture": [
+          334304.0,
+          334280.0
+        ],
+        "canonicalOrdering": [
+          13752.0,
+          13752.0
+        ],
+        "contextFreeze": [
+          124184.0,
+          124184.0
+        ],
+        "eventFreeze": [
+          155728.0,
+          155728.0
+        ],
+        "publication": [
+          38152.48,
+          38152.48
+        ],
+        "serialization": [
+          37528.0,
+          37528.0
+        ],
+        "disclosureDelivery": [
+          0.0,
+          0.0
+        ]
+      },
+      "projectionResidualCpuMicros": [
+        183.71022749999997,
+        298.53163625
+      ],
+      "projectionResidualAllocatedBytes": [
+        196368.0,
+        196344.0
+      ],
+      "disclosureDeliveryCpuMicros": [
+        10.355628750000001,
+        12.992655
+      ],
+      "disclosureDeliveryAllocatedBytes": [
+        16336.0,
+        16336.0
+      ],
+      "frozenContextReachableBytes": [
+        126832,
+        126832
+      ],
+      "disclosureBufferReachableBytes": [
+        19896,
+        19896
+      ],
+      "sampledPayloadPeakBytes": [
+        230456,
+        230456
+      ],
+      "representativeRawBytes": [
+        27309,
+        27309
+      ],
+      "representativeGzipBytes": [
+        1723,
+        1725
+      ],
+      "allModesGcWindows": [
+        {
+          "DISABLED": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "COPY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "BASE_CHOICE": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "INPUT_CHOICE": {
+            "control": {
+              "gcCollections": 5,
+              "gcMillis": 34
+            },
+            "profiled": {
+              "gcCollections": 5,
+              "gcMillis": 25
+            }
+          },
+          "CAPTURE_ONLY": {
+            "control": {
+              "gcCollections": 1,
+              "gcMillis": 6
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "FREEZE_ONLY": {
+            "control": {
+              "gcCollections": 1,
+              "gcMillis": 9
+            },
+            "profiled": {
+              "gcCollections": 4,
+              "gcMillis": 12
+            }
+          },
+          "PUBLISH_ONLY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "SERIALIZE_ONLY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "DISCLOSURE_ONLY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          }
+        },
+        {
+          "DISABLED": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "COPY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "BASE_CHOICE": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "INPUT_CHOICE": {
+            "control": {
+              "gcCollections": 5,
+              "gcMillis": 37
+            },
+            "profiled": {
+              "gcCollections": 2,
+              "gcMillis": 12
+            }
+          },
+          "CAPTURE_ONLY": {
+            "control": {
+              "gcCollections": 4,
+              "gcMillis": 35
+            },
+            "profiled": {
+              "gcCollections": 3,
+              "gcMillis": 18
+            }
+          },
+          "FREEZE_ONLY": {
+            "control": {
+              "gcCollections": 1,
+              "gcMillis": 9
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "PUBLISH_ONLY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "SERIALIZE_ONLY": {
+            "control": {
+              "gcCollections": 1,
+              "gcMillis": 9
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          },
+          "DISCLOSURE_ONLY": {
+            "control": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            },
+            "profiled": {
+              "gcCollections": 0,
+              "gcMillis": 0
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Inclusive phase spans overlap. Capture includes its internal freeze and ordering; publication includes sink serialization.",
+    "Exclusive residuals subtract child spans per round; they include checks, projection/buffer work and profiling overhead.",
+    "Profiled and control run in separate sequential JVMs. Differences include profiling perturbation and JIT/run variation, not a correction factor.",
+    "Serialization uses the production SimulationTraceWriter and BufferedWriter against a character-counting sink; collector envelope construction, UTF-8 encoding and filesystem I/O are excluded.",
+    "Memory-only rows sample union-reachable JSON payloads at freeze-return and serialization boundaries. This is a sampled lower bound, not exact peak transient heap.",
+    "GC deltas cover the process measurement window and can include setup/JIT garbage. They do not attribute GC causality to one operation.",
+    "Fixtures have two players, 4/30 battlefield cards per player, 7-card hands, 32-card libraries and 0/32 disclosures. They do not establish multiplayer/long-game behavior.",
+    "No gameplay policy is executed. Measured rounds provide a range, not a confidence interval."
+  ]
+}

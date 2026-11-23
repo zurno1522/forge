@@ -1,0 +1,33 @@
+{
+  "item": "OPT-001",
+  "baseline": "407ac374fcf",
+  "pythonTests": 127,
+  "failures": 0,
+  "independentJvms": 4,
+  "fixtureConfigurations": 4,
+  "modes": 9,
+  "measuredRoundsPerCase": 6,
+  "operationsPerMeasuredRound": 400,
+  "memoryOnlySamples": 24,
+  "phaseAccounting": true,
+  "controlProfilePolicyEquivalence": true,
+  "callbackOnceAndEventCounts": true,
+  "disabledCopyNoProjection": true,
+  "unavailableCaptureSamples": 0,
+  "productionRuntimeChanges": false,
+  "productionTraceWriterEncoder": true,
+  "exactTransientHeapPeakMeasured": false,
+  "rawArtifacts": {
+    "measurements-a.json.gz": "10aa52b1313f27726e0d93d7f81eb2eb21d3e166f2ce1c1e1933bfd3a9dfac12",
+    "measurements-b.json.gz": "fe610b6807c14ff5d60970e1df888f71804e8c904b4aba297629957d3986e24c"
+  },
+  "serializationCharacterAccounting": true,
+  "toolSourceSha256": {
+    "tools/decision-records/input-context-benchmark/InputContextPhaseMetrics.java": "bbcd3bbcb4ed4c6cdac47e7eac93c1d8152a9980519fc217d262cade545d880d",
+    "tools/decision-records/input-context-benchmark/InputContextPhaseAgent.java": "6adb020eb6bf2b8d8e26ffe5e366bbf44a67fb960e2da814d2b7bb3731c67233",
+    "tools/decision-records/input-context-benchmark/InputContextPhaseProbe.java": "80eb833a7956e8cbec1339a1863e8ef7ccaac6f64090b145c333f6f52a02c910",
+    "tools/decision-records/input-context-benchmark/TraceWriterProbeSink.java": "ed99a4f5d198edff45b8ce84e82f2cf4e65ae60cf3d4b7be3a822eaa872d3ad0",
+    "tools/decision-records/input-context-benchmark/run-phases.py": "eedbe06b1fdc5c38e2b9546184ba0ab4ff6106922f7380d859d97eaedff30681",
+    "tools/decision-records/input-context-benchmark/summarize-phases.py": "74ec3bf1683d75bfa328251b482d7b9c94ba78ecfa145aadc8f0160ad379221d"
+  }
+}
