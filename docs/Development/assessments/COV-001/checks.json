@@ -1,0 +1,18 @@
+{
+  "item": "COV-001",
+  "baseline": "776dfa3d8f1",
+  "pythonTests": 121,
+  "failures": 0,
+  "savedRealStreams": 8,
+  "unchangedDatasetChoiceExampleManifestValidationOutputs": true,
+  "existingCoverageFieldsUnchanged": true,
+  "fullFilteredAuditParity": true,
+  "newJavaGameplayRuns": false,
+  "performanceMeasurement": false,
+  "sources": {
+    "tools/decision-records/coverage_audit.py": "385e1a8d660730ebdb22ddafe03f7c67386299e3a978ccacb9ffbf409e6424e8",
+    "tools/decision-records/export.py": "0ce45d28183041de87dfe391b31ed41e975fb3474fcf6a23a0e970266fe4ffc7",
+    "tools/decision-records/choice_events.py": "9c0eaf162b897e63af5e76ae55bfffc603b3965aead94432b46b18e2922ccb68"
+  },
+  "pauseBefore": "OPT-001"
+}

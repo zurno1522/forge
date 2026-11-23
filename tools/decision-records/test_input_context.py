@@ -50,7 +50,7 @@ class InputContextTests(unittest.TestCase):
         path.write_text(''.join(json.dumps(row) + '\n' for row in rows))
         return path
 
-    def test_legacy_absence_keeps_old_outputs_and_does_not_claim_empty_contexts(self):
+    def test_legacy_absence_keeps_dataset_format_and_does_not_claim_empty_contexts(self):
         for standalone in (False, True):
             rows = choices_fixture() if standalone else fixture()
             output = self.root / str(standalone)
@@ -177,6 +177,9 @@ class InputContextTests(unittest.TestCase):
         rows[2]['choice'].update(choiceType='NUMBER_SELECTION', boundary='CONTROLLER_ANNOUNCEMENT',
                                 options=dict(coverage='OBSERVED_RANGE', minimum=0, maximum=2))
         rows[3]['choice']['selection'] = dict(value=1, optionIndex=None, domainMatch='WITHIN_OBSERVED_DOMAIN')
+        # Announcement is an audited outer operation, not necessarily a fresh selector.
+        self.assertEqual(module.export([self.write(rows, 'announcement-operation.jsonl')])['inputContextRecords'], 1)
+        rows[2]['choice']['inputContext']['timing'] = 'BEFORE_SELECTOR'
         with self.assertRaises(module.InvalidData): module.export([self.write(rows, 'late-input.jsonl')])
 
     def test_disclosure_superset_does_not_infer_membership_or_backfill_parent_and_full_filtered_views_match(self):

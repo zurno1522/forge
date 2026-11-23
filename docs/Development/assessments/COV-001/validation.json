@@ -1,0 +1,440 @@
+{
+  "baseline-simple-full": {
+    "sourceSha256": "1bdd695f01f0fb11e4c0b10d3b24a7ab444ac981ef65089ca8a39234102f2624",
+    "unchangedFiles": [
+      "manifest.json",
+      "examples.jsonl",
+      "validation.json",
+      "dataset.jsonl",
+      "choices.jsonl"
+    ],
+    "existingCoverageFieldsUnchanged": true,
+    "auditTotals": {
+      "records": 209,
+      "contextStatuses": {
+        "ABSENT": 209
+      },
+      "inputBoundaries": {
+        "KNOWN_INPUT_BOUNDARY_V1": 174,
+        "NO_ESTABLISHED_INPUT_BOUNDARY_V1": 35
+      },
+      "timings": {},
+      "stateBases": {},
+      "components": {},
+      "omissionReasons": {},
+      "omissionComponents": {},
+      "optionBindings": {
+        "NO_CONTEXT": 209
+      },
+      "captureOmissionMetadata": {
+        "NESTED_TARGET:DECLARED": 58,
+        "SEARCH_OPERATION:UNAVAILABLE": 58
+      },
+      "knownUnrecordedCaptures": {
+        "NESTED_TARGET:interrupted": 0,
+        "NESTED_TARGET:budget": 0
+      }
+    },
+    "owners": {
+      "DECISION": 58,
+      "NESTED_TARGET": 9,
+      "CHOICE": 142
+    },
+    "boundaryGroups": 6,
+    "turnGroups": 33
+  },
+  "baseline-simple-decisions": {
+    "sourceSha256": "8bb10afcb7011577f702db453e14871296c130eccd9c435514b2064b3fd38080",
+    "unchangedFiles": [
+      "manifest.json",
+      "examples.jsonl",
+      "validation.json",
+      "dataset.jsonl",
+      "choices.jsonl"
+    ],
+    "existingCoverageFieldsUnchanged": true,
+    "auditTotals": {
+      "records": 209,
+      "contextStatuses": {
+        "ABSENT": 209
+      },
+      "inputBoundaries": {
+        "KNOWN_INPUT_BOUNDARY_V1": 174,
+        "NO_ESTABLISHED_INPUT_BOUNDARY_V1": 35
+      },
+      "timings": {},
+      "stateBases": {},
+      "components": {},
+      "omissionReasons": {},
+      "omissionComponents": {},
+      "optionBindings": {
+        "NO_CONTEXT": 209
+      },
+      "captureOmissionMetadata": {
+        "NESTED_TARGET:DECLARED": 58,
+        "SEARCH_OPERATION:UNAVAILABLE": 58
+      },
+      "knownUnrecordedCaptures": {
+        "NESTED_TARGET:interrupted": 0,
+        "NESTED_TARGET:budget": 0
+      }
+    },
+    "owners": {
+      "DECISION": 58,
+      "NESTED_TARGET": 9,
+      "CHOICE": 142
+    },
+    "boundaryGroups": 6,
+    "turnGroups": 33
+  },
+  "baseline-complex-full": {
+    "sourceSha256": "d8b17aa6ae929113cd507021f8e89e082e52c3db22f3625bc052b3d754303ca1",
+    "unchangedFiles": [
+      "manifest.json",
+      "examples.jsonl",
+      "validation.json",
+      "dataset.jsonl",
+      "choices.jsonl"
+    ],
+    "existingCoverageFieldsUnchanged": true,
+    "auditTotals": {
+      "records": 426,
+      "contextStatuses": {
+        "ABSENT": 426
+      },
+      "inputBoundaries": {
+        "KNOWN_INPUT_BOUNDARY_V1": 334,
+        "NO_ESTABLISHED_INPUT_BOUNDARY_V1": 92
+      },
+      "timings": {},
+      "stateBases": {},
+      "components": {},
+      "omissionReasons": {},
+      "omissionComponents": {},
+      "optionBindings": {
+        "NO_CONTEXT": 426
+      },
+      "captureOmissionMetadata": {
+        "NESTED_TARGET:DECLARED": 56,
+        "SEARCH_OPERATION:UNAVAILABLE": 50,
+        "SEARCH_OPERATION:DECLARED": 6
+      },
+      "knownUnrecordedCaptures": {
+        "NESTED_TARGET:budget": 0,
+        "NESTED_TARGET:interrupted": 0,
+        "SEARCH_OPERATION:budget": 0,
+        "SEARCH_OPERATION:interrupted": 0
+      }
+    },
+    "owners": {
+      "DECISION": 56,
+      "NESTED_TARGET": 40,
+      "SEARCH_OPERATION": 6,
+      "CHOICE": 324
+    },
+    "boundaryGroups": 7,
+    "turnGroups": 41
+  },
+  "baseline-complex-decisions": {
+    "sourceSha256": "2852490c28eb0ebd19f444d2b537695a0f41de80feb6bff2a2300a1496dc6cc1",
+    "unchangedFiles": [
+      "manifest.json",
+      "examples.jsonl",
+      "validation.json",
+      "dataset.jsonl",
+      "choices.jsonl"
+    ],
+    "existingCoverageFieldsUnchanged": true,
+    "auditTotals": {
+      "records": 426,
+      "contextStatuses": {
+        "ABSENT": 426
+      },
+      "inputBoundaries": {
+        "KNOWN_INPUT_BOUNDARY_V1": 334,
+        "NO_ESTABLISHED_INPUT_BOUNDARY_V1": 92
+      },
+      "timings": {},
+      "stateBases": {},
+      "components": {},
+      "omissionReasons": {},
+      "omissionComponents": {},
+      "optionBindings": {
+        "NO_CONTEXT": 426
+      },
+      "captureOmissionMetadata": {
+        "NESTED_TARGET:DECLARED": 56,
+        "SEARCH_OPERATION:UNAVAILABLE": 50,
+        "SEARCH_OPERATION:DECLARED": 6
+      },
+      "knownUnrecordedCaptures": {
+        "NESTED_TARGET:budget": 0,
+        "NESTED_TARGET:interrupted": 0,
+        "SEARCH_OPERATION:budget": 0,
+        "SEARCH_OPERATION:interrupted": 0
+      }
+    },
+    "owners": {
+      "DECISION": 56,
+      "NESTED_TARGET": 40,
+      "SEARCH_OPERATION": 6,
+      "CHOICE": 324
+    },
+    "boundaryGroups": 7,
+    "turnGroups": 41
+  },
+  "new-simple-full": {
+    "sourceSha256": "d20470a281cd4e264ad84fc3e0097e456d6bf632fbac9ef626672048507270e3",
+    "unchangedFiles": [
+      "manifest.json",
+      "examples.jsonl",
+      "validation.json",
+      "dataset.jsonl",
+      "choices.jsonl"
+    ],
+    "existingCoverageFieldsUnchanged": true,
+    "auditTotals": {
+      "records": 209,
+      "contextStatuses": {
+        "PARTIAL": 174,
+        "ABSENT": 35
+      },
+      "inputBoundaries": {
+        "KNOWN_INPUT_BOUNDARY_V1": 174,
+        "NO_ESTABLISHED_INPUT_BOUNDARY_V1": 35
+      },
+      "timings": {
+        "BEFORE_OPERATION": 174
+      },
+      "stateBases": {
+        "RULES_STATE": 174
+      },
+      "components": {
+        "stack:UNSUPPORTED": 174,
+        "history:INCOMPLETE": 174,
+        "options:DIAGNOSTIC_ONLY": 174,
+        "disclosures:UNSUPPORTED_PRIOR_SCOPE": 174,
+        "playerView:PERMITTED_CURRENT_FIELDS_V1": 174
+      },
+      "omissionReasons": {
+        "UNSUPPORTED": 174
+      },
+      "omissionComponents": {
+        "DISCLOSURES:UNSUPPORTED": 174
+      },
+      "optionBindings": {
+        "DIAGNOSTIC_ONLY_V1": 174,
+        "NO_CONTEXT": 35
+      },
+      "captureOmissionMetadata": {
+        "NESTED_TARGET:DECLARED": 58,
+        "SEARCH_OPERATION:UNAVAILABLE": 58
+      },
+      "knownUnrecordedCaptures": {
+        "NESTED_TARGET:interrupted": 0,
+        "NESTED_TARGET:budget": 0
+      }
+    },
+    "owners": {
+      "DECISION": 58,
+      "NESTED_TARGET": 9,
+      "CHOICE": 142
+    },
+    "boundaryGroups": 6,
+    "turnGroups": 33
+  },
+  "new-simple-decisions": {
+    "sourceSha256": "8bdec3e793ef05e7cab41a5e47fa6bd6c45e8715e378d197322da7e6ffdf9906",
+    "unchangedFiles": [
+      "manifest.json",
+      "examples.jsonl",
+      "validation.json",
+      "dataset.jsonl",
+      "choices.jsonl"
+    ],
+    "existingCoverageFieldsUnchanged": true,
+    "auditTotals": {
+      "records": 209,
+      "contextStatuses": {
+        "PARTIAL": 174,
+        "ABSENT": 35
+      },
+      "inputBoundaries": {
+        "KNOWN_INPUT_BOUNDARY_V1": 174,
+        "NO_ESTABLISHED_INPUT_BOUNDARY_V1": 35
+      },
+      "timings": {
+        "BEFORE_OPERATION": 174
+      },
+      "stateBases": {
+        "RULES_STATE": 174
+      },
+      "components": {
+        "stack:UNSUPPORTED": 174,
+        "history:INCOMPLETE": 174,
+        "options:DIAGNOSTIC_ONLY": 174,
+        "disclosures:UNSUPPORTED_PRIOR_SCOPE": 174,
+        "playerView:PERMITTED_CURRENT_FIELDS_V1": 174
+      },
+      "omissionReasons": {
+        "UNSUPPORTED": 174
+      },
+      "omissionComponents": {
+        "DISCLOSURES:UNSUPPORTED": 174
+      },
+      "optionBindings": {
+        "DIAGNOSTIC_ONLY_V1": 174,
+        "NO_CONTEXT": 35
+      },
+      "captureOmissionMetadata": {
+        "NESTED_TARGET:DECLARED": 58,
+        "SEARCH_OPERATION:UNAVAILABLE": 58
+      },
+      "knownUnrecordedCaptures": {
+        "NESTED_TARGET:interrupted": 0,
+        "NESTED_TARGET:budget": 0
+      }
+    },
+    "owners": {
+      "DECISION": 58,
+      "NESTED_TARGET": 9,
+      "CHOICE": 142
+    },
+    "boundaryGroups": 6,
+    "turnGroups": 33
+  },
+  "new-complex-full": {
+    "sourceSha256": "4c6da9e873c29957b1c2a9c85213993294bed47daafb79f5a6622b5fb22a9a96",
+    "unchangedFiles": [
+      "manifest.json",
+      "examples.jsonl",
+      "validation.json",
+      "dataset.jsonl",
+      "choices.jsonl"
+    ],
+    "existingCoverageFieldsUnchanged": true,
+    "auditTotals": {
+      "records": 431,
+      "contextStatuses": {
+        "PARTIAL": 270,
+        "ABSENT": 91,
+        "CAPTURED": 70
+      },
+      "inputBoundaries": {
+        "KNOWN_INPUT_BOUNDARY_V1": 340,
+        "NO_ESTABLISHED_INPUT_BOUNDARY_V1": 91
+      },
+      "timings": {
+        "BEFORE_OPERATION": 334,
+        "BEFORE_SELECTOR": 6
+      },
+      "stateBases": {
+        "RULES_STATE": 340
+      },
+      "components": {
+        "playerView:PERMITTED_CURRENT_FIELDS_V1": 340,
+        "stack:UNSUPPORTED": 340,
+        "history:INCOMPLETE": 340,
+        "options:DIAGNOSTIC_ONLY": 340,
+        "disclosures:UNSUPPORTED_PRIOR_SCOPE": 270,
+        "disclosures:STACK_RESOLUTION": 70
+      },
+      "omissionReasons": {
+        "UNSUPPORTED": 270
+      },
+      "omissionComponents": {
+        "DISCLOSURES:UNSUPPORTED": 270
+      },
+      "optionBindings": {
+        "DIAGNOSTIC_ONLY_V1": 340,
+        "NO_CONTEXT": 91
+      },
+      "captureOmissionMetadata": {
+        "NESTED_TARGET:DECLARED": 56,
+        "SEARCH_OPERATION:UNAVAILABLE": 50,
+        "SEARCH_OPERATION:DECLARED": 6
+      },
+      "knownUnrecordedCaptures": {
+        "NESTED_TARGET:budget": 0,
+        "NESTED_TARGET:interrupted": 0,
+        "SEARCH_OPERATION:budget": 0,
+        "SEARCH_OPERATION:interrupted": 0
+      }
+    },
+    "owners": {
+      "DECISION": 56,
+      "NESTED_TARGET": 40,
+      "SEARCH_OPERATION": 6,
+      "CHOICE": 329
+    },
+    "boundaryGroups": 8,
+    "turnGroups": 41
+  },
+  "new-complex-decisions": {
+    "sourceSha256": "0b4634080c71aa4ea8c62fd494a1dd369cd2d455ae67ff01bffee69ddf80b5c1",
+    "unchangedFiles": [
+      "manifest.json",
+      "examples.jsonl",
+      "validation.json",
+      "dataset.jsonl",
+      "choices.jsonl"
+    ],
+    "existingCoverageFieldsUnchanged": true,
+    "auditTotals": {
+      "records": 431,
+      "contextStatuses": {
+        "PARTIAL": 270,
+        "ABSENT": 91,
+        "CAPTURED": 70
+      },
+      "inputBoundaries": {
+        "KNOWN_INPUT_BOUNDARY_V1": 340,
+        "NO_ESTABLISHED_INPUT_BOUNDARY_V1": 91
+      },
+      "timings": {
+        "BEFORE_OPERATION": 334,
+        "BEFORE_SELECTOR": 6
+      },
+      "stateBases": {
+        "RULES_STATE": 340
+      },
+      "components": {
+        "playerView:PERMITTED_CURRENT_FIELDS_V1": 340,
+        "stack:UNSUPPORTED": 340,
+        "history:INCOMPLETE": 340,
+        "options:DIAGNOSTIC_ONLY": 340,
+        "disclosures:UNSUPPORTED_PRIOR_SCOPE": 270,
+        "disclosures:STACK_RESOLUTION": 70
+      },
+      "omissionReasons": {
+        "UNSUPPORTED": 270
+      },
+      "omissionComponents": {
+        "DISCLOSURES:UNSUPPORTED": 270
+      },
+      "optionBindings": {
+        "DIAGNOSTIC_ONLY_V1": 340,
+        "NO_CONTEXT": 91
+      },
+      "captureOmissionMetadata": {
+        "NESTED_TARGET:DECLARED": 56,
+        "SEARCH_OPERATION:UNAVAILABLE": 50,
+        "SEARCH_OPERATION:DECLARED": 6
+      },
+      "knownUnrecordedCaptures": {
+        "NESTED_TARGET:budget": 0,
+        "NESTED_TARGET:interrupted": 0,
+        "SEARCH_OPERATION:budget": 0,
+        "SEARCH_OPERATION:interrupted": 0
+      }
+    },
+    "owners": {
+      "DECISION": 56,
+      "NESTED_TARGET": 40,
+      "SEARCH_OPERATION": 6,
+      "CHOICE": 329
+    },
+    "boundaryGroups": 8,
+    "turnGroups": 41
+  }
+}

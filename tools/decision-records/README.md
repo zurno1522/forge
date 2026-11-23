@@ -2,6 +2,8 @@
 
 Optional inline choice contexts are documented in [the implemented partial-view profile](../../docs/Development/Simulation-Input-Context.md).
 
+Coverage reports include a versioned `inputCoverageAudit`, even for legacy inputs: observed-record denominators, component coverage, omission reasons and boundary/turn groups. Unobserved choices and complete learning-example counts remain unknown. See [definitions and limits](../../docs/Development/Simulation-Coverage-Reporting.md). Dataset schemas and capture budgets are unchanged.
+
 Decision collection is independent of full game tracing. With your usual Forge launcher, run:
 
 ```sh
@@ -40,7 +42,7 @@ A setup timeout may finalize an administrative draw before `GAME_STARTED`. It re
 
 An `EXCEPTION` game can end without `GAME_FINISHED` or an outcome. The exporter preserves its available decisions and failure diagnostics when the authoritative game-execution and run-finish records are present. These decisions are censored. A game with decisions still requires `GAME_STARTED`; normal and timeout games still require their existing outcome/finish records.
 
-The exporter validates into a private temporary SQLite spool, including duplicate IDs, action history, run/game state and coverage aggregates. It materializes output from those validated bytes, so it does not reread changing source files. No database server or persistent database is required; the spool is deleted on completion or failure. It uses the system temporary directory (Python honors `TMPDIR`); output staging uses the output filesystem. Keep `export.py`, `decision_spool.py`, `choice_events.py` and `input_context.py` together when copying the tool.
+The exporter validates into a private temporary SQLite spool, including duplicate IDs, action history, run/game state and coverage aggregates. It materializes output from those validated bytes, so it does not reread changing source files. No database server or persistent database is required; the spool is deleted on completion or failure. It uses the system temporary directory (Python honors `TMPDIR`); output staging uses the output filesystem. Keep `export.py`, `decision_spool.py`, `choice_events.py`, `input_context.py` and `coverage_audit.py` together when copying the tool.
 
 The CLI streams the datasets, manifest and reports with a bounded SQLite cache. Working memory also depends on the largest input record, input-path arguments and requested example count. Python callers receive a materialized aggregate summary by default; use `compact_summary=True` to return only fixed-size counts. Direct `load_run()` remains an in-memory inspection API.
 

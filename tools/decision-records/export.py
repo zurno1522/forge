@@ -25,6 +25,10 @@ _choice_spec = importlib.util.spec_from_file_location('forge_choice_events', Pat
 _choices = importlib.util.module_from_spec(_choice_spec)
 _choice_spec.loader.exec_module(_choices)
 
+_audit_spec = importlib.util.spec_from_file_location('forge_coverage_audit', Path(__file__).with_name('coverage_audit.py'))
+_audit = importlib.util.module_from_spec(_audit_spec)
+_audit_spec.loader.exec_module(_audit)
+
 
 def ordered_games(games):
     return games.ordered_keys() if isinstance(games, _spool.Games) else sorted(games)
@@ -720,6 +724,9 @@ def matches_selected(action, candidate):
 
 
 def make_coverage(runs, rows, *, spool=None):
+    audit = _audit.CoverageAudit(
+        _spool.DiskMap(spool, 'audit:boundaries') if spool else {},
+        _spool.DiskMap(spool, 'audit:turns') if spool else {}, _choices.CONTEXT_TIMING)
     common = ('selections', 'selectedActionKinds', 'phases', 'decisionStatuses', 'outcomeLabels',
               'pilotModes', 'assessments', 'assessmentDetails', 'cardAiHandlers', 'handlerAssessments',
               'rejectedCards', 'rejectedActionKinds', 'rejectedCardKinds', 'searchReasons')
@@ -778,6 +785,14 @@ def make_coverage(runs, rows, *, spool=None):
             add('executionStatuses', game['execution']['status'])
     for row in rows:
         d = row['decision']
+        location = dict(run_id=row['runId'], game=row['game'], turn=d['observation'].get('turn'), player=d['playerId'])
+        audit.observe('DECISION', d['decisionType'], d.get('inputContext'), **location, turn_basis='PARENT_BASELINE',
+                      parent_omissions={'NESTED_TARGET': d.get('subordinateChoiceOmissions'),
+                                        'SEARCH_OPERATION': d.get('searchTargetApplicationOmissions')})
+        for choice in d.get('subordinateChoices', []):
+            audit.observe('NESTED_TARGET', choice['boundary'], None, **location, turn_basis='PARENT_CONTAINER')
+        for operation in d.get('searchTargetApplications', []):
+            audit.observe('SEARCH_OPERATION', operation['operation'], None, **location, turn_basis='PARENT_CONTAINER')
         add_input_context(d.get('inputContext'), 'DECISION')
         declared = d.get('subordinateChoiceSchemaVersion') == 1
         declared_choices = declared_choices or declared
@@ -942,6 +957,10 @@ def make_coverage(runs, rows, *, spool=None):
         choice_count = censored_count = 0
         for row in _choices.rows(runs):
             choice_count += 1
+            start = row['start']; choice = start['choice']
+            audit.observe('CHOICE', choice['boundary'], choice.get('inputContext'), run_id=row['runId'],
+                          game=row['game'], turn=start.get('turn'), player=choice['chooserPlayerId'],
+                          turn_basis='CHOICE_START_EVENT')
             add_input_context(row['start']['choice'].get('inputContext'), 'CHOICE')
             censored_count += row['censored']
             event_types[row['start']['choice']['choiceType']] += 1
@@ -1000,6 +1019,7 @@ def make_coverage(runs, rows, *, spool=None):
                        inputContextOwnerStatuses=dict(input_owners), inputContextTimings=dict(input_timings),
                        inputContextStateBases=dict(input_bases), inputContextOmissions=dict(input_omissions),
                        inputContextCoverage=dict(input_coverage))
+    summary['inputCoverageAudit'] = audit.summary(spool.sequence if spool else lambda name, values: list(values))
     summary['limitations'] = [
         'Main-phase play selection with an empty stack only; no mulligan, combat, reactive-priority or subordinate-choice coverage.',
         'Candidate assessments are partial and may repeat an ability; counts are assessment observations, not unique rejected legal actions.',
@@ -1146,6 +1166,7 @@ def report_chunks(summary, runs):
                              ('Omissions: ', 'inputContextOmissions'), ('Component coverage: ', 'inputContextCoverage')):
             yield from counter_line(prefix, name)
         yield from lines('Only inputContext.policy is the permitted feature projection. Diagnostic IDs, timestamps, offered-pool membership/order and future trace facts are excluded; unresolved disclosure facts do not establish current-object identity. Stack and long-term history remain unsupported/incomplete. trainingReady remains false.')
+    yield from _audit.markdown(summary['inputCoverageAudit'])
     if 'evaluatedXAssessmentStates' in summary:
         yield from counter_line('Evaluated X assessment snapshots: ', 'evaluatedXAssessmentStates')
     if 'searchTargetApplications' in summary:

@@ -55,6 +55,7 @@ CONTEXT_TIMING = {
     'AUTO_MANA_PAYMENT': 'BEFORE_OPERATION',
     'CONTROLLER_NUMBER_RANGE': 'BEFORE_SELECTOR',
     'CONTROLLER_NUMBER_OPTIONS': 'BEFORE_SELECTOR',
+    'CONTROLLER_ANNOUNCEMENT': 'BEFORE_OPERATION',
     'PAYMENT_DISCARD_POOL': 'BEFORE_SELECTOR',
     'PAYMENT_SACRIFICE_POOL': 'BEFORE_SELECTOR',
     'CONTROLLER_EFFECT_ENTITY': 'BEFORE_SELECTOR',
@@ -65,8 +66,9 @@ CONTEXT_TIMING = {
 def input_boundary(value, boundary, stage=None):
     expected = CONTEXT_TIMING.get(boundary)
     if expected is None:
+        hidden_source = boundary == 'MASKED_CHOICE' and {'component': 'CONTEXT', 'reason': 'HIDDEN'} in value['omissions']
         require(value['status'] == 'UNAVAILABLE'
-                and {'component': 'CONTEXT', 'reason': 'NO_AUDITED_INPUT_BOUNDARY'} in value['omissions'],
+                and (hidden_source or {'component': 'CONTEXT', 'reason': 'NO_AUDITED_INPUT_BOUNDARY'} in value['omissions']),
                 'input context claims an unaudited boundary')
     else:
         require(value['timing'] == expected, 'input context boundary/timing mismatch')
