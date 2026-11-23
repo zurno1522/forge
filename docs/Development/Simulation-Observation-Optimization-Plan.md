@@ -4,6 +4,8 @@ Status: proposed follow-up to the implemented [input-context profile](Simulation
 
 Optimization work reduces the cost of producing and storing the same represented information. It does not gain a performance improvement by silently omitting inputs, weakening privacy, moving capture after selection or reusing stale state. Coverage additions can proceed independently, subject to their existing cost guardrails; optimization comparisons must name the exact coverage/profile baseline they preserve.
 
+The [reviewed combined execution order](Simulation-Observation-Roadmap.md) keeps OPT-001 next; runtime optimizations remain conditional on measured costs.
+
 ## Ordered backlog
 
 | Priority | Item | Design and completion criteria |

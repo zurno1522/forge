@@ -6,6 +6,8 @@ COV-001 is implemented: see [definitions, validation and gap review](Simulation-
 
 Coverage work determines which decisions and permitted inputs the dataset represents, when they are captured, and how a selected option can be interpreted. CPU, allocation, retention and storage optimization have a [separate design track](Simulation-Observation-Optimization-Plan.md). Coverage reporting belongs here; performance profiling belongs there.
 
+The [combined execution order](Simulation-Observation-Roadmap.md) keeps OPT-001 next and schedules COV-001A after the additional boundary audit and before COV-006's broad selector rollout.
+
 ## Ordered backlog
 
 | Priority | Item | Design and completion criteria |
