@@ -50,11 +50,9 @@ The contract remains broader than this increment. T01 has separate fresh resourc
 
 ### Next work
 
-1. Add supported stack/resolving-object projections and authorized prompt constraints/options, with bindings from delivered facts to current selectable entities where observable continuity can actually be proved.
-2. Audit more temporary planning scopes and selector entry points before widening coverage. Existing nested target/search records do not yet share this capability.
-3. Test control/search-control/team permission composition; implement audited direct/nonstack resolution lifetimes before claiming prior-resolution disclosure there.
-4. Design historical knowledge and hidden-object continuity separately. No perfect recall, full legal-action mask, reward or learning policy is supplied here.
-5. Assess capture cost and budgets on broader multiplayer/large-board workloads. Two real games and bounded fixtures cannot establish universal overhead or timeout neutrality.
+Coverage has its own [ordered design backlog](Simulation-Observation-Coverage-Plan.md): reporting definitions, stack/resolving inputs, typed prompt constraints, safe option bindings, planning audits and broader selector families. Control/team permissions, direct/nonstack lifetimes and historical knowledge require separate focused designs.
+
+Optimization has an independent prioritization and commit boundary. Existing measurements below are a baseline, not a requirement to bundle performance changes into coverage work. Two real games and bounded fixtures cannot establish universal overhead or timeout neutrality. Changing budgets or sampling changes data availability and requires an explicit coverage review.
 
 ## Validation and measured cost
 
