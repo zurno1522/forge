@@ -16,6 +16,8 @@ Optimization work reduces the cost of producing and storing the same represented
 
 These are candidate investigations, not established bottlenecks or promised speedups. OPT-001 determines whether OPT-002 through OPT-004 justify implementation and can change their performance priority. Every optimization gets its own commit with before/after evidence and a review of remaining costs. Profiling instrumentation and benchmark improvements may have separate commits before runtime changes.
 
+COV-001's gaps are assigned in the [coverage ownership table](Simulation-Observation-Coverage-Plan.md#assigned-cov-001-gaps-and-scheduling). COV-001A invocation accounting is not a prerequisite for OPT-001: cost measurements can use known fixture operations and report their actual capture statuses. Such measurements do not establish loss rates across all engine choices. Nested timing work and example-completeness criteria remain with COV-005/006 and COV-002 through COV-004 respectively. No optimization item silently takes ownership of those coverage changes.
+
 ## Baseline and limits
 
 The existing two fixtures measured approximately 218–360 microseconds and 163–595 KB of incremental allocation per choice, including event freezing and Gson serialization. Reachable frozen contexts were approximately 31–105 KB. Those figures do not measure peak transient capture retention, whole-game CPU or nonempty disclosure-buffer cost. See the [original samples and methodology](assessments/input-context/benchmark-summary.json).

@@ -38,12 +38,13 @@ For the saved new Doctor Who/Ur-Dragon game, the denominator is 431 observed rec
 
 ## Gap review and pause
 
-COV-001's reporting scope is complete. Its deliberate limits are:
+COV-001's reporting scope is complete. The remaining limits have explicit owners in the [coverage design plan](Simulation-Observation-Coverage-Plan.md#assigned-cov-001-gaps-and-scheduling):
 
-- Choices that never emit records cannot be counted. Explicit capture omissions establish only known lost capture attempts, not all unobserved choices.
-- Version 1 has no model-facing option bindings or certified complete learning examples. COV-002 through COV-004 address missing information, not this report's counts.
-- Nested/search timing and lost-capture attribution remain at the parent-container level where the wire schema supplies no independent time/boundary.
-- Unsupported components are reported as declared; the exporter validates structure and consistency, not every engine permission or the total information used by a heuristic.
-- More granular invocation accounting would require new producer instrumentation and a separate coverage design. It is not inferred here.
+| Gap | Assigned item and required follow-up |
+| --- | --- |
+| G1: choices without records cannot be counted; reported omissions are only known lost captures | COV-001A designs bounded invocation/loss accounting at named boundaries, including retries, failures, in-flight work and delivery/close reconciliation. Uninstrumented choices remain unknown. |
+| G2: nested/search timing and lost-capture attribution are at parent-container level | COV-005 designs independent entry-location semantics; COV-006 implements and validates nested/search metadata. Omitted-capture attribution additionally depends on COV-001A. Old records retain container/unknown semantics. |
+| G3: no model-facing option bindings or certified complete learning examples | COV-002/003 supply required inputs; COV-004 owns safe bindings and per-choice-family completeness criteria. Context presence and callback success are insufficient. Current trainingReady remains false. |
+| G4: the reporter cannot prove every engine permission or heuristic input | COV-005 coordinates the producer audit, with actual permission/planning-path regression gates throughout COV-002 through COV-007. Unsupported claims stay explicit. |
 
-Pause here for review before OPT-001 (cost attribution). No allocation, copying, serialization, compression, sampling or budget optimization is included.
+These assignments do not implement new capture data or reopen the reporting item. Pause here for review before OPT-001 (cost attribution), which is not blocked by COV-001A. No allocation, copying, serialization, compression, sampling or budget optimization is included.
