@@ -1,0 +1,5 @@
+{
+  "forge-ai/src/main/java/forge/ai/AiDecisionRecorder.java": "2d64f51cd027baa32d608a394818c6306160670a0891ec93032e8d5a347af47c",
+  "forge-ai/src/main/java/forge/ai/AiChoiceRecorder.java": "0400cc5fbbba5839651030d5fb371fabbac0e9dae9312d82e24865cffcd3bfdf",
+  "forge-gui-desktop/src/test/java/forge/ai/AiChoiceRecorderTest.java": "e98379c5b8e4d3c32c6a979c28558b98ba3c1c5f6e8c3f9bf855812ce5f353c2"
+}

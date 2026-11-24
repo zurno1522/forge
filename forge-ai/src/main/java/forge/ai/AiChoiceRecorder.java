@@ -61,7 +61,10 @@ public final class AiChoiceRecorder {
     private static AiDecisionRecorder evaluation(final Player chooser, final SpellAbility ability) {
         final AiController owner = owner(ability);
         final AiDecisionRecorder recorder = owner == null ? null : owner.evaluationRecorder();
-        return recorder != null && recorder.choiceContext(ability) != null ? recorder : null;
+        if (recorder == null) { return null; }
+        final Map<String, Object> context = recorder.choiceContext(ability);
+        // A closed evaluation remains the admission owner; it cannot become an unrelated standalone capture.
+        return context != null || !recorder.choiceCaptureOpen() ? recorder : null;
     }
 
     private static boolean closedEvaluation(final AiController brain) {
@@ -129,15 +132,27 @@ public final class AiChoiceRecorder {
         final Game game = chooser.getGame();
         Observation observation = null;
         if (game.isRecordingAiDecisions() && ability != null) {
+            AiController chooserBrain = null;
+            AiController abilityBrain = null;
             try {
-                final AiController chooserBrain = chooser.getController() instanceof PlayerControllerAi ai ? ai.getAi() : null;
-                if (ability.getHostCard() != null && ability.getHostCard().getGame() == game) {
-                    if (!closedEvaluation(owner(ability)) && !closedEvaluation(chooserBrain)) {
+                chooserBrain = chooser.getController() instanceof PlayerControllerAi ai ? ai.getAi() : null;
+                final var source = ability.getHostCard();
+                if (source != null && source.getGame() == game) {
+                    abilityBrain = owner(ability);
+                    if (!closedEvaluation(abilityBrain) && !closedEvaluation(chooserBrain)) {
                         observation = new Observation(chooser, ability, type, requestedStage, boundary, options, timing, inputCapture, accounting);
                     } else if (accounting != null) { accounting.admissionClosed(); }
                 } else if (accounting != null) { accounting.unsupported(); }
             }
-            catch (RuntimeException failure) { if (accounting != null) { accounting.failure(); } game.recordEventObservationFailure(failure); }
+            catch (RuntimeException failure) {
+                // Use the already resolved owners, without new engine getters in failure handling.
+                if (!game.isRecordingAiDecisions() || closedEvaluation(abilityBrain) || closedEvaluation(chooserBrain)) {
+                    if (accounting != null) { accounting.admissionClosed(); }
+                } else {
+                    if (accounting != null) { accounting.failure(); }
+                    game.recordEventObservationFailure(failure);
+                }
+            }
         } else if (accounting != null) {
             if (ability == null) { accounting.unsupported(); } else { accounting.admissionClosed(); }
         }
@@ -187,6 +202,13 @@ public final class AiChoiceRecorder {
             this.accounting = accounting;
             evaluation = evaluation(chooser, ability);
             id = "choice:" + SEQUENCE.incrementAndGet();
+            if (evaluation != null && !evaluation.choiceCaptureOpen()) {
+                visible = false;
+                stage = requestedStage == null ? "CANDIDATE_EVALUATION" : requestedStage;
+                basis = "PLANNING_WORKING_STATE";
+                abandon();
+                return;
+            }
             visible = !ability.getHostCard().isFaceDown() && ability.getHostCard().getView().canBeShownTo(chooser.getView());
             if (accounting != null) { accounting.classify(visible ? boundary : "MASKED_CHOICE"); }
             final AiActionReference action = action(ability);

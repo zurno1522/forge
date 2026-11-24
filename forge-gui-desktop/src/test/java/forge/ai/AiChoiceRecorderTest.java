@@ -244,4 +244,110 @@ public class AiChoiceRecorderTest extends AITest {
         Assert.assertEquals(f.events.get(0).get("stage"), "RETARGET_SELECTION");
         Assert.assertEquals(f.events.get(1).get("status"), "DECLINED");
     }
+    @DataProvider public Object[][] lateContextGetters() { return new Object[][] {{false, false}, {true, false}, {false, true}, {true, true}}; }
+    @DataProvider public Object[][] lateAdmissionGetters() { return new Object[][] {{false, 1}, {true, 1}, {false, 2}, {true, 2}}; }
+
+    @Test(dataProvider = "lateContextGetters", groups = {"UnitTest", "fast"})
+    public void assessmentContextGetterCannotBlockParentCloseOrReturnALateAssociation(final boolean fail, final boolean identifier) throws Exception {
+        final Fixture f = fixture(); final var recorder = new AiDecisionRecorder(f.game, f.ai, 17);
+        final var ability = org.mockito.Mockito.spy(f.ability);
+        recorder.beginAssessment(ability);
+        final var entered = new java.util.concurrent.CountDownLatch(1);
+        final var release = new java.util.concurrent.CountDownLatch(1);
+        final org.mockito.stubbing.Answer<Object> block = ignored -> {
+            entered.countDown(); Assert.assertTrue(release.await(5, java.util.concurrent.TimeUnit.SECONDS));
+            if (fail) { throw new IllegalStateException("late context failure"); }
+            return identifier ? f.ability.getId() : ability;
+        };
+        if (identifier) { org.mockito.Mockito.doAnswer(block).when(ability).getId(); }
+        else { org.mockito.Mockito.doAnswer(block).when(ability).getRootAbility(); }
+        final var threads = java.util.concurrent.Executors.newFixedThreadPool(2);
+        try {
+            final var work = threads.submit(() -> recorder.choiceContext(ability));
+            Assert.assertTrue(entered.await(5, java.util.concurrent.TimeUnit.SECONDS));
+            final var event = threads.submit(() -> recorder.finish(null, "AI_TIMEOUT", null)).get(2, java.util.concurrent.TimeUnit.SECONDS);
+            final String frozen = event.data().toString(); release.countDown();
+            Assert.assertNull(work.get(5, java.util.concurrent.TimeUnit.SECONDS));
+            Assert.assertEquals(event.data().toString(), frozen); Assert.assertNull(f.game.getEventObservationFailure());
+        } finally { release.countDown(); threads.shutdownNow(); }
+    }
+
+    @Test(dataProvider = "lateAdmissionGetters", groups = {"UnitTest", "fast"})
+    @SuppressWarnings("unchecked")
+    public void closedAssessmentDuringStandaloneAdmissionCannotBecomeAnUnparentedChoice(final boolean fail, final int blockCall) throws Exception {
+        final Fixture f = fixture(); final var recorder = new AiDecisionRecorder(f.game, f.ai, 18);
+        recorder.beginAssessment(f.ability);
+        final var ability = org.mockito.Mockito.spy(f.ability);
+        final var entered = new java.util.concurrent.CountDownLatch(1);
+        final var release = new java.util.concurrent.CountDownLatch(1);
+        final AtomicInteger getterCalls = new AtomicInteger();
+        org.mockito.Mockito.doAnswer(ignored -> {
+            if (getterCalls.incrementAndGet() != blockCall) { return f.ability.getRootAbility(); }
+            entered.countDown(); Assert.assertTrue(release.await(5, java.util.concurrent.TimeUnit.SECONDS));
+            if (fail) { throw new IllegalStateException("late admission failure"); }
+            return f.ability.getRootAbility();
+        }).when(ability).getRootAbility();
+        final var brain = ((PlayerControllerAi) f.ai.getController()).getAi();
+        final var field = AiController.class.getDeclaredField("evaluationDecision"); field.setAccessible(true);
+        final var context = (ThreadLocal<AiDecisionRecorder>) field.get(brain);
+        final AtomicInteger callbacks = new AtomicInteger();
+        final var threads = java.util.concurrent.Executors.newFixedThreadPool(2);
+        try {
+            final var work = threads.submit(() -> {
+                context.set(recorder);
+                try { return AiChoiceRecorder.targeting(f.ai, ability, null, () -> { callbacks.incrementAndGet(); return true; }); }
+                finally { context.remove(); }
+            });
+            Assert.assertTrue(entered.await(5, java.util.concurrent.TimeUnit.SECONDS));
+            final var event = threads.submit(() -> recorder.finish(null, "AI_TIMEOUT", null)).get(2, java.util.concurrent.TimeUnit.SECONDS);
+            final String frozen = event.data().toString(); release.countDown();
+            Assert.assertTrue(work.get(5, java.util.concurrent.TimeUnit.SECONDS));
+            Assert.assertEquals(callbacks.get(), 1); Assert.assertTrue(f.events.isEmpty());
+            Assert.assertEquals(event.data().toString(), frozen); Assert.assertNull(f.game.getEventObservationFailure());
+        } finally { release.countDown(); threads.shutdownNow(); }
+    }
+
+    @Test(groups = {"UnitTest", "fast"})
+    public void assessmentChangedDuringGetterWorkCannotAcquireTheReplacementAssessmentId() throws Exception {
+        final Fixture f = fixture(); final var recorder = new AiDecisionRecorder(f.game, f.ai, 19);
+        recorder.beginAssessment(f.ability);
+        final var ability = org.mockito.Mockito.spy(f.ability);
+        final var entered = new java.util.concurrent.CountDownLatch(1);
+        final var release = new java.util.concurrent.CountDownLatch(1);
+        org.mockito.Mockito.doAnswer(ignored -> {
+            entered.countDown(); Assert.assertTrue(release.await(5, java.util.concurrent.TimeUnit.SECONDS)); return f.ability.getRootAbility();
+        }).when(ability).getRootAbility();
+        final SpellAbility replacement = addCardToZone("Doom Blade", f.ai, ZoneType.Hand).getFirstSpellAbility();
+        replacement.setActivatingPlayer(f.ai);
+        final var threads = java.util.concurrent.Executors.newFixedThreadPool(2);
+        try {
+            final var work = threads.submit(() -> recorder.choiceContext(ability));
+            Assert.assertTrue(entered.await(5, java.util.concurrent.TimeUnit.SECONDS));
+            threads.submit(() -> recorder.beginAssessment(replacement)).get(2, java.util.concurrent.TimeUnit.SECONDS);
+            release.countDown(); Assert.assertNull(work.get(5, java.util.concurrent.TimeUnit.SECONDS));
+            final var current = recorder.choiceContext(replacement); Assert.assertNotNull(current);
+            Assert.assertEquals(current.get("candidateAbilityId"), replacement.getId());
+        } finally { release.countDown(); threads.shutdownNow(); }
+    }
+
+    @Test(groups = {"UnitTest", "fast"})
+    @SuppressWarnings("unchecked")
+    public void activeAssessmentMetadataFailureStaysVisibleAndPreservesTheOriginalCallback() throws Exception {
+        final Fixture f = fixture(); final var recorder = new AiDecisionRecorder(f.game, f.ai, 20);
+        recorder.beginAssessment(f.ability);
+        final var ability = org.mockito.Mockito.spy(f.ability);
+        final var failure = new IllegalStateException("active metadata failure");
+        org.mockito.Mockito.doThrow(failure).when(ability).getRootAbility();
+        final var brain = ((PlayerControllerAi) f.ai.getController()).getAi();
+        final var field = AiController.class.getDeclaredField("evaluationDecision"); field.setAccessible(true);
+        final var context = (ThreadLocal<AiDecisionRecorder>) field.get(brain);
+        final AtomicInteger callbacks = new AtomicInteger();
+        context.set(recorder);
+        try {
+            Assert.assertTrue(AiChoiceRecorder.targeting(f.ai, ability, null, () -> { callbacks.incrementAndGet(); return true; }));
+        } finally { context.remove(); }
+        Assert.assertEquals(callbacks.get(), 1); Assert.assertTrue(f.events.isEmpty());
+        Assert.assertSame(f.game.getEventObservationFailure(), failure);
+    }
+
 }

@@ -1,0 +1,20 @@
+{
+  "before": {
+    "tests": 18,
+    "failures": 5,
+    "errors": 0,
+    "skipped": 0,
+    "expectedFailures": "Blocked root lookup prevents parent closure or assessment replacement",
+    "logSha256": "25e21cf5d34fbc1e35bd10b7f297466df63521086a72824c10702c0af5e80880"
+  },
+  "focused": {
+    "tests": 88,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "buildSuccess": true,
+    "logSha256": "7b6673a0f4d6f7685bd133e35bb4bc31e96b3e32af2e75a6ce91f73d600ee1d3"
+  },
+  "fullSuiteForThisSource": false,
+  "exporter": "Unchanged; fresh full/filtered streams validate with the existing exporter."
+}

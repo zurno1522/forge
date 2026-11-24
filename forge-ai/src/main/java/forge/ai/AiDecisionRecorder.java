@@ -31,13 +31,29 @@ final class AiDecisionRecorder {
     private long interruptedTargetCaptures;
     private final AiTargetProvenance targetProvenance = new AiTargetProvenance();
 
-    synchronized Map<String, Object> choiceContext(final SpellAbility ability) {
-        if (closed || assessment == null || ability.getRootAbility() != assessment.candidate.getRootAbility()) { return null; }
-        if (assessment.id == null) {
-            assessment.id = data.get("decisionId") + ":assessment:" + assessment.ordinal;
-            if (assessment.index != null) { candidates.get(assessment.index).put("assessmentId", assessment.id); }
+    Map<String, Object> choiceContext(final SpellAbility ability) {
+        final Assessment origin;
+        synchronized (this) {
+            if (closed || assessment == null) { return null; }
+            origin = assessment;
         }
-        return Map.of("decisionId", data.get("decisionId"), "candidateAbilityId", assessment.candidate.getId(), "assessmentId", assessment.id);
+        final boolean matches;
+        final long candidateId;
+        try {
+            matches = ability.getRootAbility() == origin.candidate.getRootAbility();
+            candidateId = matches ? origin.candidate.getId() : 0;
+        } catch (RuntimeException failure) {
+            if (closed) { return null; }
+            throw failure;
+        }
+        synchronized (this) {
+            if (closed || assessment != origin || !matches) { return null; }
+            if (origin.id == null) {
+                origin.id = data.get("decisionId") + ":assessment:" + origin.ordinal;
+                if (origin.index != null) { candidates.get(origin.index).put("assessmentId", origin.id); }
+            }
+            return Map.of("decisionId", data.get("decisionId"), "candidateAbilityId", candidateId, "assessmentId", origin.id);
+        }
     }
 
     boolean choiceCaptureOpen() { return !closed; }
