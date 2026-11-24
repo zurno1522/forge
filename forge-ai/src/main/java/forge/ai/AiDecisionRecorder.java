@@ -120,6 +120,7 @@ final class AiDecisionRecorder {
             searchTargetCapturesInFlight++;
         }
         boolean reserved = true;
+        boolean interrupted = false;
         try {
             final Card source = candidate.getHostCard();
             final boolean visible = !source.isFaceDown() && source.getView().canBeShownTo(viewer.getView());
@@ -131,7 +132,7 @@ final class AiDecisionRecorder {
             final var entry = AiEntryLocation.capture(viewer, timing, basis, visible, active);
             final SearchPlan before = visible ? searchPlan(candidate) : null;
             if (visible && before == null) {
-                synchronized (this) { if (!closed) { searchTargetInterruptedCaptures++; } }
+                interrupted = true;
                 return null;
             }
             final Map<String, Object> record = new LinkedHashMap<>();
@@ -168,7 +169,12 @@ final class AiDecisionRecorder {
                 return application;
             }
         } finally {
-            synchronized (this) { if (reserved) { searchTargetCapturesInFlight--; } }
+            synchronized (this) {
+                if (reserved) {
+                    searchTargetCapturesInFlight--;
+                    if (!closed && interrupted) { searchTargetInterruptedCaptures++; }
+                }
+            }
         }
     }
 
