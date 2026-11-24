@@ -1,0 +1,40 @@
+{
+  "focused": {
+    "results": [
+      {
+        "tests": 93,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "buildSuccess": true,
+    "logPath": "/workspace/work/cov006-nested/focused-reviewed.log",
+    "logSha256": "d410c41d2a17961c515f03c7e488f130dd2469a9782244b764ddc4604bdf2f95"
+  },
+  "full": {
+    "results": [
+      {
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "tests": 2606,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 6
+      }
+    ],
+    "buildSuccess": true,
+    "logPath": "/workspace/work/cov006-nested/full-reviewed.log",
+    "logSha256": "84b69c2d962f78c4ea0c88d20e1485d5813d84694425397be76c5ac39a3dbc4f"
+  },
+  "python": {
+    "tests": 167,
+    "failures": 0,
+    "logSha256": "3b8ac560a0ae7ba800ef7c53e60a95d98635af0c088ce6fd9ad06646c5dd1b51"
+  },
+  "scope": "Full suite validates the final production Java source. A further engine-view-getter regression case was added afterward and passed in the final focused run; the full suite was not repeated for that test-only addition."
+}

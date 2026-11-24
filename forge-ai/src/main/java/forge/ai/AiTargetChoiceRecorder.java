@@ -57,9 +57,7 @@ public final class AiTargetChoiceRecorder {
 
     public static <T extends GameObject, C extends Iterable<T>> Selection<T> selectedFrom(final Player chooser,
             final SpellAbility ability, final C options, final String boundary, final T selected) {
-        final Selection<T> result = select(chooser, ability, options, boundary, ignored -> selected, "AT_TARGET_ADDITION");
-        if (result.observation != null) { result.observation.atTargetAddition(); }
-        return result;
+        return select(chooser, ability, options, boundary, ignored -> selected, "AT_TARGET_ADDITION");
     }
 
     public static <T extends GameObject, C extends Iterable<T>> Selection<T> select(final Player chooser, final SpellAbility ability,
@@ -74,7 +72,7 @@ public final class AiTargetChoiceRecorder {
         if (chooser.getGame().isRecordingAiDecisions() && chooser.getController() instanceof PlayerControllerAi ai) {
             recorder = ai.getAi().evaluationRecorder();
             if (recorder != null) {
-                try { observation = recorder.beginTargetChoice(ability, options, boundary); }
+                try { observation = recorder.beginTargetChoice(ability, options, boundary, timing); }
                 catch (RuntimeException failure) { recorder.captureFailed(failure); }
             }
         }

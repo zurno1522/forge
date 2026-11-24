@@ -231,9 +231,10 @@ final class AiDecisionRecorder {
         }
 
         void complete(final GameObject chosen) {
+            if (closed) { return; }
+            final Map<String, Object> selected = AiTargetChoiceRecorder.reference(chosen);
             synchronized (AiDecisionRecorder.this) {
                 if (closed) { return; }
-                final Map<String, Object> selected = AiTargetChoiceRecorder.reference(chosen);
                 data.put("selected", selected);
                 final List<?> options = (List<?>) data.get("options");
                 int matches = 0;
@@ -255,24 +256,23 @@ final class AiDecisionRecorder {
 
         void captureFailed(final RuntimeException failure) { AiDecisionRecorder.this.captureFailed(failure); }
 
-        void atTargetAddition() {
-            synchronized (AiDecisionRecorder.this) {
-                if (!closed) { data.put("poolSnapshotTiming", "AT_TARGET_ADDITION"); }
-            }
-        }
-
         TargetAddition prepareAddition(final SpellAbility ability, final GameObject actual, final GameObject returned) {
+            if (closed || ability != evaluatedAbility) { return null; }
+            final var targets = ability.getTargets();
+            final int size = targets.size();
+            if (size >= AiTargetChoiceRecorder.MAX_REFERENCES) { return null; }
+            final Object state = targets.getSelectionStateIdentity();
+            final boolean delegated = ability.getTargetingPlayer() != null && ability.getTargetingPlayer() != viewer;
+            final boolean actorMatches = ability.getActivatingPlayer() == viewer;
+            final var reference = actual == returned ? AiTargetChoiceRecorder.reference(returned) : null;
             synchronized (AiDecisionRecorder.this) {
-                if (closed || ability != evaluatedAbility
-                        || ability.getTargets().size() >= AiTargetChoiceRecorder.MAX_REFERENCES) { return null; }
-                final var targets = ability.getTargets();
-                final var previous = targetProvenance.before(targets.getSelectionStateIdentity(), targets.size());
-                final boolean delegated = ability.getTargetingPlayer() != null && ability.getTargetingPlayer() != viewer;
-                final var origin = actual == returned && !delegated && ability.getActivatingPlayer() == viewer && data.get("selected") != null
-                        && data.get("selected").equals(AiTargetChoiceRecorder.reference(returned))
+                if (closed) { return null; }
+                final var previous = targetProvenance.before(state, size);
+                final var origin = actual == returned && !delegated && actorMatches && data.get("selected") != null
+                        && data.get("selected").equals(reference)
                         && !"OPPONENT_PREFERENCE".equals(data.get("purpose"))
                         ? new AiTargetProvenance.Origin((String) data.get("choiceId"), viewer.getId(),
-                                AiTargetChoiceRecorder.reference(returned)) : null;
+                                reference) : null;
                 return new TargetAddition(targets, previous, origin);
             }
         }
@@ -287,9 +287,12 @@ final class AiDecisionRecorder {
             this.targets = targets; this.previous = previous; this.origin = origin;
         }
         void added() {
+            if (closed) { return; }
+            final int size = targets.size();
+            final Object state = targets.getSelectionStateIdentity();
             synchronized (AiDecisionRecorder.this) {
-                if (!closed && targets.size() == previous.size() + 1) {
-                    targetProvenance.added(targets.getSelectionStateIdentity(), previous, origin);
+                if (!closed && size == previous.size() + 1) {
+                    targetProvenance.added(state, previous, origin);
                 }
             }
         }
@@ -297,24 +300,39 @@ final class AiDecisionRecorder {
 
     TargetChoice beginTargetChoice(final SpellAbility ability,
             final Iterable<? extends GameObject> options, final String boundary) {
+        return beginTargetChoice(ability, options, boundary, "BEFORE_CHOOSER");
+    }
+
+    TargetChoice beginTargetChoice(final SpellAbility ability,
+            final Iterable<? extends GameObject> options, final String boundary, final String poolTiming) {
+        if (!viewer.getGame().isRecordingAiDecisions()) { return null; }
         final Assessment origin;
         synchronized (this) {
-            if (closed || assessment == null || !ability.usesTargeting()
-                    || ability.getRootAbility() != assessment.candidate.getRootAbility()) { return null; }
+            if (closed || assessment == null) { return null; }
+            origin = assessment;
+        }
+        // Eligibility getters must not delay parent timeout publication either.
+        final boolean matches = ability.usesTargeting() && ability.getRootAbility() == origin.candidate.getRootAbility();
+        synchronized (this) {
+            if (closed || assessment != origin || !matches) { return null; }
             if (targetChoices.size() + targetCapturesInFlight >= AiTargetChoiceRecorder.MAX_CHOICES) {
                 targetChoicesOmittedByBudget++;
                 return null;
             }
-            origin = assessment;
             targetCapturesInFlight++;
         }
         boolean reserved = true;
         boolean interrupted = false;
         try {
             // Pool traversal must not hold the monitor needed to publish a timed-out parent.
-            final java.util.function.BooleanSupplier active = () -> !closed && !Thread.currentThread().isInterrupted();
+            final java.util.function.BooleanSupplier active = () -> !closed && !Thread.currentThread().isInterrupted()
+                    && viewer.getGame().isRecordingAiDecisions();
+            final Card source = ability.getHostCard();
+            final boolean visible = !source.isFaceDown() && source.getView().canBeShownTo(viewer.getView());
+            final String timing = "AT_TARGET_ADDITION".equals(poolTiming) ? "AFTER_SELECTION_BEFORE_APPLICATION" : "BEFORE_SELECTOR";
+            final var entry = AiEntryLocation.capture(viewer, timing, "PLANNING_WORKING_STATE", visible, active);
             final var prior = AiTargetChoiceRecorder.references(ability.getTargets(), active);
-            final var offered = prior == null ? null : AiTargetChoiceRecorder.references(options, active);
+            final var offered = prior == null ? null : AiOptionInput.capture(options, active);
             if (offered == null) { interrupted = true; return null; }
             final Map<String, Object> choice = new LinkedHashMap<>();
             choice.put("choiceSchemaVersion", 1);
@@ -324,16 +342,25 @@ final class AiDecisionRecorder {
             choice.put("candidateAbilityId", origin.candidate.getId());
             choice.put("abilityId", ability.getId());
             choice.put("sourceId", ability.getHostCard().getId());
-            final Card source = ability.getHostCard();
-            final boolean visible = !source.isFaceDown() && source.getView().canBeShownTo(viewer.getView());
             choice.put("boundary", visible ? boundary : "MASKED_TARGET_POOL");
             choice.put("purpose", !visible ? "MASKED_TARGET_PLANNING" : "DAMAGE_OPPONENT_POOL".equals(boundary)
                     ? "OPPONENT_PREFERENCE" : "TARGET_RECOMMENDATION");
             choice.put("optionCoverage", "OBSERVED_HEURISTIC_POOL_NOT_ALL_LEGAL_TARGET_SETS");
             choice.put("priorTargets", prior.values());
             choice.put("priorTargetsTruncated", prior.truncated());
-            choice.put("options", offered.values());
+            choice.put("options", offered.references());
             choice.put("optionsTruncated", offered.truncated());
+            if ("AT_TARGET_ADDITION".equals(poolTiming)) { choice.put("poolSnapshotTiming", poolTiming); }
+            choice.put("entryLocation", entry);
+            Map<String, Object> input;
+            try {
+                input = visible ? AiInputContext.capture(viewer, ability, timing, "PLANNING_WORKING_STATE", active, null, () -> offered)
+                        : AiInputContext.unavailable(viewer, timing, "PLANNING_WORKING_STATE", "HIDDEN");
+            } catch (RuntimeException failure) {
+                captureFailed(failure);
+                input = AiInputContext.unavailable(viewer, timing, "PLANNING_WORKING_STATE", "CAPTURE_FAILED");
+            }
+            choice.put("inputContext", input);
             choice.put("status", "INCOMPLETE");
             choice.put("selected", null);
             choice.put("selectedOptionIndex", null);

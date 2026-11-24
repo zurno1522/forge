@@ -40,9 +40,11 @@ class CoverageAudit:
         self.owners = Counter()
         self.entry_inventory = entry_inventory or {}
         self.entries = {key: Counter() for key in ('statuses', 'kinds', 'timings', 'stateBases', 'reasons')}
+        self.entry_owners = set()
 
     def observe(self, owner, boundary, context, *, run_id, game, turn, player, turn_basis, parent_omissions=None, entry_location=None):
         if entry_location is not None:
+            self.entry_owners.add(owner)
             for plural, field in (('statuses', 'status'), ('kinds', 'kind'), ('timings', 'timing'), ('stateBases', 'stateBasis'), ('reasons', 'reason')):
                 if entry_location[field] is not None: self.entries[plural][entry_location[field]] += 1
             turn = entry_location['turn']
@@ -82,7 +84,8 @@ class CoverageAudit:
         if self.entries['statuses']:
             result['entryLocationAudit'] = dict(schemaVersion=1, scope='PRESENT_ENTRY_COMPONENTS_ONLY',
                                               records=sum(self.entries['statuses'].values()),
-                                              knownInputBoundaryInventoryV2=self.entry_inventory,
+                                              knownInputBoundaryInventoryV2={key: value for key, value in self.entry_inventory.items()
+                                                                            if key in self.entry_owners},
                                               **{key: dict(value) for key, value in self.entries.items()})
             result['definitions']['byTurn'] += ' Present entry components supply their own clock with ENTRY_LOCATION; unavailable entries stay null with ENTRY_LOCATION_UNAVAILABLE. playerId remains the owning chooser, not the turn player.'
         return result

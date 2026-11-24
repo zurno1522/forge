@@ -127,7 +127,7 @@ def validate_search_target_applications(d, masked_ids):
                     and groups[changed[0]]['targets'] == [c['requestedTarget']] and not groups[changed[0]]['targetsTruncated'], 'accepted target application differs from its request')
 
 
-def validate_subordinate_choices(d, masked_ids):
+def validate_subordinate_choices(d, masked_ids, known_players=None):
     if 'targetChoiceProvenanceSchemaVersion' in d:
         require(integer(d['targetChoiceProvenanceSchemaVersion']) and d['targetChoiceProvenanceSchemaVersion'] in (1, 2)
                 and d.get('subordinateChoiceSchemaVersion') == 1, 'invalid target provenance declaration')
@@ -150,7 +150,7 @@ def validate_subordinate_choices(d, masked_ids):
               'abilityId', 'sourceId', 'boundary', 'optionCoverage', 'priorTargets', 'options', 'status',
               'selected', 'selectedOptionIndex', 'candidateIndex', 'candidateActionId'}
     for choice in choices:
-        optional = {'optionsTruncated', 'priorTargetsTruncated', 'purpose', 'poolSnapshotTiming'}
+        optional = {'optionsTruncated', 'priorTargetsTruncated', 'purpose', 'poolSnapshotTiming', 'entryLocation', 'inputContext'}
         require(isinstance(choice, dict) and fields <= set(choice) <= fields | optional, 'invalid subordinate choice fields')
         require('poolSnapshotTiming' not in choice or choice['poolSnapshotTiming'] == 'AT_TARGET_ADDITION', 'invalid pool snapshot timing')
         require(all(isinstance(choice[key], bool) for key in ('optionsTruncated', 'priorTargetsTruncated') if key in choice), 'invalid target capture truncation flag')
@@ -180,6 +180,25 @@ def validate_subordinate_choices(d, masked_ids):
             require(isinstance(choice[name], list), 'invalid choice target list')
             for ref in choice[name]:
                 validate_choice_reference(ref)
+        if 'inputContext' in choice:
+            require('entryLocation' in choice and 'optionsTruncated' in choice, 'nested input lacks its own boundary/prefix declaration')
+            context = choice['inputContext']
+            _choices.validate_input_context(context, choice['chooserPlayerId'], known_players)
+            timing = 'AFTER_SELECTION_BEFORE_APPLICATION' if choice.get('poolSnapshotTiming') == 'AT_TARGET_ADDITION' else 'BEFORE_SELECTOR'
+            require(context['timing'] == timing and context['stateBasis'] == 'PLANNING_WORKING_STATE', 'nested target input boundary mismatch')
+            if context['policy'] is not None:
+                require(context['policy'].get('prompt') is None, 'unaudited nested target prompt')
+            if choice['boundary'] == 'MASKED_TARGET_POOL':
+                require(context['status'] == 'UNAVAILABLE' and {'component': 'CONTEXT', 'reason': 'HIDDEN'} in context['omissions'], 'input exposes masked target source')
+        if 'entryLocation' in choice:
+            projected = dict(choice, boundary='MASKED_CHOICE' if choice['boundary'] == 'MASKED_TARGET_POOL' else choice['boundary'],
+                             options=dict(coverage=choice['optionCoverage'], items=choice['options'],
+                                          truncated=choice.get('optionsTruncated', False),
+                                          poolSnapshotTiming=choice.get('poolSnapshotTiming', 'BEFORE_CHOOSER')))
+            _choices.entry_location(projected, known_players)
+            if 'inputContext' in choice: _choices.option_links(projected)
+            if choice['entryLocation']['status'] == 'CAPTURED':
+                require(choice['entryLocation']['stateBasis'] == 'PLANNING_WORKING_STATE', 'nested target entry claims rules state')
         expected_type = {'DRAW_PLAYER_POOL': 'PLAYER', 'DAMAGE_PLAYER_POOL': 'PLAYER',
                          'ATTACH_PLAYER_POOL': 'PLAYER', 'ATTACH_CARD_POOL': 'CARD'}.get(choice['boundary'])
         if expected_type is not None:
@@ -290,7 +309,7 @@ def validate_decision(record, game):
         require(isinstance(search.get('reason'), str), 'missing search reason')
         for key in ('rollouts', 'candidatesEvaluated', 'elapsedNanos'):
             require(integer(search.get(key)) and search[key] >= 0, 'invalid search count/duration')
-    validate_subordinate_choices(d, masked_ids)
+    validate_subordinate_choices(d, masked_ids, game['players'])
     return d
 
 
@@ -747,7 +766,8 @@ def make_coverage(runs, rows, *, spool=None):
     audit = _audit.CoverageAudit(
         _spool.DiskMap(spool, 'audit:boundaries') if spool else {},
         _spool.DiskMap(spool, 'audit:turns') if spool else {}, _choices.CONTEXT_TIMING,
-        {'CHOICE': _choices.CONTEXT_TIMING_V2})
+        {'CHOICE': _choices.CONTEXT_TIMING_V2,
+         'NESTED_TARGET': {key: value for key, value in _choices.CONTEXT_TIMING_V2.items() if key in _choices.POOL_BOUNDARIES}})
     common = ('selections', 'selectedActionKinds', 'phases', 'decisionStatuses', 'outcomeLabels',
               'pilotModes', 'assessments', 'assessmentDetails', 'cardAiHandlers', 'handlerAssessments',
               'rejectedCards', 'rejectedActionKinds', 'rejectedCardKinds', 'searchReasons')
@@ -825,7 +845,9 @@ def make_coverage(runs, rows, *, spool=None):
                       parent_omissions={'NESTED_TARGET': d.get('subordinateChoiceOmissions'),
                                         'SEARCH_OPERATION': d.get('searchTargetApplicationOmissions')})
         for choice in d.get('subordinateChoices', []):
-            audit.observe('NESTED_TARGET', choice['boundary'], None, **location, turn_basis='PARENT_CONTAINER')
+            audit.observe('NESTED_TARGET', choice['boundary'], choice.get('inputContext'), **location,
+                          turn_basis='PARENT_CONTAINER', entry_location=choice.get('entryLocation'))
+            if 'inputContext' in choice: add_input_context(choice['inputContext'], 'NESTED_TARGET')
         for operation in d.get('searchTargetApplications', []):
             audit.observe('SEARCH_OPERATION', operation['operation'], None, **location, turn_basis='PARENT_CONTAINER')
         add_input_context(d.get('inputContext'), 'DECISION')

@@ -143,6 +143,8 @@ public class AiTargetChoiceRecorderTest extends AITest {
         final var choice = choices(recorder.finish(List.of(draw), "COMPLETED", null)).get(0);
         Assert.assertEquals(choice.get("boundary"), "DRAW_PLAYER_POOL");
         Assert.assertEquals(choice.get("poolSnapshotTiming"), "AT_TARGET_ADDITION");
+        Assert.assertEquals(((Map<?, ?>) choice.get("entryLocation")).get("kind"), "APPLICATION");
+        Assert.assertEquals(((Map<?, ?>) choice.get("inputContext")).get("timing"), "AFTER_SELECTION_BEFORE_APPLICATION");
         Assert.assertEquals(((List<?>) choice.get("options")).size(), 2);
         Assert.assertEquals(((Map<?, ?>) choice.get("selected")).get("id"), expected.getId());
         final var group = (Map<?, ?>) ((List<?>) recorder.targetProvenance(draw).capture(draw).get("abilities")).get(0);
@@ -213,6 +215,8 @@ public class AiTargetChoiceRecorderTest extends AITest {
         final var choice = choices(recorder.finish(null, "COMPLETED", null)).get(0);
         Assert.assertEquals(choice.get("boundary"), "MASKED_TARGET_POOL");
         Assert.assertEquals(choice.get("purpose"), "MASKED_TARGET_PLANNING");
+        Assert.assertEquals(((Map<?, ?>) choice.get("entryLocation")).get("reason"), "HIDDEN");
+        Assert.assertNull(((Map<?, ?>) choice.get("inputContext")).get("policy"));
         Assert.assertEquals(((Map<?, ?>) choice.get("selected")).keySet(), java.util.Set.of("type", "id", "gameTimestamp"));
     }
 
@@ -327,6 +331,91 @@ public class AiTargetChoiceRecorderTest extends AITest {
         Assert.assertEquals(((Map<?, ?>) choice.get("selected")).get("type"), "PLAYER");
         Assert.assertEquals(choice.get("stage"), "CANDIDATE_EVALUATION");
         Assert.assertEquals(choice.get("purpose"), "OPPONENT_PREFERENCE");
+    }
+
+    @Test(groups = {"UnitTest", "fast"})
+    public void nestedInputUsesItsOwnCurrentStateAndOnlyOneOfferedPoolTraversal() {
+        final Fixture f = fixture(); final var recorder = new AiDecisionRecorder(f.game, f.ai, 45);
+        recorder.beginAssessment(f.ability);
+        f.ai.setLife(6, null); f.game.getPhaseHandler().devModeSet(PhaseType.MAIN2, f.ai);
+        final AtomicInteger traversals = new AtomicInteger();
+        final Iterable<Card> pool = () -> { traversals.incrementAndGet(); return List.of(f.bear).iterator(); };
+        final var child = recorder.beginTargetChoice(f.ability, pool, "DESTROY_REMOVAL_POOL");
+        child.complete(f.bear);
+        f.ai.setLife(9, null); f.game.getPhaseHandler().devModeSet(PhaseType.MAIN1, f.ai);
+        recorder.evaluated(f.ability, "WillPlay");
+        final var event = recorder.finish(null, "COMPLETED", null);
+        final var choice = choices(event).get(0);
+        final Map<?, ?> entry = (Map<?, ?>) choice.get("entryLocation");
+        final Map<?, ?> context = (Map<?, ?>) choice.get("inputContext");
+        Assert.assertEquals(traversals.get(), 1);
+        Assert.assertEquals(entry.get("phase"), "MAIN2");
+        Assert.assertEquals(context.get("stateBasis"), "PLANNING_WORKING_STATE");
+        final Map<?, ?> policy = (Map<?, ?>) context.get("policy");
+        Assert.assertEquals(((Map<?, ?>) ((List<?>) policy.get("players")).get(1)).get("life"), 6);
+        final Map<?, ?> baseline = (Map<?, ?>) ((Map<?, ?>) event.data().get("inputContext")).get("policy");
+        Assert.assertEquals(((Map<?, ?>) ((List<?>) baseline.get("players")).get(1)).get("life"), 20);
+        final var links = (Map<?, ?>) ((Map<?, ?>) context.get("diagnostics")).get("optionBindings");
+        Assert.assertNotNull(((Map<?, ?>) ((List<?>) links.get("items")).get(0)).get("entityRef"));
+    }
+
+    @DataProvider public Object[][] blockingTargetStages() { return new Object[][] {{"ELIGIBILITY"}, {"INPUT"}, {"COMPLETION"}, {"ADDITION"}}; }
+    @Test(dataProvider = "blockingTargetStages", groups = {"UnitTest", "fast"})
+    public void targetGetterWorkCannotBlockTimeoutPublicationOrRewriteItsFrozenResult(final String stage) throws Exception {
+        final Fixture f = fixture(); final var recorder = new AiDecisionRecorder(f.game, f.ai, 46);
+        final var entered = new java.util.concurrent.CountDownLatch(1);
+        final var release = new java.util.concurrent.CountDownLatch(1);
+        final Runnable block = () -> {
+            entered.countDown();
+            try { Assert.assertTrue(release.await(5, java.util.concurrent.TimeUnit.SECONDS)); }
+            catch (InterruptedException error) { throw new IllegalStateException(error); }
+        };
+        final Runnable capture;
+        if ("INPUT".equals(stage)) {
+            recorder.beginAssessment(f.ability);
+            final Card selected = org.mockito.Mockito.spy(f.bear);
+            final var zone = f.bear.getController().getZone(ZoneType.Battlefield);
+            zone.remove(f.bear); zone.add(selected);
+            org.mockito.Mockito.doAnswer(ignored -> { block.run(); throw new IllegalStateException("late input failure"); }).when(selected).getNetPower();
+            capture = () -> recorder.beginTargetChoice(f.ability, List.of(selected), "DESTROY_REMOVAL_POOL");
+        } else if ("ELIGIBILITY".equals(stage)) {
+            final var ability = org.mockito.Mockito.spy(f.ability);
+            org.mockito.Mockito.doAnswer(ignored -> { block.run(); return true; }).when(ability).usesTargeting();
+            recorder.beginAssessment(ability);
+            capture = () -> recorder.beginTargetChoice(ability, List.of(f.bear), "DESTROY_REMOVAL_POOL");
+        } else {
+            recorder.beginAssessment(f.ability);
+            final var child = recorder.beginTargetChoice(f.ability, List.of(f.bear), "DESTROY_REMOVAL_POOL");
+            final Card selected = org.mockito.Mockito.spy(f.bear);
+            org.mockito.Mockito.doAnswer(ignored -> { block.run(); return f.bear.getGameTimestamp(); }).when(selected).getGameTimestamp();
+            if ("COMPLETION".equals(stage)) { capture = () -> child.complete(selected); }
+            else {
+                child.complete(f.bear);
+                capture = () -> child.prepareAddition(f.ability, selected, selected);
+            }
+        }
+        final var threads = java.util.concurrent.Executors.newFixedThreadPool(2);
+        try {
+            final var work = threads.submit(capture);
+            Assert.assertTrue(entered.await(5, java.util.concurrent.TimeUnit.SECONDS));
+            final var finished = threads.submit(() -> recorder.finish(null, "AI_TIMEOUT", null));
+            final var event = finished.get(2, java.util.concurrent.TimeUnit.SECONDS);
+            final String frozen = event.data().toString();
+            if ("ELIGIBILITY".equals(stage) || "INPUT".equals(stage)) { Assert.assertTrue(choices(event).isEmpty()); }
+            else { Assert.assertEquals(choices(event).get(0).get("status"), "COMPLETION".equals(stage) ? "INCOMPLETE" : "SELECTED"); }
+            release.countDown(); work.get(5, java.util.concurrent.TimeUnit.SECONDS);
+            Assert.assertEquals(event.data().toString(), frozen);
+            Assert.assertNull(f.game.getEventObservationFailure());
+        } finally { release.countDown(); threads.shutdownNow(); }
+    }
+
+    @Test(dataProvider = "disabledModes", groups = {"UnitTest", "fast"})
+    public void disabledNestedAdmissionDoesNotInspectAPool(final boolean copy) {
+        final Fixture f = fixture(); final var recorder = new AiDecisionRecorder(f.game, f.ai, 47);
+        recorder.beginAssessment(f.ability);
+        if (copy) { f.game.markAsSimulationCopy(); } else { f.game.setRecordAiDecisions(false); }
+        final Iterable<Card> pool = () -> { throw new AssertionError("disabled nested pool"); };
+        Assert.assertNull(recorder.beginTargetChoice(f.ability, pool, "DESTROY_REMOVAL_POOL"));
     }
 
     @Test(groups = {"UnitTest", "fast"})

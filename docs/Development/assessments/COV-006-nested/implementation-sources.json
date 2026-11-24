@@ -1,0 +1,9 @@
+{
+  "forge-ai/src/main/java/forge/ai/AiDecisionRecorder.java": "53a1c4dd9203b2cf7cc17d37596bb7e468002db9147e54569d9cca8e4b33d19d",
+  "forge-ai/src/main/java/forge/ai/AiOptionInput.java": "c3564f0d7ea765826d627f1a69ed88b651eec6bb4018e0fa8bd133be2f1e26f1",
+  "forge-ai/src/main/java/forge/ai/AiTargetChoiceRecorder.java": "0b026a1197eae12858c572c9773dca3473beaae6de6a3b56e14e98f6dba21aa8",
+  "forge-gui-desktop/src/test/java/forge/ai/AiTargetChoiceRecorderTest.java": "82e27943c8fc2e1b9cf5f7823afbfb66db8e4e494a9b50096823c8428aa14e7e",
+  "tools/decision-records/coverage_audit.py": "6c0f611104a7662d96077393aae7599414d4c57553a02bbc25ee7efb9a0362c7",
+  "tools/decision-records/export.py": "b60c60c83a8a3de0140c5826533f0b4410fbe2d75fd7afbd9b3564c10f20b98f",
+  "tools/decision-records/test_nested_input_context.py": "85bd4c837d148e18a6bdf21947e99c2a42117366f6385623202fce30745daf49"
+}

@@ -8,7 +8,7 @@ Coverage reports include a versioned `inputCoverageAudit`, even for legacy input
 
 New runs also declare bounded [standalone invocation accounting](../../docs/Development/Simulation-Invocation-Accounting.md). The run summary distinguishes entered callbacks, prepared/omitted records, callback outcomes, publication returns and collector receipts at game-capture closure. Coverage reports validate and summarize these counts. This scope covers configured original AI controllers at the standalone adapter; parent/nested and uninstrumented invocation counts remain unknown. Legacy absence, partial scope and overflow cannot establish an exact missing-start rate.
 
-Audited standalone choices also carry an optional [independent entry location](../../docs/Development/Simulation-Target-Entry-Context.md). Entry clocks are diagnostic, and legacy absence stays unknown. Standalone target pools now capture fresh V4 views and current diagnostic option links; precomputed additions retain application timing. Nested targets/search operations and modes have separate COV-006 integrations.
+Audited standalone choices also carry an optional [independent entry location](../../docs/Development/Simulation-Target-Entry-Context.md). Entry clocks are diagnostic, and legacy absence stays unknown. Standalone target pools now capture fresh V4 views and current diagnostic option links; precomputed additions retain application timing. Nested target pools also have [independent planning-state inputs](../../docs/Development/Simulation-Nested-Target-Context.md). Search operations and modes remain separate COV-006 integrations.
 
 Decision collection is independent of full game tracing. With your usual Forge launcher, run:
 
