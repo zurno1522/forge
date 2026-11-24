@@ -1,12 +1,12 @@
 # Observation coverage design priorities
 
-Status: COV-001 through COV-004 implemented for their documented scopes; later designs proposed. The [version-1 input-context profile](Simulation-Input-Context.md) is the baseline at `f115c6f2843`; [version 2 adds bounded active-stack inputs](Simulation-Stack-Input-Context.md), [version 3 adds audited controller request constraints](Simulation-Prompt-Input-Context.md), and [version 4 adds current associations and a completeness contract](Simulation-Context-Bindings.md).
+Status: COV-001 through COV-004 implemented for their documented scopes; [COV-005's audit/location contract](Simulation-Planning-Boundary-Audit.md) is complete as a design item. Later integrations remain proposed. The [version-1 input-context profile](Simulation-Input-Context.md) is the baseline at `f115c6f2843`; [version 2 adds bounded active-stack inputs](Simulation-Stack-Input-Context.md), [version 3 adds audited controller request constraints](Simulation-Prompt-Input-Context.md), and [version 4 adds current associations and a completeness contract](Simulation-Context-Bindings.md).
 
 COV-001 is implemented: see [definitions, validation and gap review](Simulation-Coverage-Reporting.md). OPT-001 has [phase results and its own gap review](Simulation-Observation-Cost-Assessment.md). COV-002/003 establish the stack/request prerequisites; COV-004 defines supported associations and per-family completeness requirements. Review and gap assignment continue after each item without a user-review pause. Current/earlier-item defects must be fixed before proceeding.
 
 Coverage work determines which decisions and permitted inputs the dataset represents, when they are captured, and how a selected option can be interpreted. CPU, allocation, retention and storage optimization have a [separate design track](Simulation-Observation-Optimization-Plan.md). Coverage reporting belongs here; performance profiling belongs there.
 
-The [combined execution order](Simulation-Observation-Roadmap.md) keeps COV-005 next after COV-004 validation/review and schedules COV-001A and a larger-profile OPT-005 checkpoint before COV-006's broad selector rollout.
+The [combined execution order](Simulation-Observation-Roadmap.md) keeps COV-001A next after COV-005 review, followed by a larger-profile OPT-005 checkpoint before COV-006's broad selector rollout.
 
 ## Ordered backlog
 

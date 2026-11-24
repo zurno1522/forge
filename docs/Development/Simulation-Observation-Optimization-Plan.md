@@ -6,7 +6,7 @@ OPT-001 now has [phase measurements and an assigned gap review](Simulation-Obser
 
 Optimization work reduces the cost of producing and storing the same represented information. It does not gain a performance improvement by silently omitting inputs, weakening privacy, moving capture after selection or reusing stale state. Coverage additions can proceed independently, subject to their existing cost guardrails; optimization comparisons must name the exact coverage/profile baseline they preserve.
 
-The [reviewed combined execution order](Simulation-Observation-Roadmap.md) keeps OPT-001 next; runtime optimizations remain conditional on measured costs.
+The [current combined execution order](Simulation-Observation-Roadmap.md) has completed OPT-001 and COV-002 through COV-005's documented scopes. After COV-001A, an OPT-005 checkpoint measures the larger V4 profile before broad selector expansion. Runtime optimizations remain conditional on measured costs and retain separate commits; internal code/gap reviews continue without waiting for user review between items.
 
 ## Ordered backlog
 

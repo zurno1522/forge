@@ -1,0 +1,693 @@
+{
+  "baselineRevision": "6ed88c170b7",
+  "method": "Qualified production adapter calls, excluding adapter-internal forwarding, utilities, declarations and commented lines; nearby literals locate boundaries but do not establish semantics.",
+  "counts": {
+    "total": 63,
+    "byAdapter": {
+      "AiPaymentChoiceRecorder": 6,
+      "AiNumberChoiceRecorder": 15,
+      "AiEffectChoiceRecorder": 2,
+      "AiChoiceRecorder": 6,
+      "AiModeChoiceRecorder": 2,
+      "AiTargetChoiceRecorder": 32
+    },
+    "byClassification": {
+      "SELECTOR": 25,
+      "OPERATION": 9,
+      "APPLICATION": 28,
+      "RESULT": 1
+    }
+  },
+  "sites": [
+    {
+      "file": "forge-ai/src/main/java/forge/ai/AiController.java",
+      "line": 1291,
+      "adapter": "AiPaymentChoiceRecorder",
+      "method": "cards",
+      "classification": "SELECTOR",
+      "nearbyBoundaryLiterals": [
+        "PAYMENT_DISCARD_POOL"
+      ],
+      "sourceSha256": "fdc222662884591b2cab0dd143f2ecde506c113dd5391d185c8159c2b178e90c"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/AiCostDecision.java",
+      "line": 32,
+      "adapter": "AiPaymentChoiceRecorder",
+      "method": "decide",
+      "classification": "OPERATION",
+      "nearbyBoundaryLiterals": [],
+      "sourceSha256": "e9d2aa634eb3f3660bb2bd877649a7eb288206312b082cc284c3cbdb98f38a39"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ComputerUtil.java",
+      "line": 627,
+      "adapter": "AiPaymentChoiceRecorder",
+      "method": "cards",
+      "classification": "SELECTOR",
+      "nearbyBoundaryLiterals": [
+        "PAYMENT_SACRIFICE_POOL"
+      ],
+      "sourceSha256": "ad8a751ba025e9545c6f5e5f69c8989ca54f1b24081d53cb88a4b52bc4b30366"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ComputerUtil.java",
+      "line": 739,
+      "adapter": "AiPaymentChoiceRecorder",
+      "method": "cards",
+      "classification": "APPLICATION",
+      "nearbyBoundaryLiterals": [
+        "PAYMENT_EXILE_POOL"
+      ],
+      "sourceSha256": "ad8a751ba025e9545c6f5e5f69c8989ca54f1b24081d53cb88a4b52bc4b30366"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ComputerUtilCost.java",
+      "line": 749,
+      "adapter": "AiNumberChoiceRecorder",
+      "method": "announceX",
+      "classification": "APPLICATION",
+      "nearbyBoundaryLiterals": [
+        "MAX_X_HEURISTIC"
+      ],
+      "sourceSha256": "0884f9c239c066511b53fa8fb92cb19c3373cf139f70b4109f94d00c122c6088"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ComputerUtilMana.java",
+      "line": 632,
+      "adapter": "AiPaymentChoiceRecorder",
+      "method": "manaPayment",
+      "classification": "OPERATION",
+      "nearbyBoundaryLiterals": [],
+      "sourceSha256": "3ad786f3ceb220e718e4c513e56b6891a4f48920f12aefa3a555682ee9898787"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java",
+      "line": 335,
+      "adapter": "AiNumberChoiceRecorder",
+      "method": "range",
+      "classification": "OPERATION",
+      "nearbyBoundaryLiterals": [
+        "CONTROLLER_ANNOUNCEMENT"
+      ],
+      "sourceSha256": "1bd2ae7efa622db896697750ebc0060e213d9767c75bd7b3f0c6a90899e2ceb6"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java",
+      "line": 435,
+      "adapter": "AiEffectChoiceRecorder",
+      "method": "single",
+      "classification": "SELECTOR",
+      "nearbyBoundaryLiterals": [],
+      "sourceSha256": "1bd2ae7efa622db896697750ebc0060e213d9767c75bd7b3f0c6a90899e2ceb6"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java",
+      "line": 815,
+      "adapter": "AiPaymentChoiceRecorder",
+      "method": "manaFromPool",
+      "classification": "SELECTOR",
+      "nearbyBoundaryLiterals": [],
+      "sourceSha256": "1bd2ae7efa622db896697750ebc0060e213d9767c75bd7b3f0c6a90899e2ceb6"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java",
+      "line": 1072,
+      "adapter": "AiChoiceRecorder",
+      "method": "targeting",
+      "classification": "OPERATION",
+      "nearbyBoundaryLiterals": [
+        "DELEGATED_TARGET_SELECTION"
+      ],
+      "sourceSha256": "1bd2ae7efa622db896697750ebc0060e213d9767c75bd7b3f0c6a90899e2ceb6"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java",
+      "line": 1130,
+      "adapter": "AiNumberChoiceRecorder",
+      "method": "controllerRange",
+      "classification": "SELECTOR",
+      "nearbyBoundaryLiterals": [],
+      "sourceSha256": "1bd2ae7efa622db896697750ebc0060e213d9767c75bd7b3f0c6a90899e2ceb6"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java",
+      "line": 1136,
+      "adapter": "AiNumberChoiceRecorder",
+      "method": "controllerRange",
+      "classification": "SELECTOR",
+      "nearbyBoundaryLiterals": [],
+      "sourceSha256": "1bd2ae7efa622db896697750ebc0060e213d9767c75bd7b3f0c6a90899e2ceb6"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java",
+      "line": 1142,
+      "adapter": "AiNumberChoiceRecorder",
+      "method": "discrete",
+      "classification": "SELECTOR",
+      "nearbyBoundaryLiterals": [],
+      "sourceSha256": "1bd2ae7efa622db896697750ebc0060e213d9767c75bd7b3f0c6a90899e2ceb6"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java",
+      "line": 1249,
+      "adapter": "AiModeChoiceRecorder",
+      "method": "choose",
+      "classification": "OPERATION",
+      "nearbyBoundaryLiterals": [],
+      "sourceSha256": "1bd2ae7efa622db896697750ebc0060e213d9767c75bd7b3f0c6a90899e2ceb6"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java",
+      "line": 1549,
+      "adapter": "AiChoiceRecorder",
+      "method": "observe",
+      "classification": "OPERATION",
+      "nearbyBoundaryLiterals": [
+        "EFFECT_COPY_TARGET_RESULT",
+        "EFFECT_COPY_TARGET_SELECTION",
+        "COPY_TARGETS",
+        "PRIOR_TARGET_PLAN_ONLY"
+      ],
+      "sourceSha256": "1bd2ae7efa622db896697750ebc0060e213d9767c75bd7b3f0c6a90899e2ceb6"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java",
+      "line": 1594,
+      "adapter": "AiChoiceRecorder",
+      "method": "triggerPreparation",
+      "classification": "OPERATION",
+      "nearbyBoundaryLiterals": [],
+      "sourceSha256": "1bd2ae7efa622db896697750ebc0060e213d9767c75bd7b3f0c6a90899e2ceb6"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java",
+      "line": 1615,
+      "adapter": "AiChoiceRecorder",
+      "method": "targeting",
+      "classification": "OPERATION",
+      "nearbyBoundaryLiterals": [
+        "DELEGATED_TARGET_SELECTION"
+      ],
+      "sourceSha256": "1bd2ae7efa622db896697750ebc0060e213d9767c75bd7b3f0c6a90899e2ceb6"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java",
+      "line": 1659,
+      "adapter": "AiChoiceRecorder",
+      "method": "targeting",
+      "classification": "OPERATION",
+      "nearbyBoundaryLiterals": [
+        "DELEGATED_TARGET_SELECTION",
+        "TRIGGER_TARGET_SELECTION"
+      ],
+      "sourceSha256": "1bd2ae7efa622db896697750ebc0060e213d9767c75bd7b3f0c6a90899e2ceb6"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java",
+      "line": 1668,
+      "adapter": "AiChoiceRecorder",
+      "method": "observe",
+      "classification": "RESULT",
+      "nearbyBoundaryLiterals": [
+        "RETARGET_RESULT",
+        "RETARGET_SELECTION",
+        "CONTROLLER_RETARGET",
+        "PRIOR_TARGET_PLAN_ONLY"
+      ],
+      "sourceSha256": "1bd2ae7efa622db896697750ebc0060e213d9767c75bd7b3f0c6a90899e2ceb6"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java",
+      "line": 1903,
+      "adapter": "AiEffectChoiceRecorder",
+      "method": "zoneChange",
+      "classification": "SELECTOR",
+      "nearbyBoundaryLiterals": [],
+      "sourceSha256": "1bd2ae7efa622db896697750ebc0060e213d9767c75bd7b3f0c6a90899e2ceb6"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/AttachAi.java",
+      "line": 1016,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "select",
+      "classification": "SELECTOR",
+      "nearbyBoundaryLiterals": [
+        "ATTACH_PLAYER_POOL"
+      ],
+      "sourceSha256": "88c10936df09e143d2ad02fcd14b2199a47e9747e051910a10f1948390325040"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/AttachAi.java",
+      "line": 1318,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "select",
+      "classification": "SELECTOR",
+      "nearbyBoundaryLiterals": [
+        "ATTACH_CARD_POOL"
+      ],
+      "sourceSha256": "88c10936df09e143d2ad02fcd14b2199a47e9747e051910a10f1948390325040"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/AttachAi.java",
+      "line": 1323,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "select",
+      "classification": "SELECTOR",
+      "nearbyBoundaryLiterals": [
+        "ATTACH_CARD_POOL",
+        "ATTACH_CARD_POOL"
+      ],
+      "sourceSha256": "88c10936df09e143d2ad02fcd14b2199a47e9747e051910a10f1948390325040"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/AttachAi.java",
+      "line": 1324,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "select",
+      "classification": "SELECTOR",
+      "nearbyBoundaryLiterals": [
+        "ATTACH_CARD_POOL"
+      ],
+      "sourceSha256": "88c10936df09e143d2ad02fcd14b2199a47e9747e051910a10f1948390325040"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/AttachAi.java",
+      "line": 1349,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "select",
+      "classification": "SELECTOR",
+      "nearbyBoundaryLiterals": [
+        "ATTACH_CARD_POOL"
+      ],
+      "sourceSha256": "88c10936df09e143d2ad02fcd14b2199a47e9747e051910a10f1948390325040"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/AttachAi.java",
+      "line": 1406,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "selectedFrom",
+      "classification": "APPLICATION",
+      "nearbyBoundaryLiterals": [
+        "ATTACH_CARD_POOL"
+      ],
+      "sourceSha256": "88c10936df09e143d2ad02fcd14b2199a47e9747e051910a10f1948390325040"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/CharmAi.java",
+      "line": 39,
+      "adapter": "AiModeChoiceRecorder",
+      "method": "evaluate",
+      "classification": "SELECTOR",
+      "nearbyBoundaryLiterals": [],
+      "sourceSha256": "639c50c188b6e1978442d3f690bce97574b66e95d23e33cc1c90e8cc2c3bd329"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DamageDealAi.java",
+      "line": 220,
+      "adapter": "AiNumberChoiceRecorder",
+      "method": "refineX",
+      "classification": "APPLICATION",
+      "nearbyBoundaryLiterals": [],
+      "sourceSha256": "f982cbb5434f39f1eed372137a3717d185d16baa9bc6dca2745188a5ed293efe"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DamageDealAi.java",
+      "line": 294,
+      "adapter": "AiNumberChoiceRecorder",
+      "method": "refineX",
+      "classification": "APPLICATION",
+      "nearbyBoundaryLiterals": [],
+      "sourceSha256": "f982cbb5434f39f1eed372137a3717d185d16baa9bc6dca2745188a5ed293efe"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DamageDealAi.java",
+      "line": 357,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "select",
+      "classification": "SELECTOR",
+      "nearbyBoundaryLiterals": [
+        "DAMAGE_KILLABLES"
+      ],
+      "sourceSha256": "f982cbb5434f39f1eed372137a3717d185d16baa9bc6dca2745188a5ed293efe"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DamageDealAi.java",
+      "line": 370,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "select",
+      "classification": "SELECTOR",
+      "nearbyBoundaryLiterals": [
+        "DAMAGE_MANDATORY_OPPONENT_POOL",
+        "DAMAGE_MANDATORY_FALLBACK_POOL"
+      ],
+      "sourceSha256": "f982cbb5434f39f1eed372137a3717d185d16baa9bc6dca2745188a5ed293efe"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DamageDealAi.java",
+      "line": 373,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "select",
+      "classification": "SELECTOR",
+      "nearbyBoundaryLiterals": [
+        "DAMAGE_MANDATORY_FALLBACK_POOL"
+      ],
+      "sourceSha256": "f982cbb5434f39f1eed372137a3717d185d16baa9bc6dca2745188a5ed293efe"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DamageDealAi.java",
+      "line": 415,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "select",
+      "classification": "SELECTOR",
+      "nearbyBoundaryLiterals": [
+        "DAMAGE_KILLABLE_PLANESWALKERS",
+        "DAMAGE_PLANESWALKER_POOL"
+      ],
+      "sourceSha256": "f982cbb5434f39f1eed372137a3717d185d16baa9bc6dca2745188a5ed293efe"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DamageDealAi.java",
+      "line": 420,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "select",
+      "classification": "SELECTOR",
+      "nearbyBoundaryLiterals": [
+        "DAMAGE_PLANESWALKER_POOL"
+      ],
+      "sourceSha256": "f982cbb5434f39f1eed372137a3717d185d16baa9bc6dca2745188a5ed293efe"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DamageDealAi.java",
+      "line": 500,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "choose",
+      "classification": "SELECTOR",
+      "nearbyBoundaryLiterals": [
+        "DAMAGE_OPPONENT_POOL"
+      ],
+      "sourceSha256": "f982cbb5434f39f1eed372137a3717d185d16baa9bc6dca2745188a5ed293efe"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DamageDealAi.java",
+      "line": 510,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "addSelected",
+      "classification": "APPLICATION",
+      "nearbyBoundaryLiterals": [
+        "DAMAGE_PLAYER_POOL"
+      ],
+      "sourceSha256": "f982cbb5434f39f1eed372137a3717d185d16baa9bc6dca2745188a5ed293efe"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DamageDealAi.java",
+      "line": 612,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "addSelected",
+      "classification": "APPLICATION",
+      "nearbyBoundaryLiterals": [
+        "DAMAGE_PLAYER_POOL"
+      ],
+      "sourceSha256": "f982cbb5434f39f1eed372137a3717d185d16baa9bc6dca2745188a5ed293efe"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DamageDealAi.java",
+      "line": 682,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "addSelected",
+      "classification": "APPLICATION",
+      "nearbyBoundaryLiterals": [
+        "DAMAGE_PLAYER_POOL"
+      ],
+      "sourceSha256": "f982cbb5434f39f1eed372137a3717d185d16baa9bc6dca2745188a5ed293efe"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DamageDealAi.java",
+      "line": 708,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "addSelected",
+      "classification": "APPLICATION",
+      "nearbyBoundaryLiterals": [
+        "DAMAGE_PLAYER_POOL"
+      ],
+      "sourceSha256": "f982cbb5434f39f1eed372137a3717d185d16baa9bc6dca2745188a5ed293efe"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DamageDealAi.java",
+      "line": 962,
+      "adapter": "AiNumberChoiceRecorder",
+      "method": "refineX",
+      "classification": "APPLICATION",
+      "nearbyBoundaryLiterals": [],
+      "sourceSha256": "f982cbb5434f39f1eed372137a3717d185d16baa9bc6dca2745188a5ed293efe"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DamageDealAi.java",
+      "line": 1029,
+      "adapter": "AiNumberChoiceRecorder",
+      "method": "refineX",
+      "classification": "APPLICATION",
+      "nearbyBoundaryLiterals": [],
+      "sourceSha256": "f982cbb5434f39f1eed372137a3717d185d16baa9bc6dca2745188a5ed293efe"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DestroyAi.java",
+      "line": 50,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "choose",
+      "classification": "SELECTOR",
+      "nearbyBoundaryLiterals": [
+        "DESTROY_POLYMORPH_POOL"
+      ],
+      "sourceSha256": "2aa18fa39b1faff8f21531c2bfa0ec73deb6367e83ce535fc745fdd8e601ae15"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DestroyAi.java",
+      "line": 93,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "choose",
+      "classification": "SELECTOR",
+      "nearbyBoundaryLiterals": [
+        "DESTROY_POLYMORPH_POOL"
+      ],
+      "sourceSha256": "2aa18fa39b1faff8f21531c2bfa0ec73deb6367e83ce535fc745fdd8e601ae15"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DestroyAi.java",
+      "line": 220,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "select",
+      "classification": "SELECTOR",
+      "nearbyBoundaryLiterals": [
+        "DESTROY_REMOVAL_POOL"
+      ],
+      "sourceSha256": "2aa18fa39b1faff8f21531c2bfa0ec73deb6367e83ce535fc745fdd8e601ae15"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DestroyAi.java",
+      "line": 229,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "select",
+      "classification": "SELECTOR",
+      "nearbyBoundaryLiterals": [
+        "DESTROY_LAND_POOL"
+      ],
+      "sourceSha256": "2aa18fa39b1faff8f21531c2bfa0ec73deb6367e83ce535fc745fdd8e601ae15"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DestroyAi.java",
+      "line": 240,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "select",
+      "classification": "SELECTOR",
+      "nearbyBoundaryLiterals": [
+        "DESTROY_REMOVAL_POOL"
+      ],
+      "sourceSha256": "2aa18fa39b1faff8f21531c2bfa0ec73deb6367e83ce535fc745fdd8e601ae15"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DrawAi.java",
+      "line": 333,
+      "adapter": "AiNumberChoiceRecorder",
+      "method": "refineX",
+      "classification": "APPLICATION",
+      "nearbyBoundaryLiterals": [],
+      "sourceSha256": "6134afa9804fb30f723b1025bb2751bda34134db9baf08d487ceb9c08484fcf4"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DrawAi.java",
+      "line": 360,
+      "adapter": "AiNumberChoiceRecorder",
+      "method": "refineX",
+      "classification": "APPLICATION",
+      "nearbyBoundaryLiterals": [],
+      "sourceSha256": "6134afa9804fb30f723b1025bb2751bda34134db9baf08d487ceb9c08484fcf4"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DrawAi.java",
+      "line": 398,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "addSelected",
+      "classification": "APPLICATION",
+      "nearbyBoundaryLiterals": [
+        "DRAW_PLAYER_POOL",
+        "DRAW_PLAYER_POOL"
+      ],
+      "sourceSha256": "6134afa9804fb30f723b1025bb2751bda34134db9baf08d487ceb9c08484fcf4"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DrawAi.java",
+      "line": 402,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "addSelected",
+      "classification": "APPLICATION",
+      "nearbyBoundaryLiterals": [
+        "DRAW_PLAYER_POOL"
+      ],
+      "sourceSha256": "6134afa9804fb30f723b1025bb2751bda34134db9baf08d487ceb9c08484fcf4"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DrawAi.java",
+      "line": 420,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "addSelected",
+      "classification": "APPLICATION",
+      "nearbyBoundaryLiterals": [
+        "DRAW_PLAYER_POOL"
+      ],
+      "sourceSha256": "6134afa9804fb30f723b1025bb2751bda34134db9baf08d487ceb9c08484fcf4"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DrawAi.java",
+      "line": 432,
+      "adapter": "AiNumberChoiceRecorder",
+      "method": "refineX",
+      "classification": "APPLICATION",
+      "nearbyBoundaryLiterals": [
+        "DRAW_PLAYER_POOL"
+      ],
+      "sourceSha256": "6134afa9804fb30f723b1025bb2751bda34134db9baf08d487ceb9c08484fcf4"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DrawAi.java",
+      "line": 434,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "addSelected",
+      "classification": "APPLICATION",
+      "nearbyBoundaryLiterals": [
+        "DRAW_PLAYER_POOL"
+      ],
+      "sourceSha256": "6134afa9804fb30f723b1025bb2751bda34134db9baf08d487ceb9c08484fcf4"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DrawAi.java",
+      "line": 445,
+      "adapter": "AiNumberChoiceRecorder",
+      "method": "refineX",
+      "classification": "APPLICATION",
+      "nearbyBoundaryLiterals": [
+        "DRAW_PLAYER_POOL"
+      ],
+      "sourceSha256": "6134afa9804fb30f723b1025bb2751bda34134db9baf08d487ceb9c08484fcf4"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DrawAi.java",
+      "line": 447,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "addSelected",
+      "classification": "APPLICATION",
+      "nearbyBoundaryLiterals": [
+        "DRAW_PLAYER_POOL"
+      ],
+      "sourceSha256": "6134afa9804fb30f723b1025bb2751bda34134db9baf08d487ceb9c08484fcf4"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DrawAi.java",
+      "line": 457,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "addSelected",
+      "classification": "APPLICATION",
+      "nearbyBoundaryLiterals": [
+        "DRAW_PLAYER_POOL"
+      ],
+      "sourceSha256": "6134afa9804fb30f723b1025bb2751bda34134db9baf08d487ceb9c08484fcf4"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DrawAi.java",
+      "line": 465,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "addSelected",
+      "classification": "APPLICATION",
+      "nearbyBoundaryLiterals": [
+        "DRAW_PLAYER_POOL"
+      ],
+      "sourceSha256": "6134afa9804fb30f723b1025bb2751bda34134db9baf08d487ceb9c08484fcf4"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DrawAi.java",
+      "line": 506,
+      "adapter": "AiNumberChoiceRecorder",
+      "method": "refineX",
+      "classification": "APPLICATION",
+      "nearbyBoundaryLiterals": [],
+      "sourceSha256": "6134afa9804fb30f723b1025bb2751bda34134db9baf08d487ceb9c08484fcf4"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DrawAi.java",
+      "line": 517,
+      "adapter": "AiNumberChoiceRecorder",
+      "method": "refineX",
+      "classification": "APPLICATION",
+      "nearbyBoundaryLiterals": [
+        "DRAW_PLAYER_POOL"
+      ],
+      "sourceSha256": "6134afa9804fb30f723b1025bb2751bda34134db9baf08d487ceb9c08484fcf4"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DrawAi.java",
+      "line": 526,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "addSelected",
+      "classification": "APPLICATION",
+      "nearbyBoundaryLiterals": [
+        "DRAW_PLAYER_POOL"
+      ],
+      "sourceSha256": "6134afa9804fb30f723b1025bb2751bda34134db9baf08d487ceb9c08484fcf4"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DrawAi.java",
+      "line": 561,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "addSelected",
+      "classification": "APPLICATION",
+      "nearbyBoundaryLiterals": [
+        "DRAW_PLAYER_POOL",
+        "DRAW_PLAYER_POOL"
+      ],
+      "sourceSha256": "6134afa9804fb30f723b1025bb2751bda34134db9baf08d487ceb9c08484fcf4"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DrawAi.java",
+      "line": 573,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "addSelected",
+      "classification": "APPLICATION",
+      "nearbyBoundaryLiterals": [
+        "DRAW_PLAYER_POOL",
+        "DRAW_PLAYER_POOL"
+      ],
+      "sourceSha256": "6134afa9804fb30f723b1025bb2751bda34134db9baf08d487ceb9c08484fcf4"
+    },
+    {
+      "file": "forge-ai/src/main/java/forge/ai/ability/DrawAi.java",
+      "line": 580,
+      "adapter": "AiTargetChoiceRecorder",
+      "method": "addSelected",
+      "classification": "APPLICATION",
+      "nearbyBoundaryLiterals": [
+        "DRAW_PLAYER_POOL"
+      ],
+      "sourceSha256": "6134afa9804fb30f723b1025bb2751bda34134db9baf08d487ceb9c08484fcf4"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "sourceBaseline": "6ed88c170b7",
+  "checkedSites": 63,
+  "sourceHashesMatch": true,
+  "lineReferencesMatch": true,
+  "classificationCountsReconcile": true,
+  "documentLinksResolve": true,
+  "runtimeChanged": false,
+  "limitations": "The scan inventories qualified adapter calls; source inspection establishes semantics. It does not count runtime invocations or all Forge decision paths.",
+  "documentSha256": "2e1b7186f03a6240cc66f14ebe23823f1cf506754d767ac96f08c65ba9ea8511"
+}
