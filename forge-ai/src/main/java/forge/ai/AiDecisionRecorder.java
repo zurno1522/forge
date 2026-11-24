@@ -24,6 +24,7 @@ final class AiDecisionRecorder {
     private Assessment assessment;
     private long assessmentSequence;
     private final List<TargetChoice> targetChoices = new ArrayList<>();
+    private final AiCaptureAccounting targetCaptureAccounting;
     private int targetCapturesInFlight;
     private long targetChoicesOmittedByBudget;
     private long interruptedTargetCaptures;
@@ -306,17 +307,29 @@ final class AiDecisionRecorder {
     TargetChoice beginTargetChoice(final SpellAbility ability,
             final Iterable<? extends GameObject> options, final String boundary, final String poolTiming) {
         if (!viewer.getGame().isRecordingAiDecisions()) { return null; }
+        final var scope = targetCaptureAccounting == null ? null : targetCaptureAccounting.enter();
+        try { return captureTargetChoice(ability, options, boundary, poolTiming, scope); }
+        catch (RuntimeException | Error failure) {
+            if (scope != null) { scope.failed(); }
+            throw failure;
+        } finally { if (scope != null) { scope.exit(); } }
+    }
+
+    private TargetChoice captureTargetChoice(final SpellAbility ability,
+            final Iterable<? extends GameObject> options, final String boundary, final String poolTiming,
+            final AiCaptureAccounting.Scope scope) {
         final Assessment origin;
         synchronized (this) {
-            if (closed || assessment == null) { return null; }
+            if (closed || assessment == null) { if (scope != null) { scope.unsupported(); } return null; }
             origin = assessment;
         }
         // Eligibility getters must not delay parent timeout publication either.
         final boolean matches = ability.usesTargeting() && ability.getRootAbility() == origin.candidate.getRootAbility();
         synchronized (this) {
-            if (closed || assessment != origin || !matches) { return null; }
+            if (closed || assessment != origin || !matches) { if (scope != null) { scope.unsupported(); } return null; }
             if (targetChoices.size() + targetCapturesInFlight >= AiTargetChoiceRecorder.MAX_CHOICES) {
                 targetChoicesOmittedByBudget++;
+                if (scope != null) { scope.budget(); }
                 return null;
             }
             targetCapturesInFlight++;
@@ -333,7 +346,7 @@ final class AiDecisionRecorder {
             final var entry = AiEntryLocation.capture(viewer, timing, "PLANNING_WORKING_STATE", visible, active);
             final var prior = AiTargetChoiceRecorder.references(ability.getTargets(), active);
             final var offered = prior == null ? null : AiOptionInput.capture(options, active);
-            if (offered == null) { interrupted = true; return null; }
+            if (offered == null) { interrupted = true; if (scope != null) { scope.interrupted(); } return null; }
             final Map<String, Object> choice = new LinkedHashMap<>();
             choice.put("choiceSchemaVersion", 1);
             choice.put("choiceType", "TARGET_POOL_SELECTION");
@@ -371,6 +384,7 @@ final class AiDecisionRecorder {
                 choice.put("choiceId", data.get("decisionId") + ":target:" + targetChoices.size());
                 final TargetChoice result = new TargetChoice(origin, ability, choice);
                 targetChoices.add(result);
+                if (scope != null) { scope.captured("UNAVAILABLE".equals(input.get("status"))); }
                 return result;
             }
         } finally {
@@ -385,6 +399,7 @@ final class AiDecisionRecorder {
 
     AiDecisionRecorder(final Game game, final Player viewer, final long sequence) {
         this.viewer = viewer;
+        targetCaptureAccounting = game.isRecordingAiDecisions() ? new AiCaptureAccounting() : null;
         data.put("decisionSchemaVersion", 1);
         data.put("actionExecutionSchemaVersion", 1);
         data.put("decisionId", viewer.getId() + ":" + sequence);
@@ -468,6 +483,7 @@ final class AiDecisionRecorder {
     synchronized AiDecisionEvent finish(final List<SpellAbility> chosen, final String status,
             final FlatMonteCarloPicker.Result search) {
         closed = true;
+        if (targetCaptureAccounting != null) { data.put("targetCaptureAccounting", targetCaptureAccounting.closeAndSnapshot()); }
         data.put("status", evaluationFailure == null ? status : evaluationFailure);
         data.put("candidates", candidates);
         final List<Map<String, Object>> selected = new ArrayList<>();

@@ -33,6 +33,10 @@ _account_spec = importlib.util.spec_from_file_location('forge_observation_accoun
 _accounting = importlib.util.module_from_spec(_account_spec)
 _account_spec.loader.exec_module(_accounting)
 
+_capture_spec = importlib.util.spec_from_file_location('forge_capture_accounting', Path(__file__).with_name('capture_accounting.py'))
+_captures = importlib.util.module_from_spec(_capture_spec)
+_capture_spec.loader.exec_module(_captures)
+
 
 def ordered_games(games):
     return games.ordered_keys() if isinstance(games, _spool.Games) else sorted(games)
@@ -128,6 +132,7 @@ def validate_search_target_applications(d, masked_ids):
 
 
 def validate_subordinate_choices(d, masked_ids, known_players=None):
+    _captures.validate(d)
     if 'targetChoiceProvenanceSchemaVersion' in d:
         require(integer(d['targetChoiceProvenanceSchemaVersion']) and d['targetChoiceProvenanceSchemaVersion'] in (1, 2)
                 and d.get('subordinateChoiceSchemaVersion') == 1, 'invalid target provenance declaration')
@@ -763,6 +768,7 @@ def matches_selected(action, candidate):
 
 
 def make_coverage(runs, rows, *, spool=None):
+    capture_accounting = _captures.Aggregate()
     audit = _audit.CoverageAudit(
         _spool.DiskMap(spool, 'audit:boundaries') if spool else {},
         _spool.DiskMap(spool, 'audit:turns') if spool else {}, _choices.CONTEXT_TIMING,
@@ -840,6 +846,7 @@ def make_coverage(runs, rows, *, spool=None):
             add('executionStatuses', game['execution']['status'])
     for row in rows:
         d = row['decision']
+        capture_accounting.observe(d)
         location = dict(run_id=row['runId'], game=row['game'], turn=d['observation'].get('turn'), player=d['playerId'])
         audit.observe('DECISION', d['decisionType'], d.get('inputContext'), **location, turn_basis='PARENT_BASELINE',
                       parent_omissions={'NESTED_TARGET': d.get('subordinateChoiceOmissions'),
@@ -1081,6 +1088,8 @@ def make_coverage(runs, rows, *, spool=None):
     if input_bindings: summary['inputContextBindings'] = dict(input_bindings)
     accounting = _accounting.summarize(runs)
     if accounting is not None: summary['observationAccounting'] = accounting
+    captures = capture_accounting.summary()
+    if captures is not None: summary['targetCaptureAccounting'] = captures
     summary['limitations'] = [
         'Main-phase play selection with an empty stack only; no mulligan, combat, reactive-priority or subordinate-choice coverage.',
         'Candidate assessments are partial and may repeat an ability; counts are assessment observations, not unique rejected legal actions.',
@@ -1114,6 +1123,8 @@ def make_coverage(runs, rows, *, spool=None):
         summary['limitations'].append('V4 retains typed request fields and adds diagnostic current-option links. Those links do not authorize entity pool membership, count or ordering as model features. Direct public disclosure links require delivery proof without an intervening engine event. No profile certifies complete learning examples.')
     if accounting is not None:
         summary['limitations'].append('Invocation accounting covers configured original-AI standalone callback wrappers only. Entries are not unique gameplay decisions. Input-unavailable records are retained records; callback errors are not capture loss. Publication return does not prove collector delivery. Cutoff-pending work is not evidence that a late callback never ran. Parent/nested and uninstrumented invocation counts remain unknown. Partial scopes, legacy absence and overflow cannot supply exact missing-start fractions.')
+    if captures is not None:
+        summary['limitations'].append('Nested target accounting counts capture-method calls within retained parents, not original selector callback outcomes or game-wide nested decisions. Missing whole-parent events remain unknown. Pending capture calls describe each parent cutoff, not workers necessarily still running at run finish. Legacy parent absence and saturation suppress the aggregate retained-parent missing-row fraction.')
     return summary
 
 
@@ -1243,6 +1254,10 @@ def report_chunks(summary, runs):
         yield from lines('', '## Standalone invocation accounting', '')
         yield from counter_line('Accounting: ', 'observationAccounting')
         yield from lines('The denominator is eligible wrapped invocations on the configured original AI controllers, across each game capture cutoff. Missing starts at cutoff include omitted/prepared-but-uncollected work; they are not unique decisions or AI errors. Nested/parent and uninstrumented counts remain unknown.')
+    if 'targetCaptureAccounting' in summary:
+        yield from lines('', '## Retained-parent target capture calls', '')
+        yield from counter_line('Capture calls: ', 'targetCaptureAccounting')
+        yield from lines('Counts cover capture-method admission within retained parents. They do not count original selector callback outcomes or reconstruct missing parents. Unavailable views remain retained rows; pending capture-method exits are not evidence that policy callbacks never ran.')
     if 'evaluatedXAssessmentStates' in summary:
         yield from counter_line('Evaluated X assessment snapshots: ', 'evaluatedXAssessmentStates')
     if 'searchTargetApplications' in summary:

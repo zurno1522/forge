@@ -359,6 +359,43 @@ public class AiTargetChoiceRecorderTest extends AITest {
         Assert.assertNotNull(((Map<?, ?>) ((List<?>) links.get("items")).get(0)).get("entityRef"));
     }
 
+    @Test(groups = {"UnitTest", "fast"})
+    public void retainedParentCountsCaptureCallsSeparatelyFromUnavailableViewsAndCallbackFailures() throws Exception {
+        final Fixture f = fixture(); final var recorder = new AiDecisionRecorder(f.game, f.ai, 48);
+        Assert.assertNull(recorder.beginTargetChoice(f.ability, List.of(f.bear), "DESTROY_REMOVAL_POOL"));
+        recorder.beginAssessment(f.ability);
+        final AtomicInteger callbacks = new AtomicInteger();
+        final var snapshotFailure = new IllegalStateException("snapshot failed");
+        final var callbackFailure = new IllegalArgumentException("original callback failed");
+        final var state = ((PlayerControllerAi) f.ai.getController()).inputContextState();
+        final var field = AiInputContext.State.class.getDeclaredField("remaining"); field.setAccessible(true);
+        final var remaining = (java.util.concurrent.atomic.AtomicLong) field.get(state);
+        evaluating(f, recorder, () -> {
+            Assert.assertSame(AiTargetChoiceRecorder.choose(f.ai, f.ability, List.of(f.bear), "DESTROY_REMOVAL_POOL", pool -> {
+                callbacks.incrementAndGet(); return f.bear;
+            }), f.bear);
+            final Iterable<Card> broken = () -> { throw snapshotFailure; };
+            Assert.assertSame(AiTargetChoiceRecorder.choose(f.ai, f.ability, broken, "DESTROY_REMOVAL_POOL", pool -> {
+                callbacks.incrementAndGet(); return f.bear;
+            }), f.bear);
+            remaining.set(0);
+            Assert.assertSame(Assert.expectThrows(IllegalArgumentException.class, () -> AiTargetChoiceRecorder.choose(
+                    f.ai, f.ability, List.of(f.bear), "DESTROY_REMOVAL_POOL", pool -> {
+                        callbacks.incrementAndGet(); throw callbackFailure;
+                    })), callbackFailure);
+            return null;
+        });
+        final var event = recorder.finish(null, "ERROR", null);
+        final Map<?, ?> counts = (Map<?, ?>) ((Map<?, ?>) event.data().get("targetCaptureAccounting")).get("counts");
+        Assert.assertEquals(callbacks.get(), 3);
+        Assert.assertEquals(counts.get("entered"), 4L); Assert.assertEquals(counts.get("captured"), 2L);
+        Assert.assertEquals(counts.get("unsupported"), 1L); Assert.assertEquals(counts.get("failed"), 1L);
+        Assert.assertEquals(counts.get("finished"), 4L); Assert.assertEquals(counts.get("inputUnavailable"), 1L);
+        Assert.assertEquals(choices(event).size(), 2);
+        Assert.assertEquals(choices(event).get(1).get("status"), "ERROR");
+        Assert.assertSame(f.game.getEventObservationFailure(), snapshotFailure);
+    }
+
     @DataProvider public Object[][] blockingTargetStages() { return new Object[][] {{"ELIGIBILITY"}, {"INPUT"}, {"COMPLETION"}, {"ADDITION"}}; }
     @Test(dataProvider = "blockingTargetStages", groups = {"UnitTest", "fast"})
     public void targetGetterWorkCannotBlockTimeoutPublicationOrRewriteItsFrozenResult(final String stage) throws Exception {
@@ -401,6 +438,11 @@ public class AiTargetChoiceRecorderTest extends AITest {
             final var finished = threads.submit(() -> recorder.finish(null, "AI_TIMEOUT", null));
             final var event = finished.get(2, java.util.concurrent.TimeUnit.SECONDS);
             final String frozen = event.data().toString();
+            final Map<?, ?> counts = (Map<?, ?>) ((Map<?, ?>) event.data().get("targetCaptureAccounting")).get("counts");
+            final long captured = "ELIGIBILITY".equals(stage) || "INPUT".equals(stage) ? 0 : 1;
+            Assert.assertEquals(counts.get("entered"), 1L);
+            Assert.assertEquals(counts.get("captured"), captured);
+            Assert.assertEquals(counts.get("finished"), captured, "Capture-method exit is distinct from later callback/completion work");
             if ("ELIGIBILITY".equals(stage) || "INPUT".equals(stage)) { Assert.assertTrue(choices(event).isEmpty()); }
             else { Assert.assertEquals(choices(event).get(0).get("status"), "COMPLETION".equals(stage) ? "INCOMPLETE" : "SELECTED"); }
             release.countDown(); work.get(5, java.util.concurrent.TimeUnit.SECONDS);
@@ -416,6 +458,10 @@ public class AiTargetChoiceRecorderTest extends AITest {
         if (copy) { f.game.markAsSimulationCopy(); } else { f.game.setRecordAiDecisions(false); }
         final Iterable<Card> pool = () -> { throw new AssertionError("disabled nested pool"); };
         Assert.assertNull(recorder.beginTargetChoice(f.ability, pool, "DESTROY_REMOVAL_POOL"));
+        final Map<?, ?> counts = (Map<?, ?>) ((Map<?, ?>) recorder.finish(null, "COMPLETED", null).data().get("targetCaptureAccounting")).get("counts");
+        Assert.assertEquals(counts.get("entered"), 0L);
+        final var disabled = new AiDecisionRecorder(f.game, f.ai, 49);
+        Assert.assertFalse(disabled.finish(null, "COMPLETED", null).data().containsKey("targetCaptureAccounting"));
     }
 
     @Test(groups = {"UnitTest", "fast"})
@@ -490,5 +536,8 @@ public class AiTargetChoiceRecorderTest extends AITest {
         Assert.assertEquals(calls.get(), 129);
         Assert.assertEquals(choices(event).size(), 128);
         Assert.assertEquals(((Map<?, ?>) event.data().get("subordinateChoiceOmissions")).get("budget"), 1L);
+        final Map<?, ?> counts = (Map<?, ?>) ((Map<?, ?>) event.data().get("targetCaptureAccounting")).get("counts");
+        Assert.assertEquals(counts.get("entered"), 129L); Assert.assertEquals(counts.get("captured"), 128L);
+        Assert.assertEquals(counts.get("budget"), 1L); Assert.assertEquals(counts.get("finished"), 129L);
     }
 }

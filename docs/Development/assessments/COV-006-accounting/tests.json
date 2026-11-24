@@ -1,0 +1,39 @@
+{
+  "focused": {
+    "results": [
+      {
+        "tests": 87,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "buildSuccess": true,
+    "logPath": "/workspace/work/cov006-accounting/focused-initial.log",
+    "logSha256": "28e6c4656c1e31e1ed395448e1dabb33cc34ae3a1b02fd1c1bed29292203fed7"
+  },
+  "full": {
+    "results": [
+      {
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "tests": 2610,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 6
+      }
+    ],
+    "buildSuccess": true,
+    "logPath": "/workspace/work/cov006-accounting/full-reviewed.log",
+    "logSha256": "1428d76f7eb79cee5634c98748e3c43c7fbc3e184d14a7f82918a81aee332ebe"
+  },
+  "python": {
+    "tests": 172,
+    "failures": 0,
+    "logSha256": "cacf20ec220a7b2b338e5662a43304978c87d04ffb6b5a8ee07a854869c362e6"
+  }
+}
