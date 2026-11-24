@@ -73,11 +73,16 @@ public class AiMonteCarloTargetProvenanceTest extends AITest {
         final Card expected = restore ? f.first : f.second;
         Assert.assertTrue(controllerApply(f, expected, operation));
         Assert.assertSame(f.ability.getTargets().get(0), expected);
+        final AtomicReference<AiDecisionEvent> decision = new AtomicReference<>();
+        f.game.observeEventEmission(event -> { if (event instanceof AiDecisionEvent emitted) { decision.set(emitted); } });
         final AtomicReference<Map<String, Object>> stacked = new AtomicReference<>();
         f.game.observeEventEmission(event -> {
             if (event instanceof GameEventSpellAbilityCast) { stacked.set(f.brain.getTargetChoiceProvenance(f.game.getStack().peekAbility())); }
         });
         f.brain.publishDecision(f.recorder, List.of(f.ability), "COMPLETED", null);
+        final Map<?, ?> application = firstApplication(decision.get());
+        Assert.assertEquals(((Map<?, ?>) application.get("entryLocation")).get("kind"), "APPLICATION");
+        Assert.assertEquals(((Map<?, ?>) application.get("inputContext")).get("timing"), "AFTER_SELECTION_BEFORE_APPLICATION");
         Assert.assertTrue(((PlayerControllerAi) f.ai.getController()).playChosenSpellAbility(f.ability));
         Assert.assertNotNull(stacked.get());
         Assert.assertEquals(stacked.get().get("schemaVersion"), 2);
@@ -185,6 +190,11 @@ public class AiMonteCarloTargetProvenanceTest extends AITest {
         final var application = firstApplication(f.recorder.finish(List.of(f.ability), "COMPLETED", null));
         Assert.assertEquals(calls.get(), 1); Assert.assertEquals(application.get("operation"), "MASKED");
         Assert.assertEquals(application.get("status"), "MASKED");
+        final Map<?, ?> input = (Map<?, ?>) application.get("inputContext");
+        Assert.assertEquals(input.get("timing"), "UNESTABLISHED"); Assert.assertNull(input.get("policy"));
+        Assert.assertEquals(input.get("stateBasis"), "UNESTABLISHED");
+        final Map<?, ?> entry = (Map<?, ?>) application.get("entryLocation");
+        Assert.assertEquals(entry.get("reason"), "HIDDEN"); Assert.assertNull(entry.get("turn"));
         Assert.assertNull(application.get("requestedTarget")); Assert.assertNull(application.get("beforeTargets"));
         Assert.assertNull(application.get("afterTargets"));
     }
@@ -255,6 +265,100 @@ public class AiMonteCarloTargetProvenanceTest extends AITest {
         final var snapshot = f.recorder.targetProvenance(f.ability).capture(f.ability);
         Assert.assertNull(((List<?>) ((Map<?, ?>) ((List<?>) snapshot.get("abilities")).get(0)).get("targetChoices")).get(0));
         Assert.assertNotNull(f.game.getEventObservationFailure());
+    }
+
+    @Test(groups = {"UnitTest", "fast"})
+    public void revalidationFreezesCurrentPlanningInputBeforeTheCallbackInsteadOfBorrowingTheParent() {
+        final Fixture f = fixture();
+        f.ai.setLife(6, null); f.game.getPhaseHandler().devModeSet(forge.game.phase.PhaseType.MAIN2, f.ai);
+        final AtomicInteger calls = new AtomicInteger();
+        Assert.assertTrue(f.recorder.searchTargets(f.ability, AiDecisionRecorder.SearchTargetOperation.HEURISTIC_REVALIDATION, null, () -> {
+            calls.incrementAndGet(); f.ai.setLife(9, null);
+            f.game.getPhaseHandler().devModeSet(forge.game.phase.PhaseType.MAIN1, f.ai);
+            return FlatMonteCarloPicker.applyTarget(f.ability, f.second);
+        }));
+        final var event = f.recorder.finish(List.of(f.ability), "COMPLETED", null);
+        final var application = firstApplication(event);
+        final Map<?, ?> entry = (Map<?, ?>) application.get("entryLocation");
+        final Map<?, ?> input = (Map<?, ?>) application.get("inputContext");
+        Assert.assertEquals(calls.get(), 1); Assert.assertEquals(entry.get("kind"), "OPERATION");
+        Assert.assertEquals(entry.get("phase"), "MAIN2");
+        Assert.assertEquals(input.get("timing"), "BEFORE_OPERATION");
+        Assert.assertEquals(input.get("stateBasis"), "PLANNING_WORKING_STATE");
+        final Map<?, ?> policy = (Map<?, ?>) input.get("policy");
+        Assert.assertEquals(((Map<?, ?>) ((List<?>) policy.get("players")).get(1)).get("life"), 6);
+        final Map<?, ?> baseline = (Map<?, ?>) ((Map<?, ?>) event.data().get("inputContext")).get("policy");
+        Assert.assertEquals(((Map<?, ?>) ((List<?>) baseline.get("players")).get(1)).get("life"), 20);
+        Assert.assertNull(policy.get("prompt"));
+        Assert.assertEquals(((Map<?, ?>) ((Map<?, ?>) input.get("diagnostics")).get("optionBindings")).get("coverage"), "UNSUPPORTED");
+    }
+
+    @Test(groups = {"UnitTest", "fast"})
+    public void unavailableSearchViewDoesNotOmitTheApplicationOrItsCallbackResult() throws Exception {
+        final Fixture f = fixture();
+        final var state = ((PlayerControllerAi) f.ai.getController()).inputContextState();
+        final var field = AiInputContext.State.class.getDeclaredField("remaining"); field.setAccessible(true);
+        ((java.util.concurrent.atomic.AtomicLong) field.get(state)).set(0);
+        Assert.assertTrue(controllerApply(f, f.second, AiDecisionRecorder.SearchTargetOperation.GUARD_REAIM));
+        final var application = firstApplication(f.recorder.finish(List.of(f.ability), "COMPLETED", null));
+        final Map<?, ?> input = (Map<?, ?>) application.get("inputContext");
+        Assert.assertEquals(input.get("status"), "UNAVAILABLE");
+        Assert.assertEquals(input.get("omissions"), List.of(Map.of("component", "CONTEXT", "reason", "BUDGET_EXHAUSTED")));
+        Assert.assertEquals(application.get("status"), "ACCEPTED"); Assert.assertNotNull(application.get("afterTargets"));
+        Assert.assertSame(f.ability.getTargets().get(0), f.second); Assert.assertNull(f.game.getEventObservationFailure());
+    }
+
+    @Test(groups = {"UnitTest", "fast"})
+    public void failedEligibilityGetterDoesNotReplaceTheOriginalSearchCallback() {
+        final Fixture f = fixture(); final var ability = org.mockito.Mockito.spy(f.ability);
+        final var failure = new IllegalStateException("eligibility failed");
+        org.mockito.Mockito.doThrow(failure).when(ability).getHostCard();
+        final AtomicInteger calls = new AtomicInteger();
+        Assert.assertTrue(f.recorder.searchTargets(ability, AiDecisionRecorder.SearchTargetOperation.HEURISTIC_REVALIDATION, null,
+                () -> { calls.incrementAndGet(); return true; }));
+        Assert.assertEquals(calls.get(), 1); Assert.assertSame(f.game.getEventObservationFailure(), failure);
+    }
+
+    @DataProvider public Object[][] blockingSearchStages() { return new Object[][] {{"INPUT"}, {"RESULT_ID"}, {"RESULT_ACTOR"}}; }
+    @Test(dataProvider = "blockingSearchStages", groups = {"UnitTest", "fast"})
+    public void searchEngineGettersCannotHoldTheParentPublicationMonitor(final String stage) throws Exception {
+        final Fixture f = fixture();
+        final var entered = new java.util.concurrent.CountDownLatch(1);
+        final var release = new java.util.concurrent.CountDownLatch(1);
+        final Runnable block = () -> {
+            entered.countDown();
+            try { Assert.assertTrue(release.await(5, java.util.concurrent.TimeUnit.SECONDS)); }
+            catch (InterruptedException failure) { throw new IllegalStateException(failure); }
+            throw new IllegalStateException("late snapshot failure");
+        };
+        final var ability = org.mockito.Mockito.spy(f.ability);
+        if ("INPUT".equals(stage)) {
+            final Card card = org.mockito.Mockito.spy(f.first);
+            final var zone = f.ai.getZone(ZoneType.Battlefield); zone.remove(f.first); zone.add(card);
+            org.mockito.Mockito.doAnswer(ignored -> { block.run(); return 0; }).when(card).getNetPower();
+        }
+        final AtomicInteger calls = new AtomicInteger();
+        final var threads = java.util.concurrent.Executors.newFixedThreadPool(2);
+        try {
+            final var work = threads.submit(() -> f.recorder.searchTargets(ability,
+                    AiDecisionRecorder.SearchTargetOperation.HEURISTIC_REVALIDATION, null, () -> {
+                        calls.incrementAndGet(); ability.getTargets().add(f.second);
+                        if ("RESULT_ID".equals(stage)) {
+                            org.mockito.Mockito.doAnswer(ignored -> { block.run(); return 0L; }).when(ability).getId();
+                        } else if ("RESULT_ACTOR".equals(stage)) {
+                            org.mockito.Mockito.doAnswer(ignored -> { block.run(); return f.ai; }).when(ability).getActivatingPlayer();
+                        }
+                        return true;
+                    }));
+            Assert.assertTrue(entered.await(5, java.util.concurrent.TimeUnit.SECONDS));
+            final var event = threads.submit(() -> f.recorder.finish(null, "AI_TIMEOUT", null)).get(2, java.util.concurrent.TimeUnit.SECONDS);
+            final String frozen = event.data().toString();
+            if ("INPUT".equals(stage)) { Assert.assertTrue(((List<?>) event.data().get("searchTargetApplications")).isEmpty()); }
+            else { Assert.assertEquals(firstApplication(event).get("status"), "INCOMPLETE"); }
+            release.countDown(); Assert.assertTrue(work.get(5, java.util.concurrent.TimeUnit.SECONDS));
+            Assert.assertEquals(calls.get(), 1); Assert.assertEquals(event.data().toString(), frozen);
+            Assert.assertNull(f.game.getEventObservationFailure());
+        } finally { release.countDown(); threads.shutdownNow(); }
     }
 
 }

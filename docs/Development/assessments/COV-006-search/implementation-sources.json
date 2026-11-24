@@ -1,0 +1,7 @@
+{
+  "forge-ai/src/main/java/forge/ai/AiDecisionRecorder.java": "47031daa4d181464f31e36cf017780fcf83b979cbd1e94f2a96bb7d7375a8a14",
+  "forge-gui-desktop/src/test/java/forge/ai/AiMonteCarloTargetProvenanceTest.java": "38c293308683ed8fd7e833d8318fe36f58f0996cb3eb3d6375509c99ff3c1d0d",
+  "tools/decision-records/export.py": "78c810bcb38dc5ff7a5aefd2eabdd73e5909fe0e486dff1476dd587c9adcc314",
+  "tools/decision-records/choice_events.py": "1e27d1971ac37429f8edf588c92b4c28f10cd7df260ecaadf85ec6418cb67c7c",
+  "tools/decision-records/test_search_input_context.py": "aa450bb5459c63adad8294e54a1d11982c0b3f2abd7643a928bad057accc86dc"
+}

@@ -12,6 +12,8 @@ _entry_spec = importlib.util.spec_from_file_location('forge_entry_location', Pat
 _entries = importlib.util.module_from_spec(_entry_spec)
 _entry_spec.loader.exec_module(_entries)
 
+validate_entry_location = _entries.validate
+
 STAGES = {'CANDIDATE_EVALUATION', 'EXECUTION', 'RESOLUTION', 'CONTROLLER_CALLBACK',
           'DELEGATED_TARGET_SELECTION', 'TRIGGER_TARGET_SELECTION', 'EFFECT_COPY_TARGET_SELECTION',
           'RETARGET_SELECTION', 'PAYMENT', 'TRIGGER_PREPARATION'}

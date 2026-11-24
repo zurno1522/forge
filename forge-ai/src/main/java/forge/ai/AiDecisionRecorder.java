@@ -66,10 +66,13 @@ final class AiDecisionRecorder {
     boolean searchTargets(final SpellAbility candidate, final SearchTargetOperation operation, final GameObject requested,
             final java.util.function.BooleanSupplier callback) {
         SearchTargetApplication application = null;
-        if (viewer.getGame().isRecordingAiDecisions() && candidate.getHostCard() != null
-                && candidate.getHostCard().getGame() == viewer.getGame()) {
-            try { application = beginSearchTargetApplication(candidate, operation, requested); }
-            catch (RuntimeException failure) { captureFailed(failure); }
+        if (!closed && viewer.getGame().isRecordingAiDecisions()) {
+            try {
+                final Card source = candidate.getHostCard();
+                if (source != null && source.getGame() == viewer.getGame()) {
+                    application = beginSearchTargetApplication(candidate, operation, requested);
+                }
+            } catch (RuntimeException failure) { captureFailed(failure); }
         }
         final boolean accepted;
         try { accepted = callback.getAsBoolean(); }
@@ -81,13 +84,13 @@ final class AiDecisionRecorder {
         return accepted;
     }
 
-    private record SearchPlanGroup(SpellAbility ability, Object state, List<Map<String, Object>> targets,
+    private record SearchPlanGroup(SpellAbility ability, long abilityId, Object state, List<Map<String, Object>> targets,
                                    boolean truncated) { }
     private record SearchPlan(List<SearchPlanGroup> groups, boolean truncated) {
         Map<String, Object> wire() {
             final List<Map<String, Object>> result = new ArrayList<>();
             for (final var group : groups) {
-                result.add(Map.of("abilityId", group.ability.getId(), "targets", group.targets, "targetsTruncated", group.truncated));
+                result.add(Map.of("abilityId", group.abilityId, "targets", group.targets, "targetsTruncated", group.truncated));
             }
             return Map.of("abilities", result, "abilitiesTruncated", truncated);
         }
@@ -101,7 +104,7 @@ final class AiDecisionRecorder {
         for (; current != null && groups.size() < AiTargetChoiceRecorder.MAX_CHOICES; current = current.getSubAbility()) {
             final var refs = AiTargetChoiceRecorder.references(current.getTargets(), active);
             if (refs == null) { return null; }
-            groups.add(new SearchPlanGroup(current, current.getTargets().getSelectionStateIdentity(), refs.values(), refs.truncated()));
+            groups.add(new SearchPlanGroup(current, current.getId(), current.getTargets().getSelectionStateIdentity(), refs.values(), refs.truncated()));
         }
         return active.getAsBoolean() ? new SearchPlan(groups, current != null) : null;
     }
@@ -120,6 +123,12 @@ final class AiDecisionRecorder {
         try {
             final Card source = candidate.getHostCard();
             final boolean visible = !source.isFaceDown() && source.getView().canBeShownTo(viewer.getView());
+            final java.util.function.BooleanSupplier active = () -> !closed && !Thread.currentThread().isInterrupted()
+                    && viewer.getGame().isRecordingAiDecisions();
+            final String timing = !visible ? "UNESTABLISHED" : operation == SearchTargetOperation.HEURISTIC_REVALIDATION
+                    ? "BEFORE_OPERATION" : "AFTER_SELECTION_BEFORE_APPLICATION";
+            final String basis = visible ? "PLANNING_WORKING_STATE" : "UNESTABLISHED";
+            final var entry = AiEntryLocation.capture(viewer, timing, basis, visible, active);
             final SearchPlan before = visible ? searchPlan(candidate) : null;
             if (visible && before == null) {
                 synchronized (this) { if (!closed) { searchTargetInterruptedCaptures++; } }
@@ -139,6 +148,16 @@ final class AiDecisionRecorder {
             record.put("afterTargets", null);
             record.put("changedAbilities", List.of());
             record.put("status", "INCOMPLETE");
+            record.put("entryLocation", entry);
+            Map<String, Object> input;
+            try {
+                input = visible ? AiInputContext.capture(viewer, candidate, timing, basis, active)
+                        : AiInputContext.unavailable(viewer, timing, basis, "HIDDEN");
+            } catch (RuntimeException failure) {
+                captureFailed(failure);
+                input = AiInputContext.unavailable(viewer, timing, basis, "CAPTURE_FAILED");
+            }
+            record.put("inputContext", input);
             synchronized (this) {
                 if (closed) { return null; }
                 record.put("choiceId", data.get("decisionId") + ":search-target:" + searchTargetApplications.size());
@@ -157,13 +176,37 @@ final class AiDecisionRecorder {
         private final SpellAbility candidate;
         private final Map<String, Object> record;
         private SearchPlan before;
+        private final String choiceId;
         private final boolean visible;
         private SearchTargetApplication(SpellAbility candidate, Map<String, Object> record, SearchPlan before, boolean visible) {
             this.candidate = candidate; this.record = record; this.before = before; this.visible = visible;
+            this.choiceId = (String) record.get("choiceId");
         }
         void complete(final String status) {
             try {
+                if (closed) { return; }
                 final SearchPlan after = visible ? searchPlan(candidate) : null;
+                final List<Integer> changed = new ArrayList<>();
+                final Map<Object, List<AiTargetProvenance.Origin>> pending = new java.util.IdentityHashMap<>();
+                // Snapshot engine getters outside the publication monitor. Publish origins only as one complete batch.
+                if (visible && after != null) {
+                    final long actorId = viewer.getId();
+                    for (int i = 0; i < after.groups.size(); i++) {
+                        final var group = after.groups.get(i);
+                        if (i < before.groups.size() && group.ability == before.groups.get(i).ability
+                                && group.state == before.groups.get(i).state) { continue; }
+                        changed.add(i);
+                        if (!"ACCEPTED".equals(status) || group.ability.getActivatingPlayer() != viewer) { continue; }
+                        final Player targeting = group.ability.getTargetingPlayer();
+                        if (targeting != null && targeting != viewer) { continue; }
+                        final List<AiTargetProvenance.Origin> origins = new ArrayList<>();
+                        for (int j = 0; j < group.targets.size(); j++) {
+                            origins.add(new AiTargetProvenance.Origin(choiceId, actorId, group.targets.get(j), i, j));
+                        }
+                        pending.put(group.state, origins);
+                    }
+                }
+                final Map<String, Object> afterWire = after == null ? null : after.wire();
                 synchronized (AiDecisionRecorder.this) {
                     if (closed) { return; }
                     if (visible && after == null) {
@@ -173,23 +216,7 @@ final class AiDecisionRecorder {
                     }
                     record.put("status", visible ? status : "MASKED");
                     if (!visible) { return; }
-                    record.put("afterTargets", after.wire());
-                    final List<Integer> changed = new ArrayList<>();
-                    final Map<Object, List<AiTargetProvenance.Origin>> pending = new java.util.IdentityHashMap<>();
-                    for (int i = 0; i < after.groups.size(); i++) {
-                        final var group = after.groups.get(i);
-                        if (i < before.groups.size() && group.ability == before.groups.get(i).ability
-                                && group.state == before.groups.get(i).state) { continue; }
-                        changed.add(i);
-                        // No origin for a declined callback, a different actor, or a delegated target chooser.
-                        if (!"ACCEPTED".equals(status) || group.ability.getActivatingPlayer() != viewer
-                                || group.ability.getTargetingPlayer() != null && group.ability.getTargetingPlayer() != viewer) { continue; }
-                        final List<AiTargetProvenance.Origin> origins = new ArrayList<>();
-                        for (int j = 0; j < group.targets.size(); j++) {
-                            origins.add(new AiTargetProvenance.Origin((String) record.get("choiceId"), viewer.getId(), group.targets.get(j), i, j));
-                        }
-                        pending.put(group.state, origins);
-                    }
+                    record.put("afterTargets", afterWire);
                     record.put("changedAbilities", changed);
                     pending.forEach(targetProvenance::applied);
                 }

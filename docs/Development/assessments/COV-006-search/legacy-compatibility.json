@@ -1,0 +1,681 @@
+{
+  "baseline": "bc4ca0e8ac2",
+  "streams": [
+    {
+      "source": "/workspace/work/input-context/baseline/simple-full.jsonl",
+      "sourceSha256": "1bdd695f01f0fb11e4c0b10d3b24a7ab444ac981ef65089ca8a39234102f2624",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/input-context/baseline/simple-decisions.jsonl",
+      "sourceSha256": "8bb10afcb7011577f702db453e14871296c130eccd9c435514b2064b3fd38080",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/input-context/baseline/complex-full.jsonl",
+      "sourceSha256": "d8b17aa6ae929113cd507021f8e89e082e52c3db22f3625bc052b3d754303ca1",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/input-context/baseline/complex-decisions.jsonl",
+      "sourceSha256": "2852490c28eb0ebd19f444d2b537695a0f41de80feb6bff2a2300a1496dc6cc1",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/input-context/new/simple-full.jsonl",
+      "sourceSha256": "d20470a281cd4e264ad84fc3e0097e456d6bf632fbac9ef626672048507270e3",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/input-context/new/simple-decisions.jsonl",
+      "sourceSha256": "8bdec3e793ef05e7cab41a5e47fa6bd6c45e8715e378d197322da7e6ffdf9906",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/input-context/new/complex-full.jsonl",
+      "sourceSha256": "4c6da9e873c29957b1c2a9c85213993294bed47daafb79f5a6622b5fb22a9a96",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/input-context/new/complex-decisions.jsonl",
+      "sourceSha256": "0b4634080c71aa4ea8c62fd494a1dd369cd2d455ae67ff01bffee69ddf80b5c1",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov002/games/simple-full.jsonl",
+      "sourceSha256": "b596e22975eaae415fd7ed2954f9ec16c1e321f7642708b9475a908e6c79be2e",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov002/games/simple-decisions.jsonl",
+      "sourceSha256": "e3ad98f589178c25b513140f1eaaf3897a05c874edc8844de7234b3a9cb87766",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov002/games/complex-full.jsonl",
+      "sourceSha256": "0a1e4ca6a152b6dcca6a327d9fe6639f4e45ada171c53fe2c4632aa87a39a035",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov002/games/complex-decisions.jsonl",
+      "sourceSha256": "6bf21823fbfeae637d3f04c0cc3c3c0334f71867195adf808d723af4000eb119",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov003/games/complex-full.jsonl",
+      "sourceSha256": "de916dde40c1cb1e3bba3f5fa5210dde3f3fa9f44deb5459150f595ec25da9d0",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov003/games/modal-full.jsonl",
+      "sourceSha256": "394bb4dc338bb145d5f24a8c244332e491d8e5718742161aa16174fc5a1f51e1",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov003/games/numeric-full.jsonl",
+      "sourceSha256": "2c2004cc98c6d1a0d5ce355a78f4d4965ecc9d3ca95d29717769fa874ab7f5db",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov003/games/simple-full.jsonl",
+      "sourceSha256": "477aa9b1031d3e335a123a35a8479e704a6e860524171bfaebf8389528570ef3",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov003/games/complex-decisions.jsonl",
+      "sourceSha256": "1e103fceeec1eba90ccd09164df8ddc1aa58f23c4726905147b4a7d1b6122358",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov003/games/modal-decisions.jsonl",
+      "sourceSha256": "b5e15a4e7d00f10a97b1a55bb637878b4a7d8536e79a2275154502d6180907e8",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov003/games/numeric-decisions.jsonl",
+      "sourceSha256": "a4cf88c66d100d8bc0655a14511ee6f19b9a0bc074f4d32e624dfe2ba6215bd8",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov003/games/simple-decisions.jsonl",
+      "sourceSha256": "be40ce0a9399cfbcd100772f7332b27fd2767513f3fafd9d217ee2593bc5bac7",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov004/games/complex-full.jsonl",
+      "sourceSha256": "dc6c640818ba6fdf3b897db979ec243ab079749b95980e030d23467c0424802a",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov004/games/numeric-full.jsonl",
+      "sourceSha256": "2053887d1898fb9bf2d9fa77e7fc0662cc698ec91cae4df5012313b8c7866d41",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov004/games/simple-full.jsonl",
+      "sourceSha256": "9edd7fe3f0662aa0677ad65a32b0749bff4a32204294560643e8426a5f2d2b95",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov004/games/complex-decisions.jsonl",
+      "sourceSha256": "72bd2e357bfd80553052f64ba0b8588a40450d7311fad05eab636f0a6c095bc8",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov004/games/numeric-decisions.jsonl",
+      "sourceSha256": "4e2b87a7890cd08bc9a1c2b2fc364b6b644c453b3f4292063ed93e3710861e4c",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov004/games/simple-decisions.jsonl",
+      "sourceSha256": "965f08543d6c3eed8b77ae48159d4ea3286fe1468d51e22a99f5c89dedf9c895",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov001a/games-reviewed/complex-full.jsonl",
+      "sourceSha256": "001d6de1ed7084f8023765d1575fc2a3f2a6ff45d3c290792d76b6577240cfb4",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov001a/games-reviewed/numeric-full.jsonl",
+      "sourceSha256": "8a310e39d67190fc5fcf67fdce6ac66680015707649986065e3dc6cdc771fb36",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov001a/games-reviewed/simple-full.jsonl",
+      "sourceSha256": "503d83df028867d490110a2c04ca583e5c6a2dd2af4e1ced7d1dab63ea9a9f8c",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov001a/games-reviewed/complex-decisions.jsonl",
+      "sourceSha256": "ed434ed13b3c2a7a5fbca884eb1df47f6b0381172d99c0c275ddb4bc983ab13f",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov001a/games-reviewed/numeric-decisions.jsonl",
+      "sourceSha256": "fdce56275ae9c4e04c98613e1d7deef921cd33262d5e3a0aae901afbadbc74ff",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov001a/games-reviewed/simple-decisions.jsonl",
+      "sourceSha256": "9a1e28cbda63f29467abf21b919c837445c6515dbfd5eb21a3648cb40b1c1355",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/opt005/games/four-player-full.jsonl",
+      "sourceSha256": "e518deb6ee496751affe1002061d89adbf6d345069ad0cf3009afe48d3a26db9",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/opt005/games/four-player-decisions.jsonl",
+      "sourceSha256": "500ce52ab6ae83157e88f9bcf57a5eb16806eff519e033bdbe61ac2d1ddd614b",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov006-standalone/games/complex-full.jsonl",
+      "sourceSha256": "b4081fd49671272783ae8f022280359656203aac35b75b896bf931f22d020e56",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov006-standalone/games/numeric-full.jsonl",
+      "sourceSha256": "6c968fc3e1fa6317da6775624432de87e987ae060687ddc03e99981d66da50bc",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov006-standalone/games/simple-full.jsonl",
+      "sourceSha256": "7d328158411f44ff6b0feecf822af1bd054d2c564f56363df4fe86cf5e72b308",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov006-standalone/games/complex-decisions.jsonl",
+      "sourceSha256": "4cfd050ebdf45ba0309151c153b0dba769f2fe589be41e3dcfd3018a2be80099",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov006-standalone/games/numeric-decisions.jsonl",
+      "sourceSha256": "0e49c53545353156bdb5b1764c67d22fbaf38b8f6b5cbcfe40aa26b8d4f560ec",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov006-standalone/games/simple-decisions.jsonl",
+      "sourceSha256": "58c09552d6cd679b417204ff58554a801020c422656deaa58f65ead408009444",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov006-nested/games/complex-full.jsonl",
+      "sourceSha256": "98999ddd87a8f532d0e942ac33d49b4afcc021d2d30350af9ada098237383728",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov006-nested/games/numeric-full.jsonl",
+      "sourceSha256": "c9ca12d6720a53f24b2ce48e2403c0f275cefdb5cd863bad394567423cc9fafc",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov006-nested/games/simple-full.jsonl",
+      "sourceSha256": "d9d3f32abb74f161c3b4e9b80d2cff107b6123a58803874af13e32a11a08b3f2",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov006-nested/games/complex-decisions.jsonl",
+      "sourceSha256": "fd245b8bfafeffb63569d8bfd1b0453165f77cded0b01528787e1d657d5c67f7",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov006-nested/games/numeric-decisions.jsonl",
+      "sourceSha256": "ad930fa0b13672392a3aa42f83140b2526acdcb5c51d5cf6a61d03bc4822e154",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov006-nested/games/simple-decisions.jsonl",
+      "sourceSha256": "34e93c8cecba364d56e6aa51defcd633adba9ba7313600a0d33bb1c4b58132fd",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov006-accounting/games/complex-full.jsonl",
+      "sourceSha256": "ff11a73f3f2e3384ec8ebe1b7b114827f179577db13641a2f0f1a1a6e62ffc3b",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov006-accounting/games/numeric-full.jsonl",
+      "sourceSha256": "4090f880d66f34c7b0d25d97ba377cb0bbd5bc57d11e23bb0fd8d8d97f4fdc5f",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov006-accounting/games/simple-full.jsonl",
+      "sourceSha256": "8b0bda1fe3b53306921ce6ddc512a80d4d01d9ff15d4fe236180e64a988669a9",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov006-accounting/games/complex-decisions.jsonl",
+      "sourceSha256": "ea1a97211b1c3dd2d556abb9673475b6b29398809fc55752b537e53ef6bda1da",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov006-accounting/games/numeric-decisions.jsonl",
+      "sourceSha256": "3d2701bebedd03e1992e680cf50db0994c5e3ab249ac85e77a96353ecc94077c",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    },
+    {
+      "source": "/workspace/work/cov006-accounting/games/simple-decisions.jsonl",
+      "sourceSha256": "5d7403b803a1828c470001489586205c710dd2bd60ba3d1df673c9bbbc359f73",
+      "byteIdentical": [
+        "dataset.jsonl",
+        "choices.jsonl",
+        "examples.jsonl",
+        "manifest.json",
+        "validation.json",
+        "coverage.json",
+        "coverage.md"
+      ]
+    }
+  ]
+}

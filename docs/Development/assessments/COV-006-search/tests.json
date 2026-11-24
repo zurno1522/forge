@@ -1,0 +1,16 @@
+{
+  "focused": {
+    "tests": 56,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "buildSuccess": true,
+    "logSha256": "ba225670524ce6fec3334e745fda950b448bf165871dde0a059a27bef29dffc6"
+  },
+  "python": {
+    "tests": 176,
+    "failures": 0,
+    "logSha256": "ede1bc2fe1bfc6906efb390e195214211d03f11a65447b7f1d9b40f05425e049"
+  },
+  "fullSuite": "Deferred to the immediate search accounting integration; no full-suite claim for this isolated source snapshot."
+}

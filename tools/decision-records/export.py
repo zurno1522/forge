@@ -77,7 +77,7 @@ def validate_choice_reference(ref):
         require(ref['stackId'] is None or integer(ref['stackId']), 'invalid choice stack identifier')
 
 
-def validate_search_target_applications(d, masked_ids):
+def validate_search_target_applications(d, masked_ids, known_players=None):
     version = d.get('searchTargetApplicationSchemaVersion')
     if version is None:
         require(not any(k in d for k in ('searchTargetApplications', 'searchTargetApplicationOmissions')), 'undeclared search target applications')
@@ -94,7 +94,7 @@ def validate_search_target_applications(d, masked_ids):
     fields = {'applicationSchemaVersion', 'choiceId', 'choiceType', 'stage', 'chooserPlayerId', 'candidateAbilityId', 'sourceId',
               'operation', 'optionCoverage', 'requestedTarget', 'beforeTargets', 'afterTargets', 'changedAbilities', 'status', 'candidateActionId'}
     for c in records:
-        require(isinstance(c, dict) and set(c) == fields, 'invalid search application fields')
+        require(isinstance(c, dict) and fields <= set(c) <= fields | {'entryLocation', 'inputContext'}, 'invalid search application fields')
         require(integer(c['applicationSchemaVersion']) and c['applicationSchemaVersion'] == 1
                 and c['choiceType'] == c['stage'] == 'SEARCH_TARGET_APPLICATION', 'invalid search application type/stage')
         require(isinstance(c['choiceId'], str) and c['choiceId'] and c['choiceId'] not in seen, 'duplicate search application id')
@@ -108,6 +108,31 @@ def validate_search_target_applications(d, masked_ids):
         changed = c['changedAbilities']
         require(isinstance(changed, list) and len(changed) <= 128 and all(integer(v) and v >= 0 for v in changed)
                 and changed == sorted(set(changed)), 'invalid changed search target abilities')
+        hidden = c['operation'] == 'MASKED'
+        timing = 'UNESTABLISHED' if hidden else 'BEFORE_OPERATION' if c['operation'] == 'HEURISTIC_REVALIDATION' else 'AFTER_SELECTION_BEFORE_APPLICATION'
+        basis = 'UNESTABLISHED' if hidden else 'PLANNING_WORKING_STATE'
+        context = c.get('inputContext')
+        if 'inputContext' in c:
+            require('entryLocation' in c, 'search input lacks its own entry')
+            _choices.validate_input_context(context, c['chooserPlayerId'], known_players)
+            require((context['timing'], context['stateBasis']) == (timing, basis), 'search input boundary mismatch')
+            if hidden:
+                require(context['status'] == 'UNAVAILABLE' and {'component': 'CONTEXT', 'reason': 'HIDDEN'} in context['omissions'], 'input exposes masked search operation')
+            else:
+                require({'component': 'CONTEXT', 'reason': 'HIDDEN'} not in context['omissions'], 'unmasked search has hidden input')
+            if context['policy'] is not None:
+                require(context['policy'].get('prompt') is None, 'unaudited search prompt')
+                if context['schemaVersion'] >= 4:
+                    require(context['diagnostics']['optionBindings']['coverage'] == 'UNSUPPORTED', 'search request is not an offered pool')
+        if 'entryLocation' in c:
+            entry = c['entryLocation']
+            _choices.validate_entry_location(entry, known_players, context)
+            if hidden:
+                require(entry['status'] == 'UNAVAILABLE' and entry['reason'] == 'HIDDEN', 'entry exposes masked search operation')
+            else:
+                require(entry['reason'] != 'HIDDEN', 'unmasked search has hidden entry')
+                if entry['status'] == 'CAPTURED':
+                    require((entry['timing'], entry['stateBasis']) == (timing, basis), 'search entry boundary mismatch')
         if c['operation'] == 'MASKED':
             require(c['optionCoverage'] == 'MASKED' and c['requestedTarget'] is None and c['beforeTargets'] is None
                     and c['afterTargets'] is None and not changed and c['status'] in ('MASKED', 'INCOMPLETE'), 'unmasked private search operation')
@@ -136,7 +161,7 @@ def validate_subordinate_choices(d, masked_ids, known_players=None):
     if 'targetChoiceProvenanceSchemaVersion' in d:
         require(integer(d['targetChoiceProvenanceSchemaVersion']) and d['targetChoiceProvenanceSchemaVersion'] in (1, 2)
                 and d.get('subordinateChoiceSchemaVersion') == 1, 'invalid target provenance declaration')
-    validate_search_target_applications(d, masked_ids)
+    validate_search_target_applications(d, masked_ids, known_players)
     version = d.get('subordinateChoiceSchemaVersion')
     if version is None:
         require(not any(key in d for key in ('subordinateChoices', 'subordinateChoiceCoverage', 'subordinateChoiceOmissions')), 'undeclared subordinate choices')
@@ -773,7 +798,9 @@ def make_coverage(runs, rows, *, spool=None):
         _spool.DiskMap(spool, 'audit:boundaries') if spool else {},
         _spool.DiskMap(spool, 'audit:turns') if spool else {}, _choices.CONTEXT_TIMING,
         {'CHOICE': _choices.CONTEXT_TIMING_V2,
-         'NESTED_TARGET': {key: value for key, value in _choices.CONTEXT_TIMING_V2.items() if key in _choices.POOL_BOUNDARIES}})
+         'NESTED_TARGET': {key: value for key, value in _choices.CONTEXT_TIMING_V2.items() if key in _choices.POOL_BOUNDARIES},
+         'SEARCH_OPERATION': {key: 'BEFORE_OPERATION' if key == 'HEURISTIC_REVALIDATION' else 'AFTER_SELECTION_BEFORE_APPLICATION'
+                              for key in ('HEURISTIC_REVALIDATION', 'RESTORE_APPROVED_TARGET', 'ROLLOUT_TARGET_OVERRIDE', 'DISCOVERED_TARGET', 'GUARD_REAIM')}})
     common = ('selections', 'selectedActionKinds', 'phases', 'decisionStatuses', 'outcomeLabels',
               'pilotModes', 'assessments', 'assessmentDetails', 'cardAiHandlers', 'handlerAssessments',
               'rejectedCards', 'rejectedActionKinds', 'rejectedCardKinds', 'searchReasons')
@@ -856,7 +883,9 @@ def make_coverage(runs, rows, *, spool=None):
                           turn_basis='PARENT_CONTAINER', entry_location=choice.get('entryLocation'))
             if 'inputContext' in choice: add_input_context(choice['inputContext'], 'NESTED_TARGET')
         for operation in d.get('searchTargetApplications', []):
-            audit.observe('SEARCH_OPERATION', operation['operation'], None, **location, turn_basis='PARENT_CONTAINER')
+            audit.observe('SEARCH_OPERATION', operation['operation'], operation.get('inputContext'), **location,
+                          turn_basis='PARENT_CONTAINER', entry_location=operation.get('entryLocation'))
+            if 'inputContext' in operation: add_input_context(operation['inputContext'], 'SEARCH_OPERATION')
         add_input_context(d.get('inputContext'), 'DECISION')
         declared = d.get('subordinateChoiceSchemaVersion') == 1
         declared_choices = declared_choices or declared
