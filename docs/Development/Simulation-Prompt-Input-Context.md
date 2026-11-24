@@ -1,6 +1,6 @@
 # COV-003: typed controller request constraints
 
-The first increment adds `inputContext.schemaVersion:3`, profile `PERMITTED_CHOICE_VIEW_V3`. Versions 1 and 2 retain their existing shapes and meanings. Version 3 adds nullable `policy.prompt` and `coverage.prompt`; existing diagnostics, record versions, event ordering and work budgets stay unchanged. This is a partial request view, not a complete legal action set or effect description.
+The V3 increment introduced `inputContext.schemaVersion:3`, profile `PERMITTED_CHOICE_VIEW_V3`. New producers use [V4 current associations](Simulation-Context-Bindings.md), retaining these request semantics. Versions 1 and 2 retain their existing shapes and meanings. Version 3 adds nullable `policy.prompt` and `coverage.prompt`; its original diagnostics, record versions, event ordering and work budgets stay unchanged. This is a partial request view, not a complete legal action set or effect description.
 
 ## Audited boundaries and permission
 

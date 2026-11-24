@@ -97,6 +97,11 @@ public final class AiTargetChoiceRecorder {
     record References(List<Map<String, Object>> values, boolean truncated) { }
 
     static References references(final Iterable<? extends GameObject> objects, final BooleanSupplier active) {
+        return references(objects, active, (object, reference) -> { });
+    }
+
+    static References references(final Iterable<? extends GameObject> objects, final BooleanSupplier active,
+            final java.util.function.BiConsumer<GameObject, Map<String, Object>> captured) {
         if (!active.getAsBoolean()) { return null; }
         final List<Map<String, Object>> result = new ArrayList<>();
         final var iterator = objects.iterator();
@@ -105,7 +110,9 @@ public final class AiTargetChoiceRecorder {
             if (result.size() == MAX_REFERENCES) { return new References(result, true); }
             final GameObject object = iterator.next();
             if (object == null) { throw new IllegalArgumentException("Null target-pool entry"); }
-            result.add(reference(object));
+            final Map<String, Object> reference = reference(object);
+            result.add(reference);
+            captured.accept(object, reference);
         }
         return null;
     }

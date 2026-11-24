@@ -1,0 +1,16 @@
+{
+  "forge-ai/src/main/java/forge/ai/AiChoiceRecorder.java": "c83c03f767d5210f90c979b1136d251f583097552284d5e9ef77b966e4d19567",
+  "forge-ai/src/main/java/forge/ai/AiContextDisclosures.java": "09625c00ff9c801a78afd42252578081969253c0055936c25f1054295a45ccac",
+  "forge-ai/src/main/java/forge/ai/AiEffectChoiceRecorder.java": "ecc24ce798ed0248f530bd611816a14a67b143070c482089154e689d2a17d9e6",
+  "forge-ai/src/main/java/forge/ai/AiInputContext.java": "ef93de819909cca76a53ebfcd2f2ce36af9b72aeaf9ef8a0014670305fac71c8",
+  "forge-ai/src/main/java/forge/ai/AiTargetChoiceRecorder.java": "19f2814ec77ec678f4dfc3c93e4b477dc3142b46c679785c275002d614179380",
+  "forge-gui-desktop/src/test/java/forge/ai/AiStackInputContextTest.java": "e3953182c26c01c791dec666f5f667ffe41ed1ae10a61e11f95bc272abee2eaf",
+  "tools/decision-records/choice_events.py": "15b6646fe96bff66d29a78d031190fee011f97ddc358bef5da45249a6a2850fc",
+  "tools/decision-records/export.py": "0c57b6d09720322fe40b77a9838dbd3ed6aa97022e7c20278f05577ae7520c11",
+  "tools/decision-records/input_context.py": "7921f19e87ddfc7f0e166c5b9fc631cff0b32497909a2cdd0987c4fd2860e7e8",
+  "tools/decision-records/test_input_context.py": "8468eeeac3abffce73012c4a6e89ece34a726c33a0d9ed77aa3234eba7d45370",
+  "tools/decision-records/test_prompt_input_context.py": "ed801f28aaaff36a21446c13ff66dec8f19c9946683b00bc053a9a107ed21c94",
+  "forge-ai/src/main/java/forge/ai/AiOptionInput.java": "9fe88143cc53d857e89954f6a3ad84f705c1bfbefa2a23a68380442794f714d8",
+  "forge-gui-desktop/src/test/java/forge/ai/AiContextBindingTest.java": "742fc7c8babce444df69c4d792e15d8bd9cf012946fad0c2928d7e215e1c7ce0",
+  "tools/decision-records/test_context_bindings.py": "4ec0ce0aa61af63245f41e78537b71b487edb52bef4830f67d8944a83c86afe2"
+}

@@ -1,0 +1,197 @@
+{
+  "simple": {
+    "contexts": 174,
+    "statuses": {
+      "PARTIAL": 174
+    },
+    "omissions": {
+      "DISCLOSURES:UNSUPPORTED": 174
+    },
+    "stateBases": {
+      "RULES_STATE": 174
+    },
+    "stack": {
+      "nonempty": 0,
+      "resolving": 0,
+      "truncated": 0
+    },
+    "promptKinds": {},
+    "promptCoverage": {
+      "UNSUPPORTED": 174
+    },
+    "diagnosticBindings": {
+      "optionEntries": 0,
+      "publicOptionLinks": 0,
+      "unresolvedOptionEntries": 0,
+      "directPublicDisclosureLinks": 0
+    },
+    "pregameShuffles": [
+      2
+    ],
+    "executionStatuses": {
+      "NORMAL": 1
+    },
+    "fullFilteredByteParity": {
+      "dataset.jsonl": true,
+      "choices.jsonl": true,
+      "examples.jsonl": true,
+      "validation.json": true
+    },
+    "coverageEqualExceptSourceRecords": true,
+    "sourceSha256": {
+      "full": "9edd7fe3f0662aa0677ad65a32b0749bff4a32204294560643e8426a5f2d2b95",
+      "decisions": "965f08543d6c3eed8b77ae48159d4ea3286fe1468d51e22a99f5c89dedf9c895"
+    },
+    "previousSourceSha256": "d20470a281cd4e264ad84fc3e0097e456d6bf632fbac9ef626672048507270e3",
+    "sameNormalizedEngineEventsAsPrevious": true,
+    "exporterValidation": {
+      "valid": true,
+      "inputs": 1,
+      "decisions": 58,
+      "checks": [
+        "run/game boundaries",
+        "event order",
+        "schemas and identities",
+        "engine-event references",
+        "visibility constraints",
+        "status/outcome agreement",
+        "timeout/error censoring"
+      ]
+    }
+  },
+  "complex": {
+    "contexts": 360,
+    "statuses": {
+      "PARTIAL": 279,
+      "CAPTURED": 81
+    },
+    "omissions": {
+      "DISCLOSURES:UNSUPPORTED": 279
+    },
+    "stateBases": {
+      "RULES_STATE": 360
+    },
+    "stack": {
+      "nonempty": 101,
+      "resolving": 81,
+      "truncated": 0,
+      "entries": 125,
+      "sourceBound": 125,
+      "rootTargetsCaptured": 125
+    },
+    "promptKinds": {
+      "SINGLE_ENTITY": 6
+    },
+    "promptCoverage": {
+      "UNSUPPORTED": 354,
+      "CONTROLLER_REQUEST_V1": 6
+    },
+    "diagnosticBindings": {
+      "optionEntries": 9,
+      "publicOptionLinks": 9,
+      "unresolvedOptionEntries": 0,
+      "directPublicDisclosureLinks": 0
+    },
+    "pregameShuffles": [
+      2
+    ],
+    "executionStatuses": {
+      "NORMAL": 1
+    },
+    "fullFilteredByteParity": {
+      "dataset.jsonl": true,
+      "choices.jsonl": true,
+      "examples.jsonl": true,
+      "validation.json": true
+    },
+    "coverageEqualExceptSourceRecords": true,
+    "sourceSha256": {
+      "full": "dc6c640818ba6fdf3b897db979ec243ab079749b95980e030d23467c0424802a",
+      "decisions": "72bd2e357bfd80553052f64ba0b8588a40450d7311fad05eab636f0a6c095bc8"
+    },
+    "previousSourceSha256": "4c6da9e873c29957b1c2a9c85213993294bed47daafb79f5a6622b5fb22a9a96",
+    "sameNormalizedEngineEventsAsPrevious": false,
+    "exporterValidation": {
+      "valid": true,
+      "inputs": 1,
+      "decisions": 57,
+      "checks": [
+        "run/game boundaries",
+        "event order",
+        "schemas and identities",
+        "engine-event references",
+        "visibility constraints",
+        "status/outcome agreement",
+        "timeout/error censoring"
+      ]
+    }
+  },
+  "numeric": {
+    "contexts": 189,
+    "statuses": {
+      "PARTIAL": 184,
+      "CAPTURED": 5
+    },
+    "omissions": {
+      "DISCLOSURES:UNSUPPORTED": 184
+    },
+    "stateBases": {
+      "RULES_STATE": 189
+    },
+    "stack": {
+      "nonempty": 5,
+      "resolving": 5,
+      "truncated": 0,
+      "entries": 5,
+      "sourceBound": 5,
+      "rootTargetsCaptured": 5
+    },
+    "promptKinds": {
+      "NUMBER_OPTIONS": 2,
+      "SINGLE_ENTITY": 1
+    },
+    "promptCoverage": {
+      "UNSUPPORTED": 186,
+      "CONTROLLER_REQUEST_V1": 3
+    },
+    "diagnosticBindings": {
+      "optionEntries": 1,
+      "publicOptionLinks": 1,
+      "unresolvedOptionEntries": 0,
+      "directPublicDisclosureLinks": 0
+    },
+    "pregameShuffles": [
+      2
+    ],
+    "executionStatuses": {
+      "NORMAL": 1
+    },
+    "fullFilteredByteParity": {
+      "dataset.jsonl": true,
+      "choices.jsonl": true,
+      "examples.jsonl": true,
+      "validation.json": true
+    },
+    "coverageEqualExceptSourceRecords": true,
+    "sourceSha256": {
+      "full": "2053887d1898fb9bf2d9fa77e7fc0662cc698ec91cae4df5012313b8c7866d41",
+      "decisions": "4e2b87a7890cd08bc9a1c2b2fc364b6b644c453b3f4292063ed93e3710861e4c"
+    },
+    "previousSourceSha256": null,
+    "sameNormalizedEngineEventsAsPrevious": null,
+    "exporterValidation": {
+      "valid": true,
+      "inputs": 1,
+      "decisions": 53,
+      "checks": [
+        "run/game boundaries",
+        "event order",
+        "schemas and identities",
+        "engine-event references",
+        "visibility constraints",
+        "status/outcome agreement",
+        "timeout/error censoring"
+      ]
+    }
+  }
+}

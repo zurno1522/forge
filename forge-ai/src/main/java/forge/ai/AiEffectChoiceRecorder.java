@@ -45,39 +45,42 @@ final class AiEffectChoiceRecorder {
     static <T extends GameEntity> T single(final Player chooser, final SpellAbility ability,
             final Iterable<T> options, final boolean optional, final Player relatedPlayer, final Supplier<T> callback) {
         final AtomicReference<List<Map<String, Object>>> offered = new AtomicReference<>();
+        final AtomicReference<AiOptionInput> proof = new AtomicReference<>();
         return AiChoiceRecorder.observeInput(chooser, ability, "EFFECT_ENTITY_SELECTION", null,
                 "CONTROLLER_EFFECT_ENTITY", "BEFORE_SELECTOR", () -> {
-                    final Map<String, Object> result = pool(options, offered);
+                    final Map<String, Object> result = pool(options, offered, proof);
                     result.put("coverage", offered.get() == null ? "UNAVAILABLE" : "OBSERVED_EFFECT_OPTIONS_DIAGNOSTIC_ONLY");
                     result.put("optional", optional);
                     result.put("relatedPlayerId", relatedPlayer == null ? null : relatedPlayer.getId());
                     return result;
                 }, callback, value -> selected(value, offered.get()),
-                () -> AiPromptInput.single(optional, relatedPlayer));
+                () -> AiPromptInput.single(optional, relatedPlayer), proof::get);
     }
 
     static Card zoneChange(final Player chooser, final SpellAbility ability, final ZoneType destination,
             final List<ZoneType> origins, final CardCollection options, final boolean optional,
             final Player decider, final Supplier<Card> callback) {
         final AtomicReference<List<Map<String, Object>>> offered = new AtomicReference<>();
+        final AtomicReference<AiOptionInput> proof = new AtomicReference<>();
         return AiChoiceRecorder.observeInput(chooser, ability, "ZONE_CHANGE_CARD_SELECTION", null,
                 "CONTROLLER_ZONE_CHANGE_CARD", "BEFORE_SELECTOR", () -> {
-                    final Map<String, Object> result = pool(options, offered);
+                    final Map<String, Object> result = pool(options, offered, proof);
                     result.put("coverage", offered.get() == null ? "UNAVAILABLE" : "OBSERVED_ZONE_CHANGE_OPTIONS_DIAGNOSTIC_ONLY");
                     result.put("optional", optional);
                     result.put("destination", destination.name());
                     result.put("origins", origins.stream().map(Enum::name).toList());
                     result.put("deciderPlayerId", decider == null ? null : decider.getId());
                     return result;
-                }, callback, value -> selected(value, offered.get()));
+                }, callback, value -> selected(value, offered.get()), null, proof::get);
     }
 
     private static Map<String, Object> pool(final Iterable<? extends GameObject> options,
-            final AtomicReference<List<Map<String, Object>>> offered) {
-        final var references = AiTargetChoiceRecorder.references(options, () -> !Thread.currentThread().isInterrupted());
+            final AtomicReference<List<Map<String, Object>>> offered, final AtomicReference<AiOptionInput> proof) {
+        final var references = AiOptionInput.capture(options);
+        proof.set(references);
         final Map<String, Object> result = new LinkedHashMap<>();
-        offered.set(references == null ? null : references.values());
-        result.put("items", references == null ? List.of() : references.values());
+        offered.set(references == null ? null : references.references());
+        result.put("items", references == null ? List.of() : references.references());
         result.put("truncated", references == null || references.truncated());
         return result;
     }

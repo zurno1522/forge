@@ -1,6 +1,6 @@
 # COV-002: bounded active-stack inputs
 
-The validation below records the V2 increment. New producers use [profile V3](Simulation-Prompt-Input-Context.md), retaining these stack semantics and adding typed controller request fields. The exporter still accepts V1 and V2 without upgrading their data.
+The validation below records the V2 increment. New producers use [profile V4](Simulation-Context-Bindings.md), retaining these stack semantics and [V3 controller request fields](Simulation-Prompt-Input-Context.md). The exporter still accepts earlier profiles without upgrading their data.
 
 The V2 increment introduced `inputContext.schemaVersion:2`, `profile:PERMITTED_CHOICE_VIEW_V2`. The exporter retains explicit version-1 support; version 1 never acquires stack semantics by inference. Existing parent/choice/event/provenance schemas, legacy `observation`, IDs and capture budgets are unchanged. Older exporters that reject version 2 need updating.
 

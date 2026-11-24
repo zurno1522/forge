@@ -765,6 +765,7 @@ def make_coverage(runs, rows, *, spool=None):
     input_statuses, input_owners, input_timings, input_bases, input_omissions, input_coverage = (collections.Counter() for _ in range(6))
     input_records = 0
     input_profiles = collections.Counter()
+    input_bindings = collections.Counter()
 
     def add_input_context(value, owner):
         nonlocal input_records
@@ -774,6 +775,17 @@ def make_coverage(runs, rows, *, spool=None):
         if value is None: return
         input_records += 1
         input_profiles[value['profile']] += 1
+        if value['schemaVersion'] >= 4:
+            input_bindings['contextRecords'] += 1
+            links = value['diagnostics']['optionBindings']
+            input_bindings['recordCoverage:' + links['coverage']] += 1
+            input_bindings['optionEntries'] += len(links['items'])
+            input_bindings['publicOptionLinks'] += sum(link['entityRef'] is not None for link in links['items'])
+            input_bindings['unresolvedOptionEntries'] += sum(link['entityRef'] is None for link in links['items'])
+            for fact in (value['policy'] or {}).get('disclosedFacts', []):
+                input_bindings['disclosureFacts'] += 1
+                input_bindings['directPublicDisclosureLinks' if fact['currentObjectAssociation'] != 'UNRESOLVED'
+                               else 'unresolvedDisclosureFacts'] += 1
         input_timings[value['timing']] += 1
         input_bases[value['stateBasis']] += 1
         for omission in value['omissions']:
@@ -1029,6 +1041,7 @@ def make_coverage(runs, rows, *, spool=None):
                        inputContextStateBases=dict(input_bases), inputContextOmissions=dict(input_omissions),
                        inputContextCoverage=dict(input_coverage))
     summary['inputCoverageAudit'] = audit.summary(spool.sequence if spool else lambda name, values: list(values))
+    if input_bindings: summary['inputContextBindings'] = dict(input_bindings)
     summary['limitations'] = [
         'Main-phase play selection with an empty stack only; no mulligan, combat, reactive-priority or subordinate-choice coverage.',
         'Candidate assessments are partial and may repeat an ability; counts are assessment observations, not unique rejected legal actions.',
@@ -1056,6 +1069,10 @@ def make_coverage(runs, rows, *, spool=None):
         summary['limitations'].append('Inline input contexts cover audited boundaries only. CAPTURED means the named partial profile was captured, not complete Magic knowledge or every AI input. ABSENT means unavailable capability, not an empty view. Only inputContext.policy is the permitted feature projection; diagnostic joins, original option membership/order, manifests, outcomes and legacy observation fields are excluded. Disclosed facts have unresolved current-object associations. Stack coverage is profile-declared and bounded where supported; long-term historical knowledge remains incomplete. trainingReady remains false.')
     if 'PERMITTED_CHOICE_VIEW_V3' in input_profiles:
         summary['limitations'].append('V3 separately permits audited numeric domains and local single-entity pick constraints in policy.prompt. Original entity pools remain diagnostic-only. Request coverage does not certify effect semantics, outer multi-pick history, option bindings or a complete legal action set.')
+    if 'PERMITTED_CHOICE_VIEW_V4' in input_profiles:
+        summary['limitations'] = [text.replace('Disclosed facts have unresolved current-object associations.',
+            'Only directly proved public disclosure associations can be linked; other associations remain unresolved.') for text in summary['limitations']]
+        summary['limitations'].append('V4 retains typed request fields and adds diagnostic current-option links. Those links do not authorize entity pool membership, count or ordering as model features. Direct public disclosure links require delivery proof without an intervening engine event. No profile certifies complete learning examples.')
     return summary
 
 
@@ -1177,6 +1194,9 @@ def report_chunks(summary, runs):
                              ('Omissions: ', 'inputContextOmissions'), ('Component coverage: ', 'inputContextCoverage')):
             yield from counter_line(prefix, name)
         yield from lines('Only inputContext.policy is the permitted feature projection. Diagnostic IDs, timestamps, offered-pool membership/order and future trace facts are excluded; unresolved disclosure facts do not establish current-object identity. Stack coverage is profile-declared and bounded where supported; long-term history remains incomplete. trainingReady remains false.')
+        if 'inputContextBindings' in summary:
+            yield from counter_line('V4 diagnostic bindings and disclosure associations: ', 'inputContextBindings')
+            yield from lines('contextRecords counts V4 contexts; optionEntries counts their represented diagnostic options; disclosureFacts counts their delivered facts. These denominators overlap and are not unique gameplay choices. Missing/uninstrumented choices remain unknown.')
     yield from _audit.markdown(summary['inputCoverageAudit'])
     if 'evaluatedXAssessmentStates' in summary:
         yield from counter_line('Evaluated X assessment snapshots: ', 'evaluatedXAssessmentStates')

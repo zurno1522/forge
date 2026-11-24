@@ -6,7 +6,7 @@ from a privileged trace or prove that an uninstrumented heuristic used this view
 """
 
 PROFILE = 'PERMITTED_CHOICE_VIEW_V1'
-PROFILES = {1: PROFILE, 2: 'PERMITTED_CHOICE_VIEW_V2', 3: 'PERMITTED_CHOICE_VIEW_V3'}
+PROFILES = {1: PROFILE, 2: 'PERMITTED_CHOICE_VIEW_V2', 3: 'PERMITTED_CHOICE_VIEW_V3', 4: 'PERMITTED_CHOICE_VIEW_V4'}
 TIMINGS = {'BEFORE_SELECTOR', 'BEFORE_OPERATION', 'AFTER_SELECTION_BEFORE_APPLICATION', 'UNESTABLISHED'}
 STATE_BASES = {'RULES_STATE', 'PLANNING_WORKING_STATE', 'UNESTABLISHED'}
 REASONS = {'HIDDEN', 'UNSUPPORTED', 'OUTSIDE_CAPTURED_PREFIX', 'UNRESOLVED_BINDING',
@@ -69,7 +69,8 @@ def validate(value, chooser_id, known_players=None):
                 and omission['reason'] in REASONS, 'unknown omission')
     require(bool(omissions) == (value['status'] != 'CAPTURED'), 'capture status/omission mismatch')
     diagnostic = value['diagnostics']
-    fields(diagnostic, 'playerBindings cardBindings' + (' stackBindings' if version >= 2 else ''), 'invalid diagnostic fields')
+    fields(diagnostic, 'playerBindings cardBindings' + (' stackBindings' if version >= 2 else '')
+           + (' optionBindings' if version >= 4 else ''), 'invalid diagnostic fields')
     require(isinstance(diagnostic['playerBindings'], list) and isinstance(diagnostic['cardBindings'], list),
             'invalid binding collections')
     policy = value['policy']
@@ -81,6 +82,8 @@ def validate(value, chooser_id, known_players=None):
         if version >= 2:
             require(coverage['stack'] == 'UNAVAILABLE' and diagnostic['stackBindings'] == [], 'unavailable stack has bindings')
         if version >= 3: require(coverage['prompt'] == 'UNAVAILABLE', 'unavailable prompt claims coverage')
+        if version >= 4:
+            require(diagnostic['optionBindings'] == dict(coverage='UNAVAILABLE', items=[], truncated=True), 'unavailable option links have data')
         return
     if version >= 2: require(coverage['stack'] == 'PUBLIC_ROOT_STACK_V1', 'stack coverage/policy mismatch')
     require(perspective['controllingPlayerId'] == chooser_id, 'unsupported controlled perspective has policy')
@@ -153,12 +156,40 @@ def validate(value, chooser_id, known_players=None):
         require(fact['zone'] is None or fact['zone'] in ZONES, 'invalid disclosed zone')
         require(fact['presentedFace'] in FACES, 'invalid presented face')
         require(all(text(fact[k]) for k in ('name', 'types', 'manaCost')), 'invalid disclosed face text')
-        require(fact['currentObjectAssociation'] == 'UNRESOLVED', 'unsupported disclosure object association')
+        association = fact['currentObjectAssociation']
+        require(association == 'UNRESOLVED' or version >= 4 and isinstance(association, str)
+                and association in card_refs, 'unsupported disclosure object association')
+        if association != 'UNRESOLVED':
+            card = cards[card_refs.index(association)]
+            require(fact['source'] == 'CONTROLLER_CARD_REVEAL' and value['stateBasis'] == 'RULES_STATE'
+                    and card['zone'] in ('Battlefield', 'Command', 'Graveyard', 'Exile', 'Stack')
+                    and not card['faceDown'] and card['identityKnown'] and fact['zone'] == card['zone']
+                    and all(fact[key] == card[key] for key in ('name', 'types', 'manaCost')), 'invalid public disclosure association')
+            require(sum(all(other[key] == field for key, field in card.items() if key != 'entityRef') for other in cards) == 1
+                    and not any(item['component'] in ('ENTITIES', 'PLAYER_VIEW', 'TEXT', 'COUNTERS') for item in omissions),
+                    'ambiguous or incomplete disclosure association')
         require(coverage['disclosures'] == fact['scope'], 'disclosure scope/coverage mismatch')
     if version >= 2:
         validate_stack(policy['stack'], diagnostic['stackBindings'], players, cards, omissions, value['stateBasis'])
     if version >= 3:
         validate_prompt(policy['prompt'], coverage['prompt'], refs, omissions, value['stateBasis'])
+    if version >= 4:
+        validate_option_links(diagnostic['optionBindings'], refs, cards)
+
+
+def validate_option_links(links, players, cards):
+    fields(links, 'coverage items truncated', 'invalid option link fields')
+    require(links['coverage'] in ('UNSUPPORTED', 'UNAVAILABLE', 'DIAGNOSTIC_PUBLIC_CURRENT_V1')
+            and isinstance(links['items'], list) and len(links['items']) <= 256 and isinstance(links['truncated'], bool), 'invalid option links')
+    if links['coverage'] != 'DIAGNOSTIC_PUBLIC_CURRENT_V1':
+        require(links['items'] == [] and links['truncated'] == (links['coverage'] == 'UNAVAILABLE'), 'invalid absent option links')
+    public = {card['entityRef'] for card in cards if card['zone'] in ('Battlefield', 'Command', 'Graveyard', 'Stack')
+              or card['zone'] == 'Exile' and not card['faceDown']}
+    for index, link in enumerate(links['items']):
+        fields(link, 'optionIndex entityRef', 'invalid option link')
+        require(integer(link['optionIndex']) and link['optionIndex'] == index, 'invalid option link ordinal')
+        require(link['entityRef'] is None or isinstance(link['entityRef'], str)
+                and link['entityRef'] in public | set(players), 'private or unknown option link')
 
 
 def validate_prompt(prompt, coverage, player_refs, omissions, state_basis):

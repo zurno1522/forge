@@ -1,0 +1,47 @@
+{
+  "focused": {
+    "tests": 66,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "full": {
+    "desktop": {
+      "tests": 2578,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 6
+    },
+    "core": {
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "game": {
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "python": {
+    "tests": 146,
+    "failures": 0
+  },
+  "logs": {
+    "focused": {
+      "path": "/workspace/work/cov004/focused-reviewed.log",
+      "sha256": "a51e6308732d173ffb12913d2992d91e50a2694320ddaebb0b9ca7e0f8234e99"
+    },
+    "full": {
+      "path": "/workspace/work/cov004/full-reviewed.log",
+      "sha256": "30b11080fbe50f78dcf6b09e6cbb95d818287943e230207fd04dc47c82912ab7"
+    },
+    "python": {
+      "path": "/workspace/work/cov004/python-final.log",
+      "sha256": "94f5c821ee99d017c1c88ddeb8cf35b6f57deeb81ecea96b422d6ec8b8596fd6"
+    }
+  },
+  "review": "Earlier broader runs were stopped and superseded after code-review fixes; only the final full run validates the final source."
+}

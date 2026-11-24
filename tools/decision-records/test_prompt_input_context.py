@@ -96,7 +96,7 @@ class PromptInputContextTests(unittest.TestCase):
     def test_schema_coverage_state_and_boundary_claims_fail_closed(self):
         mutations = {
             'old-version': lambda c: c.update(schemaVersion=2, profile='PERMITTED_CHOICE_VIEW_V2'),
-            'unknown-version': lambda c: c.update(schemaVersion=4),
+            'unknown-version': lambda c: c.update(schemaVersion=5),
             'wrong-profile': lambda c: c.update(profile='PERMITTED_CHOICE_VIEW_V2'),
             'planning': lambda c: c.update(stateBasis='PLANNING_WORKING_STATE'),
             'boolean-bound': lambda c: c['policy']['prompt'].update(minimum=False),

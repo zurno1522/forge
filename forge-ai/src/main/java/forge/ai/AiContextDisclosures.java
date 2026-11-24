@@ -35,10 +35,14 @@ final class AiContextDisclosures {
     static final int MAX_TEXT = 256;
     private static final long NO_STACK_SCOPE = -1L;
 
-    record Snapshot(List<Map<String, Object>> facts, String coverage, List<Map<String, Object>> omissions) {
+    record Proof(Card card, long timestamp, ZoneType zone, long epoch) { }
+
+    record Snapshot(List<Map<String, Object>> facts, String coverage, List<Map<String, Object>> omissions,
+                    List<Proof> proofs) {
         Snapshot {
             facts = List.copyOf(facts);
             omissions = List.copyOf(omissions);
+            proofs = Collections.unmodifiableList(new ArrayList<>(proofs));
         }
     }
 
@@ -68,6 +72,8 @@ final class AiContextDisclosures {
     private final Game game;
     private final BooleanSupplier acquireWork;
     private final List<Map<String, Object>> facts = new ArrayList<>();
+    private final List<Proof> proofs = new ArrayList<>();
+    private long evidenceEpoch;
     private final Set<String> missing = new LinkedHashSet<>();
     private EventEmissionObserver.Subscription subscription;
     private boolean observing;
@@ -108,11 +114,11 @@ final class AiContextDisclosures {
     }
 
     void cards(final CardCollectionView cards, final ZoneType zone) {
-        delivered(cards, Card::getView, zone, "CONTROLLER_CARD_REVEAL");
+        delivered(cards, Card::getView, Function.identity(), zone, "CONTROLLER_CARD_REVEAL");
     }
 
     void views(final List<CardView> cards, final ZoneType zone) {
-        delivered(cards, Function.identity(), zone, "CONTROLLER_VIEW_REVEAL");
+        delivered(cards, Function.identity(), ignored -> null, zone, "CONTROLLER_VIEW_REVEAL");
     }
 
     /** Abort the observed interval after a selector error; never carry its partial facts onward. */
@@ -131,7 +137,7 @@ final class AiContextDisclosures {
     Snapshot snapshot() {
         if (!enabled() || !supportedRecipient()) {
             if (enabled()) { unsupportedRecipient(); }
-            return new Snapshot(List.of(), "UNSUPPORTED_PRIOR_SCOPE", List.of(omission("UNSUPPORTED")));
+            return new Snapshot(List.of(), "UNSUPPORTED_PRIOR_SCOPE", List.of(omission("UNSUPPORTED")), List.of());
         }
         ensureObserver();
         synchronized (this) {
@@ -140,12 +146,12 @@ final class AiContextDisclosures {
             final List<Map<String, Object>> omissions = new ArrayList<>();
             if ("UNSUPPORTED_PRIOR_SCOPE".equals(coverage)) { omissions.add(omission("UNSUPPORTED")); }
             for (final String reason : missing) { omissions.add(omission(reason)); }
-            return new Snapshot(facts, coverage, omissions);
+            return new Snapshot(facts, coverage, omissions, proofs);
         }
     }
 
     private <T> void delivered(final Iterable<T> supplied, final Function<T, CardView> view,
-            final ZoneType zone, final String source) {
+            final Function<T, Card> original, final ZoneType zone, final String source) {
         // In particular, do not request an iterator or inspect a delivered view in disabled/copy games.
         if (!enabled()) { return; }
         if (!supportedRecipient()) { unsupportedRecipient(); return; }
@@ -172,7 +178,12 @@ final class AiContextDisclosures {
                 return;
             }
             // Reading the presented face happens outside the publication monitor, and never findByView().
-            final CardView presented = view.apply(iterator.next());
+            final T item = iterator.next();
+            final Card card = original.apply(item);
+            final long proofEpoch;
+            synchronized (this) { proofEpoch = evidenceEpoch; }
+            final long timestamp = card == null ? -1 : card.getGameTimestamp();
+            final CardView presented = view.apply(item);
             final CardView.CardStateView face = presented.getCurrentState();
             final boolean faceDown = presented.isFaceDown();
             final String name = face.getName();
@@ -188,10 +199,14 @@ final class AiContextDisclosures {
             fact.put("manaCost", bounded(cost));
             fact.put("currentObjectAssociation", "UNRESOLVED");
             final Map<String, Object> frozen = Collections.unmodifiableMap(fact);
+            final Proof proof = card != null && card.getGame() == game && publicZone(zone) && !faceDown && !card.isLKI()
+                    && card.getZone() != null && card.getZone().getZoneType() == zone
+                    ? new Proof(card, timestamp, zone, proofEpoch) : null;
             synchronized (this) {
                 if (closed || epoch != generation || !enabled()) { return; }
                 if (facts.size() == MAX_FACTS) { missing.add("OUTSIDE_CAPTURED_PREFIX"); return; }
                 facts.add(frozen);
+                proofs.add(proof);
                 if (name.length() > MAX_TEXT || types.length() > MAX_TEXT || cost.length() > MAX_TEXT) {
                     missing.add("OUTSIDE_CAPTURED_PREFIX");
                 }
@@ -234,6 +249,7 @@ final class AiContextDisclosures {
     }
 
     private synchronized void onEvent(final Event event) {
+        if (event instanceof forge.game.event.GameEvent) { evidenceEpoch++; }
         if (event instanceof GameEventSpellResolved resolved
                 && resolved.spell() != null && resolved.spell().getId() == resolvingAbility
                 || event instanceof GameEventSpellRemovedFromStack removed
@@ -298,8 +314,35 @@ final class AiContextDisclosures {
 
     private void resetFacts() {
         facts.clear();
+        proofs.clear();
+        evidenceEpoch++;
         missing.clear();
         generation++;
+    }
+
+    /** No object lookup or historical repair: only direct delivery without an intervening event. */
+    Card currentPublicSource(final Snapshot snapshot, final int index) {
+        final Proof proof;
+        synchronized (this) {
+            if (!enabled() || !supportedRecipient() || index >= snapshot.proofs().size()) { return null; }
+            proof = snapshot.proofs().get(index);
+            if (proof == null || proof.epoch() != evidenceEpoch) { return null; }
+        }
+        if (proof.card().isLKI() || proof.card().isFaceDown()
+                || proof.card().getGameTimestamp() != proof.timestamp() || proof.card().getZone() == null
+                || proof.card().getZone().getZoneType() != proof.zone()) { return null; }
+        if (!publicZone(proof.zone())) { return null; }
+        final Map<String, Object> fact = snapshot.facts().get(index);
+        final CardView.CardStateView face = proof.card().getView().getCurrentState();
+        final boolean sameFace = face.getState().name().equals(fact.get("presentedFace"))
+                && bounded(face.getName()).equals(fact.get("name")) && bounded(face.getType().toString()).equals(fact.get("types"))
+                && bounded(face.getManaCost().toString()).equals(fact.get("manaCost"));
+        synchronized (this) { return sameFace && enabled() && proof.epoch() == evidenceEpoch ? proof.card() : null; }
+    }
+
+    private static boolean publicZone(final ZoneType zone) {
+        return zone == ZoneType.Battlefield || zone == ZoneType.Command || zone == ZoneType.Graveyard
+                || zone == ZoneType.Exile || zone == ZoneType.Stack;
     }
 
     private static String bounded(final String value) {

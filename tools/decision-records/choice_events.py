@@ -77,6 +77,8 @@ def input_boundary(value, boundary, stage=None):
         if stage == 'CANDIDATE_EVALUATION':
             require(value['stateBasis'] == 'PLANNING_WORKING_STATE', 'evaluation context claims rules state')
         prompt = value['policy'].get('prompt')
+        if value['schemaVersion'] >= 4 and value['diagnostics']['optionBindings']['coverage'] != 'UNSUPPORTED':
+            require(boundary in ('CONTROLLER_EFFECT_ENTITY', 'CONTROLLER_ZONE_CHANGE_CARD'), 'option links at unaudited input boundary')
         if prompt is not None:
             require(boundary == {'NUMBER_RANGE': 'CONTROLLER_NUMBER_RANGE', 'NUMBER_OPTIONS': 'CONTROLLER_NUMBER_OPTIONS',
                                  'SINGLE_ENTITY': 'CONTROLLER_EFFECT_ENTITY'}[prompt['kind']], 'typed prompt at unaudited boundary')
@@ -99,6 +101,30 @@ def prompt_arguments(choice):
         related = prompt['relatedPlayer']
         by_ref = {binding['entityRef']: binding['id'] for binding in context['diagnostics']['playerBindings']}
         require((None if related is None else by_ref[related]) == option['relatedPlayerId'], 'prompt player differs from callback arguments')
+
+
+def option_links(choice):
+    context = choice['inputContext']
+    if context['schemaVersion'] < 4 or context['policy'] is None: return
+    links = context['diagnostics']['optionBindings']
+    supported = choice['boundary'] in ('CONTROLLER_EFFECT_ENTITY', 'CONTROLLER_ZONE_CHANGE_CARD')
+    if not supported:
+        require(links['coverage'] == 'UNSUPPORTED', 'option links at unaudited boundary')
+        return
+    if links['coverage'] == 'UNSUPPORTED': return  # Optional capability; never infer missing links.
+    options = choice['options']
+    if options['coverage'] == 'UNAVAILABLE':
+        require(links['coverage'] == 'UNAVAILABLE', 'unavailable pool has links')
+        return
+    require(links['coverage'] == 'DIAGNOSTIC_PUBLIC_CURRENT_V1' and len(links['items']) == len(options['items'])
+            and links['truncated'] == options['truncated'], 'option link prefix differs from observed pool')
+    diagnostic = context['diagnostics']
+    players = {binding['entityRef']: dict(type='PLAYER', id=binding['id']) for binding in diagnostic['playerBindings']}
+    cards = {binding['entityRef']: dict(type='CARD', id=binding['id'], gameTimestamp=binding['gameTimestamp'])
+             for binding in diagnostic['cardBindings']}
+    for link, reference in zip(links['items'], options['items']):
+        ref = link['entityRef']
+        require(ref is None or (players | cards)[ref] == reference, 'option link identity mismatch')
 
 
 def input_envelope(value, record):
@@ -355,6 +381,7 @@ def accept(record, game):
             input_boundary(c['inputContext'], c['boundary'], c['stage'])
             input_envelope(c['inputContext'], record)
             prompt_arguments(c)
+            option_links(c)
         states[cid] = dict(start=record, terminal=None, postOutcome=game['outcome'] is not None)
     else:
         require(cid in states, 'choice terminal lacks start')
