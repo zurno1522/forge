@@ -64,6 +64,15 @@ import java.util.stream.Collectors;
 public class PlayerControllerAi extends PlayerController {
     private final AiController brains;
     private AiInputContext.State inputContextState;
+    private volatile AiObservationAccounting observationAccounting;
+
+    /** Explicitly configured by the trace adapter for original participant controllers only. */
+    public synchronized AiObservationAccounting configureObservationAccounting() {
+        if (observationAccounting == null) { observationAccounting = new AiObservationAccounting(); }
+        return observationAccounting;
+    }
+
+    AiObservationAccounting observationAccounting() { return observationAccounting; }
 
     /** Allocated only on an enabled observation path, never by copied-game policy. */
     synchronized AiInputContext.State inputContextState() {

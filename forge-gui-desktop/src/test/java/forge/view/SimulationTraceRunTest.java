@@ -59,6 +59,10 @@ public class SimulationTraceRunTest {
                 Assert.assertEquals(game.get("status").getAsString(), statuses.get(i));
             }
             assertFinished(records.get(records.size() - 1), expectedStatus, statuses.size(), normal, timedOut, failed);
+            final JsonObject accounting = records.get(records.size() - 1).getAsJsonObject("observationAccounting");
+            Assert.assertEquals(accounting.get("gamesAccounted").getAsInt(), statuses.size());
+            Assert.assertTrue(accounting.getAsJsonObject("counts").get("closed").getAsBoolean());
+            Assert.assertTrue(accounting.getAsJsonObject("counts").get("scopeComplete").getAsBoolean());
         } finally {
             Files.deleteIfExists(file);
         }
@@ -109,6 +113,7 @@ public class SimulationTraceRunTest {
     private static Game game() {
         final Game game = Mockito.mock(Game.class);
         Mockito.when(game.getRegisteredPlayers()).thenReturn(new PlayerCollection());
+        Mockito.when(game.getPlayers()).thenReturn(new PlayerCollection());
         return game;
     }
 

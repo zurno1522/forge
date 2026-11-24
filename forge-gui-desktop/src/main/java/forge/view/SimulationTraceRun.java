@@ -2,6 +2,7 @@ package forge.view;
 
 import forge.LobbyPlayer;
 import forge.ai.LobbyPlayerAi;
+import forge.ai.AiObservationAccounting;
 import forge.deck.CardPool;
 import forge.deck.Deck;
 import forge.deck.DeckSection;
@@ -44,6 +45,8 @@ final class SimulationTraceRun implements AutoCloseable {
     private int gamesTimedOut;
     private int gamesFailed;
     private boolean finished;
+    private final AiObservationAccounting observationAccounting = new AiObservationAccounting();
+    private long gamesAccounted;
 
     private SimulationTraceRun(final SimulationTraceWriter writer, final SimulationTraceWriter decisionWriter) {
         this.writer = writer;
@@ -109,6 +112,7 @@ final class SimulationTraceRun implements AutoCloseable {
         record.put("schemaVersion", 1);
         record.put("actionEventSchemaVersion", 1);
         record.put("choiceEventSchemaVersion", 1);
+        record.put("observationAccountingSchemaVersion", 1);
         record.put("runId", runId);
         record.put("pilotMode", pilotMode);
         record.put("engineRevision", System.getProperty("forge.simulation.revision", "UNKNOWN"));
@@ -174,6 +178,7 @@ final class SimulationTraceRun implements AutoCloseable {
         try {
             collector.executionFinished(status, error);
         } catch (IOException e) {
+            observationAccounting.incomplete();
             gamesFailed++;
             throw new TraceFailure("Simulation trace failed while finishing game " + gamesAttempted, e);
         }
@@ -183,6 +188,13 @@ final class SimulationTraceRun implements AutoCloseable {
             case "TIMEOUT" -> gamesTimedOut++;
             case "EXCEPTION" -> gamesFailed++;
             default -> throw new IllegalArgumentException("Unknown trace game status: " + status);
+        }
+        try {
+            for (final Map<String, Object> snapshot : collector.accountingSnapshots()) { observationAccounting.merge(snapshot); }
+            gamesAccounted++;
+        } catch (RuntimeException failure) {
+            observationAccounting.incomplete();
+            throw new TraceFailure("Unable to finalize observation accounting", failure);
         }
     }
 
@@ -207,6 +219,12 @@ final class SimulationTraceRun implements AutoCloseable {
             record.put("gamesNormal", gamesNormal);
             record.put("gamesTimedOut", gamesTimedOut);
             record.put("gamesFailed", gamesFailed);
+            if (gamesAccounted != gamesAttempted) { observationAccounting.incomplete(); }
+            observationAccounting.reconcileReceipts();
+            observationAccounting.close();
+            record.put("observationAccounting", Map.of("schemaVersion", 1,
+                    "scope", "ORIGINAL_AI_STANDALONE_CALLBACKS", "cutoff", "GAME_CAPTURE_CLOSED",
+                    "gamesAccounted", gamesAccounted, "counts", observationAccounting.snapshot()));
             if (writer != null) { writer.write(record); }
             if (decisionWriter != null) { decisionWriter.write(record); }
             closeWriters();

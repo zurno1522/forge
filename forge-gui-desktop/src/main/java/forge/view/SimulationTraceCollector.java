@@ -7,6 +7,7 @@ import forge.ai.AiActionExecutionEvent;
 import forge.ai.AiActionReference;
 import forge.ai.AiChoiceEvent;
 import forge.ai.PlayerControllerAi;
+import forge.ai.AiObservationAccounting;
 import forge.card.GamePieceType;
 import forge.game.Game;
 import forge.game.GameEntityView;
@@ -39,6 +40,9 @@ import java.util.Set;
  * Read-only translator from Forge game events to the structured simulation trace.
  */
 final class SimulationTraceCollector {
+    private final List<AiObservationAccounting> accountingSources = new ArrayList<>();
+    private final Map<Long, PlayerControllerAi> accountingPlayers = new HashMap<>();
+    private final AiObservationAccounting accountingReceipt = new AiObservationAccounting();
     private final Game game;
     private final SimulationTraceWriter writer;
     private final SimulationTraceWriter decisionWriter;
@@ -80,6 +84,15 @@ final class SimulationTraceCollector {
     }
 
     void attach() {
+        int participants = 0;
+        for (final Player player : game.getPlayers()) {
+            if (participants++ == 16) { accountingReceipt.incomplete(); break; }
+            if (player.getController() instanceof PlayerControllerAi ai) {
+                accountingPlayers.put(player.getId(), ai);
+                accountingSources.add(ai.configureObservationAccounting());
+            }
+            if (player.isControlled() || game.getRules().hasSharedTeamTurns()) { accountingReceipt.incomplete(); }
+        }
         observation = game.observeEventEmission(event -> {
             if (event instanceof GameEvent e) { onGameEvent(e); }
             else if (event instanceof AiDecisionEvent e) { onAiDecision(e); }
@@ -91,6 +104,12 @@ final class SimulationTraceCollector {
     @Subscribe
     public void onGameEvent(final GameEvent event) {
         if (closed || failure != null) { return; }
+        if (event instanceof GameEventPlayerControl control) {
+            // Game cleanup also emits this event when an original controller remains unchanged.
+            final Player player = control.player() == null ? null : game.getPlayer(control.player());
+            if (player == null || player.isControlled()
+                    || player.getController() != accountingPlayers.get(player.getId())) { accountingReceipt.incomplete(); }
+        }
         // Resolve tracker identity before taking our monitor. Tracker emission already holds
         // its own monitor; no collector -> tracker lock edge may exist.
         AiActionReference action = null;
@@ -241,9 +260,13 @@ final class SimulationTraceCollector {
     public synchronized void onAiChoice(final AiChoiceEvent event) {
         if (closed || failure != null) { return; }
         try {
+            final boolean started = "STARTED".equals(event.data().get("status"));
+            if (started && (!accountingPlayers.containsKey(event.data().get("chooserPlayerId"))
+                    || !"AI".equals(event.data().get("chooserKind")))) { accountingReceipt.incomplete(); }
             final Map<String, Object> record = scoped("AI_SUBORDINATE_CHOICE", true);
             record.put("choice", event.data());
             write(record);
+            accountingReceipt.collectorWrite(started);
         } catch (IOException | RuntimeException error) {
             failure = new IOException("Unable to collect simulation choice", error);
         }
@@ -295,9 +318,18 @@ final class SimulationTraceCollector {
             if (finishing) {
                 game.setRecordAiDecisions(false);
                 game.closeEventObservations();
+                for (final AiObservationAccounting source : accountingSources) { source.close(); }
+                accountingReceipt.close();
             }
         }
         checkHealthy();
+    }
+
+    List<Map<String, Object>> accountingSnapshots() {
+        final List<Map<String, Object>> snapshots = new ArrayList<>();
+        for (final AiObservationAccounting source : accountingSources) { snapshots.add(source.snapshot()); }
+        snapshots.add(accountingReceipt.snapshot());
+        return snapshots;
     }
 
     private void finishOutput(final String status, final Throwable error) throws IOException {

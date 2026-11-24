@@ -4,6 +4,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import forge.ai.LobbyPlayerAi;
 import forge.ai.AiDecisionEvent;
+import forge.ai.AiChoiceEvent;
+import forge.ai.AiChoiceRecorder;
+import forge.ai.AiObservationAccounting;
 import forge.card.GamePieceType;
 import forge.deck.Deck;
 import forge.game.Game;
@@ -222,6 +225,53 @@ public class SimulationTraceCollectorTest {
     private static void assertCard(final JsonObject ref, final int id, final String name) {
         Assert.assertEquals(ref.get("id").getAsInt(), id);
         Assert.assertEquals(ref.get("name").getAsString(), name);
+    }
+
+    @Test(groups = { "UnitTest", "fast" })
+    public void collectorConfiguresSourceAccountingAndClosesItAtTheGameCutoff() throws Exception {
+        final RegisteredPlayer registered = new RegisteredPlayer(new Deck("Empty deck"))
+                .setPlayer(new LobbyPlayerAi("Player", null));
+        try (Trace trace = new Trace(List.of(registered))) {
+            trace.game.setRecordAiDecisions(true);
+            final var player = trace.game.getPlayers().get(0);
+            Assert.assertEquals(AiChoiceRecorder.observe(player, null, "NUMBER_SELECTION", null,
+                    "CONTROLLER_NUMBER_RANGE", Map::of, () -> 7, value -> value), Integer.valueOf(7));
+            player.clearController(); // Normal game cleanup emits a reset even without a control change.
+            trace.collector.executionFinished("TIMEOUT", null);
+            final var aggregate = new AiObservationAccounting();
+            for (final var snapshot : trace.collector.accountingSnapshots()) { aggregate.merge(snapshot); }
+            final var counts = aggregate.snapshot();
+            final var row = (Map<?, ?>) ((Map<?, ?>) counts.get("boundaries")).get("UNCLASSIFIED");
+            Assert.assertEquals(row.get("entered"), 1L);
+            Assert.assertEquals(row.get("omittedUnsupported"), 1L);
+            Assert.assertEquals(row.get("callbackReturned"), 1L);
+            Assert.assertEquals(counts.get("scopeComplete"), true);
+            Assert.assertTrue(trace.collector.accountingSnapshots().stream().allMatch(s -> Boolean.TRUE.equals(s.get("closed"))));
+            Assert.assertFalse(trace.game.isRecordingAiDecisions());
+        }
+    }
+
+    @Test(groups = { "UnitTest", "fast" })
+    public void changedControlAndUnconfiguredActorsCannotClaimCompleteAccounting() throws Exception {
+        final RegisteredPlayer first = new RegisteredPlayer(new Deck("First"))
+                .setPlayer(new LobbyPlayerAi("First", null));
+        final RegisteredPlayer second = new RegisteredPlayer(new Deck("Second"))
+                .setPlayer(new LobbyPlayerAi("Second", null));
+        try (Trace trace = new Trace(List.of(first, second))) {
+            final var player = trace.game.getPlayers().get(0);
+            final var other = trace.game.getPlayers().get(1);
+            player.addController(1L, other, other.getController(), true);
+            trace.collector.executionFinished("NORMAL", null);
+            Assert.assertFalse((Boolean) trace.collector.accountingSnapshots().get(2).get("scopeComplete"));
+        }
+        try (Trace trace = new Trace()) {
+            trace.game.fireEvent(new AiChoiceEvent(Map.of("status", "STARTED", "chooserPlayerId", 999L,
+                    "chooserKind", "AI", "choiceId", "external")));
+            trace.collector.executionFinished("NORMAL", null);
+            final var counts = trace.collector.accountingSnapshots().get(0);
+            Assert.assertFalse((Boolean) counts.get("scopeComplete"));
+            Assert.assertEquals(counts.get("collectorStarts"), 1L);
+        }
     }
 
     private static final class Trace implements AutoCloseable {

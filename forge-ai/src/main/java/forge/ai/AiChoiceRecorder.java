@@ -109,20 +109,42 @@ public final class AiChoiceRecorder {
             final Supplier<T> callback, final Function<T, Object> selection, final String timing,
             final Function<BooleanSupplier, Map<String, Object>> inputCapture) {
         final Game game = chooser.getGame();
+        AiObservationAccounting.Scope accounting = null;
+        if (game.isRecordingAiDecisions()) {
+            try {
+                if (chooser.getController() instanceof PlayerControllerAi ai && ai.observationAccounting() != null) {
+                    accounting = ai.observationAccounting().enter();
+                }
+            } catch (RuntimeException failure) { game.recordEventObservationFailure(failure); }
+        }
+        try {
+            return observeAccounted(chooser, ability, type, requestedStage, boundary, options, callback, selection, timing, inputCapture, accounting);
+        } finally { if (accounting != null) { accounting.exit(); } }
+    }
+
+    private static <T> T observeAccounted(final Player chooser, final SpellAbility ability, final String type,
+            final String requestedStage, final String boundary, final Supplier<Map<String, Object>> options,
+            final Supplier<T> callback, final Function<T, Object> selection, final String timing,
+            final Function<BooleanSupplier, Map<String, Object>> inputCapture, final AiObservationAccounting.Scope accounting) {
+        final Game game = chooser.getGame();
         Observation observation = null;
         if (game.isRecordingAiDecisions() && ability != null) {
             try {
                 final AiController chooserBrain = chooser.getController() instanceof PlayerControllerAi ai ? ai.getAi() : null;
-                if (ability.getHostCard() != null && ability.getHostCard().getGame() == game
-                        && !closedEvaluation(owner(ability)) && !closedEvaluation(chooserBrain)) {
-                    observation = new Observation(chooser, ability, type, requestedStage, boundary, options, timing, inputCapture);
-                }
+                if (ability.getHostCard() != null && ability.getHostCard().getGame() == game) {
+                    if (!closedEvaluation(owner(ability)) && !closedEvaluation(chooserBrain)) {
+                        observation = new Observation(chooser, ability, type, requestedStage, boundary, options, timing, inputCapture, accounting);
+                    } else if (accounting != null) { accounting.admissionClosed(); }
+                } else if (accounting != null) { accounting.unsupported(); }
             }
-            catch (RuntimeException failure) { game.recordEventObservationFailure(failure); }
+            catch (RuntimeException failure) { if (accounting != null) { accounting.failure(); } game.recordEventObservationFailure(failure); }
+        } else if (accounting != null) {
+            if (ability == null) { accounting.unsupported(); } else { accounting.admissionClosed(); }
         }
         final T result;
         final Observation previous = ACTIVE.get();
         if (observation != null) { ACTIVE.set(observation); }
+        if (accounting != null) { accounting.callbackStarted(); }
         try {
             try { result = callback.get(); }
             finally {
@@ -130,12 +152,14 @@ public final class AiChoiceRecorder {
             }
         }
         catch (RuntimeException | Error failure) {
+            if (accounting != null) { accounting.callbackThrew(); }
             if (observation != null) { observation.finish("ERROR", null); }
             throw failure;
         }
+        if (accounting != null) { accounting.callbackReturned(); }
         if (observation != null && observation.open()) {
             try { observation.finish(result == null ? "DECLINED" : "COMPLETED", observation.visible && result != null ? selection.apply(result) : null); }
-            catch (RuntimeException failure) { game.recordEventObservationFailure(failure); }
+            catch (RuntimeException failure) { if (accounting != null) { accounting.failure(); } game.recordEventObservationFailure(failure); }
         }
         return result;
     }
@@ -149,18 +173,22 @@ public final class AiChoiceRecorder {
         private final boolean visible;
         private final String stage;
         private final String basis;
+        private final AiObservationAccounting.Scope accounting;
         private boolean finished;
         private final long started = System.nanoTime();
 
         private Observation(final Player chooser, final SpellAbility ability, final String type,
                 final String requestedStage, final String boundary, final Supplier<Map<String, Object>> options,
-                final String timing, final Function<BooleanSupplier, Map<String, Object>> inputCapture) {
+                final String timing, final Function<BooleanSupplier, Map<String, Object>> inputCapture,
+                final AiObservationAccounting.Scope accounting) {
             game = chooser.getGame();
             this.chooser = chooser;
             this.ability = ability;
+            this.accounting = accounting;
             evaluation = evaluation(chooser, ability);
             id = "choice:" + SEQUENCE.incrementAndGet();
             visible = !ability.getHostCard().isFaceDown() && ability.getHostCard().getView().canBeShownTo(chooser.getView());
+            if (accounting != null) { accounting.classify(visible ? boundary : "MASKED_CHOICE"); }
             final AiActionReference action = action(ability);
             final Map<String, Object> context = evaluation == null ? null : evaluation.choiceContext(ability);
             final Map<String, Object> record = new LinkedHashMap<>();
@@ -191,12 +219,19 @@ public final class AiChoiceRecorder {
                     input = visible ? inputCapture.apply(this::open)
                             : AiInputContext.unavailable(chooser, timing, basis, "HIDDEN");
                 } catch (RuntimeException failure) {
+                    if (accounting != null) { accounting.failure(); }
                     game.recordEventObservationFailure(failure);
                     input = AiInputContext.unavailable(chooser, timing, basis, "CAPTURE_FAILED");
                 }
                 record.put("inputContext", input);
+                if (accounting != null && "UNAVAILABLE".equals(input.get("status"))) { accounting.unavailable(); }
             }
-            if (open()) { game.fireEvent(new AiChoiceEvent(record)); }
+            if (accounting != null) { accounting.prepared(); }
+            if (open()) {
+                if (accounting != null) { accounting.startAttempt(); }
+                game.fireEvent(new AiChoiceEvent(record));
+                if (accounting != null) { accounting.startReturned(); }
+            }
         }
 
         private boolean open() { return !finished && game.isRecordingAiDecisions() && (evaluation == null || evaluation.choiceCaptureOpen()); }
@@ -211,8 +246,10 @@ public final class AiChoiceRecorder {
                 record.put("status", status);
                 record.put("selection", visible ? selected : null);
                 record.put("elapsedNanos", System.nanoTime() - started);
+                if (accounting != null) { accounting.terminalAttempt(); }
                 game.fireEvent(new AiChoiceEvent(record));
-            } catch (RuntimeException failure) { game.recordEventObservationFailure(failure); }
+                if (accounting != null) { accounting.terminalReturned(); }
+            } catch (RuntimeException failure) { if (accounting != null) { accounting.failure(); } game.recordEventObservationFailure(failure); }
         }
     }
 

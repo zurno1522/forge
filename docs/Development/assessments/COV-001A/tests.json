@@ -1,0 +1,40 @@
+{
+  "finalFocused": {
+    "results": [
+      {
+        "tests": 59,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "logPath": "/workspace/work/cov001a/focused-final-source.log",
+    "logSha256": "ad97a3a18ab20ec05c7964d2adbf0ecaf2dec9c849cffd4e5fc9e0c61aa9e2d2",
+    "buildSuccess": true
+  },
+  "fullBeforeCleanupScopeRefinement": {
+    "results": [
+      {
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "tests": 2589,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 6
+      }
+    ],
+    "logPath": "/workspace/work/cov001a/full-reviewed.log",
+    "logSha256": "8d22516bb37814cee2dedd743b4c44d1263af2f5143b8877c364e6581caad0e6",
+    "buildSuccess": true
+  },
+  "python": {
+    "tests": 152,
+    "failures": 0,
+    "logSha256": "2b6751be3a3b6556fdb7bc0928964ef1c9fdfe5b0926b15e8329f732bf2d227b"
+  },
+  "review": "The full suite passed before fresh games exposed an overly conservative scope flag on routine controller reset. Final focused tests (including real control changes and no-op cleanup) and all three reviewed games validate the final collector refinement. No repeated full-suite result is claimed for that final refinement."
+}

@@ -1,0 +1,13 @@
+{
+  "forge-ai/src/main/java/forge/ai/AiChoiceRecorder.java": "ae42dac68671f2badbb9d05af72d127331e6103a81464d9dcbfac25b7b3b4a7e",
+  "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java": "16bffe713a695298257e31a69f12348177fe8a0bb55794a6315946cb223671eb",
+  "forge-gui-desktop/src/main/java/forge/view/SimulationTraceCollector.java": "517f90ae1de25bcb7572fd84b0dfe2ff3eca9008c2f938f71a4f7f0861f172d1",
+  "forge-gui-desktop/src/main/java/forge/view/SimulationTraceRun.java": "159cea5b3244e83cec61d69130e43da9f3d79690c8646eb7025ff6126a7a0af5",
+  "forge-gui-desktop/src/test/java/forge/view/SimulationTraceCollectorTest.java": "efcead7cc5f032fe1615c93f4af2c050c2077fe7a8a2f031589fb9cbda2722b9",
+  "forge-gui-desktop/src/test/java/forge/view/SimulationTraceRunTest.java": "2045cefb84bc49834ac30c460f0c67a538714ae939b2bdf27ce86524a159b2d2",
+  "tools/decision-records/export.py": "74ab710bb96f90ca9b2d4049c5bfd815deb4d0f46d8b4367edbe960b0945a7bc",
+  "forge-ai/src/main/java/forge/ai/AiObservationAccounting.java": "deba2c15ec55be8adee96bbc9cc24017c66bd0d87eb478af1a37a57b42bc7dd2",
+  "forge-gui-desktop/src/test/java/forge/ai/AiObservationAccountingTest.java": "f6bebd88f653d1e6978108116ae8982c900c2b1012ef070d92d09f05b2675fcc",
+  "tools/decision-records/observation_accounting.py": "ac1beeef44c19d56b65cd0ed4fa1d2944c2a704f9eb3098cda7231a9f8121e0b",
+  "tools/decision-records/test_observation_accounting.py": "ed58ba31a2909c80af3c205dbed95e9a12be0a5339173c433c3e70a157d2e3ff"
+}

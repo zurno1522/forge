@@ -29,6 +29,10 @@ _audit_spec = importlib.util.spec_from_file_location('forge_coverage_audit', Pat
 _audit = importlib.util.module_from_spec(_audit_spec)
 _audit_spec.loader.exec_module(_audit)
 
+_account_spec = importlib.util.spec_from_file_location('forge_observation_accounting', Path(__file__).with_name('observation_accounting.py'))
+_accounting = importlib.util.module_from_spec(_account_spec)
+_account_spec.loader.exec_module(_accounting)
+
 
 def ordered_games(games):
     return games.ordered_keys() if isinstance(games, _spool.Games) else sorted(games)
@@ -541,6 +545,8 @@ def load_run(path, *, games=None):
     finished = None
     games = {} if games is None else games
     records = 0
+    accounting_starts = 0
+    accounting_terminals = 0
     file_hash = hashlib.sha256()
     with path.open('rb') as source:
         for line_number, raw in enumerate(source, 1):
@@ -556,6 +562,8 @@ def load_run(path, *, games=None):
                     require(record.get('streamKind') in (None, 'FULL_GAME_TRACE', 'AI_DECISIONS'), 'unsupported stream kind')
                     require(record.get('actionEventSchemaVersion') in (None, 1), 'unsupported action event schema')
                     require(record.get('choiceEventSchemaVersion') is None or integer(record['choiceEventSchemaVersion']) and record['choiceEventSchemaVersion'] == 1, 'unsupported standalone choice capability')
+                    require(record.get('observationAccountingSchemaVersion') is None or integer(record['observationAccountingSchemaVersion'])
+                            and record['observationAccountingSchemaVersion'] == 1, 'unsupported observation accounting capability')
                     require(record.get('eventIndexMode', 'CONTIGUOUS') in ('CONTIGUOUS', 'SHARED_WITH_GAME_TRACE'), 'unsupported event index mode')
                     require(record.get('eventIndexMode') != 'SHARED_WITH_GAME_TRACE' or record.get('streamKind') == 'AI_DECISIONS', 'shared indices require a filtered decision stream')
                     require('runId' not in record or isinstance(record['runId'], str) and record['runId'], 'invalid runId')
@@ -633,6 +641,8 @@ def load_run(path, *, games=None):
                     elif kind == 'AI_SUBORDINATE_CHOICE':
                         require(metadata.get('choiceEventSchemaVersion') == 1, 'undeclared standalone choice event')
                         _choices.accept(record, game)
+                        if record['choice']['status'] == 'STARTED': accounting_starts += 1
+                        else: accounting_terminals += 1
                     elif kind in ACTION_EVENT_TYPES:
                         accept_action_event(record, game)
                     elif kind == 'GAME_OUTCOME':
@@ -682,6 +692,10 @@ def load_run(path, *, games=None):
     for key, expected_count in (('gamesAttempted', len(games)), ('gamesNormal', counts['NORMAL']), ('gamesTimedOut', counts['TIMEOUT']), ('gamesFailed', counts['EXCEPTION'])):
         require(finished.get(key) == expected_count, f'{path}: {key} disagrees with executions')
     metadata['sourceSha256'] = file_hash.hexdigest()
+    try:
+        _accounting.validate(metadata, finished, len(games), accounting_starts, accounting_terminals, _choices.BOUNDARIES)
+    except ValueError as error:
+        raise InvalidData(f'{path}: {error}') from error
     metadata.setdefault('runId', 'legacy-' + file_hash.hexdigest())
     metadata.setdefault('pilotMode', 'UNKNOWN')
     metadata.setdefault('engineRevision', 'UNKNOWN')
@@ -1042,6 +1056,8 @@ def make_coverage(runs, rows, *, spool=None):
                        inputContextCoverage=dict(input_coverage))
     summary['inputCoverageAudit'] = audit.summary(spool.sequence if spool else lambda name, values: list(values))
     if input_bindings: summary['inputContextBindings'] = dict(input_bindings)
+    accounting = _accounting.summarize(runs)
+    if accounting is not None: summary['observationAccounting'] = accounting
     summary['limitations'] = [
         'Main-phase play selection with an empty stack only; no mulligan, combat, reactive-priority or subordinate-choice coverage.',
         'Candidate assessments are partial and may repeat an ability; counts are assessment observations, not unique rejected legal actions.',
@@ -1073,6 +1089,8 @@ def make_coverage(runs, rows, *, spool=None):
         summary['limitations'] = [text.replace('Disclosed facts have unresolved current-object associations.',
             'Only directly proved public disclosure associations can be linked; other associations remain unresolved.') for text in summary['limitations']]
         summary['limitations'].append('V4 retains typed request fields and adds diagnostic current-option links. Those links do not authorize entity pool membership, count or ordering as model features. Direct public disclosure links require delivery proof without an intervening engine event. No profile certifies complete learning examples.')
+    if accounting is not None:
+        summary['limitations'].append('Invocation accounting covers configured original-AI standalone callback wrappers only. Entries are not unique gameplay decisions. Input-unavailable records are retained records; callback errors are not capture loss. Publication return does not prove collector delivery. Cutoff-pending work is not evidence that a late callback never ran. Parent/nested and uninstrumented invocation counts remain unknown. Partial scopes, legacy absence and overflow cannot supply exact missing-start fractions.')
     return summary
 
 
@@ -1198,6 +1216,10 @@ def report_chunks(summary, runs):
             yield from counter_line('V4 diagnostic bindings and disclosure associations: ', 'inputContextBindings')
             yield from lines('contextRecords counts V4 contexts; optionEntries counts their represented diagnostic options; disclosureFacts counts their delivered facts. These denominators overlap and are not unique gameplay choices. Missing/uninstrumented choices remain unknown.')
     yield from _audit.markdown(summary['inputCoverageAudit'])
+    if 'observationAccounting' in summary:
+        yield from lines('', '## Standalone invocation accounting', '')
+        yield from counter_line('Accounting: ', 'observationAccounting')
+        yield from lines('The denominator is eligible wrapped invocations on the configured original AI controllers, across each game capture cutoff. Missing starts at cutoff include omitted/prepared-but-uncollected work; they are not unique decisions or AI errors. Nested/parent and uninstrumented counts remain unknown.')
     if 'evaluatedXAssessmentStates' in summary:
         yield from counter_line('Evaluated X assessment snapshots: ', 'evaluatedXAssessmentStates')
     if 'searchTargetApplications' in summary:
