@@ -1,0 +1,1991 @@
+{
+  "schemaVersion": 1,
+  "productionBaseline": "78611be38f7",
+  "profile": "PERMITTED_CHOICE_VIEW_V4",
+  "fixtures": [
+    {
+      "workload": "SMALL",
+      "modes": {
+        "DISABLED": {
+          "policySha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "controlCpuMicrosPairMedians": [
+            1.5729437499999999,
+            1.25708125
+          ],
+          "controlAllocationBytesPairMedians": [
+            132.0,
+            132.0
+          ],
+          "contextReachableBytes": [
+            48,
+            48
+          ],
+          "rawContextBytes": [
+            2,
+            2
+          ],
+          "statuses": {},
+          "omissions": {}
+        },
+        "COPY": {
+          "policySha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "controlCpuMicrosPairMedians": [
+            1.3681062499999999,
+            1.1885375
+          ],
+          "controlAllocationBytesPairMedians": [
+            132.0,
+            132.0
+          ],
+          "contextReachableBytes": [
+            48,
+            48
+          ],
+          "rawContextBytes": [
+            2,
+            2
+          ],
+          "statuses": {},
+          "omissions": {}
+        },
+        "UNACCOUNTED_BASE": {
+          "policySha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "controlCpuMicrosPairMedians": [
+            28.00301875,
+            27.9929625
+          ],
+          "controlAllocationBytesPairMedians": [
+            4892.0,
+            4892.0
+          ],
+          "contextReachableBytes": [
+            48,
+            48
+          ],
+          "rawContextBytes": [
+            2,
+            2
+          ],
+          "statuses": {},
+          "omissions": {}
+        },
+        "ACCOUNTED_BASE": {
+          "policySha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "controlCpuMicrosPairMedians": [
+            30.08455,
+            29.646349999999998
+          ],
+          "controlAllocationBytesPairMedians": [
+            4924.0,
+            4924.0
+          ],
+          "contextReachableBytes": [
+            48,
+            48
+          ],
+          "rawContextBytes": [
+            2,
+            2
+          ],
+          "statuses": {},
+          "omissions": {}
+        },
+        "NUMERIC": {
+          "policySha256": "f4c66df69cc3479478810b15e6d9338b08311d5e1c77803201733f46d1995bc9",
+          "controlCpuMicrosPairMedians": [
+            449.81138749999997,
+            467.06240625
+          ],
+          "controlAllocationBytesPairMedians": [
+            138429.8,
+            137565.8
+          ],
+          "contextReachableBytes": [
+            33104,
+            33104
+          ],
+          "rawContextBytes": [
+            5551,
+            5551
+          ],
+          "statuses": {
+            "PARTIAL": 80
+          },
+          "omissions": {
+            "DISCLOSURES:UNSUPPORTED": 80
+          }
+        },
+        "ENTITY": {
+          "policySha256": "fedf1cec6699d88ce981cd9395fe879b1565ea98c2fbecc0f6f0a3976458768a",
+          "controlCpuMicrosPairMedians": [
+            598.0396687499999,
+            464.28505
+          ],
+          "controlAllocationBytesPairMedians": [
+            158300.95,
+            156982.65000000002
+          ],
+          "contextReachableBytes": [
+            36520,
+            36520
+          ],
+          "rawContextBytes": [
+            5949,
+            5949
+          ],
+          "statuses": {
+            "PARTIAL": 80
+          },
+          "omissions": {
+            "DISCLOSURES:UNSUPPORTED": 80
+          }
+        },
+        "CAPTURE": {
+          "policySha256": "f4c66df69cc3479478810b15e6d9338b08311d5e1c77803201733f46d1995bc9",
+          "controlCpuMicrosPairMedians": [
+            177.0328625,
+            140.7939125
+          ],
+          "controlAllocationBytesPairMedians": [
+            86885.8,
+            86021.0
+          ],
+          "contextReachableBytes": [
+            32144,
+            32144
+          ],
+          "rawContextBytes": [
+            5551,
+            5551
+          ],
+          "statuses": {
+            "PARTIAL": 80
+          },
+          "omissions": {
+            "DISCLOSURES:UNSUPPORTED": 80
+          }
+        }
+      },
+      "memorySamples": [
+        {
+          "lastContextReachableBytes": 36520,
+          "controllerLedgersReachableBytes": 15952,
+          "disclosureFactPayloadReachableBytes": 40,
+          "publicProofSlots": 0,
+          "proofShellShallowBytes": 0,
+          "payloadUnionSampledPeak": 71576
+        },
+        {
+          "lastContextReachableBytes": 36520,
+          "controllerLedgersReachableBytes": 15952,
+          "disclosureFactPayloadReachableBytes": 40,
+          "publicProofSlots": 0,
+          "proofShellShallowBytes": 0,
+          "payloadUnionSampledPeak": 71576
+        }
+      ]
+    },
+    {
+      "workload": "PRIVATE32",
+      "modes": {
+        "DISABLED": {
+          "policySha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "controlCpuMicrosPairMedians": [
+            1.37921875,
+            0.8590374999999999
+          ],
+          "controlAllocationBytesPairMedians": [
+            132.0,
+            132.0
+          ],
+          "contextReachableBytes": [
+            48,
+            48
+          ],
+          "rawContextBytes": [
+            2,
+            2
+          ],
+          "statuses": {},
+          "omissions": {}
+        },
+        "COPY": {
+          "policySha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "controlCpuMicrosPairMedians": [
+            1.2391625,
+            0.8540937500000001
+          ],
+          "controlAllocationBytesPairMedians": [
+            132.0,
+            132.0
+          ],
+          "contextReachableBytes": [
+            48,
+            48
+          ],
+          "rawContextBytes": [
+            2,
+            2
+          ],
+          "statuses": {},
+          "omissions": {}
+        },
+        "UNACCOUNTED_BASE": {
+          "policySha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "controlCpuMicrosPairMedians": [
+            24.844193750000002,
+            19.242656250000003
+          ],
+          "controlAllocationBytesPairMedians": [
+            4916.0,
+            4916.0
+          ],
+          "contextReachableBytes": [
+            48,
+            48
+          ],
+          "rawContextBytes": [
+            2,
+            2
+          ],
+          "statuses": {},
+          "omissions": {}
+        },
+        "ACCOUNTED_BASE": {
+          "policySha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "controlCpuMicrosPairMedians": [
+            26.60193125,
+            19.808518749999998
+          ],
+          "controlAllocationBytesPairMedians": [
+            4948.0,
+            4948.0
+          ],
+          "contextReachableBytes": [
+            48,
+            48
+          ],
+          "rawContextBytes": [
+            2,
+            2
+          ],
+          "statuses": {},
+          "omissions": {}
+        },
+        "NUMERIC": {
+          "policySha256": "d9f6e1aa6a1df2b9aa60c7b9adb471e605571d5b57fa5a9e5230be289baecde6",
+          "controlCpuMicrosPairMedians": [
+            1669.06873125,
+            1323.7009125
+          ],
+          "controlAllocationBytesPairMedians": [
+            567284.5,
+            572468.5
+          ],
+          "contextReachableBytes": [
+            142792,
+            142792
+          ],
+          "rawContextBytes": [
+            29886,
+            29886
+          ],
+          "statuses": {
+            "CAPTURED": 80
+          },
+          "omissions": {}
+        },
+        "ENTITY": {
+          "policySha256": "8b875d66cbe6dde213d3faa0323563cec6a1743bdfe0f3855f6a8218ec891899",
+          "controlCpuMicrosPairMedians": [
+            2037.355675,
+            1494.51074375
+          ],
+          "controlAllocationBytesPairMedians": [
+            693686.0,
+            698868.5
+          ],
+          "contextReachableBytes": [
+            162536,
+            162536
+          ],
+          "rawContextBytes": [
+            32204,
+            32204
+          ],
+          "statuses": {
+            "CAPTURED": 80
+          },
+          "omissions": {}
+        },
+        "CAPTURE": {
+          "policySha256": "d9f6e1aa6a1df2b9aa60c7b9adb471e605571d5b57fa5a9e5230be289baecde6",
+          "controlCpuMicrosPairMedians": [
+            410.75791875,
+            187.66963125
+          ],
+          "controlAllocationBytesPairMedians": [
+            354420.5,
+            359604.5
+          ],
+          "contextReachableBytes": [
+            139472,
+            139472
+          ],
+          "rawContextBytes": [
+            29886,
+            29886
+          ],
+          "statuses": {
+            "CAPTURED": 80
+          },
+          "omissions": {}
+        }
+      },
+      "memorySamples": [
+        {
+          "lastContextReachableBytes": 162536,
+          "controllerLedgersReachableBytes": 15952,
+          "disclosureFactPayloadReachableBytes": 19896,
+          "publicProofSlots": 0,
+          "proofShellShallowBytes": 0,
+          "payloadUnionSampledPeak": 327720
+        },
+        {
+          "lastContextReachableBytes": 162536,
+          "controllerLedgersReachableBytes": 15952,
+          "disclosureFactPayloadReachableBytes": 19896,
+          "publicProofSlots": 0,
+          "proofShellShallowBytes": 0,
+          "payloadUnionSampledPeak": 327720
+        }
+      ]
+    },
+    {
+      "workload": "PUBLIC32",
+      "modes": {
+        "DISABLED": {
+          "policySha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "controlCpuMicrosPairMedians": [
+            0.96533125,
+            0.65631875
+          ],
+          "controlAllocationBytesPairMedians": [
+            132.0,
+            132.0
+          ],
+          "contextReachableBytes": [
+            48,
+            48
+          ],
+          "rawContextBytes": [
+            2,
+            2
+          ],
+          "statuses": {},
+          "omissions": {}
+        },
+        "COPY": {
+          "policySha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "controlCpuMicrosPairMedians": [
+            0.9587,
+            0.6882312500000001
+          ],
+          "controlAllocationBytesPairMedians": [
+            132.0,
+            132.0
+          ],
+          "contextReachableBytes": [
+            48,
+            48
+          ],
+          "rawContextBytes": [
+            2,
+            2
+          ],
+          "statuses": {},
+          "omissions": {}
+        },
+        "UNACCOUNTED_BASE": {
+          "policySha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "controlCpuMicrosPairMedians": [
+            22.67998125,
+            20.0155125
+          ],
+          "controlAllocationBytesPairMedians": [
+            4804.0,
+            4916.0
+          ],
+          "contextReachableBytes": [
+            48,
+            48
+          ],
+          "rawContextBytes": [
+            2,
+            2
+          ],
+          "statuses": {},
+          "omissions": {}
+        },
+        "ACCOUNTED_BASE": {
+          "policySha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "controlCpuMicrosPairMedians": [
+            28.31235625,
+            17.46008125
+          ],
+          "controlAllocationBytesPairMedians": [
+            4836.0,
+            4884.0
+          ],
+          "contextReachableBytes": [
+            48,
+            48
+          ],
+          "rawContextBytes": [
+            2,
+            2
+          ],
+          "statuses": {},
+          "omissions": {}
+        },
+        "NUMERIC": {
+          "policySha256": "145c0394d976ed5791fd8a56c8e66148331b8e88a9fa46afb637a8b0883decb4",
+          "controlCpuMicrosPairMedians": [
+            1865.05594375,
+            1226.64440625
+          ],
+          "controlAllocationBytesPairMedians": [
+            578364.5,
+            583632.5
+          ],
+          "contextReachableBytes": [
+            140792,
+            140792
+          ],
+          "rawContextBytes": [
+            30136,
+            30136
+          ],
+          "statuses": {
+            "CAPTURED": 80
+          },
+          "omissions": {}
+        },
+        "ENTITY": {
+          "policySha256": "803340047fff21f6d4fc69cb22d674cb635d0371aae49c1fa6ac311040cc2b91",
+          "controlCpuMicrosPairMedians": [
+            2087.10015625,
+            1402.535225
+          ],
+          "controlAllocationBytesPairMedians": [
+            704731.9,
+            709958.4
+          ],
+          "contextReachableBytes": [
+            160536,
+            160536
+          ],
+          "rawContextBytes": [
+            32454,
+            32454
+          ],
+          "statuses": {
+            "CAPTURED": 80
+          },
+          "omissions": {}
+        },
+        "CAPTURE": {
+          "policySha256": "145c0394d976ed5791fd8a56c8e66148331b8e88a9fa46afb637a8b0883decb4",
+          "controlCpuMicrosPairMedians": [
+            590.37096875,
+            272.0795375
+          ],
+          "controlAllocationBytesPairMedians": [
+            365612.5,
+            370796.5
+          ],
+          "contextReachableBytes": [
+            137472,
+            137472
+          ],
+          "rawContextBytes": [
+            30136,
+            30136
+          ],
+          "statuses": {
+            "CAPTURED": 80
+          },
+          "omissions": {}
+        }
+      },
+      "memorySamples": [
+        {
+          "lastContextReachableBytes": 160536,
+          "controllerLedgersReachableBytes": 15952,
+          "disclosureFactPayloadReachableBytes": 22200,
+          "publicProofSlots": 32,
+          "proofShellShallowBytes": 1280,
+          "payloadUnionSampledPeak": 325720
+        },
+        {
+          "lastContextReachableBytes": 160536,
+          "controllerLedgersReachableBytes": 15952,
+          "disclosureFactPayloadReachableBytes": 22200,
+          "publicProofSlots": 32,
+          "proofShellShallowBytes": 1280,
+          "payloadUnionSampledPeak": 325720
+        }
+      ]
+    },
+    {
+      "workload": "MULTIPLAYER",
+      "modes": {
+        "DISABLED": {
+          "policySha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "controlCpuMicrosPairMedians": [
+            0.74725625,
+            0.6784250000000001
+          ],
+          "controlAllocationBytesPairMedians": [
+            132.0,
+            132.0
+          ],
+          "contextReachableBytes": [
+            48,
+            48
+          ],
+          "rawContextBytes": [
+            2,
+            2
+          ],
+          "statuses": {},
+          "omissions": {}
+        },
+        "COPY": {
+          "policySha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "controlCpuMicrosPairMedians": [
+            0.476175,
+            0.6407437500000001
+          ],
+          "controlAllocationBytesPairMedians": [
+            132.0,
+            132.0
+          ],
+          "contextReachableBytes": [
+            48,
+            48
+          ],
+          "rawContextBytes": [
+            2,
+            2
+          ],
+          "statuses": {},
+          "omissions": {}
+        },
+        "UNACCOUNTED_BASE": {
+          "policySha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "controlCpuMicrosPairMedians": [
+            22.721775,
+            17.5295875
+          ],
+          "controlAllocationBytesPairMedians": [
+            4788.0,
+            4788.0
+          ],
+          "contextReachableBytes": [
+            48,
+            48
+          ],
+          "rawContextBytes": [
+            2,
+            2
+          ],
+          "statuses": {},
+          "omissions": {}
+        },
+        "ACCOUNTED_BASE": {
+          "policySha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "controlCpuMicrosPairMedians": [
+            20.788143750000003,
+            18.05106875
+          ],
+          "controlAllocationBytesPairMedians": [
+            4820.0,
+            4820.0
+          ],
+          "contextReachableBytes": [
+            48,
+            48
+          ],
+          "rawContextBytes": [
+            2,
+            2
+          ],
+          "statuses": {},
+          "omissions": {}
+        },
+        "NUMERIC": {
+          "policySha256": "bf8384befc6739bf9b3d4e013fdbb90de1a0d0c8966175209db2412ce4c06731",
+          "controlCpuMicrosPairMedians": [
+            1834.68080625,
+            1503.15366875
+          ],
+          "controlAllocationBytesPairMedians": [
+            700036.5,
+            706308.5
+          ],
+          "contextReachableBytes": [
+            170992,
+            170992
+          ],
+          "rawContextBytes": [
+            35656,
+            35656
+          ],
+          "statuses": {
+            "CAPTURED": 80
+          },
+          "omissions": {}
+        },
+        "ENTITY": {
+          "policySha256": "abfc0fac6c08f55ce631c90933c3b4f2e19cb662179caa24f46cb33c88cb4dad",
+          "controlCpuMicrosPairMedians": [
+            2310.6103375000002,
+            1650.9812187500002
+          ],
+          "controlAllocationBytesPairMedians": [
+            851532.5,
+            857804.5
+          ],
+          "contextReachableBytes": [
+            194480,
+            194480
+          ],
+          "rawContextBytes": [
+            38418,
+            38418
+          ],
+          "statuses": {
+            "CAPTURED": 80
+          },
+          "omissions": {}
+        },
+        "CAPTURE": {
+          "policySha256": "bf8384befc6739bf9b3d4e013fdbb90de1a0d0c8966175209db2412ce4c06731",
+          "controlCpuMicrosPairMedians": [
+            642.02775625,
+            310.21745
+          ],
+          "controlAllocationBytesPairMedians": [
+            441652.5,
+            447924.5
+          ],
+          "contextReachableBytes": [
+            166792,
+            166792
+          ],
+          "rawContextBytes": [
+            35656,
+            35656
+          ],
+          "statuses": {
+            "CAPTURED": 80
+          },
+          "omissions": {}
+        }
+      },
+      "memorySamples": [
+        {
+          "lastContextReachableBytes": 194480,
+          "controllerLedgersReachableBytes": 29584,
+          "disclosureFactPayloadReachableBytes": 22200,
+          "publicProofSlots": 32,
+          "proofShellShallowBytes": 1280,
+          "payloadUnionSampledPeak": 394272
+        },
+        {
+          "lastContextReachableBytes": 194480,
+          "controllerLedgersReachableBytes": 29584,
+          "disclosureFactPayloadReachableBytes": 22200,
+          "publicProofSlots": 32,
+          "proofShellShallowBytes": 1280,
+          "payloadUnionSampledPeak": 394272
+        }
+      ]
+    },
+    {
+      "workload": "CAPPED",
+      "modes": {
+        "DISABLED": {
+          "policySha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "controlCpuMicrosPairMedians": [
+            0.2856875,
+            0.54885625
+          ],
+          "controlAllocationBytesPairMedians": [
+            132.0,
+            132.0
+          ],
+          "contextReachableBytes": [
+            48,
+            48
+          ],
+          "rawContextBytes": [
+            2,
+            2
+          ],
+          "statuses": {},
+          "omissions": {}
+        },
+        "COPY": {
+          "policySha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "controlCpuMicrosPairMedians": [
+            0.30408124999999997,
+            0.5646125
+          ],
+          "controlAllocationBytesPairMedians": [
+            132.0,
+            132.0
+          ],
+          "contextReachableBytes": [
+            48,
+            48
+          ],
+          "rawContextBytes": [
+            2,
+            2
+          ],
+          "statuses": {},
+          "omissions": {}
+        },
+        "UNACCOUNTED_BASE": {
+          "policySha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "controlCpuMicrosPairMedians": [
+            17.08353125,
+            23.40939375
+          ],
+          "controlAllocationBytesPairMedians": [
+            4788.0,
+            4788.0
+          ],
+          "contextReachableBytes": [
+            48,
+            48
+          ],
+          "rawContextBytes": [
+            2,
+            2
+          ],
+          "statuses": {},
+          "omissions": {}
+        },
+        "ACCOUNTED_BASE": {
+          "policySha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "controlCpuMicrosPairMedians": [
+            16.11641875,
+            20.55569375
+          ],
+          "controlAllocationBytesPairMedians": [
+            4820.0,
+            4820.0
+          ],
+          "contextReachableBytes": [
+            48,
+            48
+          ],
+          "rawContextBytes": [
+            2,
+            2
+          ],
+          "statuses": {},
+          "omissions": {}
+        },
+        "NUMERIC": {
+          "policySha256": "fb7db98af4bffc656d8a7a6c51843bead1a7c2acb3ec8e3f0c579d668c9ab769",
+          "controlCpuMicrosPairMedians": [
+            1787.7298812499998,
+            2193.1758499999996
+          ],
+          "controlAllocationBytesPairMedians": [
+            961000.2,
+            970854.0
+          ],
+          "contextReachableBytes": [
+            232032,
+            232032
+          ],
+          "rawContextBytes": [
+            47908,
+            47908
+          ],
+          "statuses": {
+            "PARTIAL": 80
+          },
+          "omissions": {
+            "ENTITIES:OUTSIDE_CAPTURED_PREFIX": 80,
+            "STACK:OUTSIDE_CAPTURED_PREFIX": 80,
+            "STACK:UNRESOLVED_BINDING": 80
+          }
+        },
+        "ENTITY": {
+          "policySha256": "aa91c18a786602986b33d23f5b487882ab71922c4011d348c7f62ff79e4271d3",
+          "controlCpuMicrosPairMedians": [
+            2286.77331875,
+            3094.68740625
+          ],
+          "controlAllocationBytesPairMedians": [
+            1296215.4,
+            1306102.0
+          ],
+          "contextReachableBytes": [
+            283336,
+            283336
+          ],
+          "rawContextBytes": [
+            53974,
+            53974
+          ],
+          "statuses": {
+            "PARTIAL": 80
+          },
+          "omissions": {
+            "ENTITIES:OUTSIDE_CAPTURED_PREFIX": 80,
+            "STACK:OUTSIDE_CAPTURED_PREFIX": 80,
+            "STACK:UNRESOLVED_BINDING": 80
+          }
+        },
+        "CAPTURE": {
+          "policySha256": "fb7db98af4bffc656d8a7a6c51843bead1a7c2acb3ec8e3f0c579d668c9ab769",
+          "controlCpuMicrosPairMedians": [
+            328.51138125,
+            486.3003
+          ],
+          "controlAllocationBytesPairMedians": [
+            609854.0,
+            619694.0
+          ],
+          "contextReachableBytes": [
+            226112,
+            226112
+          ],
+          "rawContextBytes": [
+            47908,
+            47908
+          ],
+          "statuses": {
+            "PARTIAL": 80
+          },
+          "omissions": {
+            "ENTITIES:OUTSIDE_CAPTURED_PREFIX": 80,
+            "STACK:OUTSIDE_CAPTURED_PREFIX": 80,
+            "STACK:UNRESOLVED_BINDING": 80
+          }
+        }
+      },
+      "memorySamples": [
+        {
+          "lastContextReachableBytes": 283336,
+          "controllerLedgersReachableBytes": 29584,
+          "disclosureFactPayloadReachableBytes": 22200,
+          "publicProofSlots": 32,
+          "proofShellShallowBytes": 1280,
+          "payloadUnionSampledPeak": 608672
+        },
+        {
+          "lastContextReachableBytes": 283336,
+          "controllerLedgersReachableBytes": 29584,
+          "disclosureFactPayloadReachableBytes": 22200,
+          "publicProofSlots": 32,
+          "proofShellShallowBytes": 1280,
+          "payloadUnionSampledPeak": 608672
+        }
+      ]
+    }
+  ],
+  "exhaustion": [
+    {
+      "profiled": false,
+      "iterations": 1200,
+      "statuses": {
+        "CAPTURED": 246,
+        "UNAVAILABLE": 954
+      },
+      "remainingWork": 0,
+      "accountingDelta": {
+        "entered": 1200,
+        "prepared": 1200,
+        "omitted": 0,
+        "callbackStarted": 1200,
+        "callbackReturned": 1200,
+        "callbackThrew": 0,
+        "inputUnavailable": 954,
+        "startAttempts": 1200,
+        "startReturned": 1200,
+        "terminalAttempts": 1200,
+        "terminalReturned": 1200,
+        "finished": 1200,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "windows": [
+        {
+          "allocatedBytes": 34127304,
+          "cpuNanos": 64918362,
+          "fromInvocation": 0,
+          "available": 40,
+          "unavailable": 0,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 34060088,
+          "cpuNanos": 68407284,
+          "fromInvocation": 40,
+          "available": 40,
+          "unavailable": 0,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 34060088,
+          "cpuNanos": 63494002,
+          "fromInvocation": 80,
+          "available": 40,
+          "unavailable": 0,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 34060904,
+          "cpuNanos": 63997482,
+          "fromInvocation": 120,
+          "available": 40,
+          "unavailable": 0,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 34061112,
+          "cpuNanos": 64594718,
+          "fromInvocation": 160,
+          "available": 40,
+          "unavailable": 0,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 34061112,
+          "cpuNanos": 67207056,
+          "fromInvocation": 200,
+          "available": 40,
+          "unavailable": 0,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 8252024,
+          "cpuNanos": 17063690,
+          "fromInvocation": 240,
+          "available": 6,
+          "unavailable": 34,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3397432,
+          "cpuNanos": 5707135,
+          "fromInvocation": 280,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3397432,
+          "cpuNanos": 5662145,
+          "fromInvocation": 320,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3398728,
+          "cpuNanos": 6260650,
+          "fromInvocation": 360,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3399352,
+          "cpuNanos": 7264371,
+          "fromInvocation": 400,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3399352,
+          "cpuNanos": 5625168,
+          "fromInvocation": 440,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3399352,
+          "cpuNanos": 5696619,
+          "fromInvocation": 480,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3399352,
+          "cpuNanos": 6128146,
+          "fromInvocation": 520,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3399352,
+          "cpuNanos": 5946318,
+          "fromInvocation": 560,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3399352,
+          "cpuNanos": 5459447,
+          "fromInvocation": 600,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3399352,
+          "cpuNanos": 5665373,
+          "fromInvocation": 640,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3399352,
+          "cpuNanos": 5580521,
+          "fromInvocation": 680,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3398968,
+          "cpuNanos": 5670815,
+          "fromInvocation": 720,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3397432,
+          "cpuNanos": 5816493,
+          "fromInvocation": 760,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3397432,
+          "cpuNanos": 5615627,
+          "fromInvocation": 800,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3397432,
+          "cpuNanos": 5918885,
+          "fromInvocation": 840,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3397432,
+          "cpuNanos": 5452720,
+          "fromInvocation": 880,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3397432,
+          "cpuNanos": 5482074,
+          "fromInvocation": 920,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3397432,
+          "cpuNanos": 5373947,
+          "fromInvocation": 960,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3397432,
+          "cpuNanos": 5499400,
+          "fromInvocation": 1000,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3397432,
+          "cpuNanos": 6426523,
+          "fromInvocation": 1040,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3397432,
+          "cpuNanos": 6147070,
+          "fromInvocation": 1080,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3397432,
+          "cpuNanos": 6133827,
+          "fromInvocation": 1120,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3397432,
+          "cpuNanos": 5567744,
+          "fromInvocation": 1160,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        }
+      ]
+    },
+    {
+      "profiled": true,
+      "iterations": 1200,
+      "statuses": {
+        "CAPTURED": 246,
+        "UNAVAILABLE": 954
+      },
+      "remainingWork": 0,
+      "accountingDelta": {
+        "entered": 1200,
+        "prepared": 1200,
+        "omitted": 0,
+        "callbackStarted": 1200,
+        "callbackReturned": 1200,
+        "callbackThrew": 0,
+        "inputUnavailable": 954,
+        "startAttempts": 1200,
+        "startReturned": 1200,
+        "terminalAttempts": 1200,
+        "terminalReturned": 1200,
+        "finished": 1200,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "windows": [
+        {
+          "cpuNanos": 70331211,
+          "allocatedBytes": 34403688,
+          "invocations": 40,
+          "unavailable": 0,
+          "available": 40,
+          "fromInvocation": 0
+        },
+        {
+          "cpuNanos": 74257947,
+          "allocatedBytes": 34333048,
+          "invocations": 40,
+          "unavailable": 0,
+          "available": 40,
+          "fromInvocation": 40
+        },
+        {
+          "cpuNanos": 65346264,
+          "allocatedBytes": 34333048,
+          "invocations": 40,
+          "unavailable": 0,
+          "available": 40,
+          "fromInvocation": 80
+        },
+        {
+          "cpuNanos": 61118757,
+          "allocatedBytes": 34333864,
+          "invocations": 40,
+          "unavailable": 0,
+          "available": 40,
+          "fromInvocation": 120
+        },
+        {
+          "cpuNanos": 66691827,
+          "allocatedBytes": 34334072,
+          "invocations": 40,
+          "unavailable": 0,
+          "available": 40,
+          "fromInvocation": 160
+        },
+        {
+          "cpuNanos": 62573786,
+          "allocatedBytes": 34334072,
+          "invocations": 40,
+          "unavailable": 0,
+          "available": 40,
+          "fromInvocation": 200
+        },
+        {
+          "cpuNanos": 15519751,
+          "allocatedBytes": 8304432,
+          "invocations": 40,
+          "unavailable": 34,
+          "available": 6,
+          "fromInvocation": 240
+        },
+        {
+          "cpuNanos": 6397760,
+          "allocatedBytes": 3403512,
+          "invocations": 40,
+          "unavailable": 40,
+          "available": 0,
+          "fromInvocation": 280
+        },
+        {
+          "cpuNanos": 5583748,
+          "allocatedBytes": 3403512,
+          "invocations": 40,
+          "unavailable": 40,
+          "available": 0,
+          "fromInvocation": 320
+        },
+        {
+          "cpuNanos": 6734128,
+          "allocatedBytes": 3404808,
+          "invocations": 40,
+          "unavailable": 40,
+          "available": 0,
+          "fromInvocation": 360
+        },
+        {
+          "cpuNanos": 5929952,
+          "allocatedBytes": 3405432,
+          "invocations": 40,
+          "unavailable": 40,
+          "available": 0,
+          "fromInvocation": 400
+        },
+        {
+          "cpuNanos": 5881091,
+          "allocatedBytes": 3405432,
+          "invocations": 40,
+          "unavailable": 40,
+          "available": 0,
+          "fromInvocation": 440
+        },
+        {
+          "cpuNanos": 6188583,
+          "allocatedBytes": 3405432,
+          "invocations": 40,
+          "unavailable": 40,
+          "available": 0,
+          "fromInvocation": 480
+        },
+        {
+          "cpuNanos": 5750658,
+          "allocatedBytes": 3405432,
+          "invocations": 40,
+          "unavailable": 40,
+          "available": 0,
+          "fromInvocation": 520
+        },
+        {
+          "cpuNanos": 5410736,
+          "allocatedBytes": 3405432,
+          "invocations": 40,
+          "unavailable": 40,
+          "available": 0,
+          "fromInvocation": 560
+        },
+        {
+          "cpuNanos": 5592174,
+          "allocatedBytes": 3405432,
+          "invocations": 40,
+          "unavailable": 40,
+          "available": 0,
+          "fromInvocation": 600
+        },
+        {
+          "cpuNanos": 6416060,
+          "allocatedBytes": 3405432,
+          "invocations": 40,
+          "unavailable": 40,
+          "available": 0,
+          "fromInvocation": 640
+        },
+        {
+          "cpuNanos": 6156889,
+          "allocatedBytes": 3405336,
+          "invocations": 40,
+          "unavailable": 40,
+          "available": 0,
+          "fromInvocation": 680
+        },
+        {
+          "cpuNanos": 6143624,
+          "allocatedBytes": 3403512,
+          "invocations": 40,
+          "unavailable": 40,
+          "available": 0,
+          "fromInvocation": 720
+        },
+        {
+          "cpuNanos": 6353945,
+          "allocatedBytes": 3403512,
+          "invocations": 40,
+          "unavailable": 40,
+          "available": 0,
+          "fromInvocation": 760
+        },
+        {
+          "cpuNanos": 6355129,
+          "allocatedBytes": 3403512,
+          "invocations": 40,
+          "unavailable": 40,
+          "available": 0,
+          "fromInvocation": 800
+        },
+        {
+          "cpuNanos": 5687690,
+          "allocatedBytes": 3403512,
+          "invocations": 40,
+          "unavailable": 40,
+          "available": 0,
+          "fromInvocation": 840
+        },
+        {
+          "cpuNanos": 6125882,
+          "allocatedBytes": 3403512,
+          "invocations": 40,
+          "unavailable": 40,
+          "available": 0,
+          "fromInvocation": 880
+        },
+        {
+          "cpuNanos": 7404253,
+          "allocatedBytes": 3403512,
+          "invocations": 40,
+          "unavailable": 40,
+          "available": 0,
+          "fromInvocation": 920
+        },
+        {
+          "cpuNanos": 5525691,
+          "allocatedBytes": 3403512,
+          "invocations": 40,
+          "unavailable": 40,
+          "available": 0,
+          "fromInvocation": 960
+        },
+        {
+          "cpuNanos": 5661731,
+          "allocatedBytes": 3403512,
+          "invocations": 40,
+          "unavailable": 40,
+          "available": 0,
+          "fromInvocation": 1000
+        },
+        {
+          "cpuNanos": 6245235,
+          "allocatedBytes": 3403512,
+          "invocations": 40,
+          "unavailable": 40,
+          "available": 0,
+          "fromInvocation": 1040
+        },
+        {
+          "cpuNanos": 6429991,
+          "allocatedBytes": 3403512,
+          "invocations": 40,
+          "unavailable": 40,
+          "available": 0,
+          "fromInvocation": 1080
+        },
+        {
+          "cpuNanos": 5846289,
+          "allocatedBytes": 3403512,
+          "invocations": 40,
+          "unavailable": 40,
+          "available": 0,
+          "fromInvocation": 1120
+        },
+        {
+          "cpuNanos": 5400996,
+          "allocatedBytes": 3403512,
+          "invocations": 40,
+          "unavailable": 40,
+          "available": 0,
+          "fromInvocation": 1160
+        }
+      ]
+    },
+    {
+      "profiled": false,
+      "iterations": 1200,
+      "statuses": {
+        "CAPTURED": 246,
+        "UNAVAILABLE": 954
+      },
+      "remainingWork": 0,
+      "accountingDelta": {
+        "entered": 1200,
+        "prepared": 1200,
+        "omitted": 0,
+        "callbackStarted": 1200,
+        "callbackReturned": 1200,
+        "callbackThrew": 0,
+        "inputUnavailable": 954,
+        "startAttempts": 1200,
+        "startReturned": 1200,
+        "terminalAttempts": 1200,
+        "terminalReturned": 1200,
+        "finished": 1200,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "windows": [
+        {
+          "allocatedBytes": 34378312,
+          "cpuNanos": 162693610,
+          "fromInvocation": 0,
+          "available": 40,
+          "unavailable": 0,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 34310968,
+          "cpuNanos": 100578640,
+          "fromInvocation": 40,
+          "available": 40,
+          "unavailable": 0,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 34310968,
+          "cpuNanos": 65386604,
+          "fromInvocation": 80,
+          "available": 40,
+          "unavailable": 0,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 34311784,
+          "cpuNanos": 65904192,
+          "fromInvocation": 120,
+          "available": 40,
+          "unavailable": 0,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 34311992,
+          "cpuNanos": 63263763,
+          "fromInvocation": 160,
+          "available": 40,
+          "unavailable": 0,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 34311992,
+          "cpuNanos": 66314007,
+          "fromInvocation": 200,
+          "available": 40,
+          "unavailable": 0,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 8295928,
+          "cpuNanos": 19603043,
+          "fromInvocation": 240,
+          "available": 6,
+          "unavailable": 34,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3397432,
+          "cpuNanos": 9303782,
+          "fromInvocation": 280,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3397432,
+          "cpuNanos": 9028326,
+          "fromInvocation": 320,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3398728,
+          "cpuNanos": 8584910,
+          "fromInvocation": 360,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3399352,
+          "cpuNanos": 7896859,
+          "fromInvocation": 400,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3399352,
+          "cpuNanos": 7852901,
+          "fromInvocation": 440,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3399352,
+          "cpuNanos": 8031919,
+          "fromInvocation": 480,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3399352,
+          "cpuNanos": 14298294,
+          "fromInvocation": 520,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3399352,
+          "cpuNanos": 8580881,
+          "fromInvocation": 560,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3399352,
+          "cpuNanos": 8884077,
+          "fromInvocation": 600,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3399352,
+          "cpuNanos": 8274777,
+          "fromInvocation": 640,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3399352,
+          "cpuNanos": 15526375,
+          "fromInvocation": 680,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3399352,
+          "cpuNanos": 16532294,
+          "fromInvocation": 720,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3399352,
+          "cpuNanos": 8188203,
+          "fromInvocation": 760,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3399352,
+          "cpuNanos": 12986882,
+          "fromInvocation": 800,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3399352,
+          "cpuNanos": 20078851,
+          "fromInvocation": 840,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3397576,
+          "cpuNanos": 12434180,
+          "fromInvocation": 880,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3397432,
+          "cpuNanos": 15091846,
+          "fromInvocation": 920,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3397432,
+          "cpuNanos": 10706825,
+          "fromInvocation": 960,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3397432,
+          "cpuNanos": 12402031,
+          "fromInvocation": 1000,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3397432,
+          "cpuNanos": 7747101,
+          "fromInvocation": 1040,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3397432,
+          "cpuNanos": 12569154,
+          "fromInvocation": 1080,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3397432,
+          "cpuNanos": 10853398,
+          "fromInvocation": 1120,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3397432,
+          "cpuNanos": 9058345,
+          "fromInvocation": 1160,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        }
+      ]
+    },
+    {
+      "profiled": true,
+      "iterations": 1200,
+      "statuses": {
+        "CAPTURED": 246,
+        "UNAVAILABLE": 954
+      },
+      "remainingWork": 0,
+      "accountingDelta": {
+        "entered": 1200,
+        "prepared": 1200,
+        "omitted": 0,
+        "callbackStarted": 1200,
+        "callbackReturned": 1200,
+        "callbackThrew": 0,
+        "inputUnavailable": 954,
+        "startAttempts": 1200,
+        "startReturned": 1200,
+        "terminalAttempts": 1200,
+        "terminalReturned": 1200,
+        "finished": 1200,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "windows": [
+        {
+          "allocatedBytes": 34244744,
+          "cpuNanos": 69147618,
+          "fromInvocation": 0,
+          "available": 40,
+          "unavailable": 0,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 34177528,
+          "cpuNanos": 69899179,
+          "fromInvocation": 40,
+          "available": 40,
+          "unavailable": 0,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 34177528,
+          "cpuNanos": 92295555,
+          "fromInvocation": 80,
+          "available": 40,
+          "unavailable": 0,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 34178344,
+          "cpuNanos": 81328921,
+          "fromInvocation": 120,
+          "available": 40,
+          "unavailable": 0,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 34178552,
+          "cpuNanos": 74529465,
+          "fromInvocation": 160,
+          "available": 40,
+          "unavailable": 0,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 34178552,
+          "cpuNanos": 69198946,
+          "fromInvocation": 200,
+          "available": 40,
+          "unavailable": 0,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 8275200,
+          "cpuNanos": 19044211,
+          "fromInvocation": 240,
+          "available": 6,
+          "unavailable": 34,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3400632,
+          "cpuNanos": 11951768,
+          "fromInvocation": 280,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3400632,
+          "cpuNanos": 9478237,
+          "fromInvocation": 320,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3401928,
+          "cpuNanos": 8233646,
+          "fromInvocation": 360,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3402552,
+          "cpuNanos": 8335832,
+          "fromInvocation": 400,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3402552,
+          "cpuNanos": 8248958,
+          "fromInvocation": 440,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3402552,
+          "cpuNanos": 8097497,
+          "fromInvocation": 480,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3402552,
+          "cpuNanos": 8328206,
+          "fromInvocation": 520,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3401256,
+          "cpuNanos": 7517080,
+          "fromInvocation": 560,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3400632,
+          "cpuNanos": 5927834,
+          "fromInvocation": 600,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3400632,
+          "cpuNanos": 5687643,
+          "fromInvocation": 640,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3400632,
+          "cpuNanos": 5516857,
+          "fromInvocation": 680,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3400632,
+          "cpuNanos": 5807615,
+          "fromInvocation": 720,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3400632,
+          "cpuNanos": 6133511,
+          "fromInvocation": 760,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3400632,
+          "cpuNanos": 6432296,
+          "fromInvocation": 800,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3400632,
+          "cpuNanos": 7772691,
+          "fromInvocation": 840,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3400632,
+          "cpuNanos": 6165845,
+          "fromInvocation": 880,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3400632,
+          "cpuNanos": 5776227,
+          "fromInvocation": 920,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3400632,
+          "cpuNanos": 5874302,
+          "fromInvocation": 960,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3400632,
+          "cpuNanos": 5653084,
+          "fromInvocation": 1000,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3400632,
+          "cpuNanos": 6647560,
+          "fromInvocation": 1040,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3400632,
+          "cpuNanos": 6308363,
+          "fromInvocation": 1080,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3400632,
+          "cpuNanos": 10412122,
+          "fromInvocation": 1120,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        },
+        {
+          "allocatedBytes": 3400632,
+          "cpuNanos": 6415609,
+          "fromInvocation": 1160,
+          "available": 0,
+          "unavailable": 40,
+          "invocations": 40
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Synthetic callback-once fixtures do not execute AI policy. Wall-clock Monte Carlo outcomes are not controls.",
+    "Healthy cost rounds reject unavailable captures; exhaustion windows report available, mixed and unavailable work separately.",
+    "Serialization uses the production writer with a character-counting sink; collector conversion, UTF-8 and physical I/O are excluded.",
+    "Retained graph sizes include shared objects; proof shells exclude the referenced Game graph. Sizes must not be blindly summed.",
+    "Sampled payload-union peaks are lower bounds, not exact transient heap peaks. Builder locals, writer buffers and other roots remain outside the sample.",
+    "Control/profile differences include instrumentation and JIT variation; these ranges are not capacity or deadline-neutrality guarantees."
+  ]
+}

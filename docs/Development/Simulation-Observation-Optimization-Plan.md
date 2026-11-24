@@ -2,11 +2,11 @@
 
 Status: proposed follow-up to the implemented [input-context profile](Simulation-Input-Context.md), baseline `f115c6f2843`. This plan changes no runtime behavior, budgets or measured results. Information coverage has a separate [design backlog](Simulation-Observation-Coverage-Plan.md).
 
-OPT-001 now has [phase measurements and an assigned gap review](Simulation-Observation-Cost-Assessment.md). Exact transient retention and broader validation remain open. Pause for review before COV-002 or a runtime optimization. The measurements rank OPT-004 first for CPU investigation and OPT-002 first for allocation; canonical-ordering work in OPT-003 is lower priority in the measured fixtures.
+OPT-001 now has [phase measurements and an assigned gap review](Simulation-Observation-Cost-Assessment.md). Exact transient retention and broader validation remain open. The current roadmap supersedes the historical review pause; code/gap review continues autonomously between items. The measurements rank OPT-004 first for CPU investigation and OPT-002 first for allocation; canonical-ordering work in OPT-003 is lower priority in the measured fixtures.
 
 Optimization work reduces the cost of producing and storing the same represented information. It does not gain a performance improvement by silently omitting inputs, weakening privacy, moving capture after selection or reusing stale state. Coverage additions can proceed independently, subject to their existing cost guardrails; optimization comparisons must name the exact coverage/profile baseline they preserve.
 
-The [current combined execution order](Simulation-Observation-Roadmap.md) has completed OPT-001 and COV-002 through COV-005's documented scopes. After COV-001A, an OPT-005 checkpoint measures the larger V4 profile before broad selector expansion. Runtime optimizations remain conditional on measured costs and retain separate commits; internal code/gap reviews continue without waiting for user review between items.
+The [current combined execution order](Simulation-Observation-Roadmap.md) has completed OPT-001 and COV-002 through COV-005's documented scopes. COV-001A and the [V4 OPT-005 checkpoint](Simulation-V4-Workload-Assessment.md) are delivered; COV-006 follows. Exact transient heap, host calibration and full-path attribution remain open under OPT-005. COV-008 owns the quantified budget-availability policy limit; runtime optimization does not gain permission to raise capture budgets. Runtime optimizations remain conditional on measured costs and retain separate commits; internal code/gap reviews continue without waiting for user review between items.
 
 ## Ordered backlog
 

@@ -70,3 +70,48 @@ must not be used as a correction factor. The agent supports the healthy fixture
 paths only: unbalanced spans or observation failures invalidate the run.
 
 See [OPT-001 findings and remaining gaps](../../../docs/Development/Simulation-Observation-Cost-Assessment.md).
+
+## OPT-005 V4 workloads
+
+`InputContextWorkloadProbe` adds two/four-player V4 fixtures with actual stack
+entries, current option bindings, 32 private/public disclosure facts and capped
+boards. Public presentations are distinct synthetic names, so all 32 public
+proofs exercise uniqueness checks. Original-controller accounting is explicitly
+configured; disabled/copy policy still initializes no state. The probe runs no
+AI policy, selector search or physical file writer.
+
+Run the two pairs sequentially, without overlapping other game/test JVMs:
+
+```sh
+python3 tools/decision-records/input-context-benchmark/run-workloads.py \
+  --classpath-file /path/to/classpath.txt --java-home /path/to/jdk-21 \
+  --user-home /path/to/writable-profile --iterations 80 --warmup 20 --rounds 6 \
+  --output-dir /path/to/v4-a
+python3 tools/decision-records/input-context-benchmark/run-workloads.py \
+  --classpath-file /path/to/classpath.txt --java-home /path/to/jdk-21 \
+  --user-home /path/to/writable-profile --iterations 80 --warmup 20 --rounds 6 \
+  --order profile-first --output-dir /path/to/v4-b
+python3 tools/decision-records/input-context-benchmark/summarize-workloads.py \
+  /path/to/v4-a --output /path/to/v4-a/summary.json
+```
+
+Healthy windows are shorter than OPT-001's to stay within unchanged player
+shares. The summarizer rejects unavailable healthy captures, inconsistent
+source/callback/event counts, unproved public bindings and policy differences.
+Separate 1,200-invocation stress windows intentionally exhaust one chooser's
+share and retain available/mixed/unavailable batch statistics. Their cheap
+unavailable calls never enter healthy cost distributions.
+
+`AccountingStateProbe` can be compiled into a runner's classes directory against
+that directory and the production classpath. Run `forge.ai.AccountingStateProbe
+/path/to/accounting-state.json` with the runner's agent installed, profiling false
+and the same module exports/opens. It measures union reachability for 2/4/16
+controller ledgers plus receipt/run ledgers and the shallow invocation scope.
+It creates no Game; shared constants remain included in reachable sizes.
+
+Payload-union samples are lower bounds, not exact transient heap. Disclosure
+proof shells reference live Game/Card graphs; their shallow sizes and detached
+fact payloads do not establish exclusive retention and must not be blindly
+summed. The [checkpoint assessment](../../../docs/Development/Simulation-V4-Workload-Assessment.md)
+records results, a real four-player sample, coverage-policy assignments and the
+remaining OPT-005 measurement limits.

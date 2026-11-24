@@ -1,0 +1,20 @@
+[
+  {
+    "originalAiControllers": 2,
+    "receiptAndRunLedgers": 2,
+    "unionReachableBytes": 29560,
+    "invocationScopeShallowBytes": 32
+  },
+  {
+    "originalAiControllers": 4,
+    "receiptAndRunLedgers": 2,
+    "unionReachableBytes": 43192,
+    "invocationScopeShallowBytes": 32
+  },
+  {
+    "originalAiControllers": 16,
+    "receiptAndRunLedgers": 2,
+    "unionReachableBytes": 125032,
+    "invocationScopeShallowBytes": 32
+  }
+]

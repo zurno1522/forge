@@ -1,0 +1,24 @@
+{
+  "javaDevelopmentProbesCompiled": true,
+  "nonoverlappingJvms": true,
+  "measuredRoundsPerPair": {
+    "control": 210,
+    "profiled": 210
+  },
+  "pairs": 2,
+  "operationsPerHealthyRound": 80,
+  "warmupOperations": 20,
+  "callbackAndEventCounts": true,
+  "sourceAccountingTransitions": true,
+  "public32ProofAssociations": true,
+  "privateDisclosureAssociationsUnresolved": true,
+  "policyEqualAcrossAllRoundsAndPairs": true,
+  "healthyRoundsHaveNoUnavailableContexts": true,
+  "disabledAndCopyDoNotInitializeState": true,
+  "exhaustionSeparatedFromHealthyCostStatistics": true,
+  "pythonTests": 157,
+  "pythonFailures": 0,
+  "pythonLogSha256": "fa6dcfa2cb19dd5c80dd0e80cd98f9a093cffc95194e2476622e9f2579e9d463",
+  "newProductionRuntimeChanges": false,
+  "fullJavaSuiteRepeated": false
+}

@@ -1,0 +1,678 @@
+{
+  "executionStatus": "NORMAL",
+  "contextsByPlayer": {
+    "0": {
+      "PARTIAL": 161,
+      "CAPTURED": 16,
+      "UNAVAILABLE": 158
+    },
+    "1": {
+      "PARTIAL": 184,
+      "CAPTURED": 2,
+      "UNAVAILABLE": 185
+    },
+    "2": {
+      "PARTIAL": 177,
+      "CAPTURED": 2,
+      "UNAVAILABLE": 51
+    },
+    "3": {
+      "PARTIAL": 189,
+      "UNAVAILABLE": 365
+    }
+  },
+  "unavailableReasonsByPlayer": {
+    "1": {
+      "CONTEXT:HIDDEN": 2,
+      "CONTEXT:BUDGET_EXHAUSTED": 183
+    },
+    "2": {
+      "CONTEXT:BUDGET_EXHAUSTED": 51
+    },
+    "0": {
+      "CONTEXT:BUDGET_EXHAUSTED": 156,
+      "CONTEXT:HIDDEN": 2
+    },
+    "3": {
+      "CONTEXT:BUDGET_EXHAUSTED": 365
+    }
+  },
+  "firstUnavailableByPlayer": {
+    "1": {
+      "eventIndex": 1696,
+      "containerTurn": 21,
+      "timingBasis": "START_EVENT"
+    },
+    "2": {
+      "eventIndex": 2730,
+      "containerTurn": 27,
+      "timingBasis": "PARENT_CONTAINER"
+    },
+    "0": {
+      "eventIndex": 3045,
+      "containerTurn": 29,
+      "timingBasis": "START_EVENT"
+    },
+    "3": {
+      "eventIndex": 3951,
+      "containerTurn": 35,
+      "timingBasis": "START_EVENT"
+    }
+  },
+  "contextsByPlayerAndContainerTurn": {
+    "0": {
+      "1": {
+        "PARENT_CONTAINER:PARTIAL": 3
+      },
+      "5": {
+        "PARENT_CONTAINER:PARTIAL": 4,
+        "START_EVENT:PARTIAL": 10,
+        "START_EVENT:CAPTURED": 2
+      },
+      "9": {
+        "PARENT_CONTAINER:PARTIAL": 4,
+        "START_EVENT:PARTIAL": 15,
+        "START_EVENT:CAPTURED": 4
+      },
+      "13": {
+        "PARENT_CONTAINER:PARTIAL": 4,
+        "START_EVENT:PARTIAL": 17,
+        "START_EVENT:CAPTURED": 7
+      },
+      "17": {
+        "PARENT_CONTAINER:PARTIAL": 3,
+        "START_EVENT:PARTIAL": 23,
+        "START_EVENT:CAPTURED": 3
+      },
+      "21": {
+        "START_EVENT:PARTIAL": 15,
+        "PARENT_CONTAINER:PARTIAL": 2
+      },
+      "25": {
+        "PARENT_CONTAINER:PARTIAL": 4,
+        "START_EVENT:PARTIAL": 30
+      },
+      "29": {
+        "PARENT_CONTAINER:PARTIAL": 4,
+        "START_EVENT:PARTIAL": 23,
+        "START_EVENT:UNAVAILABLE": 4
+      },
+      "33": {
+        "PARENT_CONTAINER:UNAVAILABLE": 3,
+        "START_EVENT:UNAVAILABLE": 19
+      },
+      "36": {
+        "START_EVENT:UNAVAILABLE": 31,
+        "PARENT_CONTAINER:UNAVAILABLE": 2
+      },
+      "39": {
+        "PARENT_CONTAINER:UNAVAILABLE": 3,
+        "START_EVENT:UNAVAILABLE": 11
+      },
+      "42": {
+        "PARENT_CONTAINER:UNAVAILABLE": 3,
+        "START_EVENT:UNAVAILABLE": 19
+      },
+      "45": {
+        "PARENT_CONTAINER:UNAVAILABLE": 3,
+        "START_EVENT:UNAVAILABLE": 24
+      },
+      "48": {
+        "START_EVENT:UNAVAILABLE": 32,
+        "PARENT_CONTAINER:UNAVAILABLE": 4
+      }
+    },
+    "1": {
+      "2": {
+        "PARENT_CONTAINER:PARTIAL": 3,
+        "START_EVENT:PARTIAL": 2
+      },
+      "6": {
+        "PARENT_CONTAINER:PARTIAL": 4,
+        "START_EVENT:PARTIAL": 8
+      },
+      "10": {
+        "PARENT_CONTAINER:PARTIAL": 5,
+        "START_EVENT:PARTIAL": 16
+      },
+      "11": {
+        "START_EVENT:PARTIAL": 6
+      },
+      "14": {
+        "PARENT_CONTAINER:PARTIAL": 4,
+        "START_EVENT:PARTIAL": 16
+      },
+      "18": {
+        "PARENT_CONTAINER:PARTIAL": 3,
+        "START_EVENT:PARTIAL": 17
+      },
+      "21": {
+        "START_EVENT:PARTIAL": 2,
+        "START_EVENT:CAPTURED": 2,
+        "START_EVENT:UNAVAILABLE": 2
+      },
+      "22": {
+        "PARENT_CONTAINER:PARTIAL": 3,
+        "START_EVENT:PARTIAL": 18
+      },
+      "26": {
+        "PARENT_CONTAINER:PARTIAL": 4,
+        "START_EVENT:PARTIAL": 20
+      },
+      "27": {
+        "START_EVENT:PARTIAL": 2
+      },
+      "30": {
+        "PARENT_CONTAINER:PARTIAL": 3,
+        "START_EVENT:PARTIAL": 2
+      },
+      "34": {
+        "PARENT_CONTAINER:PARTIAL": 4,
+        "START_EVENT:PARTIAL": 38
+      },
+      "37": {
+        "PARENT_CONTAINER:PARTIAL": 1,
+        "START_EVENT:PARTIAL": 3,
+        "START_EVENT:UNAVAILABLE": 33,
+        "PARENT_CONTAINER:UNAVAILABLE": 3
+      },
+      "40": {
+        "PARENT_CONTAINER:UNAVAILABLE": 4,
+        "START_EVENT:UNAVAILABLE": 61
+      },
+      "43": {
+        "PARENT_CONTAINER:UNAVAILABLE": 4,
+        "START_EVENT:UNAVAILABLE": 21
+      },
+      "46": {
+        "PARENT_CONTAINER:UNAVAILABLE": 4,
+        "START_EVENT:UNAVAILABLE": 43
+      },
+      "49": {
+        "PARENT_CONTAINER:UNAVAILABLE": 1,
+        "START_EVENT:UNAVAILABLE": 9
+      }
+    },
+    "2": {
+      "3": {
+        "PARENT_CONTAINER:PARTIAL": 3,
+        "START_EVENT:PARTIAL": 2
+      },
+      "7": {
+        "PARENT_CONTAINER:PARTIAL": 4,
+        "START_EVENT:PARTIAL": 8
+      },
+      "11": {
+        "PARENT_CONTAINER:PARTIAL": 5,
+        "START_EVENT:PARTIAL": 16
+      },
+      "15": {
+        "PARENT_CONTAINER:PARTIAL": 4,
+        "START_EVENT:PARTIAL": 18,
+        "START_EVENT:CAPTURED": 2
+      },
+      "19": {
+        "PARENT_CONTAINER:PARTIAL": 4,
+        "START_EVENT:PARTIAL": 20
+      },
+      "22": {
+        "START_EVENT:PARTIAL": 3
+      },
+      "23": {
+        "START_EVENT:PARTIAL": 32,
+        "PARENT_CONTAINER:PARTIAL": 4
+      },
+      "26": {
+        "START_EVENT:PARTIAL": 3
+      },
+      "27": {
+        "START_EVENT:PARTIAL": 45,
+        "PARENT_CONTAINER:PARTIAL": 6,
+        "PARENT_CONTAINER:UNAVAILABLE": 1
+      },
+      "31": {
+        "START_EVENT:UNAVAILABLE": 42,
+        "PARENT_CONTAINER:UNAVAILABLE": 4
+      },
+      "34": {
+        "START_EVENT:UNAVAILABLE": 4
+      }
+    },
+    "3": {
+      "4": {
+        "PARENT_CONTAINER:PARTIAL": 4,
+        "START_EVENT:PARTIAL": 5
+      },
+      "8": {
+        "PARENT_CONTAINER:PARTIAL": 3,
+        "START_EVENT:PARTIAL": 2
+      },
+      "11": {
+        "START_EVENT:PARTIAL": 11
+      },
+      "12": {
+        "PARENT_CONTAINER:PARTIAL": 4,
+        "START_EVENT:PARTIAL": 15
+      },
+      "16": {
+        "PARENT_CONTAINER:PARTIAL": 4,
+        "START_EVENT:PARTIAL": 14
+      },
+      "20": {
+        "PARENT_CONTAINER:PARTIAL": 4,
+        "START_EVENT:PARTIAL": 13
+      },
+      "24": {
+        "PARENT_CONTAINER:PARTIAL": 4,
+        "START_EVENT:PARTIAL": 23
+      },
+      "28": {
+        "PARENT_CONTAINER:PARTIAL": 5,
+        "START_EVENT:PARTIAL": 30
+      },
+      "32": {
+        "PARENT_CONTAINER:PARTIAL": 4,
+        "START_EVENT:PARTIAL": 36
+      },
+      "35": {
+        "PARENT_CONTAINER:PARTIAL": 3,
+        "START_EVENT:PARTIAL": 5,
+        "START_EVENT:UNAVAILABLE": 41,
+        "PARENT_CONTAINER:UNAVAILABLE": 2
+      },
+      "36": {
+        "START_EVENT:UNAVAILABLE": 18
+      },
+      "38": {
+        "PARENT_CONTAINER:UNAVAILABLE": 5,
+        "START_EVENT:UNAVAILABLE": 56
+      },
+      "39": {
+        "START_EVENT:UNAVAILABLE": 4
+      },
+      "40": {
+        "START_EVENT:UNAVAILABLE": 28
+      },
+      "41": {
+        "PARENT_CONTAINER:UNAVAILABLE": 5,
+        "START_EVENT:UNAVAILABLE": 67
+      },
+      "44": {
+        "PARENT_CONTAINER:UNAVAILABLE": 4,
+        "START_EVENT:UNAVAILABLE": 60
+      },
+      "47": {
+        "PARENT_CONTAINER:UNAVAILABLE": 7,
+        "START_EVENT:UNAVAILABLE": 68
+      }
+    }
+  },
+  "fullFilteredByteParity": {
+    "dataset.jsonl": true,
+    "choices.jsonl": true,
+    "examples.jsonl": true,
+    "validation.json": true
+  },
+  "coverageEqualExceptSourceRecords": true,
+  "pregameShuffles": 4,
+  "observationAccounting": {
+    "schemaVersion": 1,
+    "scope": "ORIGINAL_AI_STANDALONE_CALLBACKS",
+    "runsPresent": 1,
+    "runsAbsent": 0,
+    "scopeComplete": true,
+    "overflowed": false,
+    "counts": {
+      "entered": 1780,
+      "prepared": 1778,
+      "omitted": 2,
+      "callbackStarted": 1780,
+      "callbackReturned": 1780,
+      "callbackThrew": 0,
+      "inputUnavailable": 697,
+      "startAttempts": 1778,
+      "startReturned": 1778,
+      "terminalAttempts": 1778,
+      "terminalReturned": 1778,
+      "finished": 1780,
+      "observationFailures": 0,
+      "omittedUnsupported": 2,
+      "omittedClosed": 0,
+      "omittedFailure": 0
+    },
+    "collector": {
+      "collectorStarts": 1778,
+      "collectorTerminals": 1778
+    },
+    "byBoundary": {
+      "UNCLASSIFIED": {
+        "entered": 2,
+        "prepared": 0,
+        "omitted": 2,
+        "callbackStarted": 2,
+        "callbackReturned": 2,
+        "callbackThrew": 0,
+        "inputUnavailable": 0,
+        "startAttempts": 0,
+        "startReturned": 0,
+        "terminalAttempts": 0,
+        "terminalReturned": 0,
+        "finished": 2,
+        "observationFailures": 0,
+        "omittedUnsupported": 2,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "AUTO_MANA_PAYMENT": {
+        "entered": 499,
+        "prepared": 499,
+        "omitted": 0,
+        "callbackStarted": 499,
+        "callbackReturned": 499,
+        "callbackThrew": 0,
+        "inputUnavailable": 270,
+        "startAttempts": 499,
+        "startReturned": 499,
+        "terminalAttempts": 499,
+        "terminalReturned": 499,
+        "finished": 499,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "CHARM_MODE_HEURISTIC": {
+        "entered": 32,
+        "prepared": 32,
+        "omitted": 0,
+        "callbackStarted": 32,
+        "callbackReturned": 32,
+        "callbackThrew": 0,
+        "inputUnavailable": 0,
+        "startAttempts": 32,
+        "startReturned": 32,
+        "terminalAttempts": 32,
+        "terminalReturned": 32,
+        "finished": 32,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "CONTROLLER_EFFECT_ENTITY": {
+        "entered": 5,
+        "prepared": 5,
+        "omitted": 0,
+        "callbackStarted": 5,
+        "callbackReturned": 5,
+        "callbackThrew": 0,
+        "inputUnavailable": 2,
+        "startAttempts": 5,
+        "startReturned": 5,
+        "terminalAttempts": 5,
+        "terminalReturned": 5,
+        "finished": 5,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "CONTROLLER_MODES": {
+        "entered": 3,
+        "prepared": 3,
+        "omitted": 0,
+        "callbackStarted": 3,
+        "callbackReturned": 3,
+        "callbackThrew": 0,
+        "inputUnavailable": 0,
+        "startAttempts": 3,
+        "startReturned": 3,
+        "terminalAttempts": 3,
+        "terminalReturned": 3,
+        "finished": 3,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "CONTROLLER_ZONE_CHANGE_CARD": {
+        "entered": 13,
+        "prepared": 13,
+        "omitted": 0,
+        "callbackStarted": 13,
+        "callbackReturned": 13,
+        "callbackThrew": 0,
+        "inputUnavailable": 8,
+        "startAttempts": 13,
+        "startReturned": 13,
+        "terminalAttempts": 13,
+        "terminalReturned": 13,
+        "finished": 13,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "COST_VISITOR": {
+        "entered": 778,
+        "prepared": 778,
+        "omitted": 0,
+        "callbackStarted": 778,
+        "callbackReturned": 778,
+        "callbackThrew": 0,
+        "inputUnavailable": 412,
+        "startAttempts": 778,
+        "startReturned": 778,
+        "terminalAttempts": 778,
+        "terminalReturned": 778,
+        "finished": 778,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "DAMAGE_KILLABLES": {
+        "entered": 32,
+        "prepared": 32,
+        "omitted": 0,
+        "callbackStarted": 32,
+        "callbackReturned": 32,
+        "callbackThrew": 0,
+        "inputUnavailable": 0,
+        "startAttempts": 32,
+        "startReturned": 32,
+        "terminalAttempts": 32,
+        "terminalReturned": 32,
+        "finished": 32,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "DAMAGE_OPPONENT_POOL": {
+        "entered": 138,
+        "prepared": 138,
+        "omitted": 0,
+        "callbackStarted": 138,
+        "callbackReturned": 138,
+        "callbackThrew": 0,
+        "inputUnavailable": 0,
+        "startAttempts": 138,
+        "startReturned": 138,
+        "terminalAttempts": 138,
+        "terminalReturned": 138,
+        "finished": 138,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "DAMAGE_PLAYER_POOL": {
+        "entered": 9,
+        "prepared": 9,
+        "omitted": 0,
+        "callbackStarted": 9,
+        "callbackReturned": 9,
+        "callbackThrew": 0,
+        "inputUnavailable": 0,
+        "startAttempts": 9,
+        "startReturned": 9,
+        "terminalAttempts": 9,
+        "terminalReturned": 9,
+        "finished": 9,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "DESTROY_REMOVAL_POOL": {
+        "entered": 1,
+        "prepared": 1,
+        "omitted": 0,
+        "callbackStarted": 1,
+        "callbackReturned": 1,
+        "callbackThrew": 0,
+        "inputUnavailable": 0,
+        "startAttempts": 1,
+        "startReturned": 1,
+        "terminalAttempts": 1,
+        "terminalReturned": 1,
+        "finished": 1,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "MANA_POOL_OPTIONS": {
+        "entered": 2,
+        "prepared": 2,
+        "omitted": 0,
+        "callbackStarted": 2,
+        "callbackReturned": 2,
+        "callbackThrew": 0,
+        "inputUnavailable": 0,
+        "startAttempts": 2,
+        "startReturned": 2,
+        "terminalAttempts": 2,
+        "terminalReturned": 2,
+        "finished": 2,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "MASKED_CHOICE": {
+        "entered": 4,
+        "prepared": 4,
+        "omitted": 0,
+        "callbackStarted": 4,
+        "callbackReturned": 4,
+        "callbackThrew": 0,
+        "inputUnavailable": 4,
+        "startAttempts": 4,
+        "startReturned": 4,
+        "terminalAttempts": 4,
+        "terminalReturned": 4,
+        "finished": 4,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "MAX_X_HEURISTIC": {
+        "entered": 180,
+        "prepared": 180,
+        "omitted": 0,
+        "callbackStarted": 180,
+        "callbackReturned": 180,
+        "callbackThrew": 0,
+        "inputUnavailable": 0,
+        "startAttempts": 180,
+        "startReturned": 180,
+        "terminalAttempts": 180,
+        "terminalReturned": 180,
+        "finished": 180,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "PAYMENT_DISCARD_POOL": {
+        "entered": 2,
+        "prepared": 2,
+        "omitted": 0,
+        "callbackStarted": 2,
+        "callbackReturned": 2,
+        "callbackThrew": 0,
+        "inputUnavailable": 1,
+        "startAttempts": 2,
+        "startReturned": 2,
+        "terminalAttempts": 2,
+        "terminalReturned": 2,
+        "finished": 2,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "TRIGGER_PREPARATION": {
+        "entered": 80,
+        "prepared": 80,
+        "omitted": 0,
+        "callbackStarted": 80,
+        "callbackReturned": 80,
+        "callbackThrew": 0,
+        "inputUnavailable": 0,
+        "startAttempts": 80,
+        "startReturned": 80,
+        "terminalAttempts": 80,
+        "terminalReturned": 80,
+        "finished": 80,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      }
+    },
+    "invocationsInFlightAtCutoffs": 0,
+    "callbacksInFlightAtCutoffs": 0,
+    "startsMissingAtCutoffs": 2,
+    "startRecordMissingFractionAtCutoffs": 0.0011235955056179776,
+    "nestedInvocationCount": null,
+    "uninstrumentedDecisionCount": null
+  },
+  "sourceSha256": {
+    "full": "e518deb6ee496751affe1002061d89adbf6d345069ad0cf3009afe48d3a26db9",
+    "decisions": "500ce52ab6ae83157e88f9bcf57a5eb16806eff519e033bdbe61ac2d1ddd614b"
+  },
+  "sourceBytes": {
+    "full": 16457866,
+    "decisions": 15410067
+  },
+  "limitations": [
+    "Single observed game; wall time is not a tracing-overhead estimate.",
+    "Parent contexts are grouped by parent container turn, not independent child-entry time."
+  ],
+  "firstBudgetUnavailableByPlayer": {
+    "2": {
+      "eventIndex": 2730,
+      "containerTurn": 27,
+      "timingBasis": "PARENT_CONTAINER"
+    },
+    "0": {
+      "eventIndex": 3045,
+      "containerTurn": 29,
+      "timingBasis": "START_EVENT"
+    },
+    "3": {
+      "eventIndex": 3951,
+      "containerTurn": 35,
+      "timingBasis": "START_EVENT"
+    },
+    "1": {
+      "eventIndex": 4500,
+      "containerTurn": 37,
+      "timingBasis": "START_EVENT"
+    }
+  }
+}
