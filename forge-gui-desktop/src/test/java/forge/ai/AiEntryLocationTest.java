@@ -109,6 +109,47 @@ public class AiEntryLocationTest extends AITest {
         Mockito.verify(game).recordEventObservationFailure(failure);
     }
 
+    @DataProvider public Object[][] blockedStages() { return new Object[][] {{"CLOCK"}, {"OPTIONS"}, {"INPUT"}}; }
+    @Test(dataProvider = "blockedStages", groups = {"UnitTest", "fast"})
+    public void closedAdmissionIgnoresLateGetterFailureAndStillInvokesTheOriginalCallback(final String blockedStage) throws Exception {
+        final Fixture f = fixture();
+        final var entered = new java.util.concurrent.CountDownLatch(1);
+        final var release = new java.util.concurrent.CountDownLatch(1);
+        final var failure = new IllegalStateException("late capture failure");
+        final java.util.function.Supplier<Map<String, Object>> blocked = () -> {
+            entered.countDown();
+            try { Assert.assertTrue(release.await(5, java.util.concurrent.TimeUnit.SECONDS)); }
+            catch (InterruptedException error) { throw new IllegalStateException(error); }
+            throw failure;
+        };
+        if ("CLOCK".equals(blockedStage)) {
+            final var phase = Mockito.spy(f.game.getPhaseHandler());
+            Mockito.doAnswer(ignored -> blocked.get()).when(phase).getTurn();
+            final var field = Game.class.getDeclaredField("phaseHandler"); field.setAccessible(true); field.set(f.game, phase);
+        }
+        final AtomicInteger callbacks = new AtomicInteger();
+        final AtomicInteger events = new AtomicInteger();
+        f.game.observeEventEmission(event -> { if (event instanceof AiChoiceEvent) { events.incrementAndGet(); } });
+        final var thread = java.util.concurrent.Executors.newSingleThreadExecutor();
+        try {
+            final var result = thread.submit(() -> AiChoiceRecorder.observe(f.chooser, f.ability,
+                    "NUMBER_SELECTION", null, "CONTROLLER_NUMBER_RANGE",
+                    () -> "OPTIONS".equals(blockedStage) ? blocked.get() : Map.of("coverage", "OBSERVED_RANGE", "minimum", 0, "maximum", 4),
+                    () -> { callbacks.incrementAndGet(); f.game.setRecordAiDecisions(true); return 3; }, value -> value, "BEFORE_SELECTOR",
+                    open -> {
+                        if ("INPUT".equals(blockedStage)) { return blocked.get(); }
+                        throw new AssertionError("Closed admission must not start input projection");
+                    }));
+            Assert.assertTrue(entered.await(5, java.util.concurrent.TimeUnit.SECONDS));
+            f.game.setRecordAiDecisions(false);
+            release.countDown();
+            Assert.assertEquals(result.get(5, java.util.concurrent.TimeUnit.SECONDS), Integer.valueOf(3));
+            Assert.assertEquals(callbacks.get(), 1); Assert.assertTrue(f.starts.isEmpty());
+            Assert.assertEquals(events.get(), 0, "An abandoned capture cannot revive with an orphan terminal");
+            Assert.assertNull(f.game.getEventObservationFailure());
+        } finally { release.countDown(); thread.shutdownNow(); }
+    }
+
     @DataProvider public Object[][] off() { return new Object[][] {{false}, {true}}; }
     @Test(dataProvider = "off", groups = {"UnitTest", "fast"})
     public void disabledOrCopiedTargetCallbacksDoNotTraverseOrCapture(final boolean copy) {

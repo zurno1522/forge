@@ -33,6 +33,7 @@ final class AiEntryLocation {
             if (!open.getAsBoolean() || Thread.currentThread().isInterrupted()) { return unavailable("INTERRUPTED"); }
             return AiDecisionEvent.freezeMap(value);
         } catch (RuntimeException failure) {
+            if (!open.getAsBoolean() || Thread.currentThread().isInterrupted()) { return unavailable("INTERRUPTED"); }
             chooser.getGame().recordEventObservationFailure(failure);
             return unavailable("CAPTURE_FAILED");
         }

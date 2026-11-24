@@ -217,13 +217,19 @@ public final class AiChoiceRecorder {
                 record.put("entryLocation", entry);
                 if (accounting != null && "CAPTURE_FAILED".equals(entry.get("reason"))) { accounting.failure(); }
             }
-            record.put("options", visible ? options.get() : Map.of("coverage", "MASKED"));
+            if (!open()) { abandon(); return; }
+            try { record.put("options", visible ? options.get() : Map.of("coverage", "MASKED")); }
+            catch (RuntimeException failure) {
+                if (!open()) { abandon(); return; }
+                throw failure;
+            }
             if (inputCapture != null) {
                 Map<String, Object> input;
                 try {
                     input = visible ? inputCapture.apply(this::open)
                             : AiInputContext.unavailable(chooser, timing, basis, "HIDDEN");
                 } catch (RuntimeException failure) {
+                    if (!open()) { abandon(); return; }
                     if (accounting != null) { accounting.failure(); }
                     game.recordEventObservationFailure(failure);
                     input = AiInputContext.unavailable(chooser, timing, basis, "CAPTURE_FAILED");
@@ -236,7 +242,12 @@ public final class AiChoiceRecorder {
                 if (accounting != null) { accounting.startAttempt(); }
                 game.fireEvent(new AiChoiceEvent(record));
                 if (accounting != null) { accounting.startReturned(); }
-            }
+            } else { finished = true; }
+        }
+
+        private void abandon() {
+            finished = true;
+            if (accounting != null) { accounting.admissionClosed(); }
         }
 
         private boolean open() { return !finished && game.isRecordingAiDecisions() && (evaluation == null || evaluation.choiceCaptureOpen()); }

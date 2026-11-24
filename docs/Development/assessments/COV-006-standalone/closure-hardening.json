@@ -1,0 +1,19 @@
+{
+  "tests": 56,
+  "failures": 0,
+  "errors": 0,
+  "newBlockedGetterCases": 3,
+  "stages": [
+    "CLOCK",
+    "OPTIONS",
+    "INPUT"
+  ],
+  "logPath": "/workspace/work/cov006-close/focused-final.log",
+  "logSha256": "1f3c5af39d61375e6fca75d83fc75772f0863b5b5537eb34c8e25bf059c0f0eb",
+  "sourceSha256": {
+    "forge-ai/src/main/java/forge/ai/AiChoiceRecorder.java": "f6870fa08362f8d17a57b61b2d5c1ea51b6975af29fd9a5358d09fa2edb2292c",
+    "forge-ai/src/main/java/forge/ai/AiEntryLocation.java": "bf35fc5a70adea9cc00b3b35828c62b2d3a782c0001bf929bbdf80d665814fab",
+    "forge-gui-desktop/src/test/java/forge/ai/AiEntryLocationTest.java": "65a2eb8fdc6c60dddd845b11c37584c18eeff812b2fa470b28887abbfce7f455"
+  },
+  "fullSuiteRepeated": false
+}

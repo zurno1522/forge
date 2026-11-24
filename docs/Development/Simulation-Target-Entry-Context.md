@@ -39,3 +39,9 @@ All seven exports remain byte-identical for 34 saved streams, including V1–V4 
 No additional current/prior-increment defect was reproduced. Nested/search integration, its accounting, mode planning and remaining family arguments stay within COV-006 and must be reviewed before COV-007. Sustained availability remains COV-008; the existing budget is unchanged. Continue immediately with nested target entry/context capture.
 
 Evidence: [actual entry messages and context excerpts](assessments/COV-006-standalone/actual-examples.json), [fresh-game/export checks](assessments/COV-006-standalone/validation.json), [legacy comparison](assessments/COV-006-standalone/legacy-compatibility.json), [tests](assessments/COV-006-standalone/tests.json), [commands](assessments/COV-006-standalone/commands.json) and [implementation hashes](assessments/COV-006-standalone/implementation-sources.json).
+
+### Capture-closure hardening
+
+The nested-integration review found that a newly added entry-clock getter could throw after admission closed and still mark observation health as failed. Standalone options/input capture had the same late-failure edge. Closed capture now discards those failures, stops new projection work and permanently retires the unstarted observation. Its original callback still runs once; reenabling recording during that callback cannot revive the abandoned token and emit an orphan terminal.
+
+Three blocked-getter regressions cover clock, options and input projection failures after admission closes, including recording being reenabled by the original callback. All 56 focused Java tests pass. No schema or budget change; the subsequent nested integration will supply the next full-suite check. See [closure-hardening evidence](assessments/COV-006-standalone/closure-hardening.json).
