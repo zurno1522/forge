@@ -1,0 +1,10 @@
+{
+  "forge-ai/src/main/java/forge/ai/AiChoiceRecorder.java": "d4eaf1b80e6f2345f246b62f9a06df0f2d9ef107b7c6daef0cf046637bf61874",
+  "tools/decision-records/choice_events.py": "544b40915017e89143a8e71d04239cdda68b9484f3cefa49e3f298eb23d3aaf0",
+  "tools/decision-records/coverage_audit.py": "1641c171cd6c6a9de7c219d0e82e1239d20a2524ba68f887458623eafdc36c13",
+  "tools/decision-records/export.py": "48a19c4060bbf971b38e2abcdcd131c014b13d1c1a827032447fb3ce42b57e63",
+  "forge-ai/src/main/java/forge/ai/AiEntryLocation.java": "ba6470cb970d5269138c0b7df39fad3ea0378cab34ef3745c39a5bd9d78648e9",
+  "forge-gui-desktop/src/test/java/forge/ai/AiEntryLocationTest.java": "a9245194222748dc5a07b712c92207f43b132c6a1dded3f8a2a08b0c336ab4b3",
+  "tools/decision-records/entry_location.py": "b544a0d38d1b30dc0857772945cd64f3a4db1f57e112ec00730b0d274e972d93",
+  "tools/decision-records/test_entry_location.py": "081ecfd92ad0d19f85bd2120d2ad6abfd1bbbb7db1c0969ddec0342183d42f79"
+}

@@ -1,5 +1,6 @@
 """Coverage of observed records, never an estimate of uninstrumented decisions."""
 from collections import Counter
+import json
 
 
 def counts():
@@ -31,14 +32,21 @@ def add(count, context, audited, parent_omissions=None):
 
 
 class CoverageAudit:
-    def __init__(self, boundary_groups, turn_groups, audited_boundaries):
+    def __init__(self, boundary_groups, turn_groups, audited_boundaries, entry_inventory=None):
         self.boundaries = boundary_groups
         self.turns = turn_groups
         self.audited = audited_boundaries
         self.total = counts()
         self.owners = Counter()
+        self.entry_inventory = entry_inventory or {}
+        self.entries = {key: Counter() for key in ('statuses', 'kinds', 'timings', 'stateBases', 'reasons')}
 
-    def observe(self, owner, boundary, context, *, run_id, game, turn, player, turn_basis, parent_omissions=None):
+    def observe(self, owner, boundary, context, *, run_id, game, turn, player, turn_basis, parent_omissions=None, entry_location=None):
+        if entry_location is not None:
+            for plural, field in (('statuses', 'status'), ('kinds', 'kind'), ('timings', 'timing'), ('stateBases', 'stateBasis'), ('reasons', 'reason')):
+                if entry_location[field] is not None: self.entries[plural][entry_location[field]] += 1
+            turn = entry_location['turn']
+            turn_basis = 'ENTRY_LOCATION' if entry_location['status'] == 'CAPTURED' else 'ENTRY_LOCATION_UNAVAILABLE'
         audited = owner in ('DECISION', 'CHOICE') and boundary in self.audited
         self.owners[owner] += 1
         add(self.total, context, audited, parent_omissions)
@@ -56,7 +64,7 @@ class CoverageAudit:
         store[key] = row
 
     def summary(self, sequence):
-        return dict(schemaVersion=1, scope='OBSERVED_RECORDS_ONLY',
+        result = dict(schemaVersion=1, scope='OBSERVED_RECORDS_ONLY',
                     knownInputBoundaryInventoryV1=dict(self.audited),
                     definitions=dict(
                         records='Parent decisions, standalone STARTED choices, nested target records and search operations; overlapping observations, not unique gameplay decisions. Terminals are not counted again. Includes incomplete, censored and post-outcome records; no learning eligibility claim.',
@@ -71,10 +79,19 @@ class CoverageAudit:
                     unobservedDecisionCount=None, completeLearningExampleCount=None,
                     byBoundary=sequence('audit_boundaries', self.boundaries.values()),
                     byTurn=sequence('audit_turns', self.turns.values()))
+        if self.entries['statuses']:
+            result['entryLocationAudit'] = dict(schemaVersion=1, scope='PRESENT_ENTRY_COMPONENTS_ONLY',
+                                              records=sum(self.entries['statuses'].values()),
+                                              knownInputBoundaryInventoryV2=self.entry_inventory,
+                                              **{key: dict(value) for key, value in self.entries.items()})
+            result['definitions']['byTurn'] += ' Present entry components supply their own clock with ENTRY_LOCATION; unavailable entries stay null with ENTRY_LOCATION_UNAVAILABLE. playerId remains the owning chooser, not the turn player.'
+        return result
 
 
 def markdown(audit):
     yield '\n## Observed input coverage audit\n\n'
+    if 'entryLocationAudit' in audit:
+        yield 'Independent entry components: ' + json.dumps(audit['entryLocationAudit'], sort_keys=True) + '\n\n'
     yield (f"Denominator: {audit['totals']['records']} observed records across parent decisions, standalone starts, "
            'nested target records and search operations. These overlap; they are not unique gameplay decisions. '
            'Unobserved decision count and complete learning-example count are unknown.\n\n')

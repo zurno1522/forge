@@ -212,6 +212,11 @@ public final class AiChoiceRecorder {
             record.put("assessmentId", context == null ? null : context.get("assessmentId"));
             final SpellAbility resolving = game.getStack().getResolvingAbility();
             record.put("resolvingAbilityId", resolving == null ? null : resolving.getId());
+            if (timing != null) {
+                final var entry = AiEntryLocation.capture(chooser, timing, basis, visible, this::open);
+                record.put("entryLocation", entry);
+                if (accounting != null && "CAPTURE_FAILED".equals(entry.get("reason"))) { accounting.failure(); }
+            }
             record.put("options", visible ? options.get() : Map.of("coverage", "MASKED"));
             if (inputCapture != null) {
                 Map<String, Object> input;
@@ -281,12 +286,15 @@ public final class AiChoiceRecorder {
     public static <T extends GameObject, C extends Iterable<T>> T targetPool(final Player chooser, final SpellAbility ability,
             final C pool, final String boundary, final String timing, final Function<C, T> callback) {
         final AtomicReference<List<Map<String, Object>>> offered = new AtomicReference<>();
-        return observe(chooser, ability, "TARGET_POOL_SELECTION", null, boundary, () -> {
-            final var options = AiTargetChoiceRecorder.references(pool, () -> !Thread.currentThread().isInterrupted());
+        final AtomicReference<AiOptionInput> proof = new AtomicReference<>();
+        final String inputTiming = "AT_TARGET_ADDITION".equals(timing) ? "AFTER_SELECTION_BEFORE_APPLICATION" : "BEFORE_SELECTOR";
+        return observeInput(chooser, ability, "TARGET_POOL_SELECTION", null, boundary, inputTiming, () -> {
+            final var options = AiOptionInput.capture(pool);
+            proof.set(options);
             final var prior = AiTargetChoiceRecorder.references(ability.getTargets(), () -> !Thread.currentThread().isInterrupted());
             if (options == null || prior == null) { return Map.of("coverage", "UNAVAILABLE"); }
-            offered.set(options.values());
-            return Map.of("coverage", "OBSERVED_HEURISTIC_POOL_NOT_ALL_LEGAL_TARGET_SETS", "items", options.values(),
+            offered.set(options.references());
+            return Map.of("coverage", "OBSERVED_HEURISTIC_POOL_NOT_ALL_LEGAL_TARGET_SETS", "items", offered.get(),
                     "truncated", options.truncated(), "priorTargets", prior.values(), "priorTargetsTruncated", prior.truncated(),
                     "poolSnapshotTiming", timing, "purpose", "DAMAGE_OPPONENT_POOL".equals(boundary) ? "OPPONENT_PREFERENCE" : "TARGET_RECOMMENDATION");
         }, () -> callback.apply(pool), value -> {
@@ -303,6 +311,6 @@ public final class AiChoiceRecorder {
             result.put("selectedOptionIndex", matches == 1 ? index : null);
             result.put("match", options == null ? "UNAVAILABLE" : matches == 1 ? "UNIQUE" : matches == 0 ? "OUTSIDE_CAPTURED_POOL" : "AMBIGUOUS");
             return result;
-        });
+        }, null, proof::get);
     }
 }

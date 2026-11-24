@@ -746,7 +746,8 @@ def matches_selected(action, candidate):
 def make_coverage(runs, rows, *, spool=None):
     audit = _audit.CoverageAudit(
         _spool.DiskMap(spool, 'audit:boundaries') if spool else {},
-        _spool.DiskMap(spool, 'audit:turns') if spool else {}, _choices.CONTEXT_TIMING)
+        _spool.DiskMap(spool, 'audit:turns') if spool else {}, _choices.CONTEXT_TIMING,
+        {'CHOICE': _choices.CONTEXT_TIMING_V2})
     common = ('selections', 'selectedActionKinds', 'phases', 'decisionStatuses', 'outcomeLabels',
               'pilotModes', 'assessments', 'assessmentDetails', 'cardAiHandlers', 'handlerAssessments',
               'rejectedCards', 'rejectedActionKinds', 'rejectedCardKinds', 'searchReasons')
@@ -994,7 +995,7 @@ def make_coverage(runs, rows, *, spool=None):
             start = row['start']; choice = start['choice']
             audit.observe('CHOICE', choice['boundary'], choice.get('inputContext'), run_id=row['runId'],
                           game=row['game'], turn=start.get('turn'), player=choice['chooserPlayerId'],
-                          turn_basis='CHOICE_START_EVENT')
+                          turn_basis='CHOICE_START_EVENT', entry_location=choice.get('entryLocation'))
             add_input_context(row['start']['choice'].get('inputContext'), 'CHOICE')
             censored_count += row['censored']
             event_types[row['start']['choice']['choiceType']] += 1

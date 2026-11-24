@@ -8,6 +8,10 @@ _context_spec.loader.exec_module(_contexts)
 
 validate_input_context = _contexts.validate
 
+_entry_spec = importlib.util.spec_from_file_location('forge_entry_location', Path(__file__).with_name('entry_location.py'))
+_entries = importlib.util.module_from_spec(_entry_spec)
+_entry_spec.loader.exec_module(_entries)
+
 STAGES = {'CANDIDATE_EVALUATION', 'EXECUTION', 'RESOLUTION', 'CONTROLLER_CALLBACK',
           'DELEGATED_TARGET_SELECTION', 'TRIGGER_TARGET_SELECTION', 'EFFECT_COPY_TARGET_SELECTION',
           'RETARGET_SELECTION', 'PAYMENT', 'TRIGGER_PREPARATION'}
@@ -61,10 +65,18 @@ CONTEXT_TIMING = {
     'CONTROLLER_EFFECT_ENTITY': 'BEFORE_SELECTOR',
     'CONTROLLER_ZONE_CHANGE_CARD': 'BEFORE_SELECTOR',
 }
+CONTEXT_TIMING_V2 = {**{key: value for key, value in CONTEXT_TIMING.items() if key != 'MAIN_PHASE_PLAY_SELECTION'},
+                     **{boundary: ['BEFORE_SELECTOR', 'AFTER_SELECTION_BEFORE_APPLICATION']
+                        for boundary in sorted(POOL_BOUNDARIES - {'MASKED_TARGET_POOL'})}}
 
 
-def input_boundary(value, boundary, stage=None):
+def input_boundary(value, boundary, stage=None, choice=None):
     expected = CONTEXT_TIMING.get(boundary)
+    target_pool = choice is not None and choice['choiceType'] == 'TARGET_POOL_SELECTION' and 'entryLocation' in choice
+    if target_pool:
+        require(value['timing'] in ('BEFORE_SELECTOR', 'AFTER_SELECTION_BEFORE_APPLICATION'), 'invalid target input timing')
+        options = choice['options']
+        expected = ('AFTER_SELECTION_BEFORE_APPLICATION' if options['poolSnapshotTiming'] == 'AT_TARGET_ADDITION' else 'BEFORE_SELECTOR') if options['coverage'] != 'UNAVAILABLE' else value['timing']
     if expected is None:
         hidden_source = boundary == 'MASKED_CHOICE' and {'component': 'CONTEXT', 'reason': 'HIDDEN'} in value['omissions']
         require(value['status'] == 'UNAVAILABLE'
@@ -78,7 +90,7 @@ def input_boundary(value, boundary, stage=None):
             require(value['stateBasis'] == 'PLANNING_WORKING_STATE', 'evaluation context claims rules state')
         prompt = value['policy'].get('prompt')
         if value['schemaVersion'] >= 4 and value['diagnostics']['optionBindings']['coverage'] != 'UNSUPPORTED':
-            require(boundary in ('CONTROLLER_EFFECT_ENTITY', 'CONTROLLER_ZONE_CHANGE_CARD'), 'option links at unaudited input boundary')
+            require(boundary in ('CONTROLLER_EFFECT_ENTITY', 'CONTROLLER_ZONE_CHANGE_CARD') or target_pool, 'option links at unaudited input boundary')
         if prompt is not None:
             require(boundary == {'NUMBER_RANGE': 'CONTROLLER_NUMBER_RANGE', 'NUMBER_OPTIONS': 'CONTROLLER_NUMBER_OPTIONS',
                                  'SINGLE_ENTITY': 'CONTROLLER_EFFECT_ENTITY'}[prompt['kind']], 'typed prompt at unaudited boundary')
@@ -107,7 +119,7 @@ def option_links(choice):
     context = choice['inputContext']
     if context['schemaVersion'] < 4 or context['policy'] is None: return
     links = context['diagnostics']['optionBindings']
-    supported = choice['boundary'] in ('CONTROLLER_EFFECT_ENTITY', 'CONTROLLER_ZONE_CHANGE_CARD')
+    supported = choice['boundary'] in ('CONTROLLER_EFFECT_ENTITY', 'CONTROLLER_ZONE_CHANGE_CARD') or choice['choiceType'] == 'TARGET_POOL_SELECTION' and 'entryLocation' in choice
     if not supported:
         require(links['coverage'] == 'UNSUPPORTED', 'option links at unaudited boundary')
         return
@@ -133,6 +145,25 @@ def input_envelope(value, record):
         for field in ('turn', 'phase'):
             if field in record:
                 require(policy[field] == record[field], 'input context/envelope ' + field + ' mismatch')
+
+
+def entry_location(choice, known_players=None):
+    if 'entryLocation' not in choice: return
+    value = choice['entryLocation']
+    _entries.validate(value, known_players, choice.get('inputContext'))
+    if choice['boundary'] == 'MASKED_CHOICE':
+        require(value['status'] == 'UNAVAILABLE' and value['reason'] == 'HIDDEN', 'entry exposes masked source')
+        return
+    require(value['reason'] != 'HIDDEN', 'hidden entry has unmasked source')
+    if value['status'] != 'CAPTURED': return
+    expected = CONTEXT_TIMING.get(choice['boundary'])
+    if choice['choiceType'] == 'TARGET_POOL_SELECTION':
+        options = choice['options']
+        if options['coverage'] == 'UNAVAILABLE':
+            require(value['timing'] in ('BEFORE_SELECTOR', 'AFTER_SELECTION_BEFORE_APPLICATION'), 'invalid target entry timing')
+            return
+        expected = 'AFTER_SELECTION_BEFORE_APPLICATION' if options['poolSnapshotTiming'] == 'AT_TARGET_ADDITION' else 'BEFORE_SELECTOR'
+    require(expected is not None and value['timing'] == expected, 'entry claims an unaudited boundary')
 
 
 def integer(v):
@@ -361,7 +392,7 @@ def accept(record, game):
     if status == 'STARTED':
         fields = {'choiceSchemaVersion', 'choiceId', 'parentChoiceId', 'status', 'choiceType', 'boundary', 'stage', 'chooserPlayerId',
                   'chooserKind', 'abilityId', 'sourceId', 'decisionId', 'actionId', 'candidateAbilityId', 'assessmentId', 'resolvingAbilityId', 'options'}
-        require(set(c) in (fields, fields | {'inputContext'}) and c['choiceType'] in TYPES and c['boundary'] in BOUNDARIES, 'invalid standalone choice start')
+        require(fields <= set(c) <= fields | {'inputContext', 'entryLocation'} and c['choiceType'] in TYPES and c['boundary'] in BOUNDARIES, 'invalid standalone choice start')
         require(c['boundary'] in TYPE_BOUNDARIES[c['choiceType']], 'choice type/boundary mismatch')
         require(c['stage'] in STAGES and c['chooserKind'] in ('AI', 'OTHER'), 'invalid standalone choice actor/stage')
         require(all(integer(c[k]) for k in ('chooserPlayerId', 'abilityId', 'sourceId')), 'invalid standalone choice identity')
@@ -378,10 +409,11 @@ def accept(record, game):
         options(c)
         if 'inputContext' in c:
             validate_input_context(c['inputContext'], c['chooserPlayerId'])
-            input_boundary(c['inputContext'], c['boundary'], c['stage'])
+            input_boundary(c['inputContext'], c['boundary'], c['stage'], c)
             input_envelope(c['inputContext'], record)
             prompt_arguments(c)
             option_links(c)
+        entry_location(c)
         states[cid] = dict(start=record, terminal=None, postOutcome=game['outcome'] is not None)
     else:
         require(cid in states, 'choice terminal lacks start')
@@ -420,6 +452,7 @@ def context(state, game):
     if game['start'] is not None:
         require(c['chooserPlayerId'] in game['players'], 'unknown standalone choice chooser')
         if 'inputContext' in c: validate_input_context(c['inputContext'], c['chooserPlayerId'], game['players'])
+        entry_location(c, game['players'])
     if state['terminal'] is None:
         require(game['execution']['status'] != 'NORMAL' or parent is not None and parent['status'] != 'COMPLETED', 'normal choice lacks terminal result')
     return parent
