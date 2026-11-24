@@ -18,6 +18,8 @@ def validate(value, known_players=None, context=None):
     require(isinstance(value, dict) and set(value) == {'schemaVersion', 'status', 'kind', 'timing', 'stateBasis', 'turn', 'phase', 'turnPlayerId', 'reason'}, 'invalid fields')
     require(integer(value['schemaVersion']) and value['schemaVersion'] == 1, 'unsupported version')
     require(value['status'] in ('CAPTURED', 'UNAVAILABLE'), 'invalid status')
+    if context is not None and {'component': 'CONTEXT', 'reason': 'HIDDEN'} in context.get('omissions', []):
+        require(value['status'] == 'UNAVAILABLE' and value['reason'] == 'HIDDEN', 'entry exposes a hidden source context')
     if value['status'] == 'UNAVAILABLE':
         require(all(value[k] == 'UNESTABLISHED' for k in ('kind', 'timing', 'stateBasis'))
                 and all(value[k] is None for k in ('turn', 'phase', 'turnPlayerId'))

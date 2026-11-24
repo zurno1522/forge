@@ -90,6 +90,15 @@ class EntryLocationTests(unittest.TestCase):
             if error == 'extra': value['decisionId'] = 'invented location join'
             with self.subTest(error=error), self.assertRaises(module.InvalidData): self.export(rows)
 
+    def test_hidden_source_context_cannot_be_paired_with_a_captured_entry_clock(self):
+        rows = target_rows(); context = rows[2]['choice']['inputContext']
+        context.update(status='UNAVAILABLE', policy=None,
+                       diagnostics=dict(playerBindings=[], cardBindings=[], stackBindings=[],
+                                        optionBindings=dict(coverage='UNAVAILABLE', items=[], truncated=True)),
+                       omissions=[dict(component='CONTEXT', reason='HIDDEN')])
+        context['coverage'].update(playerView='UNAVAILABLE', disclosures='UNAVAILABLE', stack='UNAVAILABLE', prompt='UNAVAILABLE')
+        with self.assertRaises(module.InvalidData): self.export(rows)
+
     def test_new_target_view_does_not_allow_private_or_stale_option_identity(self):
         for error in ('private', 'stale', 'missing-entry'):
             rows = target_rows(); choice = rows[2]['choice']; context = choice['inputContext']

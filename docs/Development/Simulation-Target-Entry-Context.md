@@ -45,3 +45,7 @@ Evidence: [actual entry messages and context excerpts](assessments/COV-006-stand
 The nested-integration review found that a newly added entry-clock getter could throw after admission closed and still mark observation health as failed. Standalone options/input capture had the same late-failure edge. Closed capture now discards those failures, stops new projection work and permanently retires the unstarted observation. Its original callback still runs once; reenabling recording during that callback cannot revive the abandoned token and emit an orphan terminal.
 
 Three blocked-getter regressions cover clock, options and input projection failures after admission closes, including recording being reenabled by the original callback. All 56 focused Java tests pass. No schema or budget change; the subsequent nested integration will supply the next full-suite check. See [closure-hardening evidence](assessments/COV-006-standalone/closure-hardening.json).
+
+### Hidden-entry consistency
+
+The subsequent decoder review found an accepted contradiction: a context explicitly unavailable because its source was hidden could still carry a captured public entry kind/clock. The new regression failed before the fix. Such a context now requires the matching hidden, unavailable entry; existing source-boundary masking checks still apply. All 163 Python tests pass after the fix. This changes validation of contradictory new metadata, not valid legacy messages or production field meanings.
