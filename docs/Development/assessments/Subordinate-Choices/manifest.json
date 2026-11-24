@@ -4,12 +4,6 @@
   "baselineRevision": "b620996209064f618b1829e08d79133d74f9d7f9",
   "productionWorktreeDirty": false,
   "tests": {
-    "core": {
-      "tests": 23,
-      "failures": 0,
-      "errors": 0,
-      "skipped": 0
-    },
     "game": {
       "tests": 23,
       "failures": 0,
@@ -26,6 +20,12 @@
       "tests": 95,
       "failures": 0,
       "errors": 0
+    },
+    "gui": {
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
     }
   },
   "reviewRegressions": {
@@ -102,5 +102,6 @@
     "One Monte Carlo reconfigure slot retains unknown provenance after target-plan revalidation/rebuilding.",
     "Runtime samples do not exercise every delegated, copy, unsupported-retarget or mana-pool callback; these have focused tests.",
     "Outcome/control agreement and serialized byte counts do not establish deadline-neutral capture or comparative pilot strength."
-  ]
+  ],
+  "moduleLabelCorrection": "The 23-case GUI suite was previously labeled core; retained Maven logs verify game and GUI, with no core tests. See ../COV-006-search-accounting/module-label-audit.json."
 }

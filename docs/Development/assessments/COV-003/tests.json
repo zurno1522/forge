@@ -12,13 +12,13 @@
       "errors": 0,
       "skipped": 6
     },
-    "core": {
+    "game": {
       "tests": 23,
       "failures": 0,
       "errors": 0,
       "skipped": 0
     },
-    "game": {
+    "gui": {
       "tests": 23,
       "failures": 0,
       "errors": 0,
@@ -46,5 +46,6 @@
       "path": "/workspace/work/cov003/compatibility-final.log",
       "sha256": "f7e92034bc84adb23d80121de20f6711876ec045c186668620ee4295b1c959a9"
     }
-  }
+  },
+  "moduleLabelCorrection": "The 23-case GUI suite was previously labeled core; retained Maven logs verify game and GUI, with no core tests. See ../COV-006-search-accounting/module-label-audit.json."
 }

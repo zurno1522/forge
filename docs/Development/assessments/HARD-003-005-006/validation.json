@@ -58,10 +58,10 @@
   "javaTests": {
     "desktop": 2408,
     "desktopSkipped": 6,
-    "core": 23,
-    "game": 23,
     "failures": 0,
-    "errors": 0
+    "errors": 0,
+    "otherModulesCombined": 46,
+    "moduleAttribution": "Historical non-desktop total retained; original module attribution cannot be reverified from surviving logs."
   },
   "pythonTests": {
     "tests": 55,

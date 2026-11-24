@@ -10,15 +10,15 @@
         "skipped": 6,
         "failures": 0
       },
-      "core": {
-        "tests": 23,
-        "failures": 0
-      },
       "game": {
         "tests": 23,
         "failures": 0
       },
-      "build": "SUCCESS"
+      "build": "SUCCESS",
+      "gui": {
+        "tests": 23,
+        "failures": 0
+      }
     }
   },
   "python": {
@@ -30,5 +30,6 @@
     "fullFilteredParity": true,
     "legacyExportFilesByteIdentical": 28
   },
-  "limits": "Representative partial profile; broader gates remain documented in Simulation-Input-Context.md."
+  "limits": "Representative partial profile; broader gates remain documented in Simulation-Input-Context.md.",
+  "moduleLabelCorrection": "The 23-case GUI suite was previously labeled core; retained Maven logs verify game and GUI, with no core tests. See ../COV-006-search-accounting/module-label-audit.json."
 }

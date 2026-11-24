@@ -1,0 +1,60 @@
+{
+  "full": {
+    "modules": {
+      "forge-core": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "report": "No tests to run"
+      },
+      "forge-ai": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "report": "No tests to run"
+      },
+      "forge-game": {
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "forge-gui": {
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "forge-gui-desktop": {
+        "tests": 2622,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 6
+      }
+    },
+    "buildSuccess": true,
+    "logSha256": "1f3b168235e3e4473fd07ad58395b1b5f9cd05dcb870fb8fdf2d45151c2d0eee",
+    "sourceHashesMatch": true
+  },
+  "focusedBeforeRaceRegression": {
+    "tests": 61,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "logSha256": "1e6c588966123bb29a35dc033fd59e0187b062109b369d9091a144ba3a21330b"
+  },
+  "python": {
+    "tests": 181,
+    "failures": 0,
+    "logSha256": "479f113365f0957cbdfa78a5ba2510b50d7b2d98d48a6d144a2728c91277f983"
+  },
+  "regressionBeforeFix": {
+    "tests": 1,
+    "failures": 1,
+    "expectedFailure": "One interrupted capture serialized as two: expected [1] but found [2]",
+    "logSha256": "44ff12b617ecef9642708dd280f9b989faf705efdd75137ed0207dd00a608f87"
+  },
+  "discardedRun": "An earlier full run was intentionally stopped after review found the interruption race. The final full run above includes its correction and regression."
+}

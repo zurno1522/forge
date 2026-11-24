@@ -36,11 +36,6 @@
       "errors": 0,
       "skipped": 6
     },
-    "core": {
-      "cases": 23,
-      "failures": 0,
-      "errors": 0
-    },
     "game": {
       "cases": 23,
       "failures": 0,
@@ -54,6 +49,11 @@
     },
     "pythonExporter": {
       "cases": 70,
+      "failures": 0,
+      "errors": 0
+    },
+    "gui": {
+      "cases": 23,
       "failures": 0,
       "errors": 0
     }
@@ -80,5 +80,6 @@
     "Gameplay checks validate collection and linkage, not learning or comparative deck strength.",
     "All 20 sampled target slots fit within the capture bounds; 15 have explicit origins and five are unknown. No provenance truncation was observed.",
     "Raw streams/logs remain workspace artifacts. Curated summaries, commands and one actual example are committed."
-  ]
+  ],
+  "moduleLabelCorrection": "The 23-case GUI suite was previously labeled core; retained Maven logs verify game and GUI, with no core tests. See ../COV-006-search-accounting/module-label-audit.json."
 }

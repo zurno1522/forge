@@ -37,11 +37,6 @@
       "errors": 0,
       "skipped": 6
     },
-    "core": {
-      "cases": 23,
-      "failures": 0,
-      "errors": 0
-    },
     "game": {
       "cases": 23,
       "failures": 0,
@@ -59,11 +54,17 @@
       "cases": 25,
       "failures": 0,
       "errors": 0
+    },
+    "gui": {
+      "cases": 23,
+      "failures": 0,
+      "errors": 0
     }
   },
   "notes": [
     "Final games and cost probe ran sequentially after the Java reactor, using the committed production build.",
     "This is collection/coverage validation, not learning, deck-strength or strategic-quality evidence.",
     "Only curated summaries and one actual message example are committed; raw traces/logs remain workspace artifacts."
-  ]
+  ],
+  "moduleLabelCorrection": "The 23-case GUI suite was previously labeled core; retained Maven logs verify game and GUI, with no core tests. See ../COV-006-search-accounting/module-label-audit.json."
 }

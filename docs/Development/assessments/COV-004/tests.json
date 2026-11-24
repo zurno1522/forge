@@ -12,13 +12,13 @@
       "errors": 0,
       "skipped": 6
     },
-    "core": {
+    "game": {
       "tests": 23,
       "failures": 0,
       "errors": 0,
       "skipped": 0
     },
-    "game": {
+    "gui": {
       "tests": 23,
       "failures": 0,
       "errors": 0,
@@ -43,5 +43,6 @@
       "sha256": "94f5c821ee99d017c1c88ddeb8cf35b6f57deeb81ecea96b422d6ec8b8596fd6"
     }
   },
-  "review": "Earlier broader runs were stopped and superseded after code-review fixes; only the final full run validates the final source."
+  "review": "Earlier broader runs were stopped and superseded after code-review fixes; only the final full run validates the final source.",
+  "moduleLabelCorrection": "The 23-case GUI suite was previously labeled core; retained Maven logs verify game and GUI, with no core tests. See ../COV-006-search-accounting/module-label-audit.json."
 }

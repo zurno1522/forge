@@ -1,0 +1,170 @@
+{
+  "correction": "The 23-case GUI suite was mislabeled as core in earlier summaries. Retained log totals are unchanged; core has no tests.",
+  "logs": [
+    {
+      "path": "/workspace/work/cov001a/full-reviewed.log",
+      "sha256": "8d22516bb37814cee2dedd743b4c44d1263af2f5143b8877c364e6581caad0e6",
+      "modules": {
+        "forge-core": 0,
+        "forge-game": 23,
+        "forge-ai": 0,
+        "forge-gui": 23,
+        "forge-gui-desktop": 2589
+      }
+    },
+    {
+      "path": "/workspace/work/cov002/final-full-tests.log",
+      "sha256": "0362570b6b04fd640dbdcb75176f4cd299e894d0654cafffc3719ec803d8e57b",
+      "modules": {
+        "forge-core": 0,
+        "forge-game": 23,
+        "forge-ai": 0,
+        "forge-gui": 23,
+        "forge-gui-desktop": 2559
+      }
+    },
+    {
+      "path": "/workspace/work/cov003/full-tests.log",
+      "sha256": "220191c9631ffe2e9a7f138373a78c4ee869b03dad1c7bf70768b2a962b991e0",
+      "modules": {
+        "forge-core": 0,
+        "forge-game": 23,
+        "forge-ai": 0,
+        "forge-gui": 23,
+        "forge-gui-desktop": 2571
+      }
+    },
+    {
+      "path": "/workspace/work/cov004/full-reviewed.log",
+      "sha256": "30b11080fbe50f78dcf6b09e6cbb95d818287943e230207fd04dc47c82912ab7",
+      "modules": {
+        "forge-core": 0,
+        "forge-game": 23,
+        "forge-ai": 0,
+        "forge-gui": 23,
+        "forge-gui-desktop": 2578
+      }
+    },
+    {
+      "path": "/workspace/work/cov006-accounting/full-reviewed.log",
+      "sha256": "1428d76f7eb79cee5634c98748e3c43c7fbc3e184d14a7f82918a81aee332ebe",
+      "modules": {
+        "forge-core": 0,
+        "forge-game": 23,
+        "forge-ai": 0,
+        "forge-gui": 23,
+        "forge-gui-desktop": 2610
+      }
+    },
+    {
+      "path": "/workspace/work/cov006-nested/full-reviewed.log",
+      "sha256": "84b69c2d962f78c4ea0c88d20e1485d5813d84694425397be76c5ac39a3dbc4f",
+      "modules": {
+        "forge-core": 0,
+        "forge-game": 23,
+        "forge-ai": 0,
+        "forge-gui": 23,
+        "forge-gui-desktop": 2606
+      }
+    },
+    {
+      "path": "/workspace/work/cov006-search-accounting/full-reviewed.log",
+      "sha256": "1f3b168235e3e4473fd07ad58395b1b5f9cd05dcb870fb8fdf2d45151c2d0eee",
+      "modules": {
+        "forge-core": 0,
+        "forge-game": 23,
+        "forge-ai": 0,
+        "forge-gui": 23,
+        "forge-gui-desktop": 2622
+      }
+    },
+    {
+      "path": "/workspace/work/cov006-standalone/full-reviewed.log",
+      "sha256": "b7c507ac5c1ce84c2f280def027b03c63b71aa00f23f16c05307e2c47cfeabdd",
+      "modules": {
+        "forge-core": 0,
+        "forge-game": 23,
+        "forge-ai": 0,
+        "forge-gui": 23,
+        "forge-gui-desktop": 2597
+      }
+    },
+    {
+      "path": "/workspace/work/five-tasks-final-full-tests.log",
+      "sha256": "bf05677d6ef536b466f65d6837b5641f7347a796f3fac13c23cff06199697838",
+      "modules": {
+        "forge-core": 0,
+        "forge-game": 23,
+        "forge-ai": 0,
+        "forge-gui": 23,
+        "forge-gui-desktop": 2495
+      }
+    },
+    {
+      "path": "/workspace/work/five-tasks-full-tests.log",
+      "sha256": "583ca9d4b1c5173a8225a71949d548883ff832c2122693d31084d9ed90a5f47c",
+      "modules": {
+        "forge-core": 0,
+        "forge-game": 23,
+        "forge-ai": 0,
+        "forge-gui": 23,
+        "forge-gui-desktop": 2494
+      }
+    },
+    {
+      "path": "/workspace/work/input-context/full-tests.log",
+      "sha256": "2d825a606ac86eaafe3953c5423d889f532e2ea8bd28547714e7328724bd929d",
+      "modules": {
+        "forge-core": 0,
+        "forge-game": 23,
+        "forge-ai": 0,
+        "forge-gui": 23,
+        "forge-gui-desktop": 2548
+      }
+    },
+    {
+      "path": "/workspace/work/mc-target-full-tests.log",
+      "sha256": "d7d4d813aca26672a0391c1ef6f0ee1005121c917f0a7d5586977f0d93a05251",
+      "modules": {
+        "forge-core": 0,
+        "forge-game": 23,
+        "forge-ai": 0,
+        "forge-gui": 23,
+        "forge-gui-desktop": 2512
+      }
+    },
+    {
+      "path": "/workspace/work/subordinate-targets/full-final-tests.log",
+      "sha256": "9b71de0e72c9daf8dc99f588e328c5bfaec78225f07a18740161d92e47f0aa05",
+      "modules": {
+        "forge-core": 0,
+        "forge-game": 23,
+        "forge-ai": 0,
+        "forge-gui": 23,
+        "forge-gui-desktop": 2426
+      }
+    },
+    {
+      "path": "/workspace/work/subordinate-targets/full-tests.log",
+      "sha256": "9af1734584036a8b3f581205510987c10f19e15b30d16166a6950ebef8b4cc75",
+      "modules": {
+        "forge-core": 0,
+        "forge-game": 23,
+        "forge-ai": 0,
+        "forge-gui": 23,
+        "forge-gui-desktop": 2423
+      }
+    },
+    {
+      "path": "/workspace/work/target-provenance-final-tests.log",
+      "sha256": "b12f1349361b2531be6ed336ce4b5ad66aa4edcb64681e8389e7ed69fc0feab0",
+      "modules": {
+        "forge-core": 0,
+        "forge-game": 23,
+        "forge-ai": 0,
+        "forge-gui": 23,
+        "forge-gui-desktop": 2456
+      }
+    }
+  ]
+}

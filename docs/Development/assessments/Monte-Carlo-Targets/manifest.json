@@ -3,12 +3,6 @@
   "baselineRevision": "4739d7b469cdcbfd986946bf476b52aa4f6dadc1",
   "productionWorktreeDirty": false,
   "tests": {
-    "core": {
-      "tests": 23,
-      "failures": 0,
-      "errors": 0,
-      "skipped": 0
-    },
     "game": {
       "tests": 23,
       "failures": 0,
@@ -31,6 +25,12 @@
       "tests": 102,
       "failures": 0,
       "errors": 0
+    },
+    "gui": {
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
     }
   },
   "simulations": {
@@ -87,5 +87,6 @@
     "Live samples exercise heuristic revalidation and approved-target restoration; other operation types have focused controller/engine tests.",
     "Matching control outcomes do not establish timing-neutral capture or identical Monte Carlo work.",
     "The observation/visibility contract and complete legal-option/search-value datasets remain separate work."
-  ]
+  ],
+  "moduleLabelCorrection": "The 23-case GUI suite was previously labeled core; retained Maven logs verify game and GUI, with no core tests. See ../COV-006-search-accounting/module-label-audit.json."
 }
