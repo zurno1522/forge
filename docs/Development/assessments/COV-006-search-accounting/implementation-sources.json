@@ -1,0 +1,9 @@
+{
+  "forge-ai/src/main/java/forge/ai/AiDecisionRecorder.java": "da557be62981949d5ab1f6f73c0dd44d6995ce1d2cb95f3be6a7f3662d1dd4f1",
+  "forge-ai/src/main/java/forge/ai/AiCaptureAccounting.java": "8f4d08f15a3ee581832d67731c8d36630c586dd32005950ca9e4fa4e32f1d01a",
+  "forge-gui-desktop/src/test/java/forge/ai/AiMonteCarloTargetProvenanceTest.java": "151ea902d3abe7d43fdc61768483bc59697718f710e85f2c22f17b5b94536d4f",
+  "forge-gui-desktop/src/test/java/forge/ai/AiCaptureAccountingTest.java": "d24cf0265c54f2836c8c40e643eecd1aed9a42aeb8ee4a7c28c95ad6126520ae",
+  "tools/decision-records/capture_accounting.py": "226564abda9560e7e802604ed6cf2150484db6fe4a7f897e0b104a74192d506b",
+  "tools/decision-records/test_search_capture_accounting.py": "49d85cd0a3cdf0695a3fb761145f8082944ab9543b214103db277ec6767c4a2a",
+  "tools/decision-records/export.py": "ffaf285f590ee5756da25f39742e59910238e441746226eb3f0590ef8af9bd95"
+}

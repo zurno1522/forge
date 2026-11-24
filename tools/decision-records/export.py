@@ -794,6 +794,7 @@ def matches_selected(action, candidate):
 
 def make_coverage(runs, rows, *, spool=None):
     capture_accounting = _captures.Aggregate()
+    search_capture_accounting = _captures.Aggregate('search')
     audit = _audit.CoverageAudit(
         _spool.DiskMap(spool, 'audit:boundaries') if spool else {},
         _spool.DiskMap(spool, 'audit:turns') if spool else {}, _choices.CONTEXT_TIMING,
@@ -874,6 +875,7 @@ def make_coverage(runs, rows, *, spool=None):
     for row in rows:
         d = row['decision']
         capture_accounting.observe(d)
+        search_capture_accounting.observe(d)
         location = dict(run_id=row['runId'], game=row['game'], turn=d['observation'].get('turn'), player=d['playerId'])
         audit.observe('DECISION', d['decisionType'], d.get('inputContext'), **location, turn_basis='PARENT_BASELINE',
                       parent_omissions={'NESTED_TARGET': d.get('subordinateChoiceOmissions'),
@@ -1119,6 +1121,8 @@ def make_coverage(runs, rows, *, spool=None):
     if accounting is not None: summary['observationAccounting'] = accounting
     captures = capture_accounting.summary()
     if captures is not None: summary['targetCaptureAccounting'] = captures
+    search_captures = search_capture_accounting.summary()
+    if search_captures is not None: summary['searchCaptureAccounting'] = search_captures
     summary['limitations'] = [
         'Main-phase play selection with an empty stack only; no mulligan, combat, reactive-priority or subordinate-choice coverage.',
         'Candidate assessments are partial and may repeat an ability; counts are assessment observations, not unique rejected legal actions.',
@@ -1154,6 +1158,8 @@ def make_coverage(runs, rows, *, spool=None):
         summary['limitations'].append('Invocation accounting covers configured original-AI standalone callback wrappers only. Entries are not unique gameplay decisions. Input-unavailable records are retained records; callback errors are not capture loss. Publication return does not prove collector delivery. Cutoff-pending work is not evidence that a late callback never ran. Parent/nested and uninstrumented invocation counts remain unknown. Partial scopes, legacy absence and overflow cannot supply exact missing-start fractions.')
     if captures is not None:
         summary['limitations'].append('Nested target accounting counts capture-method calls within retained parents, not original selector callback outcomes or game-wide nested decisions. Missing whole-parent events remain unknown. Pending capture calls describe each parent cutoff, not workers necessarily still running at run finish. Legacy parent absence and saturation suppress the aggregate retained-parent missing-row fraction.')
+    if search_captures is not None:
+        summary['limitations'].append('Search accounting counts recording-parent capture attempts before host eligibility, not original search callback outcomes or game-wide decisions. Result-stage interruption/failure on retained rows is separate from capture-method omissions. Missing whole parents remain unknown; mixed legacy data and saturation suppress the aggregate retained-parent missing-row fraction.')
     return summary
 
 
@@ -1287,6 +1293,10 @@ def report_chunks(summary, runs):
         yield from lines('', '## Retained-parent target capture calls', '')
         yield from counter_line('Capture calls: ', 'targetCaptureAccounting')
         yield from lines('Counts cover capture-method admission within retained parents. They do not count original selector callback outcomes or reconstruct missing parents. Unavailable views remain retained rows; pending capture-method exits are not evidence that policy callbacks never ran.')
+    if 'searchCaptureAccounting' in summary:
+        yield from lines('', '## Retained-parent search capture calls', '')
+        yield from counter_line('Capture calls: ', 'searchCaptureAccounting')
+        yield from lines('Counts cover the capture phase before host eligibility and original callback execution. A retained row with result-stage interruption/failure is not a missing capture. Missing parents and game-wide callback outcomes remain unknown; pending exits describe parent cutoffs only.')
     if 'evaluatedXAssessmentStates' in summary:
         yield from counter_line('Evaluated X assessment snapshots: ', 'evaluatedXAssessmentStates')
     if 'searchTargetApplications' in summary:

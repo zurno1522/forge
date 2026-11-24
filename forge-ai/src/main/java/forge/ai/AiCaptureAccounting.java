@@ -6,6 +6,11 @@ import java.util.Map;
 
 /** Fixed scalar source counts for capture calls within one retained parent. No invocation registry. */
 final class AiCaptureAccounting {
+    enum Family { TARGET, SEARCH }
+    private final Family family;
+    AiCaptureAccounting() { this(Family.TARGET); }
+    AiCaptureAccounting(final Family family) { this.family = family; }
+
     static final List<String> FIELDS = List.of("entered", "captured", "unsupported", "budget", "interrupted", "failed", "finished", "inputUnavailable");
     private final long[] counts = new long[FIELDS.size()];
     private boolean closed;
@@ -24,7 +29,7 @@ final class AiCaptureAccounting {
         closed = true;
         final Map<String, Object> values = new LinkedHashMap<>();
         for (int i = 0; i < FIELDS.size(); i++) { values.put(FIELDS.get(i), counts[i]); }
-        return AiDecisionEvent.freezeMap(Map.of("schemaVersion", 1, "scope", "RECORDING_PARENT_TARGET_CAPTURE_CALLS",
+        return AiDecisionEvent.freezeMap(Map.of("schemaVersion", 1, "scope", "RECORDING_PARENT_" + family.name() + "_CAPTURE_CALLS",
                 "cutoff", "PARENT_CAPTURE_CLOSED", "closed", true, "overflowed", overflowed, "counts", values));
     }
 

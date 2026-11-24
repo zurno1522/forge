@@ -25,6 +25,7 @@ final class AiDecisionRecorder {
     private long assessmentSequence;
     private final List<TargetChoice> targetChoices = new ArrayList<>();
     private final AiCaptureAccounting targetCaptureAccounting;
+    private final AiCaptureAccounting searchCaptureAccounting;
     private int targetCapturesInFlight;
     private long targetChoicesOmittedByBudget;
     private long interruptedTargetCaptures;
@@ -67,12 +68,16 @@ final class AiDecisionRecorder {
             final java.util.function.BooleanSupplier callback) {
         SearchTargetApplication application = null;
         if (!closed && viewer.getGame().isRecordingAiDecisions()) {
+            final var scope = searchCaptureAccounting == null ? null : searchCaptureAccounting.enter();
             try {
                 final Card source = candidate.getHostCard();
                 if (source != null && source.getGame() == viewer.getGame()) {
-                    application = beginSearchTargetApplication(candidate, operation, requested);
-                }
-            } catch (RuntimeException failure) { captureFailed(failure); }
+                    application = beginSearchTargetApplication(candidate, operation, requested, scope);
+                } else if (scope != null) { scope.unsupported(); }
+            } catch (RuntimeException failure) {
+                if (scope != null) { scope.failed(); }
+                captureFailed(failure);
+            } finally { if (scope != null) { scope.exit(); } }
         }
         final boolean accepted;
         try { accepted = callback.getAsBoolean(); }
@@ -110,12 +115,14 @@ final class AiDecisionRecorder {
     }
 
     private SearchTargetApplication beginSearchTargetApplication(final SpellAbility candidate,
-            final SearchTargetOperation operation, final GameObject requested) {
+            final SearchTargetOperation operation, final GameObject requested, final AiCaptureAccounting.Scope scope) {
         synchronized (this) {
-            if (closed) { return null; }
+            if (closed) { if (scope != null) { scope.unsupported(); } return null; }
             searchTargetCaptureDeclared = true;
             if (searchTargetApplications.size() + searchTargetCapturesInFlight >= AiTargetChoiceRecorder.MAX_CHOICES) {
-                searchTargetBudgetOmissions++; return null;
+                searchTargetBudgetOmissions++;
+                if (scope != null) { scope.budget(); }
+                return null;
             }
             searchTargetCapturesInFlight++;
         }
@@ -133,6 +140,7 @@ final class AiDecisionRecorder {
             final SearchPlan before = visible ? searchPlan(candidate) : null;
             if (visible && before == null) {
                 interrupted = true;
+                if (scope != null) { scope.interrupted(); }
                 return null;
             }
             final Map<String, Object> record = new LinkedHashMap<>();
@@ -164,6 +172,7 @@ final class AiDecisionRecorder {
                 record.put("choiceId", data.get("decisionId") + ":search-target:" + searchTargetApplications.size());
                 final var application = new SearchTargetApplication(candidate, record, before, visible);
                 searchTargetApplications.add(application);
+                if (scope != null) { scope.captured("UNAVAILABLE".equals(input.get("status"))); }
                 searchTargetCapturesInFlight--;
                 reserved = false;
                 return application;
@@ -433,6 +442,7 @@ final class AiDecisionRecorder {
     AiDecisionRecorder(final Game game, final Player viewer, final long sequence) {
         this.viewer = viewer;
         targetCaptureAccounting = game.isRecordingAiDecisions() ? new AiCaptureAccounting() : null;
+        searchCaptureAccounting = game.isRecordingAiDecisions() ? new AiCaptureAccounting(AiCaptureAccounting.Family.SEARCH) : null;
         data.put("decisionSchemaVersion", 1);
         data.put("actionExecutionSchemaVersion", 1);
         data.put("decisionId", viewer.getId() + ":" + sequence);
@@ -517,6 +527,7 @@ final class AiDecisionRecorder {
             final FlatMonteCarloPicker.Result search) {
         closed = true;
         if (targetCaptureAccounting != null) { data.put("targetCaptureAccounting", targetCaptureAccounting.closeAndSnapshot()); }
+        if (searchCaptureAccounting != null) { data.put("searchCaptureAccounting", searchCaptureAccounting.closeAndSnapshot()); }
         data.put("status", evaluationFailure == null ? status : evaluationFailure);
         data.put("candidates", candidates);
         final List<Map<String, Object>> selected = new ArrayList<>();
