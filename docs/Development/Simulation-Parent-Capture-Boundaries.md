@@ -28,6 +28,8 @@ Tests must force closure while each affected getter/iterator is blocked, release
 
 ## Contract for the publication increment
 
+The [selected publication contract](Simulation-Parent-Publication-Contract.md) specifies preparation, claim, registration and failure stages, including the previously unguarded parent-construction boundary.
+
 An AI's already selected result must survive a runtime observation failure without rerunning its policy. Normal publication must retain existing decision/action IDs and engine event order. No execution should acquire references from a partially prepared action-registration batch. Parent projection, provenance preparation, registration and event emission have distinct failure outcomes; define them before moving locks or adding cleanup.
 
 Event publication returning normally is not collector delivery acknowledgement. If projection cannot produce a valid parent, report health and preserve missing-parent uncertainty. If a valid parent exists but action-link preparation fails, retain available parent evidence without claiming registered execution linkage. Registration/emission failure handling must leave no orphan aliases attributable to an uncommitted batch. Preserve actual execution lifetimes if any engine action has already started; never restore targets or undo gameplay to repair diagnostics.
