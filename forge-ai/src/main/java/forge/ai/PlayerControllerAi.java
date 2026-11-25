@@ -1910,6 +1910,12 @@ public class PlayerControllerAi extends PlayerController {
     }
 
     @Override
+    public CardCollection withZoneChangeSelections(final ZoneChangeSelectionRequest request,
+            final java.util.function.Function<ZoneChangeSelectionObserver, CardCollection> callback) {
+        return AiZoneOperationRecorder.choose(player, request, callback);
+    }
+
+    @Override
     public Card chooseSingleCardForZoneChange(ZoneType destination,
             List<ZoneType> origin, SpellAbility sa, CardCollection fetchList, DelayedReveal delayedReveal,
             String selectPrompt, boolean isOptional, Player decider) {

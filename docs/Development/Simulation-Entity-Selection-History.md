@@ -1,6 +1,6 @@
 # COV-006: prior entity selections in the next selector's own view
 
-The V6 outer operation is implemented and validated. The V7 implementation adds the bounded selector-history permission defined here; current producers use V8 while retaining that permission. The design source baseline is `f40645bb13c`. The controller's loop, not the presence of earlier trace events, determines which non-null values actually returned and were appended to `selecteds`.
+The V6 outer operation is implemented and validated. The V7 implementation adds the bounded selector-history permission defined here; current producers use V9 while retaining that permission. The design source baseline is `f40645bb13c`. The controller's loop, not the presence of earlier trace events, determines which non-null values actually returned and were appended to `selecteds`.
 
 ## Scope and exact ownership
 

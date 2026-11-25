@@ -7,7 +7,7 @@ from a privileged trace or prove that an uninstrumented heuristic used this view
 
 PROFILE = 'PERMITTED_CHOICE_VIEW_V1'
 PROFILES = {1: PROFILE, 2: 'PERMITTED_CHOICE_VIEW_V2', 3: 'PERMITTED_CHOICE_VIEW_V3', 4: 'PERMITTED_CHOICE_VIEW_V4',
-            5: 'PERMITTED_CHOICE_VIEW_V5', 6: 'PERMITTED_CHOICE_VIEW_V6', 7: 'PERMITTED_CHOICE_VIEW_V7', 8: 'PERMITTED_CHOICE_VIEW_V8'}
+            5: 'PERMITTED_CHOICE_VIEW_V5', 6: 'PERMITTED_CHOICE_VIEW_V6', 7: 'PERMITTED_CHOICE_VIEW_V7', 8: 'PERMITTED_CHOICE_VIEW_V8', 9: 'PERMITTED_CHOICE_VIEW_V9'}
 TIMINGS = {'BEFORE_SELECTOR', 'BEFORE_OPERATION', 'AFTER_SELECTION_BEFORE_APPLICATION', 'UNESTABLISHED'}
 STATE_BASES = {'RULES_STATE', 'PLANNING_WORKING_STATE', 'UNESTABLISHED'}
 REASONS = {'HIDDEN', 'UNSUPPORTED', 'OUTSIDE_CAPTURED_PREFIX', 'UNRESOLVED_BINDING',
@@ -198,6 +198,7 @@ def validate_prompt(prompt, coverage, player_refs, omissions, state_basis, versi
     if version >= 6: permitted.add('RECEIVED_ENTITY_BOUNDS_V1')
     if version >= 7: permitted.add('RECEIVED_ENTITY_SEQUENCE_V1')
     if version >= 8: permitted.add('RECEIVED_ZONE_REQUEST_V1')
+    if version >= 9: permitted.add('RECEIVED_ZONE_OPERATION_V1')
     require(coverage in permitted | {'UNSUPPORTED', 'UNAVAILABLE'}, 'invalid prompt coverage')
     require((prompt is not None) == (coverage in permitted), 'prompt coverage/policy mismatch')
     if prompt is None:
@@ -211,10 +212,19 @@ def validate_prompt(prompt, coverage, player_refs, omissions, state_basis, versi
     entities = kind == 'ENTITY_BOUNDS'
     sequence = kind == 'ENTITY_PICK_SEQUENCE'
     zone = kind == 'ZONE_CHANGE_REQUEST'
-    require(state_basis == 'RULES_STATE' or (mode and version >= 5 or entities and version >= 6 or sequence and version >= 7 or zone and version >= 8) and state_basis == 'PLANNING_WORKING_STATE',
+    operation = kind == 'ZONE_CHANGE_OPERATION_REQUEST'
+    require(state_basis == 'RULES_STATE' or (mode and version >= 5 or entities and version >= 6 or sequence and version >= 7 or zone and version >= 8 or operation and version >= 9) and state_basis == 'PLANNING_WORKING_STATE',
             'planning prompt claims committed request arguments')
-    require(coverage == ('RECEIVED_MODE_BOUNDS_V1' if mode else 'RECEIVED_ENTITY_BOUNDS_V1' if entities else 'RECEIVED_ENTITY_SEQUENCE_V1' if sequence else 'RECEIVED_ZONE_REQUEST_V1' if zone else 'CONTROLLER_REQUEST_V1'), 'prompt kind/coverage mismatch')
-    if zone:
+    require(coverage == ('RECEIVED_MODE_BOUNDS_V1' if mode else 'RECEIVED_ENTITY_BOUNDS_V1' if entities else 'RECEIVED_ENTITY_SEQUENCE_V1' if sequence else 'RECEIVED_ZONE_REQUEST_V1' if zone else 'RECEIVED_ZONE_OPERATION_V1' if operation else 'CONTROLLER_REQUEST_V1'), 'prompt kind/coverage mismatch')
+    if operation:
+        require(version >= 9, 'zone operation requires V9')
+        fields(prompt, 'kind requestedIterations destination origins sourcePlayer decider', 'invalid operation request fields')
+        require(integer(prompt['requestedIterations']) and -(1 << 31) <= prompt['requestedIterations'] < (1 << 31), 'invalid operation iteration request')
+        require(isinstance(prompt['destination'], str) and prompt['destination'] in ZONES
+                and isinstance(prompt['origins'], list) and len(prompt['origins']) <= len(ZONES)
+                and all(isinstance(z, str) and z in ZONES for z in prompt['origins']), 'invalid operation request zones')
+        require(all(prompt[k] is None or isinstance(prompt[k], str) and prompt[k] in player_refs for k in ('sourcePlayer','decider')), 'unknown operation request role')
+    elif zone:
         require(version >= 8, 'zone request requires V8')
         fields(prompt, 'kind minimumPicks maximumPicks optional destination origins decider', 'invalid zone request fields')
         require(isinstance(prompt['optional'], bool) and integer(prompt['minimumPicks']) and integer(prompt['maximumPicks'])

@@ -34,7 +34,7 @@ final class AiInputContext {
     static final int MAX_TEXT = 256;
     static final int MAX_REQUEST_ZONES = ZoneType.values().length;
     static final long MAX_GAME_WORK = 256_000;
-    static final String PROFILE = "PERMITTED_CHOICE_VIEW_V8";
+    static final String PROFILE = "PERMITTED_CHOICE_VIEW_V9";
     private static final List<ZoneType> ZONES = List.of(ZoneType.Battlefield, ZoneType.Command,
             ZoneType.Graveyard, ZoneType.Exile, ZoneType.Hand, ZoneType.Library);
 
@@ -108,7 +108,7 @@ final class AiInputContext {
 
     private static Map<String, Object> envelope(final Player chooser, final String timing, final String stateBasis) {
         final Map<String, Object> result = new LinkedHashMap<>();
-        result.put("schemaVersion", 8);
+        result.put("schemaVersion", 9);
         result.put("profile", PROFILE);
         result.put("timing", timing);
         result.put("stateBasis", stateBasis);
@@ -320,6 +320,7 @@ final class AiInputContext {
             if (!"RULES_STATE".equals(stateBasis) && !(promptInput instanceof AiPromptInput.ModeBounds)
                     && !(promptInput instanceof AiPromptInput.EntityBounds)
                     && !(promptInput instanceof AiPromptInput.ZoneRequest)
+                    && !(promptInput instanceof AiPromptInput.ZoneOperation)
                     && !(promptInput instanceof AiEntitySelectionHistory.Prompt sequence && sequence.sequenced())) {
                 omit("PROMPT", "UNSUPPORTED"); return null;
             }
@@ -366,6 +367,24 @@ final class AiInputContext {
                     result.put("minimumPicks", request.minimum()); result.put("maximumPicks", request.maximum());
                     result.put("relatedPlayer", related);
                 }
+                case ZONE_CHANGE_OPERATION_REQUEST -> {
+                    final var requestValue = request.zoneOperation().request();
+                    final Player sourcePlayer = requestValue.sourcePlayer();
+                    final String source = sourcePlayer == null ? null : currentPlayerRef(sourcePlayer);
+                    if (sourcePlayer != null && source == null) { omit("PROMPT", "UNRESOLVED_BINDING"); return null; }
+                    if (requestValue.destination() == null || requestValue.origins() == null) { omit("PROMPT", "UNSUPPORTED"); return null; }
+                    if (requestValue.origins().size() > MAX_REQUEST_ZONES) { omit("PROMPT", "OUTSIDE_CAPTURED_PREFIX"); return null; }
+                    final List<String> origins = new ArrayList<>();
+                    for (final ZoneType origin : requestValue.origins()) {
+                        if (origins.size() == MAX_REQUEST_ZONES) { omit("PROMPT", "OUTSIDE_CAPTURED_PREFIX"); return null; }
+                        if (!work("PROMPT")) { return null; }
+                        if (origin == null) { omit("PROMPT", "UNSUPPORTED"); return null; }
+                        origins.add(origin.name());
+                    }
+                    result.put("requestedIterations", requestValue.requestedIterations());
+                    result.put("destination", requestValue.destination().name()); result.put("origins", origins);
+                    result.put("sourcePlayer", source); result.put("decider", related);
+                }
                 case ZONE_CHANGE_REQUEST -> {
                     final var zones = request.zoneRequest();
                     if (zones.destination() == null || zones.origins() == null) { omit("PROMPT", "UNSUPPORTED"); return null; }
@@ -401,6 +420,7 @@ final class AiInputContext {
                 case ENTITY_BOUNDS -> "RECEIVED_ENTITY_BOUNDS_V1";
                 case ENTITY_PICK_SEQUENCE -> "RECEIVED_ENTITY_SEQUENCE_V1";
                 case ZONE_CHANGE_REQUEST -> "RECEIVED_ZONE_REQUEST_V1";
+                case ZONE_CHANGE_OPERATION_REQUEST -> "RECEIVED_ZONE_OPERATION_V1";
                 default -> "CONTROLLER_REQUEST_V1";
             };
             return result;

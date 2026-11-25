@@ -33,7 +33,7 @@ COST_KINDS = {
     'CostUntapType', 'CostWaterbend', 'OTHER'
 }
 TYPES = {'TRIGGER_PREPARATION_RESULT', 'PAYMENT_DECISION', 'PAYMENT_CARD_SELECTION', 'PAYMENT_MANA', 'PAYMENT_MANA_SELECTION', 'TARGET_SELECTION_RESULT', 'EFFECT_COPY_TARGET_RESULT', 'RETARGET_RESULT', 'TARGET_POOL_SELECTION', 'MODE_SELECTION', 'NUMBER_SELECTION', 'X_SELECTION', 'MASKED_CHOICE', 'EFFECT_ENTITY_SELECTION', 'ZONE_CHANGE_CARD_SELECTION'}
-TYPES.add('EFFECT_MULTI_ENTITY_SELECTION')
+TYPES.update(('EFFECT_MULTI_ENTITY_SELECTION', 'ZONE_CHANGE_SELECTION_OPERATION'))
 BOUNDARIES = {'TRIGGER_PREPARATION', 'COST_VISITOR', 'PAYMENT_SACRIFICE_POOL', 'PAYMENT_DISCARD_POOL', 'PAYMENT_EXILE_POOL', 'AUTO_MANA_PAYMENT', 'MANA_POOL_OPTIONS', 'CONTROLLER_TARGETS', 'COPY_TARGETS', 'CONTROLLER_RETARGET', 'CHARM_MODE_HEURISTIC', 'CONTROLLER_MODES',
               'CONTROLLER_NUMBER_RANGE', 'CONTROLLER_NUMBER_OPTIONS', 'CONTROLLER_ANNOUNCEMENT', 'MAX_X_HEURISTIC', 'X_ANNOUNCEMENT_REFINEMENT', 'MASKED_CHOICE', 'CONTROLLER_EFFECT_ENTITY', 'CONTROLLER_ZONE_CHANGE_CARD'} | POOL_BOUNDARIES
 
@@ -54,8 +54,9 @@ TYPE_BOUNDARIES = {
     'EFFECT_ENTITY_SELECTION': {'CONTROLLER_EFFECT_ENTITY'},
     'ZONE_CHANGE_CARD_SELECTION': {'CONTROLLER_ZONE_CHANGE_CARD'},
     'EFFECT_MULTI_ENTITY_SELECTION': {'CONTROLLER_EFFECT_ENTITIES'},
+    'ZONE_CHANGE_SELECTION_OPERATION': {'CONTROLLER_ZONE_CHANGE_SELECTIONS'},
 }
-BOUNDARIES.add('CONTROLLER_EFFECT_ENTITIES')
+BOUNDARIES.update(('CONTROLLER_EFFECT_ENTITIES', 'CONTROLLER_ZONE_CHANGE_SELECTIONS'))
 
 CONTEXT_TIMING = {
     'MAIN_PHASE_PLAY_SELECTION': 'BEFORE_OPERATION',
@@ -75,6 +76,7 @@ CONTEXT_TIMING_V2 = {**{key: value for key, value in CONTEXT_TIMING.items() if k
                         for boundary in sorted(POOL_BOUNDARIES - {'MASKED_TARGET_POOL'})}}
 MODE_CONTEXT_TIMING = {'CHARM_MODE_HEURISTIC': 'BEFORE_SELECTOR', 'CONTROLLER_MODES': 'BEFORE_OPERATION'}
 MULTI_CONTEXT_TIMING = {'CONTROLLER_EFFECT_ENTITIES': 'BEFORE_OPERATION'}
+ZONE_OPERATION_CONTEXT_TIMING = {'CONTROLLER_ZONE_CHANGE_SELECTIONS': 'BEFORE_OPERATION'}
 
 
 def input_boundary(value, boundary, stage=None, choice=None):
@@ -83,6 +85,10 @@ def input_boundary(value, boundary, stage=None, choice=None):
     if multi:
         require('entryLocation' in choice, 'outer entity input lacks its own entry')
         expected = MULTI_CONTEXT_TIMING[boundary]
+    operation = choice is not None and choice['choiceType'] == 'ZONE_CHANGE_SELECTION_OPERATION'
+    if operation:
+        require('entryLocation' in choice and value['schemaVersion'] >= 9, 'zone operation lacks own entry/profile')
+        expected = ZONE_OPERATION_CONTEXT_TIMING[boundary]
     mode = choice is not None and boundary in MODE_CONTEXT_TIMING and 'entryLocation' in choice
     if mode:
         expected = MODE_CONTEXT_TIMING[boundary]
@@ -107,7 +113,9 @@ def input_boundary(value, boundary, stage=None, choice=None):
         if value['schemaVersion'] >= 4 and value['diagnostics']['optionBindings']['coverage'] != 'UNSUPPORTED':
             require(boundary in ('CONTROLLER_EFFECT_ENTITY', 'CONTROLLER_ZONE_CHANGE_CARD') or target_pool, 'option links at unaudited input boundary')
         if prompt is not None:
-            if prompt['kind'] == 'MODE_BOUNDS':
+            if prompt['kind'] == 'ZONE_CHANGE_OPERATION_REQUEST':
+                require(operation and value['schemaVersion'] >= 9, 'zone operation request at unaudited boundary')
+            elif prompt['kind'] == 'MODE_BOUNDS':
                 require(mode and value['schemaVersion'] >= 5, 'mode prompt at unaudited boundary')
             elif prompt['kind'] == 'ENTITY_BOUNDS':
                 require(multi and value['schemaVersion'] >= 6, 'entity bounds at unaudited boundary')
@@ -127,7 +135,12 @@ def prompt_arguments(choice):
     prompt = (context['policy'] or {}).get('prompt')
     if prompt is None: return
     option = choice['options']
-    if prompt['kind'] == 'ZONE_CHANGE_REQUEST':
+    if prompt['kind'] == 'ZONE_CHANGE_OPERATION_REQUEST':
+        require(all(prompt[k] == option[k] for k in ('requestedIterations', 'destination', 'origins')), 'zone operation arguments differ')
+        by_ref = {b['entityRef']: b['id'] for b in context['diagnostics']['playerBindings']}
+        for field, raw in (('sourcePlayer', 'sourcePlayerId'), ('decider', 'deciderPlayerId')):
+            require((None if prompt[field] is None else by_ref[prompt[field]]) == option[raw], 'zone operation role differs')
+    elif prompt['kind'] == 'ZONE_CHANGE_REQUEST':
         require(all(prompt[k] == option[k] for k in ('optional', 'destination', 'origins')), 'zone request differs from callback arguments')
         by_ref = {b['entityRef']: b['id'] for b in context['diagnostics']['playerBindings']}
         require((None if prompt['decider'] is None else by_ref[prompt['decider']]) == option['deciderPlayerId'], 'zone request decider differs from callback')
@@ -250,6 +263,7 @@ def entry_location(choice, known_players=None):
     if value['status'] != 'CAPTURED': return
     expected = CONTEXT_TIMING.get(choice['boundary'])
     if choice['boundary'] in MULTI_CONTEXT_TIMING: expected = MULTI_CONTEXT_TIMING[choice['boundary']]
+    if choice['boundary'] in ZONE_OPERATION_CONTEXT_TIMING: expected = ZONE_OPERATION_CONTEXT_TIMING[choice['boundary']]
     if choice['boundary'] in MODE_CONTEXT_TIMING:
         expected = MODE_CONTEXT_TIMING[choice['boundary']]
         require(value['stateBasis'] == 'PLANNING_WORKING_STATE', 'mode entry claims committed state')
@@ -315,6 +329,16 @@ def options(choice):
     option = choice['options']
     if choice['choiceType'] == 'MASKED_CHOICE':
         require(option == {'coverage': 'MASKED'} and choice['boundary'] == 'MASKED_CHOICE', 'unmasked private choice')
+        return
+    if choice['choiceType'] == 'ZONE_CHANGE_SELECTION_OPERATION':
+        require(isinstance(option, dict) and set(option) == {'coverage', 'branch', 'requestedIterations', 'destination', 'origins', 'sourcePlayerId', 'deciderPlayerId'}
+                and option['coverage'] == 'RECEIVED_ZONE_OPERATION_REQUEST' and option['branch'] == 'ORDINARY_HIDDEN_ORIGIN', 'invalid zone operation options')
+        require('entryLocation' in choice and choice.get('inputContext', {}).get('schemaVersion', 0) >= 9, 'zone operation lacks entry/profile')
+        require(integer(option['requestedIterations']) and -(1 << 31) <= option['requestedIterations'] < (1 << 31), 'invalid iteration request')
+        require(isinstance(option['destination'], str) and option['destination'] in _contexts.ZONES
+                and isinstance(option['origins'], list) and len(option['origins']) <= len(_contexts.ZONES)
+                and all(isinstance(z, str) and z in _contexts.ZONES for z in option['origins']), 'invalid operation zones')
+        require(all(option[k] is None or integer(option[k]) for k in ('sourcePlayerId', 'deciderPlayerId')), 'invalid operation roles')
         return
     if choice['choiceType'] == 'EFFECT_MULTI_ENTITY_SELECTION':
         require(isinstance(option, dict) and set(option) == {'coverage', 'items', 'truncated', 'min', 'max', 'relatedPlayerId'}
@@ -422,16 +446,17 @@ def selection(start, terminal):
     if terminal['status'] in ('DECLINED', 'ERROR') or start['choiceType'] == 'MASKED_CHOICE':
         require(value is None, 'unavailable choice carries selection')
         return
-    if start['choiceType'] == 'EFFECT_MULTI_ENTITY_SELECTION':
+    if start['choiceType'] in ('EFFECT_MULTI_ENTITY_SELECTION', 'ZONE_CHANGE_SELECTION_OPERATION'):
+        zone = start['choiceType'] == 'ZONE_CHANGE_SELECTION_OPERATION'
         require(isinstance(value, dict) and set(value) == {'coverage', 'items', 'selectedCount', 'truncated'}
-                and value['coverage'] in ('OBSERVED_RETURNED_ENTITY_PREFIX', 'UNAVAILABLE'), 'invalid outer entity result')
+                and value['coverage'] in ('OBSERVED_RETAINED_CARD_PREFIX' if zone else 'OBSERVED_RETURNED_ENTITY_PREFIX', 'UNAVAILABLE'), 'invalid outer entity result')
         items, count = value['items'], value['selectedCount']
         require(isinstance(items, list) and len(items) <= 256 and integer(count) and 0 <= count < (1 << 31)
                 and len(items) <= count and isinstance(value['truncated'], bool), 'invalid outer entity result prefix')
         require(not items and value['truncated'] if value['coverage'] == 'UNAVAILABLE'
                 else value['truncated'] == (count > len(items)), 'invalid outer entity result coverage')
         for ref in items:
-            reference(ref); require(ref['type'] in ('CARD', 'PLAYER'), 'non-entity in outer result')
+            reference(ref); require(ref['type'] == 'CARD' if zone else ref['type'] in ('CARD', 'PLAYER'), 'invalid outer result identity')
         return
     if start['choiceType'] == 'PAYMENT_DECISION':
         require(isinstance(value, dict) and set(value) == {'decisionCount', 'cards', 'mana', 'players', 'abilities', 'colorMask', 'unrecordedDetails'}

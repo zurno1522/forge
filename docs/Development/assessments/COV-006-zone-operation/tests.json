@@ -1,0 +1,53 @@
+{
+  "engineFocused": {
+    "tests": 31,
+    "newEngineCases": 10,
+    "failures": 0,
+    "logSha256": "473d2d0015fa1d95404db08834cba83cbc7eb2f51374eec437dfec5ac40af926"
+  },
+  "focused": {
+    "tests": 92,
+    "newOuterCases": 12,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "logSha256": "f93b80cb22dea07ab3e3a002d96d87d97f8a234e72f5497df06428ffbbe8fec8"
+  },
+  "full": {
+    "modules": {
+      "forge-game": {
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "forge-gui": {
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "forge-gui-desktop": {
+        "tests": 2770,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 6
+      }
+    },
+    "coreAndAiModules": "Compile; no tests",
+    "buildSuccess": true,
+    "sourceHashesMatch": true,
+    "freezeScope": "Java frozen before full reactor; Python frozen before final Python suite",
+    "logSha256": "1ed3f21ceb1984801737d304bdd6004da7010e4df925e78e0d8fe11856784069"
+  },
+  "python": {
+    "tests": 210,
+    "failures": 0,
+    "logSha256": "29c2109c2d95ffd4258f0d4ef10550f6d06fec06f089f85fb7ba10a5bd4f6771"
+  },
+  "profileSmoke": {
+    "passed": true,
+    "scope": "One actual workload protocol trial; not a cost assessment",
+    "logSha256": "d2ec081c9ac97e411aef72c5b2f3a06340e0cdf59787e41682927e7c61583038"
+  }
+}
