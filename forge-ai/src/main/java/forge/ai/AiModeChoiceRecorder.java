@@ -74,6 +74,6 @@ public final class AiModeChoiceRecorder {
             value.put("truncated", chosen != null && chosen.size() > modes.size());
             value.put("accepted", accepted.apply(result));
             return value;
-        }));
+        }, new AiPromptInput.ModeBounds(min, max, repeat)));
     }
 }

@@ -1,5 +1,12 @@
 # Development cost probe
 
+The workload probe now declares `inputContextProfile` from the built producer on
+every row. The workload summarizer preserves historical rows without this field
+as the frozen V4 format, and rejects mixed legacy/declarations, differing profiles
+or unsupported profiles. Current V5 measurements must not be reported as V4.
+Existing V4 assessments remain historical results; this metadata update does not
+measure the subsequent coverage increments.
+
 `InputContextProbe` measures calling-thread CPU/allocation for disabled choices,
 base choices, choices with contexts, the unchanged legacy view and the new view.
 It includes synchronous freezing and Gson serialization, without selector work.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate V4 workload evidence without treating unavailable captures as cost savings."""
+"""Validate profile-declared workload evidence without treating unavailable capture as savings."""
 import argparse
 from collections import defaultdict
 import json
@@ -90,6 +90,12 @@ def validate(rows, profiled):
 
 
 def summarize(control, profiled):
+    rows = control + profiled
+    declared = {'inputContextProfile' in row for row in rows}
+    require(len(declared) == 1, 'Mixed legacy and declared producer profiles')
+    profiles = {row.get('inputContextProfile', 'PERMITTED_CHOICE_VIEW_V4') for row in rows}
+    require(len(profiles) == 1 and profiles <= {'PERMITTED_CHOICE_VIEW_V4', 'PERMITTED_CHOICE_VIEW_V5'},
+            'Unknown or mismatched producer profiles')
     groups = defaultdict(list)
     for label, rows in [('control', validate(control, False)), ('profiled', validate(profiled, True))]:
         for row in rows: groups[label, row['workload'], row['mode']].append(row)
@@ -116,7 +122,7 @@ def summarize(control, profiled):
         fixture['memorySample'] = {key: sample[key] for key in ('lastContextReachableBytes', 'controllerLedgersReachableBytes', 'disclosureFactPayloadReachableBytes', 'publicProofSlots', 'proofShellShallowBytes')}
         fixture['memorySample']['payloadUnionSampledPeak'] = sample['phases']['peakSampledPayloadBytes']
         fixtures.append(fixture)
-    return dict(schemaVersion=1, profile='PERMITTED_CHOICE_VIEW_V4', fixtures=fixtures,
+    return dict(schemaVersion=1, profile=next(iter(profiles)), fixtures=fixtures,
                 exhaustion=[{key: row[key] for key in ('profiled', 'iterations', 'statuses', 'remainingWork', 'accountingDelta', 'windows')}
                             for rows in (control, profiled) for row in rows if row['exhaustionSample']],
                 limitations=[
@@ -133,6 +139,6 @@ def main():
     args = parser.parse_args()
     result = summarize(json.loads((args.directory/'control.json').read_text()), json.loads((args.directory/'profiled.json').read_text()))
     args.output.write_text(json.dumps(result, indent=2)+'\n')
-    print('Validated V4 workload, source-accounting, public-proof, phase and exhaustion evidence.')
+    print('Validated', result['profile'], 'workload, source-accounting, public-proof, phase and exhaustion evidence.')
 
 if __name__ == '__main__': main()

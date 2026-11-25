@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run V4 workload control/profile JVMs sequentially against a built Forge checkout."""
+"""Run producer-profile-declared workload JVMs sequentially against a built Forge checkout."""
 import argparse
 import hashlib
 import json

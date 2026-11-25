@@ -57,6 +57,18 @@ def measurements(profiled):
 
 
 class WorkloadMeasurementTests(unittest.TestCase):
+    def test_profile_declarations_preserve_legacy_v4_and_prevent_mislabeled_new_measurements(self):
+        control, profiled = measurements(False), measurements(True)
+        self.assertEqual(summary.summarize(control, profiled)['profile'], 'PERMITTED_CHOICE_VIEW_V4')
+        for r in control + profiled: r['inputContextProfile'] = 'PERMITTED_CHOICE_VIEW_V5'
+        self.assertEqual(summary.summarize(control, profiled)['profile'], 'PERMITTED_CHOICE_VIEW_V5')
+        control[0]['inputContextProfile'] = 'PERMITTED_CHOICE_VIEW_V4'
+        with self.assertRaises(ValueError): summary.summarize(control, profiled)
+        control[0].pop('inputContextProfile')
+        with self.assertRaises(ValueError): summary.summarize(control, profiled)
+        control[0]['inputContextProfile'] = 'PERMITTED_CHOICE_VIEW_V99'
+        with self.assertRaises(ValueError): summary.summarize(control, profiled)
+
     def test_healthy_costs_and_exhaustion_evidence_are_kept_separate(self):
         result = summary.summarize(measurements(False), measurements(True))
         self.assertEqual(len(result['fixtures']), 5)

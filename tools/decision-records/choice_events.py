@@ -99,8 +99,11 @@ def input_boundary(value, boundary, stage=None, choice=None):
         if value['schemaVersion'] >= 4 and value['diagnostics']['optionBindings']['coverage'] != 'UNSUPPORTED':
             require(boundary in ('CONTROLLER_EFFECT_ENTITY', 'CONTROLLER_ZONE_CHANGE_CARD') or target_pool, 'option links at unaudited input boundary')
         if prompt is not None:
-            require(boundary == {'NUMBER_RANGE': 'CONTROLLER_NUMBER_RANGE', 'NUMBER_OPTIONS': 'CONTROLLER_NUMBER_OPTIONS',
-                                 'SINGLE_ENTITY': 'CONTROLLER_EFFECT_ENTITY'}[prompt['kind']], 'typed prompt at unaudited boundary')
+            if prompt['kind'] == 'MODE_BOUNDS':
+                require(mode and value['schemaVersion'] >= 5, 'mode prompt at unaudited boundary')
+            else:
+                require(boundary == {'NUMBER_RANGE': 'CONTROLLER_NUMBER_RANGE', 'NUMBER_OPTIONS': 'CONTROLLER_NUMBER_OPTIONS',
+                                     'SINGLE_ENTITY': 'CONTROLLER_EFFECT_ENTITY'}[prompt['kind']], 'typed prompt at unaudited boundary')
 
 
 def prompt_arguments(choice):
@@ -108,7 +111,11 @@ def prompt_arguments(choice):
     prompt = (context['policy'] or {}).get('prompt')
     if prompt is None: return
     option = choice['options']
-    if prompt['kind'] == 'NUMBER_RANGE':
+    if prompt['kind'] == 'MODE_BOUNDS':
+        require(option['coverage'] == 'OBSERVED_MODE_OPTIONS', 'mode bounds lack received arguments')
+        require((prompt['minimumPicks'], prompt['maximumPicks'], prompt['allowRepeat']) ==
+                (option['min'], option['max'], option['allowRepeat']), 'mode bounds differ from callback arguments')
+    elif prompt['kind'] == 'NUMBER_RANGE':
         require(option['coverage'] == 'OBSERVED_RANGE', 'prompt range lacks range arguments')
         require((prompt['minimum'], prompt['maximum']) == (option['minimum'], option['maximum']), 'prompt range differs from callback arguments')
     elif prompt['kind'] == 'NUMBER_OPTIONS':

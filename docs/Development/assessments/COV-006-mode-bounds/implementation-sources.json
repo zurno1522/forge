@@ -1,0 +1,16 @@
+{
+  "forge-ai/src/main/java/forge/ai/AiInputContext.java": "5be9d3205d30714e576f4670aa71ca7b64fade1fc2fed25bed36112bad2e3b69",
+  "forge-ai/src/main/java/forge/ai/AiModeChoiceRecorder.java": "cc0c822a8e9847434c6d83e4b89e2d3d575a041913518ea65b00677e441877b8",
+  "forge-ai/src/main/java/forge/ai/AiPromptInput.java": "a253135e308e8cb486880ee39935ff47e26548b7ca14768e19627c9450285a67",
+  "forge-gui-desktop/src/test/java/forge/ai/AiModeInputContextTest.java": "016996730a5894ec0e565e08fcc7047d445986242aa299c99d0f12e0d1e45aec",
+  "forge-gui-desktop/src/test/java/forge/ai/AiStackInputContextTest.java": "99107114ea1400513b40883cb019be22c95340f0d95895ca48514d06370c86db",
+  "tools/decision-records/choice_events.py": "941de548ff2b58e350ca8c6ee2a23baf9d840ea4f7f512aa05c733b5544a3226",
+  "tools/decision-records/export.py": "ad06956815237b868978531a39f36a3bb34b02aabcb1c3d0f9507a9a995791f7",
+  "tools/decision-records/input-context-benchmark/InputContextWorkloadProbe.java": "734527f77128974269825c98494ee3a1b5d639c01f2e13e239d1ad8cbf973614",
+  "tools/decision-records/input-context-benchmark/run-workloads.py": "358513ebf11becec3a1dc246cf972894ae6b2899264fe9522f46dc954461e24e",
+  "tools/decision-records/input-context-benchmark/summarize-workloads.py": "1881cc6703de48d0b80398e9231a3f0abfa3a55b291ff5616e7fd40e6cadbffa",
+  "tools/decision-records/input_context.py": "6b3abc84bddeebcbb73818b71c6a03ab274e30df848298617d97cbca4b3c2631",
+  "tools/decision-records/test_workload_measurements.py": "47bafd0a1801a4ff1a08488e91d2308e900638cf93c92fbd6c0d60f4da468fb7",
+  "forge-gui-desktop/src/test/java/forge/ai/AiModePromptInputTest.java": "d473d27d9e28126cca002ce650fa990d2bc9231d6ccde9502b10390f434dc697",
+  "tools/decision-records/test_mode_prompt_input.py": "c6898a12e29adf11fa9ff12fe019f34a5ebbe3851911ae9f7b862378a75ab61e"
+}

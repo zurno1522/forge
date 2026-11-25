@@ -55,7 +55,7 @@ public class AiModeInputContextTest extends AITest {
         final Map<?, ?> policy = (Map<?, ?>) input(start).get("policy");
         Assert.assertEquals(policy.get("phase"), "MAIN1");
         Assert.assertEquals(((Map<?, ?>) ((List<?>) policy.get("players")).get(1)).get("life"), 20);
-        Assert.assertNull(policy.get("prompt")); // V4: mode bounds are still diagnostic.
+        Assert.assertEquals(policy.get("prompt"), Map.of("kind", "MODE_BOUNDS", "minimumPicks", 1, "maximumPicks", 2, "allowRepeat", true));
         Assert.assertEquals(((Map<?, ?>) ((Map<?, ?>) input(start).get("diagnostics")).get("optionBindings")).get("coverage"), "UNSUPPORTED");
         Assert.expectThrows(UnsupportedOperationException.class, () -> ((List<?>) policy.get("players")).clear());
     }
@@ -209,6 +209,7 @@ public class AiModeInputContextTest extends AITest {
             Assert.assertEquals(f.events.get(0).get("boundary"), "MASKED_CHOICE");
             Assert.assertEquals(entry(f.events.get(0)).get("reason"), "HIDDEN");
             Assert.assertEquals(input(f.events.get(0)).get("timing"), "UNESTABLISHED");
+            Assert.assertEquals(input(f.events.get(0)).get("profile"), "PERMITTED_CHOICE_VIEW_V5");
             Assert.assertNull(f.events.get(1).get("selection"));
         } else { Assert.assertTrue(f.events.isEmpty()); }
         Assert.assertNull(f.game.getEventObservationFailure());

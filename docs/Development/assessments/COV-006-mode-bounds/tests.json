@@ -1,0 +1,54 @@
+{
+  "initial": {
+    "tests": 5,
+    "failures": 4,
+    "errors": 0,
+    "skipped": 0,
+    "logSha256": "a78ca7fa6df4853f86cd5379aeb9630fc77d4bee9e5e26613e8475417a256617"
+  },
+  "focused": {
+    "tests": 102,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "logSha256": "319e5935a025e1384d93530db2c101b68e93b629fd3aac2480ce3fe57f6dd0bb"
+  },
+  "full": {
+    "modules": {
+      "forge-game": {
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "forge-gui": {
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "forge-gui-desktop": {
+        "tests": 2703,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 6
+      }
+    },
+    "coreAndAiModules": "Compile; no tests",
+    "buildSuccess": true,
+    "sourceHashesMatch": true,
+    "logSha256": "f0bf3496453fda0eda72d63b5fd840aa0ff6863b23b1ddff58765922abbd5b85"
+  },
+  "python": {
+    "tests": 189,
+    "failures": 0,
+    "logSha256": "956f7fc7302605927c13307699dc17a418b3226a319eb94a000992648e686f87"
+  },
+  "probeSmoke": {
+    "passed": true,
+    "scope": "One actual workload protocol trial; not a cost assessment",
+    "logSha256": "9b56058316ed7b4dff77eb9cb45d2d43a65d1f09a04b187d8b01e8b785491acd",
+    "initialHarnessCorrection": "Installed the development agent required by reachable-size reads, with profiling disabled as in the normal runner; no production correction needed.",
+    "initialLogSha256": "8ce22c5a55218be8f57516842e3165eeb6093732ac1be56b935f36a7d56277a4"
+  }
+}

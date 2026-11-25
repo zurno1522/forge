@@ -33,7 +33,7 @@ final class AiInputContext {
     static final int MAX_COUNTERS = 32;
     static final int MAX_TEXT = 256;
     static final long MAX_GAME_WORK = 256_000;
-    private static final String PROFILE = "PERMITTED_CHOICE_VIEW_V4";
+    static final String PROFILE = "PERMITTED_CHOICE_VIEW_V5";
     private static final List<ZoneType> ZONES = List.of(ZoneType.Battlefield, ZoneType.Command,
             ZoneType.Graveyard, ZoneType.Exile, ZoneType.Hand, ZoneType.Library);
 
@@ -107,7 +107,7 @@ final class AiInputContext {
 
     private static Map<String, Object> envelope(final Player chooser, final String timing, final String stateBasis) {
         final Map<String, Object> result = new LinkedHashMap<>();
-        result.put("schemaVersion", 4);
+        result.put("schemaVersion", 5);
         result.put("profile", PROFILE);
         result.put("timing", timing);
         result.put("stateBasis", stateBasis);
@@ -316,7 +316,9 @@ final class AiInputContext {
         private Map<String, Object> prompt() {
             if (promptInput == null) { return null; }
             promptCoverage = "UNAVAILABLE";
-            if (!"RULES_STATE".equals(stateBasis)) { omit("PROMPT", "UNSUPPORTED"); return null; }
+            if (!"RULES_STATE".equals(stateBasis) && !(promptInput instanceof AiPromptInput.ModeBounds)) {
+                omit("PROMPT", "UNSUPPORTED"); return null;
+            }
             if (!work("PROMPT")) { return null; }
             final AiPromptInput request = promptInput.get();
             String related = null;
@@ -349,9 +351,13 @@ final class AiInputContext {
                     result.put("minimumPicks", request.minimum()); result.put("maximumPicks", request.maximum());
                     result.put("optional", request.optional()); result.put("relatedPlayer", related);
                 }
+                case MODE_BOUNDS -> {
+                    result.put("minimumPicks", request.minimum()); result.put("maximumPicks", request.maximum());
+                    result.put("allowRepeat", request.allowRepeat());
+                }
                 default -> throw new IllegalStateException("Unsupported prompt kind");
             }
-            promptCoverage = "CONTROLLER_REQUEST_V1";
+            promptCoverage = request.kind() == AiPromptInput.Kind.MODE_BOUNDS ? "RECEIVED_MODE_BOUNDS_V1" : "CONTROLLER_REQUEST_V1";
             return result;
         }
 

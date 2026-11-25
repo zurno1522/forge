@@ -26,7 +26,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/** Development-only V4 workloads, including real source accounting and populated public proofs. */
+/** Development workloads with an explicit producer profile, real accounting and populated public proofs. */
 public final class InputContextWorkloadProbe extends AITest {
     private static final Gson GSON = new GsonBuilder().serializeNulls().create();
     private static volatile Object consumed;
@@ -217,6 +217,7 @@ public final class InputContextWorkloadProbe extends AITest {
             if (field.get(controller) != null || controller.observationAccounting() != null) { throw new IllegalStateException("Disabled/copy state"); }
         }
         Map<String, Object> result = new LinkedHashMap<>();
+        result.put("inputContextProfile", AiInputContext.PROFILE);
         result.put("workload", w.name); result.put("players", w.players); result.put("boardCardsPerPlayer", w.board);
         result.put("stackEntries", w.stack); result.put("delivery", w.delivery); result.put("mode", mode);
         result.put("round", round); result.put("memorySample", memory); result.put("exhaustionSample", exhaustion);

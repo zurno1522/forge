@@ -6,7 +6,8 @@ from a privileged trace or prove that an uninstrumented heuristic used this view
 """
 
 PROFILE = 'PERMITTED_CHOICE_VIEW_V1'
-PROFILES = {1: PROFILE, 2: 'PERMITTED_CHOICE_VIEW_V2', 3: 'PERMITTED_CHOICE_VIEW_V3', 4: 'PERMITTED_CHOICE_VIEW_V4'}
+PROFILES = {1: PROFILE, 2: 'PERMITTED_CHOICE_VIEW_V2', 3: 'PERMITTED_CHOICE_VIEW_V3', 4: 'PERMITTED_CHOICE_VIEW_V4',
+            5: 'PERMITTED_CHOICE_VIEW_V5'}
 TIMINGS = {'BEFORE_SELECTOR', 'BEFORE_OPERATION', 'AFTER_SELECTION_BEFORE_APPLICATION', 'UNESTABLISHED'}
 STATE_BASES = {'RULES_STATE', 'PLANNING_WORKING_STATE', 'UNESTABLISHED'}
 REASONS = {'HIDDEN', 'UNSUPPORTED', 'OUTSIDE_CAPTURED_PREFIX', 'UNRESOLVED_BINDING',
@@ -172,7 +173,7 @@ def validate(value, chooser_id, known_players=None):
     if version >= 2:
         validate_stack(policy['stack'], diagnostic['stackBindings'], players, cards, omissions, value['stateBasis'])
     if version >= 3:
-        validate_prompt(policy['prompt'], coverage['prompt'], refs, omissions, value['stateBasis'])
+        validate_prompt(policy['prompt'], coverage['prompt'], refs, omissions, value['stateBasis'], version)
     if version >= 4:
         validate_option_links(diagnostic['optionBindings'], refs, cards)
 
@@ -192,18 +193,27 @@ def validate_option_links(links, players, cards):
                 and link['entityRef'] in public | set(players), 'private or unknown option link')
 
 
-def validate_prompt(prompt, coverage, player_refs, omissions, state_basis):
-    require(coverage in ('CONTROLLER_REQUEST_V1', 'UNSUPPORTED', 'UNAVAILABLE'), 'invalid prompt coverage')
-    require((prompt is not None) == (coverage == 'CONTROLLER_REQUEST_V1'), 'prompt coverage/policy mismatch')
+def validate_prompt(prompt, coverage, player_refs, omissions, state_basis, version):
+    permitted = {'CONTROLLER_REQUEST_V1'} | ({'RECEIVED_MODE_BOUNDS_V1'} if version >= 5 else set())
+    require(coverage in permitted | {'UNSUPPORTED', 'UNAVAILABLE'}, 'invalid prompt coverage')
+    require((prompt is not None) == (coverage in permitted), 'prompt coverage/policy mismatch')
     if prompt is None:
         require(coverage != 'UNAVAILABLE' or any(item['component'] == 'PROMPT' for item in omissions),
                 'unavailable prompt has no omission')
         return
-    require(state_basis == 'RULES_STATE', 'planning prompt claims committed request arguments')
     require(not any(item['component'] == 'PROMPT' for item in omissions), 'captured prompt has an omission')
     require(isinstance(prompt, dict), 'invalid typed prompt')
     kind = prompt.get('kind')
-    if kind == 'NUMBER_RANGE':
+    mode = kind == 'MODE_BOUNDS'
+    require(state_basis == 'RULES_STATE' or mode and version >= 5 and state_basis == 'PLANNING_WORKING_STATE',
+            'planning prompt claims committed request arguments')
+    require(coverage == ('RECEIVED_MODE_BOUNDS_V1' if mode else 'CONTROLLER_REQUEST_V1'), 'prompt kind/coverage mismatch')
+    if mode:
+        require(version >= 5, 'mode bounds require V5')
+        fields(prompt, 'kind minimumPicks maximumPicks allowRepeat', 'invalid mode bounds fields')
+        require(all(integer(prompt[key]) and -(1 << 31) <= prompt[key] < (1 << 31) for key in ('minimumPicks', 'maximumPicks'))
+                and isinstance(prompt['allowRepeat'], bool), 'invalid received mode bounds')
+    elif kind == 'NUMBER_RANGE':
         fields(prompt, 'kind minimum maximum', 'invalid range prompt fields')
         require(integer(prompt['minimum']) and integer(prompt['maximum']), 'invalid request range')
     elif kind == 'NUMBER_OPTIONS':

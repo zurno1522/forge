@@ -1,0 +1,13 @@
+{
+  "inputContextProfile": "PERMITTED_CHOICE_VIEW_V5",
+  "workload": "SMALL",
+  "mode": "NUMERIC",
+  "iterations": 1,
+  "callbacks": 1,
+  "events": 2,
+  "statuses": {
+    "PARTIAL": 1
+  },
+  "scope": "One actual workload protocol trial; not a CPU/allocation/peak assessment.",
+  "helperSha256": "89e499627da5eb3fa104b2241c7493312a3bf39623700383a407d78141ea57a2"
+}

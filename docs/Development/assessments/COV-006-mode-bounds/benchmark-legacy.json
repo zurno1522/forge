@@ -1,0 +1,33 @@
+{
+  "experiment-a": {
+    "sameAsPreviousSummarizer": true,
+    "sameAsRetainedSummary": true,
+    "profile": "PERMITTED_CHOICE_VIEW_V4",
+    "sourceSha256": {
+      "control.json": "539a3d0a0fc7b903f7f9f2993a30cb0e1f4e9913f76022f57ed3ddefa26e8acb",
+      "profiled.json": "a083cd0a35bd77bc8dcdc86ec71d13e2bb77de01605fee708185885ec35e5238",
+      "summary.json": "cf25d02e917b2bf6bb1657bc8bd58b3608a9260390a48538143d5dfd7d7022f5"
+    }
+  },
+  "experiment-b": {
+    "sameAsPreviousSummarizer": true,
+    "sameAsRetainedSummary": true,
+    "profile": "PERMITTED_CHOICE_VIEW_V4",
+    "sourceSha256": {
+      "control.json": "6f4a74db08d730530c34f89f28046cd047700a4d9279d45e385182208f9beccc",
+      "profiled.json": "b169173fa96ed05c9b234aaac17e80ca69d8b78a79385bb49d409fafbf379224",
+      "summary.json": "ffa768c527e5b03cc9ee4b163ee42b004cc4c5520e88c65d65a26eea640fb7e1"
+    }
+  },
+  "smoke-reviewed": {
+    "sameAsPreviousSummarizer": true,
+    "sameAsRetainedSummary": false,
+    "profile": "PERMITTED_CHOICE_VIEW_V4",
+    "sourceSha256": {
+      "control.json": "529b75f06ed91de91862bb0746a3f82192fb51a417fed0cf24d37c684f969602",
+      "profiled.json": "ea91866dad4332d0ba835c1714bfe05f8a4052ee5c62a55bb86a8e6ad0f3109b",
+      "summary.json": "01786602287cbc13c6fcb61542d078733fae826e5a8484e4408211b33fc95aca"
+    }
+  },
+  "note": "Both published experiment summaries are unchanged. The development smoke retained summary predates phase-breakdown aggregation; both the immediately preceding and current summarizers add those breakdowns identically."
+}
