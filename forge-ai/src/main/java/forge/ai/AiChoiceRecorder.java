@@ -249,7 +249,7 @@ public final class AiChoiceRecorder {
                 Map<String, Object> input;
                 try {
                     input = visible ? inputCapture.apply(this::open)
-                            : AiInputContext.unavailable(chooser, timing, basis, "HIDDEN");
+                            : AiInputContext.unavailable(chooser, "UNESTABLISHED", "UNESTABLISHED", "HIDDEN");
                 } catch (RuntimeException failure) {
                     if (!open()) { abandon(); return; }
                     if (accounting != null) { accounting.failure(); }

@@ -131,6 +131,31 @@ public class AiChoiceRecorderTest extends AITest {
         Assert.assertNull(f.game.getEventObservationFailure());
     }
 
+    @DataProvider public Object[][] hiddenTimings() { return new Object[][] {{"BEFORE_SELECTOR"}, {"BEFORE_OPERATION"}}; }
+
+    @Test(dataProvider = "hiddenTimings", groups = {"UnitTest", "fast"})
+    public void hiddenInputDoesNotDiscloseTheKindOrPlanningBasisOfTheMaskedBoundary(final String timing) {
+        final Fixture f = fixture();
+        f.ability.getHostCard().turnFaceDown();
+        final AtomicInteger calls = new AtomicInteger();
+        Assert.assertEquals(AiChoiceRecorder.planning(f.ai, () -> AiChoiceRecorder.observeInput(f.ai, f.ability,
+                "TARGET_SELECTION_RESULT", null, "CONTROLLER_TARGETS", timing,
+                () -> { throw new AssertionError("hidden options"); },
+                () -> { calls.incrementAndGet(); return 42; },
+                ignored -> { throw new AssertionError("hidden result"); })), Integer.valueOf(42));
+        Assert.assertEquals(calls.get(), 1);
+        Assert.assertEquals(f.events.size(), 2);
+        final Map<?, ?> start = f.events.get(0);
+        Assert.assertEquals(start.get("boundary"), "MASKED_CHOICE");
+        final Map<?, ?> entry = (Map<?, ?>) start.get("entryLocation");
+        final Map<?, ?> input = (Map<?, ?>) start.get("inputContext");
+        Assert.assertEquals(entry.get("reason"), "HIDDEN");
+        Assert.assertEquals(input.get("timing"), "UNESTABLISHED");
+        Assert.assertEquals(input.get("stateBasis"), "UNESTABLISHED");
+        Assert.assertNull(input.get("policy"));
+        Assert.assertNull(f.game.getEventObservationFailure());
+    }
+
     @Test(groups = {"UnitTest", "fast"})
     @SuppressWarnings("unchecked")
     public void lateEvaluationCompletionDoesNotReadOrEmitIntoTheNextDecision() throws Exception {
