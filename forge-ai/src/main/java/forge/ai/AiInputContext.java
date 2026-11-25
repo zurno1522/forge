@@ -33,7 +33,7 @@ final class AiInputContext {
     static final int MAX_COUNTERS = 32;
     static final int MAX_TEXT = 256;
     static final long MAX_GAME_WORK = 256_000;
-    static final String PROFILE = "PERMITTED_CHOICE_VIEW_V6";
+    static final String PROFILE = "PERMITTED_CHOICE_VIEW_V7";
     private static final List<ZoneType> ZONES = List.of(ZoneType.Battlefield, ZoneType.Command,
             ZoneType.Graveyard, ZoneType.Exile, ZoneType.Hand, ZoneType.Library);
 
@@ -107,7 +107,7 @@ final class AiInputContext {
 
     private static Map<String, Object> envelope(final Player chooser, final String timing, final String stateBasis) {
         final Map<String, Object> result = new LinkedHashMap<>();
-        result.put("schemaVersion", 6);
+        result.put("schemaVersion", 7);
         result.put("profile", PROFILE);
         result.put("timing", timing);
         result.put("stateBasis", stateBasis);
@@ -317,11 +317,15 @@ final class AiInputContext {
             if (promptInput == null) { return null; }
             promptCoverage = "UNAVAILABLE";
             if (!"RULES_STATE".equals(stateBasis) && !(promptInput instanceof AiPromptInput.ModeBounds)
-                    && !(promptInput instanceof AiPromptInput.EntityBounds)) {
+                    && !(promptInput instanceof AiPromptInput.EntityBounds)
+                    && !(promptInput instanceof AiEntitySelectionHistory.Prompt sequence && sequence.sequenced())) {
                 omit("PROMPT", "UNSUPPORTED"); return null;
             }
             if (!work("PROMPT")) { return null; }
             final AiPromptInput request = promptInput.get();
+            if (request.kind() == AiPromptInput.Kind.ENTITY_PICK_SEQUENCE && !"COMPLETE".equals(request.sequence().coverage())) {
+                omit("PROMPT", request.sequence().reason()); return null;
+            }
             String related = null;
             if (request.relatedPlayer() != null) {
                 int index = 0;
@@ -360,14 +364,37 @@ final class AiInputContext {
                     result.put("minimumPicks", request.minimum()); result.put("maximumPicks", request.maximum());
                     result.put("relatedPlayer", related);
                 }
+                case ENTITY_PICK_SEQUENCE -> {
+                    final var sequence = request.sequence();
+                    result.put("minimumPicks", request.minimum()); result.put("maximumPicks", request.maximum());
+                    result.put("optional", request.optional()); result.put("relatedPlayer", related);
+                    result.put("minimumTotal", sequence.minimum()); result.put("maximumTotal", sequence.maximum());
+                    result.put("priorSelectionCount", sequence.priorCount());
+                    final List<String> previous = new ArrayList<>();
+                    for (final AiOptionInput.Entry receipt : sequence.receipts()) {
+                        if (!work("PROMPT")) { return null; }
+                        previous.add(previousSelectionRef(receipt));
+                    }
+                    result.put("previousSelections", previous);
+                }
                 default -> throw new IllegalStateException("Unsupported prompt kind");
             }
             promptCoverage = switch (request.kind()) {
                 case MODE_BOUNDS -> "RECEIVED_MODE_BOUNDS_V1";
                 case ENTITY_BOUNDS -> "RECEIVED_ENTITY_BOUNDS_V1";
+                case ENTITY_PICK_SEQUENCE -> "RECEIVED_ENTITY_SEQUENCE_V1";
                 default -> "CONTROLLER_REQUEST_V1";
             };
             return result;
+        }
+
+        private String previousSelectionRef(final AiOptionInput.Entry receipt) {
+            if (receipt.object() instanceof Player player) { return currentPlayerRef(player); }
+            if (receipt.object() instanceof Card card && !card.isLKI()
+                    && java.util.Objects.equals(receipt.reference().get("gameTimestamp"), cardIncarnations.get(card))) {
+                return publicCardRef(card);
+            }
+            return null;
         }
 
         private Map<String, Object> build() {

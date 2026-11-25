@@ -1,6 +1,6 @@
 # COV-006: prior entity selections in the next selector's own view
 
-The V6 outer operation is implemented and validated. This contract defines the next increment; it adds no runtime permission by itself. The source baseline is `f40645bb13c`. The controller's loop, not the presence of earlier trace events, determines which non-null values actually returned and were appended to `selecteds`.
+The V6 outer operation is implemented and validated. The V7 implementation adds the bounded selector-history permission defined here. The design source baseline is `f40645bb13c`. The controller's loop, not the presence of earlier trace events, determines which non-null values actually returned and were appended to `selecteds`.
 
 ## Scope and exact ownership
 
@@ -53,6 +53,8 @@ Preserve duplicates/order. A complete receipt history can contain unresolved ide
 
 A final typed carrier identifies this new planning permission before a hypothetical supplier is inspected. A carrier without an audited sequence does not grant planning permission to the older ordinary `SINGLE_ENTITY` request. Other unsupported hypothetical prompt suppliers remain uninspected. The current selector's own fresh snapshot determines all local references; this is not a borrowed outer baseline.
 
+The conditional `entitySelectionHistory` coverage report counts only present sequence components: receipt coverage, overlapping prior-return/receipt totals, projected prompts and resolved/unresolved projected entries. Absent components and unobserved sequence counts stay unknown. These vectors overlap across successive picks and are not unique gameplay decisions.
+
 The decoder checks exact component/profile fields and scalar types, prefix/count declarations, own entry/timing, actual local optionality/role, and complete prompt/diagnostic agreement. It checks that `parentChoiceId` identifies an earlier, still-open recorded outer entity operation with the same chooser/request and matching bounds. It must not require that every earlier return has its own surviving message: receipts come from actual returns, and messages can be missing. Where a current local reference is supplied, validate its identity/incarnation against the raw receipt and the current public snapshot bindings. Reject private/stale links, invented counts/ownership, unknown fields and false completeness. Every example remains `trainingReady=false`.
 
 ## Validation gates and remaining work
@@ -63,4 +65,20 @@ Validate current full/filtered output, preserve the six V6 game samples and lega
 
 Review this increment before proceeding. Zone-change request/repetition and spell-ability choice families remain separate COV-006 work; engine-owned repetitions need their explicit engine/controller contract. COV-004 retains completeness requirements, COV-007 inner payment/X and COV-008 sustained availability.
 
-Design/source hashes: [baseline evidence](assessments/COV-006-entity-history/design-sources.json). Documentation links and source ownership were checked; this design commit adds no runtime unit tests or V7 output. The reviewed risks above are implementation gates for this increment, not defects claimed in the completed V6 outer-operation scope.
+Design/source hashes: [baseline evidence](assessments/COV-006-entity-history/design-sources.json). The reviewed risks above are validation gates for this increment, not defects claimed in the completed V6 outer-operation scope.
+
+## Implementation validation and gap review
+
+The initial six controller regressions fail in five cases for the missing sequence prompt; the unsupported override case already preserves behavior. Final focused validation passes 143 Java cases. The full reactor passes 2,738 desktop tests (six existing skips), 23 game tests and 23 GUI tests; core/AI compile with no tests. Nineteen new cases exercise actual repeated controller choices, fresh second-selector state and local references, immutable earlier messages, private/stale receipt refusal, zero/empty/direct cleanup, nested/delegated isolation, failed intermediate admission, one-time dispatch claims, the bounded prefix beyond 64 without capping actual returns, and hidden/off/copy bypass. Four blocked-receipt cases verify parent closure or recording-off with a late value or Runtime failure; live receipt failure remains visible and the original returns survive. Existing shared bindings/prompt/lifecycle tests cover the delegated projection helpers and original callback exceptions.
+
+The Python suite passes 202 tests. It checks public and unresolved history, planning permission, actual outer ownership/role/bounds, complete versus prefix/unavailable declarations, valid missing earlier selector rows, sequence-position progression, current receipt identity/incarnation and private/stale-link rejection. Conditional coverage counts preserve absence as unknown, including in the disk-backed exporter.
+
+All seven exported artifacts are byte-identical across 104 saved V1–V6 streams. Both published V4 workload summaries remain unchanged. A real workload protocol smoke check confirms the current profile for one numeric callback and two lifecycle messages; it is not a new CPU/allocation/peak assessment.
+
+The integration review found no further demonstrated current/prior runtime defect. Histories are explicitly partial and bounded: an incomplete receipt prefix makes the prompt unavailable, and complete receipt capture can still contain null current identities. Direct or unaudited callbacks remain history-unknown. No new ID registry, offered-pool permission, raised budget or learning-readiness claim is introduced. The next COV-006 item is the separately audited zone-change request, followed by explicit engine-owned repetition and spell-ability families. COV-004/007/008/OPT-005 retain the ownership above.
+
+Six fresh games complete normally: simple, numeric, modal Azorius, Doctor Who/Ur-Dragon, time-counter and counter-focused fixtures. The time-counter operation has one initial selector and returns no entities. The counter-focused game records four operations returning one, one, two and two entities: six complete selector histories, including two later picks with one resolved earlier return each. Actual message excerpts preserve the child's own view and owner. Private/stale identities, prefix exhaustion and receipt faults are exercised by unit cases rather than claimed as observed game samples.
+
+Full/filtered datasets, choices, examples and validation match byte for byte; coverage agrees except source-record totals. Every game preserves two shuffles before `GAME_STARTED`. All five non-Monte-Carlo engine streams match V6 after normalizing diagnostic metadata; simple/numeric/modal also match their earlier baselines. Monte Carlo differs and provides no deterministic or universal deadline-neutrality claim.
+
+Evidence: [actual messages](assessments/COV-006-entity-history/actual-examples.json), [game/export validation](assessments/COV-006-entity-history/validation.json), [tests](assessments/COV-006-entity-history/tests.json), [legacy compatibility](assessments/COV-006-entity-history/legacy-compatibility.json), [implementation hashes](assessments/COV-006-entity-history/implementation-sources.json), [fixtures](assessments/COV-006-entity-history/fixture-sources.json), [game commands](assessments/COV-006-entity-history/commands.json), [workload profile smoke](assessments/COV-006-entity-history/profile-smoke.json) and [historical workload parity](assessments/COV-006-entity-history/benchmark-legacy.json).

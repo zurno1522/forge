@@ -7,7 +7,7 @@ from a privileged trace or prove that an uninstrumented heuristic used this view
 
 PROFILE = 'PERMITTED_CHOICE_VIEW_V1'
 PROFILES = {1: PROFILE, 2: 'PERMITTED_CHOICE_VIEW_V2', 3: 'PERMITTED_CHOICE_VIEW_V3', 4: 'PERMITTED_CHOICE_VIEW_V4',
-            5: 'PERMITTED_CHOICE_VIEW_V5', 6: 'PERMITTED_CHOICE_VIEW_V6'}
+            5: 'PERMITTED_CHOICE_VIEW_V5', 6: 'PERMITTED_CHOICE_VIEW_V6', 7: 'PERMITTED_CHOICE_VIEW_V7'}
 TIMINGS = {'BEFORE_SELECTOR', 'BEFORE_OPERATION', 'AFTER_SELECTION_BEFORE_APPLICATION', 'UNESTABLISHED'}
 STATE_BASES = {'RULES_STATE', 'PLANNING_WORKING_STATE', 'UNESTABLISHED'}
 REASONS = {'HIDDEN', 'UNSUPPORTED', 'OUTSIDE_CAPTURED_PREFIX', 'UNRESOLVED_BINDING',
@@ -196,6 +196,7 @@ def validate_option_links(links, players, cards):
 def validate_prompt(prompt, coverage, player_refs, omissions, state_basis, version):
     permitted = {'CONTROLLER_REQUEST_V1'} | ({'RECEIVED_MODE_BOUNDS_V1'} if version >= 5 else set())
     if version >= 6: permitted.add('RECEIVED_ENTITY_BOUNDS_V1')
+    if version >= 7: permitted.add('RECEIVED_ENTITY_SEQUENCE_V1')
     require(coverage in permitted | {'UNSUPPORTED', 'UNAVAILABLE'}, 'invalid prompt coverage')
     require((prompt is not None) == (coverage in permitted), 'prompt coverage/policy mismatch')
     if prompt is None:
@@ -207,10 +208,20 @@ def validate_prompt(prompt, coverage, player_refs, omissions, state_basis, versi
     kind = prompt.get('kind')
     mode = kind == 'MODE_BOUNDS'
     entities = kind == 'ENTITY_BOUNDS'
-    require(state_basis == 'RULES_STATE' or (mode and version >= 5 or entities and version >= 6) and state_basis == 'PLANNING_WORKING_STATE',
+    sequence = kind == 'ENTITY_PICK_SEQUENCE'
+    require(state_basis == 'RULES_STATE' or (mode and version >= 5 or entities and version >= 6 or sequence and version >= 7) and state_basis == 'PLANNING_WORKING_STATE',
             'planning prompt claims committed request arguments')
-    require(coverage == ('RECEIVED_MODE_BOUNDS_V1' if mode else 'RECEIVED_ENTITY_BOUNDS_V1' if entities else 'CONTROLLER_REQUEST_V1'), 'prompt kind/coverage mismatch')
-    if mode or entities:
+    require(coverage == ('RECEIVED_MODE_BOUNDS_V1' if mode else 'RECEIVED_ENTITY_BOUNDS_V1' if entities else 'RECEIVED_ENTITY_SEQUENCE_V1' if sequence else 'CONTROLLER_REQUEST_V1'), 'prompt kind/coverage mismatch')
+    if sequence:
+        require(version >= 7, 'selection history requires V7')
+        fields(prompt, 'kind minimumPicks maximumPicks optional relatedPlayer minimumTotal maximumTotal priorSelectionCount previousSelections', 'invalid sequence prompt fields')
+        require(isinstance(prompt['optional'], bool) and integer(prompt['minimumPicks']) and integer(prompt['maximumPicks'])
+                and prompt['minimumPicks'] == (0 if prompt['optional'] else 1) and prompt['maximumPicks'] == 1, 'invalid sequence local constraints')
+        require(all(integer(prompt[k]) and -(1 << 31) <= prompt[k] < (1 << 31) for k in ('minimumTotal', 'maximumTotal')), 'invalid sequence total bounds')
+        require(integer(prompt['priorSelectionCount']) and 0 <= prompt['priorSelectionCount'] <= 64
+                and isinstance(prompt['previousSelections'], list) and len(prompt['previousSelections']) == prompt['priorSelectionCount'], 'invalid sequence history count')
+        require(all(ref is None or isinstance(ref, str) for ref in prompt['previousSelections']), 'invalid sequence local references')
+    elif mode or entities:
         require(version >= (5 if mode else 6), 'bounds require their declared profile')
         fields(prompt, 'kind minimumPicks maximumPicks ' + ('allowRepeat' if mode else 'relatedPlayer'), 'invalid received bounds fields')
         require(all(integer(prompt[key]) and -(1 << 31) <= prompt[key] < (1 << 31) for key in ('minimumPicks', 'maximumPicks'))

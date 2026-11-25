@@ -46,20 +46,32 @@ final class AiEffectChoiceRecorder {
             final Iterable<T> options, final boolean optional, final Player relatedPlayer, final Supplier<T> callback) {
         final AtomicReference<List<Map<String, Object>>> offered = new AtomicReference<>();
         final AtomicReference<AiOptionInput> proof = new AtomicReference<>();
+        final AtomicReference<AiEntitySelectionHistory.Input> sequence = AiEntitySelectionHistory.present(chooser, ability)
+                ? new AtomicReference<>() : null;
         return AiChoiceRecorder.observeInput(chooser, ability, "EFFECT_ENTITY_SELECTION", null,
                 "CONTROLLER_EFFECT_ENTITY", "BEFORE_SELECTOR", () -> {
+                    final var history = sequence == null ? null : AiEntitySelectionHistory.claim(chooser, ability, options, optional, relatedPlayer);
+                    if (sequence != null) { sequence.set(history); }
                     final Map<String, Object> result = pool(options, offered, proof);
                     result.put("coverage", offered.get() == null ? "UNAVAILABLE" : "OBSERVED_EFFECT_OPTIONS_DIAGNOSTIC_ONLY");
                     result.put("optional", optional);
                     result.put("relatedPlayerId", relatedPlayer == null ? null : relatedPlayer.getId());
+                    if (history != null) { result.put("selectionSequence", history.diagnostics()); }
                     return result;
                 }, callback, value -> selected(value, offered.get()),
-                () -> AiPromptInput.single(optional, relatedPlayer), proof::get);
+                sequence == null ? () -> AiPromptInput.single(optional, relatedPlayer)
+                        : new AiEntitySelectionHistory.Prompt(sequence, optional, relatedPlayer), proof::get);
     }
 
     static <T extends GameEntity> List<T> multiple(final Player chooser, final SpellAbility ability,
             final Iterable<T> options, final int min, final int max, final Player relatedPlayer,
             final Supplier<List<T>> callback) {
+        return multiple(chooser, ability, options, min, max, relatedPlayer, null, callback);
+    }
+
+    static <T extends GameEntity> List<T> multiple(final Player chooser, final SpellAbility ability,
+            final Iterable<T> options, final int min, final int max, final Player relatedPlayer,
+            final PlayerControllerAi receiver, final Supplier<List<T>> callback) {
         if (!chooser.getGame().isRecordingAiDecisions()) { return callback.get(); }
         return AiChoiceRecorder.observeInput(chooser, ability, "EFFECT_MULTI_ENTITY_SELECTION", null,
                 "CONTROLLER_EFFECT_ENTITIES", "BEFORE_OPERATION", () -> {
@@ -79,7 +91,8 @@ final class AiEffectChoiceRecorder {
                     return Map.of("coverage", captured == null ? "UNAVAILABLE" : "OBSERVED_RETURNED_ENTITY_PREFIX",
                             "items", references, "selectedCount", count,
                             "truncated", captured == null || captured.truncated() || count > references.size());
-                }, new AiPromptInput.EntityBounds(min, max, relatedPlayer));
+                }, new AiPromptInput.EntityBounds(min, max, relatedPlayer), null,
+                (owner, policy) -> AiEntitySelectionHistory.operation(chooser, ability, receiver, min, max, relatedPlayer, owner, policy));
     }
 
     static Card zoneChange(final Player chooser, final SpellAbility ability, final ZoneType destination,

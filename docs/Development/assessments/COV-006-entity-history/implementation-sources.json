@@ -1,0 +1,19 @@
+{
+  "forge-ai/src/main/java/forge/ai/AiChoiceRecorder.java": "3f1f5fbf482933a1f9f5d0b37ac563d26a0dabb94608d79a50fa3c8fb0d67500",
+  "forge-ai/src/main/java/forge/ai/AiEffectChoiceRecorder.java": "eacc47a3671cde7505a69b3b7fec6958776a98a5c1445e9349f3688e1d083571",
+  "forge-ai/src/main/java/forge/ai/AiEntitySelectionHistory.java": "4a7c5b8c389c1cc42985762afed4ac7692444efe308897e2a2eea4d1c223caf5",
+  "forge-ai/src/main/java/forge/ai/AiInputContext.java": "b3804d9b385b648aaf3ec015df42f4768713a21f14a4ae521f92d8a46ffb4788",
+  "forge-ai/src/main/java/forge/ai/AiPromptInput.java": "0f0ecc2eb0b4099a409cf30f6968e707b7eee50ecc41d477190b6fd7ec116d63",
+  "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java": "8d10c7c5b7758ebd9bffedacb7c6ab6e0828a04c45a009c7fd0dbaf7931810c9",
+  "forge-gui-desktop/src/test/java/forge/ai/AiEntitySelectionHistoryTest.java": "c6852d60080f656cb71ef92a2a45a4c04e23946b74344f011130023209ab2448",
+  "forge-gui-desktop/src/test/java/forge/ai/AiModeInputContextTest.java": "28910c27a39facee43392974ed998d99603c9ba0c144fccffe9c138b2bfca3ce",
+  "forge-gui-desktop/src/test/java/forge/ai/AiModePromptInputTest.java": "e4f268c1afae8b7140c80398f0f41af08e1efd6ea1219229f9183c95681c0b34",
+  "forge-gui-desktop/src/test/java/forge/ai/AiMultiEntityChoiceRecorderTest.java": "1dc760943882ab8fb5de58bc5483394e3bd48f0033471b12330bc92cfe915dd8",
+  "forge-gui-desktop/src/test/java/forge/ai/AiStackInputContextTest.java": "0df4e4d20ae672b0bcc0a3510780ff6b6ac75ce13c7ecf07fa87db5d041fff7c",
+  "tools/decision-records/choice_events.py": "4bdcd7cc98b86fff58434226ea8417c2d3a6fe26f11822fb1fa58932b2bbb671",
+  "tools/decision-records/export.py": "bd957f6123866bb3535a595483044374c6b391228b99b3b6813b4d0bc2fc4d92",
+  "tools/decision-records/input_context.py": "5fa275b675bda665ef0b35524e4d76465ee113fce7d870b195c91ba06a4ec879",
+  "tools/decision-records/test_entity_selection_history.py": "227d9cfebd12be420a9f650c3c19b31d8229a1771d1a7bb1e8fd4be7a4af89f8",
+  "tools/decision-records/test_workload_measurements.py": "298929d072129d16ce9141a8c95a33a240362d8b134109d13988b03868db17e5",
+  "tools/decision-records/input-context-benchmark/summarize-workloads.py": "60630f9f5503a4eba4b12fd27dd88ab9dd9da3169942ca081716568bbacb1936"
+}

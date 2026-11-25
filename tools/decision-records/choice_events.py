@@ -111,6 +111,9 @@ def input_boundary(value, boundary, stage=None, choice=None):
                 require(mode and value['schemaVersion'] >= 5, 'mode prompt at unaudited boundary')
             elif prompt['kind'] == 'ENTITY_BOUNDS':
                 require(multi and value['schemaVersion'] >= 6, 'entity bounds at unaudited boundary')
+            elif prompt['kind'] == 'ENTITY_PICK_SEQUENCE':
+                require(boundary == 'CONTROLLER_EFFECT_ENTITY' and value['schemaVersion'] >= 7
+                        and 'entryLocation' in choice and 'selectionSequence' in choice['options'], 'history at unaudited boundary')
             else:
                 require(boundary == {'NUMBER_RANGE': 'CONTROLLER_NUMBER_RANGE', 'NUMBER_OPTIONS': 'CONTROLLER_NUMBER_OPTIONS',
                                      'SINGLE_ENTITY': 'CONTROLLER_EFFECT_ENTITY'}[prompt['kind']], 'typed prompt at unaudited boundary')
@@ -121,7 +124,13 @@ def prompt_arguments(choice):
     prompt = (context['policy'] or {}).get('prompt')
     if prompt is None: return
     option = choice['options']
-    if prompt['kind'] == 'MODE_BOUNDS':
+    if prompt['kind'] == 'ENTITY_PICK_SEQUENCE':
+        sequence = option['selectionSequence']
+        require(sequence['coverage'] == 'COMPLETE', 'incomplete history claims a sequence prompt')
+        require(all(prompt[k] == sequence[k] for k in ('minimumTotal', 'maximumTotal', 'priorSelectionCount')), 'sequence prompt differs from observed history')
+        require(prompt['optional'] == option['optional'], 'sequence optionality differs from callback')
+        sequence_links(choice, sequence, prompt)
+    elif prompt['kind'] == 'MODE_BOUNDS':
         require(option['coverage'] == 'OBSERVED_MODE_OPTIONS', 'mode bounds lack received arguments')
         require((prompt['minimumPicks'], prompt['maximumPicks'], prompt['allowRepeat']) ==
                 (option['min'], option['max'], option['allowRepeat']), 'mode bounds differ from callback arguments')
@@ -136,10 +145,59 @@ def prompt_arguments(choice):
         require(not option['truncated'] and prompt['values'] == option['items'], 'prompt numeric list differs from callback arguments')
     else:
         require(prompt['optional'] == option['optional'], 'prompt optionality differs from callback arguments')
-    if prompt['kind'] in ('SINGLE_ENTITY', 'ENTITY_BOUNDS'):
+    if prompt['kind'] in ('SINGLE_ENTITY', 'ENTITY_BOUNDS', 'ENTITY_PICK_SEQUENCE'):
         related = prompt['relatedPlayer']
         by_ref = {binding['entityRef']: binding['id'] for binding in context['diagnostics']['playerBindings']}
         require((None if related is None else by_ref[related]) == option['relatedPlayerId'], 'prompt player differs from callback arguments')
+
+
+def sequence_metadata(choice):
+    value = choice['options']['selectionSequence']
+    require(choice['choiceType'] == 'EFFECT_ENTITY_SELECTION' and 'entryLocation' in choice
+            and choice.get('inputContext', {}).get('schemaVersion', 0) >= 7, 'sequence metadata lacks audited entry/profile')
+    require(isinstance(value, dict) and set(value) == {'schemaVersion', 'coverage', 'minimumTotal', 'maximumTotal',
+            'priorSelectionCount', 'priorSelections', 'reason'} and integer(value['schemaVersion']) and value['schemaVersion'] == 1, 'invalid sequence metadata fields')
+    require(value['coverage'] in ('COMPLETE', 'PREFIX', 'UNAVAILABLE')
+            and all(integer(value[k]) and -(1 << 31) <= value[k] < (1 << 31) for k in ('minimumTotal', 'maximumTotal')), 'invalid sequence bounds/coverage')
+    count, refs = value['priorSelectionCount'], value['priorSelections']
+    require(integer(count) and 0 <= count < (1 << 31) and isinstance(refs, list) and len(refs) <= min(count, 64), 'invalid sequence receipt prefix')
+    for ref in refs:
+        reference(ref); require(ref['type'] in ('CARD', 'PLAYER'), 'non-entity history receipt')
+    if value['coverage'] == 'COMPLETE':
+        require(count == len(refs) and value['reason'] is None, 'incomplete receipt history claims completeness')
+    elif value['coverage'] == 'PREFIX':
+        require(len(refs) < count and value['reason'] == 'OUTSIDE_CAPTURED_PREFIX', 'invalid receipt prefix omission')
+    else:
+        require(value['reason'] in ('CAPTURE_FAILED', 'UNSUPPORTED', 'INTERRUPTED'), 'unavailable receipt history has no reason')
+    require(choice['options']['optional'] == (count >= value['minimumTotal']), 'sequence local optionality differs from actual loop')
+
+
+def sequence_owner(choice, states):
+    value = choice['options']['selectionSequence']
+    parent_id = choice['parentChoiceId']
+    require(parent_id is not None, 'sequence lacks recorded outer owner')
+    state = states[parent_id]
+    parent = state['start']['choice']
+    require(parent['choiceType'] == 'EFFECT_MULTI_ENTITY_SELECTION'
+            and all(parent[k] == choice[k] for k in ('chooserPlayerId', 'abilityId', 'sourceId')), 'sequence owner differs from controller request')
+    require((value['minimumTotal'], value['maximumTotal']) == (parent['options']['min'], parent['options']['max']), 'sequence bounds differ from outer request')
+    require(value['priorSelectionCount'] > state.get('sequenceMaxPriorCount', -1), 'duplicate or reversed selector sequence position')
+    state['sequenceMaxPriorCount'] = value['priorSelectionCount']
+    states[parent_id] = state
+
+
+def sequence_links(choice, sequence, prompt):
+    context = choice['inputContext']; diagnostic = context['diagnostics']
+    players = {b['entityRef']: dict(type='PLAYER', id=b['id']) for b in diagnostic['playerBindings']}
+    cards = {b['entityRef']: dict(type='CARD', id=b['id'], gameTimestamp=b['gameTimestamp']) for b in diagnostic['cardBindings']}
+    public = {c['entityRef'] for c in context['policy']['cards'] if c['zone'] in ('Battlefield', 'Command', 'Graveyard', 'Stack')
+              or c['zone'] == 'Exile' and not c['faceDown']}
+    refs = prompt['previousSelections']
+    require(len(refs) == len(sequence['priorSelections']), 'history link prefix differs from receipts')
+    for local, receipt in zip(refs, sequence['priorSelections']):
+        if local is None: continue
+        require(local in players or local in public, 'private or unknown history reference')
+        require((players | cards)[local] == receipt, 'history receipt identity/incarnation mismatch')
 
 
 def option_links(choice):
@@ -265,6 +323,10 @@ def options(choice):
         common = {'coverage', 'items', 'truncated', 'optional'}
         zone = choice['choiceType'] == 'ZONE_CHANGE_CARD_SELECTION'
         expected = common | ({'destination', 'origins', 'deciderPlayerId'} if zone else {'relatedPlayerId'})
+        if 'selectionSequence' in option:
+            require(not zone, 'zone-change callback claims controller-owned history')
+            expected |= {'selectionSequence'}
+            sequence_metadata(choice)
         require(isinstance(option, dict) and set(option) == expected
                 and option['coverage'] in ('UNAVAILABLE', 'OBSERVED_ZONE_CHANGE_OPTIONS_DIAGNOSTIC_ONLY' if zone else 'OBSERVED_EFFECT_OPTIONS_DIAGNOSTIC_ONLY'),
                 'invalid effect choice options')
@@ -459,6 +521,7 @@ def accept(record, game):
         if parent_choice is not None:
             require(states[parent_choice]['terminal'] is None, 'choice began after its parent choice finished')
         options(c)
+        if 'selectionSequence' in c['options']: sequence_owner(c, states)
         if 'inputContext' in c:
             validate_input_context(c['inputContext'], c['chooserPlayerId'])
             input_boundary(c['inputContext'], c['boundary'], c['stage'], c)
@@ -482,6 +545,15 @@ def accept(record, game):
 
 def context(state, game):
     c = state['start']['choice']; parent = None
+    if 'selectionSequence' in c['options']:
+        owner = game['choices'][c['parentChoiceId']]
+        terminal = owner['terminal']
+        if terminal is not None and terminal['choice']['status'] == 'COMPLETED':
+            count = terminal['choice']['selection']['selectedCount']
+            child = state['terminal']
+            returned = child is not None and child['choice']['status'] == 'COMPLETED'
+            require(count >= c['options']['selectionSequence']['priorSelectionCount'] + int(returned),
+                    'selector sequence exceeds actual outer return count')
     if c['parentChoiceId'] is not None and state['terminal'] is not None:
         outer = game['choices'][c['parentChoiceId']]
         if outer['terminal'] is not None and game['execution']['status'] == 'NORMAL':

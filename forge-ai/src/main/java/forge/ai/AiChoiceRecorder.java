@@ -14,6 +14,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.BooleanSupplier;
+import java.util.function.BiFunction;
 
 /** Observes a callback once. No policy reruns, inferred legal alternatives, or diagnostic strings. */
 public final class AiChoiceRecorder {
@@ -21,6 +22,12 @@ public final class AiChoiceRecorder {
     private static final ThreadLocal<Observation> ACTIVE = new ThreadLocal<>();
     private static final ThreadLocal<Game> PLANNING = new ThreadLocal<>();
     private AiChoiceRecorder() { }
+
+    /** Exact, visible invocation admission; never a lookup of a nearby parent. */
+    interface Capture {
+        boolean open();
+        void failure(RuntimeException failure);
+    }
 
     /** Marks audited hypothetical policy work without changing or restoring that work. */
     public static <T> T planning(final Player chooser, final Supplier<T> callback) {
@@ -96,8 +103,16 @@ public final class AiChoiceRecorder {
             final String requestedStage, final String boundary, final String timing,
             final Supplier<Map<String, Object>> options, final Supplier<T> callback, final Function<T, Object> selection,
             final Supplier<AiPromptInput> prompt, final Supplier<AiOptionInput> optionInput) {
+        return observeInput(chooser, ability, type, requestedStage, boundary, timing, options, callback, selection, prompt, optionInput, null);
+    }
+
+    static <T> T observeInput(final Player chooser, final SpellAbility ability, final String type,
+            final String requestedStage, final String boundary, final String timing,
+            final Supplier<Map<String, Object>> options, final Supplier<T> callback, final Function<T, Object> selection,
+            final Supplier<AiPromptInput> prompt, final Supplier<AiOptionInput> optionInput,
+            final BiFunction<Capture, Supplier<T>, T> ownedCallback) {
         return observe(chooser, ability, type, requestedStage, boundary, options, callback, selection, timing,
-                open -> AiInputContext.capture(chooser, ability, timing, stateBasis(chooser, ability), open, prompt, optionInput));
+                open -> AiInputContext.capture(chooser, ability, timing, stateBasis(chooser, ability), open, prompt, optionInput), ownedCallback);
     }
 
     private static String stateBasis(final Player chooser, final SpellAbility ability) {
@@ -111,6 +126,14 @@ public final class AiChoiceRecorder {
             final String requestedStage, final String boundary, final Supplier<Map<String, Object>> options,
             final Supplier<T> callback, final Function<T, Object> selection, final String timing,
             final Function<BooleanSupplier, Map<String, Object>> inputCapture) {
+        return observe(chooser, ability, type, requestedStage, boundary, options, callback, selection, timing, inputCapture, null);
+    }
+
+    private static <T> T observe(final Player chooser, final SpellAbility ability, final String type,
+            final String requestedStage, final String boundary, final Supplier<Map<String, Object>> options,
+            final Supplier<T> callback, final Function<T, Object> selection, final String timing,
+            final Function<BooleanSupplier, Map<String, Object>> inputCapture,
+            final BiFunction<Capture, Supplier<T>, T> ownedCallback) {
         final Game game = chooser.getGame();
         AiObservationAccounting.Scope accounting = null;
         if (game.isRecordingAiDecisions()) {
@@ -121,14 +144,15 @@ public final class AiChoiceRecorder {
             } catch (RuntimeException failure) { game.recordEventObservationFailure(failure); }
         }
         try {
-            return observeAccounted(chooser, ability, type, requestedStage, boundary, options, callback, selection, timing, inputCapture, accounting);
+            return observeAccounted(chooser, ability, type, requestedStage, boundary, options, callback, selection, timing, inputCapture, accounting, ownedCallback);
         } finally { if (accounting != null) { accounting.exit(); } }
     }
 
     private static <T> T observeAccounted(final Player chooser, final SpellAbility ability, final String type,
             final String requestedStage, final String boundary, final Supplier<Map<String, Object>> options,
             final Supplier<T> callback, final Function<T, Object> selection, final String timing,
-            final Function<BooleanSupplier, Map<String, Object>> inputCapture, final AiObservationAccounting.Scope accounting) {
+            final Function<BooleanSupplier, Map<String, Object>> inputCapture, final AiObservationAccounting.Scope accounting,
+            final BiFunction<Capture, Supplier<T>, T> ownedCallback) {
         final Game game = chooser.getGame();
         Observation observation = null;
         if (game.isRecordingAiDecisions() && ability != null) {
@@ -161,7 +185,10 @@ public final class AiChoiceRecorder {
         if (observation != null) { ACTIVE.set(observation); }
         if (accounting != null) { accounting.callbackStarted(); }
         try {
-            try { result = callback.get(); }
+            try {
+                result = ownedCallback == null ? callback.get() : ownedCallback.apply(
+                        observation != null && observation.visible && observation.open() ? observation : null, callback);
+            }
             finally {
                 if (previous == null) { ACTIVE.remove(); } else { ACTIVE.set(previous); }
             }
@@ -185,7 +212,7 @@ public final class AiChoiceRecorder {
         return result;
     }
 
-    private static final class Observation {
+    private static final class Observation implements Capture {
         private final Game game;
         private final Player chooser;
         private final SpellAbility ability;
@@ -278,7 +305,14 @@ public final class AiChoiceRecorder {
             if (accounting != null) { accounting.admissionClosed(); }
         }
 
-        private boolean open() { return !finished && game.isRecordingAiDecisions() && (evaluation == null || evaluation.choiceCaptureOpen()); }
+        @Override public boolean open() { return !finished && game.isRecordingAiDecisions() && (evaluation == null || evaluation.choiceCaptureOpen()); }
+
+        @Override public void failure(final RuntimeException failure) {
+            if (open()) {
+                if (accounting != null) { accounting.failure(); }
+                game.recordEventObservationFailure(failure);
+            }
+        }
 
         private void finish(final String status, final Object selected) {
             if (!open()) { return; }

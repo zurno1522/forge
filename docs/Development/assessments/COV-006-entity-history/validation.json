@@ -1,0 +1,2186 @@
+{
+  "simple": {
+    "entitySelectionHistory": {},
+    "multiEntityOperations": 0,
+    "modeBoundaries": {},
+    "searchCaptureAccounting": {
+      "schemaVersion": 1,
+      "scope": "RECORDING_PARENT_SEARCH_CAPTURE_CALLS",
+      "population": "RETAINED_PARENT_RECORDS",
+      "parentsPresent": 58,
+      "parentsAbsent": 0,
+      "overflowed": false,
+      "counts": {
+        "entered": 0,
+        "captured": 0,
+        "unsupported": 0,
+        "budget": 0,
+        "interrupted": 0,
+        "failed": 0,
+        "finished": 0,
+        "inputUnavailable": 0
+      },
+      "knownMissingRowsAtParentCutoffs": 0,
+      "captureCallsPendingAtParentCutoffs": 0,
+      "missingRowFractionForRetainedParents": null,
+      "gameWideNestedInvocationCount": null,
+      "callbackOutcomeCounts": null,
+      "missingParentInvocationCount": null
+    },
+    "searchOperations": {},
+    "searchInputStatuses": {},
+    "targetCaptureAccounting": {
+      "schemaVersion": 1,
+      "scope": "RECORDING_PARENT_TARGET_CAPTURE_CALLS",
+      "population": "RETAINED_PARENT_RECORDS",
+      "parentsPresent": 58,
+      "parentsAbsent": 0,
+      "overflowed": false,
+      "counts": {
+        "entered": 9,
+        "captured": 9,
+        "unsupported": 0,
+        "budget": 0,
+        "interrupted": 0,
+        "failed": 0,
+        "finished": 9,
+        "inputUnavailable": 0
+      },
+      "knownMissingRowsAtParentCutoffs": 0,
+      "captureCallsPendingAtParentCutoffs": 0,
+      "missingRowFractionForRetainedParents": 0.0,
+      "gameWideNestedInvocationCount": null,
+      "callbackOutcomeCounts": null,
+      "missingParentInvocationCount": null
+    },
+    "nestedTargetRecords": 9,
+    "entryLocationAudit": {
+      "schemaVersion": 1,
+      "scope": "PRESENT_ENTRY_COMPONENTS_ONLY",
+      "records": 151,
+      "knownInputBoundaryInventoryV2": {
+        "CHOICE": {
+          "CONTROLLER_TARGETS": "BEFORE_OPERATION",
+          "COST_VISITOR": "BEFORE_OPERATION",
+          "AUTO_MANA_PAYMENT": "BEFORE_OPERATION",
+          "CONTROLLER_NUMBER_RANGE": "BEFORE_SELECTOR",
+          "CONTROLLER_NUMBER_OPTIONS": "BEFORE_SELECTOR",
+          "CONTROLLER_ANNOUNCEMENT": "BEFORE_OPERATION",
+          "PAYMENT_DISCARD_POOL": "BEFORE_SELECTOR",
+          "PAYMENT_SACRIFICE_POOL": "BEFORE_SELECTOR",
+          "CONTROLLER_EFFECT_ENTITY": "BEFORE_SELECTOR",
+          "CONTROLLER_ZONE_CHANGE_CARD": "BEFORE_SELECTOR",
+          "ATTACH_CARD_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "ATTACH_PLAYER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_KILLABLES": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_KILLABLE_PLANESWALKERS": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_MANDATORY_FALLBACK_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_MANDATORY_OPPONENT_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_OPPONENT_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_PLANESWALKER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_PLAYER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DESTROY_LAND_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DESTROY_POLYMORPH_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DESTROY_REMOVAL_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DRAW_PLAYER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ]
+        },
+        "NESTED_TARGET": {
+          "ATTACH_CARD_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "ATTACH_PLAYER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_KILLABLES": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_KILLABLE_PLANESWALKERS": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_MANDATORY_FALLBACK_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_MANDATORY_OPPONENT_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_OPPONENT_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_PLANESWALKER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_PLAYER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DESTROY_LAND_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DESTROY_POLYMORPH_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DESTROY_REMOVAL_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DRAW_PLAYER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ]
+        }
+      },
+      "statuses": {
+        "CAPTURED": 151
+      },
+      "kinds": {
+        "SELECTOR": 30,
+        "APPLICATION": 5,
+        "OPERATION": 116
+      },
+      "timings": {
+        "BEFORE_SELECTOR": 30,
+        "AFTER_SELECTION_BEFORE_APPLICATION": 5,
+        "BEFORE_OPERATION": 116
+      },
+      "stateBases": {
+        "PLANNING_WORKING_STATE": 9,
+        "RULES_STATE": 142
+      },
+      "reasons": {}
+    },
+    "observationAccounting": {
+      "schemaVersion": 1,
+      "scope": "ORIGINAL_AI_STANDALONE_CALLBACKS",
+      "runsPresent": 1,
+      "runsAbsent": 0,
+      "scopeComplete": true,
+      "overflowed": false,
+      "counts": {
+        "entered": 142,
+        "prepared": 142,
+        "omitted": 0,
+        "callbackStarted": 142,
+        "callbackReturned": 142,
+        "callbackThrew": 0,
+        "inputUnavailable": 0,
+        "startAttempts": 142,
+        "startReturned": 142,
+        "terminalAttempts": 142,
+        "terminalReturned": 142,
+        "finished": 142,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "collector": {
+        "collectorStarts": 142,
+        "collectorTerminals": 142
+      },
+      "byBoundary": {
+        "AUTO_MANA_PAYMENT": {
+          "entered": 43,
+          "prepared": 43,
+          "omitted": 0,
+          "callbackStarted": 43,
+          "callbackReturned": 43,
+          "callbackThrew": 0,
+          "inputUnavailable": 0,
+          "startAttempts": 43,
+          "startReturned": 43,
+          "terminalAttempts": 43,
+          "terminalReturned": 43,
+          "finished": 43,
+          "observationFailures": 0,
+          "omittedUnsupported": 0,
+          "omittedClosed": 0,
+          "omittedFailure": 0
+        },
+        "COST_VISITOR": {
+          "entered": 73,
+          "prepared": 73,
+          "omitted": 0,
+          "callbackStarted": 73,
+          "callbackReturned": 73,
+          "callbackThrew": 0,
+          "inputUnavailable": 0,
+          "startAttempts": 73,
+          "startReturned": 73,
+          "terminalAttempts": 73,
+          "terminalReturned": 73,
+          "finished": 73,
+          "observationFailures": 0,
+          "omittedUnsupported": 0,
+          "omittedClosed": 0,
+          "omittedFailure": 0
+        },
+        "DESTROY_REMOVAL_POOL": {
+          "entered": 26,
+          "prepared": 26,
+          "omitted": 0,
+          "callbackStarted": 26,
+          "callbackReturned": 26,
+          "callbackThrew": 0,
+          "inputUnavailable": 0,
+          "startAttempts": 26,
+          "startReturned": 26,
+          "terminalAttempts": 26,
+          "terminalReturned": 26,
+          "finished": 26,
+          "observationFailures": 0,
+          "omittedUnsupported": 0,
+          "omittedClosed": 0,
+          "omittedFailure": 0
+        }
+      },
+      "invocationsInFlightAtCutoffs": 0,
+      "callbacksInFlightAtCutoffs": 0,
+      "startsMissingAtCutoffs": 0,
+      "startRecordMissingFractionAtCutoffs": 0.0,
+      "nestedInvocationCount": null,
+      "uninstrumentedDecisionCount": null
+    },
+    "contexts": 209,
+    "statuses": {
+      "PARTIAL": 209
+    },
+    "omissions": {
+      "DISCLOSURES:UNSUPPORTED": 209
+    },
+    "stateBases": {
+      "RULES_STATE": 200,
+      "PLANNING_WORKING_STATE": 9
+    },
+    "stack": {
+      "nonempty": 1,
+      "resolving": 0,
+      "truncated": 0,
+      "entries": 1,
+      "sourceBound": 1,
+      "rootTargetsCaptured": 1
+    },
+    "promptKinds": {},
+    "promptCoverage": {
+      "UNSUPPORTED": 209
+    },
+    "diagnosticBindings": {
+      "optionEntries": 43,
+      "publicOptionLinks": 43,
+      "unresolvedOptionEntries": 0,
+      "directPublicDisclosureLinks": 0
+    },
+    "pregameShuffles": [
+      2
+    ],
+    "executionStatuses": {
+      "NORMAL": 1
+    },
+    "fullFilteredByteParity": {
+      "dataset.jsonl": true,
+      "choices.jsonl": true,
+      "examples.jsonl": true,
+      "validation.json": true
+    },
+    "coverageEqualExceptSourceRecords": true,
+    "sourceSha256": {
+      "full": "5b8057a28914e11edca540866052978a03604efd1967537ec08dbcb9279f5130",
+      "decisions": "ce855fc464b0a3104d6e2e06f929dd7639b544f91f15207067ed4775ff3b68a9"
+    },
+    "previousSourceSha256": "9edd7fe3f0662aa0677ad65a32b0749bff4a32204294560643e8426a5f2d2b95",
+    "sameNormalizedEngineEventsAsPrevious": true,
+    "exporterValidation": {
+      "valid": true,
+      "inputs": 1,
+      "decisions": 58,
+      "checks": [
+        "run/game boundaries",
+        "event order",
+        "schemas and identities",
+        "engine-event references",
+        "visibility constraints",
+        "status/outcome agreement",
+        "timeout/error censoring"
+      ]
+    },
+    "sameNormalizedEngineEventsAsV6": true,
+    "v6SourceSha256": "e645521c53b9d0c955fafbe8d4b5c9d97d4c751a8ba0839efdaadeeab915f18a"
+  },
+  "complex": {
+    "entitySelectionHistory": {},
+    "multiEntityOperations": 0,
+    "modeBoundaries": {},
+    "searchCaptureAccounting": {
+      "schemaVersion": 1,
+      "scope": "RECORDING_PARENT_SEARCH_CAPTURE_CALLS",
+      "population": "RETAINED_PARENT_RECORDS",
+      "parentsPresent": 56,
+      "parentsAbsent": 0,
+      "overflowed": false,
+      "counts": {
+        "entered": 6,
+        "captured": 6,
+        "unsupported": 0,
+        "budget": 0,
+        "interrupted": 0,
+        "failed": 0,
+        "finished": 6,
+        "inputUnavailable": 0
+      },
+      "knownMissingRowsAtParentCutoffs": 0,
+      "captureCallsPendingAtParentCutoffs": 0,
+      "missingRowFractionForRetainedParents": 0.0,
+      "gameWideNestedInvocationCount": null,
+      "callbackOutcomeCounts": null,
+      "missingParentInvocationCount": null
+    },
+    "searchOperations": {
+      "HEURISTIC_REVALIDATION": 6
+    },
+    "searchInputStatuses": {
+      "PARTIAL": 6
+    },
+    "targetCaptureAccounting": {
+      "schemaVersion": 1,
+      "scope": "RECORDING_PARENT_TARGET_CAPTURE_CALLS",
+      "population": "RETAINED_PARENT_RECORDS",
+      "parentsPresent": 56,
+      "parentsAbsent": 0,
+      "overflowed": false,
+      "counts": {
+        "entered": 40,
+        "captured": 40,
+        "unsupported": 0,
+        "budget": 0,
+        "interrupted": 0,
+        "failed": 0,
+        "finished": 40,
+        "inputUnavailable": 0
+      },
+      "knownMissingRowsAtParentCutoffs": 0,
+      "captureCallsPendingAtParentCutoffs": 0,
+      "missingRowFractionForRetainedParents": 0.0,
+      "gameWideNestedInvocationCount": null,
+      "callbackOutcomeCounts": null,
+      "missingParentInvocationCount": null
+    },
+    "nestedTargetRecords": 40,
+    "entryLocationAudit": {
+      "schemaVersion": 1,
+      "scope": "PRESENT_ENTRY_COMPONENTS_ONLY",
+      "records": 341,
+      "knownInputBoundaryInventoryV2": {
+        "CHOICE": {
+          "CONTROLLER_TARGETS": "BEFORE_OPERATION",
+          "COST_VISITOR": "BEFORE_OPERATION",
+          "AUTO_MANA_PAYMENT": "BEFORE_OPERATION",
+          "CONTROLLER_NUMBER_RANGE": "BEFORE_SELECTOR",
+          "CONTROLLER_NUMBER_OPTIONS": "BEFORE_SELECTOR",
+          "CONTROLLER_ANNOUNCEMENT": "BEFORE_OPERATION",
+          "PAYMENT_DISCARD_POOL": "BEFORE_SELECTOR",
+          "PAYMENT_SACRIFICE_POOL": "BEFORE_SELECTOR",
+          "CONTROLLER_EFFECT_ENTITY": "BEFORE_SELECTOR",
+          "CONTROLLER_ZONE_CHANGE_CARD": "BEFORE_SELECTOR",
+          "ATTACH_CARD_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "ATTACH_PLAYER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_KILLABLES": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_KILLABLE_PLANESWALKERS": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_MANDATORY_FALLBACK_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_MANDATORY_OPPONENT_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_OPPONENT_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_PLANESWALKER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_PLAYER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DESTROY_LAND_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DESTROY_POLYMORPH_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DESTROY_REMOVAL_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DRAW_PLAYER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ]
+        },
+        "NESTED_TARGET": {
+          "ATTACH_CARD_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "ATTACH_PLAYER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_KILLABLES": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_KILLABLE_PLANESWALKERS": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_MANDATORY_FALLBACK_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_MANDATORY_OPPONENT_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_OPPONENT_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_PLANESWALKER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_PLAYER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DESTROY_LAND_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DESTROY_POLYMORPH_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DESTROY_REMOVAL_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DRAW_PLAYER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ]
+        },
+        "SEARCH_OPERATION": {
+          "HEURISTIC_REVALIDATION": "BEFORE_OPERATION",
+          "RESTORE_APPROVED_TARGET": "AFTER_SELECTION_BEFORE_APPLICATION",
+          "ROLLOUT_TARGET_OVERRIDE": "AFTER_SELECTION_BEFORE_APPLICATION",
+          "DISCOVERED_TARGET": "AFTER_SELECTION_BEFORE_APPLICATION",
+          "GUARD_REAIM": "AFTER_SELECTION_BEFORE_APPLICATION"
+        }
+      },
+      "statuses": {
+        "CAPTURED": 341
+      },
+      "kinds": {
+        "SELECTOR": 57,
+        "OPERATION": 284
+      },
+      "timings": {
+        "BEFORE_SELECTOR": 57,
+        "BEFORE_OPERATION": 284
+      },
+      "stateBases": {
+        "PLANNING_WORKING_STATE": 46,
+        "RULES_STATE": 295
+      },
+      "reasons": {}
+    },
+    "observationAccounting": {
+      "schemaVersion": 1,
+      "scope": "ORIGINAL_AI_STANDALONE_CALLBACKS",
+      "runsPresent": 1,
+      "runsAbsent": 0,
+      "scopeComplete": true,
+      "overflowed": false,
+      "counts": {
+        "entered": 331,
+        "prepared": 330,
+        "omitted": 1,
+        "callbackStarted": 331,
+        "callbackReturned": 331,
+        "callbackThrew": 0,
+        "inputUnavailable": 0,
+        "startAttempts": 330,
+        "startReturned": 330,
+        "terminalAttempts": 330,
+        "terminalReturned": 330,
+        "finished": 331,
+        "observationFailures": 0,
+        "omittedUnsupported": 1,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "collector": {
+        "collectorStarts": 330,
+        "collectorTerminals": 330
+      },
+      "byBoundary": {
+        "UNCLASSIFIED": {
+          "entered": 1,
+          "prepared": 0,
+          "omitted": 1,
+          "callbackStarted": 1,
+          "callbackReturned": 1,
+          "callbackThrew": 0,
+          "inputUnavailable": 0,
+          "startAttempts": 0,
+          "startReturned": 0,
+          "terminalAttempts": 0,
+          "terminalReturned": 0,
+          "finished": 1,
+          "observationFailures": 0,
+          "omittedUnsupported": 1,
+          "omittedClosed": 0,
+          "omittedFailure": 0
+        },
+        "ATTACH_CARD_POOL": {
+          "entered": 11,
+          "prepared": 11,
+          "omitted": 0,
+          "callbackStarted": 11,
+          "callbackReturned": 11,
+          "callbackThrew": 0,
+          "inputUnavailable": 0,
+          "startAttempts": 11,
+          "startReturned": 11,
+          "terminalAttempts": 11,
+          "terminalReturned": 11,
+          "finished": 11,
+          "observationFailures": 0,
+          "omittedUnsupported": 0,
+          "omittedClosed": 0,
+          "omittedFailure": 0
+        },
+        "AUTO_MANA_PAYMENT": {
+          "entered": 120,
+          "prepared": 120,
+          "omitted": 0,
+          "callbackStarted": 120,
+          "callbackReturned": 120,
+          "callbackThrew": 0,
+          "inputUnavailable": 0,
+          "startAttempts": 120,
+          "startReturned": 120,
+          "terminalAttempts": 120,
+          "terminalReturned": 120,
+          "finished": 120,
+          "observationFailures": 0,
+          "omittedUnsupported": 0,
+          "omittedClosed": 0,
+          "omittedFailure": 0
+        },
+        "CONTROLLER_EFFECT_ENTITY": {
+          "entered": 6,
+          "prepared": 6,
+          "omitted": 0,
+          "callbackStarted": 6,
+          "callbackReturned": 6,
+          "callbackThrew": 0,
+          "inputUnavailable": 0,
+          "startAttempts": 6,
+          "startReturned": 6,
+          "terminalAttempts": 6,
+          "terminalReturned": 6,
+          "finished": 6,
+          "observationFailures": 0,
+          "omittedUnsupported": 0,
+          "omittedClosed": 0,
+          "omittedFailure": 0
+        },
+        "COST_VISITOR": {
+          "entered": 158,
+          "prepared": 158,
+          "omitted": 0,
+          "callbackStarted": 158,
+          "callbackReturned": 158,
+          "callbackThrew": 0,
+          "inputUnavailable": 0,
+          "startAttempts": 158,
+          "startReturned": 158,
+          "terminalAttempts": 158,
+          "terminalReturned": 158,
+          "finished": 158,
+          "observationFailures": 0,
+          "omittedUnsupported": 0,
+          "omittedClosed": 0,
+          "omittedFailure": 0
+        },
+        "TRIGGER_PREPARATION": {
+          "entered": 35,
+          "prepared": 35,
+          "omitted": 0,
+          "callbackStarted": 35,
+          "callbackReturned": 35,
+          "callbackThrew": 0,
+          "inputUnavailable": 0,
+          "startAttempts": 35,
+          "startReturned": 35,
+          "terminalAttempts": 35,
+          "terminalReturned": 35,
+          "finished": 35,
+          "observationFailures": 0,
+          "omittedUnsupported": 0,
+          "omittedClosed": 0,
+          "omittedFailure": 0
+        }
+      },
+      "invocationsInFlightAtCutoffs": 0,
+      "callbacksInFlightAtCutoffs": 0,
+      "startsMissingAtCutoffs": 1,
+      "startRecordMissingFractionAtCutoffs": 0.0030211480362537764,
+      "nestedInvocationCount": null,
+      "uninstrumentedDecisionCount": null
+    },
+    "contexts": 397,
+    "statuses": {
+      "PARTIAL": 327,
+      "CAPTURED": 70
+    },
+    "omissions": {
+      "DISCLOSURES:UNSUPPORTED": 327
+    },
+    "stateBases": {
+      "RULES_STATE": 351,
+      "PLANNING_WORKING_STATE": 46
+    },
+    "stack": {
+      "nonempty": 84,
+      "resolving": 70,
+      "truncated": 0,
+      "entries": 106,
+      "sourceBound": 106,
+      "rootTargetsCaptured": 106
+    },
+    "promptKinds": {
+      "SINGLE_ENTITY": 6
+    },
+    "promptCoverage": {
+      "UNSUPPORTED": 391,
+      "CONTROLLER_REQUEST_V1": 6
+    },
+    "diagnosticBindings": {
+      "optionEntries": 291,
+      "publicOptionLinks": 291,
+      "unresolvedOptionEntries": 0,
+      "directPublicDisclosureLinks": 0
+    },
+    "pregameShuffles": [
+      2
+    ],
+    "executionStatuses": {
+      "NORMAL": 1
+    },
+    "fullFilteredByteParity": {
+      "dataset.jsonl": true,
+      "choices.jsonl": true,
+      "examples.jsonl": true,
+      "validation.json": true
+    },
+    "coverageEqualExceptSourceRecords": true,
+    "sourceSha256": {
+      "full": "b407a53086593a5e77ea03978b7a8fcd022f19f0f39bf63eee7b59f7d350dd7c",
+      "decisions": "65c9ec7a72905f9c2586d9c54bf50730042273465499f6fd323a95612c35c3d4"
+    },
+    "previousSourceSha256": "dc6c640818ba6fdf3b897db979ec243ab079749b95980e030d23467c0424802a",
+    "sameNormalizedEngineEventsAsPrevious": false,
+    "exporterValidation": {
+      "valid": true,
+      "inputs": 1,
+      "decisions": 56,
+      "checks": [
+        "run/game boundaries",
+        "event order",
+        "schemas and identities",
+        "engine-event references",
+        "visibility constraints",
+        "status/outcome agreement",
+        "timeout/error censoring"
+      ]
+    },
+    "sameNormalizedEngineEventsAsV6": false,
+    "v6SourceSha256": "bb701733c82c3f84fae392f2ee8c7923410513668d4791e6461deb0633301635"
+  },
+  "numeric": {
+    "entitySelectionHistory": {},
+    "multiEntityOperations": 0,
+    "modeBoundaries": {},
+    "searchCaptureAccounting": {
+      "schemaVersion": 1,
+      "scope": "RECORDING_PARENT_SEARCH_CAPTURE_CALLS",
+      "population": "RETAINED_PARENT_RECORDS",
+      "parentsPresent": 53,
+      "parentsAbsent": 0,
+      "overflowed": false,
+      "counts": {
+        "entered": 0,
+        "captured": 0,
+        "unsupported": 0,
+        "budget": 0,
+        "interrupted": 0,
+        "failed": 0,
+        "finished": 0,
+        "inputUnavailable": 0
+      },
+      "knownMissingRowsAtParentCutoffs": 0,
+      "captureCallsPendingAtParentCutoffs": 0,
+      "missingRowFractionForRetainedParents": null,
+      "gameWideNestedInvocationCount": null,
+      "callbackOutcomeCounts": null,
+      "missingParentInvocationCount": null
+    },
+    "searchOperations": {},
+    "searchInputStatuses": {},
+    "targetCaptureAccounting": {
+      "schemaVersion": 1,
+      "scope": "RECORDING_PARENT_TARGET_CAPTURE_CALLS",
+      "population": "RETAINED_PARENT_RECORDS",
+      "parentsPresent": 53,
+      "parentsAbsent": 0,
+      "overflowed": false,
+      "counts": {
+        "entered": 0,
+        "captured": 0,
+        "unsupported": 0,
+        "budget": 0,
+        "interrupted": 0,
+        "failed": 0,
+        "finished": 0,
+        "inputUnavailable": 0
+      },
+      "knownMissingRowsAtParentCutoffs": 0,
+      "captureCallsPendingAtParentCutoffs": 0,
+      "missingRowFractionForRetainedParents": null,
+      "gameWideNestedInvocationCount": null,
+      "callbackOutcomeCounts": null,
+      "missingParentInvocationCount": null
+    },
+    "nestedTargetRecords": 0,
+    "entryLocationAudit": {
+      "schemaVersion": 1,
+      "scope": "PRESENT_ENTRY_COMPONENTS_ONLY",
+      "records": 136,
+      "knownInputBoundaryInventoryV2": {
+        "CHOICE": {
+          "CONTROLLER_TARGETS": "BEFORE_OPERATION",
+          "COST_VISITOR": "BEFORE_OPERATION",
+          "AUTO_MANA_PAYMENT": "BEFORE_OPERATION",
+          "CONTROLLER_NUMBER_RANGE": "BEFORE_SELECTOR",
+          "CONTROLLER_NUMBER_OPTIONS": "BEFORE_SELECTOR",
+          "CONTROLLER_ANNOUNCEMENT": "BEFORE_OPERATION",
+          "PAYMENT_DISCARD_POOL": "BEFORE_SELECTOR",
+          "PAYMENT_SACRIFICE_POOL": "BEFORE_SELECTOR",
+          "CONTROLLER_EFFECT_ENTITY": "BEFORE_SELECTOR",
+          "CONTROLLER_ZONE_CHANGE_CARD": "BEFORE_SELECTOR",
+          "ATTACH_CARD_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "ATTACH_PLAYER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_KILLABLES": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_KILLABLE_PLANESWALKERS": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_MANDATORY_FALLBACK_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_MANDATORY_OPPONENT_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_OPPONENT_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_PLANESWALKER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_PLAYER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DESTROY_LAND_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DESTROY_POLYMORPH_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DESTROY_REMOVAL_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DRAW_PLAYER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ]
+        }
+      },
+      "statuses": {
+        "CAPTURED": 136
+      },
+      "kinds": {
+        "OPERATION": 133,
+        "SELECTOR": 3
+      },
+      "timings": {
+        "BEFORE_OPERATION": 133,
+        "BEFORE_SELECTOR": 3
+      },
+      "stateBases": {
+        "RULES_STATE": 136
+      },
+      "reasons": {}
+    },
+    "observationAccounting": {
+      "schemaVersion": 1,
+      "scope": "ORIGINAL_AI_STANDALONE_CALLBACKS",
+      "runsPresent": 1,
+      "runsAbsent": 0,
+      "scopeComplete": true,
+      "overflowed": false,
+      "counts": {
+        "entered": 138,
+        "prepared": 138,
+        "omitted": 0,
+        "callbackStarted": 138,
+        "callbackReturned": 138,
+        "callbackThrew": 0,
+        "inputUnavailable": 0,
+        "startAttempts": 138,
+        "startReturned": 138,
+        "terminalAttempts": 138,
+        "terminalReturned": 138,
+        "finished": 138,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "collector": {
+        "collectorStarts": 138,
+        "collectorTerminals": 138
+      },
+      "byBoundary": {
+        "AUTO_MANA_PAYMENT": {
+          "entered": 50,
+          "prepared": 50,
+          "omitted": 0,
+          "callbackStarted": 50,
+          "callbackReturned": 50,
+          "callbackThrew": 0,
+          "inputUnavailable": 0,
+          "startAttempts": 50,
+          "startReturned": 50,
+          "terminalAttempts": 50,
+          "terminalReturned": 50,
+          "finished": 50,
+          "observationFailures": 0,
+          "omittedUnsupported": 0,
+          "omittedClosed": 0,
+          "omittedFailure": 0
+        },
+        "CONTROLLER_EFFECT_ENTITY": {
+          "entered": 1,
+          "prepared": 1,
+          "omitted": 0,
+          "callbackStarted": 1,
+          "callbackReturned": 1,
+          "callbackThrew": 0,
+          "inputUnavailable": 0,
+          "startAttempts": 1,
+          "startReturned": 1,
+          "terminalAttempts": 1,
+          "terminalReturned": 1,
+          "finished": 1,
+          "observationFailures": 0,
+          "omittedUnsupported": 0,
+          "omittedClosed": 0,
+          "omittedFailure": 0
+        },
+        "CONTROLLER_NUMBER_OPTIONS": {
+          "entered": 2,
+          "prepared": 2,
+          "omitted": 0,
+          "callbackStarted": 2,
+          "callbackReturned": 2,
+          "callbackThrew": 0,
+          "inputUnavailable": 0,
+          "startAttempts": 2,
+          "startReturned": 2,
+          "terminalAttempts": 2,
+          "terminalReturned": 2,
+          "finished": 2,
+          "observationFailures": 0,
+          "omittedUnsupported": 0,
+          "omittedClosed": 0,
+          "omittedFailure": 0
+        },
+        "COST_VISITOR": {
+          "entered": 83,
+          "prepared": 83,
+          "omitted": 0,
+          "callbackStarted": 83,
+          "callbackReturned": 83,
+          "callbackThrew": 0,
+          "inputUnavailable": 0,
+          "startAttempts": 83,
+          "startReturned": 83,
+          "terminalAttempts": 83,
+          "terminalReturned": 83,
+          "finished": 83,
+          "observationFailures": 0,
+          "omittedUnsupported": 0,
+          "omittedClosed": 0,
+          "omittedFailure": 0
+        },
+        "TRIGGER_PREPARATION": {
+          "entered": 2,
+          "prepared": 2,
+          "omitted": 0,
+          "callbackStarted": 2,
+          "callbackReturned": 2,
+          "callbackThrew": 0,
+          "inputUnavailable": 0,
+          "startAttempts": 2,
+          "startReturned": 2,
+          "terminalAttempts": 2,
+          "terminalReturned": 2,
+          "finished": 2,
+          "observationFailures": 0,
+          "omittedUnsupported": 0,
+          "omittedClosed": 0,
+          "omittedFailure": 0
+        }
+      },
+      "invocationsInFlightAtCutoffs": 0,
+      "callbacksInFlightAtCutoffs": 0,
+      "startsMissingAtCutoffs": 0,
+      "startRecordMissingFractionAtCutoffs": 0.0,
+      "nestedInvocationCount": null,
+      "uninstrumentedDecisionCount": null
+    },
+    "contexts": 189,
+    "statuses": {
+      "PARTIAL": 184,
+      "CAPTURED": 5
+    },
+    "omissions": {
+      "DISCLOSURES:UNSUPPORTED": 184
+    },
+    "stateBases": {
+      "RULES_STATE": 189
+    },
+    "stack": {
+      "nonempty": 5,
+      "resolving": 5,
+      "truncated": 0,
+      "entries": 5,
+      "sourceBound": 5,
+      "rootTargetsCaptured": 5
+    },
+    "promptKinds": {
+      "NUMBER_OPTIONS": 2,
+      "SINGLE_ENTITY": 1
+    },
+    "promptCoverage": {
+      "UNSUPPORTED": 186,
+      "CONTROLLER_REQUEST_V1": 3
+    },
+    "diagnosticBindings": {
+      "optionEntries": 1,
+      "publicOptionLinks": 1,
+      "unresolvedOptionEntries": 0,
+      "directPublicDisclosureLinks": 0
+    },
+    "pregameShuffles": [
+      2
+    ],
+    "executionStatuses": {
+      "NORMAL": 1
+    },
+    "fullFilteredByteParity": {
+      "dataset.jsonl": true,
+      "choices.jsonl": true,
+      "examples.jsonl": true,
+      "validation.json": true
+    },
+    "coverageEqualExceptSourceRecords": true,
+    "sourceSha256": {
+      "full": "0d636e0429db0d63e794bd273291093553d509fb5523f1bb1ee37f9bfbe13c1b",
+      "decisions": "0d517c69fdd29a255a6a605be2b61acbdbe6ef00633aeeb15da9e330c6420e6d"
+    },
+    "previousSourceSha256": "2053887d1898fb9bf2d9fa77e7fc0662cc698ec91cae4df5012313b8c7866d41",
+    "sameNormalizedEngineEventsAsPrevious": true,
+    "exporterValidation": {
+      "valid": true,
+      "inputs": 1,
+      "decisions": 53,
+      "checks": [
+        "run/game boundaries",
+        "event order",
+        "schemas and identities",
+        "engine-event references",
+        "visibility constraints",
+        "status/outcome agreement",
+        "timeout/error censoring"
+      ]
+    },
+    "sameNormalizedEngineEventsAsV6": true,
+    "v6SourceSha256": "abbb1f1f84cb15220a5cefb42001d91df3c52fd72a2321e61af3940400bcf137"
+  },
+  "modes": {
+    "entitySelectionHistory": {},
+    "multiEntityOperations": 0,
+    "modeBoundaries": {
+      "CHARM_MODE_HEURISTIC": 168,
+      "CONTROLLER_MODES": 4
+    },
+    "searchCaptureAccounting": {
+      "schemaVersion": 1,
+      "scope": "RECORDING_PARENT_SEARCH_CAPTURE_CALLS",
+      "population": "RETAINED_PARENT_RECORDS",
+      "parentsPresent": 64,
+      "parentsAbsent": 0,
+      "overflowed": false,
+      "counts": {
+        "entered": 0,
+        "captured": 0,
+        "unsupported": 0,
+        "budget": 0,
+        "interrupted": 0,
+        "failed": 0,
+        "finished": 0,
+        "inputUnavailable": 0
+      },
+      "knownMissingRowsAtParentCutoffs": 0,
+      "captureCallsPendingAtParentCutoffs": 0,
+      "missingRowFractionForRetainedParents": null,
+      "gameWideNestedInvocationCount": null,
+      "callbackOutcomeCounts": null,
+      "missingParentInvocationCount": null
+    },
+    "searchOperations": {},
+    "searchInputStatuses": {},
+    "targetCaptureAccounting": {
+      "schemaVersion": 1,
+      "scope": "RECORDING_PARENT_TARGET_CAPTURE_CALLS",
+      "population": "RETAINED_PARENT_RECORDS",
+      "parentsPresent": 64,
+      "parentsAbsent": 0,
+      "overflowed": false,
+      "counts": {
+        "entered": 0,
+        "captured": 0,
+        "unsupported": 0,
+        "budget": 0,
+        "interrupted": 0,
+        "failed": 0,
+        "finished": 0,
+        "inputUnavailable": 0
+      },
+      "knownMissingRowsAtParentCutoffs": 0,
+      "captureCallsPendingAtParentCutoffs": 0,
+      "missingRowFractionForRetainedParents": null,
+      "gameWideNestedInvocationCount": null,
+      "callbackOutcomeCounts": null,
+      "missingParentInvocationCount": null
+    },
+    "nestedTargetRecords": 0,
+    "entryLocationAudit": {
+      "schemaVersion": 1,
+      "scope": "PRESENT_ENTRY_COMPONENTS_ONLY",
+      "records": 372,
+      "knownInputBoundaryInventoryV2": {
+        "CHOICE": {
+          "CONTROLLER_TARGETS": "BEFORE_OPERATION",
+          "COST_VISITOR": "BEFORE_OPERATION",
+          "AUTO_MANA_PAYMENT": "BEFORE_OPERATION",
+          "CONTROLLER_NUMBER_RANGE": "BEFORE_SELECTOR",
+          "CONTROLLER_NUMBER_OPTIONS": "BEFORE_SELECTOR",
+          "CONTROLLER_ANNOUNCEMENT": "BEFORE_OPERATION",
+          "PAYMENT_DISCARD_POOL": "BEFORE_SELECTOR",
+          "PAYMENT_SACRIFICE_POOL": "BEFORE_SELECTOR",
+          "CONTROLLER_EFFECT_ENTITY": "BEFORE_SELECTOR",
+          "CONTROLLER_ZONE_CHANGE_CARD": "BEFORE_SELECTOR",
+          "ATTACH_CARD_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "ATTACH_PLAYER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_KILLABLES": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_KILLABLE_PLANESWALKERS": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_MANDATORY_FALLBACK_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_MANDATORY_OPPONENT_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_OPPONENT_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_PLANESWALKER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_PLAYER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DESTROY_LAND_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DESTROY_POLYMORPH_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DESTROY_REMOVAL_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DRAW_PLAYER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ]
+        }
+      },
+      "statuses": {
+        "CAPTURED": 372
+      },
+      "kinds": {
+        "SELECTOR": 168,
+        "OPERATION": 204
+      },
+      "timings": {
+        "BEFORE_SELECTOR": 168,
+        "BEFORE_OPERATION": 204
+      },
+      "stateBases": {
+        "PLANNING_WORKING_STATE": 172,
+        "RULES_STATE": 200
+      },
+      "reasons": {},
+      "knownInputBoundaryInventoryExtensionV3": {
+        "CHOICE": {
+          "CHARM_MODE_HEURISTIC": "BEFORE_SELECTOR",
+          "CONTROLLER_MODES": "BEFORE_OPERATION"
+        }
+      }
+    },
+    "observationAccounting": {
+      "schemaVersion": 1,
+      "scope": "ORIGINAL_AI_STANDALONE_CALLBACKS",
+      "runsPresent": 1,
+      "runsAbsent": 0,
+      "scopeComplete": true,
+      "overflowed": false,
+      "counts": {
+        "entered": 376,
+        "prepared": 375,
+        "omitted": 1,
+        "callbackStarted": 376,
+        "callbackReturned": 376,
+        "callbackThrew": 0,
+        "inputUnavailable": 0,
+        "startAttempts": 375,
+        "startReturned": 375,
+        "terminalAttempts": 375,
+        "terminalReturned": 375,
+        "finished": 376,
+        "observationFailures": 0,
+        "omittedUnsupported": 1,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "collector": {
+        "collectorStarts": 375,
+        "collectorTerminals": 375
+      },
+      "byBoundary": {
+        "UNCLASSIFIED": {
+          "entered": 1,
+          "prepared": 0,
+          "omitted": 1,
+          "callbackStarted": 1,
+          "callbackReturned": 1,
+          "callbackThrew": 0,
+          "inputUnavailable": 0,
+          "startAttempts": 0,
+          "startReturned": 0,
+          "terminalAttempts": 0,
+          "terminalReturned": 0,
+          "finished": 1,
+          "observationFailures": 0,
+          "omittedUnsupported": 1,
+          "omittedClosed": 0,
+          "omittedFailure": 0
+        },
+        "AUTO_MANA_PAYMENT": {
+          "entered": 75,
+          "prepared": 75,
+          "omitted": 0,
+          "callbackStarted": 75,
+          "callbackReturned": 75,
+          "callbackThrew": 0,
+          "inputUnavailable": 0,
+          "startAttempts": 75,
+          "startReturned": 75,
+          "terminalAttempts": 75,
+          "terminalReturned": 75,
+          "finished": 75,
+          "observationFailures": 0,
+          "omittedUnsupported": 0,
+          "omittedClosed": 0,
+          "omittedFailure": 0
+        },
+        "CHARM_MODE_HEURISTIC": {
+          "entered": 168,
+          "prepared": 168,
+          "omitted": 0,
+          "callbackStarted": 168,
+          "callbackReturned": 168,
+          "callbackThrew": 0,
+          "inputUnavailable": 0,
+          "startAttempts": 168,
+          "startReturned": 168,
+          "terminalAttempts": 168,
+          "terminalReturned": 168,
+          "finished": 168,
+          "observationFailures": 0,
+          "omittedUnsupported": 0,
+          "omittedClosed": 0,
+          "omittedFailure": 0
+        },
+        "CONTROLLER_MODES": {
+          "entered": 4,
+          "prepared": 4,
+          "omitted": 0,
+          "callbackStarted": 4,
+          "callbackReturned": 4,
+          "callbackThrew": 0,
+          "inputUnavailable": 0,
+          "startAttempts": 4,
+          "startReturned": 4,
+          "terminalAttempts": 4,
+          "terminalReturned": 4,
+          "finished": 4,
+          "observationFailures": 0,
+          "omittedUnsupported": 0,
+          "omittedClosed": 0,
+          "omittedFailure": 0
+        },
+        "COST_VISITOR": {
+          "entered": 125,
+          "prepared": 125,
+          "omitted": 0,
+          "callbackStarted": 125,
+          "callbackReturned": 125,
+          "callbackThrew": 0,
+          "inputUnavailable": 0,
+          "startAttempts": 125,
+          "startReturned": 125,
+          "terminalAttempts": 125,
+          "terminalReturned": 125,
+          "finished": 125,
+          "observationFailures": 0,
+          "omittedUnsupported": 0,
+          "omittedClosed": 0,
+          "omittedFailure": 0
+        },
+        "TRIGGER_PREPARATION": {
+          "entered": 3,
+          "prepared": 3,
+          "omitted": 0,
+          "callbackStarted": 3,
+          "callbackReturned": 3,
+          "callbackThrew": 0,
+          "inputUnavailable": 0,
+          "startAttempts": 3,
+          "startReturned": 3,
+          "terminalAttempts": 3,
+          "terminalReturned": 3,
+          "finished": 3,
+          "observationFailures": 0,
+          "omittedUnsupported": 0,
+          "omittedClosed": 0,
+          "omittedFailure": 0
+        }
+      },
+      "invocationsInFlightAtCutoffs": 0,
+      "callbacksInFlightAtCutoffs": 0,
+      "startsMissingAtCutoffs": 1,
+      "startRecordMissingFractionAtCutoffs": 0.0026595744680851063,
+      "nestedInvocationCount": null,
+      "uninstrumentedDecisionCount": null
+    },
+    "contexts": 436,
+    "statuses": {
+      "PARTIAL": 430,
+      "CAPTURED": 6
+    },
+    "omissions": {
+      "DISCLOSURES:UNSUPPORTED": 430,
+      "STACK:UNSUPPORTED": 11
+    },
+    "stateBases": {
+      "PLANNING_WORKING_STATE": 172,
+      "RULES_STATE": 264
+    },
+    "stack": {
+      "nonempty": 17,
+      "resolving": 6,
+      "truncated": 0,
+      "entries": 17,
+      "sourceBound": 17,
+      "rootTargetsCaptured": 6
+    },
+    "promptKinds": {
+      "MODE_BOUNDS": 172
+    },
+    "promptCoverage": {
+      "RECEIVED_MODE_BOUNDS_V1": 172,
+      "UNSUPPORTED": 264
+    },
+    "diagnosticBindings": {
+      "optionEntries": 0,
+      "publicOptionLinks": 0,
+      "unresolvedOptionEntries": 0,
+      "directPublicDisclosureLinks": 0
+    },
+    "pregameShuffles": [
+      2
+    ],
+    "executionStatuses": {
+      "NORMAL": 1
+    },
+    "fullFilteredByteParity": {
+      "dataset.jsonl": true,
+      "choices.jsonl": true,
+      "examples.jsonl": true,
+      "validation.json": true
+    },
+    "coverageEqualExceptSourceRecords": true,
+    "sourceSha256": {
+      "full": "b71bcf85985542b19075f8568538b461c769f33befe766da8779aa2a39078637",
+      "decisions": "552d43d2ac80a727f83d7a9a2fb89fc12b953165ebf674f1aeea129f3f82df06"
+    },
+    "previousSourceSha256": "baa478ab1f8ed22c9cdcc1aca5695ea83487de97717dedfbcd09c13dd2dd3d08",
+    "sameNormalizedEngineEventsAsPrevious": true,
+    "exporterValidation": {
+      "valid": true,
+      "inputs": 1,
+      "decisions": 64,
+      "checks": [
+        "run/game boundaries",
+        "event order",
+        "schemas and identities",
+        "engine-event references",
+        "visibility constraints",
+        "status/outcome agreement",
+        "timeout/error censoring"
+      ]
+    },
+    "sameNormalizedEngineEventsAsV6": true,
+    "v6SourceSha256": "fc8424846dc4a655b8ed370e1cfe2b02d82239619b00e11bb6a2c5fe21f060cd"
+  },
+  "repeated": {
+    "entitySelectionHistory": {
+      "COMPLETE": 1,
+      "projectedPrompts": 1,
+      "projectedEntries": 0,
+      "resolvedEntries": 0
+    },
+    "multiEntityOperations": 1,
+    "modeBoundaries": {},
+    "searchCaptureAccounting": {
+      "schemaVersion": 1,
+      "scope": "RECORDING_PARENT_SEARCH_CAPTURE_CALLS",
+      "population": "RETAINED_PARENT_RECORDS",
+      "parentsPresent": 39,
+      "parentsAbsent": 0,
+      "overflowed": false,
+      "counts": {
+        "entered": 0,
+        "captured": 0,
+        "unsupported": 0,
+        "budget": 0,
+        "interrupted": 0,
+        "failed": 0,
+        "finished": 0,
+        "inputUnavailable": 0
+      },
+      "knownMissingRowsAtParentCutoffs": 0,
+      "captureCallsPendingAtParentCutoffs": 0,
+      "missingRowFractionForRetainedParents": null,
+      "gameWideNestedInvocationCount": null,
+      "callbackOutcomeCounts": null,
+      "missingParentInvocationCount": null
+    },
+    "searchOperations": {},
+    "searchInputStatuses": {},
+    "targetCaptureAccounting": {
+      "schemaVersion": 1,
+      "scope": "RECORDING_PARENT_TARGET_CAPTURE_CALLS",
+      "population": "RETAINED_PARENT_RECORDS",
+      "parentsPresent": 39,
+      "parentsAbsent": 0,
+      "overflowed": false,
+      "counts": {
+        "entered": 0,
+        "captured": 0,
+        "unsupported": 0,
+        "budget": 0,
+        "interrupted": 0,
+        "failed": 0,
+        "finished": 0,
+        "inputUnavailable": 0
+      },
+      "knownMissingRowsAtParentCutoffs": 0,
+      "captureCallsPendingAtParentCutoffs": 0,
+      "missingRowFractionForRetainedParents": null,
+      "gameWideNestedInvocationCount": null,
+      "callbackOutcomeCounts": null,
+      "missingParentInvocationCount": null
+    },
+    "nestedTargetRecords": 0,
+    "entryLocationAudit": {
+      "schemaVersion": 1,
+      "scope": "PRESENT_ENTRY_COMPONENTS_ONLY",
+      "records": 123,
+      "knownInputBoundaryInventoryV2": {
+        "CHOICE": {
+          "CONTROLLER_TARGETS": "BEFORE_OPERATION",
+          "COST_VISITOR": "BEFORE_OPERATION",
+          "AUTO_MANA_PAYMENT": "BEFORE_OPERATION",
+          "CONTROLLER_NUMBER_RANGE": "BEFORE_SELECTOR",
+          "CONTROLLER_NUMBER_OPTIONS": "BEFORE_SELECTOR",
+          "CONTROLLER_ANNOUNCEMENT": "BEFORE_OPERATION",
+          "PAYMENT_DISCARD_POOL": "BEFORE_SELECTOR",
+          "PAYMENT_SACRIFICE_POOL": "BEFORE_SELECTOR",
+          "CONTROLLER_EFFECT_ENTITY": "BEFORE_SELECTOR",
+          "CONTROLLER_ZONE_CHANGE_CARD": "BEFORE_SELECTOR",
+          "ATTACH_CARD_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "ATTACH_PLAYER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_KILLABLES": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_KILLABLE_PLANESWALKERS": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_MANDATORY_FALLBACK_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_MANDATORY_OPPONENT_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_OPPONENT_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_PLANESWALKER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_PLAYER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DESTROY_LAND_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DESTROY_POLYMORPH_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DESTROY_REMOVAL_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DRAW_PLAYER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ]
+        }
+      },
+      "statuses": {
+        "CAPTURED": 123
+      },
+      "kinds": {
+        "OPERATION": 121,
+        "SELECTOR": 2
+      },
+      "timings": {
+        "BEFORE_OPERATION": 121,
+        "BEFORE_SELECTOR": 2
+      },
+      "stateBases": {
+        "RULES_STATE": 123
+      },
+      "reasons": {},
+      "knownInputBoundaryInventoryExtensionV4": {
+        "CHOICE": {
+          "CONTROLLER_EFFECT_ENTITIES": "BEFORE_OPERATION"
+        }
+      }
+    },
+    "observationAccounting": {
+      "schemaVersion": 1,
+      "scope": "ORIGINAL_AI_STANDALONE_CALLBACKS",
+      "runsPresent": 1,
+      "runsAbsent": 0,
+      "scopeComplete": true,
+      "overflowed": false,
+      "counts": {
+        "entered": 131,
+        "prepared": 131,
+        "omitted": 0,
+        "callbackStarted": 131,
+        "callbackReturned": 131,
+        "callbackThrew": 0,
+        "inputUnavailable": 0,
+        "startAttempts": 131,
+        "startReturned": 131,
+        "terminalAttempts": 131,
+        "terminalReturned": 131,
+        "finished": 131,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "collector": {
+        "collectorStarts": 131,
+        "collectorTerminals": 131
+      },
+      "byBoundary": {
+        "AUTO_MANA_PAYMENT": {
+          "entered": 49,
+          "prepared": 49,
+          "omitted": 0,
+          "callbackStarted": 49,
+          "callbackReturned": 49,
+          "callbackThrew": 0,
+          "inputUnavailable": 0,
+          "startAttempts": 49,
+          "startReturned": 49,
+          "terminalAttempts": 49,
+          "terminalReturned": 49,
+          "finished": 49,
+          "observationFailures": 0,
+          "omittedUnsupported": 0,
+          "omittedClosed": 0,
+          "omittedFailure": 0
+        },
+        "CONTROLLER_EFFECT_ENTITIES": {
+          "entered": 1,
+          "prepared": 1,
+          "omitted": 0,
+          "callbackStarted": 1,
+          "callbackReturned": 1,
+          "callbackThrew": 0,
+          "inputUnavailable": 0,
+          "startAttempts": 1,
+          "startReturned": 1,
+          "terminalAttempts": 1,
+          "terminalReturned": 1,
+          "finished": 1,
+          "observationFailures": 0,
+          "omittedUnsupported": 0,
+          "omittedClosed": 0,
+          "omittedFailure": 0
+        },
+        "CONTROLLER_EFFECT_ENTITY": {
+          "entered": 2,
+          "prepared": 2,
+          "omitted": 0,
+          "callbackStarted": 2,
+          "callbackReturned": 2,
+          "callbackThrew": 0,
+          "inputUnavailable": 0,
+          "startAttempts": 2,
+          "startReturned": 2,
+          "terminalAttempts": 2,
+          "terminalReturned": 2,
+          "finished": 2,
+          "observationFailures": 0,
+          "omittedUnsupported": 0,
+          "omittedClosed": 0,
+          "omittedFailure": 0
+        },
+        "COST_VISITOR": {
+          "entered": 71,
+          "prepared": 71,
+          "omitted": 0,
+          "callbackStarted": 71,
+          "callbackReturned": 71,
+          "callbackThrew": 0,
+          "inputUnavailable": 0,
+          "startAttempts": 71,
+          "startReturned": 71,
+          "terminalAttempts": 71,
+          "terminalReturned": 71,
+          "finished": 71,
+          "observationFailures": 0,
+          "omittedUnsupported": 0,
+          "omittedClosed": 0,
+          "omittedFailure": 0
+        },
+        "TRIGGER_PREPARATION": {
+          "entered": 8,
+          "prepared": 8,
+          "omitted": 0,
+          "callbackStarted": 8,
+          "callbackReturned": 8,
+          "callbackThrew": 0,
+          "inputUnavailable": 0,
+          "startAttempts": 8,
+          "startReturned": 8,
+          "terminalAttempts": 8,
+          "terminalReturned": 8,
+          "finished": 8,
+          "observationFailures": 0,
+          "omittedUnsupported": 0,
+          "omittedClosed": 0,
+          "omittedFailure": 0
+        }
+      },
+      "invocationsInFlightAtCutoffs": 0,
+      "callbacksInFlightAtCutoffs": 0,
+      "startsMissingAtCutoffs": 0,
+      "startRecordMissingFractionAtCutoffs": 0.0,
+      "nestedInvocationCount": null,
+      "uninstrumentedDecisionCount": null
+    },
+    "contexts": 162,
+    "statuses": {
+      "PARTIAL": 143,
+      "CAPTURED": 19
+    },
+    "omissions": {
+      "DISCLOSURES:UNSUPPORTED": 141,
+      "STACK:UNRESOLVED_BINDING": 2
+    },
+    "stateBases": {
+      "RULES_STATE": 162
+    },
+    "stack": {
+      "nonempty": 25,
+      "resolving": 21,
+      "truncated": 0,
+      "entries": 29,
+      "sourceBound": 27,
+      "rootTargetsCaptured": 27
+    },
+    "promptKinds": {
+      "ENTITY_BOUNDS": 1,
+      "ENTITY_PICK_SEQUENCE": 1,
+      "SINGLE_ENTITY": 1
+    },
+    "promptCoverage": {
+      "UNSUPPORTED": 159,
+      "RECEIVED_ENTITY_BOUNDS_V1": 1,
+      "RECEIVED_ENTITY_SEQUENCE_V1": 1,
+      "CONTROLLER_REQUEST_V1": 1
+    },
+    "diagnosticBindings": {
+      "optionEntries": 1,
+      "publicOptionLinks": 1,
+      "unresolvedOptionEntries": 0,
+      "directPublicDisclosureLinks": 0
+    },
+    "pregameShuffles": [
+      2
+    ],
+    "executionStatuses": {
+      "NORMAL": 1
+    },
+    "fullFilteredByteParity": {
+      "dataset.jsonl": true,
+      "choices.jsonl": true,
+      "examples.jsonl": true,
+      "validation.json": true
+    },
+    "coverageEqualExceptSourceRecords": true,
+    "sourceSha256": {
+      "full": "45e52b61d9b6d86f4d43c42ed5da4bec2a02b0a5a389b89590377cc5d0690e2a",
+      "decisions": "15a6e40a4bbd00dd1b876e66616978edf6976d819751f6ed506ad23a359b0253"
+    },
+    "previousSourceSha256": null,
+    "sameNormalizedEngineEventsAsPrevious": null,
+    "exporterValidation": {
+      "valid": true,
+      "inputs": 1,
+      "decisions": 39,
+      "checks": [
+        "run/game boundaries",
+        "event order",
+        "schemas and identities",
+        "engine-event references",
+        "visibility constraints",
+        "status/outcome agreement",
+        "timeout/error censoring"
+      ]
+    },
+    "sameNormalizedEngineEventsAsV6": true,
+    "v6SourceSha256": "a9ab0ddbbba37e19612cbc51fde1c611e13c1d3f4cd0f8643810d9230cdd1246"
+  },
+  "repeated-counters": {
+    "entitySelectionHistory": {
+      "COMPLETE": 6,
+      "projectedPrompts": 6,
+      "projectedEntries": 2,
+      "resolvedEntries": 2
+    },
+    "multiEntityOperations": 4,
+    "modeBoundaries": {},
+    "searchCaptureAccounting": {
+      "schemaVersion": 1,
+      "scope": "RECORDING_PARENT_SEARCH_CAPTURE_CALLS",
+      "population": "RETAINED_PARENT_RECORDS",
+      "parentsPresent": 61,
+      "parentsAbsent": 0,
+      "overflowed": false,
+      "counts": {
+        "entered": 0,
+        "captured": 0,
+        "unsupported": 0,
+        "budget": 0,
+        "interrupted": 0,
+        "failed": 0,
+        "finished": 0,
+        "inputUnavailable": 0
+      },
+      "knownMissingRowsAtParentCutoffs": 0,
+      "captureCallsPendingAtParentCutoffs": 0,
+      "missingRowFractionForRetainedParents": null,
+      "gameWideNestedInvocationCount": null,
+      "callbackOutcomeCounts": null,
+      "missingParentInvocationCount": null
+    },
+    "searchOperations": {},
+    "searchInputStatuses": {},
+    "targetCaptureAccounting": {
+      "schemaVersion": 1,
+      "scope": "RECORDING_PARENT_TARGET_CAPTURE_CALLS",
+      "population": "RETAINED_PARENT_RECORDS",
+      "parentsPresent": 61,
+      "parentsAbsent": 0,
+      "overflowed": false,
+      "counts": {
+        "entered": 0,
+        "captured": 0,
+        "unsupported": 0,
+        "budget": 0,
+        "interrupted": 0,
+        "failed": 0,
+        "finished": 0,
+        "inputUnavailable": 0
+      },
+      "knownMissingRowsAtParentCutoffs": 0,
+      "captureCallsPendingAtParentCutoffs": 0,
+      "missingRowFractionForRetainedParents": null,
+      "gameWideNestedInvocationCount": null,
+      "callbackOutcomeCounts": null,
+      "missingParentInvocationCount": null
+    },
+    "nestedTargetRecords": 0,
+    "entryLocationAudit": {
+      "schemaVersion": 1,
+      "scope": "PRESENT_ENTRY_COMPONENTS_ONLY",
+      "records": 180,
+      "knownInputBoundaryInventoryV2": {
+        "CHOICE": {
+          "CONTROLLER_TARGETS": "BEFORE_OPERATION",
+          "COST_VISITOR": "BEFORE_OPERATION",
+          "AUTO_MANA_PAYMENT": "BEFORE_OPERATION",
+          "CONTROLLER_NUMBER_RANGE": "BEFORE_SELECTOR",
+          "CONTROLLER_NUMBER_OPTIONS": "BEFORE_SELECTOR",
+          "CONTROLLER_ANNOUNCEMENT": "BEFORE_OPERATION",
+          "PAYMENT_DISCARD_POOL": "BEFORE_SELECTOR",
+          "PAYMENT_SACRIFICE_POOL": "BEFORE_SELECTOR",
+          "CONTROLLER_EFFECT_ENTITY": "BEFORE_SELECTOR",
+          "CONTROLLER_ZONE_CHANGE_CARD": "BEFORE_SELECTOR",
+          "ATTACH_CARD_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "ATTACH_PLAYER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_KILLABLES": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_KILLABLE_PLANESWALKERS": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_MANDATORY_FALLBACK_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_MANDATORY_OPPONENT_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_OPPONENT_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_PLANESWALKER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DAMAGE_PLAYER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DESTROY_LAND_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DESTROY_POLYMORPH_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DESTROY_REMOVAL_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ],
+          "DRAW_PLAYER_POOL": [
+            "BEFORE_SELECTOR",
+            "AFTER_SELECTION_BEFORE_APPLICATION"
+          ]
+        }
+      },
+      "statuses": {
+        "CAPTURED": 180
+      },
+      "kinds": {
+        "OPERATION": 174,
+        "SELECTOR": 6
+      },
+      "timings": {
+        "BEFORE_OPERATION": 174,
+        "BEFORE_SELECTOR": 6
+      },
+      "stateBases": {
+        "RULES_STATE": 180
+      },
+      "reasons": {},
+      "knownInputBoundaryInventoryExtensionV4": {
+        "CHOICE": {
+          "CONTROLLER_EFFECT_ENTITIES": "BEFORE_OPERATION"
+        }
+      }
+    },
+    "observationAccounting": {
+      "schemaVersion": 1,
+      "scope": "ORIGINAL_AI_STANDALONE_CALLBACKS",
+      "runsPresent": 1,
+      "runsAbsent": 0,
+      "scopeComplete": true,
+      "overflowed": false,
+      "counts": {
+        "entered": 185,
+        "prepared": 185,
+        "omitted": 0,
+        "callbackStarted": 185,
+        "callbackReturned": 185,
+        "callbackThrew": 0,
+        "inputUnavailable": 0,
+        "startAttempts": 185,
+        "startReturned": 185,
+        "terminalAttempts": 185,
+        "terminalReturned": 185,
+        "finished": 185,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "collector": {
+        "collectorStarts": 185,
+        "collectorTerminals": 185
+      },
+      "byBoundary": {
+        "AUTO_MANA_PAYMENT": {
+          "entered": 64,
+          "prepared": 64,
+          "omitted": 0,
+          "callbackStarted": 64,
+          "callbackReturned": 64,
+          "callbackThrew": 0,
+          "inputUnavailable": 0,
+          "startAttempts": 64,
+          "startReturned": 64,
+          "terminalAttempts": 64,
+          "terminalReturned": 64,
+          "finished": 64,
+          "observationFailures": 0,
+          "omittedUnsupported": 0,
+          "omittedClosed": 0,
+          "omittedFailure": 0
+        },
+        "CONTROLLER_EFFECT_ENTITIES": {
+          "entered": 4,
+          "prepared": 4,
+          "omitted": 0,
+          "callbackStarted": 4,
+          "callbackReturned": 4,
+          "callbackThrew": 0,
+          "inputUnavailable": 0,
+          "startAttempts": 4,
+          "startReturned": 4,
+          "terminalAttempts": 4,
+          "terminalReturned": 4,
+          "finished": 4,
+          "observationFailures": 0,
+          "omittedUnsupported": 0,
+          "omittedClosed": 0,
+          "omittedFailure": 0
+        },
+        "CONTROLLER_EFFECT_ENTITY": {
+          "entered": 6,
+          "prepared": 6,
+          "omitted": 0,
+          "callbackStarted": 6,
+          "callbackReturned": 6,
+          "callbackThrew": 0,
+          "inputUnavailable": 0,
+          "startAttempts": 6,
+          "startReturned": 6,
+          "terminalAttempts": 6,
+          "terminalReturned": 6,
+          "finished": 6,
+          "observationFailures": 0,
+          "omittedUnsupported": 0,
+          "omittedClosed": 0,
+          "omittedFailure": 0
+        },
+        "COST_VISITOR": {
+          "entered": 106,
+          "prepared": 106,
+          "omitted": 0,
+          "callbackStarted": 106,
+          "callbackReturned": 106,
+          "callbackThrew": 0,
+          "inputUnavailable": 0,
+          "startAttempts": 106,
+          "startReturned": 106,
+          "terminalAttempts": 106,
+          "terminalReturned": 106,
+          "finished": 106,
+          "observationFailures": 0,
+          "omittedUnsupported": 0,
+          "omittedClosed": 0,
+          "omittedFailure": 0
+        },
+        "TRIGGER_PREPARATION": {
+          "entered": 5,
+          "prepared": 5,
+          "omitted": 0,
+          "callbackStarted": 5,
+          "callbackReturned": 5,
+          "callbackThrew": 0,
+          "inputUnavailable": 0,
+          "startAttempts": 5,
+          "startReturned": 5,
+          "terminalAttempts": 5,
+          "terminalReturned": 5,
+          "finished": 5,
+          "observationFailures": 0,
+          "omittedUnsupported": 0,
+          "omittedClosed": 0,
+          "omittedFailure": 0
+        }
+      },
+      "invocationsInFlightAtCutoffs": 0,
+      "callbacksInFlightAtCutoffs": 0,
+      "startsMissingAtCutoffs": 0,
+      "startRecordMissingFractionAtCutoffs": 0.0,
+      "nestedInvocationCount": null,
+      "uninstrumentedDecisionCount": null
+    },
+    "contexts": 241,
+    "statuses": {
+      "PARTIAL": 219,
+      "CAPTURED": 22
+    },
+    "omissions": {
+      "DISCLOSURES:UNSUPPORTED": 217,
+      "STACK:UNRESOLVED_BINDING": 2
+    },
+    "stateBases": {
+      "RULES_STATE": 241
+    },
+    "stack": {
+      "nonempty": 24,
+      "resolving": 24,
+      "truncated": 0,
+      "entries": 24,
+      "sourceBound": 22,
+      "rootTargetsCaptured": 22
+    },
+    "promptKinds": {
+      "ENTITY_BOUNDS": 4,
+      "ENTITY_PICK_SEQUENCE": 6
+    },
+    "promptCoverage": {
+      "UNSUPPORTED": 231,
+      "RECEIVED_ENTITY_BOUNDS_V1": 4,
+      "RECEIVED_ENTITY_SEQUENCE_V1": 6
+    },
+    "diagnosticBindings": {
+      "optionEntries": 8,
+      "publicOptionLinks": 8,
+      "unresolvedOptionEntries": 0,
+      "directPublicDisclosureLinks": 0
+    },
+    "pregameShuffles": [
+      2
+    ],
+    "executionStatuses": {
+      "NORMAL": 1
+    },
+    "fullFilteredByteParity": {
+      "dataset.jsonl": true,
+      "choices.jsonl": true,
+      "examples.jsonl": true,
+      "validation.json": true
+    },
+    "coverageEqualExceptSourceRecords": true,
+    "sourceSha256": {
+      "full": "5333694dbe5bc589f0be15179addf906b57fe183059cca7bc34feb2925d9f5f8",
+      "decisions": "370cc51f2a23bad005a472b7999889705291c6683b17b20b7e2846c6bd2588cf"
+    },
+    "previousSourceSha256": null,
+    "sameNormalizedEngineEventsAsPrevious": null,
+    "exporterValidation": {
+      "valid": true,
+      "inputs": 1,
+      "decisions": 61,
+      "checks": [
+        "run/game boundaries",
+        "event order",
+        "schemas and identities",
+        "engine-event references",
+        "visibility constraints",
+        "status/outcome agreement",
+        "timeout/error censoring"
+      ]
+    },
+    "sameNormalizedEngineEventsAsV6": true,
+    "v6SourceSha256": "a26eff2aa4d3b54043c78b199b2e74ce5d1b6f918e045aaf7f3ca07fab0f3e4a"
+  }
+}
