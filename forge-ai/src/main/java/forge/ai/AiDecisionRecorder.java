@@ -20,6 +20,7 @@ final class AiDecisionRecorder {
     private final Map<Long, Map<String, Object>> details = new LinkedHashMap<>();
     private final long started = System.nanoTime();
     private volatile boolean closed;
+    private volatile boolean publicationClosed;
     private String evaluationFailure;
     private final Player viewer;
     private Assessment assessment;
@@ -59,15 +60,21 @@ final class AiDecisionRecorder {
 
     boolean choiceCaptureOpen() { return !closed; }
 
-    synchronized AiTargetProvenance targetProvenance(final SpellAbility selected) {
+    AiTargetProvenance targetProvenance(final SpellAbility selected) {
         final java.util.Set<String> allowed = new java.util.HashSet<>();
-        for (final TargetChoice choice : targetChoices) {
-            if (choice.origin.candidate == selected) { allowed.add((String) choice.data.get("choiceId")); }
+        final AiTargetProvenance snapshot;
+        final int version;
+        synchronized (this) {
+            for (final TargetChoice choice : targetChoices) {
+                if (choice.origin.candidate == selected) { allowed.add((String) choice.data.get("choiceId")); }
+            }
+            for (final SearchTargetApplication application : searchTargetApplications) {
+                if (application.candidate == selected) { allowed.add((String) application.record.get("choiceId")); }
+            }
+            snapshot = targetProvenance.snapshot();
+            version = searchTargetCaptureDeclared ? 2 : 1;
         }
-        for (final SearchTargetApplication application : searchTargetApplications) {
-            if (application.candidate == selected) { allowed.add((String) application.record.get("choiceId")); }
-        }
-        return targetProvenance.selected(selected, allowed, searchTargetCaptureDeclared ? 2 : 1);
+        return snapshot.selected(selected, allowed, version);
     }
 
     enum SearchTargetOperation {
@@ -472,8 +479,11 @@ final class AiDecisionRecorder {
             data.put("inputContext", AiInputContext.capture(viewer, null, "BEFORE_OPERATION", "RULES_STATE",
                     () -> !closed && game.isRecordingAiDecisions()));
         } catch (RuntimeException failure) {
-            game.recordEventObservationFailure(failure);
-            data.put("inputContext", AiInputContext.unavailable(viewer, "BEFORE_OPERATION", "RULES_STATE", "CAPTURE_FAILED"));
+            if (failure instanceof AITimeoutTracker.Expired) { throw failure; }
+            final boolean recording = game.isRecordingAiDecisions();
+            if (recording) { game.recordEventObservationFailure(failure); }
+            data.put("inputContext", AiInputContext.unavailable(viewer, "BEFORE_OPERATION", "RULES_STATE",
+                    recording ? "CAPTURE_FAILED" : "INTERRUPTED"));
         }
     }
 
@@ -586,69 +596,104 @@ final class AiDecisionRecorder {
         }
     }
 
-    synchronized AiDecisionEvent finish(final List<SpellAbility> chosen, final String status,
+    record Publication(AiDecisionEvent event, List<SpellAbility> chosen) { }
+
+    AiDecisionEvent finish(final List<SpellAbility> chosen, final String status,
             final FlatMonteCarloPicker.Result search) {
-        closed = true;
-        if (targetCaptureAccounting != null) { data.put("targetCaptureAccounting", targetCaptureAccounting.closeAndSnapshot()); }
-        if (searchCaptureAccounting != null) { data.put("searchCaptureAccounting", searchCaptureAccounting.closeAndSnapshot()); }
-        data.put("status", evaluationFailure == null ? status : evaluationFailure);
-        data.put("candidates", candidates);
+        return preparePublication(chosen, status, search).event();
+    }
+
+    boolean publicationOpen() { return !publicationClosed; }
+
+    synchronized boolean claimPublication() {
+        if (publicationClosed) { return false; }
+        publicationClosed = true;
+        return true;
+    }
+
+    private synchronized void closeCapture() {
+        if (!closed) {
+            closed = true;
+            if (targetCaptureAccounting != null) { data.put("targetCaptureAccounting", targetCaptureAccounting.closeAndSnapshot()); }
+            if (searchCaptureAccounting != null) { data.put("searchCaptureAccounting", searchCaptureAccounting.closeAndSnapshot()); }
+            data.put("subordinateChoiceOmissions", Map.of("budget", targetChoicesOmittedByBudget,
+                    "interrupted", interruptedTargetCaptures + targetCapturesInFlight));
+            if (searchTargetCaptureDeclared) {
+                data.put("searchTargetApplicationOmissions", Map.of("budget", searchTargetBudgetOmissions,
+                        "interrupted", searchTargetInterruptedCaptures + searchTargetCapturesInFlight));
+            }
+        }
+    }
+
+    synchronized void retirePublication() {
+        closeCapture();
+        publicationClosed = true;
+    }
+
+    Publication preparePublication(final List<SpellAbility> chosen, final String status,
+            final FlatMonteCarloPicker.Result search) {
+        closeCapture();
+        final String decisionId;
+        synchronized (this) { decisionId = (String) data.get("decisionId"); }
+        // Bind metadata and aliases to one owned list, even if the caller changes its list while a getter blocks.
+        final List<SpellAbility> actual = chosen == null ? List.of() : List.copyOf(chosen);
         final List<Map<String, Object>> selected = new ArrayList<>();
-        if (chosen != null) {
-            for (final SpellAbility sa : chosen) {
-                final Map<String, Object> action = action(sa);
-                action.put("actionId", data.get("decisionId") + ":" + selected.size());
-                selected.add(action);
-            }
+        for (final SpellAbility sa : actual) {
+            final Map<String, Object> action = action(sa);
+            action.put("actionId", decisionId + ":" + selected.size());
+            selected.add(action);
         }
-        data.put("selection", "ERROR".equals(status) ? "NO_ACTION" : selected.isEmpty() ? "PASS_PRIORITY" : "PLAY");
-        data.put("selectedActions", selected);
-        data.put("subordinateChoiceSchemaVersion", 1);
-        data.put("targetChoiceProvenanceSchemaVersion", searchTargetCaptureDeclared ? 2 : 1);
-        data.put("subordinateChoiceCoverage", "OBSERVED_HEURISTIC_TARGET_POOLS_V1");
-        final List<Map<String, Object>> choices = new ArrayList<>();
-        for (final TargetChoice choice : targetChoices) {
-            choice.data.put("candidateIndex", choice.origin.index);
-            String candidateActionId = null;
-            if (chosen != null) {
-                for (int i = 0; i < chosen.size(); i++) {
-                    if (chosen.get(i) == choice.origin.candidate) {
-                        candidateActionId = (String) selected.get(i).get("actionId");
-                        break;
+        synchronized (this) {
+            final Map<String, Object> record = new LinkedHashMap<>(data);
+            record.put("status", evaluationFailure == null ? status : evaluationFailure);
+            record.put("candidates", candidates);
+            record.put("selection", "ERROR".equals(status) ? "NO_ACTION" : selected.isEmpty() ? "PASS_PRIORITY" : "PLAY");
+            record.put("selectedActions", selected);
+            record.put("subordinateChoiceSchemaVersion", 1);
+            record.put("targetChoiceProvenanceSchemaVersion", searchTargetCaptureDeclared ? 2 : 1);
+            record.put("subordinateChoiceCoverage", "OBSERVED_HEURISTIC_TARGET_POOLS_V1");
+            final List<Map<String, Object>> choices = new ArrayList<>();
+            for (final TargetChoice choice : targetChoices) {
+                final Map<String, Object> choiceRecord = new LinkedHashMap<>(choice.data);
+                choiceRecord.put("candidateIndex", choice.origin.index);
+                String candidateActionId = null;
+                if (!actual.isEmpty()) {
+                    for (int i = 0; i < actual.size(); i++) {
+                        if (actual.get(i) == choice.origin.candidate) {
+                            candidateActionId = (String) selected.get(i).get("actionId");
+                            break;
+                        }
                     }
                 }
+                choiceRecord.put("candidateActionId", candidateActionId);
+                choices.add(choiceRecord);
             }
-            choice.data.put("candidateActionId", candidateActionId);
-            choices.add(choice.data);
-        }
-        data.put("subordinateChoices", choices);
-        if (searchTargetCaptureDeclared) {
-            final List<Map<String, Object>> applications = new ArrayList<>();
-            for (final SearchTargetApplication application : searchTargetApplications) {
-                String actionId = null;
-                if (chosen != null) {
-                    for (int i = 0; i < chosen.size(); i++) {
-                        if (chosen.get(i) == application.candidate) { actionId = (String) selected.get(i).get("actionId"); break; }
+            record.put("subordinateChoices", choices);
+            if (searchTargetCaptureDeclared) {
+                final List<Map<String, Object>> applications = new ArrayList<>();
+                for (final SearchTargetApplication application : searchTargetApplications) {
+                    String actionId = null;
+                    if (!actual.isEmpty()) {
+                        for (int i = 0; i < actual.size(); i++) {
+                            if (actual.get(i) == application.candidate) { actionId = (String) selected.get(i).get("actionId"); break; }
+                        }
                     }
+                    final Map<String, Object> applicationRecord = new LinkedHashMap<>(application.record);
+                    applicationRecord.put("candidateActionId", actionId);
+                    applications.add(applicationRecord);
                 }
-                application.record.put("candidateActionId", actionId);
-                applications.add(application.record);
+                record.put("searchTargetApplicationSchemaVersion", 1);
+                record.put("searchTargetApplications", applications);
             }
-            data.put("searchTargetApplicationSchemaVersion", 1);
-            data.put("searchTargetApplications", applications);
-            data.put("searchTargetApplicationOmissions", Map.of("budget", searchTargetBudgetOmissions,
-                    "interrupted", searchTargetInterruptedCaptures + searchTargetCapturesInFlight));
+            record.put("elapsedNanos", System.nanoTime() - started);
+            if (search != null) {
+                record.put("search", Map.of("method", "FLAT_MONTE_CARLO", "reason", search.reason,
+                        "decidedByRollouts", search.decidedByRollouts,
+                        "candidatesEvaluated", search.candidatesEvaluated, "rollouts", search.rollouts,
+                        "elapsedNanos", search.elapsedNanos));
+            }
+            return new Publication(new AiDecisionEvent(record), actual);
         }
-        data.put("subordinateChoiceOmissions", Map.of("budget", targetChoicesOmittedByBudget,
-                "interrupted", interruptedTargetCaptures + targetCapturesInFlight));
-        data.put("elapsedNanos", System.nanoTime() - started);
-        if (search != null) {
-            data.put("search", Map.of("method", "FLAT_MONTE_CARLO", "reason", search.reason,
-                    "decidedByRollouts", search.decidedByRollouts,
-                    "candidatesEvaluated", search.candidatesEvaluated, "rollouts", search.rollouts,
-                    "elapsedNanos", search.elapsedNanos));
-        }
-        return new AiDecisionEvent(data);
     }
 
     private Map<String, Object> action(final SpellAbility sa) {

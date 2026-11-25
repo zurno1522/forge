@@ -101,7 +101,7 @@ public class AiController {
     private long flatMcTurnSpentNanos;
     private FlatMonteCarloPicker.Result lastFlatMcResult;
     private volatile AiDecisionRecorder decisionRecorder;
-    private AiActionTracker actionTracker;
+    private volatile AiActionTracker actionTracker;
     private final ThreadLocal<AiDecisionRecorder> evaluationDecision = new ThreadLocal<>();
     /** Circuit breaker: Monte Carlo switches itself off for this player after repeated errors or hopeless slowness. */
     private int flatMcErrors;
@@ -186,12 +186,63 @@ public class AiController {
         if (actionTracker != null) { actionTracker.alias(original, transformed); }
     }
 
+    private synchronized AiActionTracker recordedActionTracker() {
+        if (actionTracker == null) { actionTracker = new AiActionTracker(game); }
+        return actionTracker;
+    }
+
+    private void decisionObservationFailed(final AiDecisionRecorder recorder, final RuntimeException failure,
+            final boolean claimed) {
+        if (failure instanceof AITimeoutTracker.Expired) { throw failure; }
+        if (game.isRecordingAiDecisions() && (claimed || recorder.publicationOpen())) {
+            game.recordEventObservationFailure(failure);
+        }
+    }
+
     void publishDecision(final AiDecisionRecorder recorder, final List<SpellAbility> chosen,
             final String status, final FlatMonteCarloPicker.Result search) {
-        final AiDecisionEvent event = recorder.finish(chosen, status, search);
-        if (actionTracker == null) { actionTracker = new AiActionTracker(game); }
-        actionTracker.selected(event, chosen, recorder);
-        game.fireEvent(event);
+        if (!game.isRecordingAiDecisions()) { recorder.retirePublication(); return; }
+        if (!recorder.publicationOpen()) { return; }
+        AiActionTracker tracker = null;
+        Object scope = null;
+        try { tracker = recordedActionTracker(); scope = tracker.selectionScope(); }
+        catch (RuntimeException failure) { decisionObservationFailed(recorder, failure, false); }
+        final AiDecisionRecorder.Publication publication;
+        try { publication = recorder.preparePublication(chosen, status, search); }
+        catch (RuntimeException failure) { decisionObservationFailed(recorder, failure, false); return; }
+        if (!game.isRecordingAiDecisions()) { recorder.retirePublication(); return; }
+        if (!recorder.publicationOpen()) { return; }
+        AiActionTracker.PreparedSelection prepared = null;
+        try {
+            if (tracker != null) { prepared = tracker.prepareSelected(scope, publication.event(), publication.chosen(), recorder); }
+        } catch (RuntimeException failure) { decisionObservationFailed(recorder, failure, false); }
+        if (!game.isRecordingAiDecisions()) { recorder.retirePublication(); return; }
+        if (!recorder.claimPublication()) { return; }
+        AiActionTracker.Registration registration = null;
+        try {
+            if (tracker != null) { registration = tracker.commitSelected(prepared); }
+            if (!game.isRecordingAiDecisions()) {
+                if (tracker != null) { tracker.rollbackSelected(registration); }
+                return;
+            }
+            game.fireEvent(publication.event());
+        } catch (RuntimeException failure) {
+            if (tracker != null) { tracker.rollbackSelected(registration); }
+            decisionObservationFailed(recorder, failure, true);
+        }
+    }
+
+    private AiDecisionRecorder beginDecisionCapture(final PhaseHandler phase) {
+        try {
+            if (!game.isRecordingAiDecisions() || phase.getPlayerTurn() != player
+                    || !(phase.is(PhaseType.MAIN1) || phase.is(PhaseType.MAIN2)) || !game.getStack().isEmpty()) { return null; }
+            final AiDecisionRecorder capture = new AiDecisionRecorder(game, player, game.nextAiDecisionSequence());
+            return game.isRecordingAiDecisions() ? capture : null;
+        } catch (RuntimeException failure) {
+            if (failure instanceof AITimeoutTracker.Expired) { throw failure; }
+            if (game.isRecordingAiDecisions()) { game.recordEventObservationFailure(failure); }
+            return null;
+        }
     }
 
     public boolean usesHybridSimulation() {
@@ -1705,9 +1756,9 @@ public class AiController {
     public List<SpellAbility> chooseSpellAbilityToPlay() {
         if (actionTracker != null) { actionTracker.abandonPending("SUPERSEDED_BY_NEXT_SELECTION"); }
         final PhaseHandler phase = game.getPhaseHandler();
-        final AiDecisionRecorder decision = game.isRecordingAiDecisions() && phase.getPlayerTurn() == player
-                && (phase.is(PhaseType.MAIN1) || phase.is(PhaseType.MAIN2)) && game.getStack().isEmpty()
-                ? new AiDecisionRecorder(game, player, game.nextAiDecisionSequence()) : null;
+        final AiDecisionRecorder decision;
+        try { decision = beginDecisionCapture(phase); }
+        catch (AITimeoutTracker.Expired expired) { return null; }
         final FlatMonteCarloPicker.Result previousSearch = lastFlatMcResult;
         decisionRecorder = decision;
         final AITimeoutTracker.SessionKey id = AITimeoutTracker.key(game.getId(), player.getId());

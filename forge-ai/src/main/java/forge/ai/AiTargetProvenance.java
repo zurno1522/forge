@@ -35,6 +35,15 @@ final class AiTargetProvenance {
         states.put(state, List.copyOf(origins));
     }
 
+    /** Copy recorder-owned lists under its monitor before engine target traversal. */
+    AiTargetProvenance snapshot() {
+        final AiTargetProvenance result = new AiTargetProvenance();
+        result.schemaVersion = schemaVersion;
+        states.forEach((state, origins) -> result.states.put(state,
+                Collections.unmodifiableList(new ArrayList<>(origins))));
+        return result;
+    }
+
     AiTargetProvenance selected(final SpellAbility root, final Set<String> allowedChoices, final int version) {
         final AiTargetProvenance result = new AiTargetProvenance();
         result.schemaVersion = version;

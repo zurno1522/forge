@@ -4,6 +4,7 @@ import forge.game.Game;
 import forge.game.event.GameEventSpellAbilityCast;
 import forge.game.event.EventEmissionObserver;
 import forge.game.spellability.SpellAbility;
+import forge.util.AITimeoutTracker;
 
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
@@ -19,6 +20,7 @@ public final class AiActionTracker implements EventEmissionObserver {
     private final EventEmissionObserver.Subscription observation;
     private final List<Attempt> actions = new ArrayList<>();
     private boolean retired;
+    private Object selectionGeneration = new Object();
 
     synchronized void retire() {
         retired = true;
@@ -49,23 +51,67 @@ public final class AiActionTracker implements EventEmissionObserver {
 
     @Override public void close() { retire(); }
 
-    synchronized void selected(final AiDecisionEvent event, final List<SpellAbility> chosen, final AiDecisionRecorder recorder) {
-        if (retired || !game.isRecordingAiDecisions() || chosen == null) { return; }
-        final List<?> selected = (List<?>) event.data().get("selectedActions");
-        for (int index = 0; index < chosen.size(); index++) {
-            final Map<?, ?> action = (Map<?, ?>) selected.get(index);
-            final Map<String, Object> identity = new LinkedHashMap<>();
-            identity.put("executionSchemaVersion", 1);
-            identity.put("decisionId", event.data().get("decisionId"));
-            identity.put("playerId", event.data().get("playerId"));
-            for (final String key : List.of("actionId", "abilityId", "sourceId", "kind")) {
-                identity.put(key, action.get(key));
-            }
-            final Attempt attempt = new Attempt(identity);
-            attempt.aliases.add(chosen.get(index));
-            attempt.targetProvenance = recorder.targetProvenance(chosen.get(index));
-            actions.add(attempt);
+    static final class PreparedSelection {
+        private final Object scope;
+        private final List<Attempt> attempts;
+        private PreparedSelection(final Object scope, final List<Attempt> attempts) {
+            this.scope = scope; this.attempts = List.copyOf(attempts);
         }
+    }
+
+    static final class Registration {
+        private final List<Attempt> attempts;
+        private Registration(final List<Attempt> attempts) { this.attempts = attempts; }
+    }
+
+    synchronized Object selectionScope() {
+        return retired || !game.isRecordingAiDecisions() ? null : selectionGeneration;
+    }
+
+    private boolean currentScope(final Object scope) {
+        return scope != null && !retired && game.isRecordingAiDecisions() && selectionGeneration == scope;
+    }
+
+    PreparedSelection prepareSelected(final Object scope, final AiDecisionEvent event,
+            final List<SpellAbility> chosen, final AiDecisionRecorder recorder) {
+        synchronized (this) { if (!currentScope(scope)) { return null; } }
+        final List<Attempt> prepared = new ArrayList<>();
+        try {
+            final List<SpellAbility> actual = chosen == null ? List.of() : List.copyOf(chosen);
+            final List<?> selected = (List<?>) event.data().get("selectedActions");
+            for (int index = 0; index < actual.size(); index++) {
+                final Map<?, ?> action = (Map<?, ?>) selected.get(index);
+                final Map<String, Object> identity = new LinkedHashMap<>();
+                identity.put("executionSchemaVersion", 1);
+                identity.put("decisionId", event.data().get("decisionId"));
+                identity.put("playerId", event.data().get("playerId"));
+                for (final String key : List.of("actionId", "abilityId", "sourceId", "kind")) {
+                    identity.put(key, action.get(key));
+                }
+                final Attempt attempt = new Attempt(identity);
+                attempt.aliases.add(actual.get(index));
+                attempt.targetProvenance = recorder.targetProvenance(actual.get(index));
+                prepared.add(attempt);
+            }
+        } catch (RuntimeException failure) {
+            if (failure instanceof AITimeoutTracker.Expired) { throw failure; }
+            synchronized (this) { if (!currentScope(scope)) { return null; } }
+            throw failure;
+        }
+        return new PreparedSelection(scope, prepared);
+    }
+
+    synchronized Registration commitSelected(final PreparedSelection prepared) {
+        if (prepared == null || !currentScope(prepared.scope)) { return null; }
+        actions.addAll(prepared.attempts);
+        selectionGeneration = new Object();
+        return new Registration(prepared.attempts);
+    }
+
+    synchronized void rollbackSelected(final Registration registration) {
+        if (registration == null) { return; }
+        // Publication failure cannot undo an execution that a synchronous consumer already started.
+        for (final Attempt attempt : registration.attempts) { if (!attempt.started) { actions.remove(attempt); } }
     }
 
     synchronized Attempt begin(final SpellAbility sa) {
@@ -175,6 +221,7 @@ public final class AiActionTracker implements EventEmissionObserver {
     }
 
     synchronized void abandonPending(final String reason) {
+        selectionGeneration = new Object();
         for (final Attempt attempt : new ArrayList<>(actions)) {
             if (!attempt.started) { finish(attempt, "ABANDONED", reason); }
         }

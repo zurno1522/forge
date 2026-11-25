@@ -1,0 +1,7 @@
+{
+  "forge-ai/src/main/java/forge/ai/AiController.java": "61c884ba7abacbcceece10599ebed9f931ce49339c10fca0006e281dd6d454b1",
+  "forge-ai/src/main/java/forge/ai/AiDecisionRecorder.java": "03ed38d283ccfe29489b0af774f351e31c9a51771fc82ac1fe142fbabaebdaf4",
+  "forge-ai/src/main/java/forge/ai/AiActionTracker.java": "2caf8d77672aa59817365437b6c2503f54c4eb1b5847f7102ca7535c7a004994",
+  "forge-ai/src/main/java/forge/ai/AiTargetProvenance.java": "38836ea060db9eeaf4628fddfe162ebda8fcbe6622bc6dfa2ce6fe994ec34248",
+  "forge-gui-desktop/src/test/java/forge/ai/AiDecisionPublicationTest.java": "1fa1d956879fc1ccbf326e2c57144a4cc3bd5a1e49bf30c1c0a7fd1f2b209f94"
+}

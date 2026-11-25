@@ -22,7 +22,7 @@ The public engine still receives its original selected abilities. No engine targ
 | Parent construction / legacy observation | Report an active runtime observation failure and continue policy without a parent recorder. Do not fabricate a parent or fallback identity. The current constructor runs before the chooser's policy try block, so this boundary needs an explicit guard. |
 | Selected-action projection | Report an active runtime observation failure, preserve the selected result and leave parent evidence unavailable. No partial action registrations. |
 | Provenance / registration preparation | If a valid parent exists, retain it and report the runtime fault, with no partially prepared execution aliases. |
-| Retired or superseded preparation | Drop late preparation and suppress obsolete failures. Do not invalidate or register into a newer selection. |
+| Retired or superseded action-registration preparation | Drop late link preparation and suppress obsolete failures. Do not invalidate or register into a newer selection. A missing parent projection remains an active capture fault while its parent/game publication is open. |
 | Genuine deadline during preparation | Preserve deadline control and allow the ordinary timeout publication path. Do not relabel it as a tracing error or spend the publication claim early. |
 | Duplicate/late publication | Emit/register only the claimant. A pre-claim losing failure cannot poison a completed parent. |
 | Emitter API throws | Report the active runtime fault and clean up this batch's unstarted aliases, without replaying publication or gameplay. Partial delivery cannot be inferred away. |
@@ -35,3 +35,5 @@ Recording closure suppresses late health updates and late publication. A publish
 Tests must exercise source projection failure without changing a real selected play, a later registration failure without a retained prefix, blocked preparation across retirement/supersession, genuine deadlines and timeout retries, concurrent publication winners, and emitter versus subscriber failure. Healthy execution-copy aliases and target origins must retain their existing behavior. New scopes must not retain parent graphs after preparation/retirement.
 
 Review each stage against its actual call sites, then run the full suite and fresh full/filtered export checks. Preserve engine event ordering, including shuffles before `GAME_STARTED`. Runtime optimization, capture-budget policy, model-facing option membership and new whole-parent source denominators remain separate work.
+
+The [publication hardening increment](Simulation-Parent-Publication-Hardening.md) implements and validates this contract. Publication permission can be claimed or retired; neither state is collector acknowledgement.
