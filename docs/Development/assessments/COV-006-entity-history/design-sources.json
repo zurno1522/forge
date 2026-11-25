@@ -1,0 +1,12 @@
+{
+  "baseline": "f40645bb13c3be58d80df034d7b77b7dfc4c20d3",
+  "scope": "Design/source audit only; no V7 producer or permission emitted",
+  "sources": {
+    "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java": "4bf2a573a8ecbfdd04940b83d9d96aded07e18a5c59ff311d7ee15a5d32ee5cb",
+    "forge-ai/src/main/java/forge/ai/AiEffectChoiceRecorder.java": "93a05efdd7a1605730799da5c1b0106e4939226b20474dfd443a1949abba99dc",
+    "forge-ai/src/main/java/forge/ai/AiChoiceRecorder.java": "a327335a2290f98b793be6b91813dfd2a8ee1eaa75c03ba105aa9e3cce706c95",
+    "forge-ai/src/main/java/forge/ai/AiInputContext.java": "1b5ab23c7deafffc4651c4e602e7725993f61a7acdb48ad4791d8622300498f1",
+    "forge-ai/src/main/java/forge/ai/AiPromptInput.java": "dfae7cd17ba4c68f906bce5c2b4bd8407e1a3c517e8c6245272b6cdcf180fa78",
+    "tools/decision-records/choice_events.py": "14871fde703bcee4ce6fe0d565fff9103407e1f5d135cec1db5b61512f7f9567"
+  }
+}
