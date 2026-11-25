@@ -1,0 +1,10 @@
+{
+  "baseRevision": "f1fd099f8c3",
+  "sources": {
+    "forge-ai/src/main/java/forge/ai/AiChoiceRecorder.java": "1a305812ad57f798681d7ed181709082c96d084114b059049c3c07e68fa7aa2f",
+    "forge-ai/src/main/java/forge/ai/AiEffectChoiceRecorder.java": "95e4cde0f9bc6bf65cf23bb72b29ca8bde7589203446d193ab97468d35d759f7",
+    "forge-ai/src/main/java/forge/ai/AiZoneOperationRecorder.java": "9dd21cae374fa63151e5218a082e32f1c22b906a88bcc964825e7a01ac518162",
+    "forge-ai/src/main/java/forge/ai/AiZoneOrigins.java": "9c85ef7e4255b8d19fcce6c0fcedae040469439142ba7eecc0ca075ec5b1d568",
+    "forge-gui-desktop/src/test/java/forge/ai/AiZoneOriginCaptureTest.java": "bf0665be359314b8e668b1e73563c09355aee9b91d823ccbe2005ad8b0142173"
+  }
+}

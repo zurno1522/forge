@@ -23,6 +23,14 @@ public final class AiChoiceRecorder {
     private static final ThreadLocal<Game> PLANNING = new ThreadLocal<>();
     private AiChoiceRecorder() { }
 
+    /** A known metadata limitation, distinct from a failing observation getter or callback. */
+    static RuntimeException unsupportedOptions() { return new UnsupportedOptions(); }
+
+    private static final class UnsupportedOptions extends RuntimeException {
+        private static final long serialVersionUID = 1L;
+        private UnsupportedOptions() { super(null, null, false, false); }
+    }
+
     /** Exact, visible invocation admission; never a lookup of a nearby parent. */
     interface Capture {
         boolean open();
@@ -274,6 +282,12 @@ public final class AiChoiceRecorder {
             }
             if (!open()) { abandon(); return; }
             try { record.put("options", visible ? options.get() : Map.of("coverage", "MASKED")); }
+            catch (UnsupportedOptions unsupported) {
+                if (!open()) { abandon(); return; }
+                finished = true;
+                if (accounting != null) { accounting.unsupported(); }
+                return;
+            }
             catch (RuntimeException failure) {
                 if (!open()) { abandon(); return; }
                 throw failure;

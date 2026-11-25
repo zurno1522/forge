@@ -23,7 +23,7 @@ final class AiZoneOperationRecorder {
                     options.put("coverage", "RECEIVED_ZONE_OPERATION_REQUEST"); options.put("branch", request.branch().name());
                     options.put("requestedIterations", request.requestedIterations());
                     options.put("destination", request.destination().name());
-                    options.put("origins", request.origins().stream().map(Enum::name).toList());
+                    options.put("origins", AiZoneOrigins.capture(request.origins()));
                     options.put("sourcePlayerId", request.sourcePlayer() == null ? null : request.sourcePlayer().getId());
                     options.put("deciderPlayerId", request.decider() == null ? null : request.decider().getId());
                     return options;

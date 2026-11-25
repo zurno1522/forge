@@ -1,0 +1,74 @@
+{
+  "results": {
+    "SINGLE": {
+      "accounting": {
+        "collectorStarts": 0,
+        "overflowed": false,
+        "boundaries": {
+          "CONTROLLER_ZONE_CHANGE_CARD": {
+            "entered": 1,
+            "prepared": 0,
+            "omitted": 1,
+            "callbackStarted": 1,
+            "callbackReturned": 1,
+            "callbackThrew": 0,
+            "inputUnavailable": 0,
+            "startAttempts": 0,
+            "startReturned": 0,
+            "terminalAttempts": 0,
+            "terminalReturned": 0,
+            "finished": 1,
+            "observationFailures": 0,
+            "omittedUnsupported": 1,
+            "omittedClosed": 0,
+            "omittedFailure": 0
+          }
+        },
+        "closed": false,
+        "scopeComplete": true,
+        "collectorTerminals": 0
+      },
+      "observationFailure": false,
+      "originCount": 21,
+      "sameResult": true,
+      "events": [],
+      "callbackCalls": 1
+    },
+    "OUTER": {
+      "accounting": {
+        "collectorStarts": 0,
+        "overflowed": false,
+        "boundaries": {
+          "CONTROLLER_ZONE_CHANGE_SELECTIONS": {
+            "entered": 1,
+            "prepared": 0,
+            "omitted": 1,
+            "callbackStarted": 1,
+            "callbackReturned": 1,
+            "callbackThrew": 0,
+            "inputUnavailable": 0,
+            "startAttempts": 0,
+            "startReturned": 0,
+            "terminalAttempts": 0,
+            "terminalReturned": 0,
+            "finished": 1,
+            "observationFailures": 0,
+            "omittedUnsupported": 1,
+            "omittedClosed": 0,
+            "omittedFailure": 0
+          }
+        },
+        "closed": false,
+        "scopeComplete": true,
+        "collectorTerminals": 0
+      },
+      "observationFailure": false,
+      "originCount": 21,
+      "sameResult": true,
+      "events": [],
+      "callbackCalls": 1
+    }
+  },
+  "completeGameTrace": false,
+  "fixtureKind": "ACTUAL_CALLBACK_BOUND_REPRODUCTION"
+}

@@ -1,0 +1,10 @@
+{
+  "moving": {
+    "startedChoiceCount": 677,
+    "optionsInputAndEntryExactlyEqualV12": true
+  },
+  "ordinary": {
+    "startedChoiceCount": 209,
+    "optionsInputAndEntryExactlyEqualV12": true
+  }
+}

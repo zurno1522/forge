@@ -1,0 +1,46 @@
+{
+  "baseline": {
+    "SINGLE": {
+      "callbackCalls": 1,
+      "sameResult": true,
+      "lifecycleEvents": 2,
+      "originCount": 21,
+      "prepared": 1,
+      "omittedUnsupported": 0,
+      "observationFailures": 0,
+      "decoderRejection": "invalid zone-change origin/destination"
+    },
+    "OUTER": {
+      "callbackCalls": 1,
+      "sameResult": true,
+      "lifecycleEvents": 2,
+      "originCount": 21,
+      "prepared": 1,
+      "omittedUnsupported": 0,
+      "observationFailures": 0,
+      "decoderRejection": "invalid operation zones"
+    }
+  },
+  "fixed": {
+    "SINGLE": {
+      "callbackCalls": 1,
+      "sameResult": true,
+      "lifecycleEvents": 0,
+      "originCount": 21,
+      "prepared": 0,
+      "omittedUnsupported": 1,
+      "observationFailures": 0,
+      "decoderRejection": null
+    },
+    "OUTER": {
+      "callbackCalls": 1,
+      "sameResult": true,
+      "lifecycleEvents": 0,
+      "originCount": 21,
+      "prepared": 0,
+      "omittedUnsupported": 1,
+      "observationFailures": 0,
+      "decoderRejection": null
+    }
+  }
+}

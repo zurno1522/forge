@@ -1,0 +1,8 @@
+{
+  "revision": "f1fd099f8c3",
+  "sources": {
+    "AiChoiceRecorder.java": "3f1f5fbf482933a1f9f5d0b37ac563d26a0dabb94608d79a50fa3c8fb0d67500",
+    "AiEffectChoiceRecorder.java": "9df3360face15ff593848f2278e4b73f0a2394e872ea0270e075ca61a72b9e91",
+    "AiZoneOperationRecorder.java": "c5e8b91542f82b89bcb947edab0238104ea6a913b026421e06c2ceb3388e2346"
+  }
+}

@@ -110,7 +110,7 @@ final class AiEffectChoiceRecorder {
                     result.put("coverage", offered.get() == null ? "UNAVAILABLE" : "OBSERVED_ZONE_CHANGE_OPTIONS_DIAGNOSTIC_ONLY");
                     result.put("optional", optional);
                     result.put("destination", destination.name());
-                    result.put("origins", origins.stream().map(Enum::name).toList());
+                    result.put("origins", AiZoneOrigins.capture(origins));
                     result.put("deciderPlayerId", decider == null ? null : decider.getId());
                     if (history != null) { result.put("zoneSelectionProgress", history.diagnostics()); }
                     return result;

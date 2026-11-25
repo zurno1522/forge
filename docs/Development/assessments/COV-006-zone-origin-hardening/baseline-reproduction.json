@@ -1,0 +1,484 @@
+{
+  "completeGameTrace": false,
+  "results": {
+    "SINGLE": {
+      "callbackCalls": 1,
+      "events": [
+        {
+          "choiceSchemaVersion": 1,
+          "choiceId": "choice:1",
+          "parentChoiceId": null,
+          "status": "STARTED",
+          "choiceType": "ZONE_CHANGE_CARD_SELECTION",
+          "boundary": "CONTROLLER_ZONE_CHANGE_CARD",
+          "stage": "CONTROLLER_CALLBACK",
+          "chooserPlayerId": 1,
+          "chooserKind": "AI",
+          "abilityId": 4,
+          "sourceId": 1,
+          "decisionId": null,
+          "actionId": null,
+          "candidateAbilityId": null,
+          "assessmentId": null,
+          "resolvingAbilityId": null,
+          "entryLocation": {
+            "schemaVersion": 1,
+            "status": "CAPTURED",
+            "kind": "SELECTOR",
+            "timing": "BEFORE_SELECTOR",
+            "stateBasis": "RULES_STATE",
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayerId": 1,
+            "reason": null
+          },
+          "options": {
+            "items": [
+              {
+                "type": "CARD",
+                "id": 2,
+                "gameTimestamp": 2
+              }
+            ],
+            "truncated": false,
+            "coverage": "OBSERVED_ZONE_CHANGE_OPTIONS_DIAGNOSTIC_ONLY",
+            "optional": true,
+            "destination": "Hand",
+            "origins": [
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library"
+            ],
+            "deciderPlayerId": 1
+          },
+          "inputContext": {
+            "schemaVersion": 12,
+            "profile": "PERMITTED_CHOICE_VIEW_V12",
+            "timing": "BEFORE_SELECTOR",
+            "stateBasis": "RULES_STATE",
+            "perspective": {
+              "chooserPlayerId": 1,
+              "controllingPlayerId": 1
+            },
+            "status": "PARTIAL",
+            "coverage": {
+              "history": "INCOMPLETE",
+              "stack": "PUBLIC_ROOT_STACK_V1",
+              "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+              "prompt": "UNAVAILABLE",
+              "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+              "options": "DIAGNOSTIC_ONLY"
+            },
+            "policy": {
+              "turn": 1,
+              "phase": "MAIN1",
+              "turnPlayer": "p1",
+              "chooser": "p1",
+              "players": [
+                {
+                  "entityRef": "p0",
+                  "life": 20,
+                  "handCount": 0,
+                  "libraryCount": 0,
+                  "floatingManaColors": []
+                },
+                {
+                  "entityRef": "p1",
+                  "life": 20,
+                  "handCount": 0,
+                  "libraryCount": 0,
+                  "floatingManaColors": []
+                }
+              ],
+              "cards": [
+                {
+                  "entityRef": "c0",
+                  "owner": "p1",
+                  "controller": "p1",
+                  "zone": "Battlefield",
+                  "tapped": false,
+                  "faceDown": false,
+                  "identityKnown": true,
+                  "name": "Time Beetle",
+                  "types": "Creature - Alien Insect",
+                  "manaCost": "{1}{U}",
+                  "power": 1,
+                  "toughness": 1,
+                  "counters": {}
+                },
+                {
+                  "entityRef": "c1",
+                  "owner": "p1",
+                  "controller": "p1",
+                  "zone": "Graveyard",
+                  "tapped": false,
+                  "faceDown": false,
+                  "identityKnown": true,
+                  "name": "Grizzly Bears",
+                  "types": "Creature - Bear",
+                  "manaCost": "{1}{G}",
+                  "power": 2,
+                  "toughness": 2,
+                  "counters": {}
+                }
+              ],
+              "stack": {
+                "entries": [],
+                "truncated": false,
+                "isResolving": false,
+                "resolving": null,
+                "resolvingCoverage": "CAPTURED"
+              },
+              "prompt": null,
+              "disclosedFacts": []
+            },
+            "diagnostics": {
+              "cardBindings": [
+                {
+                  "entityRef": "c0",
+                  "gameTimestamp": 1,
+                  "id": 1
+                },
+                {
+                  "entityRef": "c1",
+                  "gameTimestamp": 2,
+                  "id": 2
+                }
+              ],
+              "playerBindings": [
+                {
+                  "id": 0,
+                  "entityRef": "p0"
+                },
+                {
+                  "id": 1,
+                  "entityRef": "p1"
+                }
+              ],
+              "stackBindings": [],
+              "optionBindings": {
+                "truncated": false,
+                "coverage": "DIAGNOSTIC_PUBLIC_CURRENT_V1",
+                "items": [
+                  {
+                    "optionIndex": 0,
+                    "entityRef": "c1"
+                  }
+                ]
+              }
+            },
+            "omissions": [
+              {
+                "reason": "OUTSIDE_CAPTURED_PREFIX",
+                "component": "PROMPT"
+              },
+              {
+                "reason": "UNSUPPORTED",
+                "component": "DISCLOSURES"
+              }
+            ]
+          }
+        },
+        {
+          "choiceSchemaVersion": 1,
+          "choiceId": "choice:1",
+          "status": "COMPLETED",
+          "selection": {
+            "selected": {
+              "type": "CARD",
+              "id": 2,
+              "gameTimestamp": 2
+            },
+            "selectedOptionIndex": 0,
+            "match": "UNIQUE"
+          },
+          "elapsedNanos": 16117444
+        }
+      ],
+      "sameResult": true,
+      "originCount": 21,
+      "observationFailure": false,
+      "accounting": {
+        "scopeComplete": true,
+        "closed": false,
+        "boundaries": {
+          "CONTROLLER_ZONE_CHANGE_CARD": {
+            "entered": 1,
+            "prepared": 1,
+            "omitted": 0,
+            "callbackStarted": 1,
+            "callbackReturned": 1,
+            "callbackThrew": 0,
+            "inputUnavailable": 0,
+            "startAttempts": 1,
+            "startReturned": 1,
+            "terminalAttempts": 1,
+            "terminalReturned": 1,
+            "finished": 1,
+            "observationFailures": 0,
+            "omittedUnsupported": 0,
+            "omittedClosed": 0,
+            "omittedFailure": 0
+          }
+        },
+        "overflowed": false,
+        "collectorStarts": 0,
+        "collectorTerminals": 0
+      }
+    },
+    "OUTER": {
+      "callbackCalls": 1,
+      "events": [
+        {
+          "choiceSchemaVersion": 1,
+          "choiceId": "choice:2",
+          "parentChoiceId": null,
+          "status": "STARTED",
+          "choiceType": "ZONE_CHANGE_SELECTION_OPERATION",
+          "boundary": "CONTROLLER_ZONE_CHANGE_SELECTIONS",
+          "stage": "CONTROLLER_CALLBACK",
+          "chooserPlayerId": 1,
+          "chooserKind": "AI",
+          "abilityId": 8,
+          "sourceId": 1,
+          "decisionId": null,
+          "actionId": null,
+          "candidateAbilityId": null,
+          "assessmentId": null,
+          "resolvingAbilityId": null,
+          "entryLocation": {
+            "schemaVersion": 1,
+            "status": "CAPTURED",
+            "kind": "OPERATION",
+            "timing": "BEFORE_OPERATION",
+            "stateBasis": "RULES_STATE",
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayerId": 1,
+            "reason": null
+          },
+          "options": {
+            "coverage": "RECEIVED_ZONE_OPERATION_REQUEST",
+            "branch": "ORDINARY_HIDDEN_ORIGIN",
+            "requestedIterations": 1,
+            "destination": "Hand",
+            "origins": [
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library",
+              "Library"
+            ],
+            "sourcePlayerId": 1,
+            "deciderPlayerId": 1
+          },
+          "inputContext": {
+            "schemaVersion": 12,
+            "profile": "PERMITTED_CHOICE_VIEW_V12",
+            "timing": "BEFORE_OPERATION",
+            "stateBasis": "RULES_STATE",
+            "perspective": {
+              "chooserPlayerId": 1,
+              "controllingPlayerId": 1
+            },
+            "status": "PARTIAL",
+            "coverage": {
+              "history": "INCOMPLETE",
+              "stack": "PUBLIC_ROOT_STACK_V1",
+              "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+              "prompt": "UNAVAILABLE",
+              "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+              "options": "DIAGNOSTIC_ONLY"
+            },
+            "policy": {
+              "turn": 1,
+              "phase": "MAIN1",
+              "turnPlayer": "p1",
+              "chooser": "p1",
+              "players": [
+                {
+                  "entityRef": "p0",
+                  "life": 20,
+                  "handCount": 0,
+                  "libraryCount": 0,
+                  "floatingManaColors": []
+                },
+                {
+                  "entityRef": "p1",
+                  "life": 20,
+                  "handCount": 0,
+                  "libraryCount": 0,
+                  "floatingManaColors": []
+                }
+              ],
+              "cards": [
+                {
+                  "entityRef": "c0",
+                  "owner": "p1",
+                  "controller": "p1",
+                  "zone": "Battlefield",
+                  "tapped": false,
+                  "faceDown": false,
+                  "identityKnown": true,
+                  "name": "Time Beetle",
+                  "types": "Creature - Alien Insect",
+                  "manaCost": "{1}{U}",
+                  "power": 1,
+                  "toughness": 1,
+                  "counters": {}
+                },
+                {
+                  "entityRef": "c1",
+                  "owner": "p1",
+                  "controller": "p1",
+                  "zone": "Graveyard",
+                  "tapped": false,
+                  "faceDown": false,
+                  "identityKnown": true,
+                  "name": "Grizzly Bears",
+                  "types": "Creature - Bear",
+                  "manaCost": "{1}{G}",
+                  "power": 2,
+                  "toughness": 2,
+                  "counters": {}
+                }
+              ],
+              "stack": {
+                "entries": [],
+                "truncated": false,
+                "isResolving": false,
+                "resolving": null,
+                "resolvingCoverage": "CAPTURED"
+              },
+              "prompt": null,
+              "disclosedFacts": []
+            },
+            "diagnostics": {
+              "cardBindings": [
+                {
+                  "entityRef": "c0",
+                  "gameTimestamp": 1,
+                  "id": 1
+                },
+                {
+                  "entityRef": "c1",
+                  "gameTimestamp": 2,
+                  "id": 2
+                }
+              ],
+              "playerBindings": [
+                {
+                  "id": 0,
+                  "entityRef": "p0"
+                },
+                {
+                  "id": 1,
+                  "entityRef": "p1"
+                }
+              ],
+              "stackBindings": [],
+              "optionBindings": {
+                "truncated": false,
+                "coverage": "UNSUPPORTED",
+                "items": []
+              }
+            },
+            "omissions": [
+              {
+                "reason": "OUTSIDE_CAPTURED_PREFIX",
+                "component": "PROMPT"
+              },
+              {
+                "reason": "UNSUPPORTED",
+                "component": "DISCLOSURES"
+              }
+            ]
+          }
+        },
+        {
+          "choiceSchemaVersion": 1,
+          "choiceId": "choice:2",
+          "status": "COMPLETED",
+          "selection": {
+            "truncated": false,
+            "coverage": "OBSERVED_RETAINED_CARD_PREFIX",
+            "items": [
+              {
+                "type": "CARD",
+                "id": 2,
+                "gameTimestamp": 2
+              }
+            ],
+            "selectedCount": 1
+          },
+          "elapsedNanos": 2251190
+        }
+      ],
+      "sameResult": true,
+      "originCount": 21,
+      "observationFailure": false,
+      "accounting": {
+        "scopeComplete": true,
+        "closed": false,
+        "boundaries": {
+          "CONTROLLER_ZONE_CHANGE_SELECTIONS": {
+            "entered": 1,
+            "prepared": 1,
+            "omitted": 0,
+            "callbackStarted": 1,
+            "callbackReturned": 1,
+            "callbackThrew": 0,
+            "inputUnavailable": 0,
+            "startAttempts": 1,
+            "startReturned": 1,
+            "terminalAttempts": 1,
+            "terminalReturned": 1,
+            "finished": 1,
+            "observationFailures": 0,
+            "omittedUnsupported": 0,
+            "omittedClosed": 0,
+            "omittedFailure": 0
+          }
+        },
+        "overflowed": false,
+        "collectorStarts": 0,
+        "collectorTerminals": 0
+      }
+    }
+  },
+  "fixtureKind": "ACTUAL_CALLBACK_BOUND_REPRODUCTION"
+}
