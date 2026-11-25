@@ -1,0 +1,22 @@
+{
+  "forge-ai/src/main/java/forge/ai/AiChoiceRecorder.java": "3f1f5fbf482933a1f9f5d0b37ac563d26a0dabb94608d79a50fa3c8fb0d67500",
+  "forge-ai/src/main/java/forge/ai/AiEffectChoiceRecorder.java": "3c5b39d985eeff7c07e89c2b64b88faf4a3c350606ca28506830967b4449f514",
+  "forge-ai/src/main/java/forge/ai/AiEntitySelectionHistory.java": "4a7c5b8c389c1cc42985762afed4ac7692444efe308897e2a2eea4d1c223caf5",
+  "forge-ai/src/main/java/forge/ai/AiInputContext.java": "94e095b0b2415819b0bab88ad80b649ed8fab955912b8b4f42f00f8889dad7ca",
+  "forge-ai/src/main/java/forge/ai/AiPromptInput.java": "d9788a4649f19550dc712dbd2766092633471e6253db9e6586c22c616dba478b",
+  "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java": "8d10c7c5b7758ebd9bffedacb7c6ab6e0828a04c45a009c7fd0dbaf7931810c9",
+  "forge-gui-desktop/src/test/java/forge/ai/AiEntitySelectionHistoryTest.java": "d132f27f4071260c91963edc84d17bd24b31e41eeb31eb354d3deddea5149c53",
+  "forge-gui-desktop/src/test/java/forge/ai/AiZoneRequestInputTest.java": "ff3eb6e01c456dce8077fa69815570463073dad9b09fcefcd8e61e1f6b6c8a8e",
+  "forge-gui-desktop/src/test/java/forge/ai/AiInputContextIntegrationTest.java": "ff305c8541eda554bfa540eae4bb187b4b222dde0ee4126ce61b52ef7da3683e",
+  "forge-gui-desktop/src/test/java/forge/ai/AiModeInputContextTest.java": "ce524c527bc1a970db17a9f11a605a22ffc857d96b7945de49ce1ed61432154d",
+  "forge-gui-desktop/src/test/java/forge/ai/AiModePromptInputTest.java": "7da73377d18deddfab3cbb0bcf49e20c0dcf042871cde4f8c1d139396df9e478",
+  "forge-gui-desktop/src/test/java/forge/ai/AiMultiEntityChoiceRecorderTest.java": "b9b4108ba5b0c71c3d5f625e45cad48848af862b45cc9786f2eeb7642f26ef32",
+  "forge-gui-desktop/src/test/java/forge/ai/AiStackInputContextTest.java": "86d8d4a952e1d0ea6492bb913975e6b409050386f423bf018aa074000b4629ad",
+  "tools/decision-records/choice_events.py": "30c556cab9fd1368a636a117a96e4edec7554b1cd94af3351412873a492e6028",
+  "tools/decision-records/export.py": "727163c7b7269e4bd5beb271ec7d658e0e5367d2c73bea8cf0e4cc3d3130af76",
+  "tools/decision-records/input_context.py": "cb7e3d261ea07b10268678624fcdfc6429f4cf14a2ff543a81da9342e54e624c",
+  "tools/decision-records/test_entity_selection_history.py": "227d9cfebd12be420a9f650c3c19b31d8229a1771d1a7bb1e8fd4be7a4af89f8",
+  "tools/decision-records/test_zone_request_input.py": "50d84ca4870499a82832668b102b003877458da04863ee52f97fc7eca382a8b9",
+  "tools/decision-records/test_workload_measurements.py": "f26bc294185b3043038abc7d0c4529d5bac9e688dc2cb18d256c52f71de6c147",
+  "tools/decision-records/input-context-benchmark/summarize-workloads.py": "3343d402fa178c261b479b5e34d1d067e6b27d874fac224f73a709d3581f924f"
+}

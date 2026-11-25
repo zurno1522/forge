@@ -114,6 +114,9 @@ def input_boundary(value, boundary, stage=None, choice=None):
             elif prompt['kind'] == 'ENTITY_PICK_SEQUENCE':
                 require(boundary == 'CONTROLLER_EFFECT_ENTITY' and value['schemaVersion'] >= 7
                         and 'entryLocation' in choice and 'selectionSequence' in choice['options'], 'history at unaudited boundary')
+            elif prompt['kind'] == 'ZONE_CHANGE_REQUEST':
+                require(boundary == 'CONTROLLER_ZONE_CHANGE_CARD' and value['schemaVersion'] >= 8
+                        and 'entryLocation' in choice, 'zone request at unaudited boundary')
             else:
                 require(boundary == {'NUMBER_RANGE': 'CONTROLLER_NUMBER_RANGE', 'NUMBER_OPTIONS': 'CONTROLLER_NUMBER_OPTIONS',
                                      'SINGLE_ENTITY': 'CONTROLLER_EFFECT_ENTITY'}[prompt['kind']], 'typed prompt at unaudited boundary')
@@ -124,7 +127,11 @@ def prompt_arguments(choice):
     prompt = (context['policy'] or {}).get('prompt')
     if prompt is None: return
     option = choice['options']
-    if prompt['kind'] == 'ENTITY_PICK_SEQUENCE':
+    if prompt['kind'] == 'ZONE_CHANGE_REQUEST':
+        require(all(prompt[k] == option[k] for k in ('optional', 'destination', 'origins')), 'zone request differs from callback arguments')
+        by_ref = {b['entityRef']: b['id'] for b in context['diagnostics']['playerBindings']}
+        require((None if prompt['decider'] is None else by_ref[prompt['decider']]) == option['deciderPlayerId'], 'zone request decider differs from callback')
+    elif prompt['kind'] == 'ENTITY_PICK_SEQUENCE':
         sequence = option['selectionSequence']
         require(sequence['coverage'] == 'COMPLETE', 'incomplete history claims a sequence prompt')
         require(all(prompt[k] == sequence[k] for k in ('minimumTotal', 'maximumTotal', 'priorSelectionCount')), 'sequence prompt differs from observed history')

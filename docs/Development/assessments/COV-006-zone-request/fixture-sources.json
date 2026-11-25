@@ -1,0 +1,11 @@
+{
+  "tools/trace-test-decks/choice-zone-search.dck": "c3b7b2cee3e7c194b6d73f820d38954fbd2e6a63fdf0860ed0b7e820c8fca589",
+  "tools/trace-test-decks/choice-repeated-entities.dck": "23c21710be1598e9a502db53817f1667f0ee72d555ed735344271c9e46147cd7",
+  "tools/trace-test-decks/choice-repeated-counters.dck": "b41dfbb42f9f4d8360f906788b4222de33b671273bc080109454fd5ad9710d2f",
+  "tools/trace-test-decks/choice-modes-azorius.dck": "4ffaa93568b603f674a1efa1e7da37486b57a83a52858d76ecbe79a42ac05bd4",
+  "tools/trace-test-decks/target-choice-black.dck": "1e3268448d71ff9c34ddefc26fcbfb7a9b21e0014142f0d80b259be313f2afc6",
+  "tools/trace-test-decks/trace-green.dck": "84e55f9a2dd8bcfa92a2a56de1143441c8e479ce8bb0c732578d0ff1603527cf",
+  "tools/trace-test-decks/choice-numeric-prompts.dck": "502e68bb409f4d15666264208229fb47b136deb5adb28d47cff31560955f8f50",
+  "tools/decision-records/hardening/decks/doctor-who.dck": "7e53bc5153ad98abc9a0eae4aa2a7c6d35b97b5db64af788c0ad99b6d8537f16",
+  "tools/decision-records/hardening/decks/ur-dragon-draconic-domination.dck": "a50909153f7f07ea9077df668e452408b5762cf8fb9a9d43001282fe6deae86c"
+}

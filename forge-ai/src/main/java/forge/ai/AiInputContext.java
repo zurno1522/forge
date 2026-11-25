@@ -32,8 +32,9 @@ final class AiInputContext {
     static final int MAX_MANA = 128;
     static final int MAX_COUNTERS = 32;
     static final int MAX_TEXT = 256;
+    static final int MAX_REQUEST_ZONES = ZoneType.values().length;
     static final long MAX_GAME_WORK = 256_000;
-    static final String PROFILE = "PERMITTED_CHOICE_VIEW_V7";
+    static final String PROFILE = "PERMITTED_CHOICE_VIEW_V8";
     private static final List<ZoneType> ZONES = List.of(ZoneType.Battlefield, ZoneType.Command,
             ZoneType.Graveyard, ZoneType.Exile, ZoneType.Hand, ZoneType.Library);
 
@@ -107,7 +108,7 @@ final class AiInputContext {
 
     private static Map<String, Object> envelope(final Player chooser, final String timing, final String stateBasis) {
         final Map<String, Object> result = new LinkedHashMap<>();
-        result.put("schemaVersion", 7);
+        result.put("schemaVersion", 8);
         result.put("profile", PROFILE);
         result.put("timing", timing);
         result.put("stateBasis", stateBasis);
@@ -318,6 +319,7 @@ final class AiInputContext {
             promptCoverage = "UNAVAILABLE";
             if (!"RULES_STATE".equals(stateBasis) && !(promptInput instanceof AiPromptInput.ModeBounds)
                     && !(promptInput instanceof AiPromptInput.EntityBounds)
+                    && !(promptInput instanceof AiPromptInput.ZoneRequest)
                     && !(promptInput instanceof AiEntitySelectionHistory.Prompt sequence && sequence.sequenced())) {
                 omit("PROMPT", "UNSUPPORTED"); return null;
             }
@@ -364,6 +366,21 @@ final class AiInputContext {
                     result.put("minimumPicks", request.minimum()); result.put("maximumPicks", request.maximum());
                     result.put("relatedPlayer", related);
                 }
+                case ZONE_CHANGE_REQUEST -> {
+                    final var zones = request.zoneRequest();
+                    if (zones.destination() == null || zones.origins() == null) { omit("PROMPT", "UNSUPPORTED"); return null; }
+                    if (zones.origins().size() > MAX_REQUEST_ZONES) { omit("PROMPT", "OUTSIDE_CAPTURED_PREFIX"); return null; }
+                    final List<String> origins = new ArrayList<>();
+                    for (final ZoneType origin : zones.origins()) {
+                        if (origins.size() == MAX_REQUEST_ZONES) { omit("PROMPT", "OUTSIDE_CAPTURED_PREFIX"); return null; }
+                        if (!work("PROMPT")) { return null; }
+                        if (origin == null) { omit("PROMPT", "UNSUPPORTED"); return null; }
+                        origins.add(origin.name());
+                    }
+                    result.put("minimumPicks", request.minimum()); result.put("maximumPicks", request.maximum());
+                    result.put("optional", request.optional()); result.put("destination", zones.destination().name());
+                    result.put("origins", origins); result.put("decider", related);
+                }
                 case ENTITY_PICK_SEQUENCE -> {
                     final var sequence = request.sequence();
                     result.put("minimumPicks", request.minimum()); result.put("maximumPicks", request.maximum());
@@ -383,6 +400,7 @@ final class AiInputContext {
                 case MODE_BOUNDS -> "RECEIVED_MODE_BOUNDS_V1";
                 case ENTITY_BOUNDS -> "RECEIVED_ENTITY_BOUNDS_V1";
                 case ENTITY_PICK_SEQUENCE -> "RECEIVED_ENTITY_SEQUENCE_V1";
+                case ZONE_CHANGE_REQUEST -> "RECEIVED_ZONE_REQUEST_V1";
                 default -> "CONTROLLER_REQUEST_V1";
             };
             return result;

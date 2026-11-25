@@ -109,7 +109,7 @@ final class AiEffectChoiceRecorder {
                     result.put("origins", origins.stream().map(Enum::name).toList());
                     result.put("deciderPlayerId", decider == null ? null : decider.getId());
                     return result;
-                }, callback, value -> selected(value, offered.get()), null, proof::get);
+                }, callback, value -> selected(value, offered.get()), new AiPromptInput.ZoneRequest(destination, origins, optional, decider), proof::get);
     }
 
     private static Map<String, Object> pool(final Iterable<? extends GameObject> options,
