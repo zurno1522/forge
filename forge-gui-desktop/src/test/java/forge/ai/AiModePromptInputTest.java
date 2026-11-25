@@ -44,8 +44,8 @@ public class AiModePromptInputTest extends AITest {
         final List<AbilitySub> cached = List.of(f.options.get(0), f.options.get(0)); f.ability.setChosenList(cached);
         Assert.assertSame(f.ai.getController().chooseModeForAbility(f.ability, f.options, min, max, repeat), cached);
         Assert.assertEquals(f.starts.size(), 1);
-        Assert.assertEquals(input(f, 0).get("schemaVersion"), 11);
-        Assert.assertEquals(input(f, 0).get("profile"), "PERMITTED_CHOICE_VIEW_V11");
+        Assert.assertEquals(input(f, 0).get("schemaVersion"), 12);
+        Assert.assertEquals(input(f, 0).get("profile"), "PERMITTED_CHOICE_VIEW_V12");
         Assert.assertEquals(input(f, 0).get("stateBasis"), "PLANNING_WORKING_STATE");
         Assert.assertEquals(((Map<?, ?>) input(f, 0).get("coverage")).get("prompt"), "RECEIVED_MODE_BOUNDS_V1");
         Assert.assertEquals(policy(f, 0).get("prompt"), Map.of("kind", "MODE_BOUNDS", "minimumPicks", min,

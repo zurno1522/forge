@@ -333,4 +333,119 @@ public class AiZoneSelectionHistoryTest extends AITest {
         Assert.assertNull(f.game.getEventObservationFailure());
     }
 
+    private ZoneChangeSelectionRequest heistRequest(final Fixture f) {
+        return new ZoneChangeSelectionRequest(f.ability, ZoneType.Exile, List.of(ZoneType.Library), f.chooser, f.chooser, 2,
+                ZoneChangeSelectionRequest.Branch.HEIST);
+    }
+
+    @Test(groups = {"UnitTest", "fast"})
+    public void onlyTheExactAnnouncedOriginsCanClaimAMovingDispatch() {
+        final Fixture f = fixture(); final var request = heistRequest(f);
+        final List<ZoneType> announced = new ArrayList<>(request.origins()), equal = new ArrayList<>(request.origins());
+        f.chooser.getController().withZoneChangeSelections(request, observer -> {
+            observer.beforeSelector(f.cards, false, 0, 0, announced);
+            AiEffectChoiceRecorder.zoneChange(f.chooser, f.ability, request.destination(), equal, f.cards, false, f.chooser, () -> f.cards.get(0));
+            final Card selected = AiEffectChoiceRecorder.zoneChange(f.chooser, f.ability, request.destination(), announced, f.cards, false, f.chooser, () -> f.cards.get(0));
+            observer.returned(selected, 1); return f.cards;
+        });
+        Assert.assertNull(progress(picks(f).get(0))); Assert.assertNotNull(progress(picks(f).get(1)));
+        Assert.assertEquals(prompt(picks(f).get(1)).get("attemptIndex"), 0L);
+        Assert.assertNull(f.game.getEventObservationFailure());
+    }
+
+    @Test(groups = {"UnitTest", "fast"})
+    public void originValueMismatchAndOrdinaryEqualListsCannotAcquireMovingPermission() {
+        for (boolean moving : List.of(false, true)) {
+            final Fixture f = fixture(); final var request = moving ? heistRequest(f) : f.request();
+            final List<ZoneType> origins = new ArrayList<>(List.of(ZoneType.Graveyard));
+            f.chooser.getController().withZoneChangeSelections(request, observer -> {
+                observer.beforeSelector(f.cards, false, 0, 0, origins);
+                final Card selected = AiEffectChoiceRecorder.zoneChange(f.chooser, f.ability, request.destination(), origins, f.cards, false, f.chooser, () -> f.cards.get(0));
+                observer.returned(selected, 1); return f.cards;
+            });
+            Assert.assertNull(progress(picks(f).get(0))); Assert.assertEquals(prompt(picks(f).get(0)).get("kind"), "ZONE_CHANGE_REQUEST");
+            Assert.assertNull(f.game.getEventObservationFailure());
+        }
+    }
+
+    @Test(groups = {"UnitTest", "fast"})
+    public void aLiveOriginComparisonFailureBelongsToTheOuterOwner() {
+        final Fixture f = fixture(); final var request = heistRequest(f);
+        final var ledger = ((PlayerControllerAi) f.chooser.getController()).configureObservationAccounting();
+        final var failure = new IllegalStateException("origin comparison"); final AtomicBoolean first = new AtomicBoolean(true);
+        final List<ZoneType> origins = new java.util.AbstractList<>() {
+            @Override public int size() { if (first.compareAndSet(true, false)) { throw failure; } return 1; }
+            @Override public ZoneType get(int i) { return ZoneType.Library; }
+        };
+        f.chooser.getController().withZoneChangeSelections(request, observer -> {
+            for (int i = 0; i < 2; i++) {
+                observer.beforeSelector(f.cards, false, i, i, origins);
+                final Card selected = AiEffectChoiceRecorder.zoneChange(f.chooser, f.ability, request.destination(), origins, f.cards, false, f.chooser, () -> f.cards.get(0));
+                observer.returned(selected, i + 1);
+            }
+            return f.cards;
+        });
+        Assert.assertSame(f.game.getEventObservationFailure(), failure);
+        Assert.assertEquals(progress(picks(f).get(1)).get("receiptReason"), "CAPTURE_FAILED"); Assert.assertNull(prompt(picks(f).get(1)));
+        final var cells = (Map<?, ?>) ledger.snapshot().get("boundaries");
+        Assert.assertEquals(((Map<?, ?>) cells.get("CONTROLLER_ZONE_CHANGE_SELECTIONS")).get("observationFailures"), 1L);
+        Assert.assertEquals(((Map<?, ?>) cells.get("CONTROLLER_ZONE_CHANGE_CARD")).get("observationFailures"), 0L);
+    }
+
+    @Test(dataProvider = "lateReceipt", groups = {"UnitTest", "fast"})
+    @SuppressWarnings("unchecked")
+    public void closureDuringOriginComparisonDiscardsLateValuesAndFaults(final boolean parentClosure, final boolean fail) throws Exception {
+        final Fixture f = fixture(); final var request = heistRequest(f);
+        final CountDownLatch entered = new CountDownLatch(1), release = new CountDownLatch(1); final AtomicInteger callbacks = new AtomicInteger();
+        final List<ZoneType> origins = new java.util.AbstractList<>() {
+            @Override public int size() {
+                entered.countDown(); try { Assert.assertTrue(release.await(5, TimeUnit.SECONDS)); }
+                catch (InterruptedException interrupted) { throw new AssertionError(interrupted); }
+                if (fail) { throw new IllegalStateException("late origins"); } return 1;
+            }
+            @Override public ZoneType get(int i) { return ZoneType.Library; }
+        };
+        final var parent = new AiDecisionRecorder(f.game, f.chooser, 1); parent.beginAssessment(f.ability);
+        final var field = AiController.class.getDeclaredField("evaluationDecision"); field.setAccessible(true);
+        final ThreadLocal<AiDecisionRecorder> evaluation = (ThreadLocal<AiDecisionRecorder>) field.get(((PlayerControllerAi) f.chooser.getController()).getAi());
+        final var worker = Executors.newSingleThreadExecutor();
+        try {
+            final var result = worker.submit(() -> {
+                if (parentClosure) { evaluation.set(parent); }
+                try {
+                    return f.chooser.getController().withZoneChangeSelections(request, observer -> {
+                        observer.beforeSelector(f.cards, false, 0, 0, origins);
+                        final Card selected = AiEffectChoiceRecorder.zoneChange(f.chooser, f.ability, request.destination(), origins, f.cards, false, f.chooser,
+                                () -> { callbacks.incrementAndGet(); return f.cards.get(0); });
+                        observer.returned(selected, 1); return f.cards;
+                    });
+                } finally { evaluation.remove(); }
+            });
+            Assert.assertTrue(entered.await(5, TimeUnit.SECONDS));
+            if (parentClosure) { Assert.assertNotNull(parent.finish(null, "AI_TIMEOUT", null)); } else { f.game.setRecordAiDecisions(false); }
+            release.countDown(); Assert.assertSame(result.get(5, TimeUnit.SECONDS), f.cards);
+            Assert.assertEquals(callbacks.get(), 1); Assert.assertEquals(f.events.size(), 1); Assert.assertNull(f.game.getEventObservationFailure());
+        } finally { release.countDown(); worker.shutdownNow(); }
+    }
+
+    @DataProvider public Object[][] bypassMovingOrigins() { return new Object[][] {{"OFF"}, {"COPY"}, {"HIDDEN"}}; }
+    @Test(dataProvider = "bypassMovingOrigins", groups = {"UnitTest", "fast"})
+    public void bypassedMovingOperationsDoNotInspectDispatchedOrigins(final String mode) {
+        final Fixture f = fixture(); final var request = heistRequest(f); final AtomicInteger callbacks = new AtomicInteger();
+        if ("OFF".equals(mode)) { f.game.setRecordAiDecisions(false); }
+        if ("COPY".equals(mode)) { f.game.markAsSimulationCopy(); }
+        if ("HIDDEN".equals(mode)) { f.ability.getHostCard().turnFaceDown(); }
+        final List<ZoneType> forbidden = new java.util.AbstractList<>() {
+            @Override public int size() { throw new AssertionError("dispatched origins inspected"); }
+            @Override public ZoneType get(int i) { throw new AssertionError("dispatched origins inspected"); }
+        };
+        Assert.assertSame(f.chooser.getController().withZoneChangeSelections(request, observer -> {
+            observer.beforeSelector(f.cards, false, 0, 0, forbidden);
+            final Card selected = AiEffectChoiceRecorder.zoneChange(f.chooser, f.ability, request.destination(), forbidden, f.cards, false, f.chooser,
+                    () -> { callbacks.incrementAndGet(); return f.cards.get(0); });
+            observer.returned(selected, 1); return f.cards;
+        }), f.cards);
+        Assert.assertEquals(callbacks.get(), 1); Assert.assertNull(f.game.getEventObservationFailure());
+    }
+
 }

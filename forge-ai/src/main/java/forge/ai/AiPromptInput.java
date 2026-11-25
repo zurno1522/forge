@@ -12,7 +12,7 @@ record AiPromptInput(Kind kind, int minimum, int maximum, List<Integer> values, 
         Player relatedPlayer, boolean allowRepeat, AiEntitySelectionHistory.Input sequence, ZoneRequest zoneRequest, ZoneOperation zoneOperation, AiZoneSelectionHistory.Input zoneProgress) {
     enum Kind { NUMBER_RANGE, NUMBER_OPTIONS, SINGLE_ENTITY, MODE_BOUNDS, ENTITY_BOUNDS, ENTITY_PICK_SEQUENCE, ZONE_CHANGE_REQUEST, ZONE_CHANGE_OPERATION_REQUEST, ZONE_PICK_PROGRESS }
 
-    /** Exact ordinary-operation arguments, without claiming a legal pick bound. */
+    /** Exact audited-operation arguments, without claiming a legal pick bound. */
     record ZoneOperation(ZoneChangeSelectionRequest request) implements Supplier<AiPromptInput> {
         @Override public AiPromptInput get() {
             return new AiPromptInput(Kind.ZONE_CHANGE_OPERATION_REQUEST, 0, 0, null, false,

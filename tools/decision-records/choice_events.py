@@ -217,7 +217,7 @@ def zone_progress_owner(choice,states):
     require(value['requestedIterations']==option['requestedIterations']
             and all(choice['options'][k]==option[k] for k in ('destination','origins','deciderPlayerId')),'zone progress received arguments differ')
     prompt=((choice['inputContext'].get('policy') or {}).get('prompt'))
-    require(option['branch']=='ORDINARY_HIDDEN_ORIGIN' or choice['inputContext']['schemaVersion']>=11,'new progress branch requires V11')
+    _contexts.validate_zone_branch(option['branch'], choice['inputContext']['schemaVersion'])
     if prompt is not None and prompt['kind']=='ZONE_PICK_PROGRESS':
         if choice['inputContext']['schemaVersion']>=11: require(prompt['branch']==option['branch'],'progress branch differs from owner')
         bindings={b['entityRef']:b['id'] for b in choice['inputContext']['diagnostics']['playerBindings']}
@@ -408,12 +408,16 @@ def options(choice):
         require(isinstance(option, dict) and set(option) == {'coverage', 'branch', 'requestedIterations', 'destination', 'origins', 'sourcePlayerId', 'deciderPlayerId'}
                 and option['coverage'] == 'RECEIVED_ZONE_OPERATION_REQUEST' and isinstance(option['branch'], str) and option['branch'] in _contexts.ZONE_BRANCHES, 'invalid zone operation options')
         require('entryLocation' in choice and choice.get('inputContext', {}).get('schemaVersion', 0) >= 9, 'zone operation lacks entry/profile')
-        require(option['branch'] == 'ORDINARY_HIDDEN_ORIGIN' or choice['inputContext']['schemaVersion'] >= 11, 'new operation branch requires V11')
+        _contexts.validate_zone_branch(option['branch'], choice['inputContext']['schemaVersion'])
         require(integer(option['requestedIterations']) and -(1 << 31) <= option['requestedIterations'] < (1 << 31), 'invalid iteration request')
         require(isinstance(option['destination'], str) and option['destination'] in _contexts.ZONES
                 and isinstance(option['origins'], list) and len(option['origins']) <= len(_contexts.ZONES)
                 and all(isinstance(z, str) and z in _contexts.ZONES for z in option['origins']), 'invalid operation zones')
         require(all(option[k] is None or integer(option[k]) for k in ('sourcePlayerId', 'deciderPlayerId')), 'invalid operation roles')
+        _contexts.validate_moving_zones(option['branch'], option['destination'], option['origins'])
+        if option['branch'] in ('HEIST', 'DRAFT'):
+            require(option['sourcePlayerId'] is not None and option['deciderPlayerId'] == choice['chooserPlayerId'], 'invalid moving operation roles')
+            if option['branch'] == 'DRAFT': require(option['sourcePlayerId'] == option['deciderPlayerId'], 'invalid Draft source role')
         return
     if choice['choiceType'] == 'EFFECT_MULTI_ENTITY_SELECTION':
         require(isinstance(option, dict) and set(option) == {'coverage', 'items', 'truncated', 'min', 'max', 'relatedPlayerId'}

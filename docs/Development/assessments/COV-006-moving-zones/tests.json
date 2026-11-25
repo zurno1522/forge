@@ -1,0 +1,19 @@
+{
+  "focusedJava": {
+    "tests": 141,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "python": {
+    "tests": 223,
+    "failures": 0,
+    "errors": 0
+  },
+  "fullReactor": "V11 baseline 64d03722c8c passed; this increment uses the targeted reactor run, not a repeated full-suite claim.",
+  "logs": {
+    "/workspace/work/cov006-moving-zones/focused-reviewed.log": "260f2b2a2eb9aa03f44a733f0878d9173cad5795141a3a4f452b22813b93d438",
+    "/workspace/work/cov006-moving-zones/python.log": "93b1dddd0c4e92fd97ac2dd9187d199e4c693a7a242ff5dd5fe7e9639b81668e"
+  },
+  "samplingLimit": "The complete-game sample exercises Heist; Draft and rejected Heist history are exercised by actual-resolution fixtures."
+}

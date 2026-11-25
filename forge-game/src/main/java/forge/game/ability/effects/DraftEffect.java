@@ -9,6 +9,8 @@ import forge.game.card.Card;
 import forge.game.card.CardCollection;
 import forge.game.card.CardZoneTable;
 import forge.game.player.Player;
+import forge.game.player.ZoneChangeSelectionObserver;
+import forge.game.player.ZoneChangeSelectionRequest;
 import forge.game.spellability.SpellAbility;
 import forge.game.zone.ZoneType;
 import forge.item.PaperCard;
@@ -42,6 +44,30 @@ public class DraftEffect extends SpellAbilityEffect {
         moveParams.put(AbilityKey.LastStateGraveyard, sa.getLastStateGraveyard());
         CardCollection drafted = new CardCollection();
 
+        final Selection selection = new Selection(sa, player, game, spellbook, numToDraft, moveParams, drafted);
+        final ZoneChangeSelectionRequest request = new ZoneChangeSelectionRequest(sa, ZoneType.None,
+                List.of(), player, player, numToDraft, ZoneChangeSelectionRequest.Branch.DRAFT);
+        drafted = player.getController().withZoneChangeSelections(request, observer -> chooseCards(selection, observer));
+
+        final CardZoneTable triggerList = new CardZoneTable();
+        for (final Card c : drafted) {
+            Card made = game.getAction().moveToHand(c, sa, moveParams);
+            if (c != null) {
+                triggerList.put(ZoneType.None, made.getZone().getZoneType(), made);
+            }
+            if (sa.hasParam("RememberDrafted")) {
+                source.addRemembered(made);
+            }
+        }
+        triggerList.triggerChangesZoneAll(game, sa);
+    }
+    private record Selection(SpellAbility ability, Player player, Game game, List<String> spellbook, int iterations,
+            Map<AbilityKey, Object> moveParams, CardCollection chosen) { }
+
+    private CardCollection chooseCards(final Selection selection, final ZoneChangeSelectionObserver observer) {
+        final SpellAbility sa = selection.ability(); final Player player = selection.player(); final Game game = selection.game();
+        final List<String> spellbook = selection.spellbook(); final int numToDraft = selection.iterations();
+        final Map<AbilityKey, Object> moveParams = selection.moveParams(); final CardCollection drafted = selection.chosen();
         for (int i = 0; i < numToDraft; i++) {
             Collections.shuffle(spellbook, MyRandom.getRandom());
             List<Card> draftOptions = new ArrayList<>();
@@ -59,21 +85,15 @@ public class DraftEffect extends SpellAbilityEffect {
                 draftOptions.add(cardOption);
             }
 
-            Card chosenCard = player.getController().chooseSingleCardForZoneChange(ZoneType.None, new ArrayList<ZoneType>(), sa, new CardCollection(draftOptions), null, Localizer.getInstance().getMessage("lblChooseCardDraft"), false, player);
+            final List<ZoneType> origins = new ArrayList<ZoneType>();
+            final CardCollection offered = new CardCollection(draftOptions);
+            observer.beforeSelector(offered, false, i, drafted.size(), origins);
+            Card chosenCard = player.getController().chooseSingleCardForZoneChange(ZoneType.None, origins, sa, offered, null, Localizer.getInstance().getMessage("lblChooseCardDraft"), false, player);
+            observer.returned(chosenCard, drafted.size());
             game.getAction().moveTo(ZoneType.None, chosenCard, sa, moveParams);
             drafted.add(chosenCard);
         }
-
-        final CardZoneTable triggerList = new CardZoneTable();
-        for (final Card c : drafted) {
-            Card made = game.getAction().moveToHand(c, sa, moveParams);
-            if (c != null) {
-                triggerList.put(ZoneType.None, made.getZone().getZoneType(), made);
-            }
-            if (sa.hasParam("RememberDrafted")) {
-                source.addRemembered(made);
-            }
-        }
-        triggerList.triggerChangesZoneAll(game, sa);
+        return drafted;
     }
+
 }

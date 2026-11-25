@@ -87,6 +87,7 @@ final class AiZoneSelectionHistory {
         private String progressReason;
         private String receiptReason;
         private CardCollection offered;
+        private List<ZoneType> dispatchedOrigins;
         private boolean optional;
         private int loopPosition;
         private int retainedCount;
@@ -99,7 +100,7 @@ final class AiZoneSelectionHistory {
                 final AiChoiceRecorder.Capture owner) {
             this.chooser = chooser; this.receiver = receiver; this.request = request; this.owner = owner;
         }
-        private void retire() { retired = true; offered = null; receipts.clear(); }
+        private void retire() { retired = true; offered = null; dispatchedOrigins = null; receipts.clear(); }
         private boolean active() {
             if (retired || ACTIVE.get() != this) { return false; }
             if (!owner.open() || Thread.currentThread().isInterrupted()) { retire(); return false; }
@@ -115,19 +116,31 @@ final class AiZoneSelectionHistory {
         }
         @Override public void beforeSelector(final CardCollection offered, final boolean optional,
                 final int loopPosition, final int retainedCount) {
+            beforeSelector(offered, optional, loopPosition, retainedCount, request.origins());
+        }
+        @Override public void beforeSelector(final CardCollection offered, final boolean optional,
+                final int loopPosition, final int retainedCount, final List<ZoneType> origins) {
             if (!active()) { return; }
             if (loopPosition < 0 || retainedCount < 0) { retire(); return; }
             if (awaitingReturn) { unsupported(); returnsKnown = false; }
             if (attemptIndex == Long.MAX_VALUE) {
                 attemptKnown = false; progressReason = "COUNTER_OVERFLOW"; receiptReason = "COUNTER_OVERFLOW";
             } else if (attemptKnown) { attemptIndex++; }
+            this.dispatchedOrigins = origins;
             this.offered = offered; this.optional = optional; this.loopPosition = loopPosition; this.retainedCount = retainedCount;
             claimable = true; awaitingReturn = true; witnessed = false;
         }
         private Input claim(final ZoneType destination, final List<ZoneType> origins, final CardCollection offered,
                 final boolean optional, final Player decider) {
             if (!active() || !claimable || offered != this.offered || optional != this.optional
-                    || destination != request.destination() || origins != request.origins() || decider != request.decider()) { return null; }
+                    || destination != request.destination() || origins != dispatchedOrigins || decider != request.decider()) { return null; }
+            try {
+                if (!matchingOrigins(origins)) { return null; }
+            } catch (RuntimeException failure) {
+                if (active()) { receiptReason = "CAPTURE_FAILED"; owner.failure(failure); }
+                return null;
+            }
+            if (!active()) { return null; }
             claimable = false; witnessed = true;
             final String coverage = receiptReason != null ? "UNAVAILABLE" : nonNullReturns > receipts.size() ? "PREFIX" : "COMPLETE";
             return new Input(request, optional, attemptKnown ? attemptIndex : null, loopPosition,
@@ -135,11 +148,23 @@ final class AiZoneSelectionHistory {
                     receiptReason != null ? receiptReason : "PREFIX".equals(coverage) ? "OUTSIDE_CAPTURED_PREFIX" : null,
                     List.copyOf(receipts));
         }
+        private boolean matchingOrigins(final List<ZoneType> origins) {
+            if (origins == request.origins()) { return true; }
+            if (request.branch() != ZoneChangeSelectionRequest.Branch.HEIST
+                    && request.branch() != ZoneChangeSelectionRequest.Branch.DRAFT) { return false; }
+            if (origins == null || request.origins() == null) { return false; }
+            final int count = origins.size();
+            if (count < 0 || count > AiInputContext.MAX_REQUEST_ZONES || count != request.origins().size()) { return false; }
+            for (int i = 0; i < count; i++) {
+                if (origins.get(i) != request.origins().get(i)) { return false; }
+            }
+            return true;
+        }
         @Override public void returned(final Card card, final int retainedCount) {
             if (!active()) { return; }
             if (!awaitingReturn) { unsupported(); returnsKnown = false; }
             if (!witnessed && receiptReason == null) { receiptReason = "UNSUPPORTED"; }
-            awaitingReturn = false; claimable = false; offered = null;
+            awaitingReturn = false; claimable = false; offered = null; dispatchedOrigins = null;
             if (card == null) { return; }
             if (nonNullReturns == Long.MAX_VALUE) {
                 returnsKnown = false; progressReason = "COUNTER_OVERFLOW"; receiptReason = "COUNTER_OVERFLOW";

@@ -7,8 +7,8 @@ from a privileged trace or prove that an uninstrumented heuristic used this view
 
 PROFILE = 'PERMITTED_CHOICE_VIEW_V1'
 PROFILES = {1: PROFILE, 2: 'PERMITTED_CHOICE_VIEW_V2', 3: 'PERMITTED_CHOICE_VIEW_V3', 4: 'PERMITTED_CHOICE_VIEW_V4',
-            5: 'PERMITTED_CHOICE_VIEW_V5', 6: 'PERMITTED_CHOICE_VIEW_V6', 7: 'PERMITTED_CHOICE_VIEW_V7', 8: 'PERMITTED_CHOICE_VIEW_V8', 9: 'PERMITTED_CHOICE_VIEW_V9', 10: 'PERMITTED_CHOICE_VIEW_V10', 11: 'PERMITTED_CHOICE_VIEW_V11'}
-ZONE_BRANCHES = {'ORDINARY_HIDDEN_ORIGIN', 'SAME_NAME_HIDDEN_ORIGIN', 'EACH_TYPE_HIDDEN_ORIGIN'}
+            5: 'PERMITTED_CHOICE_VIEW_V5', 6: 'PERMITTED_CHOICE_VIEW_V6', 7: 'PERMITTED_CHOICE_VIEW_V7', 8: 'PERMITTED_CHOICE_VIEW_V8', 9: 'PERMITTED_CHOICE_VIEW_V9', 10: 'PERMITTED_CHOICE_VIEW_V10', 11: 'PERMITTED_CHOICE_VIEW_V11', 12: 'PERMITTED_CHOICE_VIEW_V12'}
+ZONE_BRANCHES = {'ORDINARY_HIDDEN_ORIGIN', 'SAME_NAME_HIDDEN_ORIGIN', 'EACH_TYPE_HIDDEN_ORIGIN', 'HEIST', 'DRAFT'}
 TIMINGS = {'BEFORE_SELECTOR', 'BEFORE_OPERATION', 'AFTER_SELECTION_BEFORE_APPLICATION', 'UNESTABLISHED'}
 STATE_BASES = {'RULES_STATE', 'PLANNING_WORKING_STATE', 'UNESTABLISHED'}
 REASONS = {'HIDDEN', 'UNSUPPORTED', 'OUTSIDE_CAPTURED_PREFIX', 'UNRESOLVED_BINDING',
@@ -194,6 +194,17 @@ def validate_option_links(links, players, cards):
                 and link['entityRef'] in public | set(players), 'private or unknown option link')
 
 
+def validate_moving_zones(branch, destination, origins):
+    require(branch != 'HEIST' or destination == 'Exile' and origins == ['Library'], 'invalid Heist zones')
+    require(branch != 'DRAFT' or destination == 'None' and origins == [], 'invalid Draft zones')
+
+
+def validate_zone_branch(branch, version):
+    require(isinstance(branch, str) and branch in ZONE_BRANCHES, 'invalid zone operation branch')
+    require(branch == 'ORDINARY_HIDDEN_ORIGIN' or version >= 11, 'new operation branch requires V11')
+    require(branch not in ('HEIST', 'DRAFT') or version >= 12, 'moving operation branch requires V12')
+
+
 def validate_prompt(prompt, coverage, player_refs, omissions, state_basis, version):
     permitted = {'CONTROLLER_REQUEST_V1'} | ({'RECEIVED_MODE_BOUNDS_V1'} if version >= 5 else set())
     if version >= 6: permitted.add('RECEIVED_ENTITY_BOUNDS_V1')
@@ -222,7 +233,7 @@ def validate_prompt(prompt, coverage, player_refs, omissions, state_basis, versi
     if operation:
         require(version >= 9, 'zone operation requires V9')
         fields(prompt, 'kind requestedIterations destination origins sourcePlayer decider' + (' branch' if version >= 11 else ''), 'invalid operation request fields')
-        if version >= 11: require(isinstance(prompt['branch'], str) and prompt['branch'] in ZONE_BRANCHES, 'invalid operation branch')
+        if version >= 11: validate_zone_branch(prompt['branch'], version)
         require(integer(prompt['requestedIterations']) and -(1 << 31) <= prompt['requestedIterations'] < (1 << 31), 'invalid operation iteration request')
         require(isinstance(prompt['destination'], str) and prompt['destination'] in ZONES
                 and isinstance(prompt['origins'], list) and len(prompt['origins']) <= len(ZONES)
@@ -239,7 +250,7 @@ def validate_prompt(prompt, coverage, player_refs, omissions, state_basis, versi
         require(prompt['decider'] is None or isinstance(prompt['decider'], str) and prompt['decider'] in player_refs, 'unknown request decider')
         if zone_progress:
             require(version >= 10 and (prompt['sourcePlayer'] is None or isinstance(prompt['sourcePlayer'], str) and prompt['sourcePlayer'] in player_refs), 'invalid progress source player')
-            if version >= 11: require(isinstance(prompt['branch'], str) and prompt['branch'] in ZONE_BRANCHES, 'invalid progress branch')
+            if version >= 11: validate_zone_branch(prompt['branch'], version)
             require(integer(prompt['requestedIterations']) and -(1 << 31) <= prompt['requestedIterations'] < (1 << 31), 'invalid progress iteration request')
             require(all(integer(prompt[k]) and 0 <= prompt[k] <= (1 << 63)-1 for k in ('attemptIndex','priorNonNullReturnCount'))
                     and prompt['priorNonNullReturnCount'] <= prompt['attemptIndex'], 'invalid progress long counters')
@@ -275,6 +286,8 @@ def validate_prompt(prompt, coverage, player_refs, omissions, state_basis, versi
                 'invalid single entity pick constraints')
     else:
         require(False, 'unsupported typed prompt kind')
+    if (operation or zone_progress) and version >= 12:
+        validate_moving_zones(prompt['branch'], prompt['destination'], prompt['origins'])
     if 'relatedPlayer' in prompt:
         require(prompt['relatedPlayer'] is None or prompt['relatedPlayer'] in player_refs, 'unknown request player')
 

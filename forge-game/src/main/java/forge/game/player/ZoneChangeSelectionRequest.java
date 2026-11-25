@@ -10,7 +10,7 @@ import java.util.List;
  */
 public record ZoneChangeSelectionRequest(SpellAbility ability, ZoneType destination, List<ZoneType> origins,
         Player sourcePlayer, Player decider, int requestedIterations, Branch branch) {
-    public enum Branch { ORDINARY_HIDDEN_ORIGIN, SAME_NAME_HIDDEN_ORIGIN, EACH_TYPE_HIDDEN_ORIGIN }
+    public enum Branch { ORDINARY_HIDDEN_ORIGIN, SAME_NAME_HIDDEN_ORIGIN, EACH_TYPE_HIDDEN_ORIGIN, HEIST, DRAFT }
 
     public ZoneChangeSelectionRequest(SpellAbility ability, ZoneType destination, List<ZoneType> origins,
             Player sourcePlayer, Player decider, int requestedIterations) {

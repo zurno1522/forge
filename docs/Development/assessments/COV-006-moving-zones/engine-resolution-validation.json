@@ -1,0 +1,14 @@
+{
+  "HEIST": {
+    "lifecycleEvents": 6,
+    "validatedOperationsAndSelectors": 3
+  },
+  "HEIST_REJECTED": {
+    "lifecycleEvents": 6,
+    "validatedOperationsAndSelectors": 3
+  },
+  "DRAFT": {
+    "lifecycleEvents": 6,
+    "validatedOperationsAndSelectors": 3
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "baseRevision": "9cb6d6b04340b2b6158735c711a4e7dd7c85edba",
+  "sources": {
+    "forge-ai/src/main/java/forge/ai/AiInputContext.java": "2a04c71b09fa47136269cacebcfa96f46ea80f5952b8af912a7fd950f36fcba2",
+    "forge-ai/src/main/java/forge/ai/AiPromptInput.java": "96968e9fe00b82342d40cc0bece3915b3f812b5e78eef9403a7eff832b693baf",
+    "forge-ai/src/main/java/forge/ai/AiZoneSelectionHistory.java": "02d19060d90e1ced5d693a11feed1ff0ec04c8c10955d3b5660d14aba6b2926e",
+    "forge-game/src/main/java/forge/game/ability/effects/DraftEffect.java": "2032c14e9f1119211b1c6dd6bc2057890dd11301a3c6dce6f89ef95ba4bf3aef",
+    "forge-game/src/main/java/forge/game/ability/effects/HeistEffect.java": "648349bd639335cf9b9d4b1e17ae276a72fb0b17da9e69131b4d8198cb8cfc80",
+    "forge-game/src/main/java/forge/game/player/ZoneChangeSelectionObserver.java": "785d1ccd2385caad745284e3fd0a71fd1990dd61a07c5ab3509acac4256445f6",
+    "forge-game/src/main/java/forge/game/player/ZoneChangeSelectionRequest.java": "26c4d4016c1c1e1a4366ea69a2968c0f3ade5e298b01c15e629852ac41780afb",
+    "forge-gui-desktop/src/test/java/forge/ai/AiEntitySelectionHistoryTest.java": "d4661a34177f80c89f0b559ea1662a996801cc9004aeefd619afedbd0a80ed1d",
+    "forge-gui-desktop/src/test/java/forge/ai/AiModeInputContextTest.java": "fb302c219c5bc538f45f0e33b65c2c712fee737faedc6f34b3f3ef90c171c08a",
+    "forge-gui-desktop/src/test/java/forge/ai/AiModePromptInputTest.java": "5c5be8dc3c63d1553a9d749a468fc817861a4626d80e3317c4bb33255aea2b7c",
+    "forge-gui-desktop/src/test/java/forge/ai/AiMultiEntityChoiceRecorderTest.java": "fa7e9e48b67e2125e231dcfe919a4fa72377388f2bef8cad75466ae381b233c6",
+    "forge-gui-desktop/src/test/java/forge/ai/AiStackInputContextTest.java": "57f223262c407ecb76cfe14a1a0da7989b516e78c1b570f3897512418e70d221",
+    "forge-gui-desktop/src/test/java/forge/ai/AiZoneOperationRecorderTest.java": "0ae3f7fe60de299a16bd28b91ad033e9203651c196c1f07100f36d9d71c19a4f",
+    "forge-gui-desktop/src/test/java/forge/ai/AiZoneSelectionHistoryTest.java": "b4b62d0b1258e80ff2c945e0a4be562b75c10b0ee4ce95ba146fd62706fe4155",
+    "tools/decision-records/choice_events.py": "8ae0b4faff415f44a0db662bef1332696b951cf956e3f15a2d8e0075fc58c5ad",
+    "tools/decision-records/export.py": "68b5b234e1e8bccff41d114789331efd7a5ef5d7b47bdebed85fdab770ea1e85",
+    "tools/decision-records/input-context-benchmark/summarize-workloads.py": "e1e16a3023d3204fea4fac0231957b89ffd2cd3ea470c2d9ac810008fd5ac7a1",
+    "tools/decision-records/input_context.py": "0d49cd241f8350c0979a7e8b8fd9ccbffee69ae135e217c95f9c13154e2ea2da",
+    "tools/decision-records/test_workload_measurements.py": "cd178e6fbcba301d5959253d76ef2dffa4f32a364e1447e1b7fb44cdb09a0f45",
+    "forge-gui-desktop/src/test/java/forge/ai/EngineMovingZoneSelectionTest.java": "a4a369fe715177578721093a30d785a8cf90b925692bf5357c58249a92a55310",
+    "tools/decision-records/test_moving_zone_choices.py": "03a57a2829d02964bf5ebecdf1217bde81019c1d44b5867f53169c5ae96047f1",
+    "tools/trace-test-decks/choice-zone-moving.dck": "aa9e027e3adc49ed67289c3c72349a32f6f020bea766dc3d6230becb70da1a9c"
+  }
+}
