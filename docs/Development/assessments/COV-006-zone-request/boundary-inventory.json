@@ -1,0 +1,67 @@
+{
+  "scope": "Source audit only; no new runtime permission",
+  "sources": [
+    {
+      "source": "forge-game/src/main/java/forge/game/ability/effects/ChangeZoneEffect.java",
+      "sourceSha256": "60e4dad3df89762e83c6c397c6647ad81b4ced01e90e13f89891ef22706b7ba7",
+      "calls": [
+        1117,
+        1135,
+        1213,
+        1219
+      ]
+    },
+    {
+      "source": "forge-game/src/main/java/forge/game/ability/effects/HeistEffect.java",
+      "sourceSha256": "fe0eefacd66c0e1f8d3c028e942621866024dbbd18bc1cf4b6efec115039897f",
+      "calls": [
+        44
+      ]
+    },
+    {
+      "source": "forge-game/src/main/java/forge/game/ability/effects/DraftEffect.java",
+      "sourceSha256": "fb0b66ea2132d9b94b0caabf6180da9f79957033d2e9aeeeb90615ab41e47812",
+      "calls": [
+        62
+      ]
+    },
+    {
+      "source": "forge-game/src/main/java/forge/game/player/Player.java",
+      "sourceSha256": "05767d8b69f5d4de5638eaef8d13111a24678799eed2a6834953467b7a6b154d",
+      "calls": [
+        4043
+      ]
+    },
+    {
+      "source": "forge-game/src/main/java/forge/game/player/PlayerController.java",
+      "sourceSha256": "07623185e6b6d443d943efc5997313917c75d24cc26851a972940c994409ce83",
+      "calls": []
+    },
+    {
+      "source": "forge-game/src/main/java/forge/game/zone/ZoneType.java",
+      "sourceSha256": "ef6edc1ee058c06438b713a692109cf3a5133984f2d1ddbb0f5fb9dd77804919",
+      "calls": []
+    },
+    {
+      "source": "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java",
+      "sourceSha256": "8d10c7c5b7758ebd9bffedacb7c6ab6e0828a04c45a009c7fd0dbaf7931810c9",
+      "calls": []
+    },
+    {
+      "source": "forge-ai/src/main/java/forge/ai/AiEffectChoiceRecorder.java",
+      "sourceSha256": "eacc47a3671cde7505a69b3b7fec6958776a98a5c1445e9349f3688e1d083571",
+      "calls": []
+    },
+    {
+      "source": "forge-ai/src/main/java/forge/ai/AiPromptInput.java",
+      "sourceSha256": "0f0ecc2eb0b4099a409cf30f6968e707b7eee50ecc41d477190b6fd7ec116d63",
+      "calls": []
+    },
+    {
+      "source": "forge-ai/src/main/java/forge/ai/AiInputContext.java",
+      "sourceSha256": "b3804d9b385b648aaf3ec015df42f4768713a21f14a4ae521f92d8a46ffb4788",
+      "calls": []
+    }
+  ],
+  "baseline": "5e1931169e3504821f73080eaee839f271724fc9"
+}
