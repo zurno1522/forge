@@ -1,0 +1,19 @@
+{
+  "initial": {
+    "tests": 3,
+    "failures": 2,
+    "logSha256": "3d93ac88cc01639eb49a9485a2d992bd36c17f2e09560abdbcd886fc0b153855"
+  },
+  "focused": {
+    "tests": 59,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "logSha256": "2934da848b6507384718bae2c809eb19485d67f973e805ce28ca77cfbd842e2c"
+  },
+  "scope": "Shared-adapter focused tests during ongoing V6 integration; the subsequent outer-operation increment supplies combined full-suite validation.",
+  "sources": {
+    "forge-ai/src/main/java/forge/ai/AiChoiceRecorder.java": "a327335a2290f98b793be6b91813dfd2a8ee1eaa75c03ba105aa9e3cce706c95",
+    "forge-gui-desktop/src/test/java/forge/ai/AiChoiceResultClosureTest.java": "62398fb527a227005fe2a8347b4e5926c91357b206d1e6eaeb9e17452afc6146"
+  }
+}

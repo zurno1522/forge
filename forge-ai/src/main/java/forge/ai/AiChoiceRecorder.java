@@ -174,7 +174,13 @@ public final class AiChoiceRecorder {
         if (accounting != null) { accounting.callbackReturned(); }
         if (observation != null && observation.open()) {
             try { observation.finish(result == null ? "DECLINED" : "COMPLETED", observation.visible && result != null ? selection.apply(result) : null); }
-            catch (RuntimeException failure) { if (accounting != null) { accounting.failure(); } game.recordEventObservationFailure(failure); }
+            catch (RuntimeException failure) {
+                // Projection can finish after timeout/recording closure; its obsolete failure is not live health.
+                if (observation.open()) {
+                    if (accounting != null) { accounting.failure(); }
+                    game.recordEventObservationFailure(failure);
+                }
+            }
         }
         return result;
     }
