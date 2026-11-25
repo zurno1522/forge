@@ -68,7 +68,7 @@ public class AiEntitySelectionHistoryTest extends AITest {
         final Fixture f = fixture(); Assert.assertEquals(choose(f, 1, 2), new ArrayList<>(f.options));
         final var picks = picks(f); Assert.assertEquals(picks.size(), 2);
         Assert.assertEquals(prompt(picks.get(0)).get("kind"), "ENTITY_PICK_SEQUENCE");
-        Assert.assertEquals(input(picks.get(0)).get("schemaVersion"), 9);
+        Assert.assertEquals(input(picks.get(0)).get("schemaVersion"), 10);
         Assert.assertEquals(sequence(picks.get(0)).get("coverage"), "COMPLETE");
         Assert.assertEquals(sequence(picks.get(0)).get("priorSelectionCount"), 0);
         Assert.assertTrue(((List<?>) prompt(picks.get(0)).get("previousSelections")).isEmpty());

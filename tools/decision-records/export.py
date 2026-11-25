@@ -1053,6 +1053,7 @@ def make_coverage(runs, rows, *, spool=None):
         payment_kinds, payment_coverage, payment_details, payment_mana = (collections.Counter() for _ in range(4))
         choice_count = censored_count = 0
         history = collections.Counter()
+        zone_history = collections.Counter()
         for row in _choices.rows(runs):
             choice_count += 1
             start = row['start']; choice = start['choice']
@@ -1064,6 +1065,22 @@ def make_coverage(runs, rows, *, spool=None):
             event_types[row['start']['choice']['choiceType']] += 1
             stages[row['start']['choice']['stage']] += 1
             statuses[row['status']] += 1
+            zone_progress = choice['options'].get('zoneSelectionProgress')
+            if zone_progress is not None:
+                zone_history['records'] += 1
+                zone_history['progress:' + zone_progress['progressCoverage']] += 1
+                zone_history['receipts:' + zone_progress['receiptCoverage']] += 1
+                zone_history['knownAttemptIndices'] += zone_progress['attemptIndex'] is not None
+                if zone_progress['priorNonNullReturnCount'] is None: zone_history['unknownReturnCountRecords'] += 1
+                else: zone_history['priorReturnsAcrossRecords'] += zone_progress['priorNonNullReturnCount']
+                zone_history['receiptEntriesAcrossRecords'] += len(zone_progress['priorReturns'])
+                prompt = ((choice.get('inputContext') or {}).get('policy') or {}).get('prompt')
+                if prompt is not None and prompt['kind'] == 'ZONE_PICK_PROGRESS':
+                    zone_history['projectedPrompts'] += 1
+                    zone_history['projectedEntries'] += len(prompt['previousReturns'])
+                    zone_history['resolvedEntries'] += sum(ref is not None for ref in prompt['previousReturns'])
+                    zone_history['unresolvedEntries'] += sum(ref is None for ref in prompt['previousReturns'])
+                else: zone_history['unavailablePrompts'] += 1
             sequence = choice['options'].get('selectionSequence')
             if sequence is not None:
                 history['records'] += 1
@@ -1109,6 +1126,10 @@ def make_coverage(runs, rows, *, spool=None):
         summary.update(standaloneChoiceRecords=choice_count, censoredStandaloneChoices=censored_count,
                        standaloneChoiceTypes=dict(event_types), standaloneChoiceStages=dict(stages),
                        standaloneChoiceStatuses=dict(statuses))
+        if zone_history:
+            summary['zoneSelectionProgress'] = dict(schemaVersion=1, scope='PRESENT_PROGRESS_COMPONENTS_ONLY', counts=dict(zone_history),
+                unobservedAttemptCount=None,
+                definition='Observed components and repeated history vectors overlap; they are not unique operations, choices or returns. Retained counts and movements are separate. Complete receipts can have unresolved identities. Missing components/attempts remain unknown and trainingReady remains false.')
         if history:
             summary['entitySelectionHistory'] = dict(schemaVersion=1, scope='PRESENT_SEQUENCE_COMPONENTS_ONLY',
                 counts=dict(history), unobservedSequenceCount=None,
@@ -1171,23 +1192,25 @@ def make_coverage(runs, rows, *, spool=None):
         summary['limitations'].append('Inline input contexts cover audited boundaries only. CAPTURED means the named partial profile was captured, not complete Magic knowledge or every AI input. ABSENT means unavailable capability, not an empty view. Only inputContext.policy is the permitted feature projection; diagnostic joins, original option membership/order, manifests, outcomes and legacy observation fields are excluded. Disclosed facts have unresolved current-object associations. Stack coverage is profile-declared and bounded where supported; long-term historical knowledge remains incomplete. trainingReady remains false.')
     if 'PERMITTED_CHOICE_VIEW_V3' in input_profiles:
         summary['limitations'].append('V3 separately permits audited numeric domains and local single-entity pick constraints in policy.prompt. Original entity pools remain diagnostic-only. Request coverage does not certify effect semantics, outer multi-pick history, option bindings or a complete legal action set.')
-    if {'PERMITTED_CHOICE_VIEW_V4', 'PERMITTED_CHOICE_VIEW_V5', 'PERMITTED_CHOICE_VIEW_V6', 'PERMITTED_CHOICE_VIEW_V7', 'PERMITTED_CHOICE_VIEW_V8', 'PERMITTED_CHOICE_VIEW_V9'} & input_profiles.keys():
+    if {'PERMITTED_CHOICE_VIEW_V4', 'PERMITTED_CHOICE_VIEW_V5', 'PERMITTED_CHOICE_VIEW_V6', 'PERMITTED_CHOICE_VIEW_V7', 'PERMITTED_CHOICE_VIEW_V8', 'PERMITTED_CHOICE_VIEW_V9', 'PERMITTED_CHOICE_VIEW_V10'} & input_profiles.keys():
         summary['limitations'] = [text.replace('Disclosed facts have unresolved current-object associations.',
             'Only directly proved public disclosure associations can be linked; other associations remain unresolved.') for text in summary['limitations']]
         summary['limitations'].append('V4 retains typed request fields and adds diagnostic current-option links. Those links do not authorize entity pool membership, count or ordering as model features. Direct public disclosure links require delivery proof without an intervening engine event. No profile certifies complete learning examples.')
-    if {'PERMITTED_CHOICE_VIEW_V5', 'PERMITTED_CHOICE_VIEW_V6', 'PERMITTED_CHOICE_VIEW_V7', 'PERMITTED_CHOICE_VIEW_V8', 'PERMITTED_CHOICE_VIEW_V9'} & input_profiles.keys():
+    if {'PERMITTED_CHOICE_VIEW_V5', 'PERMITTED_CHOICE_VIEW_V6', 'PERMITTED_CHOICE_VIEW_V7', 'PERMITTED_CHOICE_VIEW_V8', 'PERMITTED_CHOICE_VIEW_V9', 'PERMITTED_CHOICE_VIEW_V10'} & input_profiles.keys():
         summary['limitations'].append('V5 additionally permits exact received scalar mode bounds at audited planning selector/operation entries. These are invocation arguments, not committed rules constraints or mode identities, membership/order, effect semantics, cached-plan cause or a complete legal mode domain. Other hypothetical prompt families remain unsupported.')
-    if {'PERMITTED_CHOICE_VIEW_V6', 'PERMITTED_CHOICE_VIEW_V7', 'PERMITTED_CHOICE_VIEW_V8', 'PERMITTED_CHOICE_VIEW_V9'} & input_profiles.keys():
+    if {'PERMITTED_CHOICE_VIEW_V6', 'PERMITTED_CHOICE_VIEW_V7', 'PERMITTED_CHOICE_VIEW_V8', 'PERMITTED_CHOICE_VIEW_V9', 'PERMITTED_CHOICE_VIEW_V10'} & input_profiles.keys():
         summary['limitations'] = [s.replace('Other hypothetical prompt families remain unsupported.', 'V5 itself grants no other hypothetical prompt permission.') for s in summary['limitations']]
         summary['limitations'].append('V6 additionally permits exact received total entity bounds and the supplied related-player role at the audited outer entity operation. This operation overlaps its inner selectors. Parent choice links are diagnostic; prior-selection history and entity pool membership/count/order remain outside the permitted projection. These received arguments may describe planning work and do not certify legal results or complete learning examples.')
-    if {'PERMITTED_CHOICE_VIEW_V7', 'PERMITTED_CHOICE_VIEW_V8', 'PERMITTED_CHOICE_VIEW_V9'} & input_profiles.keys():
+    if {'PERMITTED_CHOICE_VIEW_V7', 'PERMITTED_CHOICE_VIEW_V8', 'PERMITTED_CHOICE_VIEW_V9', 'PERMITTED_CHOICE_VIEW_V10'} & input_profiles.keys():
         summary['limitations'] = [s.replace('Parent choice links are diagnostic; prior-selection history and entity pool membership/count/order remain outside the permitted projection.',
             'V6 parent links alone grant no history; V7 declares its own history permission below. Entity pool membership/count/order remain excluded.') for s in summary['limitations']]
         summary['limitations'].append('V7 additionally permits bounded successful-return history within an audited base-controller entity operation at the next selector entry. Current public associations require exact receipt identity/incarnation and fresh local bindings; unresolved identities stay null. Incomplete histories are unavailable, and direct/unaudited selector history remains unknown. No current offered-pool membership/count/order, complete game history or learning readiness follows from this permission.')
-    if {'PERMITTED_CHOICE_VIEW_V8', 'PERMITTED_CHOICE_VIEW_V9'} & input_profiles.keys():
+    if {'PERMITTED_CHOICE_VIEW_V8', 'PERMITTED_CHOICE_VIEW_V9', 'PERMITTED_CHOICE_VIEW_V10'} & input_profiles.keys():
         summary['limitations'].append('V8 additionally permits the received single zone-change request at its audited selector: destination, ordered origins, local optionality and current decider role. These invocation arguments do not predict actual movement, authorize offered cards or establish outer repetition/history, effect semantics or learning readiness. None and empty origins retain their request meanings.')
-    if 'PERMITTED_CHOICE_VIEW_V9' in input_profiles:
+    if {'PERMITTED_CHOICE_VIEW_V9', 'PERMITTED_CHOICE_VIEW_V10'} & input_profiles.keys():
         summary['limitations'].append('V9 additionally permits the received ordinary engine zone-operation iteration request, ordered zones and current source/decider roles at its own entry before reveal. The terminal describes retained cards before later processing, not callback returns or movement. Child links remain diagnostic and grant no zone-selection history. Outer/inner observations overlap; no legal domain, complete history or learning readiness follows.')
+    if 'PERMITTED_CHOICE_VIEW_V10' in input_profiles:
+        summary['limitations'].append('V10 additionally permits audited ordinary zone-selector progress and bounded prior non-null callback returns at the child entry. Attempts, engine loop positions, non-null returns, retained cards and movement have separate meanings. Current public associations require exact receipt identity/incarnation and fresh local bindings; private/stale identities stay null. Incomplete progress/history is unavailable; direct or unsupported history remains unknown. No offered-pool permission, complete legal domain or learning readiness follows.')
     if accounting is not None:
         summary['limitations'].append('Invocation accounting covers configured original-AI standalone callback wrappers only. Entries are not unique gameplay decisions. Input-unavailable records are retained records; callback errors are not capture loss. Publication return does not prove collector delivery. Cutoff-pending work is not evidence that a late callback never ran. Parent/nested and uninstrumented invocation counts remain unknown. Partial scopes, legacy absence and overflow cannot supply exact missing-start fractions.')
     if captures is not None:
@@ -1318,6 +1341,8 @@ def report_chunks(summary, runs):
         if 'inputContextBindings' in summary:
             yield from counter_line('V4 diagnostic bindings and disclosure associations: ', 'inputContextBindings')
             yield from lines('contextRecords counts V4 contexts; optionEntries counts their represented diagnostic options; disclosureFacts counts their delivered facts. These denominators overlap and are not unique gameplay choices. Missing/uninstrumented choices remain unknown.')
+    if 'zoneSelectionProgress' in summary:
+        yield from counter_line('Scoped zone-selection progress: ', 'zoneSelectionProgress')
     if 'entitySelectionHistory' in summary:
         yield from counter_line('Scoped entity-selection history: ', 'entitySelectionHistory')
     yield from _audit.markdown(summary['inputCoverageAudit'])

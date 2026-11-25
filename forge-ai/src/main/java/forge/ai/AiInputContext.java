@@ -34,7 +34,7 @@ final class AiInputContext {
     static final int MAX_TEXT = 256;
     static final int MAX_REQUEST_ZONES = ZoneType.values().length;
     static final long MAX_GAME_WORK = 256_000;
-    static final String PROFILE = "PERMITTED_CHOICE_VIEW_V9";
+    static final String PROFILE = "PERMITTED_CHOICE_VIEW_V10";
     private static final List<ZoneType> ZONES = List.of(ZoneType.Battlefield, ZoneType.Command,
             ZoneType.Graveyard, ZoneType.Exile, ZoneType.Hand, ZoneType.Library);
 
@@ -108,7 +108,7 @@ final class AiInputContext {
 
     private static Map<String, Object> envelope(final Player chooser, final String timing, final String stateBasis) {
         final Map<String, Object> result = new LinkedHashMap<>();
-        result.put("schemaVersion", 9);
+        result.put("schemaVersion", 10);
         result.put("profile", PROFILE);
         result.put("timing", timing);
         result.put("stateBasis", stateBasis);
@@ -321,6 +321,7 @@ final class AiInputContext {
                     && !(promptInput instanceof AiPromptInput.EntityBounds)
                     && !(promptInput instanceof AiPromptInput.ZoneRequest)
                     && !(promptInput instanceof AiPromptInput.ZoneOperation)
+                    && !(promptInput instanceof AiZoneSelectionHistory.Prompt)
                     && !(promptInput instanceof AiEntitySelectionHistory.Prompt sequence && sequence.sequenced())) {
                 omit("PROMPT", "UNSUPPORTED"); return null;
             }
@@ -328,6 +329,9 @@ final class AiInputContext {
             final AiPromptInput request = promptInput.get();
             if (request.kind() == AiPromptInput.Kind.ENTITY_PICK_SEQUENCE && !"COMPLETE".equals(request.sequence().coverage())) {
                 omit("PROMPT", request.sequence().reason()); return null;
+            }
+            if (request.kind() == AiPromptInput.Kind.ZONE_PICK_PROGRESS && !request.zoneProgress().complete()) {
+                omit("PROMPT", request.zoneProgress().omission()); return null;
             }
             String related = null;
             if (request.relatedPlayer() != null) {
@@ -385,7 +389,7 @@ final class AiInputContext {
                     result.put("destination", requestValue.destination().name()); result.put("origins", origins);
                     result.put("sourcePlayer", source); result.put("decider", related);
                 }
-                case ZONE_CHANGE_REQUEST -> {
+                case ZONE_CHANGE_REQUEST, ZONE_PICK_PROGRESS -> {
                     final var zones = request.zoneRequest();
                     if (zones.destination() == null || zones.origins() == null) { omit("PROMPT", "UNSUPPORTED"); return null; }
                     if (zones.origins().size() > MAX_REQUEST_ZONES) { omit("PROMPT", "OUTSIDE_CAPTURED_PREFIX"); return null; }
@@ -399,6 +403,21 @@ final class AiInputContext {
                     result.put("minimumPicks", request.minimum()); result.put("maximumPicks", request.maximum());
                     result.put("optional", request.optional()); result.put("destination", zones.destination().name());
                     result.put("origins", origins); result.put("decider", related);
+                    if (request.kind() == AiPromptInput.Kind.ZONE_PICK_PROGRESS) {
+                        final var progress = request.zoneProgress();
+                        final Player sourcePlayer = progress.operation().sourcePlayer();
+                        final String source = sourcePlayer == null ? null : currentPlayerRef(sourcePlayer);
+                        if (sourcePlayer != null && source == null) { omit("PROMPT", "UNRESOLVED_BINDING"); return null; }
+                        result.put("sourcePlayer", source); result.put("requestedIterations", progress.operation().requestedIterations());
+                        result.put("attemptIndex", progress.attemptIndex()); result.put("loopPosition", progress.loopPosition());
+                        result.put("priorNonNullReturnCount", progress.priorNonNullReturnCount()); result.put("retainedCount", progress.retainedCount());
+                        final List<String> previous = new ArrayList<>();
+                        for (final AiOptionInput.Entry receipt : progress.receipts()) {
+                            if (!work("PROMPT")) { return null; }
+                            previous.add(previousSelectionRef(receipt));
+                        }
+                        result.put("previousReturns", previous);
+                    }
                 }
                 case ENTITY_PICK_SEQUENCE -> {
                     final var sequence = request.sequence();
@@ -421,6 +440,7 @@ final class AiInputContext {
                 case ENTITY_PICK_SEQUENCE -> "RECEIVED_ENTITY_SEQUENCE_V1";
                 case ZONE_CHANGE_REQUEST -> "RECEIVED_ZONE_REQUEST_V1";
                 case ZONE_CHANGE_OPERATION_REQUEST -> "RECEIVED_ZONE_OPERATION_V1";
+                case ZONE_PICK_PROGRESS -> "RECEIVED_ZONE_PROGRESS_V1";
                 default -> "CONTROLLER_REQUEST_V1";
             };
             return result;

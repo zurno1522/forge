@@ -235,8 +235,12 @@ public class AiInputContextIntegrationTest extends AITest {
         Assert.assertEquals(context.get("timing"), "BEFORE_SELECTOR");
         Assert.assertEquals(context.get("stateBasis"), "RULES_STATE");
         Assert.assertEquals(((Map<?, ?>) context.get("perspective")).get("chooserPlayerId"), chooser.getId());
-        Assert.assertEquals(policy(context).get("prompt"), Map.of("kind", "ZONE_CHANGE_REQUEST", "minimumPicks", 1,
-                "maximumPicks", 1, "optional", false, "destination", "Hand", "origins", List.of("Library"), "decider", "p0"));
+        Assert.assertEquals(policy(context).get("prompt"), Map.ofEntries(
+                Map.entry("kind", "ZONE_PICK_PROGRESS"), Map.entry("minimumPicks", 1), Map.entry("maximumPicks", 1),
+                Map.entry("optional", false), Map.entry("destination", "Hand"), Map.entry("origins", List.of("Library")),
+                Map.entry("sourcePlayer", "p1"), Map.entry("decider", "p0"), Map.entry("requestedIterations", 1),
+                Map.entry("attemptIndex", 0L), Map.entry("loopPosition", 0), Map.entry("priorNonNullReturnCount", 0L),
+                Map.entry("retainedCount", 0), Map.entry("previousReturns", List.of())));
         Assert.assertEquals(facts(context).size(), Math.min(3, available));
         Assert.assertEquals(((List<?>) ((Map<?, ?>) delegated.get("options")).get("items")).size(), Math.min(3, available));
         Assert.assertTrue(policy(context).toString().contains("Plains"));

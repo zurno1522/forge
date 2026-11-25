@@ -50,7 +50,7 @@ public class AiZoneOperationRecorderTest extends AITest {
         final var start = f.events.get(0);
         Assert.assertEquals(start.get("choiceType"), "ZONE_CHANGE_SELECTION_OPERATION");
         Assert.assertEquals(((Map<?, ?>) start.get("entryLocation")).get("kind"), "OPERATION");
-        Assert.assertEquals(input(start).get("timing"), "BEFORE_OPERATION"); Assert.assertEquals(input(start).get("schemaVersion"), 9);
+        Assert.assertEquals(input(start).get("timing"), "BEFORE_OPERATION"); Assert.assertEquals(input(start).get("schemaVersion"), 10);
         Assert.assertEquals(prompt(start), Map.of("kind", "ZONE_CHANGE_OPERATION_REQUEST", "requestedIterations", -3,
                 "destination", "Hand", "origins", List.of("Library"), "sourcePlayer", "p0", "decider", "p1"));
         Assert.assertEquals(((Map<?, ?>) ((List<?>) ((Map<?, ?>) input(start).get("policy")).get("players")).get(1)).get("life"), 20);
@@ -68,7 +68,7 @@ public class AiZoneOperationRecorderTest extends AITest {
     }
 
     @Test(groups = {"UnitTest", "fast"})
-    public void actualEngineSelectorsHaveAnOuterOwnerButNoInventedChildHistory() {
+    public void actualEngineSelectorsHaveAnOuterOwnerAndTheirOwnProgress() {
         final Fixture f = fixture(); new ChangeZoneEffect().resolve(f.ability);
         final var outer = f.events.get(0); Assert.assertEquals(outer.get("choiceType"), "ZONE_CHANGE_SELECTION_OPERATION");
         final var children = f.events.stream().filter(c -> "CONTROLLER_ZONE_CHANGE_CARD".equals(c.get("boundary"))).toList();
@@ -77,7 +77,7 @@ public class AiZoneOperationRecorderTest extends AITest {
         Assert.assertEquals(((List<?>) ((Map<?, ?>) input(children.get(0)).get("policy")).get("disclosedFacts")).size(), 2);
         for (final var child : children) {
             Assert.assertEquals(child.get("parentChoiceId"), outer.get("choiceId"));
-            Assert.assertEquals(prompt(child).get("kind"), "ZONE_CHANGE_REQUEST");
+            Assert.assertEquals(prompt(child).get("kind"), "ZONE_PICK_PROGRESS");
             Assert.assertFalse(((Map<?, ?>) child.get("options")).containsKey("selectionSequence"));
         }
         Assert.assertEquals(((Map<?, ?>) f.events.get(f.events.size()-1).get("selection")).get("selectedCount"), 2);

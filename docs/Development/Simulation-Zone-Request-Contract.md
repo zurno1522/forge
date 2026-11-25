@@ -1,6 +1,6 @@
 # COV-006: received single zone-change request
 
-The V8 permission, retained by current V9 producers, projects the arguments already received by `PlayerControllerAi.chooseSingleCardForZoneChange`. The existing selector entry remains after delayed reveal delivery and before the original heuristic. It adds no engine operation or repetition ownership. The controller's original callback, return and exception remain unchanged.
+The V8 permission, retained by current V10 producers, projects the arguments already received by `PlayerControllerAi.chooseSingleCardForZoneChange`. The existing selector entry remains after delayed reveal delivery and before the original heuristic. It adds no engine operation or repetition ownership. The controller's original callback, return and exception remain unchanged.
 
 ## Source boundary and semantics
 

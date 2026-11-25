@@ -14,9 +14,9 @@ import java.util.function.Function;
 final class AiZoneOperationRecorder {
     private AiZoneOperationRecorder() { }
 
-    static CardCollection choose(final Player chooser, final ZoneChangeSelectionRequest request,
+    static CardCollection choose(final Player chooser, final PlayerControllerAi receiver, final ZoneChangeSelectionRequest request,
             final Function<ZoneChangeSelectionObserver, CardCollection> callback) {
-        if (!chooser.getGame().isRecordingAiDecisions()) { return callback.apply(ZoneChangeSelectionObserver.NONE); }
+        if (!chooser.getGame().isRecordingAiDecisions()) { return AiZoneSelectionHistory.operation(chooser, receiver, request, null, callback); }
         return AiChoiceRecorder.observeInput(chooser, request.ability(), "ZONE_CHANGE_SELECTION_OPERATION", null,
                 "CONTROLLER_ZONE_CHANGE_SELECTIONS", "BEFORE_OPERATION", () -> {
                     final Map<String, Object> options = new LinkedHashMap<>();
@@ -34,6 +34,7 @@ final class AiZoneOperationRecorder {
                     return Map.of("coverage", captured == null ? "UNAVAILABLE" : "OBSERVED_RETAINED_CARD_PREFIX",
                             "items", references, "selectedCount", count,
                             "truncated", captured == null || captured.truncated() || count > references.size());
-                }, new AiPromptInput.ZoneOperation(request));
+                }, new AiPromptInput.ZoneOperation(request), null,
+                (owner, ignored) -> AiZoneSelectionHistory.operation(chooser, receiver, request, owner, callback));
     }
 }

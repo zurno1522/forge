@@ -7,7 +7,7 @@ from a privileged trace or prove that an uninstrumented heuristic used this view
 
 PROFILE = 'PERMITTED_CHOICE_VIEW_V1'
 PROFILES = {1: PROFILE, 2: 'PERMITTED_CHOICE_VIEW_V2', 3: 'PERMITTED_CHOICE_VIEW_V3', 4: 'PERMITTED_CHOICE_VIEW_V4',
-            5: 'PERMITTED_CHOICE_VIEW_V5', 6: 'PERMITTED_CHOICE_VIEW_V6', 7: 'PERMITTED_CHOICE_VIEW_V7', 8: 'PERMITTED_CHOICE_VIEW_V8', 9: 'PERMITTED_CHOICE_VIEW_V9'}
+            5: 'PERMITTED_CHOICE_VIEW_V5', 6: 'PERMITTED_CHOICE_VIEW_V6', 7: 'PERMITTED_CHOICE_VIEW_V7', 8: 'PERMITTED_CHOICE_VIEW_V8', 9: 'PERMITTED_CHOICE_VIEW_V9', 10: 'PERMITTED_CHOICE_VIEW_V10'}
 TIMINGS = {'BEFORE_SELECTOR', 'BEFORE_OPERATION', 'AFTER_SELECTION_BEFORE_APPLICATION', 'UNESTABLISHED'}
 STATE_BASES = {'RULES_STATE', 'PLANNING_WORKING_STATE', 'UNESTABLISHED'}
 REASONS = {'HIDDEN', 'UNSUPPORTED', 'OUTSIDE_CAPTURED_PREFIX', 'UNRESOLVED_BINDING',
@@ -67,7 +67,7 @@ def validate(value, chooser_id, known_players=None):
     for omission in omissions:
         fields(omission, 'component reason', 'invalid omission fields')
         require(omission['component'] in COMPONENTS | ({'STACK'} if version >= 2 else set()) | ({'PROMPT'} if version >= 3 else set())
-                and omission['reason'] in REASONS, 'unknown omission')
+                and omission['reason'] in (REASONS | ({'COUNTER_OVERFLOW'} if version >= 10 else set())), 'unknown omission')
     require(bool(omissions) == (value['status'] != 'CAPTURED'), 'capture status/omission mismatch')
     diagnostic = value['diagnostics']
     fields(diagnostic, 'playerBindings cardBindings' + (' stackBindings' if version >= 2 else '')
@@ -199,6 +199,7 @@ def validate_prompt(prompt, coverage, player_refs, omissions, state_basis, versi
     if version >= 7: permitted.add('RECEIVED_ENTITY_SEQUENCE_V1')
     if version >= 8: permitted.add('RECEIVED_ZONE_REQUEST_V1')
     if version >= 9: permitted.add('RECEIVED_ZONE_OPERATION_V1')
+    if version >= 10: permitted.add('RECEIVED_ZONE_PROGRESS_V1')
     require(coverage in permitted | {'UNSUPPORTED', 'UNAVAILABLE'}, 'invalid prompt coverage')
     require((prompt is not None) == (coverage in permitted), 'prompt coverage/policy mismatch')
     if prompt is None:
@@ -212,10 +213,11 @@ def validate_prompt(prompt, coverage, player_refs, omissions, state_basis, versi
     entities = kind == 'ENTITY_BOUNDS'
     sequence = kind == 'ENTITY_PICK_SEQUENCE'
     zone = kind == 'ZONE_CHANGE_REQUEST'
+    zone_progress = kind == 'ZONE_PICK_PROGRESS'
     operation = kind == 'ZONE_CHANGE_OPERATION_REQUEST'
-    require(state_basis == 'RULES_STATE' or (mode and version >= 5 or entities and version >= 6 or sequence and version >= 7 or zone and version >= 8 or operation and version >= 9) and state_basis == 'PLANNING_WORKING_STATE',
+    require(state_basis == 'RULES_STATE' or (mode and version >= 5 or entities and version >= 6 or sequence and version >= 7 or zone and version >= 8 or operation and version >= 9 or zone_progress and version >= 10) and state_basis == 'PLANNING_WORKING_STATE',
             'planning prompt claims committed request arguments')
-    require(coverage == ('RECEIVED_MODE_BOUNDS_V1' if mode else 'RECEIVED_ENTITY_BOUNDS_V1' if entities else 'RECEIVED_ENTITY_SEQUENCE_V1' if sequence else 'RECEIVED_ZONE_REQUEST_V1' if zone else 'RECEIVED_ZONE_OPERATION_V1' if operation else 'CONTROLLER_REQUEST_V1'), 'prompt kind/coverage mismatch')
+    require(coverage == ('RECEIVED_MODE_BOUNDS_V1' if mode else 'RECEIVED_ENTITY_BOUNDS_V1' if entities else 'RECEIVED_ENTITY_SEQUENCE_V1' if sequence else 'RECEIVED_ZONE_REQUEST_V1' if zone else 'RECEIVED_ZONE_OPERATION_V1' if operation else 'RECEIVED_ZONE_PROGRESS_V1' if zone_progress else 'CONTROLLER_REQUEST_V1'), 'prompt kind/coverage mismatch')
     if operation:
         require(version >= 9, 'zone operation requires V9')
         fields(prompt, 'kind requestedIterations destination origins sourcePlayer decider', 'invalid operation request fields')
@@ -224,15 +226,24 @@ def validate_prompt(prompt, coverage, player_refs, omissions, state_basis, versi
                 and isinstance(prompt['origins'], list) and len(prompt['origins']) <= len(ZONES)
                 and all(isinstance(z, str) and z in ZONES for z in prompt['origins']), 'invalid operation request zones')
         require(all(prompt[k] is None or isinstance(prompt[k], str) and prompt[k] in player_refs for k in ('sourcePlayer','decider')), 'unknown operation request role')
-    elif zone:
+    elif zone or zone_progress:
         require(version >= 8, 'zone request requires V8')
-        fields(prompt, 'kind minimumPicks maximumPicks optional destination origins decider', 'invalid zone request fields')
+        fields(prompt, 'kind minimumPicks maximumPicks optional destination origins decider' + (' sourcePlayer requestedIterations attemptIndex loopPosition priorNonNullReturnCount retainedCount previousReturns' if zone_progress else ''), 'invalid zone request fields')
         require(isinstance(prompt['optional'], bool) and integer(prompt['minimumPicks']) and integer(prompt['maximumPicks'])
                 and prompt['minimumPicks'] == (0 if prompt['optional'] else 1) and prompt['maximumPicks'] == 1, 'invalid zone pick constraints')
         require(isinstance(prompt['destination'], str) and prompt['destination'] in ZONES
                 and isinstance(prompt['origins'], list) and len(prompt['origins']) <= len(ZONES)
                 and all(isinstance(origin, str) and origin in ZONES for origin in prompt['origins']), 'invalid request zones')
         require(prompt['decider'] is None or isinstance(prompt['decider'], str) and prompt['decider'] in player_refs, 'unknown request decider')
+        if zone_progress:
+            require(version >= 10 and (prompt['sourcePlayer'] is None or isinstance(prompt['sourcePlayer'], str) and prompt['sourcePlayer'] in player_refs), 'invalid progress source player')
+            require(integer(prompt['requestedIterations']) and -(1 << 31) <= prompt['requestedIterations'] < (1 << 31), 'invalid progress iteration request')
+            require(all(integer(prompt[k]) and 0 <= prompt[k] <= (1 << 63)-1 for k in ('attemptIndex','priorNonNullReturnCount'))
+                    and prompt['priorNonNullReturnCount'] <= prompt['attemptIndex'], 'invalid progress long counters')
+            require(all(integer(prompt[k]) and 0 <= prompt[k] < (1 << 31) for k in ('loopPosition','retainedCount')), 'invalid engine progress counts')
+            require(isinstance(prompt['previousReturns'],list) and len(prompt['previousReturns']) <= 64
+                    and len(prompt['previousReturns']) == prompt['priorNonNullReturnCount']
+                    and all(ref is None or isinstance(ref,str) for ref in prompt['previousReturns']), 'invalid previous return vector')
     elif sequence:
         require(version >= 7, 'selection history requires V7')
         fields(prompt, 'kind minimumPicks maximumPicks optional relatedPlayer minimumTotal maximumTotal priorSelectionCount previousSelections', 'invalid sequence prompt fields')

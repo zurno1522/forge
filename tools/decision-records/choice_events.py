@@ -122,6 +122,9 @@ def input_boundary(value, boundary, stage=None, choice=None):
             elif prompt['kind'] == 'ENTITY_PICK_SEQUENCE':
                 require(boundary == 'CONTROLLER_EFFECT_ENTITY' and value['schemaVersion'] >= 7
                         and 'entryLocation' in choice and 'selectionSequence' in choice['options'], 'history at unaudited boundary')
+            elif prompt['kind'] == 'ZONE_PICK_PROGRESS':
+                require(boundary == 'CONTROLLER_ZONE_CHANGE_CARD' and value['schemaVersion'] >= 10
+                        and 'entryLocation' in choice and 'zoneSelectionProgress' in choice['options'], 'zone progress at unaudited boundary')
             elif prompt['kind'] == 'ZONE_CHANGE_REQUEST':
                 require(boundary == 'CONTROLLER_ZONE_CHANGE_CARD' and value['schemaVersion'] >= 8
                         and 'entryLocation' in choice, 'zone request at unaudited boundary')
@@ -140,6 +143,14 @@ def prompt_arguments(choice):
         by_ref = {b['entityRef']: b['id'] for b in context['diagnostics']['playerBindings']}
         for field, raw in (('sourcePlayer', 'sourcePlayerId'), ('decider', 'deciderPlayerId')):
             require((None if prompt[field] is None else by_ref[prompt[field]]) == option[raw], 'zone operation role differs')
+    elif prompt['kind'] == 'ZONE_PICK_PROGRESS':
+        progress = option['zoneSelectionProgress']
+        require(progress['progressCoverage'] == progress['receiptCoverage'] == 'COMPLETE', 'incomplete progress claims a prompt')
+        require(all(prompt[k] == progress[k] for k in ('attemptIndex','loopPosition','priorNonNullReturnCount','retainedCount','requestedIterations')), 'progress prompt differs from entry')
+        require(all(prompt[k] == option[k] for k in ('optional','destination','origins')), 'progress request differs from callback')
+        by_ref = {b['entityRef']:b['id'] for b in context['diagnostics']['playerBindings']}
+        require((None if prompt['decider'] is None else by_ref[prompt['decider']]) == option['deciderPlayerId'], 'progress decider differs')
+        sequence_links(choice, {'priorSelections':progress['priorReturns']}, {'previousSelections':prompt['previousReturns']})
     elif prompt['kind'] == 'ZONE_CHANGE_REQUEST':
         require(all(prompt[k] == option[k] for k in ('optional', 'destination', 'origins')), 'zone request differs from callback arguments')
         by_ref = {b['entityRef']: b['id'] for b in context['diagnostics']['playerBindings']}
@@ -169,6 +180,66 @@ def prompt_arguments(choice):
         related = prompt['relatedPlayer']
         by_ref = {binding['entityRef']: binding['id'] for binding in context['diagnostics']['playerBindings']}
         require((None if related is None else by_ref[related]) == option['relatedPlayerId'], 'prompt player differs from callback arguments')
+
+
+def zone_progress_metadata(choice):
+    value=choice['options']['zoneSelectionProgress']
+    require(choice['choiceType']=='ZONE_CHANGE_CARD_SELECTION' and 'entryLocation' in choice
+            and choice.get('inputContext',{}).get('schemaVersion',0)>=10, 'zone progress lacks entry/profile')
+    require(isinstance(value,dict) and set(value)=={'schemaVersion','progressCoverage','progressReason','attemptIndex','loopPosition',
+            'priorNonNullReturnCount','retainedCount','requestedIterations','receiptCoverage','receiptReason','priorReturns'}
+            and integer(value['schemaVersion']) and value['schemaVersion']==1,'invalid zone progress fields')
+    require(all(integer(value[k]) and -(1<<31)<=value[k]<(1<<31) for k in ('loopPosition','requestedIterations'))
+            and integer(value['retainedCount']) and 0<=value['retainedCount']<(1<<31),'invalid engine progress integers')
+    require(all(value[k] is None or integer(value[k]) and 0<=value[k]<=(1<<63)-1 for k in ('attemptIndex','priorNonNullReturnCount')),'invalid progress long counters')
+    if value['progressCoverage']=='COMPLETE':
+        require(value['progressReason'] is None and value['loopPosition']>=0 and value['attemptIndex'] is not None
+                and value['priorNonNullReturnCount'] is not None and value['priorNonNullReturnCount']<=value['attemptIndex'],'incomplete progress claims completeness')
+    else:
+        require(value['progressCoverage']=='UNAVAILABLE' and value['progressReason'] in ('UNSUPPORTED','COUNTER_OVERFLOW'),'invalid unavailable progress')
+    refs=value['priorReturns'];count=value['priorNonNullReturnCount']
+    require(isinstance(refs,list) and len(refs)<=64 and (count is None or len(refs)<=count),'invalid return receipt prefix')
+    for ref in refs: typed_reference(ref,'CARD')
+    if value['receiptCoverage']=='COMPLETE':
+        require(value['progressCoverage']=='COMPLETE' and len(refs)==count and value['receiptReason'] is None,'incomplete receipts claim completeness')
+    elif value['receiptCoverage']=='PREFIX':
+        require(value['progressCoverage']=='COMPLETE' and len(refs)<count and value['receiptReason']=='OUTSIDE_CAPTURED_PREFIX','invalid receipt prefix')
+    else:
+        require(value['receiptCoverage']=='UNAVAILABLE' and value['receiptReason'] in ('CAPTURE_FAILED','UNSUPPORTED','COUNTER_OVERFLOW'),'invalid unavailable receipts')
+
+
+def zone_progress_owner(choice,states):
+    value=choice['options']['zoneSelectionProgress'];parent_id=choice['parentChoiceId']
+    require(parent_id is not None,'zone progress lacks outer owner')
+    state=states[parent_id];parent=state['start']['choice'];option=parent['options']
+    require(parent['choiceType']=='ZONE_CHANGE_SELECTION_OPERATION' and all(parent[k]==choice[k] for k in ('chooserPlayerId','abilityId','sourceId')),'zone progress owner differs')
+    require(value['requestedIterations']==option['requestedIterations']
+            and all(choice['options'][k]==option[k] for k in ('destination','origins','deciderPlayerId')),'zone progress received arguments differ')
+    prompt=((choice['inputContext'].get('policy') or {}).get('prompt'))
+    if prompt is not None and prompt['kind']=='ZONE_PICK_PROGRESS':
+        bindings={b['entityRef']:b['id'] for b in choice['inputContext']['diagnostics']['playerBindings']}
+        require((None if prompt['sourcePlayer'] is None else bindings.get(prompt['sourcePlayer']))==option['sourcePlayerId'],'progress source role differs')
+    require(not state.get('zoneProgressUnavailable') or value['progressCoverage']=='UNAVAILABLE','unavailable progress became complete')
+    require(not state.get('zoneReceiptsIncomplete') or value['receiptCoverage']!='COMPLETE','incomplete receipts became complete')
+    index,count=value['attemptIndex'],value['priorNonNullReturnCount']
+    if index is not None:
+        require(index>state.get('zoneLastIndex',-1),'duplicate or reversed attempt index')
+        state['zoneLastIndex']=index
+    previous=state.get('zoneLastCount')
+    if previous is not None and index is not None and count is not None:
+        gap=index-previous['index'];delta=count-previous['count']
+        require(0<=delta<=gap,'return count differs from attempt gap')
+        terminal=states[previous['choiceId']]['terminal']
+        if terminal is not None:
+            status=terminal['choice']['status']
+            require(status!='ERROR' or value['progressCoverage']=='UNAVAILABLE','progress continued after selector error')
+            if status=='COMPLETED':require(delta>=1 and (gap!=1 or delta==1),'completed callback missing from count')
+            if status=='DECLINED' and gap==1:require(delta==0,'declined callback increments return count')
+    if index is not None and count is not None:
+        state['zoneLastCount']=dict(index=index,count=count,choiceId=choice['choiceId'])
+    state['zoneProgressUnavailable']=state.get('zoneProgressUnavailable',False) or value['progressCoverage']=='UNAVAILABLE'
+    state['zoneReceiptsIncomplete']=state.get('zoneReceiptsIncomplete',False) or value['receiptCoverage']!='COMPLETE'
+    states[parent_id]=state
 
 
 def sequence_metadata(choice):
@@ -354,6 +425,10 @@ def options(choice):
         common = {'coverage', 'items', 'truncated', 'optional'}
         zone = choice['choiceType'] == 'ZONE_CHANGE_CARD_SELECTION'
         expected = common | ({'destination', 'origins', 'deciderPlayerId'} if zone else {'relatedPlayerId'})
+        if 'zoneSelectionProgress' in option:
+            require(zone, 'entity callback claims zone progress')
+            expected |= {'zoneSelectionProgress'}
+            zone_progress_metadata(choice)
         if 'selectionSequence' in option:
             require(not zone, 'zone-change callback claims controller-owned history')
             expected |= {'selectionSequence'}
@@ -554,6 +629,7 @@ def accept(record, game):
             require(states[parent_choice]['terminal'] is None, 'choice began after its parent choice finished')
         options(c)
         if 'selectionSequence' in c['options']: sequence_owner(c, states)
+        if 'zoneSelectionProgress' in c['options']: zone_progress_owner(c, states)
         if 'inputContext' in c:
             validate_input_context(c['inputContext'], c['chooserPlayerId'])
             input_boundary(c['inputContext'], c['boundary'], c['stage'], c)

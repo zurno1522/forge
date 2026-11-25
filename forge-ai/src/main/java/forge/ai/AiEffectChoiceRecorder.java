@@ -100,16 +100,21 @@ final class AiEffectChoiceRecorder {
             final Player decider, final Supplier<Card> callback) {
         final AtomicReference<List<Map<String, Object>>> offered = new AtomicReference<>();
         final AtomicReference<AiOptionInput> proof = new AtomicReference<>();
+        final AtomicReference<AiZoneSelectionHistory.Input> progress = AiZoneSelectionHistory.present(chooser, ability) ? new AtomicReference<>() : null;
+        final var request = new AiPromptInput.ZoneRequest(destination, origins, optional, decider);
         return AiChoiceRecorder.observeInput(chooser, ability, "ZONE_CHANGE_CARD_SELECTION", null,
                 "CONTROLLER_ZONE_CHANGE_CARD", "BEFORE_SELECTOR", () -> {
+                    final var history = progress == null ? null : AiZoneSelectionHistory.claim(chooser, ability, destination, origins, options, optional, decider);
+                    if (progress != null) { progress.set(history); }
                     final Map<String, Object> result = pool(options, offered, proof);
                     result.put("coverage", offered.get() == null ? "UNAVAILABLE" : "OBSERVED_ZONE_CHANGE_OPTIONS_DIAGNOSTIC_ONLY");
                     result.put("optional", optional);
                     result.put("destination", destination.name());
                     result.put("origins", origins.stream().map(Enum::name).toList());
                     result.put("deciderPlayerId", decider == null ? null : decider.getId());
+                    if (history != null) { result.put("zoneSelectionProgress", history.diagnostics()); }
                     return result;
-                }, callback, value -> selected(value, offered.get()), new AiPromptInput.ZoneRequest(destination, origins, optional, decider), proof::get);
+                }, callback, value -> selected(value, offered.get()), progress == null ? request : new AiZoneSelectionHistory.Prompt(progress, request), proof::get);
     }
 
     private static Map<String, Object> pool(final Iterable<? extends GameObject> options,

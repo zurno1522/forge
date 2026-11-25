@@ -1912,7 +1912,7 @@ public class PlayerControllerAi extends PlayerController {
     @Override
     public CardCollection withZoneChangeSelections(final ZoneChangeSelectionRequest request,
             final java.util.function.Function<ZoneChangeSelectionObserver, CardCollection> callback) {
-        return AiZoneOperationRecorder.choose(player, request, callback);
+        return AiZoneOperationRecorder.choose(player, this, request, callback);
     }
 
     @Override
