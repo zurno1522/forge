@@ -34,7 +34,7 @@ final class AiInputContext {
     static final int MAX_TEXT = 256;
     static final int MAX_REQUEST_ZONES = ZoneType.values().length;
     static final long MAX_GAME_WORK = 256_000;
-    static final String PROFILE = "PERMITTED_CHOICE_VIEW_V10";
+    static final String PROFILE = "PERMITTED_CHOICE_VIEW_V11";
     private static final List<ZoneType> ZONES = List.of(ZoneType.Battlefield, ZoneType.Command,
             ZoneType.Graveyard, ZoneType.Exile, ZoneType.Hand, ZoneType.Library);
 
@@ -108,7 +108,7 @@ final class AiInputContext {
 
     private static Map<String, Object> envelope(final Player chooser, final String timing, final String stateBasis) {
         final Map<String, Object> result = new LinkedHashMap<>();
-        result.put("schemaVersion", 10);
+        result.put("schemaVersion", 11);
         result.put("profile", PROFILE);
         result.put("timing", timing);
         result.put("stateBasis", stateBasis);
@@ -385,6 +385,7 @@ final class AiInputContext {
                         if (origin == null) { omit("PROMPT", "UNSUPPORTED"); return null; }
                         origins.add(origin.name());
                     }
+                    result.put("branch", requestValue.branch().name());
                     result.put("requestedIterations", requestValue.requestedIterations());
                     result.put("destination", requestValue.destination().name()); result.put("origins", origins);
                     result.put("sourcePlayer", source); result.put("decider", related);
@@ -408,6 +409,7 @@ final class AiInputContext {
                         final Player sourcePlayer = progress.operation().sourcePlayer();
                         final String source = sourcePlayer == null ? null : currentPlayerRef(sourcePlayer);
                         if (sourcePlayer != null && source == null) { omit("PROMPT", "UNRESOLVED_BINDING"); return null; }
+                        result.put("branch", progress.operation().branch().name());
                         result.put("sourcePlayer", source); result.put("requestedIterations", progress.operation().requestedIterations());
                         result.put("attemptIndex", progress.attemptIndex()); result.put("loopPosition", progress.loopPosition());
                         result.put("priorNonNullReturnCount", progress.priorNonNullReturnCount()); result.put("retainedCount", progress.retainedCount());

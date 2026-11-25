@@ -1,0 +1,1323 @@
+{
+  "SAME_NAME_HIDDEN_ORIGIN": {
+    "excerpt": true,
+    "scenario": "named-control",
+    "parent": {
+      "choiceSchemaVersion": 1,
+      "choiceId": "choice:138",
+      "parentChoiceId": null,
+      "status": "STARTED",
+      "choiceType": "ZONE_CHANGE_SELECTION_OPERATION",
+      "boundary": "CONTROLLER_ZONE_CHANGE_SELECTIONS",
+      "stage": "RESOLUTION",
+      "chooserPlayerId": 0,
+      "chooserKind": "AI",
+      "abilityId": 323,
+      "sourceId": 2,
+      "decisionId": null,
+      "actionId": null,
+      "candidateAbilityId": null,
+      "assessmentId": null,
+      "resolvingAbilityId": 323,
+      "entryLocation": {
+        "schemaVersion": 1,
+        "status": "CAPTURED",
+        "kind": "OPERATION",
+        "timing": "BEFORE_OPERATION",
+        "stateBasis": "RULES_STATE",
+        "turn": 7,
+        "phase": "MAIN1",
+        "turnPlayerId": 0,
+        "reason": null
+      },
+      "options": {
+        "coverage": "RECEIVED_ZONE_OPERATION_REQUEST",
+        "branch": "SAME_NAME_HIDDEN_ORIGIN",
+        "requestedIterations": 3,
+        "destination": "Battlefield",
+        "origins": [
+          "Library"
+        ],
+        "sourcePlayerId": 0,
+        "deciderPlayerId": 0
+      },
+      "inputContext": {
+        "schemaVersion": 11,
+        "profile": "PERMITTED_CHOICE_VIEW_V11",
+        "timing": "BEFORE_OPERATION",
+        "stateBasis": "RULES_STATE",
+        "perspective": {
+          "chooserPlayerId": 0,
+          "controllingPlayerId": 0
+        },
+        "status": "CAPTURED",
+        "coverage": {
+          "history": "INCOMPLETE",
+          "options": "DIAGNOSTIC_ONLY",
+          "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+          "prompt": "RECEIVED_ZONE_OPERATION_V1",
+          "disclosures": "STACK_RESOLUTION",
+          "stack": "PUBLIC_ROOT_STACK_V1"
+        },
+        "policy": {
+          "turn": 7,
+          "phase": "MAIN1",
+          "turnPlayer": "p0",
+          "chooser": "p0",
+          "players": [
+            {
+              "entityRef": "p0",
+              "life": 20,
+              "handCount": 1,
+              "libraryCount": 51,
+              "floatingManaColors": []
+            },
+            {
+              "entityRef": "p1",
+              "life": 19,
+              "handCount": 7,
+              "libraryCount": 46,
+              "floatingManaColors": []
+            }
+          ],
+          "cards": [
+            {
+              "entityRef": "c0",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Battlefield",
+              "tapped": true,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Forest",
+              "types": "Basic Land - Forest",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c1",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Battlefield",
+              "tapped": true,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Forest",
+              "types": "Basic Land - Forest",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c2",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Battlefield",
+              "tapped": true,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Elvish Mystic",
+              "types": "Creature - Elf Druid",
+              "manaCost": "{G}",
+              "power": 1,
+              "toughness": 1,
+              "counters": {}
+            },
+            {
+              "entityRef": "c3",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Battlefield",
+              "tapped": true,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Forest",
+              "types": "Basic Land - Forest",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c4",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Battlefield",
+              "tapped": true,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Elvish Mystic",
+              "types": "Creature - Elf Druid",
+              "manaCost": "{G}",
+              "power": 1,
+              "toughness": 1,
+              "counters": {}
+            },
+            {
+              "entityRef": "c5",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Battlefield",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Elvish Visionary",
+              "types": "Creature - Elf Shaman",
+              "manaCost": "{1}{G}",
+              "power": 1,
+              "toughness": 1,
+              "counters": {}
+            },
+            {
+              "entityRef": "c6",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Battlefield",
+              "tapped": true,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Forest",
+              "types": "Basic Land - Forest",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c7",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Hand",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Forest",
+              "types": "Basic Land - Forest",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c8",
+              "owner": "p1",
+              "controller": "p1",
+              "zone": "Battlefield",
+              "tapped": true,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Island",
+              "types": "Basic Land - Island",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c9",
+              "owner": "p1",
+              "controller": "p1",
+              "zone": "Battlefield",
+              "tapped": true,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Island",
+              "types": "Basic Land - Island",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c10",
+              "owner": "p1",
+              "controller": "p1",
+              "zone": "Battlefield",
+              "tapped": true,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Plains",
+              "types": "Basic Land - Plains",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c11",
+              "owner": "p1",
+              "controller": "p1",
+              "zone": "Graveyard",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Ponder",
+              "types": "Sorcery",
+              "manaCost": "{U}",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c12",
+              "owner": "p1",
+              "controller": "p1",
+              "zone": "Graveyard",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Ponder",
+              "types": "Sorcery",
+              "manaCost": "{U}",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c13",
+              "owner": "p1",
+              "controller": "p1",
+              "zone": "Graveyard",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Ponder",
+              "types": "Sorcery",
+              "manaCost": "{U}",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c14",
+              "owner": "p1",
+              "controller": "p1",
+              "zone": "Graveyard",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Supreme Will",
+              "types": "Instant",
+              "manaCost": "{2}{U}",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Stack",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Doubling Chant",
+              "types": "Sorcery",
+              "manaCost": "{5}{G}",
+              "power": null,
+              "toughness": null,
+              "counters": {},
+              "entityRef": "c15"
+            }
+          ],
+          "stack": {
+            "entries": [
+              {
+                "entityRef": "s0",
+                "kind": "SPELL",
+                "controller": "p0",
+                "source": "c15",
+                "rootX": null,
+                "targets": [],
+                "targetsCoverage": "ROOT_TARGETS_ONLY"
+              }
+            ],
+            "truncated": false,
+            "isResolving": true,
+            "resolving": "s0",
+            "resolvingCoverage": "CAPTURED"
+          },
+          "prompt": {
+            "kind": "ZONE_CHANGE_OPERATION_REQUEST",
+            "branch": "SAME_NAME_HIDDEN_ORIGIN",
+            "requestedIterations": 3,
+            "destination": "Battlefield",
+            "origins": [
+              "Library"
+            ],
+            "sourcePlayer": "p0",
+            "decider": "p0"
+          },
+          "disclosedFacts": []
+        },
+        "diagnostics": {
+          "playerBindings": [
+            {
+              "id": 0,
+              "entityRef": "p0"
+            },
+            {
+              "id": 1,
+              "entityRef": "p1"
+            }
+          ],
+          "cardBindings": [
+            {
+              "entityRef": "c0",
+              "id": 45,
+              "gameTimestamp": 45
+            },
+            {
+              "entityRef": "c1",
+              "id": 50,
+              "gameTimestamp": 54
+            },
+            {
+              "entityRef": "c2",
+              "id": 6,
+              "gameTimestamp": 55
+            },
+            {
+              "entityRef": "c3",
+              "id": 39,
+              "gameTimestamp": 69
+            },
+            {
+              "entityRef": "c4",
+              "id": 7,
+              "gameTimestamp": 70
+            },
+            {
+              "entityRef": "c5",
+              "id": 19,
+              "gameTimestamp": 71
+            },
+            {
+              "entityRef": "c6",
+              "id": 55,
+              "gameTimestamp": 81
+            },
+            {
+              "entityRef": "c7",
+              "id": 48,
+              "gameTimestamp": 80
+            },
+            {
+              "entityRef": "c8",
+              "id": 100,
+              "gameTimestamp": 47
+            },
+            {
+              "entityRef": "c9",
+              "id": 91,
+              "gameTimestamp": 57
+            },
+            {
+              "entityRef": "c10",
+              "id": 107,
+              "gameTimestamp": 74
+            },
+            {
+              "entityRef": "c11",
+              "id": 116,
+              "gameTimestamp": 52
+            },
+            {
+              "entityRef": "c12",
+              "id": 114,
+              "gameTimestamp": 62
+            },
+            {
+              "entityRef": "c13",
+              "id": 115,
+              "gameTimestamp": 67
+            },
+            {
+              "entityRef": "c14",
+              "id": 64,
+              "gameTimestamp": 79
+            },
+            {
+              "entityRef": "c15",
+              "id": 2,
+              "gameTimestamp": 40
+            }
+          ],
+          "optionBindings": {
+            "truncated": false,
+            "items": [],
+            "coverage": "UNSUPPORTED"
+          },
+          "stackBindings": [
+            {
+              "entityRef": "s0",
+              "abilityId": 323,
+              "id": 29
+            }
+          ]
+        },
+        "omissions": []
+      }
+    },
+    "child": {
+      "choiceSchemaVersion": 1,
+      "choiceId": "choice:139",
+      "parentChoiceId": "choice:138",
+      "status": "STARTED",
+      "choiceType": "ZONE_CHANGE_CARD_SELECTION",
+      "boundary": "CONTROLLER_ZONE_CHANGE_CARD",
+      "stage": "RESOLUTION",
+      "chooserPlayerId": 0,
+      "chooserKind": "AI",
+      "abilityId": 323,
+      "sourceId": 2,
+      "decisionId": null,
+      "actionId": null,
+      "candidateAbilityId": null,
+      "assessmentId": null,
+      "resolvingAbilityId": 323,
+      "entryLocation": {
+        "schemaVersion": 1,
+        "status": "CAPTURED",
+        "kind": "SELECTOR",
+        "timing": "BEFORE_SELECTOR",
+        "stateBasis": "RULES_STATE",
+        "turn": 7,
+        "phase": "MAIN1",
+        "turnPlayerId": 0,
+        "reason": null
+      },
+      "options": {
+        "items": [
+          {
+            "type": "CARD",
+            "id": 5,
+            "gameTimestamp": 34
+          },
+          {
+            "type": "CARD",
+            "id": 8,
+            "gameTimestamp": 15
+          }
+        ],
+        "truncated": false,
+        "coverage": "OBSERVED_ZONE_CHANGE_OPTIONS_DIAGNOSTIC_ONLY",
+        "optional": true,
+        "destination": "Battlefield",
+        "origins": [
+          "Library"
+        ],
+        "deciderPlayerId": 0,
+        "zoneSelectionProgress": {
+          "schemaVersion": 1,
+          "progressCoverage": "COMPLETE",
+          "progressReason": null,
+          "attemptIndex": 0,
+          "loopPosition": 0,
+          "priorNonNullReturnCount": 0,
+          "retainedCount": 0,
+          "requestedIterations": 3,
+          "receiptCoverage": "COMPLETE",
+          "receiptReason": null,
+          "priorReturns": []
+        }
+      },
+      "inputContext": {
+        "schemaVersion": 11,
+        "profile": "PERMITTED_CHOICE_VIEW_V11",
+        "timing": "BEFORE_SELECTOR",
+        "stateBasis": "RULES_STATE",
+        "perspective": {
+          "chooserPlayerId": 0,
+          "controllingPlayerId": 0
+        },
+        "status": "PARTIAL",
+        "coverage": {
+          "history": "INCOMPLETE",
+          "options": "DIAGNOSTIC_ONLY",
+          "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+          "prompt": "RECEIVED_ZONE_PROGRESS_V1",
+          "disclosures": "STACK_RESOLUTION",
+          "stack": "PUBLIC_ROOT_STACK_V1"
+        },
+        "policy": {
+          "turn": 7,
+          "phase": "MAIN1",
+          "turnPlayer": "p0",
+          "chooser": "p0",
+          "players": [
+            {
+              "entityRef": "p0",
+              "life": 20,
+              "handCount": 1,
+              "libraryCount": 51,
+              "floatingManaColors": []
+            },
+            {
+              "entityRef": "p1",
+              "life": 19,
+              "handCount": 7,
+              "libraryCount": 46,
+              "floatingManaColors": []
+            }
+          ],
+          "cards": [
+            {
+              "entityRef": "c0",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Battlefield",
+              "tapped": true,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Forest",
+              "types": "Basic Land - Forest",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c1",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Battlefield",
+              "tapped": true,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Forest",
+              "types": "Basic Land - Forest",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c2",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Battlefield",
+              "tapped": true,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Elvish Mystic",
+              "types": "Creature - Elf Druid",
+              "manaCost": "{G}",
+              "power": 1,
+              "toughness": 1,
+              "counters": {}
+            },
+            {
+              "entityRef": "c3",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Battlefield",
+              "tapped": true,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Forest",
+              "types": "Basic Land - Forest",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c4",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Battlefield",
+              "tapped": true,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Elvish Mystic",
+              "types": "Creature - Elf Druid",
+              "manaCost": "{G}",
+              "power": 1,
+              "toughness": 1,
+              "counters": {}
+            },
+            {
+              "entityRef": "c5",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Battlefield",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Elvish Visionary",
+              "types": "Creature - Elf Shaman",
+              "manaCost": "{1}{G}",
+              "power": 1,
+              "toughness": 1,
+              "counters": {}
+            },
+            {
+              "entityRef": "c6",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Battlefield",
+              "tapped": true,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Forest",
+              "types": "Basic Land - Forest",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c7",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Hand",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Forest",
+              "types": "Basic Land - Forest",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c8",
+              "owner": "p1",
+              "controller": "p1",
+              "zone": "Battlefield",
+              "tapped": true,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Island",
+              "types": "Basic Land - Island",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c9",
+              "owner": "p1",
+              "controller": "p1",
+              "zone": "Battlefield",
+              "tapped": true,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Island",
+              "types": "Basic Land - Island",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c10",
+              "owner": "p1",
+              "controller": "p1",
+              "zone": "Battlefield",
+              "tapped": true,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Plains",
+              "types": "Basic Land - Plains",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c11",
+              "owner": "p1",
+              "controller": "p1",
+              "zone": "Graveyard",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Ponder",
+              "types": "Sorcery",
+              "manaCost": "{U}",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c12",
+              "owner": "p1",
+              "controller": "p1",
+              "zone": "Graveyard",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Ponder",
+              "types": "Sorcery",
+              "manaCost": "{U}",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c13",
+              "owner": "p1",
+              "controller": "p1",
+              "zone": "Graveyard",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Ponder",
+              "types": "Sorcery",
+              "manaCost": "{U}",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c14",
+              "owner": "p1",
+              "controller": "p1",
+              "zone": "Graveyard",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Supreme Will",
+              "types": "Instant",
+              "manaCost": "{2}{U}",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Stack",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Doubling Chant",
+              "types": "Sorcery",
+              "manaCost": "{5}{G}",
+              "power": null,
+              "toughness": null,
+              "counters": {},
+              "entityRef": "c15"
+            }
+          ],
+          "stack": {
+            "entries": [
+              {
+                "entityRef": "s0",
+                "kind": "SPELL",
+                "controller": "p0",
+                "source": "c15",
+                "rootX": null,
+                "targets": [],
+                "targetsCoverage": "ROOT_TARGETS_ONLY"
+              }
+            ],
+            "truncated": false,
+            "isResolving": true,
+            "resolving": "s0",
+            "resolvingCoverage": "CAPTURED"
+          },
+          "prompt": {
+            "kind": "ZONE_PICK_PROGRESS",
+            "minimumPicks": 0,
+            "maximumPicks": 1,
+            "optional": true,
+            "destination": "Battlefield",
+            "origins": [
+              "Library"
+            ],
+            "decider": "p0",
+            "branch": "SAME_NAME_HIDDEN_ORIGIN",
+            "sourcePlayer": "p0",
+            "requestedIterations": 3,
+            "attemptIndex": 0,
+            "loopPosition": 0,
+            "priorNonNullReturnCount": 0,
+            "retainedCount": 0,
+            "previousReturns": []
+          },
+          "disclosedFacts": [
+            {
+              "entityRef": "d0",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Skyshroud Claim",
+              "types": "Sorcery",
+              "manaCost": "{3}{G}",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d1",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Llanowar Elves",
+              "types": "Creature - Elf Druid",
+              "manaCost": "{G}",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d2",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Elvish Visionary",
+              "types": "Creature - Elf Shaman",
+              "manaCost": "{1}{G}",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d3",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Llanowar Elves",
+              "types": "Creature - Elf Druid",
+              "manaCost": "{G}",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d4",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Forest",
+              "types": "Basic Land - Forest",
+              "manaCost": "no cost",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d5",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Skyshroud Claim",
+              "types": "Sorcery",
+              "manaCost": "{3}{G}",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d6",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Forest",
+              "types": "Basic Land - Forest",
+              "manaCost": "no cost",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d7",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Forest",
+              "types": "Basic Land - Forest",
+              "manaCost": "no cost",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d8",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Forest",
+              "types": "Basic Land - Forest",
+              "manaCost": "no cost",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d9",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Forest",
+              "types": "Basic Land - Forest",
+              "manaCost": "no cost",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d10",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Cultivate",
+              "types": "Sorcery",
+              "manaCost": "{2}{G}",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d11",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Rampant Growth",
+              "types": "Sorcery",
+              "manaCost": "{1}{G}",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d12",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Forest",
+              "types": "Basic Land - Forest",
+              "manaCost": "no cost",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d13",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Forest",
+              "types": "Basic Land - Forest",
+              "manaCost": "no cost",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d14",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Forest",
+              "types": "Basic Land - Forest",
+              "manaCost": "no cost",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d15",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Cultivate",
+              "types": "Sorcery",
+              "manaCost": "{2}{G}",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d16",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Cultivate",
+              "types": "Sorcery",
+              "manaCost": "{2}{G}",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d17",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Colossal Dreadmaw",
+              "types": "Creature - Dinosaur",
+              "manaCost": "{4}{G}{G}",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d18",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Forest",
+              "types": "Basic Land - Forest",
+              "manaCost": "no cost",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d19",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Forest",
+              "types": "Basic Land - Forest",
+              "manaCost": "no cost",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d20",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Forest",
+              "types": "Basic Land - Forest",
+              "manaCost": "no cost",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d21",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Colossal Dreadmaw",
+              "types": "Creature - Dinosaur",
+              "manaCost": "{4}{G}{G}",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d22",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Llanowar Elves",
+              "types": "Creature - Elf Druid",
+              "manaCost": "{G}",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d23",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Elvish Mystic",
+              "types": "Creature - Elf Druid",
+              "manaCost": "{G}",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d24",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Skyshroud Claim",
+              "types": "Sorcery",
+              "manaCost": "{3}{G}",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d25",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Elvish Visionary",
+              "types": "Creature - Elf Shaman",
+              "manaCost": "{1}{G}",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d26",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Forest",
+              "types": "Basic Land - Forest",
+              "manaCost": "no cost",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d27",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Doubling Chant",
+              "types": "Sorcery",
+              "manaCost": "{5}{G}",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d28",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Forest",
+              "types": "Basic Land - Forest",
+              "manaCost": "no cost",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d29",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Forest",
+              "types": "Basic Land - Forest",
+              "manaCost": "no cost",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d30",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Rampant Growth",
+              "types": "Sorcery",
+              "manaCost": "{1}{G}",
+              "currentObjectAssociation": "UNRESOLVED"
+            },
+            {
+              "entityRef": "d31",
+              "source": "CONTROLLER_VIEW_REVEAL",
+              "scope": "STACK_RESOLUTION",
+              "zone": "Library",
+              "presentedFace": "Original",
+              "name": "Rampaging Baloths",
+              "types": "Creature - Beast",
+              "manaCost": "{4}{G}{G}",
+              "currentObjectAssociation": "UNRESOLVED"
+            }
+          ]
+        },
+        "diagnostics": {
+          "playerBindings": [
+            {
+              "id": 0,
+              "entityRef": "p0"
+            },
+            {
+              "id": 1,
+              "entityRef": "p1"
+            }
+          ],
+          "cardBindings": [
+            {
+              "entityRef": "c0",
+              "id": 45,
+              "gameTimestamp": 45
+            },
+            {
+              "entityRef": "c1",
+              "id": 50,
+              "gameTimestamp": 54
+            },
+            {
+              "entityRef": "c2",
+              "id": 6,
+              "gameTimestamp": 55
+            },
+            {
+              "entityRef": "c3",
+              "id": 39,
+              "gameTimestamp": 69
+            },
+            {
+              "entityRef": "c4",
+              "id": 7,
+              "gameTimestamp": 70
+            },
+            {
+              "entityRef": "c5",
+              "id": 19,
+              "gameTimestamp": 71
+            },
+            {
+              "entityRef": "c6",
+              "id": 55,
+              "gameTimestamp": 81
+            },
+            {
+              "entityRef": "c7",
+              "id": 48,
+              "gameTimestamp": 80
+            },
+            {
+              "entityRef": "c8",
+              "id": 100,
+              "gameTimestamp": 47
+            },
+            {
+              "entityRef": "c9",
+              "id": 91,
+              "gameTimestamp": 57
+            },
+            {
+              "entityRef": "c10",
+              "id": 107,
+              "gameTimestamp": 74
+            },
+            {
+              "entityRef": "c11",
+              "id": 116,
+              "gameTimestamp": 52
+            },
+            {
+              "entityRef": "c12",
+              "id": 114,
+              "gameTimestamp": 62
+            },
+            {
+              "entityRef": "c13",
+              "id": 115,
+              "gameTimestamp": 67
+            },
+            {
+              "entityRef": "c14",
+              "id": 64,
+              "gameTimestamp": 79
+            },
+            {
+              "entityRef": "c15",
+              "id": 2,
+              "gameTimestamp": 40
+            }
+          ],
+          "optionBindings": {
+            "truncated": false,
+            "items": [
+              {
+                "optionIndex": 0,
+                "entityRef": null
+              },
+              {
+                "optionIndex": 1,
+                "entityRef": null
+              }
+            ],
+            "coverage": "DIAGNOSTIC_PUBLIC_CURRENT_V1"
+          },
+          "stackBindings": [
+            {
+              "entityRef": "s0",
+              "abilityId": 323,
+              "id": 29
+            }
+          ]
+        },
+        "omissions": [
+          {
+            "component": "DISCLOSURES",
+            "reason": "OUTSIDE_CAPTURED_PREFIX"
+          }
+        ]
+      }
+    }
+  }
+}

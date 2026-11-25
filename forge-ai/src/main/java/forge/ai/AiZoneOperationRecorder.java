@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-/** The ordinary engine selection callback, before reveal and before later application. */
+/** The audited engine selection callback, before reveal and before later application. */
 final class AiZoneOperationRecorder {
     private AiZoneOperationRecorder() { }
 
@@ -20,7 +20,7 @@ final class AiZoneOperationRecorder {
         return AiChoiceRecorder.observeInput(chooser, request.ability(), "ZONE_CHANGE_SELECTION_OPERATION", null,
                 "CONTROLLER_ZONE_CHANGE_SELECTIONS", "BEFORE_OPERATION", () -> {
                     final Map<String, Object> options = new LinkedHashMap<>();
-                    options.put("coverage", "RECEIVED_ZONE_OPERATION_REQUEST"); options.put("branch", "ORDINARY_HIDDEN_ORIGIN");
+                    options.put("coverage", "RECEIVED_ZONE_OPERATION_REQUEST"); options.put("branch", request.branch().name());
                     options.put("requestedIterations", request.requestedIterations());
                     options.put("destination", request.destination().name());
                     options.put("origins", request.origins().stream().map(Enum::name).toList());

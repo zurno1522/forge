@@ -236,7 +236,7 @@ public class AiInputContextIntegrationTest extends AITest {
         Assert.assertEquals(context.get("stateBasis"), "RULES_STATE");
         Assert.assertEquals(((Map<?, ?>) context.get("perspective")).get("chooserPlayerId"), chooser.getId());
         Assert.assertEquals(policy(context).get("prompt"), Map.ofEntries(
-                Map.entry("kind", "ZONE_PICK_PROGRESS"), Map.entry("minimumPicks", 1), Map.entry("maximumPicks", 1),
+                Map.entry("branch", "ORDINARY_HIDDEN_ORIGIN"), Map.entry("kind", "ZONE_PICK_PROGRESS"), Map.entry("minimumPicks", 1), Map.entry("maximumPicks", 1),
                 Map.entry("optional", false), Map.entry("destination", "Hand"), Map.entry("origins", List.of("Library")),
                 Map.entry("sourcePlayer", "p1"), Map.entry("decider", "p0"), Map.entry("requestedIterations", 1),
                 Map.entry("attemptIndex", 0L), Map.entry("loopPosition", 0), Map.entry("priorNonNullReturnCount", 0L),

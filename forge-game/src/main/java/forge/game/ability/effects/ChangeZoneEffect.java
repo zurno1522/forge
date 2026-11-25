@@ -1106,39 +1106,23 @@ public class ChangeZoneEffect extends SpellAbilityEffect {
 
             CardCollection chosenCards = new CardCollection();
             if (sa.hasParam("SameNameAsEach")) {
-                // one search, one card per named card: "for each ..., search for a card with the same name"
-                boolean shouldReveal = true; // the reveal dialog only the first time through, as below
-                for (final Card named : AbilityUtils.getDefinedCards(source, sa.getParam("SameNameAsEach"), sa)) {
-                    CardCollection thisList = CardLists.filter(fetchList, CardPredicates.sharesNameWith(named));
-                    thisList.removeAll(chosenCards);
-                    if (thisList.isEmpty() && !shouldReveal) {
-                        continue;
-                    }
-                    Card c = decider.getController().chooseSingleCardForZoneChange(destination, origin, sa,
-                            thisList, shouldReveal ? delayedReveal : null, selectPrompt + " (" + named.getName() + ")", !mandatory, decider);
-                    shouldReveal = false;
-                    if (c != null) {
-                        chosenCards.add(c);
-                        if (delayedReveal != null) {
-                            delayedReveal.remove(CardView.get(c));
-                        }
-                    }
-                }
+                final CardCollection namedCards = AbilityUtils.getDefinedCards(source, sa.getParam("SameNameAsEach"), sa);
+                final GroupedSelection selection = new GroupedSelection(sa, decider, origin, destination, mandatory,
+                        fetchList, delayedReveal, selectPrompt, chosenCards);
+                final ZoneChangeSelectionRequest request = new ZoneChangeSelectionRequest(sa, destination, origin,
+                        player, decider, namedCards.size(), ZoneChangeSelectionRequest.Branch.SAME_NAME_HIDDEN_ORIGIN);
+                chosenCards = decider.getController().withZoneChangeSelections(request,
+                        observer -> chooseSameNameHiddenOriginCards(selection, namedCards, observer));
             } else if (changeType.startsWith("EACH")) {
                 String[] eachTypes = changeType.substring(5).split(" & ");
                 for (String thisType : eachTypes) {
-                    for (int i = 0; i < changeNum; i++) {
-                        CardCollection thisList = (CardCollection) AbilityUtils.filterListByType(fetchList, thisType, sa);
-                        if (!chosenCards.isEmpty()) {
-                            thisList.removeAll(chosenCards);
-                        }
-                        Card c = decider.getController().chooseSingleCardForZoneChange(destination, origin, sa,
-                                thisList, delayedReveal, selectPrompt, !mandatory, decider);
-                        if (c == null) {
-                            continue;
-                        }
-                        chosenCards.add(c);
-                    }
+                    final GroupedSelection selection = new GroupedSelection(sa, decider, origin, destination, mandatory,
+                            fetchList, delayedReveal, selectPrompt, chosenCards);
+                    final ZoneChangeSelectionRequest request = new ZoneChangeSelectionRequest(sa, destination, origin,
+                            player, decider, changeNum, ZoneChangeSelectionRequest.Branch.EACH_TYPE_HIDDEN_ORIGIN);
+                    final int iterations = changeNum;
+                    chosenCards = decider.getController().withZoneChangeSelections(request,
+                            observer -> chooseTypeHiddenOriginCards(selection, thisType, iterations, observer));
                 }
             } else if (changeNum > 1 && allowMultiSelect(decider, sa)) {
                 // only multi-select if player can select more than one
@@ -1485,6 +1469,49 @@ public class ChangeZoneEffect extends SpellAbilityEffect {
             //some kind of reset here?
         }
         decider.getController().endTempShowCards();
+    }
+
+    private record GroupedSelection(SpellAbility ability, Player decider, List<ZoneType> origins,
+            ZoneType destination, boolean mandatory, CardCollection offered, DelayedReveal delayedReveal,
+            String prompt, CardCollection chosen) { }
+
+    private CardCollection chooseSameNameHiddenOriginCards(final GroupedSelection selection,
+            final CardCollection namedCards, final ZoneChangeSelectionObserver observer) {
+        boolean shouldReveal = true;
+        int position = 0;
+        for (final Card named : namedCards) {
+            final int currentPosition = position++;
+            CardCollection thisList = CardLists.filter(selection.offered(), CardPredicates.sharesNameWith(named));
+            thisList.removeAll(selection.chosen());
+            if (thisList.isEmpty() && !shouldReveal) { continue; }
+            observer.beforeSelector(thisList, !selection.mandatory(), currentPosition, selection.chosen().size());
+            Card c = selection.decider().getController().chooseSingleCardForZoneChange(selection.destination(),
+                    selection.origins(), selection.ability(), thisList, shouldReveal ? selection.delayedReveal() : null,
+                    selection.prompt() + " (" + named.getName() + ")", !selection.mandatory(), selection.decider());
+            shouldReveal = false;
+            if (c != null) {
+                selection.chosen().add(c);
+                if (selection.delayedReveal() != null) { selection.delayedReveal().remove(CardView.get(c)); }
+            }
+            observer.returned(c, selection.chosen().size());
+        }
+        return selection.chosen();
+    }
+
+    private CardCollection chooseTypeHiddenOriginCards(final GroupedSelection selection, final String type,
+            final int iterations, final ZoneChangeSelectionObserver observer) {
+        for (int i = 0; i < iterations; i++) {
+            CardCollection thisList = (CardCollection) AbilityUtils.filterListByType(selection.offered(), type, selection.ability());
+            if (!selection.chosen().isEmpty()) { thisList.removeAll(selection.chosen()); }
+            observer.beforeSelector(thisList, !selection.mandatory(), i, selection.chosen().size());
+            Card c = selection.decider().getController().chooseSingleCardForZoneChange(selection.destination(),
+                    selection.origins(), selection.ability(), thisList, selection.delayedReveal(), selection.prompt(),
+                    !selection.mandatory(), selection.decider());
+            if (c == null) { observer.returned(null, selection.chosen().size()); continue; }
+            selection.chosen().add(c);
+            observer.returned(c, selection.chosen().size());
+        }
+        return selection.chosen();
     }
 
     private record OrdinarySelection(SpellAbility ability, Card source, Player decider, List<ZoneType> origins,

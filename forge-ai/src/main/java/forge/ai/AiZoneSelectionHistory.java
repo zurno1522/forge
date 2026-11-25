@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-/** Facts owned by one ordinary engine callback, never a cross-operation history registry. */
+/** Facts owned by one audited engine callback, never a cross-operation history registry. */
 final class AiZoneSelectionHistory {
     private static final ThreadLocal<Scope> ACTIVE = new ThreadLocal<>();
     private AiZoneSelectionHistory() { }

@@ -1,0 +1,26 @@
+{
+  "baseRevision": "5a21d098b872cd5a0f1465455986e1846e50f4b8",
+  "sources": {
+    "forge-ai/src/main/java/forge/ai/AiInputContext.java": "b162fae3f809ae316937229734c45ada3041061f0e19ef05ca1374c9a7eaacb6",
+    "forge-ai/src/main/java/forge/ai/AiZoneOperationRecorder.java": "c5e8b91542f82b89bcb947edab0238104ea6a913b026421e06c2ceb3388e2346",
+    "forge-ai/src/main/java/forge/ai/AiZoneSelectionHistory.java": "6f56ef95a2f7d659e3292eb8a05b778fb8e7c2d84d9e933f110372b370019175",
+    "forge-game/src/main/java/forge/game/ability/effects/ChangeZoneEffect.java": "345bfbceb9d0cae604839ae14636f8b5f01f98825a467a811c643da850e933d8",
+    "forge-game/src/main/java/forge/game/player/ZoneChangeSelectionRequest.java": "072c8b45ea488f02058dcee973b83c47eff3fbe32eb72c9c98207718a14f0496",
+    "forge-gui-desktop/src/test/java/forge/ai/AiEntitySelectionHistoryTest.java": "6999239a1c2c17c0095f4acb4e1eff5687610e0bebd60eaffdef4ea04082387c",
+    "forge-gui-desktop/src/test/java/forge/ai/AiInputContextIntegrationTest.java": "784d0e2c1246848236e382f216bc1b5f577ff4f6300362417e3ae1725ef50772",
+    "forge-gui-desktop/src/test/java/forge/ai/AiModeInputContextTest.java": "7578ab4b80f5e36f1c48ccb74261da62054c8c9c061626a451e3d724f88a1715",
+    "forge-gui-desktop/src/test/java/forge/ai/AiModePromptInputTest.java": "9e35a0f31fcd1a12aa393dd48fd8f170b72fd407aeb24071816db50ebf6907b7",
+    "forge-gui-desktop/src/test/java/forge/ai/AiMultiEntityChoiceRecorderTest.java": "f29c5ef5a256e70930233c51473b96cd7a067fc0a8921187bd33604331c2cac3",
+    "forge-gui-desktop/src/test/java/forge/ai/AiStackInputContextTest.java": "29b7f1fa09fa070a11388bb12fa0955fbb214896977c58ca3747fc7c808f791e",
+    "forge-gui-desktop/src/test/java/forge/ai/AiZoneOperationRecorderTest.java": "2ec8541e892c011b615c8111465cdaa656d541bd14986e63b962bcdbe2d82066",
+    "forge-gui-desktop/src/test/java/forge/ai/EngineZoneSelectionBoundaryTest.java": "5ba70ef5d326de422b0ff1abb7a6ee14170e072412e59cc4d8c42c0d405e7621",
+    "tools/decision-records/choice_events.py": "5cacac3d226b9d75ff552c7c033fce67c3ae27f46cda82a941fbc3d5583c89b3",
+    "tools/decision-records/export.py": "8485db247c6738c8fc5ad31ca3a7337f248bdb84c944a56a7d4ab98fe97b69ff",
+    "tools/decision-records/input-context-benchmark/summarize-workloads.py": "2f361ddc1d2972038700c262f2595fa592fac54a36491e558ee9c1fd09ae4bca",
+    "tools/decision-records/input_context.py": "6773c00e306b0a85dd33cafdf13514564ad04c5729057eb9b68bebbc1a4f2d21",
+    "tools/decision-records/test_workload_measurements.py": "d6b940999d2d5df68b2cc49a795c9d4aa89899766fce969003699fc22a7e67ac",
+    "tools/decision-records/test_zone_variants.py": "0c5c19db27e50d8d381cfc5eb3d40f2f868b3c4f4a0047f4c5d321d3233e0849",
+    "tools/trace-test-decks/choice-zone-each.dck": "108fe58097c706184d2103202844e0e093cf48877ea17d5bf8f5ff2ea532ea75",
+    "tools/trace-test-decks/choice-zone-named.dck": "060be8d833909f988c79c41599f458c6658ec54bf1027f1a53c3b1972acd0d25"
+  }
+}

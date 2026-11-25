@@ -1,0 +1,10 @@
+{
+  "SAME_NAME_HIDDEN_ORIGIN": {
+    "lifecycleEvents": 6,
+    "validatedOperationsAndSelectors": 3
+  },
+  "EACH_TYPE_HIDDEN_ORIGIN": {
+    "lifecycleEvents": 12,
+    "validatedOperationsAndSelectors": 6
+  }
+}

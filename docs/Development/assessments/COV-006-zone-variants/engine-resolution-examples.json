@@ -1,0 +1,2119 @@
+{
+  "choices": {
+    "SAME_NAME_HIDDEN_ORIGIN": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:1",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "ZONE_CHANGE_SELECTION_OPERATION",
+        "boundary": "CONTROLLER_ZONE_CHANGE_SELECTIONS",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 11,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "coverage": "RECEIVED_ZONE_OPERATION_REQUEST",
+          "branch": "SAME_NAME_HIDDEN_ORIGIN",
+          "requestedIterations": 2,
+          "destination": "Hand",
+          "origins": [
+            "Library"
+          ],
+          "sourcePlayerId": 1,
+          "deciderPlayerId": 1
+        },
+        "inputContext": {
+          "schemaVersion": 11,
+          "profile": "PERMITTED_CHOICE_VIEW_V11",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "prompt": "RECEIVED_ZONE_OPERATION_V1",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "options": "DIAGNOSTIC_ONLY",
+            "history": "INCOMPLETE"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 2,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Time Beetle",
+                "types": "Creature - Alien Insect",
+                "manaCost": "{1}{U}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Forest",
+                "types": "Basic Land - Forest",
+                "manaCost": "no cost",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c2",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Island",
+                "types": "Basic Land - Island",
+                "manaCost": "no cost",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "ZONE_CHANGE_OPERATION_REQUEST",
+              "branch": "SAME_NAME_HIDDEN_ORIGIN",
+              "requestedIterations": 2,
+              "destination": "Hand",
+              "origins": [
+                "Library"
+              ],
+              "sourcePlayer": "p1",
+              "decider": "p1"
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "stackBindings": [],
+            "optionBindings": {
+              "coverage": "UNSUPPORTED",
+              "items": [],
+              "truncated": false
+            },
+            "cardBindings": [
+              {
+                "gameTimestamp": 1,
+                "id": 1,
+                "entityRef": "c0"
+              },
+              {
+                "gameTimestamp": 3,
+                "id": 3,
+                "entityRef": "c1"
+              },
+              {
+                "gameTimestamp": 5,
+                "id": 5,
+                "entityRef": "c2"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "reason": "UNSUPPORTED",
+              "component": "DISCLOSURES"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:2",
+        "parentChoiceId": "choice:1",
+        "status": "STARTED",
+        "choiceType": "ZONE_CHANGE_CARD_SELECTION",
+        "boundary": "CONTROLLER_ZONE_CHANGE_CARD",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 11,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "items": [
+            {
+              "type": "CARD",
+              "id": 2,
+              "gameTimestamp": 2
+            }
+          ],
+          "truncated": false,
+          "coverage": "OBSERVED_ZONE_CHANGE_OPTIONS_DIAGNOSTIC_ONLY",
+          "optional": false,
+          "destination": "Hand",
+          "origins": [
+            "Library"
+          ],
+          "deciderPlayerId": 1,
+          "zoneSelectionProgress": {
+            "schemaVersion": 1,
+            "progressCoverage": "COMPLETE",
+            "progressReason": null,
+            "attemptIndex": 0,
+            "loopPosition": 0,
+            "priorNonNullReturnCount": 0,
+            "retainedCount": 0,
+            "requestedIterations": 2,
+            "receiptCoverage": "COMPLETE",
+            "receiptReason": null,
+            "priorReturns": []
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 11,
+          "profile": "PERMITTED_CHOICE_VIEW_V11",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "CAPTURED",
+          "coverage": {
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "disclosures": "CURRENT_PROMPT",
+            "prompt": "RECEIVED_ZONE_PROGRESS_V1",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "options": "DIAGNOSTIC_ONLY",
+            "history": "INCOMPLETE"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 2,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Time Beetle",
+                "types": "Creature - Alien Insect",
+                "manaCost": "{1}{U}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Forest",
+                "types": "Basic Land - Forest",
+                "manaCost": "no cost",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c2",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Island",
+                "types": "Basic Land - Island",
+                "manaCost": "no cost",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "ZONE_PICK_PROGRESS",
+              "minimumPicks": 1,
+              "maximumPicks": 1,
+              "optional": false,
+              "destination": "Hand",
+              "origins": [
+                "Library"
+              ],
+              "decider": "p1",
+              "branch": "SAME_NAME_HIDDEN_ORIGIN",
+              "sourcePlayer": "p1",
+              "requestedIterations": 2,
+              "attemptIndex": 0,
+              "loopPosition": 0,
+              "priorNonNullReturnCount": 0,
+              "retainedCount": 0,
+              "previousReturns": []
+            },
+            "disclosedFacts": [
+              {
+                "entityRef": "d0",
+                "source": "CONTROLLER_VIEW_REVEAL",
+                "scope": "CURRENT_PROMPT",
+                "zone": "Library",
+                "presentedFace": "Original",
+                "name": "Forest",
+                "types": "Basic Land - Forest",
+                "manaCost": "no cost",
+                "currentObjectAssociation": "UNRESOLVED"
+              },
+              {
+                "entityRef": "d1",
+                "source": "CONTROLLER_VIEW_REVEAL",
+                "scope": "CURRENT_PROMPT",
+                "zone": "Library",
+                "presentedFace": "Original",
+                "name": "Island",
+                "types": "Basic Land - Island",
+                "manaCost": "no cost",
+                "currentObjectAssociation": "UNRESOLVED"
+              }
+            ]
+          },
+          "diagnostics": {
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "stackBindings": [],
+            "optionBindings": {
+              "coverage": "DIAGNOSTIC_PUBLIC_CURRENT_V1",
+              "items": [
+                {
+                  "optionIndex": 0,
+                  "entityRef": null
+                }
+              ],
+              "truncated": false
+            },
+            "cardBindings": [
+              {
+                "gameTimestamp": 1,
+                "id": 1,
+                "entityRef": "c0"
+              },
+              {
+                "gameTimestamp": 3,
+                "id": 3,
+                "entityRef": "c1"
+              },
+              {
+                "gameTimestamp": 5,
+                "id": 5,
+                "entityRef": "c2"
+              }
+            ]
+          },
+          "omissions": []
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:2",
+        "status": "COMPLETED",
+        "selection": {
+          "selected": {
+            "type": "CARD",
+            "id": 2,
+            "gameTimestamp": 2
+          },
+          "selectedOptionIndex": 0,
+          "match": "UNIQUE"
+        },
+        "elapsedNanos": 57720192
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:3",
+        "parentChoiceId": "choice:1",
+        "status": "STARTED",
+        "choiceType": "ZONE_CHANGE_CARD_SELECTION",
+        "boundary": "CONTROLLER_ZONE_CHANGE_CARD",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 11,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "items": [
+            {
+              "type": "CARD",
+              "id": 4,
+              "gameTimestamp": 4
+            }
+          ],
+          "truncated": false,
+          "coverage": "OBSERVED_ZONE_CHANGE_OPTIONS_DIAGNOSTIC_ONLY",
+          "optional": false,
+          "destination": "Hand",
+          "origins": [
+            "Library"
+          ],
+          "deciderPlayerId": 1,
+          "zoneSelectionProgress": {
+            "schemaVersion": 1,
+            "progressCoverage": "COMPLETE",
+            "progressReason": null,
+            "attemptIndex": 1,
+            "loopPosition": 1,
+            "priorNonNullReturnCount": 1,
+            "retainedCount": 1,
+            "requestedIterations": 2,
+            "receiptCoverage": "COMPLETE",
+            "receiptReason": null,
+            "priorReturns": [
+              {
+                "type": "CARD",
+                "id": 2,
+                "gameTimestamp": 2
+              }
+            ]
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 11,
+          "profile": "PERMITTED_CHOICE_VIEW_V11",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "CAPTURED",
+          "coverage": {
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "disclosures": "CURRENT_PROMPT",
+            "prompt": "RECEIVED_ZONE_PROGRESS_V1",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "options": "DIAGNOSTIC_ONLY",
+            "history": "INCOMPLETE"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 2,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Time Beetle",
+                "types": "Creature - Alien Insect",
+                "manaCost": "{1}{U}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Forest",
+                "types": "Basic Land - Forest",
+                "manaCost": "no cost",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c2",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Island",
+                "types": "Basic Land - Island",
+                "manaCost": "no cost",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "ZONE_PICK_PROGRESS",
+              "minimumPicks": 1,
+              "maximumPicks": 1,
+              "optional": false,
+              "destination": "Hand",
+              "origins": [
+                "Library"
+              ],
+              "decider": "p1",
+              "branch": "SAME_NAME_HIDDEN_ORIGIN",
+              "sourcePlayer": "p1",
+              "requestedIterations": 2,
+              "attemptIndex": 1,
+              "loopPosition": 1,
+              "priorNonNullReturnCount": 1,
+              "retainedCount": 1,
+              "previousReturns": [
+                null
+              ]
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "stackBindings": [],
+            "optionBindings": {
+              "coverage": "DIAGNOSTIC_PUBLIC_CURRENT_V1",
+              "items": [
+                {
+                  "optionIndex": 0,
+                  "entityRef": null
+                }
+              ],
+              "truncated": false
+            },
+            "cardBindings": [
+              {
+                "gameTimestamp": 1,
+                "id": 1,
+                "entityRef": "c0"
+              },
+              {
+                "gameTimestamp": 3,
+                "id": 3,
+                "entityRef": "c1"
+              },
+              {
+                "gameTimestamp": 5,
+                "id": 5,
+                "entityRef": "c2"
+              }
+            ]
+          },
+          "omissions": []
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:3",
+        "status": "COMPLETED",
+        "selection": {
+          "selected": {
+            "type": "CARD",
+            "id": 4,
+            "gameTimestamp": 4
+          },
+          "selectedOptionIndex": 0,
+          "match": "UNIQUE"
+        },
+        "elapsedNanos": 1108135
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:1",
+        "status": "COMPLETED",
+        "selection": {
+          "coverage": "OBSERVED_RETAINED_CARD_PREFIX",
+          "items": [
+            {
+              "type": "CARD",
+              "id": 2,
+              "gameTimestamp": 2
+            },
+            {
+              "type": "CARD",
+              "id": 4,
+              "gameTimestamp": 4
+            }
+          ],
+          "selectedCount": 2,
+          "truncated": false
+        },
+        "elapsedNanos": 133974923
+      }
+    ],
+    "EACH_TYPE_HIDDEN_ORIGIN": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:4",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "ZONE_CHANGE_SELECTION_OPERATION",
+        "boundary": "CONTROLLER_ZONE_CHANGE_SELECTIONS",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 26,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "coverage": "RECEIVED_ZONE_OPERATION_REQUEST",
+          "branch": "EACH_TYPE_HIDDEN_ORIGIN",
+          "requestedIterations": 2,
+          "destination": "Hand",
+          "origins": [
+            "Library"
+          ],
+          "sourcePlayerId": 1,
+          "deciderPlayerId": 1
+        },
+        "inputContext": {
+          "schemaVersion": 11,
+          "profile": "PERMITTED_CHOICE_VIEW_V11",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "prompt": "RECEIVED_ZONE_OPERATION_V1",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "options": "DIAGNOSTIC_ONLY",
+            "history": "INCOMPLETE"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 2,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Time Beetle",
+                "types": "Creature - Alien Insect",
+                "manaCost": "{1}{U}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Forest",
+                "types": "Basic Land - Forest",
+                "manaCost": "no cost",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c2",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Island",
+                "types": "Basic Land - Island",
+                "manaCost": "no cost",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "ZONE_CHANGE_OPERATION_REQUEST",
+              "branch": "EACH_TYPE_HIDDEN_ORIGIN",
+              "requestedIterations": 2,
+              "destination": "Hand",
+              "origins": [
+                "Library"
+              ],
+              "sourcePlayer": "p1",
+              "decider": "p1"
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "stackBindings": [],
+            "optionBindings": {
+              "coverage": "UNSUPPORTED",
+              "items": [],
+              "truncated": false
+            },
+            "cardBindings": [
+              {
+                "gameTimestamp": 1,
+                "id": 1,
+                "entityRef": "c0"
+              },
+              {
+                "gameTimestamp": 3,
+                "id": 3,
+                "entityRef": "c1"
+              },
+              {
+                "gameTimestamp": 5,
+                "id": 5,
+                "entityRef": "c2"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "reason": "UNSUPPORTED",
+              "component": "DISCLOSURES"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:5",
+        "parentChoiceId": "choice:4",
+        "status": "STARTED",
+        "choiceType": "ZONE_CHANGE_CARD_SELECTION",
+        "boundary": "CONTROLLER_ZONE_CHANGE_CARD",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 26,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "items": [
+            {
+              "type": "CARD",
+              "id": 2,
+              "gameTimestamp": 2
+            }
+          ],
+          "truncated": false,
+          "coverage": "OBSERVED_ZONE_CHANGE_OPTIONS_DIAGNOSTIC_ONLY",
+          "optional": false,
+          "destination": "Hand",
+          "origins": [
+            "Library"
+          ],
+          "deciderPlayerId": 1,
+          "zoneSelectionProgress": {
+            "schemaVersion": 1,
+            "progressCoverage": "COMPLETE",
+            "progressReason": null,
+            "attemptIndex": 0,
+            "loopPosition": 0,
+            "priorNonNullReturnCount": 0,
+            "retainedCount": 0,
+            "requestedIterations": 2,
+            "receiptCoverage": "COMPLETE",
+            "receiptReason": null,
+            "priorReturns": []
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 11,
+          "profile": "PERMITTED_CHOICE_VIEW_V11",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "CAPTURED",
+          "coverage": {
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "disclosures": "CURRENT_PROMPT",
+            "prompt": "RECEIVED_ZONE_PROGRESS_V1",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "options": "DIAGNOSTIC_ONLY",
+            "history": "INCOMPLETE"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 2,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Time Beetle",
+                "types": "Creature - Alien Insect",
+                "manaCost": "{1}{U}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Forest",
+                "types": "Basic Land - Forest",
+                "manaCost": "no cost",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c2",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Island",
+                "types": "Basic Land - Island",
+                "manaCost": "no cost",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "ZONE_PICK_PROGRESS",
+              "minimumPicks": 1,
+              "maximumPicks": 1,
+              "optional": false,
+              "destination": "Hand",
+              "origins": [
+                "Library"
+              ],
+              "decider": "p1",
+              "branch": "EACH_TYPE_HIDDEN_ORIGIN",
+              "sourcePlayer": "p1",
+              "requestedIterations": 2,
+              "attemptIndex": 0,
+              "loopPosition": 0,
+              "priorNonNullReturnCount": 0,
+              "retainedCount": 0,
+              "previousReturns": []
+            },
+            "disclosedFacts": [
+              {
+                "entityRef": "d0",
+                "source": "CONTROLLER_VIEW_REVEAL",
+                "scope": "CURRENT_PROMPT",
+                "zone": "Library",
+                "presentedFace": "Original",
+                "name": "Forest",
+                "types": "Basic Land - Forest",
+                "manaCost": "no cost",
+                "currentObjectAssociation": "UNRESOLVED"
+              },
+              {
+                "entityRef": "d1",
+                "source": "CONTROLLER_VIEW_REVEAL",
+                "scope": "CURRENT_PROMPT",
+                "zone": "Library",
+                "presentedFace": "Original",
+                "name": "Island",
+                "types": "Basic Land - Island",
+                "manaCost": "no cost",
+                "currentObjectAssociation": "UNRESOLVED"
+              }
+            ]
+          },
+          "diagnostics": {
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "stackBindings": [],
+            "optionBindings": {
+              "coverage": "DIAGNOSTIC_PUBLIC_CURRENT_V1",
+              "items": [
+                {
+                  "optionIndex": 0,
+                  "entityRef": null
+                }
+              ],
+              "truncated": false
+            },
+            "cardBindings": [
+              {
+                "gameTimestamp": 1,
+                "id": 1,
+                "entityRef": "c0"
+              },
+              {
+                "gameTimestamp": 3,
+                "id": 3,
+                "entityRef": "c1"
+              },
+              {
+                "gameTimestamp": 5,
+                "id": 5,
+                "entityRef": "c2"
+              }
+            ]
+          },
+          "omissions": []
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:5",
+        "status": "COMPLETED",
+        "selection": {
+          "selected": {
+            "type": "CARD",
+            "id": 2,
+            "gameTimestamp": 2
+          },
+          "selectedOptionIndex": 0,
+          "match": "UNIQUE"
+        },
+        "elapsedNanos": 4788638
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:6",
+        "parentChoiceId": "choice:4",
+        "status": "STARTED",
+        "choiceType": "ZONE_CHANGE_CARD_SELECTION",
+        "boundary": "CONTROLLER_ZONE_CHANGE_CARD",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 26,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "items": [],
+          "truncated": false,
+          "coverage": "OBSERVED_ZONE_CHANGE_OPTIONS_DIAGNOSTIC_ONLY",
+          "optional": false,
+          "destination": "Hand",
+          "origins": [
+            "Library"
+          ],
+          "deciderPlayerId": 1,
+          "zoneSelectionProgress": {
+            "schemaVersion": 1,
+            "progressCoverage": "COMPLETE",
+            "progressReason": null,
+            "attemptIndex": 1,
+            "loopPosition": 1,
+            "priorNonNullReturnCount": 1,
+            "retainedCount": 1,
+            "requestedIterations": 2,
+            "receiptCoverage": "COMPLETE",
+            "receiptReason": null,
+            "priorReturns": [
+              {
+                "type": "CARD",
+                "id": 2,
+                "gameTimestamp": 2
+              }
+            ]
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 11,
+          "profile": "PERMITTED_CHOICE_VIEW_V11",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "CAPTURED",
+          "coverage": {
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "disclosures": "CURRENT_PROMPT",
+            "prompt": "RECEIVED_ZONE_PROGRESS_V1",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "options": "DIAGNOSTIC_ONLY",
+            "history": "INCOMPLETE"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 2,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Time Beetle",
+                "types": "Creature - Alien Insect",
+                "manaCost": "{1}{U}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Forest",
+                "types": "Basic Land - Forest",
+                "manaCost": "no cost",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c2",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Island",
+                "types": "Basic Land - Island",
+                "manaCost": "no cost",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "ZONE_PICK_PROGRESS",
+              "minimumPicks": 1,
+              "maximumPicks": 1,
+              "optional": false,
+              "destination": "Hand",
+              "origins": [
+                "Library"
+              ],
+              "decider": "p1",
+              "branch": "EACH_TYPE_HIDDEN_ORIGIN",
+              "sourcePlayer": "p1",
+              "requestedIterations": 2,
+              "attemptIndex": 1,
+              "loopPosition": 1,
+              "priorNonNullReturnCount": 1,
+              "retainedCount": 1,
+              "previousReturns": [
+                null
+              ]
+            },
+            "disclosedFacts": [
+              {
+                "entityRef": "d0",
+                "source": "CONTROLLER_VIEW_REVEAL",
+                "scope": "CURRENT_PROMPT",
+                "zone": "Library",
+                "presentedFace": "Original",
+                "name": "Forest",
+                "types": "Basic Land - Forest",
+                "manaCost": "no cost",
+                "currentObjectAssociation": "UNRESOLVED"
+              },
+              {
+                "entityRef": "d1",
+                "source": "CONTROLLER_VIEW_REVEAL",
+                "scope": "CURRENT_PROMPT",
+                "zone": "Library",
+                "presentedFace": "Original",
+                "name": "Island",
+                "types": "Basic Land - Island",
+                "manaCost": "no cost",
+                "currentObjectAssociation": "UNRESOLVED"
+              }
+            ]
+          },
+          "diagnostics": {
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "stackBindings": [],
+            "optionBindings": {
+              "coverage": "DIAGNOSTIC_PUBLIC_CURRENT_V1",
+              "items": [],
+              "truncated": false
+            },
+            "cardBindings": [
+              {
+                "gameTimestamp": 1,
+                "id": 1,
+                "entityRef": "c0"
+              },
+              {
+                "gameTimestamp": 3,
+                "id": 3,
+                "entityRef": "c1"
+              },
+              {
+                "gameTimestamp": 5,
+                "id": 5,
+                "entityRef": "c2"
+              }
+            ]
+          },
+          "omissions": []
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:6",
+        "status": "DECLINED",
+        "selection": null,
+        "elapsedNanos": 1088788
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:4",
+        "status": "COMPLETED",
+        "selection": {
+          "coverage": "OBSERVED_RETAINED_CARD_PREFIX",
+          "items": [
+            {
+              "type": "CARD",
+              "id": 2,
+              "gameTimestamp": 2
+            }
+          ],
+          "selectedCount": 1,
+          "truncated": false
+        },
+        "elapsedNanos": 8500175
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:7",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "ZONE_CHANGE_SELECTION_OPERATION",
+        "boundary": "CONTROLLER_ZONE_CHANGE_SELECTIONS",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 26,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "coverage": "RECEIVED_ZONE_OPERATION_REQUEST",
+          "branch": "EACH_TYPE_HIDDEN_ORIGIN",
+          "requestedIterations": 2,
+          "destination": "Hand",
+          "origins": [
+            "Library"
+          ],
+          "sourcePlayerId": 1,
+          "deciderPlayerId": 1
+        },
+        "inputContext": {
+          "schemaVersion": 11,
+          "profile": "PERMITTED_CHOICE_VIEW_V11",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "prompt": "RECEIVED_ZONE_OPERATION_V1",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "options": "DIAGNOSTIC_ONLY",
+            "history": "INCOMPLETE"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 2,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Time Beetle",
+                "types": "Creature - Alien Insect",
+                "manaCost": "{1}{U}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Forest",
+                "types": "Basic Land - Forest",
+                "manaCost": "no cost",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c2",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Island",
+                "types": "Basic Land - Island",
+                "manaCost": "no cost",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "ZONE_CHANGE_OPERATION_REQUEST",
+              "branch": "EACH_TYPE_HIDDEN_ORIGIN",
+              "requestedIterations": 2,
+              "destination": "Hand",
+              "origins": [
+                "Library"
+              ],
+              "sourcePlayer": "p1",
+              "decider": "p1"
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "stackBindings": [],
+            "optionBindings": {
+              "coverage": "UNSUPPORTED",
+              "items": [],
+              "truncated": false
+            },
+            "cardBindings": [
+              {
+                "gameTimestamp": 1,
+                "id": 1,
+                "entityRef": "c0"
+              },
+              {
+                "gameTimestamp": 3,
+                "id": 3,
+                "entityRef": "c1"
+              },
+              {
+                "gameTimestamp": 5,
+                "id": 5,
+                "entityRef": "c2"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "reason": "UNSUPPORTED",
+              "component": "DISCLOSURES"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:8",
+        "parentChoiceId": "choice:7",
+        "status": "STARTED",
+        "choiceType": "ZONE_CHANGE_CARD_SELECTION",
+        "boundary": "CONTROLLER_ZONE_CHANGE_CARD",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 26,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "items": [
+            {
+              "type": "CARD",
+              "id": 4,
+              "gameTimestamp": 4
+            }
+          ],
+          "truncated": false,
+          "coverage": "OBSERVED_ZONE_CHANGE_OPTIONS_DIAGNOSTIC_ONLY",
+          "optional": false,
+          "destination": "Hand",
+          "origins": [
+            "Library"
+          ],
+          "deciderPlayerId": 1,
+          "zoneSelectionProgress": {
+            "schemaVersion": 1,
+            "progressCoverage": "COMPLETE",
+            "progressReason": null,
+            "attemptIndex": 0,
+            "loopPosition": 0,
+            "priorNonNullReturnCount": 0,
+            "retainedCount": 1,
+            "requestedIterations": 2,
+            "receiptCoverage": "COMPLETE",
+            "receiptReason": null,
+            "priorReturns": []
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 11,
+          "profile": "PERMITTED_CHOICE_VIEW_V11",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "CAPTURED",
+          "coverage": {
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "disclosures": "CURRENT_PROMPT",
+            "prompt": "RECEIVED_ZONE_PROGRESS_V1",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "options": "DIAGNOSTIC_ONLY",
+            "history": "INCOMPLETE"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 2,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Time Beetle",
+                "types": "Creature - Alien Insect",
+                "manaCost": "{1}{U}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Forest",
+                "types": "Basic Land - Forest",
+                "manaCost": "no cost",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c2",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Island",
+                "types": "Basic Land - Island",
+                "manaCost": "no cost",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "ZONE_PICK_PROGRESS",
+              "minimumPicks": 1,
+              "maximumPicks": 1,
+              "optional": false,
+              "destination": "Hand",
+              "origins": [
+                "Library"
+              ],
+              "decider": "p1",
+              "branch": "EACH_TYPE_HIDDEN_ORIGIN",
+              "sourcePlayer": "p1",
+              "requestedIterations": 2,
+              "attemptIndex": 0,
+              "loopPosition": 0,
+              "priorNonNullReturnCount": 0,
+              "retainedCount": 1,
+              "previousReturns": []
+            },
+            "disclosedFacts": [
+              {
+                "entityRef": "d0",
+                "source": "CONTROLLER_VIEW_REVEAL",
+                "scope": "CURRENT_PROMPT",
+                "zone": "Library",
+                "presentedFace": "Original",
+                "name": "Forest",
+                "types": "Basic Land - Forest",
+                "manaCost": "no cost",
+                "currentObjectAssociation": "UNRESOLVED"
+              },
+              {
+                "entityRef": "d1",
+                "source": "CONTROLLER_VIEW_REVEAL",
+                "scope": "CURRENT_PROMPT",
+                "zone": "Library",
+                "presentedFace": "Original",
+                "name": "Island",
+                "types": "Basic Land - Island",
+                "manaCost": "no cost",
+                "currentObjectAssociation": "UNRESOLVED"
+              }
+            ]
+          },
+          "diagnostics": {
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "stackBindings": [],
+            "optionBindings": {
+              "coverage": "DIAGNOSTIC_PUBLIC_CURRENT_V1",
+              "items": [
+                {
+                  "optionIndex": 0,
+                  "entityRef": null
+                }
+              ],
+              "truncated": false
+            },
+            "cardBindings": [
+              {
+                "gameTimestamp": 1,
+                "id": 1,
+                "entityRef": "c0"
+              },
+              {
+                "gameTimestamp": 3,
+                "id": 3,
+                "entityRef": "c1"
+              },
+              {
+                "gameTimestamp": 5,
+                "id": 5,
+                "entityRef": "c2"
+              }
+            ]
+          },
+          "omissions": []
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:8",
+        "status": "COMPLETED",
+        "selection": {
+          "selected": {
+            "type": "CARD",
+            "id": 4,
+            "gameTimestamp": 4
+          },
+          "selectedOptionIndex": 0,
+          "match": "UNIQUE"
+        },
+        "elapsedNanos": 2362439
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:9",
+        "parentChoiceId": "choice:7",
+        "status": "STARTED",
+        "choiceType": "ZONE_CHANGE_CARD_SELECTION",
+        "boundary": "CONTROLLER_ZONE_CHANGE_CARD",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 26,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "items": [],
+          "truncated": false,
+          "coverage": "OBSERVED_ZONE_CHANGE_OPTIONS_DIAGNOSTIC_ONLY",
+          "optional": false,
+          "destination": "Hand",
+          "origins": [
+            "Library"
+          ],
+          "deciderPlayerId": 1,
+          "zoneSelectionProgress": {
+            "schemaVersion": 1,
+            "progressCoverage": "COMPLETE",
+            "progressReason": null,
+            "attemptIndex": 1,
+            "loopPosition": 1,
+            "priorNonNullReturnCount": 1,
+            "retainedCount": 2,
+            "requestedIterations": 2,
+            "receiptCoverage": "COMPLETE",
+            "receiptReason": null,
+            "priorReturns": [
+              {
+                "type": "CARD",
+                "id": 4,
+                "gameTimestamp": 4
+              }
+            ]
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 11,
+          "profile": "PERMITTED_CHOICE_VIEW_V11",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "CAPTURED",
+          "coverage": {
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "disclosures": "CURRENT_PROMPT",
+            "prompt": "RECEIVED_ZONE_PROGRESS_V1",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "options": "DIAGNOSTIC_ONLY",
+            "history": "INCOMPLETE"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 2,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Time Beetle",
+                "types": "Creature - Alien Insect",
+                "manaCost": "{1}{U}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Forest",
+                "types": "Basic Land - Forest",
+                "manaCost": "no cost",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c2",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Island",
+                "types": "Basic Land - Island",
+                "manaCost": "no cost",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "ZONE_PICK_PROGRESS",
+              "minimumPicks": 1,
+              "maximumPicks": 1,
+              "optional": false,
+              "destination": "Hand",
+              "origins": [
+                "Library"
+              ],
+              "decider": "p1",
+              "branch": "EACH_TYPE_HIDDEN_ORIGIN",
+              "sourcePlayer": "p1",
+              "requestedIterations": 2,
+              "attemptIndex": 1,
+              "loopPosition": 1,
+              "priorNonNullReturnCount": 1,
+              "retainedCount": 2,
+              "previousReturns": [
+                null
+              ]
+            },
+            "disclosedFacts": [
+              {
+                "entityRef": "d0",
+                "source": "CONTROLLER_VIEW_REVEAL",
+                "scope": "CURRENT_PROMPT",
+                "zone": "Library",
+                "presentedFace": "Original",
+                "name": "Forest",
+                "types": "Basic Land - Forest",
+                "manaCost": "no cost",
+                "currentObjectAssociation": "UNRESOLVED"
+              },
+              {
+                "entityRef": "d1",
+                "source": "CONTROLLER_VIEW_REVEAL",
+                "scope": "CURRENT_PROMPT",
+                "zone": "Library",
+                "presentedFace": "Original",
+                "name": "Island",
+                "types": "Basic Land - Island",
+                "manaCost": "no cost",
+                "currentObjectAssociation": "UNRESOLVED"
+              }
+            ]
+          },
+          "diagnostics": {
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "stackBindings": [],
+            "optionBindings": {
+              "coverage": "DIAGNOSTIC_PUBLIC_CURRENT_V1",
+              "items": [],
+              "truncated": false
+            },
+            "cardBindings": [
+              {
+                "gameTimestamp": 1,
+                "id": 1,
+                "entityRef": "c0"
+              },
+              {
+                "gameTimestamp": 3,
+                "id": 3,
+                "entityRef": "c1"
+              },
+              {
+                "gameTimestamp": 5,
+                "id": 5,
+                "entityRef": "c2"
+              }
+            ]
+          },
+          "omissions": []
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:9",
+        "status": "DECLINED",
+        "selection": null,
+        "elapsedNanos": 1294437
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:7",
+        "status": "COMPLETED",
+        "selection": {
+          "coverage": "OBSERVED_RETAINED_CARD_PREFIX",
+          "items": [
+            {
+              "type": "CARD",
+              "id": 2,
+              "gameTimestamp": 2
+            },
+            {
+              "type": "CARD",
+              "id": 4,
+              "gameTimestamp": 4
+            }
+          ],
+          "selectedCount": 2,
+          "truncated": false
+        },
+        "elapsedNanos": 6840404
+      }
+    ]
+  },
+  "fixtureKind": "ACTUAL_ENGINE_RESOLUTION_EXCERPTS",
+  "completeGameTrace": false
+}

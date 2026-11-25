@@ -96,9 +96,11 @@ public class EngineZoneSelectionBoundaryTest extends AITest {
     }
 
     @Test(groups = {"UnitTest", "fast"})
-    public void aNamedSearchDoesNotAcquireAnOrdinaryOperationBoundary() {
+    public void aNamedSearchKeepsItsFirstEmptyDispatchAndUsesItsOwnBranch() {
         final Fixture f = fixture(1, " | SameNameAsEach$ Self", true); resolve(f);
-        Assert.assertTrue(f.requests.isEmpty()); Assert.assertTrue(f.facts.isEmpty());
+        Assert.assertEquals(f.requests.get(0).branch(), ZoneChangeSelectionRequest.Branch.SAME_NAME_HIDDEN_ORIGIN);
+        Assert.assertEquals(f.requests.get(0).requestedIterations(), 1);
+        Assert.assertEquals(f.facts, List.of("begin", "before:0:0:0", "returned:null:0", "complete:0"));
         Assert.assertEquals(f.reveals.size(), 1);
         Assert.assertTrue(f.player.getCardsIn(ZoneType.Hand).isEmpty());
     }
@@ -147,4 +149,75 @@ public class EngineZoneSelectionBoundaryTest extends AITest {
         Assert.assertSame(Assert.expectThrows(IllegalStateException.class, () -> resolve(failure)), original);
         Assert.assertTrue(failure.player.getCardsIn(ZoneType.Hand).isEmpty());
     }
+    @Test(groups = {"UnitTest", "fast"})
+    public void namedSearchSkipsLaterEmptyOffersWithoutRenumberingListPositions() {
+        final Fixture f = fixture(99, " | SameNameAsEach$ Valid Land.YouCtrl", true);
+        for (final String name : List.of("Forest", "Swamp", "Island")) { addCardToZone(name, f.player, ZoneType.Battlefield); }
+        resolve(f);
+        Assert.assertEquals(f.requests.get(0).requestedIterations(), 3);
+        Assert.assertEquals(f.facts, List.of("begin", "before:0:0:1", "returned:Forest:1", "before:2:1:1", "returned:Island:2", "complete:2"));
+        Assert.assertEquals(f.reveals, List.of(true, false));
+        Assert.assertEquals(f.player.getCardsIn(ZoneType.Hand).size(), 2);
+    }
+
+    @Test(groups = {"UnitTest", "fast"})
+    public void eachTypeRestartsItsIndexButKeepsTheOriginalAccumulatedPileAndReveal() {
+        final Fixture f = fixture(2, " | ChangeType$ EACH Forest & Island", true); resolve(f);
+        Assert.assertEquals(f.requests.size(), 2);
+        for (final var request : f.requests) {
+            Assert.assertEquals(request.branch(), ZoneChangeSelectionRequest.Branch.EACH_TYPE_HIDDEN_ORIGIN);
+            Assert.assertEquals(request.requestedIterations(), 2);
+        }
+        Assert.assertEquals(f.facts, List.of("begin", "before:0:0:1", "returned:Forest:1", "before:1:1:0", "returned:null:1", "complete:1",
+                "begin", "before:0:1:1", "returned:Island:2", "before:1:2:0", "returned:null:2", "complete:2"));
+        Assert.assertEquals(f.reveals, List.of(true, true, true, true));
+        Assert.assertEquals(f.player.getCardsIn(ZoneType.Hand).size(), 2);
+    }
+
+    @DataProvider public Object[][] groupedBranches() {
+        return new Object[][] {{" | SameNameAsEach$ Valid Land.YouCtrl"}, {" | ChangeType$ EACH Forest & Island"}};
+    }
+    @Test(dataProvider = "groupedBranches", groups = {"UnitTest", "fast"})
+    public void groupedNoOpWrapperPreservesSelectionAndOriginalErrors(final String branch) {
+        final Fixture normal = fixture(1, branch, false);
+        addCardToZone("Forest", normal.player, ZoneType.Battlefield); resolve(normal);
+        Assert.assertEquals(normal.player.getCardsIn(ZoneType.Hand).size(), branch.contains("SameName") ? 1 : 2);
+        final Fixture failure = fixture(1, branch, true);
+        addCardToZone("Forest", failure.player, ZoneType.Battlefield);
+        final var original = new IllegalArgumentException("original grouped selector");
+        Mockito.doThrow(original).when(failure.controller).chooseSingleCardForZoneChange(Mockito.any(), Mockito.anyList(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.anyString(), Mockito.anyBoolean(), Mockito.any());
+        Assert.assertSame(Assert.expectThrows(IllegalArgumentException.class, () -> resolve(failure)), original);
+        Assert.assertEquals(failure.facts.size(), 2);
+        Assert.assertTrue(failure.player.getCardsIn(ZoneType.Hand).isEmpty());
+    }
+
+    @Test(dataProvider = "emptyIterations", groups = {"UnitTest", "fast"})
+    public void eachTypeWithNoIterationsDoesNotInventASelector(final int iterations) {
+        final Fixture f = fixture(iterations, " | ChangeType$ EACH Forest & Island", true); resolve(f);
+        Assert.assertEquals(f.facts, List.of("begin", "complete:0", "begin", "complete:0"));
+        Assert.assertTrue(f.reveals.isEmpty());
+    }
+
+    @Test(groups = {"UnitTest", "fast"})
+    public void aNamedDeclineContinuesToTheNextNameWithoutRepeatingReveal() {
+        final Fixture f = fixture(99, " | SameNameAsEach$ Valid Land.YouCtrl", true);
+        addCardToZone("Forest", f.player, ZoneType.Battlefield); addCardToZone("Island", f.player, ZoneType.Battlefield);
+        final AtomicInteger calls = new AtomicInteger();
+        Mockito.doAnswer(call -> {
+            f.reveals.add(call.getArgument(4) != null);
+            return calls.getAndIncrement() == 0 ? null : ((CardCollection) call.getArgument(3)).getFirst();
+        }).when(f.controller).chooseSingleCardForZoneChange(Mockito.any(), Mockito.anyList(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.anyString(), Mockito.anyBoolean(), Mockito.any());
+        resolve(f);
+        Assert.assertEquals(f.facts, List.of("begin", "before:0:0:1", "returned:null:0", "before:1:0:1", "returned:Island:1", "complete:1"));
+        Assert.assertEquals(f.reveals, List.of(true, false));
+        Assert.assertEquals(f.player.getCardsIn(ZoneType.Hand).size(), 1);
+    }
+
+    @Test(groups = {"UnitTest", "fast"})
+    public void anEmptyNamedListHasNoInventedSelector() {
+        final Fixture f = fixture(99, " | SameNameAsEach$ Valid Land.YouCtrl", true); resolve(f);
+        Assert.assertEquals(f.requests.get(0).requestedIterations(), 0);
+        Assert.assertEquals(f.facts, List.of("begin", "complete:0")); Assert.assertTrue(f.reveals.isEmpty());
+    }
+
 }

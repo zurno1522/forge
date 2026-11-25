@@ -139,6 +139,7 @@ def prompt_arguments(choice):
     if prompt is None: return
     option = choice['options']
     if prompt['kind'] == 'ZONE_CHANGE_OPERATION_REQUEST':
+        if context['schemaVersion'] >= 11: require(prompt['branch'] == option['branch'], 'zone operation branch differs')
         require(all(prompt[k] == option[k] for k in ('requestedIterations', 'destination', 'origins')), 'zone operation arguments differ')
         by_ref = {b['entityRef']: b['id'] for b in context['diagnostics']['playerBindings']}
         for field, raw in (('sourcePlayer', 'sourcePlayerId'), ('decider', 'deciderPlayerId')):
@@ -216,7 +217,9 @@ def zone_progress_owner(choice,states):
     require(value['requestedIterations']==option['requestedIterations']
             and all(choice['options'][k]==option[k] for k in ('destination','origins','deciderPlayerId')),'zone progress received arguments differ')
     prompt=((choice['inputContext'].get('policy') or {}).get('prompt'))
+    require(option['branch']=='ORDINARY_HIDDEN_ORIGIN' or choice['inputContext']['schemaVersion']>=11,'new progress branch requires V11')
     if prompt is not None and prompt['kind']=='ZONE_PICK_PROGRESS':
+        if choice['inputContext']['schemaVersion']>=11: require(prompt['branch']==option['branch'],'progress branch differs from owner')
         bindings={b['entityRef']:b['id'] for b in choice['inputContext']['diagnostics']['playerBindings']}
         require((None if prompt['sourcePlayer'] is None else bindings.get(prompt['sourcePlayer']))==option['sourcePlayerId'],'progress source role differs')
     require(not state.get('zoneProgressUnavailable') or value['progressCoverage']=='UNAVAILABLE','unavailable progress became complete')
@@ -403,8 +406,9 @@ def options(choice):
         return
     if choice['choiceType'] == 'ZONE_CHANGE_SELECTION_OPERATION':
         require(isinstance(option, dict) and set(option) == {'coverage', 'branch', 'requestedIterations', 'destination', 'origins', 'sourcePlayerId', 'deciderPlayerId'}
-                and option['coverage'] == 'RECEIVED_ZONE_OPERATION_REQUEST' and option['branch'] == 'ORDINARY_HIDDEN_ORIGIN', 'invalid zone operation options')
+                and option['coverage'] == 'RECEIVED_ZONE_OPERATION_REQUEST' and isinstance(option['branch'], str) and option['branch'] in _contexts.ZONE_BRANCHES, 'invalid zone operation options')
         require('entryLocation' in choice and choice.get('inputContext', {}).get('schemaVersion', 0) >= 9, 'zone operation lacks entry/profile')
+        require(option['branch'] == 'ORDINARY_HIDDEN_ORIGIN' or choice['inputContext']['schemaVersion'] >= 11, 'new operation branch requires V11')
         require(integer(option['requestedIterations']) and -(1 << 31) <= option['requestedIterations'] < (1 << 31), 'invalid iteration request')
         require(isinstance(option['destination'], str) and option['destination'] in _contexts.ZONES
                 and isinstance(option['origins'], list) and len(option['origins']) <= len(_contexts.ZONES)

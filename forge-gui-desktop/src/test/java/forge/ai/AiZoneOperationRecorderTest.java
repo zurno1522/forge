@@ -50,8 +50,8 @@ public class AiZoneOperationRecorderTest extends AITest {
         final var start = f.events.get(0);
         Assert.assertEquals(start.get("choiceType"), "ZONE_CHANGE_SELECTION_OPERATION");
         Assert.assertEquals(((Map<?, ?>) start.get("entryLocation")).get("kind"), "OPERATION");
-        Assert.assertEquals(input(start).get("timing"), "BEFORE_OPERATION"); Assert.assertEquals(input(start).get("schemaVersion"), 10);
-        Assert.assertEquals(prompt(start), Map.of("kind", "ZONE_CHANGE_OPERATION_REQUEST", "requestedIterations", -3,
+        Assert.assertEquals(input(start).get("timing"), "BEFORE_OPERATION"); Assert.assertEquals(input(start).get("schemaVersion"), 11);
+        Assert.assertEquals(prompt(start), Map.of("branch", "ORDINARY_HIDDEN_ORIGIN", "kind", "ZONE_CHANGE_OPERATION_REQUEST", "requestedIterations", -3,
                 "destination", "Hand", "origins", List.of("Library"), "sourcePlayer", "p0", "decider", "p1"));
         Assert.assertEquals(((Map<?, ?>) ((List<?>) ((Map<?, ?>) input(start).get("policy")).get("players")).get(1)).get("life"), 20);
         Assert.assertEquals(((Map<?, ?>) f.events.get(1).get("selection")).get("coverage"), "OBSERVED_RETAINED_CARD_PREFIX");
@@ -189,6 +189,33 @@ public class AiZoneOperationRecorderTest extends AITest {
         Assert.assertSame(f.ai.getController().withZoneChangeSelections(f.request(2), observer -> { calls.incrementAndGet(); return f.cards; }), f.cards);
         Assert.assertEquals(calls.get(), 1); Assert.assertEquals(input(f.events.get(0)).get("status"), "UNAVAILABLE");
         Assert.assertEquals(f.events.get(1).get("status"), "COMPLETED"); Assert.assertNull(f.game.getEventObservationFailure());
+    }
+
+    @DataProvider public Object[][] groupedBranches() {
+        return new Object[][] {{"SAME_NAME_HIDDEN_ORIGIN", " | SameNameAsEach$ Valid Land.YouCtrl"},
+                {"EACH_TYPE_HIDDEN_ORIGIN", " | ChangeType$ EACH Forest & Island"}};
+    }
+    @Test(dataProvider = "groupedBranches", groups = {"UnitTest", "fast"})
+    public void groupedEngineChoicesHaveTheirExactBranchAndScopedHistory(final String branch, final String parameters) {
+        final Fixture f = fixture();
+        addCardToZone("Forest", f.ai, ZoneType.Battlefield); addCardToZone("Island", f.ai, ZoneType.Battlefield);
+        final SpellAbility ability = AbilityFactory.getAbility("AB$ ChangeZone | Cost$ 0 | Origin$ Library | Destination$ Hand"
+                + " | ChangeType$ Card | ChangeNum$ 1 | Mandatory$ True | Shuffle$ False" + parameters, f.ability.getHostCard());
+        ability.setActivatingPlayer(f.ai); new ChangeZoneEffect().resolve(ability);
+        final var starts = f.events.stream().filter(c -> "STARTED".equals(c.get("status"))).toList();
+        final var outers = starts.stream().filter(c -> "ZONE_CHANGE_SELECTION_OPERATION".equals(c.get("choiceType"))).toList();
+        final var children = starts.stream().filter(c -> "ZONE_CHANGE_CARD_SELECTION".equals(c.get("choiceType"))).toList();
+        Assert.assertEquals(outers.size(), branch.startsWith("SAME") ? 1 : 2); Assert.assertEquals(children.size(), 2);
+        for (final var outer : outers) { Assert.assertEquals(prompt(outer).get("branch"), branch); }
+        for (int i = 0; i < children.size(); i++) {
+            final var child = children.get(i); final var parent = outers.get(outers.size() == 1 ? 0 : i);
+            Assert.assertEquals(child.get("parentChoiceId"), parent.get("choiceId"));
+            Assert.assertEquals(prompt(child).get("branch"), branch);
+            Assert.assertEquals(prompt(child).get("attemptIndex"), outers.size() == 1 ? (long) i : 0L);
+            Assert.assertEquals(prompt(child).get("retainedCount"), i);
+            Assert.assertEquals(prompt(child).get("priorNonNullReturnCount"), outers.size() == 1 ? (long) i : 0L);
+        }
+        Assert.assertEquals(f.ai.getCardsIn(ZoneType.Hand).size(), 2); Assert.assertNull(f.game.getEventObservationFailure());
     }
 
 }

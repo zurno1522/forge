@@ -1,0 +1,42 @@
+{
+  "fullReactor": {
+    "forge-game": {
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "forge-gui": {
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "forge-gui-desktop": {
+      "tests": 2801,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 6
+    }
+  },
+  "coreAndAi": "Compiled; no test classes",
+  "focusedBeforeTwoAdditionalEngineCases": {
+    "tests": 121,
+    "failures": 0,
+    "errors": 0
+  },
+  "python": {
+    "tests": 220,
+    "failures": 0,
+    "errors": 0
+  },
+  "limitations": [
+    "Five complete games did not sample the EACH branch. Actual engine-resolution excerpts and focused engine tests exercise it.",
+    "An initial game launch overlapped class recompilation and failed before producing a trace; it is excluded from completed-game results."
+  ],
+  "logs": {
+    "/workspace/work/cov006-zone-variants/reactor.log": "9eb199771816bf231fcc8e81430e97a9d6c7cd3fc43cb58bd2cfc6cdca56f58d",
+    "/workspace/work/zone-variants-focused.log": "49f0f57829d971920739dd5fd8edb93a80b1fc02b80d7702b20c41bd6e9fbdd0",
+    "/workspace/work/zone-variants-python.log": "fcaca07cbdbc1f33d75dd0be113004042936c7ea5965fb48908a74f65e7d152f"
+  }
+}
