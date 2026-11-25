@@ -1,6 +1,6 @@
 # COV-006: ordinary engine-owned zone selection operation
 
-The [boundary inventory](Simulation-Engine-Zone-Sequence-Boundaries.md) is complete. Implement this in separate increments: a neutral game/controller callback seam, then an observed outer operation, then child progress/history. Each increment preserves its own validated scope. The neutral engine seam and V9 outer operation are implemented; child progress/history remains the next increment.
+The [boundary inventory](Simulation-Engine-Zone-Sequence-Boundaries.md) is complete. Implement this in separate increments: a neutral game/controller callback seam, then an observed outer operation, then child progress/history. Each increment preserves its own validated scope. The neutral engine seam and V9 outer operation are implemented; the [child progress/history contract](Simulation-Zone-Pick-Progress-Contract.md) defines the next implementation increment.
 
 ## Game/controller boundary
 

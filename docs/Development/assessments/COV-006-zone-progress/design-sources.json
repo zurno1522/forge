@@ -1,0 +1,16 @@
+{
+  "baseline": "4c07be00db6462fd926b6c2704117439b756ec67",
+  "scope": "Design/source contract only; no V10 permission or component emitted",
+  "sources": {
+    "forge-ai/src/main/java/forge/ai/AiChoiceRecorder.java": "3f1f5fbf482933a1f9f5d0b37ac563d26a0dabb94608d79a50fa3c8fb0d67500",
+    "forge-ai/src/main/java/forge/ai/AiZoneOperationRecorder.java": "4f974f0ce1166c3929f7d278de222555c9fa3171de4e9fbed3ddf49dc1bf7a6c",
+    "forge-ai/src/main/java/forge/ai/AiEntitySelectionHistory.java": "4a7c5b8c389c1cc42985762afed4ac7692444efe308897e2a2eea4d1c223caf5",
+    "forge-ai/src/main/java/forge/ai/AiEffectChoiceRecorder.java": "3c5b39d985eeff7c07e89c2b64b88faf4a3c350606ca28506830967b4449f514",
+    "forge-ai/src/main/java/forge/ai/AiInputContext.java": "bce44c930762c632a350dc627a51cd50da1d6f9535c31c8f941f95d96a440c7c",
+    "forge-ai/src/main/java/forge/ai/AiPromptInput.java": "c10e034eb5528b5011283625b8d4d73f1c7a4cbbb3b21cf0044566c811030df8",
+    "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java": "763b0627c3e0496a70ec10a96715ff9690792db09116636fa5341f15b5f798b0",
+    "forge-game/src/main/java/forge/game/player/ZoneChangeSelectionObserver.java": "ec9623a6b0897b749c594a0d4a28b622adc6f06bbbdb3b7844400f31a261fc61",
+    "forge-game/src/main/java/forge/game/ability/effects/ChangeZoneEffect.java": "a12c1a444303fa6bbe6621601a488824872de11ef8057587ade8ee3605c9a500",
+    "tools/decision-records/choice_events.py": "7ca40f4fd13da40f2165bfe6cd9845d78f4136927eb1160b3f1a4f422635e496"
+  }
+}
