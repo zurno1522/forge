@@ -6,6 +6,7 @@ import forge.game.GameObject;
 import forge.game.card.Card;
 import forge.game.player.Player;
 import forge.game.spellability.SpellAbility;
+import forge.util.AITimeoutTracker;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -477,53 +478,93 @@ final class AiDecisionRecorder {
     }
 
     // Evaluation can run on a worker which outlives cancellation. Never write into another decision.
-    synchronized void beginAssessment(final SpellAbility sa) {
-        if (!closed) {
-            details.remove(sa.getRootAbility().getId());
-            assessment = new Assessment(sa, ++assessmentSequence);
+    void beginAssessment(final SpellAbility sa) {
+        if (closed) { return; }
+        final long rootId;
+        try { rootId = sa.getRootAbility().getId(); }
+        catch (RuntimeException failure) { metadataFailed(failure); return; }
+        synchronized (this) {
+            if (!closed) {
+                details.remove(rootId);
+                assessment = new Assessment(sa, ++assessmentSequence);
+            }
         }
     }
 
-    synchronized void detail(final SpellAbility sa, final Map<String, Object> reason) {
-        if (!closed) { details.put(sa.getRootAbility().getId(), reason); }
-    }
-
-    synchronized void lands(final Iterable<Card> playable, final SpellAbility heuristic) {
-        if (closed) { return; }
-        for (final Card land : playable) {
-            final boolean preferred = land.getId() == heuristic.getHostCard().getId();
-            final Map<String, Object> option = preferred ? action(heuristic) : cardAction(land);
-            option.put("kind", "LAND");
-            option.put("assessment", "LAND_OPTION");
-            option.put("assessmentStage", "LAND_SHORTLIST");
-            option.put("heuristicDefault", preferred);
-            option.put("searchOffered", false);
-            candidates.add(option);
+    void detail(final SpellAbility sa, final Map<String, Object> reason) {
+        final Assessment origin;
+        synchronized (this) {
+            if (closed) { return; }
+            origin = assessment;
         }
+        final long rootId;
+        try { rootId = sa.getRootAbility().getId(); }
+        catch (RuntimeException failure) { metadataFailed(failure); return; }
+        synchronized (this) { if (!closed && assessment == origin) { details.put(rootId, reason); } }
     }
 
-    synchronized void landSearchCandidates(final List<SpellAbility> offered) {
+    void lands(final Iterable<Card> playable, final SpellAbility heuristic) {
         if (closed) { return; }
-        for (final Map<String, Object> candidate : candidates) {
-            if (!"LAND_SHORTLIST".equals(candidate.get("assessmentStage"))) { continue; }
+        final List<Map<String, Object>> options = new ArrayList<>();
+        try {
+            for (final Card land : playable) {
+                if (closed) { return; }
+                final boolean preferred = land.getId() == heuristic.getHostCard().getId();
+                final Map<String, Object> option = preferred ? action(heuristic) : cardAction(land);
+                option.put("kind", "LAND");
+                option.put("assessment", "LAND_OPTION");
+                option.put("assessmentStage", "LAND_SHORTLIST");
+                option.put("heuristicDefault", preferred);
+                option.put("searchOffered", false);
+                options.add(option);
+            }
+        } catch (RuntimeException failure) { metadataFailed(failure); return; }
+        synchronized (this) { if (!closed) { candidates.addAll(options); } }
+    }
+
+    private record OfferedLand(long sourceId, long abilityId) { }
+
+    void landSearchCandidates(final List<SpellAbility> offered) {
+        if (closed) { return; }
+        final List<OfferedLand> identities = new ArrayList<>();
+        try {
             for (final SpellAbility sa : offered) {
-                if (candidate.get("sourceId").equals(sa.getHostCard().getId())) {
-                    candidate.put("searchOffered", true);
-                    candidate.put("abilityId", sa.getId());
+                if (closed) { return; }
+                identities.add(new OfferedLand(sa.getHostCard().getId(), sa.getId()));
+            }
+        } catch (RuntimeException failure) { metadataFailed(failure); return; }
+        synchronized (this) {
+            if (closed) { return; }
+            for (final Map<String, Object> candidate : candidates) {
+                if (!"LAND_SHORTLIST".equals(candidate.get("assessmentStage"))) { continue; }
+                for (final OfferedLand identity : identities) {
+                    if (candidate.get("sourceId").equals(identity.sourceId)) {
+                        candidate.put("searchOffered", true);
+                        candidate.put("abilityId", identity.abilityId);
+                    }
                 }
             }
         }
     }
 
-    synchronized void evaluated(final SpellAbility sa, final String reason) {
-        if (!closed) {
-            final Map<String, Object> candidate = action(sa);
-            if (assessment != null && assessment.candidate == sa && assessment.index == null) {
-                assessment.index = candidates.size();
-                if (assessment.id != null) { candidate.put("assessmentId", assessment.id); }
+    void evaluated(final SpellAbility sa, final String reason) {
+        final Assessment origin;
+        synchronized (this) {
+            if (closed) { return; }
+            origin = assessment;
+        }
+        final Map<String, Object> candidate;
+        final long rootId;
+        try { candidate = action(sa); rootId = sa.getRootAbility().getId(); }
+        catch (RuntimeException failure) { metadataFailed(failure); return; }
+        synchronized (this) {
+            if (closed || assessment != origin) { return; }
+            if (origin != null && origin.candidate == sa && origin.index == null) {
+                origin.index = candidates.size();
+                if (origin.id != null) { candidate.put("assessmentId", origin.id); }
             }
             candidate.put("assessment", reason);
-            final Map<String, Object> detail = details.remove(sa.getRootAbility().getId());
+            final Map<String, Object> detail = details.remove(rootId);
             if (detail != null && !"WillPlay".equals(reason) && !"MONTE_CARLO_ONLY_WillPlay".equals(reason)) {
                 // Handler names can reveal a face-down card's implementation. Retain only the generic code then.
                 candidate.put("assessmentDetail", candidate.containsKey("sourceName") ? detail
@@ -531,6 +572,12 @@ final class AiDecisionRecorder {
             }
             candidates.add(candidate);
         }
+    }
+
+    private void metadataFailed(final RuntimeException failure) {
+        // A real AI deadline remains policy control flow, including when a metadata getter reaches it.
+        if (failure instanceof AITimeoutTracker.Expired) { throw failure; }
+        captureFailed(failure);
     }
 
     synchronized void interrupted(final String reason) {

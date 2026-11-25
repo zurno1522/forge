@@ -41,3 +41,5 @@ Do not add new allocator IDs or a persistent registry. Reuse owned batch identit
 3. Recheck the full parent boundary inventory, then continue mode operation/selector inputs and remaining COV-006 family arguments.
 
 COV-006 and the earlier HARD-001 lifecycle/failure contract own these fixes; they precede modes. COV-007 still owns inner payment/X seams, COV-008 sustained availability, and OPT-005 updated full-path/peak measurement. No runtime optimization or budget increase is authorized by this inventory.
+
+The subsequent [parent metadata capture increment](Simulation-Parent-Metadata-Hardening.md) implements the first five table entries. Publication/registration remains the immediate next increment; the source table above describes its audited baseline.

@@ -1,0 +1,65 @@
+{
+  "before": {
+    "tests": 18,
+    "failures": 18,
+    "errors": 0,
+    "expected": "Twelve blocked closure cases and six escaping live metadata failures",
+    "logSha256": "29ef2b28440be30ce8e0067186b6c9502cb05750cad1f60bed898d11487af154"
+  },
+  "focused": {
+    "tests": 125,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "logSha256": "74c950f70ceb2085a180bc86498c2160594d3f7d4e83724e7535dce1846c3afd"
+  },
+  "full": {
+    "modules": {
+      "forge-game": {
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "forge-gui": {
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "forge-gui-desktop": {
+        "tests": 2660,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 6
+      }
+    },
+    "coreAndAiModules": "Compile; no tests",
+    "buildSuccess": true,
+    "logSha256": "32b8dc046cdc7b9d691228bfba1d24559df54f661a02eb72661ab71f08ca9043",
+    "sourceHashesMatch": true
+  },
+  "python": {
+    "tests": 181,
+    "failures": 0,
+    "logSha256": "7f627fbac82c76550c4adda70e5eb34b25191e2b1e1a5c9f035421fcf80a8a4e"
+  },
+  "initialFull": {
+    "tests": 2660,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 6,
+    "test": "FlatMonteCarloStrategyTest.drawsIntoTheCounterspellInResponseToAThreat",
+    "failure": "Expected Brainstorm; returned null",
+    "tracingEnabled": false,
+    "logSha256": "b30025edc57a83ca8f4f3de75ea1da933d75d43cfdff3b70a919ad51d34add9d"
+  },
+  "strategyFollowup": {
+    "tests": 25,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "logSha256": "4bb63339933d6286658e20d052bdc2a2ac0b87e5e30054a96898eb94bd0f1acd"
+  },
+  "strategyFailureAssessment": "The failing test runs with tracing disabled and does not exercise the changed recorder methods. The unchanged full strategy class and subsequent full suite pass. Timed-search variation is suspected; the cause is not established. No AI policy, strategy assertion or timing budget was changed."
+}
