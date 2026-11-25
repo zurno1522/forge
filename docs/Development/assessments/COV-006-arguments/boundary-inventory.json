@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "scope": "SOURCE_BOUNDARIES_NOT_RUNTIME_INVOCATION_COVERAGE",
+  "baseline": "0ac8a6e7ebd1b3d5ea462887f4397694a08b53ee",
+  "sources": {
+    "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java": "16bffe713a695298257e31a69f12348177fe8a0bb55794a6315946cb223671eb",
+    "forge-ai/src/main/java/forge/ai/AiEffectChoiceRecorder.java": "ecc24ce798ed0248f530bd611816a14a67b143070c482089154e689d2a17d9e6",
+    "forge-ai/src/main/java/forge/ai/AiInputContext.java": "5be9d3205d30714e576f4670aa71ca7b64fade1fc2fed25bed36112bad2e3b69",
+    "forge-ai/src/main/java/forge/ai/AiOptionInput.java": "c3564f0d7ea765826d627f1a69ed88b651eec6bb4018e0fa8bd133be2f1e26f1",
+    "forge-ai/src/main/java/forge/ai/AiObservationAccounting.java": "deba2c15ec55be8adee96bbc9cc24017c66bd0d87eb478af1a37a57b42bc7dd2",
+    "forge-game/src/main/java/forge/game/ability/effects/ChangeZoneEffect.java": "60e4dad3df89762e83c6c397c6647ad81b4ced01e90e13f89891ef22706b7ba7",
+    "forge-game/src/main/java/forge/game/ability/effects/ChooseGenericEffect.java": "af39bc8d32bddbeb537f4cd3fe21865e1f53abde7205bdc4c6898d77dd6833eb",
+    "forge-game/src/main/java/forge/game/ability/effects/VillainousChoiceEffect.java": "4d5457af7a8280601bb4f399526477d3e2e6319714602cee87b2b066c961431f",
+    "forge-game/src/main/java/forge/game/ability/effects/CountersProliferateEffect.java": "93e84c549b6466039c8789ec728069c202fe6783feb9ac66772fcf01e8145b30",
+    "forge-game/src/main/java/forge/game/ability/effects/DamageDealEffect.java": "2dc732d6e4edf9e8903b17c3c45c51d03157e3ac319ebea35bd0c4d8273eb2b3",
+    "forge-game/src/main/java/forge/game/ability/effects/DigEffect.java": "39dc36477b73e339210461e92612f84d8566a9701f4e8d95610ec27d81a9478f",
+    "forge-game/src/main/java/forge/game/ability/effects/LifeSetEffect.java": "8d4fa88ad01a3a2ab9babe503417ca47ed23325f242dba56e1bd1e0213fef41f",
+    "forge-game/src/main/java/forge/game/ability/effects/TapEffect.java": "5b863ca990f419e15331a95488b39c7c03cfed66b7e585a9d3281478c97cf296",
+    "forge-game/src/main/java/forge/game/ability/effects/TimeTravelEffect.java": "200acc8f6978978634b7cbaf98930f6920a62ef6c5dde655f331a48f0360a1ab"
+  },
+  "controllerBoundaries": [
+    {
+      "path": "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java",
+      "line": 450,
+      "method": "chooseEntitiesForEffect",
+      "kind": "OPERATION",
+      "observed": false,
+      "remaining": [
+        "outer total bounds",
+        "outer lifecycle",
+        "explicit child ownership",
+        "prior selections"
+      ]
+    },
+    {
+      "path": "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java",
+      "line": 441,
+      "method": "chooseSingleEntityForEffect",
+      "kind": "SELECTOR",
+      "observed": true,
+      "remaining": [
+        "outer total bounds and prior selections where applicable",
+        "typed effect-specific params"
+      ]
+    },
+    {
+      "path": "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java",
+      "line": 1907,
+      "method": "chooseSingleCardForZoneChange",
+      "kind": "SELECTOR",
+      "observed": true,
+      "remaining": [
+        "typed destination/origins/decider request",
+        "engine-owned repetition totals/history"
+      ]
+    },
+    {
+      "path": "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java",
+      "line": 467,
+      "method": "chooseSpellAbilitiesForEffect",
+      "kind": "OPERATION",
+      "observed": false,
+      "remaining": [
+        "operation and child observation",
+        "ability-option permissions",
+        "total request/history"
+      ]
+    },
+    {
+      "path": "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java",
+      "line": 483,
+      "method": "chooseSingleSpellForEffect",
+      "kind": "SELECTOR",
+      "observed": false,
+      "remaining": [
+        "selector observation",
+        "ability-option permissions",
+        "typed effect-specific params"
+      ]
+    },
+    {
+      "path": "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java",
+      "line": 1918,
+      "method": "chooseCardsForZoneChange",
+      "kind": "UNIMPLEMENTED_AI_PATH",
+      "observed": false,
+      "remaining": [
+        "no AI reachability established for the guarded engine call"
+      ]
+    }
+  ],
+  "entityOperationEngineCallers": [
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/CountersProliferateEffect.java",
+      "line": 64
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/DamageDealEffect.java",
+      "line": 173
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/DigEffect.java",
+      "line": 344
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/LifeSetEffect.java",
+      "line": 50
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/TapEffect.java",
+      "line": 39
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/TimeTravelEffect.java",
+      "line": 51
+    }
+  ],
+  "zoneChangeMultiSelectGuard": {
+    "path": "forge-game/src/main/java/forge/game/ability/effects/ChangeZoneEffect.java",
+    "line": 1581,
+    "condition": "Excludes AI controllers"
+  },
+  "sourceAccounting": {
+    "currentNamedBoundaries": 34,
+    "newOuterBoundaryRequired": true,
+    "scope": "ORIGINAL_AI_STANDALONE_CALLBACKS; overlapping wrappers, not unique decisions"
+  }
+}
