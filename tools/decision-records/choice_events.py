@@ -70,10 +70,15 @@ CONTEXT_TIMING = {
 CONTEXT_TIMING_V2 = {**{key: value for key, value in CONTEXT_TIMING.items() if key != 'MAIN_PHASE_PLAY_SELECTION'},
                      **{boundary: ['BEFORE_SELECTOR', 'AFTER_SELECTION_BEFORE_APPLICATION']
                         for boundary in sorted(POOL_BOUNDARIES - {'MASKED_TARGET_POOL'})}}
+MODE_CONTEXT_TIMING = {'CHARM_MODE_HEURISTIC': 'BEFORE_SELECTOR', 'CONTROLLER_MODES': 'BEFORE_OPERATION'}
 
 
 def input_boundary(value, boundary, stage=None, choice=None):
     expected = CONTEXT_TIMING.get(boundary)
+    mode = choice is not None and boundary in MODE_CONTEXT_TIMING and 'entryLocation' in choice
+    if mode:
+        expected = MODE_CONTEXT_TIMING[boundary]
+        require(value['stateBasis'] == 'PLANNING_WORKING_STATE', 'mode input claims committed state')
     target_pool = choice is not None and choice['choiceType'] == 'TARGET_POOL_SELECTION' and 'entryLocation' in choice
     if target_pool:
         require(value['timing'] in ('BEFORE_SELECTOR', 'AFTER_SELECTION_BEFORE_APPLICATION'), 'invalid target input timing')
@@ -159,6 +164,9 @@ def entry_location(choice, known_players=None):
     require(value['reason'] != 'HIDDEN', 'hidden entry has unmasked source')
     if value['status'] != 'CAPTURED': return
     expected = CONTEXT_TIMING.get(choice['boundary'])
+    if choice['boundary'] in MODE_CONTEXT_TIMING:
+        expected = MODE_CONTEXT_TIMING[choice['boundary']]
+        require(value['stateBasis'] == 'PLANNING_WORKING_STATE', 'mode entry claims committed state')
     if choice['choiceType'] == 'TARGET_POOL_SELECTION':
         options = choice['options']
         if options['coverage'] == 'UNAVAILABLE':

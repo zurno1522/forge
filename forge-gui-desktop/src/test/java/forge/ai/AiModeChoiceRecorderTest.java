@@ -123,6 +123,8 @@ public class AiModeChoiceRecorderTest extends AITest {
         final var start = choices.stream().filter(c -> "MODE_SELECTION".equals(c.get("choiceType"))).findFirst().orElseThrow();
         final var end = choices.stream().filter(c -> start.get("choiceId").equals(c.get("choiceId")) && !"STARTED".equals(c.get("status"))).findFirst().orElseThrow();
         Assert.assertEquals(start.get("stage"), "CANDIDATE_EVALUATION");
+        Assert.assertEquals(((Map<?, ?>) start.get("entryLocation")).get("kind"), "SELECTOR");
+        Assert.assertEquals(((Map<?, ?>) start.get("inputContext")).get("stateBasis"), "PLANNING_WORKING_STATE");
         Assert.assertEquals(start.get("decisionId"), decisions.get(0).data().get("decisionId"));
         Assert.assertNotNull(start.get("assessmentId"));
         Assert.assertTrue(((List<?>) ((Map<?, ?>) start.get("options")).get("items")).size() >= 1);

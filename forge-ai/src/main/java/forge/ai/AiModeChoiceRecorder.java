@@ -18,22 +18,24 @@ public final class AiModeChoiceRecorder {
 
     public static AiAbilityDecision evaluate(final Player chooser, final SpellAbility ability, final List<AbilitySub> possible,
             final int min, final int max, final boolean repeat, final Supplier<AiAbilityDecision> callback) {
-        return record(chooser, ability, possible, min, max, repeat, "CHARM_MODE_HEURISTIC", callback,
+        return record(chooser, ability, possible, min, max, repeat, "CHARM_MODE_HEURISTIC", "BEFORE_SELECTOR", callback,
                 ignored -> ability.getChosenList(), AiAbilityDecision::willingToPlay);
     }
 
     public static List<AbilitySub> choose(final Player chooser, final SpellAbility ability, final List<AbilitySub> possible,
             final int min, final int max, final boolean repeat, final Supplier<List<AbilitySub>> callback) {
-        return record(chooser, ability, possible, min, max, repeat, "CONTROLLER_MODES", callback, Function.identity(), ignored -> null);
+        return record(chooser, ability, possible, min, max, repeat, "CONTROLLER_MODES", "BEFORE_OPERATION", callback, Function.identity(), ignored -> null);
     }
 
     private static <T> T record(final Player chooser, final SpellAbility ability, final List<AbilitySub> possible,
-            final int min, final int max, final boolean repeat, final String boundary, final Supplier<T> callback,
+            final int min, final int max, final boolean repeat, final String boundary, final String timing, final Supplier<T> callback,
             final Function<T, List<AbilitySub>> selected, final Function<T, Boolean> accepted) {
         if (!chooser.getGame().isRecordingAiDecisions()) { return callback.get(); }
         final IdentityHashMap<SpellAbility, Integer> indices = new IdentityHashMap<>();
         final IdentityHashMap<SpellAbility, Integer> definitions = new IdentityHashMap<>();
-        return AiChoiceRecorder.observe(chooser, ability, "MODE_SELECTION", null, boundary, () -> {
+        // Both the heuristic and controller can consume hypothetical, prepared plans/resources.
+        // The controller may reuse a plan; wrapping it does not make it a fresh selector.
+        return AiChoiceRecorder.planning(chooser, () -> AiChoiceRecorder.observeInput(chooser, ability, "MODE_SELECTION", null, boundary, timing, () -> {
             final List<AbilitySub> declared = ability.getAdditionalAbilityList("Choices");
             for (int i = 0; declared != null && i < declared.size() && i < AiTargetChoiceRecorder.MAX_REFERENCES; i++) {
                 final AbilitySub mode = declared.get(i);
@@ -72,6 +74,6 @@ public final class AiModeChoiceRecorder {
             value.put("truncated", chosen != null && chosen.size() > modes.size());
             value.put("accepted", accepted.apply(result));
             return value;
-        });
+        }));
     }
 }

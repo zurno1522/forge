@@ -32,7 +32,7 @@ def add(count, context, audited, parent_omissions=None):
 
 
 class CoverageAudit:
-    def __init__(self, boundary_groups, turn_groups, audited_boundaries, entry_inventory=None):
+    def __init__(self, boundary_groups, turn_groups, audited_boundaries, entry_inventory=None, entry_extensions=None):
         self.boundaries = boundary_groups
         self.turns = turn_groups
         self.audited = audited_boundaries
@@ -41,10 +41,14 @@ class CoverageAudit:
         self.entry_inventory = entry_inventory or {}
         self.entries = {key: Counter() for key in ('statuses', 'kinds', 'timings', 'stateBases', 'reasons')}
         self.entry_owners = set()
+        self.entry_extensions = entry_extensions or {}
+        self.observed_entry_extensions = {}
 
     def observe(self, owner, boundary, context, *, run_id, game, turn, player, turn_basis, parent_omissions=None, entry_location=None):
         if entry_location is not None:
             self.entry_owners.add(owner)
+            if boundary in self.entry_extensions.get(owner, {}):
+                self.observed_entry_extensions.setdefault(owner, {})[boundary] = self.entry_extensions[owner][boundary]
             for plural, field in (('statuses', 'status'), ('kinds', 'kind'), ('timings', 'timing'), ('stateBases', 'stateBasis'), ('reasons', 'reason')):
                 if entry_location[field] is not None: self.entries[plural][entry_location[field]] += 1
             turn = entry_location['turn']
@@ -87,6 +91,8 @@ class CoverageAudit:
                                               knownInputBoundaryInventoryV2={key: value for key, value in self.entry_inventory.items()
                                                                             if key in self.entry_owners},
                                               **{key: dict(value) for key, value in self.entries.items()})
+            if self.observed_entry_extensions:
+                result['entryLocationAudit']['knownInputBoundaryInventoryExtensionV3'] = self.observed_entry_extensions
             result['definitions']['byTurn'] += ' Present entry components supply their own clock with ENTRY_LOCATION; unavailable entries stay null with ENTRY_LOCATION_UNAVAILABLE. playerId remains the owning chooser, not the turn player.'
         return result
 

@@ -1,0 +1,722 @@
+{
+  "MODE_CHARM_MODE_HEURISTIC": {
+    "scenario": "modes",
+    "excerpt": true,
+    "choice": {
+      "choiceSchemaVersion": 1,
+      "choiceId": "choice:1",
+      "parentChoiceId": null,
+      "status": "STARTED",
+      "choiceType": "MODE_SELECTION",
+      "boundary": "CHARM_MODE_HEURISTIC",
+      "stage": "CONTROLLER_CALLBACK",
+      "chooserPlayerId": 0,
+      "chooserKind": "AI",
+      "abilityId": 209,
+      "sourceId": 10,
+      "decisionId": null,
+      "actionId": null,
+      "candidateAbilityId": null,
+      "assessmentId": null,
+      "resolvingAbilityId": null,
+      "entryLocation": {
+        "schemaVersion": 1,
+        "status": "CAPTURED",
+        "kind": "SELECTOR",
+        "timing": "BEFORE_SELECTOR",
+        "stateBasis": "PLANNING_WORKING_STATE",
+        "turn": 1,
+        "phase": "UPKEEP",
+        "turnPlayerId": 1,
+        "reason": null
+      },
+      "options": {
+        "allowRepeat": false,
+        "min": 2,
+        "max": 2,
+        "truncated": false,
+        "coverage": "OBSERVED_MODE_OPTIONS",
+        "items": [
+          {
+            "abilityId": 211,
+            "optionIndex": 0,
+            "definitionIndex": 1
+          },
+          {
+            "abilityId": 213,
+            "optionIndex": 1,
+            "definitionIndex": 3
+          }
+        ]
+      },
+      "inputContext": {
+        "schemaVersion": 4,
+        "profile": "PERMITTED_CHOICE_VIEW_V4",
+        "timing": "BEFORE_SELECTOR",
+        "stateBasis": "PLANNING_WORKING_STATE",
+        "perspective": {
+          "chooserPlayerId": 0,
+          "controllingPlayerId": 0
+        },
+        "status": "PARTIAL",
+        "coverage": {
+          "prompt": "UNSUPPORTED",
+          "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+          "options": "DIAGNOSTIC_ONLY",
+          "history": "INCOMPLETE",
+          "stack": "PUBLIC_ROOT_STACK_V1",
+          "disclosures": "UNSUPPORTED_PRIOR_SCOPE"
+        },
+        "policy": {
+          "turn": 1,
+          "phase": "UPKEEP",
+          "turnPlayer": "p1",
+          "chooser": "p0",
+          "players": [
+            {
+              "entityRef": "p0",
+              "life": 20,
+              "handCount": 7,
+              "libraryCount": 53,
+              "floatingManaColors": []
+            },
+            {
+              "entityRef": "p1",
+              "life": 20,
+              "handCount": 7,
+              "libraryCount": 41,
+              "floatingManaColors": []
+            }
+          ],
+          "cards": [
+            {
+              "entityRef": "c0",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Hand",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Island",
+              "types": "Basic Land - Island",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c1",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Hand",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Island",
+              "types": "Basic Land - Island",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c2",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Hand",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Ojutai's Command",
+              "types": "Instant",
+              "manaCost": "{2}{W}{U}",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c3",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Hand",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Plains",
+              "types": "Basic Land - Plains",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c4",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Hand",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Plains",
+              "types": "Basic Land - Plains",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c5",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Hand",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Plains",
+              "types": "Basic Land - Plains",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c6",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Hand",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Wall of Omens",
+              "types": "Creature - Wall",
+              "manaCost": "{1}{W}",
+              "power": 0,
+              "toughness": 4,
+              "counters": {}
+            }
+          ],
+          "stack": {
+            "entries": [],
+            "truncated": false,
+            "isResolving": false,
+            "resolving": null,
+            "resolvingCoverage": "CAPTURED"
+          },
+          "prompt": null,
+          "disclosedFacts": []
+        },
+        "diagnostics": {
+          "optionBindings": {
+            "truncated": false,
+            "coverage": "UNSUPPORTED",
+            "items": []
+          },
+          "cardBindings": [
+            {
+              "entityRef": "c0",
+              "gameTimestamp": 5,
+              "id": 34
+            },
+            {
+              "entityRef": "c1",
+              "gameTimestamp": 7,
+              "id": 33
+            },
+            {
+              "entityRef": "c2",
+              "gameTimestamp": 1,
+              "id": 10
+            },
+            {
+              "entityRef": "c3",
+              "gameTimestamp": 2,
+              "id": 46
+            },
+            {
+              "entityRef": "c4",
+              "gameTimestamp": 3,
+              "id": 48
+            },
+            {
+              "entityRef": "c5",
+              "gameTimestamp": 6,
+              "id": 44
+            },
+            {
+              "entityRef": "c6",
+              "gameTimestamp": 4,
+              "id": 24
+            }
+          ],
+          "playerBindings": [
+            {
+              "id": 0,
+              "entityRef": "p0"
+            },
+            {
+              "id": 1,
+              "entityRef": "p1"
+            }
+          ],
+          "stackBindings": []
+        },
+        "omissions": [
+          {
+            "reason": "UNSUPPORTED",
+            "component": "DISCLOSURES"
+          }
+        ]
+      }
+    }
+  },
+  "MODE_CONTROLLER_MODES": {
+    "scenario": "modes",
+    "excerpt": true,
+    "choice": {
+      "choiceSchemaVersion": 1,
+      "choiceId": "choice:108",
+      "parentChoiceId": null,
+      "status": "STARTED",
+      "choiceType": "MODE_SELECTION",
+      "boundary": "CONTROLLER_MODES",
+      "stage": "EXECUTION",
+      "chooserPlayerId": 0,
+      "chooserKind": "AI",
+      "abilityId": 257,
+      "sourceId": 8,
+      "decisionId": "0:21",
+      "actionId": "0:21:0",
+      "candidateAbilityId": null,
+      "assessmentId": null,
+      "resolvingAbilityId": null,
+      "entryLocation": {
+        "schemaVersion": 1,
+        "status": "CAPTURED",
+        "kind": "OPERATION",
+        "timing": "BEFORE_OPERATION",
+        "stateBasis": "PLANNING_WORKING_STATE",
+        "turn": 6,
+        "phase": "MAIN2",
+        "turnPlayerId": 0,
+        "reason": null
+      },
+      "options": {
+        "allowRepeat": false,
+        "min": 1,
+        "max": 1,
+        "truncated": false,
+        "coverage": "OBSERVED_MODE_OPTIONS",
+        "items": [
+          {
+            "abilityId": 258,
+            "optionIndex": 0,
+            "definitionIndex": 0
+          },
+          {
+            "abilityId": 259,
+            "optionIndex": 1,
+            "definitionIndex": 1
+          }
+        ]
+      },
+      "inputContext": {
+        "schemaVersion": 4,
+        "profile": "PERMITTED_CHOICE_VIEW_V4",
+        "timing": "BEFORE_OPERATION",
+        "stateBasis": "PLANNING_WORKING_STATE",
+        "perspective": {
+          "chooserPlayerId": 0,
+          "controllingPlayerId": 0
+        },
+        "status": "PARTIAL",
+        "coverage": {
+          "prompt": "UNSUPPORTED",
+          "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+          "options": "DIAGNOSTIC_ONLY",
+          "history": "INCOMPLETE",
+          "stack": "PUBLIC_ROOT_STACK_V1",
+          "disclosures": "UNSUPPORTED_PRIOR_SCOPE"
+        },
+        "policy": {
+          "turn": 6,
+          "phase": "MAIN2",
+          "turnPlayer": "p0",
+          "chooser": "p0",
+          "players": [
+            {
+              "entityRef": "p0",
+              "life": 20,
+              "handCount": 6,
+              "libraryCount": 49,
+              "floatingManaColors": []
+            },
+            {
+              "entityRef": "p1",
+              "life": 20,
+              "handCount": 3,
+              "libraryCount": 39,
+              "floatingManaColors": []
+            }
+          ],
+          "cards": [
+            {
+              "entityRef": "c0",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Battlefield",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Plains",
+              "types": "Basic Land - Plains",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c1",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Battlefield",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Island",
+              "types": "Basic Land - Island",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c2",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Battlefield",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Plains",
+              "types": "Basic Land - Plains",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c3",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Graveyard",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Wall of Omens",
+              "types": "Creature - Wall",
+              "manaCost": "{1}{W}",
+              "power": 0,
+              "toughness": 4,
+              "counters": {}
+            },
+            {
+              "entityRef": "c4",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Hand",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Island",
+              "types": "Basic Land - Island",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c5",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Hand",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Ojutai's Command",
+              "types": "Instant",
+              "manaCost": "{2}{W}{U}",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c6",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Hand",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Plains",
+              "types": "Basic Land - Plains",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c7",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Hand",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Plains",
+              "types": "Basic Land - Plains",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c8",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Hand",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Plains",
+              "types": "Basic Land - Plains",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c9",
+              "owner": "p0",
+              "controller": "p0",
+              "zone": "Hand",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Plains",
+              "types": "Basic Land - Plains",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c10",
+              "owner": "p1",
+              "controller": "p1",
+              "zone": "Battlefield",
+              "tapped": true,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Forest",
+              "types": "Basic Land - Forest",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c11",
+              "owner": "p1",
+              "controller": "p1",
+              "zone": "Battlefield",
+              "tapped": true,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Forest",
+              "types": "Basic Land - Forest",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c12",
+              "owner": "p1",
+              "controller": "p1",
+              "zone": "Battlefield",
+              "tapped": true,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Runeclaw Bear",
+              "types": "Creature - Bear",
+              "manaCost": "{1}{G}",
+              "power": 2,
+              "toughness": 2,
+              "counters": {}
+            },
+            {
+              "entityRef": "c13",
+              "owner": "p1",
+              "controller": "p1",
+              "zone": "Battlefield",
+              "tapped": true,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Forest",
+              "types": "Basic Land - Forest",
+              "manaCost": "no cost",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            },
+            {
+              "entityRef": "c14",
+              "owner": "p1",
+              "controller": "p1",
+              "zone": "Battlefield",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Runeclaw Bear",
+              "types": "Creature - Bear",
+              "manaCost": "{1}{G}",
+              "power": 2,
+              "toughness": 2,
+              "counters": {}
+            },
+            {
+              "entityRef": "c15",
+              "owner": "p1",
+              "controller": "p1",
+              "zone": "Graveyard",
+              "tapped": false,
+              "faceDown": false,
+              "identityKnown": true,
+              "name": "Giant Growth",
+              "types": "Instant",
+              "manaCost": "{G}",
+              "power": null,
+              "toughness": null,
+              "counters": {}
+            }
+          ],
+          "stack": {
+            "entries": [],
+            "truncated": false,
+            "isResolving": false,
+            "resolving": null,
+            "resolvingCoverage": "CAPTURED"
+          },
+          "prompt": null,
+          "disclosedFacts": []
+        },
+        "diagnostics": {
+          "optionBindings": {
+            "truncated": false,
+            "coverage": "UNSUPPORTED",
+            "items": []
+          },
+          "cardBindings": [
+            {
+              "entityRef": "c0",
+              "gameTimestamp": 17,
+              "id": 46
+            },
+            {
+              "entityRef": "c1",
+              "gameTimestamp": 22,
+              "id": 34
+            },
+            {
+              "entityRef": "c2",
+              "gameTimestamp": 56,
+              "id": 48
+            },
+            {
+              "entityRef": "c3",
+              "gameTimestamp": 53,
+              "id": 24
+            },
+            {
+              "entityRef": "c4",
+              "gameTimestamp": 7,
+              "id": 33
+            },
+            {
+              "entityRef": "c5",
+              "gameTimestamp": 1,
+              "id": 10
+            },
+            {
+              "entityRef": "c6",
+              "gameTimestamp": 6,
+              "id": 44
+            },
+            {
+              "entityRef": "c7",
+              "gameTimestamp": 16,
+              "id": 52
+            },
+            {
+              "entityRef": "c8",
+              "gameTimestamp": 21,
+              "id": 49
+            },
+            {
+              "entityRef": "c9",
+              "gameTimestamp": 55,
+              "id": 45
+            },
+            {
+              "entityRef": "c10",
+              "gameTimestamp": 15,
+              "id": 99
+            },
+            {
+              "entityRef": "c11",
+              "gameTimestamp": 19,
+              "id": 96
+            },
+            {
+              "entityRef": "c12",
+              "gameTimestamp": 20,
+              "id": 65
+            },
+            {
+              "entityRef": "c13",
+              "gameTimestamp": 38,
+              "id": 89
+            },
+            {
+              "entityRef": "c14",
+              "gameTimestamp": 54,
+              "id": 67
+            },
+            {
+              "entityRef": "c15",
+              "gameTimestamp": 52,
+              "id": 73
+            }
+          ],
+          "playerBindings": [
+            {
+              "id": 0,
+              "entityRef": "p0"
+            },
+            {
+              "id": 1,
+              "entityRef": "p1"
+            }
+          ],
+          "stackBindings": []
+        },
+        "omissions": [
+          {
+            "reason": "UNSUPPORTED",
+            "component": "DISCLOSURES"
+          }
+        ]
+      }
+    }
+  }
+}

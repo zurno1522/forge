@@ -1,0 +1,10 @@
+{
+  "forge-ai/src/main/java/forge/ai/AiModeChoiceRecorder.java": "bb55e474e12406e9c827555647134588645e574300a3af63f5c4eb1b6abfe4f9",
+  "forge-gui-desktop/src/test/java/forge/ai/AiModeInputContextTest.java": "9b05cf5450f6b0d3eb3b41d4818ba82124e8534d71c90642bf00404922ba52df",
+  "forge-gui-desktop/src/test/java/forge/ai/AiModeChoiceRecorderTest.java": "811c0804fcc9fc5398c43634fefc16226f9ef1b43f35136f1f37a6cbc7ec9a6f",
+  "tools/decision-records/choice_events.py": "efe086e1cdaf0021762b440820f2acdb46690c20e20f2b7b358f1eebadc48f43",
+  "tools/decision-records/coverage_audit.py": "57434119539ee9ac2de18672620a37f876e49e0421c96b9491bb2fca9585ae2e",
+  "tools/decision-records/export.py": "2ec8b0e5c14b64ca4100eb4f769d2355f454c7c5570174a418661eaf83984588",
+  "tools/decision-records/test_mode_choices.py": "bf3ae50263d30f17a1365333dfd3fe69f78acb54cf0ca4bb40d334b8c6459cb0",
+  "tools/trace-test-decks/choice-modes-azorius.dck": "4ffaa93568b603f674a1efa1e7da37486b57a83a52858d76ecbe79a42ac05bd4"
+}

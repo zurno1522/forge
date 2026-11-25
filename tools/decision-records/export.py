@@ -801,7 +801,8 @@ def make_coverage(runs, rows, *, spool=None):
         {'CHOICE': _choices.CONTEXT_TIMING_V2,
          'NESTED_TARGET': {key: value for key, value in _choices.CONTEXT_TIMING_V2.items() if key in _choices.POOL_BOUNDARIES},
          'SEARCH_OPERATION': {key: 'BEFORE_OPERATION' if key == 'HEURISTIC_REVALIDATION' else 'AFTER_SELECTION_BEFORE_APPLICATION'
-                              for key in ('HEURISTIC_REVALIDATION', 'RESTORE_APPROVED_TARGET', 'ROLLOUT_TARGET_OVERRIDE', 'DISCOVERED_TARGET', 'GUARD_REAIM')}})
+                              for key in ('HEURISTIC_REVALIDATION', 'RESTORE_APPROVED_TARGET', 'ROLLOUT_TARGET_OVERRIDE', 'DISCOVERED_TARGET', 'GUARD_REAIM')}},
+        {'CHOICE': _choices.MODE_CONTEXT_TIMING})
     common = ('selections', 'selectedActionKinds', 'phases', 'decisionStatuses', 'outcomeLabels',
               'pilotModes', 'assessments', 'assessmentDetails', 'cardAiHandlers', 'handlerAssessments',
               'rejectedCards', 'rejectedActionKinds', 'rejectedCardKinds', 'searchReasons')

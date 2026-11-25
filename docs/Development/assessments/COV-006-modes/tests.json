@@ -1,0 +1,22 @@
+{
+  "initial": {
+    "tests": 14,
+    "failures": 7,
+    "errors": 0,
+    "skipped": 0,
+    "logSha256": "8097bc3a7503309d7b446a5b8e7ae73c53f3502e10a1b00ccbc851434f18e720"
+  },
+  "focused": {
+    "tests": 73,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "logSha256": "456d317008be0d4ba6e3fac091ac07dba9b0284450127e1cb1e41438562d19f4"
+  },
+  "python": {
+    "tests": 184,
+    "failures": 0,
+    "logSha256": "dce2553759686e56096615ee7c01dec3c573ca5de99bc87f17245d2203289ff4"
+  },
+  "full": "Not rerun for this isolated increment; follows in versioned mode-bounds integration."
+}
