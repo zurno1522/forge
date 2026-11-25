@@ -1,0 +1,21 @@
+{
+  "forge-ai/src/main/java/forge/ai/AiEffectChoiceRecorder.java": "93a05efdd7a1605730799da5c1b0106e4939226b20474dfd443a1949abba99dc",
+  "forge-ai/src/main/java/forge/ai/AiInputContext.java": "1b5ab23c7deafffc4651c4e602e7725993f61a7acdb48ad4791d8622300498f1",
+  "forge-ai/src/main/java/forge/ai/AiObservationAccounting.java": "e3cc0c4a16f226692d678b4c2da39aa1cca05a989c3b8a3450d917dfeb906b6a",
+  "forge-ai/src/main/java/forge/ai/AiPromptInput.java": "dfae7cd17ba4c68f906bce5c2b4bd8407e1a3c517e8c6245272b6cdcf180fa78",
+  "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java": "4bf2a573a8ecbfdd04940b83d9d96aded07e18a5c59ff311d7ee15a5d32ee5cb",
+  "forge-gui-desktop/src/test/java/forge/ai/AiModeInputContextTest.java": "d43e46e43fe5c194216dcd1359802ef94d833d4f1918060480a7945842108136",
+  "forge-gui-desktop/src/test/java/forge/ai/AiModePromptInputTest.java": "f9dd4d5ff0e1ed8fe30b9da0fbd1df2b29310d40b66a58af2c9abeb13e853ac8",
+  "forge-gui-desktop/src/test/java/forge/ai/AiStackInputContextTest.java": "86ca6f066cf6b423f2ec493780cd40942d1a027780e38d8df11f0e7b7e92be9b",
+  "tools/decision-records/choice_events.py": "14871fde703bcee4ce6fe0d565fff9103407e1f5d135cec1db5b61512f7f9567",
+  "tools/decision-records/coverage_audit.py": "b99ba718f0d96799ad6a712d91f6b9f2b79210505562bf83a2cb191a63cd2b98",
+  "tools/decision-records/export.py": "4ab01bc93bf522132de619f495c04e197dde9adf37987673f5bcd23e7d5d251b",
+  "tools/decision-records/input-context-benchmark/summarize-workloads.py": "ae32db68043128ec00cee3c86fe2118d371b08ca91520dca1f7dae4cc6767f78",
+  "tools/decision-records/input_context.py": "571be2168ca2d318d8431bbcdec37ba3c13a15cb621f1be53143cd759c127e29",
+  "tools/decision-records/test_workload_measurements.py": "2a2006822f2ecbfdb264aa9a21b6fb25de650e1f4edb23d5ff4eb404fe2026f9",
+  "forge-gui-desktop/src/test/java/forge/ai/AiMultiEntityChoiceRecorderTest.java": "ab257ac43f795e2596712b9f22cd42575b6eaa5a8f82e59cf5fb9313f22dede8",
+  "tools/decision-records/test_multi_entity_choices.py": "f0c1ce0588facdff0592606be491f10bb441571d78fc7f654f996dcb51deafee",
+  "forge-ai/src/main/java/forge/ai/AiChoiceRecorder.java": "a327335a2290f98b793be6b91813dfd2a8ee1eaa75c03ba105aa9e3cce706c95",
+  "forge-gui-desktop/src/test/java/forge/ai/AiChoiceResultClosureTest.java": "62398fb527a227005fe2a8347b4e5926c91357b206d1e6eaeb9e17452afc6146",
+  "tools/trace-test-decks/choice-repeated-entities.dck": "23c21710be1598e9a502db53817f1667f0ee72d555ed735344271c9e46147cd7"
+}

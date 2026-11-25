@@ -1,0 +1,52 @@
+{
+  "initial": {
+    "tests": 6,
+    "failures": 4,
+    "errors": 0,
+    "skipped": 0,
+    "logSha256": "9a47da0f21f1108068e14ec41381fb63c09efe731f30003752a17505357f133e"
+  },
+  "focused": {
+    "tests": 124,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "logSha256": "9c8bf6cf9ba1587d89662a4e7b746ba078d496343fb914852e5d33c01732a288"
+  },
+  "full": {
+    "modules": {
+      "forge-game": {
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "forge-gui": {
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "forge-gui-desktop": {
+        "tests": 2719,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 6
+      }
+    },
+    "coreAndAiModules": "Compile; no tests",
+    "buildSuccess": true,
+    "sourceHashesMatch": true,
+    "logSha256": "bd32f37ca40e38e328ec5c137a48aaa6335608b6e88bb2c26f7d3a03682ac690"
+  },
+  "python": {
+    "tests": 196,
+    "failures": 0,
+    "logSha256": "3ba89ff402c37e530029202d6250ec2b0f64ea9d945559ef30a8402d87adbadb"
+  },
+  "profileSmoke": {
+    "passed": true,
+    "scope": "One actual workload protocol trial; not a performance assessment",
+    "logSha256": "a0077d86b95de477df637dda70479930cae74d2779e1ec6069f0b3eb6bdd27a0"
+  }
+}

@@ -452,14 +452,16 @@ public class PlayerControllerAi extends PlayerController {
             Player targetedPlayer, Map<String, Object> params) {
         return AiEffectChoiceRecorder.prompt(player, () -> {
             if (delayedReveal != null) { reveal(delayedReveal); }
-            FCollection<T> remaining = new FCollection<>(optionList);
-            List<T> selecteds = new ArrayList<>();
-            T selected;
-            do {
-                selected = chooseSingleEntityForEffect(remaining, null, sa, title, selecteds.size()>=min, targetedPlayer, params);
-                if (selected != null) { remaining.remove(selected); selecteds.add(selected); }
-            } while ((selected != null) && (selecteds.size() < max));
-            return selecteds;
+            return AiEffectChoiceRecorder.multiple(player, sa, optionList, min, max, targetedPlayer, () -> {
+                FCollection<T> remaining = new FCollection<>(optionList);
+                List<T> selecteds = new ArrayList<>();
+                T selected;
+                do {
+                    selected = chooseSingleEntityForEffect(remaining, null, sa, title, selecteds.size()>=min, targetedPlayer, params);
+                    if (selected != null) { remaining.remove(selected); selecteds.add(selected); }
+                } while ((selected != null) && (selecteds.size() < max));
+                return selecteds;
+            });
         });
     }
 

@@ -57,6 +57,31 @@ final class AiEffectChoiceRecorder {
                 () -> AiPromptInput.single(optional, relatedPlayer), proof::get);
     }
 
+    static <T extends GameEntity> List<T> multiple(final Player chooser, final SpellAbility ability,
+            final Iterable<T> options, final int min, final int max, final Player relatedPlayer,
+            final Supplier<List<T>> callback) {
+        if (!chooser.getGame().isRecordingAiDecisions()) { return callback.get(); }
+        return AiChoiceRecorder.observeInput(chooser, ability, "EFFECT_MULTI_ENTITY_SELECTION", null,
+                "CONTROLLER_EFFECT_ENTITIES", "BEFORE_OPERATION", () -> {
+                    final var captured = AiOptionInput.capture(options);
+                    final Map<String, Object> result = new LinkedHashMap<>();
+                    result.put("coverage", captured == null ? "UNAVAILABLE" : "OBSERVED_EFFECT_OPTIONS_DIAGNOSTIC_ONLY");
+                    result.put("items", captured == null ? List.of() : captured.references());
+                    result.put("truncated", captured == null || captured.truncated());
+                    result.put("min", min); result.put("max", max);
+                    result.put("relatedPlayerId", relatedPlayer == null ? null : relatedPlayer.getId());
+                    return result;
+                }, callback, values -> {
+                    final int count = values.size();
+                    final var captured = AiOptionInput.capture(values);
+                    final List<Map<String, Object>> references = captured == null ? List.of() : captured.references();
+                    if (references.size() > count) { throw new IllegalStateException("Returned entity list changed during capture"); }
+                    return Map.of("coverage", captured == null ? "UNAVAILABLE" : "OBSERVED_RETURNED_ENTITY_PREFIX",
+                            "items", references, "selectedCount", count,
+                            "truncated", captured == null || captured.truncated() || count > references.size());
+                }, new AiPromptInput.EntityBounds(min, max, relatedPlayer));
+    }
+
     static Card zoneChange(final Player chooser, final SpellAbility ability, final ZoneType destination,
             final List<ZoneType> origins, final CardCollection options, final boolean optional,
             final Player decider, final Supplier<Card> callback) {

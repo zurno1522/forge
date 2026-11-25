@@ -7,7 +7,7 @@ from a privileged trace or prove that an uninstrumented heuristic used this view
 
 PROFILE = 'PERMITTED_CHOICE_VIEW_V1'
 PROFILES = {1: PROFILE, 2: 'PERMITTED_CHOICE_VIEW_V2', 3: 'PERMITTED_CHOICE_VIEW_V3', 4: 'PERMITTED_CHOICE_VIEW_V4',
-            5: 'PERMITTED_CHOICE_VIEW_V5'}
+            5: 'PERMITTED_CHOICE_VIEW_V5', 6: 'PERMITTED_CHOICE_VIEW_V6'}
 TIMINGS = {'BEFORE_SELECTOR', 'BEFORE_OPERATION', 'AFTER_SELECTION_BEFORE_APPLICATION', 'UNESTABLISHED'}
 STATE_BASES = {'RULES_STATE', 'PLANNING_WORKING_STATE', 'UNESTABLISHED'}
 REASONS = {'HIDDEN', 'UNSUPPORTED', 'OUTSIDE_CAPTURED_PREFIX', 'UNRESOLVED_BINDING',
@@ -195,6 +195,7 @@ def validate_option_links(links, players, cards):
 
 def validate_prompt(prompt, coverage, player_refs, omissions, state_basis, version):
     permitted = {'CONTROLLER_REQUEST_V1'} | ({'RECEIVED_MODE_BOUNDS_V1'} if version >= 5 else set())
+    if version >= 6: permitted.add('RECEIVED_ENTITY_BOUNDS_V1')
     require(coverage in permitted | {'UNSUPPORTED', 'UNAVAILABLE'}, 'invalid prompt coverage')
     require((prompt is not None) == (coverage in permitted), 'prompt coverage/policy mismatch')
     if prompt is None:
@@ -205,14 +206,15 @@ def validate_prompt(prompt, coverage, player_refs, omissions, state_basis, versi
     require(isinstance(prompt, dict), 'invalid typed prompt')
     kind = prompt.get('kind')
     mode = kind == 'MODE_BOUNDS'
-    require(state_basis == 'RULES_STATE' or mode and version >= 5 and state_basis == 'PLANNING_WORKING_STATE',
+    entities = kind == 'ENTITY_BOUNDS'
+    require(state_basis == 'RULES_STATE' or (mode and version >= 5 or entities and version >= 6) and state_basis == 'PLANNING_WORKING_STATE',
             'planning prompt claims committed request arguments')
-    require(coverage == ('RECEIVED_MODE_BOUNDS_V1' if mode else 'CONTROLLER_REQUEST_V1'), 'prompt kind/coverage mismatch')
-    if mode:
-        require(version >= 5, 'mode bounds require V5')
-        fields(prompt, 'kind minimumPicks maximumPicks allowRepeat', 'invalid mode bounds fields')
+    require(coverage == ('RECEIVED_MODE_BOUNDS_V1' if mode else 'RECEIVED_ENTITY_BOUNDS_V1' if entities else 'CONTROLLER_REQUEST_V1'), 'prompt kind/coverage mismatch')
+    if mode or entities:
+        require(version >= (5 if mode else 6), 'bounds require their declared profile')
+        fields(prompt, 'kind minimumPicks maximumPicks ' + ('allowRepeat' if mode else 'relatedPlayer'), 'invalid received bounds fields')
         require(all(integer(prompt[key]) and -(1 << 31) <= prompt[key] < (1 << 31) for key in ('minimumPicks', 'maximumPicks'))
-                and isinstance(prompt['allowRepeat'], bool), 'invalid received mode bounds')
+                and (not mode or isinstance(prompt['allowRepeat'], bool)), 'invalid received bounds')
     elif kind == 'NUMBER_RANGE':
         fields(prompt, 'kind minimum maximum', 'invalid range prompt fields')
         require(integer(prompt['minimum']) and integer(prompt['maximum']), 'invalid request range')

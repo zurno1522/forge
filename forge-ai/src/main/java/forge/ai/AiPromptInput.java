@@ -8,12 +8,19 @@ import java.util.function.Supplier;
 /** Temporary audited request arguments. Only AiInputContext projects these into frozen JSON. */
 record AiPromptInput(Kind kind, int minimum, int maximum, List<Integer> values, boolean optional,
         Player relatedPlayer, boolean allowRepeat) {
-    enum Kind { NUMBER_RANGE, NUMBER_OPTIONS, SINGLE_ENTITY, MODE_BOUNDS }
+    enum Kind { NUMBER_RANGE, NUMBER_OPTIONS, SINGLE_ENTITY, MODE_BOUNDS, ENTITY_BOUNDS }
 
     /** Audited received primitives, identifiable without evaluating a hypothetical supplier. */
     record ModeBounds(int minimum, int maximum, boolean allowRepeat) implements Supplier<AiPromptInput> {
         @Override public AiPromptInput get() {
             return new AiPromptInput(Kind.MODE_BOUNDS, minimum, maximum, null, false, null, allowRepeat);
+        }
+    }
+
+    /** Exact received total bounds and role; no pool or prior-selection permission. */
+    record EntityBounds(int minimum, int maximum, Player relatedPlayer) implements Supplier<AiPromptInput> {
+        @Override public AiPromptInput get() {
+            return new AiPromptInput(Kind.ENTITY_BOUNDS, minimum, maximum, null, false, relatedPlayer, false);
         }
     }
 

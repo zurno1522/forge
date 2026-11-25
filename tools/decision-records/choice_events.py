@@ -33,6 +33,7 @@ COST_KINDS = {
     'CostUntapType', 'CostWaterbend', 'OTHER'
 }
 TYPES = {'TRIGGER_PREPARATION_RESULT', 'PAYMENT_DECISION', 'PAYMENT_CARD_SELECTION', 'PAYMENT_MANA', 'PAYMENT_MANA_SELECTION', 'TARGET_SELECTION_RESULT', 'EFFECT_COPY_TARGET_RESULT', 'RETARGET_RESULT', 'TARGET_POOL_SELECTION', 'MODE_SELECTION', 'NUMBER_SELECTION', 'X_SELECTION', 'MASKED_CHOICE', 'EFFECT_ENTITY_SELECTION', 'ZONE_CHANGE_CARD_SELECTION'}
+TYPES.add('EFFECT_MULTI_ENTITY_SELECTION')
 BOUNDARIES = {'TRIGGER_PREPARATION', 'COST_VISITOR', 'PAYMENT_SACRIFICE_POOL', 'PAYMENT_DISCARD_POOL', 'PAYMENT_EXILE_POOL', 'AUTO_MANA_PAYMENT', 'MANA_POOL_OPTIONS', 'CONTROLLER_TARGETS', 'COPY_TARGETS', 'CONTROLLER_RETARGET', 'CHARM_MODE_HEURISTIC', 'CONTROLLER_MODES',
               'CONTROLLER_NUMBER_RANGE', 'CONTROLLER_NUMBER_OPTIONS', 'CONTROLLER_ANNOUNCEMENT', 'MAX_X_HEURISTIC', 'X_ANNOUNCEMENT_REFINEMENT', 'MASKED_CHOICE', 'CONTROLLER_EFFECT_ENTITY', 'CONTROLLER_ZONE_CHANGE_CARD'} | POOL_BOUNDARIES
 
@@ -52,7 +53,9 @@ TYPE_BOUNDARIES = {
     'MASKED_CHOICE': {'MASKED_CHOICE'},
     'EFFECT_ENTITY_SELECTION': {'CONTROLLER_EFFECT_ENTITY'},
     'ZONE_CHANGE_CARD_SELECTION': {'CONTROLLER_ZONE_CHANGE_CARD'},
+    'EFFECT_MULTI_ENTITY_SELECTION': {'CONTROLLER_EFFECT_ENTITIES'},
 }
+BOUNDARIES.add('CONTROLLER_EFFECT_ENTITIES')
 
 CONTEXT_TIMING = {
     'MAIN_PHASE_PLAY_SELECTION': 'BEFORE_OPERATION',
@@ -71,10 +74,15 @@ CONTEXT_TIMING_V2 = {**{key: value for key, value in CONTEXT_TIMING.items() if k
                      **{boundary: ['BEFORE_SELECTOR', 'AFTER_SELECTION_BEFORE_APPLICATION']
                         for boundary in sorted(POOL_BOUNDARIES - {'MASKED_TARGET_POOL'})}}
 MODE_CONTEXT_TIMING = {'CHARM_MODE_HEURISTIC': 'BEFORE_SELECTOR', 'CONTROLLER_MODES': 'BEFORE_OPERATION'}
+MULTI_CONTEXT_TIMING = {'CONTROLLER_EFFECT_ENTITIES': 'BEFORE_OPERATION'}
 
 
 def input_boundary(value, boundary, stage=None, choice=None):
     expected = CONTEXT_TIMING.get(boundary)
+    multi = choice is not None and choice['choiceType'] == 'EFFECT_MULTI_ENTITY_SELECTION'
+    if multi:
+        require('entryLocation' in choice, 'outer entity input lacks its own entry')
+        expected = MULTI_CONTEXT_TIMING[boundary]
     mode = choice is not None and boundary in MODE_CONTEXT_TIMING and 'entryLocation' in choice
     if mode:
         expected = MODE_CONTEXT_TIMING[boundary]
@@ -101,6 +109,8 @@ def input_boundary(value, boundary, stage=None, choice=None):
         if prompt is not None:
             if prompt['kind'] == 'MODE_BOUNDS':
                 require(mode and value['schemaVersion'] >= 5, 'mode prompt at unaudited boundary')
+            elif prompt['kind'] == 'ENTITY_BOUNDS':
+                require(multi and value['schemaVersion'] >= 6, 'entity bounds at unaudited boundary')
             else:
                 require(boundary == {'NUMBER_RANGE': 'CONTROLLER_NUMBER_RANGE', 'NUMBER_OPTIONS': 'CONTROLLER_NUMBER_OPTIONS',
                                      'SINGLE_ENTITY': 'CONTROLLER_EFFECT_ENTITY'}[prompt['kind']], 'typed prompt at unaudited boundary')
@@ -115,6 +125,9 @@ def prompt_arguments(choice):
         require(option['coverage'] == 'OBSERVED_MODE_OPTIONS', 'mode bounds lack received arguments')
         require((prompt['minimumPicks'], prompt['maximumPicks'], prompt['allowRepeat']) ==
                 (option['min'], option['max'], option['allowRepeat']), 'mode bounds differ from callback arguments')
+    elif prompt['kind'] == 'ENTITY_BOUNDS':
+        require(option['coverage'] in ('OBSERVED_EFFECT_OPTIONS_DIAGNOSTIC_ONLY', 'UNAVAILABLE'), 'entity bounds lack received arguments')
+        require((prompt['minimumPicks'], prompt['maximumPicks']) == (option['min'], option['max']), 'entity bounds differ from callback arguments')
     elif prompt['kind'] == 'NUMBER_RANGE':
         require(option['coverage'] == 'OBSERVED_RANGE', 'prompt range lacks range arguments')
         require((prompt['minimum'], prompt['maximum']) == (option['minimum'], option['maximum']), 'prompt range differs from callback arguments')
@@ -123,7 +136,7 @@ def prompt_arguments(choice):
         require(not option['truncated'] and prompt['values'] == option['items'], 'prompt numeric list differs from callback arguments')
     else:
         require(prompt['optional'] == option['optional'], 'prompt optionality differs from callback arguments')
-    if prompt['kind'] == 'SINGLE_ENTITY':
+    if prompt['kind'] in ('SINGLE_ENTITY', 'ENTITY_BOUNDS'):
         related = prompt['relatedPlayer']
         by_ref = {binding['entityRef']: binding['id'] for binding in context['diagnostics']['playerBindings']}
         require((None if related is None else by_ref[related]) == option['relatedPlayerId'], 'prompt player differs from callback arguments')
@@ -171,6 +184,7 @@ def entry_location(choice, known_players=None):
     require(value['reason'] != 'HIDDEN', 'hidden entry has unmasked source')
     if value['status'] != 'CAPTURED': return
     expected = CONTEXT_TIMING.get(choice['boundary'])
+    if choice['boundary'] in MULTI_CONTEXT_TIMING: expected = MULTI_CONTEXT_TIMING[choice['boundary']]
     if choice['boundary'] in MODE_CONTEXT_TIMING:
         expected = MODE_CONTEXT_TIMING[choice['boundary']]
         require(value['stateBasis'] == 'PLANNING_WORKING_STATE', 'mode entry claims committed state')
@@ -236,6 +250,16 @@ def options(choice):
     option = choice['options']
     if choice['choiceType'] == 'MASKED_CHOICE':
         require(option == {'coverage': 'MASKED'} and choice['boundary'] == 'MASKED_CHOICE', 'unmasked private choice')
+        return
+    if choice['choiceType'] == 'EFFECT_MULTI_ENTITY_SELECTION':
+        require(isinstance(option, dict) and set(option) == {'coverage', 'items', 'truncated', 'min', 'max', 'relatedPlayerId'}
+                and option['coverage'] in ('UNAVAILABLE', 'OBSERVED_EFFECT_OPTIONS_DIAGNOSTIC_ONLY'), 'invalid outer entity options')
+        require(isinstance(option['items'], list) and len(option['items']) <= 256 and isinstance(option['truncated'], bool)
+                and all(integer(option[k]) and -(1 << 31) <= option[k] < (1 << 31) for k in ('min', 'max'))
+                and (option['relatedPlayerId'] is None or integer(option['relatedPlayerId'])), 'invalid outer entity arguments')
+        if option['coverage'] == 'UNAVAILABLE': require(not option['items'] and option['truncated'], 'unavailable outer pool has entries')
+        for ref in option['items']:
+            reference(ref); require(ref['type'] in ('CARD', 'PLAYER'), 'non-entity in outer pool')
         return
     if choice['choiceType'] in ('EFFECT_ENTITY_SELECTION', 'ZONE_CHANGE_CARD_SELECTION'):
         common = {'coverage', 'items', 'truncated', 'optional'}
@@ -328,6 +352,17 @@ def selection(start, terminal):
     value = terminal['selection']
     if terminal['status'] in ('DECLINED', 'ERROR') or start['choiceType'] == 'MASKED_CHOICE':
         require(value is None, 'unavailable choice carries selection')
+        return
+    if start['choiceType'] == 'EFFECT_MULTI_ENTITY_SELECTION':
+        require(isinstance(value, dict) and set(value) == {'coverage', 'items', 'selectedCount', 'truncated'}
+                and value['coverage'] in ('OBSERVED_RETURNED_ENTITY_PREFIX', 'UNAVAILABLE'), 'invalid outer entity result')
+        items, count = value['items'], value['selectedCount']
+        require(isinstance(items, list) and len(items) <= 256 and integer(count) and 0 <= count < (1 << 31)
+                and len(items) <= count and isinstance(value['truncated'], bool), 'invalid outer entity result prefix')
+        require(not items and value['truncated'] if value['coverage'] == 'UNAVAILABLE'
+                else value['truncated'] == (count > len(items)), 'invalid outer entity result coverage')
+        for ref in items:
+            reference(ref); require(ref['type'] in ('CARD', 'PLAYER'), 'non-entity in outer result')
         return
     if start['choiceType'] == 'PAYMENT_DECISION':
         require(isinstance(value, dict) and set(value) == {'decisionCount', 'cards', 'mana', 'players', 'abilities', 'colorMask', 'unrecordedDetails'}

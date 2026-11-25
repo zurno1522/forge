@@ -1,0 +1,7 @@
+{
+  "sources": {
+    "tools/trace-test-decks/choice-repeated-entities.dck": "23c21710be1598e9a502db53817f1667f0ee72d555ed735344271c9e46147cd7",
+    "tools/trace-test-decks/choice-repeated-counters.dck": "b41dfbb42f9f4d8360f906788b4222de33b671273bc080109454fd5ad9710d2f"
+  },
+  "note": "The counter-focused deck was added after the full unit run, then validated in a fresh normal game and both export streams. It changes test data only; implementation hashes remain identical to the full run."
+}

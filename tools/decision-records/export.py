@@ -802,7 +802,7 @@ def make_coverage(runs, rows, *, spool=None):
          'NESTED_TARGET': {key: value for key, value in _choices.CONTEXT_TIMING_V2.items() if key in _choices.POOL_BOUNDARIES},
          'SEARCH_OPERATION': {key: 'BEFORE_OPERATION' if key == 'HEURISTIC_REVALIDATION' else 'AFTER_SELECTION_BEFORE_APPLICATION'
                               for key in ('HEURISTIC_REVALIDATION', 'RESTORE_APPROVED_TARGET', 'ROLLOUT_TARGET_OVERRIDE', 'DISCOVERED_TARGET', 'GUARD_REAIM')}},
-        {'CHOICE': _choices.MODE_CONTEXT_TIMING})
+        {'CHOICE': _choices.MODE_CONTEXT_TIMING}, {'CHOICE': _choices.MULTI_CONTEXT_TIMING})
     common = ('selections', 'selectedActionKinds', 'phases', 'decisionStatuses', 'outcomeLabels',
               'pilotModes', 'assessments', 'assessmentDetails', 'cardAiHandlers', 'handlerAssessments',
               'rejectedCards', 'rejectedActionKinds', 'rejectedCardKinds', 'searchReasons')
@@ -1151,12 +1151,15 @@ def make_coverage(runs, rows, *, spool=None):
         summary['limitations'].append('Inline input contexts cover audited boundaries only. CAPTURED means the named partial profile was captured, not complete Magic knowledge or every AI input. ABSENT means unavailable capability, not an empty view. Only inputContext.policy is the permitted feature projection; diagnostic joins, original option membership/order, manifests, outcomes and legacy observation fields are excluded. Disclosed facts have unresolved current-object associations. Stack coverage is profile-declared and bounded where supported; long-term historical knowledge remains incomplete. trainingReady remains false.')
     if 'PERMITTED_CHOICE_VIEW_V3' in input_profiles:
         summary['limitations'].append('V3 separately permits audited numeric domains and local single-entity pick constraints in policy.prompt. Original entity pools remain diagnostic-only. Request coverage does not certify effect semantics, outer multi-pick history, option bindings or a complete legal action set.')
-    if {'PERMITTED_CHOICE_VIEW_V4', 'PERMITTED_CHOICE_VIEW_V5'} & input_profiles.keys():
+    if {'PERMITTED_CHOICE_VIEW_V4', 'PERMITTED_CHOICE_VIEW_V5', 'PERMITTED_CHOICE_VIEW_V6'} & input_profiles.keys():
         summary['limitations'] = [text.replace('Disclosed facts have unresolved current-object associations.',
             'Only directly proved public disclosure associations can be linked; other associations remain unresolved.') for text in summary['limitations']]
         summary['limitations'].append('V4 retains typed request fields and adds diagnostic current-option links. Those links do not authorize entity pool membership, count or ordering as model features. Direct public disclosure links require delivery proof without an intervening engine event. No profile certifies complete learning examples.')
-    if 'PERMITTED_CHOICE_VIEW_V5' in input_profiles:
+    if {'PERMITTED_CHOICE_VIEW_V5', 'PERMITTED_CHOICE_VIEW_V6'} & input_profiles.keys():
         summary['limitations'].append('V5 additionally permits exact received scalar mode bounds at audited planning selector/operation entries. These are invocation arguments, not committed rules constraints or mode identities, membership/order, effect semantics, cached-plan cause or a complete legal mode domain. Other hypothetical prompt families remain unsupported.')
+    if 'PERMITTED_CHOICE_VIEW_V6' in input_profiles:
+        summary['limitations'] = [s.replace('Other hypothetical prompt families remain unsupported.', 'V5 itself grants no other hypothetical prompt permission.') for s in summary['limitations']]
+        summary['limitations'].append('V6 additionally permits exact received total entity bounds and the supplied related-player role at the audited outer entity operation. This operation overlaps its inner selectors. Parent choice links are diagnostic; prior-selection history and entity pool membership/count/order remain outside the permitted projection. These received arguments may describe planning work and do not certify legal results or complete learning examples.')
     if accounting is not None:
         summary['limitations'].append('Invocation accounting covers configured original-AI standalone callback wrappers only. Entries are not unique gameplay decisions. Input-unavailable records are retained records; callback errors are not capture loss. Publication return does not prove collector delivery. Cutoff-pending work is not evidence that a late callback never ran. Parent/nested and uninstrumented invocation counts remain unknown. Partial scopes, legacy absence and overflow cannot supply exact missing-start fractions.')
     if captures is not None:
