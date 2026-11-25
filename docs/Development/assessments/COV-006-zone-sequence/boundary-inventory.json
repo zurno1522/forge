@@ -1,0 +1,25 @@
+{
+  "baseline": "b7e73d2d5168a6fa2f00f2c73f3398a89d973fb4",
+  "scope": "Source/boundary inventory and first integration design only; no new runtime API or permission",
+  "sources": {
+    "forge-game/src/main/java/forge/game/ability/effects/ChangeZoneEffect.java": "60e4dad3df89762e83c6c397c6647ad81b4ced01e90e13f89891ef22706b7ba7",
+    "forge-game/src/main/java/forge/game/ability/effects/HeistEffect.java": "fe0eefacd66c0e1f8d3c028e942621866024dbbd18bc1cf4b6efec115039897f",
+    "forge-game/src/main/java/forge/game/ability/effects/DraftEffect.java": "fb0b66ea2132d9b94b0caabf6180da9f79957033d2e9aeeeb90615ab41e47812",
+    "forge-game/src/main/java/forge/game/player/Player.java": "05767d8b69f5d4de5638eaef8d13111a24678799eed2a6834953467b7a6b154d",
+    "forge-game/src/main/java/forge/game/player/PlayerController.java": "07623185e6b6d443d943efc5997313917c75d24cc26851a972940c994409ce83",
+    "forge-game/src/main/java/forge/game/card/CardCollection.java": "26662221928c5ed126d9f81c3c5eb30ea22630f09634a8f7b60208f885dfedc5",
+    "forge-core/src/main/java/forge/util/collect/FCollection.java": "8f3dd8a487a3bd31b3094e9c063d25e78703197c3703ebfb789b340282e5e944",
+    "forge-ai/src/main/java/forge/ai/AiChoiceRecorder.java": "3f1f5fbf482933a1f9f5d0b37ac563d26a0dabb94608d79a50fa3c8fb0d67500",
+    "forge-ai/src/main/java/forge/ai/AiEntitySelectionHistory.java": "4a7c5b8c389c1cc42985762afed4ac7692444efe308897e2a2eea4d1c223caf5",
+    "forge-ai/src/main/java/forge/ai/AiEffectChoiceRecorder.java": "3c5b39d985eeff7c07e89c2b64b88faf4a3c350606ca28506830967b4449f514",
+    "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java": "8d10c7c5b7758ebd9bffedacb7c6ab6e0828a04c45a009c7fd0dbaf7931810c9"
+  },
+  "firstScope": "ChangeZoneEffect ordinary one-at-a-time selection only",
+  "separateScopes": [
+    "SameNameAsEach",
+    "EACH",
+    "HeistEffect",
+    "DraftEffect"
+  ],
+  "notRepeated": "Player.learn makes one request"
+}
