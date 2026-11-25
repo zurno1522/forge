@@ -1,0 +1,9 @@
+{
+  "focusedCases": 31,
+  "newEngineCases": 10,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "logSha256": "473d2d0015fa1d95404db08834cba83cbc7eb2f51374eec437dfec5ac40af926",
+  "scope": "Engine seam plus existing zone-request and delegated integration cases; full combined reactor remains required for outer adapter"
+}

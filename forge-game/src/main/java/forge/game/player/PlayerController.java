@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -390,6 +391,12 @@ public abstract class PlayerController {
     public abstract String chooseCardName(SpellAbility sa, List<ICardFace> faces, String message);
 
     // better to have this odd method than those if playerType comparison in ChangeZone
+    /** One engine-owned selection operation; the default preserves its callback and result. */
+    public CardCollection withZoneChangeSelections(final ZoneChangeSelectionRequest request,
+            final Function<ZoneChangeSelectionObserver, CardCollection> callback) {
+        return callback.apply(ZoneChangeSelectionObserver.NONE);
+    }
+
     public abstract Card chooseSingleCardForZoneChange(ZoneType destination, List<ZoneType> origin, SpellAbility sa, CardCollection fetchList, DelayedReveal delayedReveal, String selectPrompt, boolean isOptional, Player decider);
     public abstract List<Card> chooseCardsForZoneChange(ZoneType destination, List<ZoneType> origin, SpellAbility sa, CardCollection fetchList, int min, int max, DelayedReveal delayedReveal, String selectPrompt, Player decider);
 

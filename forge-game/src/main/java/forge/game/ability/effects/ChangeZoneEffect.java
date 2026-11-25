@@ -1162,95 +1162,13 @@ public class ChangeZoneEffect extends SpellAbilityEffect {
                 }
                 // maybe prompt the user if they selected fewer than the maximum possible?
             } else {
-                // one at a time
-                for (int i = 0; i < changeNum; i++) {
-                    if (sa.hasParam("DifferentNames")) {
-                        for (Card c : chosenCards) {
-                            fetchList = CardLists.filter(fetchList, CardPredicates.sharesNameWith(c).negate());
-                        }
-                    }
-                    if (sa.hasParam("DifferentCMC")) {
-                        for (Card c : chosenCards) {
-                            fetchList = CardLists.filter(fetchList, CardPredicates.sharesCMCWith(c).negate());
-                        }
-                    }
-                    if (sa.hasParam("DifferentPower")) {
-                        for (Card c : chosenCards) {
-                            int chosenPower = c.getNetPower();
-                            fetchList = CardLists.filter(fetchList, x -> x.getNetPower() != chosenPower);
-                        }
-                    }
-                    if (sa.hasParam("ShareLandType")) {
-                        // After the first card is chosen, check if the land type is shared
-                        for (final Card c : chosenCards) {
-                            fetchList = CardLists.filter(fetchList, CardPredicates.sharesLandTypeWith(c));
-                        }
-                    }
-                    if (totalcmc != null) {
-                        if (totcmc >= 0) {
-                            fetchList = CardLists.getValidCards(fetchList, "Card.cmcLE" + totcmc, source.getController(), source, sa);
-                        }
-                    }
-                    if (totalpower != null) {
-                        if (totpower >= 0) {
-                            fetchList = CardLists.getValidCards(fetchList, "Card.powerLE" + totpower, source.getController(), source, sa);
-                        }
-                    }
-
-                    // If we're choosing multiple cards, only need to show the reveal dialog the first time through.
-                    boolean shouldReveal = (i == 0);
-                    Card c = null;
-                    if (sa.hasParam("AtRandom")) {
-                        if (shouldReveal && delayedReveal != null) {
-                            decider.getController().reveal(delayedReveal);
-                        }
-                        c = Aggregates.random(fetchList);
-                    } else if (defined && !chooseFromDef) {
-                        c = Iterables.getFirst(fetchList, null);
-                    } else if (totalCardTypes != null) {
-                      String title = selectPrompt;
-                      title += "\nCard types left: " + Math.max(totCardTypes, 0);
-                      c = decider.getController().chooseSingleCardForZoneChange(destination, origin, sa, fetchList, shouldReveal ? delayedReveal : null, title, !mandatory, decider);
-                    } else {
-                        String title = selectPrompt;
-                        if (changeNum > 1) { //indicate progress if multiple cards being chosen
-                            title += " (" + (i + 1) + " / " + changeNum + ")";
-                        }
-                        c = decider.getController().chooseSingleCardForZoneChange(destination, origin, sa, fetchList, shouldReveal ? delayedReveal : null, title, !mandatory, decider);
-                    }
-
-                    if (c == null) {
-                        final int num = Math.min(fetchList.size(), changeNum - i);
-                        String message = Localizer.getInstance().getMessage("lblCancelSearchUpToSelectNumCards", String.valueOf(num));
-
-                        if (fetchList.isEmpty() || sa.hasParam("SkipCancelPrompt") ||
-                                decider.getController().confirmAction(sa, PlayerActionConfirmMode.ChangeZoneGeneral, message, null)) {
-                            break;
-                        }
-                        i--;
-                        continue;
-                    }
-
-                    fetchList.remove(c);
-                    if (delayedReveal != null) {
-                        delayedReveal.remove(CardView.get(c));
-                    }
-                    chosenCards.add(c);
-
-                    if (totalcmc != null) {
-                        totcmc -= c.getCMC();
-                    }
-                    if (totalpower != null) {
-                        totpower -= c.getCurrentPower();
-                    }
-                    if (totalCardTypes != null) {
-                        totCardTypes -= Iterables.size(c.getType().getCoreTypes());
-                    }
-                }
-
-                if (totalCardTypes != null && totCardTypes > 0) {
-                    chosenCards.clear();
-                }
+                final OrdinarySelection selection = new OrdinarySelection(sa, source, decider, origin, destination,
+                        mandatory, defined, chooseFromDef, fetchList, changeNum, delayedReveal, selectPrompt,
+                        totalcmc, totalpower, totalCardTypes, totcmc, totpower, totCardTypes, chosenCards);
+                final ZoneChangeSelectionRequest request = new ZoneChangeSelectionRequest(sa, destination, origin,
+                        player, decider, changeNum);
+                chosenCards = decider.getController().withZoneChangeSelections(request,
+                        observer -> chooseOrdinaryHiddenOriginCards(selection, observer));
             }
 
             if (sa.hasParam("ShuffleChangedPile")) {
@@ -1567,6 +1485,122 @@ public class ChangeZoneEffect extends SpellAbilityEffect {
             //some kind of reset here?
         }
         decider.getController().endTempShowCards();
+    }
+
+    private record OrdinarySelection(SpellAbility ability, Card source, Player decider, List<ZoneType> origins,
+            ZoneType destination, boolean mandatory, boolean defined, boolean chooseFromDefined, CardCollection offered,
+            int iterations, DelayedReveal delayedReveal, String prompt, String cmcRule, String powerRule, String typesRule,
+            int cmc, int power, int types, CardCollection chosen) { }
+
+    private CardCollection chooseOrdinaryHiddenOriginCards(final OrdinarySelection selection,
+            final ZoneChangeSelectionObserver observer) {
+        final SpellAbility sa = selection.ability(); final Card source = selection.source();
+        final Player decider = selection.decider(); final List<ZoneType> origin = selection.origins();
+        final ZoneType destination = selection.destination(); final boolean mandatory = selection.mandatory();
+        final boolean defined = selection.defined(); final boolean chooseFromDef = selection.chooseFromDefined();
+        CardCollection fetchList = selection.offered(); final int changeNum = selection.iterations();
+        final DelayedReveal delayedReveal = selection.delayedReveal(); final String selectPrompt = selection.prompt();
+        final String totalcmc = selection.cmcRule(); final String totalpower = selection.powerRule();
+        final String totalCardTypes = selection.typesRule(); int totcmc = selection.cmc();
+        int totpower = selection.power(); int totCardTypes = selection.types();
+        final CardCollection chosenCards = selection.chosen();
+        // one at a time
+        for (int i = 0; i < changeNum; i++) {
+            if (sa.hasParam("DifferentNames")) {
+                for (Card c : chosenCards) {
+                    fetchList = CardLists.filter(fetchList, CardPredicates.sharesNameWith(c).negate());
+                }
+            }
+            if (sa.hasParam("DifferentCMC")) {
+                for (Card c : chosenCards) {
+                    fetchList = CardLists.filter(fetchList, CardPredicates.sharesCMCWith(c).negate());
+                }
+            }
+            if (sa.hasParam("DifferentPower")) {
+                for (Card c : chosenCards) {
+                    int chosenPower = c.getNetPower();
+                    fetchList = CardLists.filter(fetchList, x -> x.getNetPower() != chosenPower);
+                }
+            }
+            if (sa.hasParam("ShareLandType")) {
+                // After the first card is chosen, check if the land type is shared
+                for (final Card c : chosenCards) {
+                    fetchList = CardLists.filter(fetchList, CardPredicates.sharesLandTypeWith(c));
+                }
+            }
+            if (totalcmc != null) {
+                if (totcmc >= 0) {
+                    fetchList = CardLists.getValidCards(fetchList, "Card.cmcLE" + totcmc, source.getController(), source, sa);
+                }
+            }
+            if (totalpower != null) {
+                if (totpower >= 0) {
+                    fetchList = CardLists.getValidCards(fetchList, "Card.powerLE" + totpower, source.getController(), source, sa);
+                }
+            }
+
+            // If we're choosing multiple cards, only need to show the reveal dialog the first time through.
+            boolean shouldReveal = (i == 0);
+            Card c = null;
+            boolean dispatched = false;
+            if (sa.hasParam("AtRandom")) {
+                if (shouldReveal && delayedReveal != null) {
+                    decider.getController().reveal(delayedReveal);
+                }
+                c = Aggregates.random(fetchList);
+            } else if (defined && !chooseFromDef) {
+                c = Iterables.getFirst(fetchList, null);
+            } else if (totalCardTypes != null) {
+              String title = selectPrompt;
+              title += "\nCard types left: " + Math.max(totCardTypes, 0);
+              observer.beforeSelector(fetchList, !mandatory, i, chosenCards.size());
+                dispatched = true;
+                c = decider.getController().chooseSingleCardForZoneChange(destination, origin, sa, fetchList, shouldReveal ? delayedReveal : null, title, !mandatory, decider);
+            } else {
+                String title = selectPrompt;
+                if (changeNum > 1) { //indicate progress if multiple cards being chosen
+                    title += " (" + (i + 1) + " / " + changeNum + ")";
+                }
+                observer.beforeSelector(fetchList, !mandatory, i, chosenCards.size());
+                dispatched = true;
+                c = decider.getController().chooseSingleCardForZoneChange(destination, origin, sa, fetchList, shouldReveal ? delayedReveal : null, title, !mandatory, decider);
+            }
+
+            if (c == null) {
+                if (dispatched) { observer.returned(null, chosenCards.size()); }
+                final int num = Math.min(fetchList.size(), changeNum - i);
+                String message = Localizer.getInstance().getMessage("lblCancelSearchUpToSelectNumCards", String.valueOf(num));
+
+                if (fetchList.isEmpty() || sa.hasParam("SkipCancelPrompt") ||
+                        decider.getController().confirmAction(sa, PlayerActionConfirmMode.ChangeZoneGeneral, message, null)) {
+                    break;
+                }
+                i--;
+                continue;
+            }
+
+            fetchList.remove(c);
+            if (delayedReveal != null) {
+                delayedReveal.remove(CardView.get(c));
+            }
+            chosenCards.add(c);
+            if (dispatched) { observer.returned(c, chosenCards.size()); }
+
+            if (totalcmc != null) {
+                totcmc -= c.getCMC();
+            }
+            if (totalpower != null) {
+                totpower -= c.getCurrentPower();
+            }
+            if (totalCardTypes != null) {
+                totCardTypes -= Iterables.size(c.getType().getCoreTypes());
+            }
+        }
+
+        if (totalCardTypes != null && totCardTypes > 0) {
+            chosenCards.clear();
+        }
+        return chosenCards;
     }
 
     private static class HiddenOriginChoices {

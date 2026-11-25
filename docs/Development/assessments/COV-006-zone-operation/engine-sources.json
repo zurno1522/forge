@@ -1,0 +1,7 @@
+{
+  "forge-game/src/main/java/forge/game/player/PlayerController.java": "c34e701a2a2117af67e520ba526af48f2fd71d448ee3105997b7a19370018eb9",
+  "forge-game/src/main/java/forge/game/player/ZoneChangeSelectionObserver.java": "ec9623a6b0897b749c594a0d4a28b622adc6f06bbbdb3b7844400f31a261fc61",
+  "forge-game/src/main/java/forge/game/player/ZoneChangeSelectionRequest.java": "80bf92d11d3eeca8f91a81457c6698058e8b451f21ae3a35d75224ae3641018c",
+  "forge-game/src/main/java/forge/game/ability/effects/ChangeZoneEffect.java": "a12c1a444303fa6bbe6621601a488824872de11ef8057587ade8ee3605c9a500",
+  "forge-gui-desktop/src/test/java/forge/ai/EngineZoneSelectionBoundaryTest.java": "7e058062c46f43519c7fe926d57552c23b268508710eb8906563699faf08748e"
+}
