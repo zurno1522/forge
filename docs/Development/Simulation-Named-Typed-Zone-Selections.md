@@ -1,0 +1,27 @@
+# COV-006: named searches and per-type zone selections
+
+Extend the existing engine callback and bounded observer without changing the selector, reveal, retry or movement behavior. V11 adds an explicit operation branch to both permitted operation and progress prompts. V1–V10 retain their exact vocabulary and validation. The named accounting boundary and inventory do not change.
+
+## Operation meanings
+
+| Branch | Lifetime | `requestedIterations` | `loopPosition` |
+| --- | --- | --- | --- |
+| `ORDINARY_HIDDEN_ORIGIN` | Existing ordinary loop | Received `changeNum` | Existing retryable loop index |
+| `SAME_NAME_HIDDEN_ORIGIN` | One evaluated `SameNameAsEach` list | Size of that evaluated named-card list | Index in that list, including skipped entries |
+| `EACH_TYPE_HIDDEN_ORIGIN` | One type's inner loop | Received `changeNum` for this type | Inner loop index, starting at zero |
+
+The named list is evaluated once, at its original position. Its size is an explicit invocation-count permission, not permission for its identities, names or order. Empty subsequent offers retain the original skip rule and produce no callback facts. The first named search still dispatches even with no matching cards, preserving its reveal behavior. Null returns do not end either loop. Named returns are reported after the original append/reveal removal.
+
+Each type has a separate operation. Earlier type selections remain in the original shared retained collection, so the first entry can have a positive `retainedCount` and no prior returns in this operation. The terminal collection describes the accumulated retained pile at the end of this type, not exclusively cards returned by this operation. Preserve this distinction in consumers; no equality with return counts is valid. Origin/destination roles and the current callback remain exact. No new type predicate, offered pool, all-types count or across-type history permission is granted. Those constraints remain unknown, as do ordinary-loop validity predicates.
+
+Keep the exact original controller lookup at each selector. The per-operation wrapper must not replace subsequent virtual dispatches with its receiver. Before/return facts and owned admission reuse the existing bounded observer, including nested masking, one-time exact claims, receipt prefix limits, counter overflow and closure rules. Off/copy/hidden paths must not acquire new card-name or receipt reads. Only the named list's existing engine container size is added; no observation getter is moved into engine selection logic.
+
+## Wire and decoder
+
+The outer diagnostic options retain their fields, with `branch` accepting the two new audited variants only at V11 or later. Operation and progress prompts add the exact `branch` field at V11. Older profiles must reject the new variants/field. Progress metadata remains schema 1: its counts are scoped by its parent operation and the parent's branch. Require the child's permitted branch to equal its actual earlier, still-open parent's branch. A V10 child cannot claim progress under a new V11 branch. Current role bindings, argument checks, scalar sequence validation and fresh public receipt associations remain unchanged.
+
+The new branch does not establish full request completeness, legal actions, persistent private knowledge or learning readiness. All examples remain `trainingReady=false`; budgets, sampling and engine rules are unchanged. Heist and Draft remain separate increments because their movements occur between callbacks. Spell-ability inputs follow those increments; payment/X, sustained availability and measured cost remain COV-007, COV-008 and OPT-005.
+
+## Validation gates
+
+Use actual `ChangeZoneEffect` resolution to exercise named skips, first empty dispatch, null continuation, original reveal order, per-type reset with cumulative retention, zero iterations and original exceptions. Check observed versus no-op engine results and original returned object identity. Add exporter negatives for profile/branch mismatch, missing or invented branch and incorrect parent association. Preserve legacy bytes and source/collector reconciliation. Review these changes for current/prior gaps before continuing to Heist/Draft.
