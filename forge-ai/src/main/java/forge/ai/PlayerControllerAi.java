@@ -1611,7 +1611,7 @@ public class PlayerControllerAi extends PlayerController {
     }
 
     private boolean prepareSingleSa(final Card host, SpellAbility sa, boolean isMandatory) {
-        return AiChoiceRecorder.triggerPreparation(player, sa,
+        return AiChoiceRecorder.triggerPreparation(player, sa, isMandatory,
                 () -> prepareSingleSaImpl(host, sa, isMandatory));
     }
 

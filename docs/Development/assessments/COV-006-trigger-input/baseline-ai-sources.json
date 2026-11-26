@@ -1,0 +1,9 @@
+{
+  "revision": "aa32e3bca50",
+  "scope": "Three pre-V17 AI classes over otherwise current build; no checkout mutation or whole-build performance comparison.",
+  "sources": {
+    "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java": "71dda8645d5cce696e4d16b3ff3a6d21928926cedbf77c3b04fe3842d48a3fd4",
+    "forge-ai/src/main/java/forge/ai/AiChoiceRecorder.java": "39d8e7f40dbf95ea1196039334d7ded51f1aa8d6879598dd57bf1a3a06b6868d",
+    "forge-ai/src/main/java/forge/ai/AiInputContext.java": "16669a46ff3c3220d5b6410b6e373fba3748fef23b0e72ab79b95b8758449715"
+  }
+}

@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicReference;
 final class AiReceivedParameters {
     enum Family { NUMBER, ENTITY }
     enum Kind { NONE, VOTER, COUNTER_AMOUNT, COUNTER_TRANSFER_AMOUNT, ENTITY_CARD_ROLE, ENTITY_TARGET_ROLE,
-        ENTITY_MANA_VALUE_LIMIT, ENTITY_COUNTER_REQUEST }
+        ENTITY_MANA_VALUE_LIMIT, ENTITY_COUNTER_REQUEST, TRIGGER_REQUIREMENT }
     record Carrier(AtomicReference<Input> receipt) { }
     record Input(Kind kind, String coverage, String reason, Map<String, Object> values, Map<String, AiOptionInput.Entry> roles) {
         Map<String, Object> diagnostics() {
@@ -29,6 +29,10 @@ final class AiReceivedParameters {
         }
     }
     private AiReceivedParameters() { }
+
+    static Input trigger(final Boolean mandatory) {
+        return mandatory == null ? unsupported() : complete(Kind.TRIGGER_REQUIREMENT, Map.of("mandatory", mandatory), Map.of());
+    }
 
     private static Input unsupported() { return new Input(null, "UNSUPPORTED", "UNSUPPORTED", null, Map.of()); }
     private static boolean nativeCounter(final Object value) {

@@ -1,13 +1,15 @@
 """Typed request arguments at two audited callbacks; no option-pool permission."""
 
 SHAPES = {
-    'NONE': set(), 'VOTER': {'voter'},
+    'NONE': set(), 'VOTER': {'voter'}, 'TRIGGER_REQUIREMENT': {'mandatory'},
     'COUNTER_AMOUNT': {'target', 'counterType'}, 'COUNTER_TRANSFER_AMOUNT': {'source', 'target', 'counterType'},
     'ENTITY_CARD_ROLE': {'role', 'entity'}, 'ENTITY_TARGET_ROLE': {'target'},
     'ENTITY_MANA_VALUE_LIMIT': {'manaValueLimit'}, 'ENTITY_COUNTER_REQUEST': {'counterType', 'amount', 'target'},
 }
 NUMBER_KINDS = {'NONE', 'VOTER', 'COUNTER_AMOUNT', 'COUNTER_TRANSFER_AMOUNT'}
-ENTITY_KINDS = set(SHAPES) - NUMBER_KINDS | {'NONE'}
+ENTITY_KINDS = {'NONE', 'ENTITY_CARD_ROLE', 'ENTITY_TARGET_ROLE', 'ENTITY_MANA_VALUE_LIMIT', 'ENTITY_COUNTER_REQUEST'}
+TRIGGER_KINDS = {'TRIGGER_REQUIREMENT'}
+MIN_PROFILE = {'TRIGGER_REQUIREMENT': 17}
 
 
 def require(ok, message):
@@ -24,6 +26,7 @@ def roles(kind):
 
 
 def scalars(kind, values):
+    if 'mandatory' in values: require(isinstance(values['mandatory'], bool), 'invalid mandatory directive')
     if 'counterType' in values: require(isinstance(values['counterType'], str) and len(values['counterType']) <= 256, 'invalid counter type name')
     if kind == 'ENTITY_CARD_ROLE': require(values['role'] in ('Attach', 'Attacker', 'Partner'), 'invalid card role')
     for key in ('amount', 'manaValueLimit'):
@@ -31,13 +34,14 @@ def scalars(kind, values):
             require(key == 'amount' and values[key] is None or integer(values[key]) and -(1 << 31) <= values[key] < (1 << 31), 'invalid received integer')
 
 
-def receipt(value, family, typed_reference):
+def receipt(value, family, typed_reference, version=16):
     require(isinstance(value, dict) and set(value) == {'schemaVersion','coverage','kind','values','reason'}
             and integer(value['schemaVersion']) and value['schemaVersion'] == 1, 'invalid diagnostic fields')
-    kind = value['kind']; allowed = NUMBER_KINDS if family == 'NUMBER' else ENTITY_KINDS
+    kind = value['kind']; allowed = NUMBER_KINDS if family == 'NUMBER' else TRIGGER_KINDS if family == 'TRIGGER' else ENTITY_KINDS
     if value['coverage'] == 'UNSUPPORTED':
         require(kind is None and value['values'] is None and value['reason'] == 'UNSUPPORTED', 'unsupported shape carries values'); return
     require(isinstance(kind, str) and kind in allowed, 'unknown or wrong-family shape')
+    require(version >= MIN_PROFILE.get(kind, 16), 'shape requires a newer profile')
     if value['coverage'] == 'UNAVAILABLE':
         require(value['values'] is None and value['reason'] == 'OUTSIDE_CAPTURED_PREFIX', 'invalid bounded refusal'); return
     require(value['coverage'] == 'COMPLETE' and value['reason'] is None
@@ -50,7 +54,7 @@ def receipt(value, family, typed_reference):
         typed_reference(ref, ref['type'])
 
 
-def projection(value, coverage, player_refs, cards, omissions, allowed):
+def projection(value, coverage, player_refs, cards, omissions, allowed, version=16):
     require(coverage in ('RECEIVED_CALLBACK_PARAMETERS_V1','UNSUPPORTED','UNAVAILABLE'), 'unknown capability')
     if not allowed: require(coverage == 'UNSUPPORTED' and value is None, 'parameters at unaudited boundary')
     require((value is not None) == (coverage == 'RECEIVED_CALLBACK_PARAMETERS_V1'), 'capability/projection mismatch')
@@ -58,7 +62,8 @@ def projection(value, coverage, player_refs, cards, omissions, allowed):
         if coverage == 'UNAVAILABLE': require(any(o['component'] == 'PARAMETERS' for o in omissions), 'unavailable component lacks reason')
         return
     require(isinstance(value, dict) and isinstance(value.get('kind'), str) and value['kind'] in SHAPES, 'unknown shape')
-    kind = value['kind']; require(set(value) == {'kind'} | SHAPES[kind], 'invalid projected fields'); scalars(kind, value)
+    kind = value['kind']; require(version >= MIN_PROFILE.get(kind, 16), 'shape requires a newer profile')
+    require(set(value) == {'kind'} | SHAPES[kind], 'invalid projected fields'); scalars(kind, value)
     public = {c['entityRef'] for c in cards if c['zone'] in ('Battlefield','Command','Graveyard','Stack') or c['zone'] == 'Exile' and not c['faceDown']}
     for key, kinds in roles(kind).items():
         ref = value[key]

@@ -1,0 +1,21 @@
+{
+  "finalFocusedJava": {
+    "tests": 125,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "newCases": 14
+  },
+  "python": {
+    "tests": 256,
+    "failures": 0,
+    "errors": 0,
+    "newMethods": 6
+  },
+  "fullReactor": "Not repeated for this increment; prior V15 full-run scavenge instability remains separately documented.",
+  "logs": {
+    "/workspace/work/cov006-trigger-input/focused-final.log": "18d81f77f13fdfb82ea7ff9b220b477345ca34e1a3d9fbb54ecb0aeb2e1d7c4e",
+    "/workspace/work/cov006-trigger-input/python.log": "afd444b9d1302d30072a197c32370e5d647210824595361614f9471c6041a8fa",
+    "/workspace/work/cov006-trigger-input/validate-games-final.log": "3a8f46d4f6736577633bf3e1200dbc223bfb0ca67ad0d38bde7ce21d7e9dd058"
+  }
+}

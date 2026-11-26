@@ -79,11 +79,15 @@ CONTEXT_TIMING_V2 = {**{key: value for key, value in CONTEXT_TIMING.items() if k
 MODE_CONTEXT_TIMING = {'CHARM_MODE_HEURISTIC': 'BEFORE_SELECTOR', 'CONTROLLER_MODES': 'BEFORE_OPERATION'}
 MULTI_CONTEXT_TIMING = {'CONTROLLER_EFFECT_ENTITIES': 'BEFORE_OPERATION'}
 ZONE_OPERATION_CONTEXT_TIMING = {'CONTROLLER_ZONE_CHANGE_SELECTIONS': 'BEFORE_OPERATION'}
+PREPARATION_CONTEXT_TIMING = {'TRIGGER_PREPARATION': 'BEFORE_OPERATION'}
 SPELL_CONTEXT_TIMING = {'CONTROLLER_EFFECT_SPELL_ABILITIES': 'BEFORE_OPERATION', 'CONTROLLER_EFFECT_SPELL_ABILITY': 'BEFORE_SELECTOR'}
 
 
 def input_boundary(value, boundary, stage=None, choice=None):
     expected = CONTEXT_TIMING.get(boundary)
+    if choice is not None and boundary in PREPARATION_CONTEXT_TIMING and value['schemaVersion'] >= 17:
+        require('entryLocation' in choice and stage == 'TRIGGER_PREPARATION', 'preparation input lacks own entry/stage')
+        expected = PREPARATION_CONTEXT_TIMING[boundary]
     spell_operation = choice is not None and choice['choiceType'] == 'EFFECT_MULTI_SPELL_ABILITY_SELECTION'
     if choice is not None and boundary in SPELL_CONTEXT_TIMING:
         require('entryLocation' in choice and value['schemaVersion'] >= 13, 'spell input lacks entry/profile')
@@ -145,6 +149,9 @@ def input_boundary(value, boundary, stage=None, choice=None):
 
 
 def parameter_boundary(choice):
+    context = choice.get('inputContext')
+    if (choice['choiceType'], choice['boundary']) == ('TRIGGER_PREPARATION_RESULT', 'TRIGGER_PREPARATION'):
+        return isinstance(context, dict) and integer(context.get('schemaVersion')) and context['schemaVersion'] >= 17
     return (choice['choiceType'], choice['boundary']) in (
         ('NUMBER_SELECTION', 'CONTROLLER_NUMBER_RANGE'), ('EFFECT_ENTITY_SELECTION', 'CONTROLLER_EFFECT_ENTITY'))
 
@@ -437,6 +444,9 @@ def entry_location(choice, known_players=None):
     if choice['boundary'] in MULTI_CONTEXT_TIMING: expected = MULTI_CONTEXT_TIMING[choice['boundary']]
     if choice['boundary'] in ZONE_OPERATION_CONTEXT_TIMING: expected = ZONE_OPERATION_CONTEXT_TIMING[choice['boundary']]
     if choice['boundary'] in SPELL_CONTEXT_TIMING: expected = SPELL_CONTEXT_TIMING[choice['boundary']]
+    if choice['boundary'] in PREPARATION_CONTEXT_TIMING:
+        require(choice.get('inputContext', {}).get('schemaVersion', 0) >= 17, 'preparation entry requires V17')
+        expected = PREPARATION_CONTEXT_TIMING[choice['boundary']]
     if choice['boundary'] in MODE_CONTEXT_TIMING:
         expected = MODE_CONTEXT_TIMING[choice['boundary']]
         require(value['stateBasis'] == 'PLANNING_WORKING_STATE', 'mode entry claims committed state')
@@ -555,7 +565,7 @@ def options(choice):
         if parameter_options(choice):
             expected.add('callbackParameters')
             require('entryLocation' in choice, 'received parameters lack own entry')
-            _contexts._parameters.receipt(option.get('callbackParameters'), 'ENTITY', typed_reference)
+            _contexts._parameters.receipt(option.get('callbackParameters'), 'ENTITY', typed_reference, choice['inputContext']['schemaVersion'])
         if 'zoneSelectionProgress' in option:
             require(zone, 'entity callback claims zone progress')
             expected |= {'zoneSelectionProgress'}
@@ -618,7 +628,7 @@ def options(choice):
             require(set(option) == {'coverage', 'minimum', 'maximum'} | extra and integer(option['minimum']) and integer(option['maximum']), 'invalid observed numeric range')
             if extra:
                 require('entryLocation' in choice, 'received numeric parameters lack own entry')
-                _contexts._parameters.receipt(option['callbackParameters'], 'NUMBER', typed_reference)
+                _contexts._parameters.receipt(option['callbackParameters'], 'NUMBER', typed_reference, choice['inputContext']['schemaVersion'])
         else:
             require(set(option) == {'coverage', 'items', 'truncated'} and coverage == 'OBSERVED_DISCRETE_OPTIONS'
                     and isinstance(option['items'], list) and len(option['items']) <= 256
@@ -646,7 +656,11 @@ def options(choice):
             require(isinstance(option[field], list) and len(option[field]) <= 256, 'invalid target pool prefix')
             for ref in option[field]: reference(ref)
         return
-    require(isinstance(option, dict) and set(option) == {'coverage', 'priorTargets'}
+    extra = {'callbackParameters'} if parameter_options(choice) else set()
+    if extra:
+        require('entryLocation' in choice, 'preparation parameters lack entry')
+        _contexts._parameters.receipt(option.get('callbackParameters'), 'TRIGGER', typed_reference, choice['inputContext']['schemaVersion'])
+    require(isinstance(option, dict) and set(option) == {'coverage', 'priorTargets'} | extra
             and option['coverage'] == 'PRIOR_TARGET_PLAN_ONLY', 'invalid targeting choice options')
     target_plan(option['priorTargets'], choice['abilityId'])
 

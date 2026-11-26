@@ -1,0 +1,30 @@
+{
+  "SIMULTANEOUS_MANDATORY": {
+    "lifecycleEvents": 10,
+    "validatedObservations": 5
+  },
+  "IMMEDIATE_OPTIONAL": {
+    "lifecycleEvents": 14,
+    "validatedObservations": 7
+  },
+  "MODAL_MANDATORY": {
+    "lifecycleEvents": 10,
+    "validatedObservations": 5
+  },
+  "FALSE_AFTER_MUTATION": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "UNKNOWN_DIRECTIVE": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "PLANNING_DELEGATE": {
+    "lifecycleEvents": 4,
+    "validatedObservations": 2
+  },
+  "ORIGINAL_ERROR": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  }
+}

@@ -1,0 +1,4001 @@
+{
+  "fixtureKind": "ACTUAL_PREPARATION_CONTROLLER_EXCERPTS",
+  "choices": {
+    "SIMULTANEOUS_MANDATORY": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:1",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "TRIGGER_PREPARATION_RESULT",
+        "boundary": "TRIGGER_PREPARATION",
+        "stage": "TRIGGER_PREPARATION",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 5,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "TRIGGER_REQUIREMENT",
+            "values": {
+              "mandatory": true
+            },
+            "reason": null
+          },
+          "priorTargets": {
+            "abilitiesTruncated": false,
+            "abilities": [
+              {
+                "targetsTruncated": false,
+                "targets": [],
+                "abilityId": 5
+              }
+            ]
+          },
+          "coverage": "PRIOR_TARGET_PLAN_ONLY"
+        },
+        "inputContext": {
+          "schemaVersion": 17,
+          "profile": "PERMITTED_CHOICE_VIEW_V17",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "prompt": "UNSUPPORTED",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p0",
+                "controller": "p0",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Flametongue Kavu",
+                "types": "Creature - Kavu",
+                "manaCost": "{3}{R}",
+                "power": 4,
+                "toughness": 2,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": {
+              "kind": "TRIGGER_REQUIREMENT",
+              "mandatory": true
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "UNSUPPORTED",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c1"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:2",
+        "parentChoiceId": "choice:1",
+        "status": "STARTED",
+        "choiceType": "TARGET_POOL_SELECTION",
+        "boundary": "DAMAGE_OPPONENT_POOL",
+        "stage": "TRIGGER_PREPARATION",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 1,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "items": [],
+          "poolSnapshotTiming": "BEFORE_CHOOSER",
+          "coverage": "OBSERVED_HEURISTIC_POOL_NOT_ALL_LEGAL_TARGET_SETS",
+          "purpose": "OPPONENT_PREFERENCE",
+          "priorTargetsTruncated": false,
+          "priorTargets": [],
+          "truncated": false
+        },
+        "inputContext": {
+          "schemaVersion": 17,
+          "profile": "PERMITTED_CHOICE_VIEW_V17",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "prompt": "UNSUPPORTED",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "UNSUPPORTED"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p0",
+                "controller": "p0",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Flametongue Kavu",
+                "types": "Creature - Kavu",
+                "manaCost": "{3}{R}",
+                "power": 4,
+                "toughness": 2,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": null,
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "DIAGNOSTIC_PUBLIC_CURRENT_V1",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c1"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:2",
+        "status": "DECLINED",
+        "selection": null,
+        "elapsedNanos": 4017602
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:3",
+        "parentChoiceId": "choice:1",
+        "status": "STARTED",
+        "choiceType": "TARGET_POOL_SELECTION",
+        "boundary": "DAMAGE_KILLABLES",
+        "stage": "TRIGGER_PREPARATION",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 1,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "items": [
+            {
+              "type": "CARD",
+              "id": 2,
+              "gameTimestamp": 2
+            }
+          ],
+          "poolSnapshotTiming": "BEFORE_CHOOSER",
+          "coverage": "OBSERVED_HEURISTIC_POOL_NOT_ALL_LEGAL_TARGET_SETS",
+          "purpose": "TARGET_RECOMMENDATION",
+          "priorTargetsTruncated": false,
+          "priorTargets": [],
+          "truncated": false
+        },
+        "inputContext": {
+          "schemaVersion": 17,
+          "profile": "PERMITTED_CHOICE_VIEW_V17",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "prompt": "UNSUPPORTED",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "UNSUPPORTED"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p0",
+                "controller": "p0",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Flametongue Kavu",
+                "types": "Creature - Kavu",
+                "manaCost": "{3}{R}",
+                "power": 4,
+                "toughness": 2,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": null,
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [
+                {
+                  "optionIndex": 0,
+                  "entityRef": "c0"
+                }
+              ],
+              "coverage": "DIAGNOSTIC_PUBLIC_CURRENT_V1",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c1"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:3",
+        "status": "COMPLETED",
+        "selection": {
+          "selected": {
+            "type": "CARD",
+            "id": 2,
+            "gameTimestamp": 2
+          },
+          "selectedOptionIndex": 0,
+          "match": "UNIQUE"
+        },
+        "elapsedNanos": 76241718
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:1",
+        "status": "COMPLETED",
+        "selection": {
+          "targets": {
+            "abilitiesTruncated": false,
+            "abilities": [
+              {
+                "targetsTruncated": false,
+                "targets": [
+                  {
+                    "type": "CARD",
+                    "id": 2,
+                    "gameTimestamp": 2
+                  }
+                ],
+                "abilityId": 5
+              }
+            ]
+          },
+          "accepted": true
+        },
+        "elapsedNanos": 207863834
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:4",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "PAYMENT_DECISION",
+        "boundary": "COST_VISITOR",
+        "stage": "PAYMENT",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 5,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "effect": false,
+          "coverage": "PAYMENT_VISITOR_INPUT_NOT_ALTERNATIVES",
+          "costKind": "CostPartMana"
+        },
+        "inputContext": {
+          "schemaVersion": 17,
+          "profile": "PERMITTED_CHOICE_VIEW_V17",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "prompt": "UNSUPPORTED",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "UNSUPPORTED"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p0",
+                "controller": "p0",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Flametongue Kavu",
+                "types": "Creature - Kavu",
+                "manaCost": "{3}{R}",
+                "power": 4,
+                "toughness": 2,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": null,
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "UNSUPPORTED",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c1"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:4",
+        "status": "COMPLETED",
+        "selection": {
+          "decisionCount": 0,
+          "cards": {
+            "truncated": false,
+            "items": []
+          },
+          "mana": null,
+          "players": null,
+          "abilities": null,
+          "colorMask": null,
+          "unrecordedDetails": []
+        },
+        "elapsedNanos": 2556958
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:5",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "PAYMENT_MANA",
+        "boundary": "AUTO_MANA_PAYMENT",
+        "stage": "PAYMENT",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 5,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "remainingManaValue": 0,
+          "coverage": "OBSERVED_REQUIREMENT_NOT_ALTERNATIVE_PLANS",
+          "effect": false
+        },
+        "inputContext": {
+          "schemaVersion": 17,
+          "profile": "PERMITTED_CHOICE_VIEW_V17",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "prompt": "UNSUPPORTED",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "UNSUPPORTED"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p0",
+                "controller": "p0",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Flametongue Kavu",
+                "types": "Creature - Kavu",
+                "manaCost": "{3}{R}",
+                "power": 4,
+                "toughness": 2,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": null,
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "UNSUPPORTED",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c1"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:5",
+        "status": "COMPLETED",
+        "selection": {
+          "costSatisfied": true,
+          "manaAbilities": {
+            "truncated": false,
+            "items": []
+          },
+          "paymentRoutineReturned": true
+        },
+        "elapsedNanos": 683772
+      }
+    ],
+    "IMMEDIATE_OPTIONAL": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:6",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "TRIGGER_PREPARATION_RESULT",
+        "boundary": "TRIGGER_PREPARATION",
+        "stage": "TRIGGER_PREPARATION",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 10,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "TRIGGER_REQUIREMENT",
+            "values": {
+              "mandatory": false
+            },
+            "reason": null
+          },
+          "priorTargets": {
+            "abilitiesTruncated": false,
+            "abilities": [
+              {
+                "targetsTruncated": false,
+                "targets": [],
+                "abilityId": 10
+              }
+            ]
+          },
+          "coverage": "PRIOR_TARGET_PLAN_ONLY"
+        },
+        "inputContext": {
+          "schemaVersion": 17,
+          "profile": "PERMITTED_CHOICE_VIEW_V17",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "prompt": "UNSUPPORTED",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p0",
+                "controller": "p0",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Flametongue Kavu",
+                "types": "Creature - Kavu",
+                "manaCost": "{3}{R}",
+                "power": 4,
+                "toughness": 2,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": {
+              "kind": "TRIGGER_REQUIREMENT",
+              "mandatory": false
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "UNSUPPORTED",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c1"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:7",
+        "parentChoiceId": "choice:6",
+        "status": "STARTED",
+        "choiceType": "TARGET_POOL_SELECTION",
+        "boundary": "DAMAGE_OPPONENT_POOL",
+        "stage": "TRIGGER_PREPARATION",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 6,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "items": [],
+          "poolSnapshotTiming": "BEFORE_CHOOSER",
+          "coverage": "OBSERVED_HEURISTIC_POOL_NOT_ALL_LEGAL_TARGET_SETS",
+          "purpose": "OPPONENT_PREFERENCE",
+          "priorTargetsTruncated": false,
+          "priorTargets": [],
+          "truncated": false
+        },
+        "inputContext": {
+          "schemaVersion": 17,
+          "profile": "PERMITTED_CHOICE_VIEW_V17",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "prompt": "UNSUPPORTED",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "UNSUPPORTED"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p0",
+                "controller": "p0",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Flametongue Kavu",
+                "types": "Creature - Kavu",
+                "manaCost": "{3}{R}",
+                "power": 4,
+                "toughness": 2,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": null,
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "DIAGNOSTIC_PUBLIC_CURRENT_V1",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c1"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:7",
+        "status": "DECLINED",
+        "selection": null,
+        "elapsedNanos": 571530
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:8",
+        "parentChoiceId": "choice:6",
+        "status": "STARTED",
+        "choiceType": "TARGET_POOL_SELECTION",
+        "boundary": "DAMAGE_KILLABLES",
+        "stage": "TRIGGER_PREPARATION",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 6,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "items": [
+            {
+              "type": "CARD",
+              "id": 2,
+              "gameTimestamp": 2
+            }
+          ],
+          "poolSnapshotTiming": "BEFORE_CHOOSER",
+          "coverage": "OBSERVED_HEURISTIC_POOL_NOT_ALL_LEGAL_TARGET_SETS",
+          "purpose": "TARGET_RECOMMENDATION",
+          "priorTargetsTruncated": false,
+          "priorTargets": [],
+          "truncated": false
+        },
+        "inputContext": {
+          "schemaVersion": 17,
+          "profile": "PERMITTED_CHOICE_VIEW_V17",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "prompt": "UNSUPPORTED",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "UNSUPPORTED"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p0",
+                "controller": "p0",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Flametongue Kavu",
+                "types": "Creature - Kavu",
+                "manaCost": "{3}{R}",
+                "power": 4,
+                "toughness": 2,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": null,
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [
+                {
+                  "optionIndex": 0,
+                  "entityRef": "c0"
+                }
+              ],
+              "coverage": "DIAGNOSTIC_PUBLIC_CURRENT_V1",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c1"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:8",
+        "status": "COMPLETED",
+        "selection": {
+          "selected": {
+            "type": "CARD",
+            "id": 2,
+            "gameTimestamp": 2
+          },
+          "selectedOptionIndex": 0,
+          "match": "UNIQUE"
+        },
+        "elapsedNanos": 7448708
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:6",
+        "status": "COMPLETED",
+        "selection": {
+          "targets": {
+            "abilitiesTruncated": false,
+            "abilities": [
+              {
+                "targetsTruncated": false,
+                "targets": [
+                  {
+                    "type": "CARD",
+                    "id": 2,
+                    "gameTimestamp": 2
+                  }
+                ],
+                "abilityId": 10
+              }
+            ]
+          },
+          "accepted": true
+        },
+        "elapsedNanos": 9661790
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:9",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "PAYMENT_DECISION",
+        "boundary": "COST_VISITOR",
+        "stage": "PAYMENT",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 10,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "effect": true,
+          "coverage": "PAYMENT_VISITOR_INPUT_NOT_ALTERNATIVES",
+          "costKind": "CostPartMana"
+        },
+        "inputContext": {
+          "schemaVersion": 17,
+          "profile": "PERMITTED_CHOICE_VIEW_V17",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "prompt": "UNSUPPORTED",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "UNSUPPORTED"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p0",
+                "controller": "p0",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Flametongue Kavu",
+                "types": "Creature - Kavu",
+                "manaCost": "{3}{R}",
+                "power": 4,
+                "toughness": 2,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": null,
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "UNSUPPORTED",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c1"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:9",
+        "status": "COMPLETED",
+        "selection": {
+          "decisionCount": 0,
+          "cards": {
+            "truncated": false,
+            "items": []
+          },
+          "mana": null,
+          "players": null,
+          "abilities": null,
+          "colorMask": null,
+          "unrecordedDetails": []
+        },
+        "elapsedNanos": 449142
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:10",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "PAYMENT_MANA",
+        "boundary": "AUTO_MANA_PAYMENT",
+        "stage": "PAYMENT",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 10,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "remainingManaValue": 0,
+          "coverage": "OBSERVED_REQUIREMENT_NOT_ALTERNATIVE_PLANS",
+          "effect": true
+        },
+        "inputContext": {
+          "schemaVersion": 17,
+          "profile": "PERMITTED_CHOICE_VIEW_V17",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "prompt": "UNSUPPORTED",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "UNSUPPORTED"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p0",
+                "controller": "p0",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Flametongue Kavu",
+                "types": "Creature - Kavu",
+                "manaCost": "{3}{R}",
+                "power": 4,
+                "toughness": 2,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": null,
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "UNSUPPORTED",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c1"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:10",
+        "status": "COMPLETED",
+        "selection": {
+          "costSatisfied": true,
+          "manaAbilities": {
+            "truncated": false,
+            "items": []
+          },
+          "paymentRoutineReturned": true
+        },
+        "elapsedNanos": 395577
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:11",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "PAYMENT_DECISION",
+        "boundary": "COST_VISITOR",
+        "stage": "PAYMENT",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 6,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "effect": true,
+          "coverage": "PAYMENT_VISITOR_INPUT_NOT_ALTERNATIVES",
+          "costKind": "CostPartMana"
+        },
+        "inputContext": {
+          "schemaVersion": 17,
+          "profile": "PERMITTED_CHOICE_VIEW_V17",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "prompt": "UNSUPPORTED",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "UNSUPPORTED"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p0",
+                "controller": "p0",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Flametongue Kavu",
+                "types": "Creature - Kavu",
+                "manaCost": "{3}{R}",
+                "power": 4,
+                "toughness": 2,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": null,
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "UNSUPPORTED",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c1"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:11",
+        "status": "COMPLETED",
+        "selection": {
+          "decisionCount": 0,
+          "cards": {
+            "truncated": false,
+            "items": []
+          },
+          "mana": null,
+          "players": null,
+          "abilities": null,
+          "colorMask": null,
+          "unrecordedDetails": []
+        },
+        "elapsedNanos": 1530547
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:12",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "PAYMENT_MANA",
+        "boundary": "AUTO_MANA_PAYMENT",
+        "stage": "PAYMENT",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 6,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "remainingManaValue": 0,
+          "coverage": "OBSERVED_REQUIREMENT_NOT_ALTERNATIVE_PLANS",
+          "effect": true
+        },
+        "inputContext": {
+          "schemaVersion": 17,
+          "profile": "PERMITTED_CHOICE_VIEW_V17",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "prompt": "UNSUPPORTED",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "UNSUPPORTED"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p0",
+                "controller": "p0",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Flametongue Kavu",
+                "types": "Creature - Kavu",
+                "manaCost": "{3}{R}",
+                "power": 4,
+                "toughness": 2,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": null,
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "UNSUPPORTED",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c1"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:12",
+        "status": "COMPLETED",
+        "selection": {
+          "costSatisfied": true,
+          "manaAbilities": {
+            "truncated": false,
+            "items": []
+          },
+          "paymentRoutineReturned": true
+        },
+        "elapsedNanos": 285658
+      }
+    ],
+    "MODAL_MANDATORY": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:13",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "TRIGGER_PREPARATION_RESULT",
+        "boundary": "TRIGGER_PREPARATION",
+        "stage": "TRIGGER_PREPARATION",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 18,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "TRIGGER_REQUIREMENT",
+            "values": {
+              "mandatory": true
+            },
+            "reason": null
+          },
+          "priorTargets": {
+            "abilitiesTruncated": false,
+            "abilities": [
+              {
+                "targetsTruncated": false,
+                "targets": [],
+                "abilityId": 18
+              }
+            ]
+          },
+          "coverage": "PRIOR_TARGET_PLAN_ONLY"
+        },
+        "inputContext": {
+          "schemaVersion": 17,
+          "profile": "PERMITTED_CHOICE_VIEW_V17",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "prompt": "UNSUPPORTED",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p0",
+                "controller": "p0",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Knight of Autumn",
+                "types": "Creature - Dryad Knight",
+                "manaCost": "{1}{G}{W}",
+                "power": 2,
+                "toughness": 1,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": {
+              "kind": "TRIGGER_REQUIREMENT",
+              "mandatory": true
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "UNSUPPORTED",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c1"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:14",
+        "parentChoiceId": "choice:13",
+        "status": "STARTED",
+        "choiceType": "MODE_SELECTION",
+        "boundary": "CONTROLLER_MODES",
+        "stage": "TRIGGER_PREPARATION",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 18,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "PLANNING_WORKING_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "max": 1,
+          "min": 1,
+          "allowRepeat": false,
+          "items": [
+            {
+              "abilityId": 12,
+              "optionIndex": 0,
+              "definitionIndex": 0
+            },
+            {
+              "abilityId": 14,
+              "optionIndex": 1,
+              "definitionIndex": 2
+            }
+          ],
+          "coverage": "OBSERVED_MODE_OPTIONS",
+          "truncated": false
+        },
+        "inputContext": {
+          "schemaVersion": 17,
+          "profile": "PERMITTED_CHOICE_VIEW_V17",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "PLANNING_WORKING_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "prompt": "RECEIVED_MODE_BOUNDS_V1",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "UNSUPPORTED"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p0",
+                "controller": "p0",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Knight of Autumn",
+                "types": "Creature - Dryad Knight",
+                "manaCost": "{1}{G}{W}",
+                "power": 2,
+                "toughness": 1,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "MODE_BOUNDS",
+              "minimumPicks": 1,
+              "maximumPicks": 1,
+              "allowRepeat": false
+            },
+            "receivedParameters": null,
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "UNSUPPORTED",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c1"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:15",
+        "parentChoiceId": "choice:14",
+        "status": "STARTED",
+        "choiceType": "MODE_SELECTION",
+        "boundary": "CHARM_MODE_HEURISTIC",
+        "stage": "TRIGGER_PREPARATION",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 11,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "PLANNING_WORKING_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "max": 1,
+          "min": 1,
+          "allowRepeat": false,
+          "items": [
+            {
+              "abilityId": 12,
+              "optionIndex": 0,
+              "definitionIndex": 0
+            },
+            {
+              "abilityId": 14,
+              "optionIndex": 1,
+              "definitionIndex": 2
+            }
+          ],
+          "coverage": "OBSERVED_MODE_OPTIONS",
+          "truncated": false
+        },
+        "inputContext": {
+          "schemaVersion": 17,
+          "profile": "PERMITTED_CHOICE_VIEW_V17",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "PLANNING_WORKING_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "prompt": "RECEIVED_MODE_BOUNDS_V1",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "UNSUPPORTED"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p0",
+                "controller": "p0",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Knight of Autumn",
+                "types": "Creature - Dryad Knight",
+                "manaCost": "{1}{G}{W}",
+                "power": 2,
+                "toughness": 1,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "MODE_BOUNDS",
+              "minimumPicks": 1,
+              "maximumPicks": 1,
+              "allowRepeat": false
+            },
+            "receivedParameters": null,
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "UNSUPPORTED",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c1"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:15",
+        "status": "COMPLETED",
+        "selection": {
+          "available": true,
+          "modes": [
+            {
+              "abilityId": 14,
+              "optionIndex": 1,
+              "definitionIndex": 2
+            }
+          ],
+          "selectedCount": 1,
+          "truncated": false,
+          "accepted": true
+        },
+        "elapsedNanos": 31421295
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:14",
+        "status": "COMPLETED",
+        "selection": {
+          "available": true,
+          "modes": [
+            {
+              "abilityId": 14,
+              "optionIndex": 1,
+              "definitionIndex": 2
+            }
+          ],
+          "selectedCount": 1,
+          "truncated": false,
+          "accepted": null
+        },
+        "elapsedNanos": 35552150
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:13",
+        "status": "COMPLETED",
+        "selection": {
+          "targets": {
+            "abilitiesTruncated": false,
+            "abilities": [
+              {
+                "targetsTruncated": false,
+                "targets": [],
+                "abilityId": 18
+              },
+              {
+                "targetsTruncated": false,
+                "targets": [],
+                "abilityId": 24
+              }
+            ]
+          },
+          "accepted": true
+        },
+        "elapsedNanos": 75492539
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:16",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "PAYMENT_DECISION",
+        "boundary": "COST_VISITOR",
+        "stage": "PAYMENT",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 18,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "effect": false,
+          "coverage": "PAYMENT_VISITOR_INPUT_NOT_ALTERNATIVES",
+          "costKind": "CostPartMana"
+        },
+        "inputContext": {
+          "schemaVersion": 17,
+          "profile": "PERMITTED_CHOICE_VIEW_V17",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "prompt": "UNSUPPORTED",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "UNSUPPORTED"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p0",
+                "controller": "p0",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Knight of Autumn",
+                "types": "Creature - Dryad Knight",
+                "manaCost": "{1}{G}{W}",
+                "power": 2,
+                "toughness": 1,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": null,
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "UNSUPPORTED",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c1"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:16",
+        "status": "COMPLETED",
+        "selection": {
+          "decisionCount": 0,
+          "cards": {
+            "truncated": false,
+            "items": []
+          },
+          "mana": null,
+          "players": null,
+          "abilities": null,
+          "colorMask": null,
+          "unrecordedDetails": []
+        },
+        "elapsedNanos": 973534
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:17",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "PAYMENT_MANA",
+        "boundary": "AUTO_MANA_PAYMENT",
+        "stage": "PAYMENT",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 18,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "remainingManaValue": 0,
+          "coverage": "OBSERVED_REQUIREMENT_NOT_ALTERNATIVE_PLANS",
+          "effect": false
+        },
+        "inputContext": {
+          "schemaVersion": 17,
+          "profile": "PERMITTED_CHOICE_VIEW_V17",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "prompt": "UNSUPPORTED",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "UNSUPPORTED"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p0",
+                "controller": "p0",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Knight of Autumn",
+                "types": "Creature - Dryad Knight",
+                "manaCost": "{1}{G}{W}",
+                "power": 2,
+                "toughness": 1,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": null,
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "UNSUPPORTED",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c1"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:17",
+        "status": "COMPLETED",
+        "selection": {
+          "costSatisfied": true,
+          "manaAbilities": {
+            "truncated": false,
+            "items": []
+          },
+          "paymentRoutineReturned": true
+        },
+        "elapsedNanos": 351157
+      }
+    ],
+    "FALSE_AFTER_MUTATION": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:18",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "TRIGGER_PREPARATION_RESULT",
+        "boundary": "TRIGGER_PREPARATION",
+        "stage": "TRIGGER_PREPARATION",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 28,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "TRIGGER_REQUIREMENT",
+            "values": {
+              "mandatory": false
+            },
+            "reason": null
+          },
+          "priorTargets": {
+            "abilitiesTruncated": false,
+            "abilities": [
+              {
+                "targetsTruncated": false,
+                "targets": [],
+                "abilityId": 28
+              }
+            ]
+          },
+          "coverage": "PRIOR_TARGET_PLAN_ONLY"
+        },
+        "inputContext": {
+          "schemaVersion": 17,
+          "profile": "PERMITTED_CHOICE_VIEW_V17",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "prompt": "UNSUPPORTED",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p0",
+                "controller": "p0",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Flametongue Kavu",
+                "types": "Creature - Kavu",
+                "manaCost": "{3}{R}",
+                "power": 4,
+                "toughness": 2,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": {
+              "kind": "TRIGGER_REQUIREMENT",
+              "mandatory": false
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "UNSUPPORTED",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c1"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:18",
+        "status": "COMPLETED",
+        "selection": {
+          "targets": {
+            "abilitiesTruncated": false,
+            "abilities": [
+              {
+                "targetsTruncated": false,
+                "targets": [
+                  {
+                    "type": "CARD",
+                    "id": 2,
+                    "gameTimestamp": 2
+                  }
+                ],
+                "abilityId": 28
+              }
+            ]
+          },
+          "accepted": false
+        },
+        "elapsedNanos": 8552686
+      }
+    ],
+    "UNKNOWN_DIRECTIVE": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:19",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "TRIGGER_PREPARATION_RESULT",
+        "boundary": "TRIGGER_PREPARATION",
+        "stage": "TRIGGER_PREPARATION",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 32,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "UNSUPPORTED",
+            "kind": null,
+            "values": null,
+            "reason": "UNSUPPORTED"
+          },
+          "priorTargets": {
+            "abilitiesTruncated": false,
+            "abilities": [
+              {
+                "targetsTruncated": false,
+                "targets": [],
+                "abilityId": 32
+              }
+            ]
+          },
+          "coverage": "PRIOR_TARGET_PLAN_ONLY"
+        },
+        "inputContext": {
+          "schemaVersion": 17,
+          "profile": "PERMITTED_CHOICE_VIEW_V17",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "prompt": "UNSUPPORTED",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "UNAVAILABLE"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p0",
+                "controller": "p0",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Flametongue Kavu",
+                "types": "Creature - Kavu",
+                "manaCost": "{3}{R}",
+                "power": 4,
+                "toughness": 2,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": null,
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "UNSUPPORTED",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c1"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "PARAMETERS",
+              "reason": "UNSUPPORTED"
+            },
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:19",
+        "status": "COMPLETED",
+        "selection": {
+          "targets": {
+            "abilitiesTruncated": false,
+            "abilities": [
+              {
+                "targetsTruncated": false,
+                "targets": [],
+                "abilityId": 32
+              }
+            ]
+          },
+          "accepted": true
+        },
+        "elapsedNanos": 411789
+      }
+    ],
+    "PLANNING_DELEGATE": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:20",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "TRIGGER_PREPARATION_RESULT",
+        "boundary": "TRIGGER_PREPARATION",
+        "stage": "TRIGGER_PREPARATION",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 36,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "PLANNING_WORKING_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "TRIGGER_REQUIREMENT",
+            "values": {
+              "mandatory": true
+            },
+            "reason": null
+          },
+          "priorTargets": {
+            "abilitiesTruncated": false,
+            "abilities": [
+              {
+                "targetsTruncated": false,
+                "targets": [],
+                "abilityId": 36
+              }
+            ]
+          },
+          "coverage": "PRIOR_TARGET_PLAN_ONLY"
+        },
+        "inputContext": {
+          "schemaVersion": 17,
+          "profile": "PERMITTED_CHOICE_VIEW_V17",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "PLANNING_WORKING_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "prompt": "UNSUPPORTED",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p0",
+                "controller": "p0",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Flametongue Kavu",
+                "types": "Creature - Kavu",
+                "manaCost": "{3}{R}",
+                "power": 4,
+                "toughness": 2,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": {
+              "kind": "TRIGGER_REQUIREMENT",
+              "mandatory": true
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "UNSUPPORTED",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c1"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:21",
+        "parentChoiceId": "choice:20",
+        "status": "STARTED",
+        "choiceType": "NUMBER_SELECTION",
+        "boundary": "CONTROLLER_NUMBER_RANGE",
+        "stage": "TRIGGER_PREPARATION",
+        "chooserPlayerId": 0,
+        "chooserKind": "AI",
+        "abilityId": 36,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "PLANNING_WORKING_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "maximum": 3,
+          "coverage": "OBSERVED_RANGE",
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "NONE",
+            "values": {},
+            "reason": null
+          },
+          "minimum": 0
+        },
+        "inputContext": {
+          "schemaVersion": 17,
+          "profile": "PERMITTED_CHOICE_VIEW_V17",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "PLANNING_WORKING_STATE",
+          "perspective": {
+            "controllingPlayerId": 0,
+            "chooserPlayerId": 0
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "prompt": "UNAVAILABLE",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p0",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p0",
+                "controller": "p0",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Flametongue Kavu",
+                "types": "Creature - Kavu",
+                "manaCost": "{3}{R}",
+                "power": 4,
+                "toughness": 2,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": {
+              "kind": "NONE"
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "UNSUPPORTED",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c1"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "PROMPT",
+              "reason": "UNSUPPORTED"
+            },
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:21",
+        "status": "COMPLETED",
+        "selection": {
+          "value": 2,
+          "optionIndex": null,
+          "domainMatch": "WITHIN_OBSERVED_DOMAIN"
+        },
+        "elapsedNanos": 4920487
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:20",
+        "status": "COMPLETED",
+        "selection": {
+          "targets": {
+            "abilitiesTruncated": false,
+            "abilities": [
+              {
+                "targetsTruncated": false,
+                "targets": [],
+                "abilityId": 36
+              }
+            ]
+          },
+          "accepted": true
+        },
+        "elapsedNanos": 17030067
+      }
+    ],
+    "ORIGINAL_ERROR": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:22",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "TRIGGER_PREPARATION_RESULT",
+        "boundary": "TRIGGER_PREPARATION",
+        "stage": "TRIGGER_PREPARATION",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 40,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "TRIGGER_REQUIREMENT",
+            "values": {
+              "mandatory": true
+            },
+            "reason": null
+          },
+          "priorTargets": {
+            "abilitiesTruncated": false,
+            "abilities": [
+              {
+                "targetsTruncated": false,
+                "targets": [],
+                "abilityId": 40
+              }
+            ]
+          },
+          "coverage": "PRIOR_TARGET_PLAN_ONLY"
+        },
+        "inputContext": {
+          "schemaVersion": 17,
+          "profile": "PERMITTED_CHOICE_VIEW_V17",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "prompt": "UNSUPPORTED",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p0",
+                "controller": "p0",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Flametongue Kavu",
+                "types": "Creature - Kavu",
+                "manaCost": "{3}{R}",
+                "power": 4,
+                "toughness": 2,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": {
+              "kind": "TRIGGER_REQUIREMENT",
+              "mandatory": true
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "UNSUPPORTED",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c1"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:22",
+        "status": "ERROR",
+        "selection": null,
+        "elapsedNanos": 446175
+      }
+    ]
+  },
+  "completeGameTrace": false
+}

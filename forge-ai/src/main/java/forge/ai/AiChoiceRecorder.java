@@ -128,8 +128,15 @@ public final class AiChoiceRecorder {
             final String boundary, final Supplier<Map<String, Object>> options, final Supplier<T> callback,
             final Function<T, Object> selection, final Supplier<AiPromptInput> prompt,
             final Supplier<AiOptionInput> optionInput, final AiReceivedParameters.Carrier parameters) {
-        return observe(chooser, ability, type, null, boundary, options, callback, selection, "BEFORE_SELECTOR",
-                open -> AiInputContext.capture(chooser, ability, "BEFORE_SELECTOR", stateBasis(chooser, ability), open, prompt, optionInput, parameters));
+        return observeParametersAt(chooser, ability, type, null, boundary, "BEFORE_SELECTOR", options, callback, selection, prompt, optionInput, parameters);
+    }
+
+    private static <T> T observeParametersAt(final Player chooser, final SpellAbility ability, final String type,
+            final String stage, final String boundary, final String timing, final Supplier<Map<String, Object>> options,
+            final Supplier<T> callback, final Function<T, Object> selection, final Supplier<AiPromptInput> prompt,
+            final Supplier<AiOptionInput> optionInput, final AiReceivedParameters.Carrier parameters) {
+        return observe(chooser, ability, type, stage, boundary, options, callback, selection, timing,
+                open -> AiInputContext.capture(chooser, ability, timing, stateBasis(chooser, ability), open, prompt, optionInput, parameters));
     }
 
     private static String stateBasis(final Player chooser, final SpellAbility ability) {
@@ -374,9 +381,16 @@ public final class AiChoiceRecorder {
 
     public static boolean triggerPreparation(final Player chooser, final SpellAbility ability,
             final Supplier<Boolean> callback) {
-        return observe(chooser, ability, "TRIGGER_PREPARATION_RESULT", "TRIGGER_PREPARATION", "TRIGGER_PREPARATION",
-                () -> Map.of("coverage", "PRIOR_TARGET_PLAN_ONLY", "priorTargets", targetPlan(ability)), callback,
-                accepted -> Map.of("accepted", accepted, "targets", targetPlan(ability)));
+        return triggerPreparation(chooser, ability, null, callback);
+    }
+
+    public static boolean triggerPreparation(final Player chooser, final SpellAbility ability, final Boolean mandatory,
+            final Supplier<Boolean> callback) {
+        final AtomicReference<AiReceivedParameters.Input> parameters = new AtomicReference<>();
+        return observeParametersAt(chooser, ability, "TRIGGER_PREPARATION_RESULT", "TRIGGER_PREPARATION", "TRIGGER_PREPARATION", "BEFORE_OPERATION", () -> {
+            final var received = AiReceivedParameters.trigger(mandatory); parameters.set(received);
+            return Map.of("coverage", "PRIOR_TARGET_PLAN_ONLY", "priorTargets", targetPlan(ability), "callbackParameters", received.diagnostics());
+        }, callback, accepted -> Map.of("accepted", accepted, "targets", targetPlan(ability)), null, null, new AiReceivedParameters.Carrier(parameters));
     }
 
     public static <T extends GameObject, C extends Iterable<T>> T targetPool(final Player chooser, final SpellAbility ability,
