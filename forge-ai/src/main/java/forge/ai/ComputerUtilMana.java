@@ -746,7 +746,18 @@ public class ComputerUtilMana {
                 }
             }
 
-            SpellAbility saPayment = saList.isEmpty() ? null : chooseManaAbility(cost, sa, ai, toPay, saList, checkPlayable || !test);
+            SpellAbility saPayment;
+            if (saList.isEmpty()) {
+                saPayment = null;
+            } else if (test) {
+                saPayment = chooseManaAbility(cost, sa, ai, toPay, saList, checkPlayable || !test);
+            } else {
+                final ManaCostShard requestedShard = toPay;
+                final Collection<SpellAbility> offeredSources = saList;
+                final boolean checkSourceCosts = checkPlayable || !test;
+                saPayment = AiPaymentChoiceRecorder.manaSource(ai, sa, cost, requestedShard, offeredSources, checkSourceCosts, effect,
+                        () -> chooseManaAbility(cost, sa, ai, requestedShard, offeredSources, checkSourceCosts));
+            }
 
             if (saPayment != null && ComputerUtilCost.isSacrificeSelfCost(saPayment.getPayCosts()) && sa.isTargeting(saPayment.getHostCard())) {
                 // not a good idea to sac a card that you're targeting with the SA you're paying for

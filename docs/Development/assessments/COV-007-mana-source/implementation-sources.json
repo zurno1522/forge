@@ -1,0 +1,25 @@
+{
+  "baseRevision": "da09223c236",
+  "scope": "Final V20 production, decoder and unit/current-profile assertions. One test-only ordering correction was compiled with --release 17 into an isolated directory; all sixteen focused classes passed over unchanged Maven-built production.",
+  "sources": {
+    "forge-ai/src/main/java/forge/ai/AiInputContext.java": "eafd8df584dc1c29652af448c7b48fee294c458d7fd046ceab7b3ecdd97f88e5",
+    "forge-ai/src/main/java/forge/ai/AiObservationAccounting.java": "2be1741a17f1594dcb0437ec4691dc83150194fe42545f468e22d57e843bccbc",
+    "forge-ai/src/main/java/forge/ai/AiPaymentChoiceRecorder.java": "6da049eddeeba1e99cad56175ff0f78f683dda6608fd1e868d965f6a627173ae",
+    "forge-ai/src/main/java/forge/ai/AiReceivedParameters.java": "752cbc5c11f50a9d01a56c2ce7cfd3854f95bdfcbfa7646c77c0ee290b757c35",
+    "forge-ai/src/main/java/forge/ai/ComputerUtilMana.java": "22eee2bf27035820c3f107c9cff95b21e8a8a5b4f69f5c2307080388d0dfe739",
+    "forge-gui-desktop/src/test/java/forge/ai/AiCopyTargetInputTest.java": "e1053adc56e24378098db4fe508b93847c9cb3e3aed1eecd9a62f6eed706c84d",
+    "forge-gui-desktop/src/test/java/forge/ai/AiEntitySelectionHistoryTest.java": "48a0890984f2676733e9932ac38b2f29e847290add8a4d126e0efce3f4abc5a8",
+    "forge-gui-desktop/src/test/java/forge/ai/AiModeInputContextTest.java": "25f4ce1cedd1723ee9d322bc2a1d0efa3d5f0c656443df65595da6b0cc75bd8f",
+    "forge-gui-desktop/src/test/java/forge/ai/AiModePromptInputTest.java": "36486afd86d992e613378389bc36e43e72b120b73f486fbd064c947adb05f4c2",
+    "forge-gui-desktop/src/test/java/forge/ai/AiMultiEntityChoiceRecorderTest.java": "fcf23d8a765338e04a8830bece89cbc683ad8b201cfcec244be52545871bdb8c",
+    "forge-gui-desktop/src/test/java/forge/ai/AiStackInputContextTest.java": "44400adbbddd0de7b6cf432fcc2fd8a593500f547324c59c64da8ce302a1fada",
+    "forge-gui-desktop/src/test/java/forge/ai/AiZoneOperationRecorderTest.java": "834b8763a2cbf992eb26c847b46c3a682165ccf60e9b8671c64b5c71216a147f",
+    "tools/decision-records/choice_events.py": "6889ad9fda9faaad279f2ca0d6cee600f9bea4ff20ee00304e572b92b4131788",
+    "tools/decision-records/coverage_audit.py": "afdddf26ae3065228ce814e04800da20ac6485c49fc031c9401587923851501c",
+    "tools/decision-records/export.py": "e0006578eeafe4320fa416b6ec9cfcbd4fe1ca7874f1626d76e63a2781749bc3",
+    "tools/decision-records/input_context.py": "9a32ea3042b828a7ce6ba6369ff3cc7dcdef8a6b5efdafa7cda52210b2b32a23",
+    "tools/decision-records/received_parameters.py": "5ce1f30b4b96c2204dda72343dd0465cf939decebfc6192239a9702fdfd0b523",
+    "forge-gui-desktop/src/test/java/forge/ai/AiManaSourceInputTest.java": "ed210cf565890b6b3a98e0caccf6c6b9f0da413d7a4b4ccbb763b24ecb5fedf4",
+    "tools/decision-records/test_mana_source_input.py": "2f0d3ecd36ec24f4b1caff85f11f53fe9de26d14e2bf88b26c5f97c04067f9f3"
+  }
+}

@@ -32,7 +32,7 @@ def add(count, context, audited, parent_omissions=None):
 
 
 class CoverageAudit:
-    def __init__(self, boundary_groups, turn_groups, audited_boundaries, entry_inventory=None, entry_extensions=None, entry_extensions_v4=None, entry_extensions_v5=None, entry_extensions_v6=None, entry_extensions_v7=None, entry_extensions_v8=None, entry_extensions_v9=None):
+    def __init__(self, boundary_groups, turn_groups, audited_boundaries, entry_inventory=None, entry_extensions=None, entry_extensions_v4=None, entry_extensions_v5=None, entry_extensions_v6=None, entry_extensions_v7=None, entry_extensions_v8=None, entry_extensions_v9=None, entry_extensions_v10=None):
         self.boundaries = boundary_groups
         self.turns = turn_groups
         self.audited = audited_boundaries
@@ -41,7 +41,7 @@ class CoverageAudit:
         self.entry_inventory = entry_inventory or {}
         self.entries = {key: Counter() for key in ('statuses', 'kinds', 'timings', 'stateBases', 'reasons')}
         self.entry_owners = set()
-        self.entry_extensions = {3: entry_extensions or {}, 4: entry_extensions_v4 or {}, 5: entry_extensions_v5 or {}, 6: entry_extensions_v6 or {}, 7: entry_extensions_v7 or {}, 8: entry_extensions_v8 or {}, 9: entry_extensions_v9 or {}}
+        self.entry_extensions = {3: entry_extensions or {}, 4: entry_extensions_v4 or {}, 5: entry_extensions_v5 or {}, 6: entry_extensions_v6 or {}, 7: entry_extensions_v7 or {}, 8: entry_extensions_v8 or {}, 9: entry_extensions_v9 or {}, 10: entry_extensions_v10 or {}}
         self.observed_entry_extensions = {}
 
     def observe(self, owner, boundary, context, *, run_id, game, turn, player, turn_basis, parent_omissions=None, entry_location=None):

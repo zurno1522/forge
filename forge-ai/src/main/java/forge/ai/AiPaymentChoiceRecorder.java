@@ -1,6 +1,7 @@
 package forge.ai;
 
 import forge.game.GameObject;
+import forge.card.mana.ManaCostShard;
 import forge.game.card.CardCollection;
 import forge.game.cost.CostPart;
 import forge.game.cost.PaymentDecision;
@@ -11,6 +12,7 @@ import forge.game.player.Player;
 import forge.game.spellability.SpellAbility;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -92,6 +94,18 @@ public final class AiPaymentChoiceRecorder {
                 () -> Map.of("coverage", "OBSERVED_REQUIREMENT_NOT_ALTERNATIVE_PLANS", "remainingManaValue", cost.getConvertedManaCost(),
                         "effect", effect), callback,
                 result -> Map.of("paymentRoutineReturned", true, "costSatisfied", cost.isPaid(), "manaAbilities", refs(result)));
+    }
+
+    static SpellAbility manaSource(final Player chooser, final SpellAbility ability, final ManaCostBeingPaid cost,
+            final ManaCostShard shard, final Collection<SpellAbility> options, final boolean checkCosts, final boolean effect,
+            final Supplier<SpellAbility> callback) {
+        final var parameters = new AtomicReference<AiReceivedParameters.Input>();
+        return AiChoiceRecorder.observeParametersAt(chooser, ability, "PAYMENT_MANA_SOURCE_SELECTION", null,
+                "MANA_SOURCE_OPTIONS", "BEFORE_SELECTOR", () -> {
+                    final var received = AiReceivedParameters.manaSource(cost, shard, checkCosts, effect); parameters.set(received);
+                    return Map.of("coverage", "OBSERVED_MANA_SOURCE_OPTIONS_NOT_ALL_LEGAL_PAYMENT_PLANS", "abilities", refs(options),
+                            "callbackParameters", received.diagnostics());
+                }, callback, AiTargetChoiceRecorder::reference, null, null, new AiReceivedParameters.Carrier(parameters));
     }
 
     private static final ThreadLocal<PoolRequest> POOL_REQUEST = new ThreadLocal<>();

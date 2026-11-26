@@ -1,0 +1,24 @@
+{
+  "focusedJava": {
+    "tests": 206,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "newCases": 14,
+    "execution": "Maven compiled production and ran the initial suite. A test-only ordering correction calls the public selector before an affordability probe reserves sources; its final source compiled with --release 17 into an isolated directory, then all sixteen focused classes passed over unchanged production."
+  },
+  "python": {
+    "tests": 278,
+    "failures": 0,
+    "errors": 0,
+    "newMethods": 6
+  },
+  "fullDesktopReactor": "Not repeated; the earlier reproduced scavenge instability remains a separate validation limit.",
+  "gameGui": "Not repeated: this increment changes no engine/GUI code; preceding V19 game and GUI module runs each passed 23 tests.",
+  "logs": {
+    "/workspace/work/cov007-mana-source/focused.log": "4af409ed76d99f4b9dfe51034cb0e5044f9a991d0c416705dfec61d40ebf2747",
+    "/workspace/work/cov007-mana-source/focused-final.log": "eef7cfee5485912b1d4da924eaa3281fe30e9299b07df2cb75f552322b741105",
+    "/workspace/work/cov007-mana-source/python.log": "80787c69ef4bb29934876788f4695a47989ee6dd822d1628650944536c9c1803",
+    "/workspace/work/cov007-mana-source/validation.log": "db6a8c6c5d206a4968f68b955a10646bc0c39fe7718aac9b79e3eed412cc9f27"
+  }
+}

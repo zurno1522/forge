@@ -33,6 +33,7 @@ COST_KINDS = {
     'CostUntapType', 'CostWaterbend', 'OTHER'
 }
 TYPES = {'TRIGGER_PREPARATION_RESULT', 'PAYMENT_DECISION', 'PAYMENT_CARD_SELECTION', 'PAYMENT_MANA', 'PAYMENT_MANA_SELECTION', 'TARGET_SELECTION_RESULT', 'EFFECT_COPY_TARGET_RESULT', 'RETARGET_RESULT', 'TARGET_POOL_SELECTION', 'MODE_SELECTION', 'NUMBER_SELECTION', 'X_SELECTION', 'MASKED_CHOICE', 'EFFECT_ENTITY_SELECTION', 'ZONE_CHANGE_CARD_SELECTION'}
+TYPES.add('PAYMENT_MANA_SOURCE_SELECTION')
 TYPES.update(('EFFECT_MULTI_ENTITY_SELECTION', 'ZONE_CHANGE_SELECTION_OPERATION', 'EFFECT_MULTI_SPELL_ABILITY_SELECTION', 'EFFECT_SPELL_ABILITY_SELECTION'))
 BOUNDARIES = {'TRIGGER_PREPARATION', 'COST_VISITOR', 'PAYMENT_SACRIFICE_POOL', 'PAYMENT_DISCARD_POOL', 'PAYMENT_EXILE_POOL', 'AUTO_MANA_PAYMENT', 'MANA_POOL_OPTIONS', 'CONTROLLER_TARGETS', 'COPY_TARGETS', 'CONTROLLER_RETARGET', 'CHARM_MODE_HEURISTIC', 'CONTROLLER_MODES',
               'CONTROLLER_NUMBER_RANGE', 'CONTROLLER_NUMBER_OPTIONS', 'CONTROLLER_ANNOUNCEMENT', 'MAX_X_HEURISTIC', 'X_ANNOUNCEMENT_REFINEMENT', 'MASKED_CHOICE', 'CONTROLLER_EFFECT_ENTITY', 'CONTROLLER_ZONE_CHANGE_CARD'} | POOL_BOUNDARIES
@@ -50,6 +51,7 @@ TYPE_BOUNDARIES = {
     'PAYMENT_CARD_SELECTION': {'PAYMENT_DISCARD_POOL', 'PAYMENT_SACRIFICE_POOL', 'PAYMENT_EXILE_POOL'},
     'PAYMENT_MANA': {'AUTO_MANA_PAYMENT'},
     'PAYMENT_MANA_SELECTION': {'MANA_POOL_OPTIONS'},
+    'PAYMENT_MANA_SOURCE_SELECTION': {'MANA_SOURCE_OPTIONS'},
     'MASKED_CHOICE': {'MASKED_CHOICE'},
     'EFFECT_ENTITY_SELECTION': {'CONTROLLER_EFFECT_ENTITY'},
     'ZONE_CHANGE_CARD_SELECTION': {'CONTROLLER_ZONE_CHANGE_CARD'},
@@ -58,6 +60,7 @@ TYPE_BOUNDARIES = {
     'EFFECT_MULTI_SPELL_ABILITY_SELECTION': {'CONTROLLER_EFFECT_SPELL_ABILITIES'},
     'EFFECT_SPELL_ABILITY_SELECTION': {'CONTROLLER_EFFECT_SPELL_ABILITY'},
 }
+BOUNDARIES.add('MANA_SOURCE_OPTIONS')
 BOUNDARIES.update(('CONTROLLER_EFFECT_ENTITIES', 'CONTROLLER_ZONE_CHANGE_SELECTIONS', 'CONTROLLER_EFFECT_SPELL_ABILITIES', 'CONTROLLER_EFFECT_SPELL_ABILITY'))
 
 CONTEXT_TIMING = {
@@ -79,6 +82,7 @@ CONTEXT_TIMING_V2 = {**{key: value for key, value in CONTEXT_TIMING.items() if k
 MODE_CONTEXT_TIMING = {'CHARM_MODE_HEURISTIC': 'BEFORE_SELECTOR', 'CONTROLLER_MODES': 'BEFORE_OPERATION'}
 MULTI_CONTEXT_TIMING = {'CONTROLLER_EFFECT_ENTITIES': 'BEFORE_OPERATION'}
 ZONE_OPERATION_CONTEXT_TIMING = {'CONTROLLER_ZONE_CHANGE_SELECTIONS': 'BEFORE_OPERATION'}
+MANA_SOURCE_CONTEXT_TIMING = {'MANA_SOURCE_OPTIONS': 'BEFORE_SELECTOR'}
 MANA_POOL_CONTEXT_TIMING = {'MANA_POOL_OPTIONS': 'BEFORE_SELECTOR'}
 COPY_CONTEXT_TIMING = {'COPY_TARGETS': 'BEFORE_OPERATION'}
 PREPARATION_CONTEXT_TIMING = {'TRIGGER_PREPARATION': 'BEFORE_OPERATION'}
@@ -96,6 +100,9 @@ def input_boundary(value, boundary, stage=None, choice=None):
     if choice is not None and boundary in MANA_POOL_CONTEXT_TIMING and value['schemaVersion'] >= 19:
         require('entryLocation' in choice, 'mana pool input lacks own entry')
         expected = MANA_POOL_CONTEXT_TIMING[boundary]
+    if choice is not None and boundary in MANA_SOURCE_CONTEXT_TIMING and value['schemaVersion'] >= 20:
+        require('entryLocation' in choice, 'mana source input lacks own entry')
+        expected = MANA_SOURCE_CONTEXT_TIMING[boundary]
     spell_operation = choice is not None and choice['choiceType'] == 'EFFECT_MULTI_SPELL_ABILITY_SELECTION'
     if choice is not None and boundary in SPELL_CONTEXT_TIMING:
         require('entryLocation' in choice and value['schemaVersion'] >= 13, 'spell input lacks entry/profile')
@@ -158,6 +165,8 @@ def input_boundary(value, boundary, stage=None, choice=None):
 
 def parameter_boundary(choice):
     context = choice.get('inputContext')
+    if (choice['choiceType'], choice['boundary']) == ('PAYMENT_MANA_SOURCE_SELECTION', 'MANA_SOURCE_OPTIONS'):
+        return isinstance(context, dict) and integer(context.get('schemaVersion')) and context['schemaVersion'] >= 20
     if (choice['choiceType'], choice['boundary']) == ('PAYMENT_MANA_SELECTION', 'MANA_POOL_OPTIONS'):
         return isinstance(context, dict) and integer(context.get('schemaVersion')) and context['schemaVersion'] >= 19
     if (choice['choiceType'], choice['boundary']) == ('TRIGGER_PREPARATION_RESULT', 'TRIGGER_PREPARATION'):
@@ -457,6 +466,9 @@ def entry_location(choice, known_players=None):
     if choice['boundary'] in PREPARATION_CONTEXT_TIMING:
         require(choice.get('inputContext', {}).get('schemaVersion', 0) >= 17, 'preparation entry requires V17')
         expected = PREPARATION_CONTEXT_TIMING[choice['boundary']]
+    if choice['boundary'] in MANA_SOURCE_CONTEXT_TIMING:
+        require(choice.get('inputContext', {}).get('schemaVersion', 0) >= 20, 'mana source entry requires V20')
+        expected = MANA_SOURCE_CONTEXT_TIMING[choice['boundary']]
     if choice['boundary'] in MANA_POOL_CONTEXT_TIMING:
         require(choice.get('inputContext', {}).get('schemaVersion', 0) >= 19, 'mana pool entry requires V19')
         expected = MANA_POOL_CONTEXT_TIMING[choice['boundary']]
@@ -624,6 +636,13 @@ def options(choice):
                 and integer(option['remainingManaValue']) and isinstance(option['effect'], bool)
                 and choice['boundary'] == 'AUTO_MANA_PAYMENT', 'invalid mana requirement')
         return
+    if choice['choiceType'] == 'PAYMENT_MANA_SOURCE_SELECTION':
+        require(parameter_options(choice) and 'entryLocation' in choice, 'mana source lacks own entry/profile')
+        require(isinstance(option, dict) and set(option) == {'coverage','abilities','callbackParameters'}
+                and option['coverage'] == 'OBSERVED_MANA_SOURCE_OPTIONS_NOT_ALL_LEGAL_PAYMENT_PLANS', 'invalid source options')
+        prefix(option['abilities'], lambda v: typed_reference(v, 'SPELL_ABILITY'))
+        _contexts._parameters.receipt(option['callbackParameters'], 'MANA_SOURCE', typed_reference, choice['inputContext']['schemaVersion'])
+        return
     if choice['choiceType'] == 'PAYMENT_MANA_SELECTION':
         extra = {'callbackParameters'} if parameter_options(choice) else set()
         require(isinstance(option, dict) and set(option) == {'coverage', 'mana'} | extra and option['coverage'] == 'OBSERVED_MANA_OPTIONS'
@@ -724,6 +743,9 @@ def selection(start, terminal):
         require(isinstance(value, dict) and set(value) == {'paymentRoutineReturned', 'costSatisfied', 'manaAbilities'}
                 and value['paymentRoutineReturned'] is True and isinstance(value['costSatisfied'], bool), 'invalid mana payment return')
         prefix(value['manaAbilities'], lambda v: typed_reference(v, 'SPELL_ABILITY'))
+        return
+    if start['choiceType'] == 'PAYMENT_MANA_SOURCE_SELECTION':
+        typed_reference(value, 'SPELL_ABILITY')
         return
     if start['choiceType'] == 'PAYMENT_MANA_SELECTION':
         mana_reference(value)

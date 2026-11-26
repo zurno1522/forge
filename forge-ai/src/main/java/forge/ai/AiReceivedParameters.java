@@ -3,6 +3,8 @@ package forge.ai;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableList;
 import forge.game.GameEntity;
+import forge.card.mana.ManaCostShard;
+import forge.game.mana.ManaCostBeingPaid;
 import forge.game.card.Card;
 import forge.game.card.CardCollection;
 import forge.game.card.CounterCustomType;
@@ -26,7 +28,7 @@ final class AiReceivedParameters {
     static final int MAX_ROLE_LIST = 64;
     enum Family { NUMBER, ENTITY }
     enum Kind { NONE, VOTER, COUNTER_AMOUNT, COUNTER_TRANSFER_AMOUNT, ENTITY_CARD_ROLE, ENTITY_TARGET_ROLE,
-        ENTITY_MANA_VALUE_LIMIT, ENTITY_COUNTER_REQUEST, TRIGGER_REQUIREMENT, ENTITY_ATTACHMENT_ROLES, ENTITY_ATTACKER_ROLES, MANA_POOL_REQUEST }
+        ENTITY_MANA_VALUE_LIMIT, ENTITY_COUNTER_REQUEST, TRIGGER_REQUIREMENT, ENTITY_ATTACHMENT_ROLES, ENTITY_ATTACKER_ROLES, MANA_POOL_REQUEST, MANA_SOURCE_REQUEST }
     record Carrier(AtomicReference<Input> receipt) { }
     record Input(Kind kind, String coverage, String reason, Map<String, Object> values, Map<String, AiOptionInput.Entry> roles, Map<String, List<AiOptionInput.Entry>> roleLists) {
         Map<String, Object> diagnostics() {
@@ -44,6 +46,11 @@ final class AiReceivedParameters {
     static Input manaPool(final ManaPoolChoiceContext request) {
         return request == null || request.shard() == null ? unsupported() : complete(Kind.MANA_POOL_REQUEST,
                 Map.of("testPayment", request.testPayment(), "shard", request.shard().name(), "colorsPaid", (int) request.colorsPaid()), Map.of());
+    }
+
+    static Input manaSource(final ManaCostBeingPaid cost, final ManaCostShard shard, final boolean checkCosts, final boolean effect) {
+        return cost == null || cost.getClass() != ManaCostBeingPaid.class || shard == null ? unsupported() : complete(Kind.MANA_SOURCE_REQUEST,
+                Map.of("shard", shard.name(), "remainingManaValue", cost.getConvertedManaCost(), "checkCosts", checkCosts, "effect", effect), Map.of());
     }
 
     private static Input unsupported() { return new Input(null, "UNSUPPORTED", "UNSUPPORTED", null, Map.of(), Map.of()); }

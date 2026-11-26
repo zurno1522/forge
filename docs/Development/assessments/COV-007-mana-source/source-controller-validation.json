@@ -1,0 +1,26 @@
+{
+  "ACTUAL_SUCCESSIVE_PAYMENT": {
+    "lifecycleEvents": 18,
+    "validatedObservations": 9
+  },
+  "CONTROLLED_POST_SELECTION_REJECTION": {
+    "lifecycleEvents": 12,
+    "validatedObservations": 6
+  },
+  "FROZEN_PLANNING": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "DECLINED_SOURCE": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "UNKNOWN_COST": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "ORIGINAL_ERROR": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  }
+}
