@@ -1566,7 +1566,8 @@ public class PlayerControllerAi extends PlayerController {
     }
 
     void chooseNewTargetsForCopy(final SpellAbility copy) {
-        AiChoiceRecorder.observe(player, copy, "EFFECT_COPY_TARGET_RESULT", "EFFECT_COPY_TARGET_SELECTION", "COPY_TARGETS",
+        // This is an operation: completion can retain the old targets, including an illegal old target.
+        AiChoiceRecorder.observeInput(player, copy, "EFFECT_COPY_TARGET_RESULT", "EFFECT_COPY_TARGET_SELECTION", "COPY_TARGETS", "BEFORE_OPERATION",
                 () -> Map.of("coverage", "PRIOR_TARGET_PLAN_ONLY", "priorTargets", AiChoiceRecorder.targetPlan(copy)),
                 () -> { chooseNewTargetsForCopyImpl(copy); return true; },
                 ignored -> Map.of("targets", AiChoiceRecorder.targetPlan(copy)));

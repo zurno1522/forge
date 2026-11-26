@@ -803,7 +803,7 @@ def make_coverage(runs, rows, *, spool=None):
          'SEARCH_OPERATION': {key: 'BEFORE_OPERATION' if key == 'HEURISTIC_REVALIDATION' else 'AFTER_SELECTION_BEFORE_APPLICATION'
                               for key in ('HEURISTIC_REVALIDATION', 'RESTORE_APPROVED_TARGET', 'ROLLOUT_TARGET_OVERRIDE', 'DISCOVERED_TARGET', 'GUARD_REAIM')}},
         {'CHOICE': _choices.MODE_CONTEXT_TIMING}, {'CHOICE': _choices.MULTI_CONTEXT_TIMING},
-        {'CHOICE': _choices.ZONE_OPERATION_CONTEXT_TIMING}, {'CHOICE': _choices.SPELL_CONTEXT_TIMING}, {'CHOICE': _choices.PREPARATION_CONTEXT_TIMING})
+        {'CHOICE': _choices.ZONE_OPERATION_CONTEXT_TIMING}, {'CHOICE': _choices.SPELL_CONTEXT_TIMING}, {'CHOICE': _choices.PREPARATION_CONTEXT_TIMING}, {'CHOICE': _choices.COPY_CONTEXT_TIMING})
     common = ('selections', 'selectedActionKinds', 'phases', 'decisionStatuses', 'outcomeLabels',
               'pilotModes', 'assessments', 'assessmentDetails', 'cardAiHandlers', 'handlerAssessments',
               'rejectedCards', 'rejectedActionKinds', 'rejectedCardKinds', 'searchReasons')
@@ -1226,6 +1226,8 @@ def make_coverage(runs, rows, *, spool=None):
         summary['limitations'].append('V15 additionally permits controller-owned spell-choice progress and a bounded prior-return occurrence vector at the next selector. Ability identities stay unresolved (null); detached receipts and IDs remain diagnostic. Only an exact admitted base-controller operation can own this history; direct selectors and external engine repetition remain unknown. Incomplete history is unavailable. No offered-pool, ability-definition, complete domain or learning readiness follows.')
     if {'PERMITTED_CHOICE_VIEW_V16', 'PERMITTED_CHOICE_VIEW_V17'} & input_profiles.keys():
         summary['limitations'].append('V16 independently permits bounded received scalar/current-public-role parameters at audited numeric-range and single-entity callbacks. Unknown maps/keys/values remain unsupported, and unproved/private/stale roles are unavailable. Parameters do not grant offered-pool membership, complete counter/effect/cost semantics or additional numeric planning-domain permission. Role collections remain unsupported; all examples remain incomplete.')
+    if audit.observed_entry_extensions.get(8):
+        summary['limitations'].append('COPY_TARGETS captures its operation entry before clear/delegate/rechoose/restore/reaim work. Completion and final target diagnostics do not establish successful reselection, legal targets or an available target domain; received parameters remain unsupported and trainingReady stays false.')
     if 'PERMITTED_CHOICE_VIEW_V17' in input_profiles:
         summary['limitations'].append('V17 captures the existing trigger-preparation operation before its work and permits only its received mandatory directive. Acceptance/final targets remain results, and nested selectors retain their own actors/entries. Unknown legacy helper directives stay unavailable. This grants no trigger semantics, option domain or learning readiness; legacy absent operation inputs remain unknown.')
     if accounting is not None:

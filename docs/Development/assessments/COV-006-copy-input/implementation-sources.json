@@ -1,0 +1,13 @@
+{
+  "baseRevision": "1a8a33cbacc",
+  "scope": "Final runtime, decoder, unit tests and game fixture; final corrected Java test compiled into an isolated test directory over the Maven-built production classes.",
+  "sources": {
+    "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java": "85743a73488e15d06dbd784bb4ebf9dd4d74016ccf19bb792a29c0e539339671",
+    "tools/decision-records/choice_events.py": "60e3fb2c1ecba37aa81d371b63a570c85c54b2267f9e773792932d67fa85765c",
+    "tools/decision-records/coverage_audit.py": "6138c0f9ccab64382c6ced2fdfc7627323fff94a11304ed4cad0cf70f87a5938",
+    "tools/decision-records/export.py": "938431bb15eb89171eb9328665d52529f1f4196a851a7c4ca583f5f16deb3e95",
+    "forge-gui-desktop/src/test/java/forge/ai/AiCopyTargetInputTest.java": "5d1f94229dbd61441852772a6650cf5144ef5c796a024860922e6721ea166d51",
+    "tools/decision-records/test_copy_target_input.py": "0c7f833292f07ba217d97e35f0540a29e17eaf5177d1e6fcc5b7203a81b78912",
+    "tools/trace-test-decks/choice-copy-targets.dck": "f06cf4724b461c2c7feedf718e60ce2904d80b3b5655a2aaabb58cf0bbde6dff"
+  }
+}

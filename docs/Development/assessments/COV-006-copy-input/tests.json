@@ -1,0 +1,22 @@
+{
+  "focusedJava": {
+    "tests": 86,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "newCases": 8,
+    "execution": "Maven reactor compiled production/classes and ran the initial tests. After correcting one test-only terminal lookup, --release 17 javac compiled the final test into an isolated directory and TestNG reran all six focused classes over that unchanged production build."
+  },
+  "python": {
+    "tests": 260,
+    "failures": 0,
+    "errors": 0,
+    "newMethods": 4
+  },
+  "fullReactor": "Not repeated; the separately reproduced pre-V15 scavenge instability remains an earlier validation limit.",
+  "logs": {
+    "/workspace/work/cov006-copy-input/focused-isolated.log": "2eeb7cc4b9bea269f7218c726533cc1c35354c05bf27348b2410960c0831ab50",
+    "/workspace/work/cov006-copy-input/python.log": "65102a0f36d4fc89bf87e4484424c53ea5bc6fdedcfb2a7ea0de0a0405ef2bba",
+    "/workspace/work/cov006-copy-input/validation-final.log": "b6c224bc17aa8fa7eff0b99f40d0fe07732a3f0cc7797e3dec05ce97386c156c"
+  }
+}

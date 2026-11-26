@@ -1,0 +1,7 @@
+{
+  "revision": "3f4ab6fe700",
+  "scope": "One pre-copy-input AI class over otherwise current build; no checkout mutation or whole-build performance comparison.",
+  "sources": {
+    "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java": "dd42f695b89b1f5fa4d48b11b47d8108b53484e34da1b6a498749a8a2deb3581"
+  }
+}

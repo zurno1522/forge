@@ -1,0 +1,14 @@
+{
+  "RESELECT": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "ILLEGAL_FALLBACK": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "PLANNING_DELEGATE": {
+    "lifecycleEvents": 6,
+    "validatedObservations": 3
+  }
+}

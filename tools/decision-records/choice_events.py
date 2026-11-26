@@ -79,6 +79,7 @@ CONTEXT_TIMING_V2 = {**{key: value for key, value in CONTEXT_TIMING.items() if k
 MODE_CONTEXT_TIMING = {'CHARM_MODE_HEURISTIC': 'BEFORE_SELECTOR', 'CONTROLLER_MODES': 'BEFORE_OPERATION'}
 MULTI_CONTEXT_TIMING = {'CONTROLLER_EFFECT_ENTITIES': 'BEFORE_OPERATION'}
 ZONE_OPERATION_CONTEXT_TIMING = {'CONTROLLER_ZONE_CHANGE_SELECTIONS': 'BEFORE_OPERATION'}
+COPY_CONTEXT_TIMING = {'COPY_TARGETS': 'BEFORE_OPERATION'}
 PREPARATION_CONTEXT_TIMING = {'TRIGGER_PREPARATION': 'BEFORE_OPERATION'}
 SPELL_CONTEXT_TIMING = {'CONTROLLER_EFFECT_SPELL_ABILITIES': 'BEFORE_OPERATION', 'CONTROLLER_EFFECT_SPELL_ABILITY': 'BEFORE_SELECTOR'}
 
@@ -88,6 +89,9 @@ def input_boundary(value, boundary, stage=None, choice=None):
     if choice is not None and boundary in PREPARATION_CONTEXT_TIMING and value['schemaVersion'] >= 17:
         require('entryLocation' in choice and stage == 'TRIGGER_PREPARATION', 'preparation input lacks own entry/stage')
         expected = PREPARATION_CONTEXT_TIMING[boundary]
+    if choice is not None and boundary in COPY_CONTEXT_TIMING and value['schemaVersion'] >= 17:
+        require('entryLocation' in choice and stage == 'EFFECT_COPY_TARGET_SELECTION', 'copy input lacks own entry/stage')
+        expected = COPY_CONTEXT_TIMING[boundary]
     spell_operation = choice is not None and choice['choiceType'] == 'EFFECT_MULTI_SPELL_ABILITY_SELECTION'
     if choice is not None and boundary in SPELL_CONTEXT_TIMING:
         require('entryLocation' in choice and value['schemaVersion'] >= 13, 'spell input lacks entry/profile')
@@ -447,6 +451,9 @@ def entry_location(choice, known_players=None):
     if choice['boundary'] in PREPARATION_CONTEXT_TIMING:
         require(choice.get('inputContext', {}).get('schemaVersion', 0) >= 17, 'preparation entry requires V17')
         expected = PREPARATION_CONTEXT_TIMING[choice['boundary']]
+    if choice['boundary'] in COPY_CONTEXT_TIMING:
+        require(choice.get('inputContext', {}).get('schemaVersion', 0) >= 17, 'copy entry requires V17')
+        expected = COPY_CONTEXT_TIMING[choice['boundary']]
     if choice['boundary'] in MODE_CONTEXT_TIMING:
         expected = MODE_CONTEXT_TIMING[choice['boundary']]
         require(value['stateBasis'] == 'PLANNING_WORKING_STATE', 'mode entry claims committed state')
