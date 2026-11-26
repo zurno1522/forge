@@ -490,7 +490,7 @@ public class PlayerControllerAi extends PlayerController {
     @Override
     public SpellAbility chooseSingleSpellForEffect(List<SpellAbility> spells, SpellAbility sa, String title,
             Map<String, Object> params) {
-        return AiSpellChoiceRecorder.single(player, sa, spells,
+        return AiSpellChoiceRecorder.single(player, sa, spells, params,
                 () -> SpellApiToAi.Converter.get(sa).chooseSingleSpellAbility(player, sa, spells, params));
     }
 

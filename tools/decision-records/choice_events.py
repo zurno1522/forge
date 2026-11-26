@@ -120,7 +120,9 @@ def input_boundary(value, boundary, stage=None, choice=None):
         if value['schemaVersion'] >= 4 and value['diagnostics']['optionBindings']['coverage'] != 'UNSUPPORTED':
             require(boundary in ('CONTROLLER_EFFECT_ENTITY', 'CONTROLLER_ZONE_CHANGE_CARD') or target_pool, 'option links at unaudited input boundary')
         if prompt is not None:
-            if prompt['kind'] == 'SPELL_ABILITY_OPERATION_REQUEST':
+            if prompt['kind'] == 'SPELL_ABILITY_REQUEST':
+                require(choice['choiceType'] == 'EFFECT_SPELL_ABILITY_SELECTION' and value['schemaVersion'] >= 14, 'single spell request at unaudited boundary')
+            elif prompt['kind'] == 'SPELL_ABILITY_OPERATION_REQUEST':
                 require(spell_operation and value['schemaVersion'] >= 13, 'spell request at unaudited boundary')
             elif prompt['kind'] == 'ZONE_CHANGE_OPERATION_REQUEST':
                 require(operation and value['schemaVersion'] >= 9, 'zone operation request at unaudited boundary')
@@ -147,7 +149,12 @@ def prompt_arguments(choice):
     prompt = (context['policy'] or {}).get('prompt')
     if prompt is None: return
     option = choice['options']
-    if prompt['kind'] == 'SPELL_ABILITY_OPERATION_REQUEST':
+    if prompt['kind'] == 'SPELL_ABILITY_REQUEST':
+        receipt = option['spellRequest']
+        require(receipt['coverage'] == 'COMPLETE', 'unsupported spell parameters claim a prompt')
+        by_ref = {binding['entityRef']: binding['id'] for binding in context['diagnostics']['playerBindings']}
+        require((None if prompt['affectedPlayer'] is None else by_ref[prompt['affectedPlayer']]) == receipt['affectedPlayerId'], 'affected role differs from received argument')
+    elif prompt['kind'] == 'SPELL_ABILITY_OPERATION_REQUEST':
         require(prompt['requestedSelections'] == option['requestedSelections'], 'spell request differs from received argument')
     elif prompt['kind'] == 'ZONE_CHANGE_OPERATION_REQUEST':
         if context['schemaVersion'] >= 11: require(prompt['branch'] == option['branch'], 'zone operation branch differs')
@@ -420,12 +427,19 @@ def options(choice):
         multiple = choice['choiceType'] == 'EFFECT_MULTI_SPELL_ABILITY_SELECTION'
         context = choice.get('inputContext')
         require('entryLocation' in choice and isinstance(context, dict) and integer(context.get('schemaVersion')) and context['schemaVersion'] >= 13, 'spell choice lacks entry/profile')
-        require(isinstance(option, dict) and set(option) == {'coverage', 'items', 'truncated'} | ({'requestedSelections'} if multiple else set())
+        request_fields = {'spellRequest'} if not multiple and context['schemaVersion'] >= 14 else set()
+        require(isinstance(option, dict) and set(option) == {'coverage', 'items', 'truncated'} | ({'requestedSelections'} if multiple else set()) | request_fields
                 and option['coverage'] in ('OBSERVED_SPELL_ABILITY_OPTIONS_DIAGNOSTIC_ONLY', 'UNAVAILABLE'), 'invalid spell choice options')
         require(isinstance(option['items'], list) and len(option['items']) <= 256 and isinstance(option['truncated'], bool), 'invalid spell option prefix')
         if option['coverage'] == 'UNAVAILABLE': require(not option['items'] and option['truncated'], 'unavailable spell options have items')
         if multiple: require(integer(option['requestedSelections']) and -(1 << 31) <= option['requestedSelections'] < (1 << 31), 'invalid requested spell selections')
         for ref in option['items']: typed_reference(ref, 'SPELL_ABILITY')
+        if request_fields:
+            receipt = option['spellRequest']
+            require(isinstance(receipt, dict) and set(receipt) == {'schemaVersion', 'coverage', 'affectedPlayerId'}
+                    and integer(receipt['schemaVersion']) and receipt['schemaVersion'] == 1, 'invalid received spell parameter fields')
+            require(receipt['coverage'] in ('COMPLETE', 'UNSUPPORTED') and (receipt['affectedPlayerId'] is None or integer(receipt['affectedPlayerId'])), 'invalid received spell parameters')
+            require(receipt['coverage'] != 'UNSUPPORTED' or receipt['affectedPlayerId'] is None, 'unsupported parameters carry a role')
         return
     if choice['choiceType'] == 'ZONE_CHANGE_SELECTION_OPERATION':
         require(isinstance(option, dict) and set(option) == {'coverage', 'branch', 'requestedIterations', 'destination', 'origins', 'sourcePlayerId', 'deciderPlayerId'}

@@ -6,11 +6,21 @@ import forge.game.zone.ZoneType;
 
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.concurrent.atomic.AtomicReference;
 
 /** Temporary audited request arguments. Only AiInputContext projects these into frozen JSON. */
 record AiPromptInput(Kind kind, int minimum, int maximum, List<Integer> values, boolean optional,
         Player relatedPlayer, boolean allowRepeat, AiEntitySelectionHistory.Input sequence, ZoneRequest zoneRequest, ZoneOperation zoneOperation, AiZoneSelectionHistory.Input zoneProgress) {
-    enum Kind { NUMBER_RANGE, NUMBER_OPTIONS, SINGLE_ENTITY, MODE_BOUNDS, ENTITY_BOUNDS, ENTITY_PICK_SEQUENCE, ZONE_CHANGE_REQUEST, ZONE_CHANGE_OPERATION_REQUEST, ZONE_PICK_PROGRESS, SPELL_ABILITY_OPERATION_REQUEST }
+    enum Kind { NUMBER_RANGE, NUMBER_OPTIONS, SINGLE_ENTITY, MODE_BOUNDS, ENTITY_BOUNDS, ENTITY_PICK_SEQUENCE, ZONE_CHANGE_REQUEST, ZONE_CHANGE_OPERATION_REQUEST, ZONE_PICK_PROGRESS, SPELL_ABILITY_OPERATION_REQUEST, SPELL_ABILITY_REQUEST, UNSUPPORTED_REQUEST }
+
+    /** Reads only the receipt captured by this entry's visible options supplier. */
+    record SpellRequest(AtomicReference<AiSpellRequestInput> input) implements Supplier<AiPromptInput> {
+        @Override public AiPromptInput get() {
+            final var received = input.get();
+            return new AiPromptInput(received != null && received.supported() ? Kind.SPELL_ABILITY_REQUEST : Kind.UNSUPPORTED_REQUEST,
+                    0, 0, null, false, received == null ? null : received.affectedPlayer(), false, null, null, null, null);
+        }
+    }
 
     /** Received do-while request, never a legal minimum/maximum result bound. */
     record SpellOperation(int requestedSelections) implements Supplier<AiPromptInput> {

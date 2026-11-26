@@ -1,0 +1,25 @@
+{
+  "baseRevision": "4f25f5360c5502592831f582fc89cf0db51155f9",
+  "sources": {
+    "forge-ai/src/main/java/forge/ai/AiInputContext.java": "6753765a9a6e8adf929bd1ef6230772883e5d9e6b7cb14db2a81ce32b1abfbd5",
+    "forge-ai/src/main/java/forge/ai/AiPromptInput.java": "723bb957782a6ff7062c30be68ea61b6c904b52d2fbbf982a99350d954389b3c",
+    "forge-ai/src/main/java/forge/ai/AiSpellChoiceRecorder.java": "43690ea2ff91f95151db3454da912df85e07a3a783bc9e1bd1a4f8be725448f5",
+    "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java": "405121b4ab5a0bfc014ae6513194cb4388c1d7a5e09ab423c03e921e026eb201",
+    "forge-gui-desktop/src/test/java/forge/ai/AiEntitySelectionHistoryTest.java": "f47f08eea966a96d1111af58b76660cc7b51f6e8ee2f62c0e84dcfa41cac10b4",
+    "forge-gui-desktop/src/test/java/forge/ai/AiModeInputContextTest.java": "153e8967ea8f9c1aea00dcb8829ccf5b01ea29ac71c5886a4b0f5bf0293c43a9",
+    "forge-gui-desktop/src/test/java/forge/ai/AiModePromptInputTest.java": "93ca844201d7118d7f60603a594873d1a7309e644c5d4a92f0d47b0f6bf1c28c",
+    "forge-gui-desktop/src/test/java/forge/ai/AiMultiEntityChoiceRecorderTest.java": "ff3d73972af8a67cb36efb2aac6174e699183755413418686f93c4bdd141e8c5",
+    "forge-gui-desktop/src/test/java/forge/ai/AiSpellChoiceRecorderTest.java": "6d791e2eeda13ee94d2447e39f6cd23b8fe86d48869eb439201466357cc5028a",
+    "forge-gui-desktop/src/test/java/forge/ai/AiStackInputContextTest.java": "2fc8ddbee02fa69a706a9aa786614616a374950b520e392b7be9d9eb2b7291c2",
+    "forge-gui-desktop/src/test/java/forge/ai/AiZoneOperationRecorderTest.java": "0762734268ce9bd2993aca7e78bc5830d8e8ef00fbc44f045aae032fd9a44149",
+    "tools/decision-records/choice_events.py": "6de6b3068ee93e59e4b18f0050c359927441e3d94d7eea31e064b5474e38fa78",
+    "tools/decision-records/export.py": "566fe2036282c46b41510ce86d55b4f78a1b4e09556e1d29554323f00eaef0dd",
+    "tools/decision-records/input-context-benchmark/summarize-workloads.py": "ffc7ac97c3f35620cdc2f1cece5bba19604549becf2e2cdae0f8b38e84109d1b",
+    "tools/decision-records/input_context.py": "8aa49c47d8b77d468741c146c236382d6f972f015167f98f0f0cba5de5c18fbb",
+    "tools/decision-records/test_workload_measurements.py": "8fd12dde03897a7d6570a09c97699aa82d8f7a8703e2a99c2e0cfaaf58bf96cc",
+    "forge-ai/src/main/java/forge/ai/AiSpellRequestInput.java": "4b6aae999c7bd4cc2eabc83c1275813d6366f5edcec0640910c97ce791896e96",
+    "forge-gui-desktop/src/test/java/forge/ai/AiSpellRequestInputTest.java": "ffec53b6426643ec9a189db1786678bed5912cfe12074034f082bd18415a0899",
+    "tools/decision-records/test_spell_request_input.py": "a9a55c1d64c80e9e83707a84eb126c30e6c590b8bb150f54a3574e8f96ae5185",
+    "tools/trace-test-decks/choice-spell-player-request.dck": "098fefaf48123906cd0e9fcab3106856124299944a50f82e7295cfcc4121e4d2"
+  }
+}

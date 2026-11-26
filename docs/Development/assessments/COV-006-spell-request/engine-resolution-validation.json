@@ -1,0 +1,18 @@
+{
+  "FRIEND_FOE_EFFECT": {
+    "lifecycleEvents": 4,
+    "validatedOperationsAndSelectors": 2
+  },
+  "NO_PARAMETERS": {
+    "lifecycleEvents": 2,
+    "validatedOperationsAndSelectors": 1
+  },
+  "UNSUPPORTED_MAP": {
+    "lifecycleEvents": 2,
+    "validatedOperationsAndSelectors": 1
+  },
+  "FOREIGN_EQUAL_ID": {
+    "lifecycleEvents": 2,
+    "validatedOperationsAndSelectors": 1
+  }
+}

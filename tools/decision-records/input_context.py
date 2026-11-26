@@ -7,7 +7,7 @@ from a privileged trace or prove that an uninstrumented heuristic used this view
 
 PROFILE = 'PERMITTED_CHOICE_VIEW_V1'
 PROFILES = {1: PROFILE, 2: 'PERMITTED_CHOICE_VIEW_V2', 3: 'PERMITTED_CHOICE_VIEW_V3', 4: 'PERMITTED_CHOICE_VIEW_V4',
-            5: 'PERMITTED_CHOICE_VIEW_V5', 6: 'PERMITTED_CHOICE_VIEW_V6', 7: 'PERMITTED_CHOICE_VIEW_V7', 8: 'PERMITTED_CHOICE_VIEW_V8', 9: 'PERMITTED_CHOICE_VIEW_V9', 10: 'PERMITTED_CHOICE_VIEW_V10', 11: 'PERMITTED_CHOICE_VIEW_V11', 12: 'PERMITTED_CHOICE_VIEW_V12', 13: 'PERMITTED_CHOICE_VIEW_V13'}
+            5: 'PERMITTED_CHOICE_VIEW_V5', 6: 'PERMITTED_CHOICE_VIEW_V6', 7: 'PERMITTED_CHOICE_VIEW_V7', 8: 'PERMITTED_CHOICE_VIEW_V8', 9: 'PERMITTED_CHOICE_VIEW_V9', 10: 'PERMITTED_CHOICE_VIEW_V10', 11: 'PERMITTED_CHOICE_VIEW_V11', 12: 'PERMITTED_CHOICE_VIEW_V12', 13: 'PERMITTED_CHOICE_VIEW_V13', 14: 'PERMITTED_CHOICE_VIEW_V14'}
 ZONE_BRANCHES = {'ORDINARY_HIDDEN_ORIGIN', 'SAME_NAME_HIDDEN_ORIGIN', 'EACH_TYPE_HIDDEN_ORIGIN', 'HEIST', 'DRAFT'}
 TIMINGS = {'BEFORE_SELECTOR', 'BEFORE_OPERATION', 'AFTER_SELECTION_BEFORE_APPLICATION', 'UNESTABLISHED'}
 STATE_BASES = {'RULES_STATE', 'PLANNING_WORKING_STATE', 'UNESTABLISHED'}
@@ -212,6 +212,7 @@ def validate_prompt(prompt, coverage, player_refs, omissions, state_basis, versi
     if version >= 8: permitted.add('RECEIVED_ZONE_REQUEST_V1')
     if version >= 9: permitted.add('RECEIVED_ZONE_OPERATION_V1')
     if version >= 13: permitted.add('RECEIVED_SPELL_OPERATION_V1')
+    if version >= 14: permitted.add('RECEIVED_SPELL_REQUEST_V1')
     if version >= 10: permitted.add('RECEIVED_ZONE_PROGRESS_V1')
     require(coverage in permitted | {'UNSUPPORTED', 'UNAVAILABLE'}, 'invalid prompt coverage')
     require((prompt is not None) == (coverage in permitted), 'prompt coverage/policy mismatch')
@@ -229,10 +230,15 @@ def validate_prompt(prompt, coverage, player_refs, omissions, state_basis, versi
     zone_progress = kind == 'ZONE_PICK_PROGRESS'
     operation = kind == 'ZONE_CHANGE_OPERATION_REQUEST'
     spell_operation = kind == 'SPELL_ABILITY_OPERATION_REQUEST'
-    require(state_basis == 'RULES_STATE' or (mode and version >= 5 or entities and version >= 6 or sequence and version >= 7 or zone and version >= 8 or operation and version >= 9 or zone_progress and version >= 10 or spell_operation and version >= 13) and state_basis == 'PLANNING_WORKING_STATE',
+    spell_request = kind == 'SPELL_ABILITY_REQUEST'
+    require(state_basis == 'RULES_STATE' or (mode and version >= 5 or entities and version >= 6 or sequence and version >= 7 or zone and version >= 8 or operation and version >= 9 or zone_progress and version >= 10 or spell_operation and version >= 13 or spell_request and version >= 14) and state_basis == 'PLANNING_WORKING_STATE',
             'planning prompt claims committed request arguments')
-    require(coverage == ('RECEIVED_MODE_BOUNDS_V1' if mode else 'RECEIVED_ENTITY_BOUNDS_V1' if entities else 'RECEIVED_ENTITY_SEQUENCE_V1' if sequence else 'RECEIVED_ZONE_REQUEST_V1' if zone else 'RECEIVED_ZONE_OPERATION_V1' if operation else 'RECEIVED_ZONE_PROGRESS_V1' if zone_progress else 'RECEIVED_SPELL_OPERATION_V1' if spell_operation else 'CONTROLLER_REQUEST_V1'), 'prompt kind/coverage mismatch')
-    if spell_operation:
+    require(coverage == ('RECEIVED_MODE_BOUNDS_V1' if mode else 'RECEIVED_ENTITY_BOUNDS_V1' if entities else 'RECEIVED_ENTITY_SEQUENCE_V1' if sequence else 'RECEIVED_ZONE_REQUEST_V1' if zone else 'RECEIVED_ZONE_OPERATION_V1' if operation else 'RECEIVED_ZONE_PROGRESS_V1' if zone_progress else 'RECEIVED_SPELL_OPERATION_V1' if spell_operation else 'RECEIVED_SPELL_REQUEST_V1' if spell_request else 'CONTROLLER_REQUEST_V1'), 'prompt kind/coverage mismatch')
+    if spell_request:
+        require(version >= 14, 'spell request requires V14')
+        fields(prompt, 'kind affectedPlayer', 'invalid single spell request fields')
+        require(prompt['affectedPlayer'] is None or isinstance(prompt['affectedPlayer'], str) and prompt['affectedPlayer'] in player_refs, 'unknown affected player')
+    elif spell_operation:
         require(version >= 13, 'spell operation requires V13')
         fields(prompt, 'kind requestedSelections', 'invalid spell operation request fields')
         require(integer(prompt['requestedSelections']) and -(1 << 31) <= prompt['requestedSelections'] < (1 << 31), 'invalid spell selection request')

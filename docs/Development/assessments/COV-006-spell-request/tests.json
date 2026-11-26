@@ -1,0 +1,22 @@
+{
+  "focusedJava": {
+    "tests": 164,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "newJavaCases": 15,
+  "python": {
+    "tests": 233,
+    "failures": 0,
+    "errors": 0
+  },
+  "newPythonMethods": 5,
+  "newPythonNegativeMutations": 19,
+  "fullReactor": "Not repeated for V14; V13 baseline passed desktop 2853 (6 skips), game 23, GUI 23. Current reactor modules compiled and focused tests passed.",
+  "logs": {
+    "/workspace/work/cov006-spell-request/focused.log": "46dd830e1a91c9cddfd2a17d7dc65914542514bb3e558a4816ebe311b3537e0f",
+    "/workspace/work/cov006-spell-request/python.log": "652f7a6f6f338ec1e2bf3da1b0e84c757c78e34a27e7adcc3547bf01fc6e0df6",
+    "/workspace/work/cov006-spell-request/validate-games.log": "2031d6e7a705181d2f7cff7c00a442076e6c2e4965c48f6b31c20830b7efcfcc"
+  }
+}

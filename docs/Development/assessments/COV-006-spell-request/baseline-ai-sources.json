@@ -1,0 +1,10 @@
+{
+  "revision": "043256593f7",
+  "sources": {
+    "PlayerControllerAi.java": "e77c7aa2a6756b3b0cfdaa402ca7e82db11f78f763b4e0a3a294a9a72a91b871",
+    "AiSpellChoiceRecorder.java": "acec25d8728ea488850364a67945aad08e43e87d8b23cfd296e3aa9e1631766b",
+    "AiInputContext.java": "a3cf0105fc4241cfa97c489fd79144d5ca9221b5a5e082021f2da0c0a59ea2d7",
+    "AiPromptInput.java": "bff7eb5846d2fb1697d48bf6b21adbf5c33ace014fd1967a4caffa0cbf8873eb"
+  },
+  "scope": "Four pre-request AI classes are overlaid on the otherwise shared current build, without changing the checkout. This controls engine behavior, not whole-build performance."
+}

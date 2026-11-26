@@ -34,7 +34,7 @@ final class AiInputContext {
     static final int MAX_TEXT = 256;
     static final int MAX_REQUEST_ZONES = ZoneType.values().length;
     static final long MAX_GAME_WORK = 256_000;
-    static final String PROFILE = "PERMITTED_CHOICE_VIEW_V13";
+    static final String PROFILE = "PERMITTED_CHOICE_VIEW_V14";
     private static final List<ZoneType> ZONES = List.of(ZoneType.Battlefield, ZoneType.Command,
             ZoneType.Graveyard, ZoneType.Exile, ZoneType.Hand, ZoneType.Library);
 
@@ -108,7 +108,7 @@ final class AiInputContext {
 
     private static Map<String, Object> envelope(final Player chooser, final String timing, final String stateBasis) {
         final Map<String, Object> result = new LinkedHashMap<>();
-        result.put("schemaVersion", 13);
+        result.put("schemaVersion", 14);
         result.put("profile", PROFILE);
         result.put("timing", timing);
         result.put("stateBasis", stateBasis);
@@ -322,12 +322,14 @@ final class AiInputContext {
                     && !(promptInput instanceof AiPromptInput.ZoneRequest)
                     && !(promptInput instanceof AiPromptInput.ZoneOperation)
                     && !(promptInput instanceof AiPromptInput.SpellOperation)
+                    && !(promptInput instanceof AiPromptInput.SpellRequest)
                     && !(promptInput instanceof AiZoneSelectionHistory.Prompt)
                     && !(promptInput instanceof AiEntitySelectionHistory.Prompt sequence && sequence.sequenced())) {
                 omit("PROMPT", "UNSUPPORTED"); return null;
             }
             if (!work("PROMPT")) { return null; }
             final AiPromptInput request = promptInput.get();
+            if (request.kind() == AiPromptInput.Kind.UNSUPPORTED_REQUEST) { omit("PROMPT", "UNSUPPORTED"); return null; }
             if (request.kind() == AiPromptInput.Kind.ENTITY_PICK_SEQUENCE && !"COMPLETE".equals(request.sequence().coverage())) {
                 omit("PROMPT", request.sequence().reason()); return null;
             }
@@ -368,6 +370,7 @@ final class AiInputContext {
                     result.put("minimumPicks", request.minimum()); result.put("maximumPicks", request.maximum());
                     result.put("allowRepeat", request.allowRepeat());
                 }
+                case SPELL_ABILITY_REQUEST -> result.put("affectedPlayer", related);
                 case SPELL_ABILITY_OPERATION_REQUEST -> result.put("requestedSelections", request.minimum());
                 case ENTITY_BOUNDS -> {
                     result.put("minimumPicks", request.minimum()); result.put("maximumPicks", request.maximum());
@@ -439,6 +442,7 @@ final class AiInputContext {
                 default -> throw new IllegalStateException("Unsupported prompt kind");
             }
             promptCoverage = switch (request.kind()) {
+                case SPELL_ABILITY_REQUEST -> "RECEIVED_SPELL_REQUEST_V1";
                 case SPELL_ABILITY_OPERATION_REQUEST -> "RECEIVED_SPELL_OPERATION_V1";
                 case MODE_BOUNDS -> "RECEIVED_MODE_BOUNDS_V1";
                 case ENTITY_BOUNDS -> "RECEIVED_ENTITY_BOUNDS_V1";

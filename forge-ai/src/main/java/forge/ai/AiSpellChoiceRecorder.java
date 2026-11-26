@@ -15,11 +15,20 @@ final class AiSpellChoiceRecorder {
 
     static SpellAbility single(final Player chooser, final SpellAbility ability, final List<SpellAbility> options,
             final Supplier<SpellAbility> callback) {
+        return single(chooser, ability, options, null, callback);
+    }
+
+    static SpellAbility single(final Player chooser, final SpellAbility ability, final List<SpellAbility> options,
+            final Map<String, Object> params, final Supplier<SpellAbility> callback) {
         if (!chooser.getGame().isRecordingAiDecisions()) { return callback.get(); }
         final AtomicReference<List<Map<String, Object>>> offered = new AtomicReference<>();
+        final AtomicReference<AiSpellRequestInput> request = new AtomicReference<>();
         return AiChoiceRecorder.observeInput(chooser, ability, "EFFECT_SPELL_ABILITY_SELECTION", null,
-                "CONTROLLER_EFFECT_SPELL_ABILITY", "BEFORE_SELECTOR", () -> pool(options, offered), callback,
-                value -> AiEffectChoiceRecorder.selected(value, offered.get()));
+                "CONTROLLER_EFFECT_SPELL_ABILITY", "BEFORE_SELECTOR", () -> {
+                    final Map<String, Object> result = pool(options, offered);
+                    final var received = AiSpellRequestInput.capture(params); request.set(received);
+                    result.put("spellRequest", received.diagnostics()); return result;
+                }, callback, value -> AiEffectChoiceRecorder.selected(value, offered.get()), new AiPromptInput.SpellRequest(request));
     }
 
     static List<SpellAbility> multiple(final Player chooser, final SpellAbility ability, final List<SpellAbility> options,
