@@ -1,0 +1,40 @@
+{
+  "fullReactor": {
+    "forge-game": {
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "forge-gui": {
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "forge-gui-desktop": {
+      "tests": 2853,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 6
+    }
+  },
+  "coreAndAi": "Compiled; no test classes",
+  "focusedJava": {
+    "tests": 158,
+    "failures": 0,
+    "errors": 0
+  },
+  "newJavaCases": 16,
+  "python": {
+    "tests": 228,
+    "failures": 0,
+    "errors": 0
+  },
+  "initialFixtureCorrection": "The first focused run used ChooseGeneric instead of the GenericChoice API enum; corrected before the successful focused/full runs.",
+  "logs": {
+    "/workspace/work/cov006-spell-choices/reactor.log": "388d3e55c1e5864b30ce09609a4030fb9feec5a6693b777b3fc6ea2ccecaf588",
+    "/workspace/work/cov006-spell-choices/focused-reviewed.log": "1324be9ab7381f3e8da17dfd96e67758fb7e6a8c02da8c4c4acdde11f63876f0",
+    "/workspace/work/cov006-spell-choices/python.log": "10c801fd119bf53a50959d4bdee91ed1cda92215e2104eaca2030daa4a786a2a"
+  }
+}

@@ -76,6 +76,8 @@ class WorkloadMeasurementTests(unittest.TestCase):
         self.assertEqual(summary.summarize(control, profiled)['profile'], 'PERMITTED_CHOICE_VIEW_V11')
         for r in control + profiled: r['inputContextProfile'] = 'PERMITTED_CHOICE_VIEW_V12'
         self.assertEqual(summary.summarize(control, profiled)['profile'], 'PERMITTED_CHOICE_VIEW_V12')
+        for r in control + profiled: r['inputContextProfile'] = 'PERMITTED_CHOICE_VIEW_V13'
+        self.assertEqual(summary.summarize(control, profiled)['profile'], 'PERMITTED_CHOICE_VIEW_V13')
         control[0]['inputContextProfile'] = 'PERMITTED_CHOICE_VIEW_V4'
         with self.assertRaises(ValueError): summary.summarize(control, profiled)
         control[0].pop('inputContextProfile')

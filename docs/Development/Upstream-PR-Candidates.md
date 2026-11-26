@@ -120,3 +120,7 @@ Final main-phase search revalidation/restoration/replacement now records its own
 ### Inline choice-context follow-up
 
 Representative inline player-view contexts, scoped delivered facts, and exporter validation belong with PR-003 as an observability enhancement. They do not establish a Forge rules or card defect. This increment adds no engine API or learning identifiers to forge-game. Review the optional wire capability and its privacy/coverage limits if proposing it upstream; no PR is opened by this entry. See [the implemented profile and remaining gaps](Simulation-Input-Context.md).
+
+### Spell-ability observation increment (2026-11-25)
+
+V13 adds controller spell-ability operation/selector records, own entry clocks and received outer counts, validated by the full reactor, legacy exports and normal constructed/Commander games. It preserves the original AI do-while, including one pick for a nonpositive direct request. No shipped zero-count caller or upstream rules defect is established; do not classify that test edge as an engine bug without a separate caller/requirements audit and upstream review. Typed single parameters and spell-choice history remain local recording work under PR-003's enhancement scope. See the [contract and review](Simulation-Spell-Ability-Choice-Contract.md).

@@ -33,7 +33,7 @@ COST_KINDS = {
     'CostUntapType', 'CostWaterbend', 'OTHER'
 }
 TYPES = {'TRIGGER_PREPARATION_RESULT', 'PAYMENT_DECISION', 'PAYMENT_CARD_SELECTION', 'PAYMENT_MANA', 'PAYMENT_MANA_SELECTION', 'TARGET_SELECTION_RESULT', 'EFFECT_COPY_TARGET_RESULT', 'RETARGET_RESULT', 'TARGET_POOL_SELECTION', 'MODE_SELECTION', 'NUMBER_SELECTION', 'X_SELECTION', 'MASKED_CHOICE', 'EFFECT_ENTITY_SELECTION', 'ZONE_CHANGE_CARD_SELECTION'}
-TYPES.update(('EFFECT_MULTI_ENTITY_SELECTION', 'ZONE_CHANGE_SELECTION_OPERATION'))
+TYPES.update(('EFFECT_MULTI_ENTITY_SELECTION', 'ZONE_CHANGE_SELECTION_OPERATION', 'EFFECT_MULTI_SPELL_ABILITY_SELECTION', 'EFFECT_SPELL_ABILITY_SELECTION'))
 BOUNDARIES = {'TRIGGER_PREPARATION', 'COST_VISITOR', 'PAYMENT_SACRIFICE_POOL', 'PAYMENT_DISCARD_POOL', 'PAYMENT_EXILE_POOL', 'AUTO_MANA_PAYMENT', 'MANA_POOL_OPTIONS', 'CONTROLLER_TARGETS', 'COPY_TARGETS', 'CONTROLLER_RETARGET', 'CHARM_MODE_HEURISTIC', 'CONTROLLER_MODES',
               'CONTROLLER_NUMBER_RANGE', 'CONTROLLER_NUMBER_OPTIONS', 'CONTROLLER_ANNOUNCEMENT', 'MAX_X_HEURISTIC', 'X_ANNOUNCEMENT_REFINEMENT', 'MASKED_CHOICE', 'CONTROLLER_EFFECT_ENTITY', 'CONTROLLER_ZONE_CHANGE_CARD'} | POOL_BOUNDARIES
 
@@ -55,8 +55,10 @@ TYPE_BOUNDARIES = {
     'ZONE_CHANGE_CARD_SELECTION': {'CONTROLLER_ZONE_CHANGE_CARD'},
     'EFFECT_MULTI_ENTITY_SELECTION': {'CONTROLLER_EFFECT_ENTITIES'},
     'ZONE_CHANGE_SELECTION_OPERATION': {'CONTROLLER_ZONE_CHANGE_SELECTIONS'},
+    'EFFECT_MULTI_SPELL_ABILITY_SELECTION': {'CONTROLLER_EFFECT_SPELL_ABILITIES'},
+    'EFFECT_SPELL_ABILITY_SELECTION': {'CONTROLLER_EFFECT_SPELL_ABILITY'},
 }
-BOUNDARIES.update(('CONTROLLER_EFFECT_ENTITIES', 'CONTROLLER_ZONE_CHANGE_SELECTIONS'))
+BOUNDARIES.update(('CONTROLLER_EFFECT_ENTITIES', 'CONTROLLER_ZONE_CHANGE_SELECTIONS', 'CONTROLLER_EFFECT_SPELL_ABILITIES', 'CONTROLLER_EFFECT_SPELL_ABILITY'))
 
 CONTEXT_TIMING = {
     'MAIN_PHASE_PLAY_SELECTION': 'BEFORE_OPERATION',
@@ -77,10 +79,15 @@ CONTEXT_TIMING_V2 = {**{key: value for key, value in CONTEXT_TIMING.items() if k
 MODE_CONTEXT_TIMING = {'CHARM_MODE_HEURISTIC': 'BEFORE_SELECTOR', 'CONTROLLER_MODES': 'BEFORE_OPERATION'}
 MULTI_CONTEXT_TIMING = {'CONTROLLER_EFFECT_ENTITIES': 'BEFORE_OPERATION'}
 ZONE_OPERATION_CONTEXT_TIMING = {'CONTROLLER_ZONE_CHANGE_SELECTIONS': 'BEFORE_OPERATION'}
+SPELL_CONTEXT_TIMING = {'CONTROLLER_EFFECT_SPELL_ABILITIES': 'BEFORE_OPERATION', 'CONTROLLER_EFFECT_SPELL_ABILITY': 'BEFORE_SELECTOR'}
 
 
 def input_boundary(value, boundary, stage=None, choice=None):
     expected = CONTEXT_TIMING.get(boundary)
+    spell_operation = choice is not None and choice['choiceType'] == 'EFFECT_MULTI_SPELL_ABILITY_SELECTION'
+    if choice is not None and boundary in SPELL_CONTEXT_TIMING:
+        require('entryLocation' in choice and value['schemaVersion'] >= 13, 'spell input lacks entry/profile')
+        expected = SPELL_CONTEXT_TIMING[boundary]
     multi = choice is not None and choice['choiceType'] == 'EFFECT_MULTI_ENTITY_SELECTION'
     if multi:
         require('entryLocation' in choice, 'outer entity input lacks its own entry')
@@ -113,7 +120,9 @@ def input_boundary(value, boundary, stage=None, choice=None):
         if value['schemaVersion'] >= 4 and value['diagnostics']['optionBindings']['coverage'] != 'UNSUPPORTED':
             require(boundary in ('CONTROLLER_EFFECT_ENTITY', 'CONTROLLER_ZONE_CHANGE_CARD') or target_pool, 'option links at unaudited input boundary')
         if prompt is not None:
-            if prompt['kind'] == 'ZONE_CHANGE_OPERATION_REQUEST':
+            if prompt['kind'] == 'SPELL_ABILITY_OPERATION_REQUEST':
+                require(spell_operation and value['schemaVersion'] >= 13, 'spell request at unaudited boundary')
+            elif prompt['kind'] == 'ZONE_CHANGE_OPERATION_REQUEST':
                 require(operation and value['schemaVersion'] >= 9, 'zone operation request at unaudited boundary')
             elif prompt['kind'] == 'MODE_BOUNDS':
                 require(mode and value['schemaVersion'] >= 5, 'mode prompt at unaudited boundary')
@@ -138,7 +147,9 @@ def prompt_arguments(choice):
     prompt = (context['policy'] or {}).get('prompt')
     if prompt is None: return
     option = choice['options']
-    if prompt['kind'] == 'ZONE_CHANGE_OPERATION_REQUEST':
+    if prompt['kind'] == 'SPELL_ABILITY_OPERATION_REQUEST':
+        require(prompt['requestedSelections'] == option['requestedSelections'], 'spell request differs from received argument')
+    elif prompt['kind'] == 'ZONE_CHANGE_OPERATION_REQUEST':
         if context['schemaVersion'] >= 11: require(prompt['branch'] == option['branch'], 'zone operation branch differs')
         require(all(prompt[k] == option[k] for k in ('requestedIterations', 'destination', 'origins')), 'zone operation arguments differ')
         by_ref = {b['entityRef']: b['id'] for b in context['diagnostics']['playerBindings']}
@@ -338,6 +349,7 @@ def entry_location(choice, known_players=None):
     expected = CONTEXT_TIMING.get(choice['boundary'])
     if choice['boundary'] in MULTI_CONTEXT_TIMING: expected = MULTI_CONTEXT_TIMING[choice['boundary']]
     if choice['boundary'] in ZONE_OPERATION_CONTEXT_TIMING: expected = ZONE_OPERATION_CONTEXT_TIMING[choice['boundary']]
+    if choice['boundary'] in SPELL_CONTEXT_TIMING: expected = SPELL_CONTEXT_TIMING[choice['boundary']]
     if choice['boundary'] in MODE_CONTEXT_TIMING:
         expected = MODE_CONTEXT_TIMING[choice['boundary']]
         require(value['stateBasis'] == 'PLANNING_WORKING_STATE', 'mode entry claims committed state')
@@ -403,6 +415,17 @@ def options(choice):
     option = choice['options']
     if choice['choiceType'] == 'MASKED_CHOICE':
         require(option == {'coverage': 'MASKED'} and choice['boundary'] == 'MASKED_CHOICE', 'unmasked private choice')
+        return
+    if choice['choiceType'] in ('EFFECT_SPELL_ABILITY_SELECTION', 'EFFECT_MULTI_SPELL_ABILITY_SELECTION'):
+        multiple = choice['choiceType'] == 'EFFECT_MULTI_SPELL_ABILITY_SELECTION'
+        context = choice.get('inputContext')
+        require('entryLocation' in choice and isinstance(context, dict) and integer(context.get('schemaVersion')) and context['schemaVersion'] >= 13, 'spell choice lacks entry/profile')
+        require(isinstance(option, dict) and set(option) == {'coverage', 'items', 'truncated'} | ({'requestedSelections'} if multiple else set())
+                and option['coverage'] in ('OBSERVED_SPELL_ABILITY_OPTIONS_DIAGNOSTIC_ONLY', 'UNAVAILABLE'), 'invalid spell choice options')
+        require(isinstance(option['items'], list) and len(option['items']) <= 256 and isinstance(option['truncated'], bool), 'invalid spell option prefix')
+        if option['coverage'] == 'UNAVAILABLE': require(not option['items'] and option['truncated'], 'unavailable spell options have items')
+        if multiple: require(integer(option['requestedSelections']) and -(1 << 31) <= option['requestedSelections'] < (1 << 31), 'invalid requested spell selections')
+        for ref in option['items']: typed_reference(ref, 'SPELL_ABILITY')
         return
     if choice['choiceType'] == 'ZONE_CHANGE_SELECTION_OPERATION':
         require(isinstance(option, dict) and set(option) == {'coverage', 'branch', 'requestedIterations', 'destination', 'origins', 'sourcePlayerId', 'deciderPlayerId'}
@@ -529,17 +552,18 @@ def selection(start, terminal):
     if terminal['status'] in ('DECLINED', 'ERROR') or start['choiceType'] == 'MASKED_CHOICE':
         require(value is None, 'unavailable choice carries selection')
         return
-    if start['choiceType'] in ('EFFECT_MULTI_ENTITY_SELECTION', 'ZONE_CHANGE_SELECTION_OPERATION'):
+    if start['choiceType'] in ('EFFECT_MULTI_ENTITY_SELECTION', 'ZONE_CHANGE_SELECTION_OPERATION', 'EFFECT_MULTI_SPELL_ABILITY_SELECTION'):
         zone = start['choiceType'] == 'ZONE_CHANGE_SELECTION_OPERATION'
+        spell = start['choiceType'] == 'EFFECT_MULTI_SPELL_ABILITY_SELECTION'
         require(isinstance(value, dict) and set(value) == {'coverage', 'items', 'selectedCount', 'truncated'}
-                and value['coverage'] in ('OBSERVED_RETAINED_CARD_PREFIX' if zone else 'OBSERVED_RETURNED_ENTITY_PREFIX', 'UNAVAILABLE'), 'invalid outer entity result')
+                and value['coverage'] in ('OBSERVED_RETAINED_CARD_PREFIX' if zone else 'OBSERVED_RETURNED_SPELL_ABILITY_PREFIX' if spell else 'OBSERVED_RETURNED_ENTITY_PREFIX', 'UNAVAILABLE'), 'invalid outer entity result')
         items, count = value['items'], value['selectedCount']
         require(isinstance(items, list) and len(items) <= 256 and integer(count) and 0 <= count < (1 << 31)
                 and len(items) <= count and isinstance(value['truncated'], bool), 'invalid outer entity result prefix')
         require(not items and value['truncated'] if value['coverage'] == 'UNAVAILABLE'
                 else value['truncated'] == (count > len(items)), 'invalid outer entity result coverage')
         for ref in items:
-            reference(ref); require(ref['type'] == 'CARD' if zone else ref['type'] in ('CARD', 'PLAYER'), 'invalid outer result identity')
+            reference(ref); require(ref['type'] == 'CARD' if zone else ref['type'] == 'SPELL_ABILITY' if spell else ref['type'] in ('CARD', 'PLAYER'), 'invalid outer result identity')
         return
     if start['choiceType'] == 'PAYMENT_DECISION':
         require(isinstance(value, dict) and set(value) == {'decisionCount', 'cards', 'mana', 'players', 'abilities', 'colorMask', 'unrecordedDetails'}
@@ -591,9 +615,9 @@ def selection(start, terminal):
             require(index is None or integer(index) and 0 <= index < len(offered) and mode['abilityId'] == offered[index]['abilityId'], 'invalid selected mode option link')
             require(index is None or mode['definitionIndex'] == offered[index]['definitionIndex'], 'mode definition/offered index mismatch')
         return
-    if start['choiceType'] in ('TARGET_POOL_SELECTION', 'EFFECT_ENTITY_SELECTION', 'ZONE_CHANGE_CARD_SELECTION'):
+    if start['choiceType'] in ('TARGET_POOL_SELECTION', 'EFFECT_ENTITY_SELECTION', 'ZONE_CHANGE_CARD_SELECTION', 'EFFECT_SPELL_ABILITY_SELECTION'):
         require(isinstance(value, dict) and set(value) == {'selected', 'selectedOptionIndex', 'match'}, 'invalid target pool return')
-        typed_reference(value['selected'], 'CARD') if start['choiceType'] == 'ZONE_CHANGE_CARD_SELECTION' else reference(value['selected'])
+        typed_reference(value['selected'], 'CARD') if start['choiceType'] == 'ZONE_CHANGE_CARD_SELECTION' else typed_reference(value['selected'], 'SPELL_ABILITY') if start['choiceType'] == 'EFFECT_SPELL_ABILITY_SELECTION' else reference(value['selected'])
         index, kind = value['selectedOptionIndex'], value['match']
         require(index is None or integer(index), 'invalid target pool index')
         if start['options']['coverage'] == 'UNAVAILABLE':

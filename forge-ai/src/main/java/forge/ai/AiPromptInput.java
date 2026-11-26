@@ -10,7 +10,15 @@ import java.util.function.Supplier;
 /** Temporary audited request arguments. Only AiInputContext projects these into frozen JSON. */
 record AiPromptInput(Kind kind, int minimum, int maximum, List<Integer> values, boolean optional,
         Player relatedPlayer, boolean allowRepeat, AiEntitySelectionHistory.Input sequence, ZoneRequest zoneRequest, ZoneOperation zoneOperation, AiZoneSelectionHistory.Input zoneProgress) {
-    enum Kind { NUMBER_RANGE, NUMBER_OPTIONS, SINGLE_ENTITY, MODE_BOUNDS, ENTITY_BOUNDS, ENTITY_PICK_SEQUENCE, ZONE_CHANGE_REQUEST, ZONE_CHANGE_OPERATION_REQUEST, ZONE_PICK_PROGRESS }
+    enum Kind { NUMBER_RANGE, NUMBER_OPTIONS, SINGLE_ENTITY, MODE_BOUNDS, ENTITY_BOUNDS, ENTITY_PICK_SEQUENCE, ZONE_CHANGE_REQUEST, ZONE_CHANGE_OPERATION_REQUEST, ZONE_PICK_PROGRESS, SPELL_ABILITY_OPERATION_REQUEST }
+
+    /** Received do-while request, never a legal minimum/maximum result bound. */
+    record SpellOperation(int requestedSelections) implements Supplier<AiPromptInput> {
+        @Override public AiPromptInput get() {
+            return new AiPromptInput(Kind.SPELL_ABILITY_OPERATION_REQUEST, requestedSelections, 0, null, false,
+                    null, false, null, null, null, null);
+        }
+    }
 
     /** Exact audited-operation arguments, without claiming a legal pick bound. */
     record ZoneOperation(ZoneChangeSelectionRequest request) implements Supplier<AiPromptInput> {

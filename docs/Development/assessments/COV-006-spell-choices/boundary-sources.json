@@ -1,0 +1,10 @@
+{
+  "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java": "e77c7aa2a6756b3b0cfdaa402ca7e82db11f78f763b4e0a3a294a9a72a91b871",
+  "forge-ai/src/main/java/forge/ai/AiSpellChoiceRecorder.java": "acec25d8728ea488850364a67945aad08e43e87d8b23cfd296e3aa9e1631766b",
+  "forge-game/src/main/java/forge/game/ability/effects/ChooseGenericEffect.java": "af39bc8d32bddbeb537f4cd3fe21865e1f53abde7205bdc4c6898d77dd6833eb",
+  "forge-game/src/main/java/forge/game/ability/effects/VillainousChoiceEffect.java": "4d5457af7a8280601bb4f399526477d3e2e6319714602cee87b2b066c961431f",
+  "forge-game/src/main/java/forge/game/ability/effects/VentureEffect.java": "a90d9476fe45bbe0fd3046ed1db8b308120d2b228181fbb5496cdfab624d278e",
+  "forge-game/src/main/java/forge/game/ability/effects/CopySpellAbilityEffect.java": "1474928054b84608021ea6f94cb38a41d3301647887347b8d9fdda2eaa9e41df",
+  "forge-game/src/main/java/forge/game/ability/effects/AssignGroupEffect.java": "dc38e47e3c98680946343c2e8289a6681f0d0af6d295997250687a7e2446b10e",
+  "forge-game/src/main/java/forge/game/ability/effects/ActivateAbilityEffect.java": "4f010f0c8a37d53d16a5c82dbd8f03f2301abf82ab686040bc9197f94228869e"
+}

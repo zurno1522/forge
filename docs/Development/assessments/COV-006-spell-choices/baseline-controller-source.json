@@ -1,0 +1,6 @@
+{
+  "revision": "4086e2894ce",
+  "source": "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java",
+  "sha256": "c9a0bb730e53d26da58bdda36ac10c1affb8c1abc305e4747d5c88a7d7878234",
+  "scope": "Only the pre-instrumentation controller is overlaid; the rest of the current frozen build is shared. No checkout changes."
+}

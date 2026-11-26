@@ -128,7 +128,7 @@ final class AiEffectChoiceRecorder {
         return result;
     }
 
-    private static Object selected(final GameObject value, final List<Map<String, Object>> offered) {
+    static Object selected(final GameObject value, final List<Map<String, Object>> offered) {
         if (value == null) { return null; }
         final Map<String, Object> reference = AiTargetChoiceRecorder.reference(value);
         Integer index = null;

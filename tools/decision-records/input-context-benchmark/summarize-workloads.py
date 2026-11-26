@@ -94,7 +94,7 @@ def summarize(control, profiled):
     declared = {'inputContextProfile' in row for row in rows}
     require(len(declared) == 1, 'Mixed legacy and declared producer profiles')
     profiles = {row.get('inputContextProfile', 'PERMITTED_CHOICE_VIEW_V4') for row in rows}
-    require(len(profiles) == 1 and profiles <= {'PERMITTED_CHOICE_VIEW_V4', 'PERMITTED_CHOICE_VIEW_V5', 'PERMITTED_CHOICE_VIEW_V6', 'PERMITTED_CHOICE_VIEW_V7', 'PERMITTED_CHOICE_VIEW_V8', 'PERMITTED_CHOICE_VIEW_V9', 'PERMITTED_CHOICE_VIEW_V10', 'PERMITTED_CHOICE_VIEW_V11', 'PERMITTED_CHOICE_VIEW_V12'},
+    require(len(profiles) == 1 and profiles <= {'PERMITTED_CHOICE_VIEW_V4', 'PERMITTED_CHOICE_VIEW_V5', 'PERMITTED_CHOICE_VIEW_V6', 'PERMITTED_CHOICE_VIEW_V7', 'PERMITTED_CHOICE_VIEW_V8', 'PERMITTED_CHOICE_VIEW_V9', 'PERMITTED_CHOICE_VIEW_V10', 'PERMITTED_CHOICE_VIEW_V11', 'PERMITTED_CHOICE_VIEW_V12', 'PERMITTED_CHOICE_VIEW_V13'},
             'Unknown or mismatched producer profiles')
     groups = defaultdict(list)
     for label, rows in [('control', validate(control, False)), ('profiled', validate(profiled, True))]:
