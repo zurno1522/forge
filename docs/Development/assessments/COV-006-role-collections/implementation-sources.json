@@ -1,0 +1,21 @@
+{
+  "baseRevision": "bb90860cf0c",
+  "scope": "Final V18 production, decoder, changed/current-version assertions, new role tests and game fixture.",
+  "sources": {
+    "forge-ai/src/main/java/forge/ai/AiInputContext.java": "de673b452a02f45a657437c18f12dca9d02d690417ed801228f580b37f40e033",
+    "forge-ai/src/main/java/forge/ai/AiReceivedParameters.java": "19b29bbadf2c0cad10d92196788e0b8b5d29196c1dcf871ca8efe5a0aa3382b5",
+    "forge-gui-desktop/src/test/java/forge/ai/AiCopyTargetInputTest.java": "fde67f04e9852561e281321825bcc6c714b576fabe1ad63d50b792dccc8acc77",
+    "forge-gui-desktop/src/test/java/forge/ai/AiEntitySelectionHistoryTest.java": "0004fc93675f505aedf04fcc8ec8ad81b03c060fbb54b331e827275f85f02402",
+    "forge-gui-desktop/src/test/java/forge/ai/AiModeInputContextTest.java": "ac5f811f8a01d454ca22f77a3462d8a359c7cbecc1aacc7355c70558b51c5a29",
+    "forge-gui-desktop/src/test/java/forge/ai/AiModePromptInputTest.java": "443f8feb3f2c6a899dc44213ac6d7b460ddf0f2d53b8091cf539989ecf48de04",
+    "forge-gui-desktop/src/test/java/forge/ai/AiMultiEntityChoiceRecorderTest.java": "8d624c9e1067ddaef680ccfc51ee6e1261a377c2fab2c2974a1a6e6812b80d60",
+    "forge-gui-desktop/src/test/java/forge/ai/AiStackInputContextTest.java": "399460875f3d00c3d160bd0b76ee0fe538067af2ca7a6e80e268964baf051b63",
+    "forge-gui-desktop/src/test/java/forge/ai/AiZoneOperationRecorderTest.java": "d97c1f9c576da953dbc25352a5e5c553c3b65ccf27da1004963520577fd74fa6",
+    "tools/decision-records/export.py": "8f5fa9b72162a7ef858f73115619633eeaa4686384cc3299923c5a6cd16f2c71",
+    "tools/decision-records/input_context.py": "c4d20e56eac38996c732f28c695c17ef6b64e2c928fa3079b4e51ff0b89e529c",
+    "tools/decision-records/received_parameters.py": "04543bd8e31abe848a80237ced58e9a1962128a0a9e8bfe24d713de8dfdfd24f",
+    "forge-gui-desktop/src/test/java/forge/ai/AiRoleCollectionInputTest.java": "31d8a666365764ed562700671b34f7a2eaeb730a9475432b4ed6d38f54c40b23",
+    "tools/decision-records/test_role_collection_input.py": "a0c139b77c16165735b5f75629baa9d0f29d803875a93beca0c5223fc650e9d6",
+    "tools/trace-test-decks/choice-role-collections.dck": "320a95bb82bcef04c8effa02c6c1c4c8440abd64386b90eab917b17a698bc36f"
+  }
+}

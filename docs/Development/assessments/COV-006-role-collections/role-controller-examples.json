@@ -1,0 +1,1091 @@
+{
+  "completeGameTrace": false,
+  "choices": {
+    "ATTACH_EFFECT": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:1",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "EFFECT_ENTITY_SELECTION",
+        "boundary": "CONTROLLER_EFFECT_ENTITY",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 4,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "items": [
+            {
+              "type": "CARD",
+              "id": 2,
+              "gameTimestamp": 2
+            }
+          ],
+          "truncated": false,
+          "coverage": "OBSERVED_EFFECT_OPTIONS_DIAGNOSTIC_ONLY",
+          "optional": false,
+          "relatedPlayerId": null,
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "ENTITY_ATTACHMENT_ROLES",
+            "values": {
+              "entities": [
+                {
+                  "type": "CARD",
+                  "id": 1,
+                  "gameTimestamp": 1
+                }
+              ]
+            },
+            "reason": null
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 18,
+          "profile": "PERMITTED_CHOICE_VIEW_V18",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "chooserPlayerId": 1,
+            "controllingPlayerId": 1
+          },
+          "status": "CAPTURED",
+          "coverage": {
+            "prompt": "CONTROLLER_REQUEST_V1",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1",
+            "options": "DIAGNOSTIC_ONLY",
+            "disclosures": "CURRENT_PROMPT",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "history": "INCOMPLETE",
+            "stack": "PUBLIC_ROOT_STACK_V1"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Lightning Greaves",
+                "types": "Artifact - Equipment",
+                "manaCost": "{2}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "SINGLE_ENTITY",
+              "minimumPicks": 1,
+              "maximumPicks": 1,
+              "optional": false,
+              "relatedPlayer": null
+            },
+            "receivedParameters": {
+              "kind": "ENTITY_ATTACHMENT_ROLES",
+              "entities": [
+                "c0"
+              ]
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "cardBindings": [
+              {
+                "entityRef": "c0",
+                "gameTimestamp": 1,
+                "id": 1
+              },
+              {
+                "entityRef": "c1",
+                "gameTimestamp": 2,
+                "id": 2
+              }
+            ],
+            "playerBindings": [
+              {
+                "id": 0,
+                "entityRef": "p0"
+              },
+              {
+                "id": 1,
+                "entityRef": "p1"
+              }
+            ],
+            "stackBindings": [],
+            "optionBindings": {
+              "truncated": false,
+              "coverage": "DIAGNOSTIC_PUBLIC_CURRENT_V1",
+              "items": [
+                {
+                  "optionIndex": 0,
+                  "entityRef": "c1"
+                }
+              ]
+            }
+          },
+          "omissions": []
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:1",
+        "status": "COMPLETED",
+        "selection": {
+          "selected": {
+            "type": "CARD",
+            "id": 2,
+            "gameTimestamp": 2
+          },
+          "selectedOptionIndex": 0,
+          "match": "UNIQUE"
+        },
+        "elapsedNanos": 127822694
+      }
+    ],
+    "MUST_BLOCK_EFFECT": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:2",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "EFFECT_ENTITY_SELECTION",
+        "boundary": "CONTROLLER_EFFECT_ENTITY",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 12,
+        "sourceId": 3,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "items": [
+            {
+              "type": "CARD",
+              "id": 4,
+              "gameTimestamp": 4
+            }
+          ],
+          "truncated": false,
+          "coverage": "OBSERVED_EFFECT_OPTIONS_DIAGNOSTIC_ONLY",
+          "optional": false,
+          "relatedPlayerId": null,
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "ENTITY_ATTACKER_ROLES",
+            "values": {
+              "entities": [
+                {
+                  "type": "CARD",
+                  "id": 3,
+                  "gameTimestamp": 3
+                }
+              ]
+            },
+            "reason": null
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 18,
+          "profile": "PERMITTED_CHOICE_VIEW_V18",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "chooserPlayerId": 1,
+            "controllingPlayerId": 1
+          },
+          "status": "CAPTURED",
+          "coverage": {
+            "prompt": "CONTROLLER_REQUEST_V1",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1",
+            "options": "DIAGNOSTIC_ONLY",
+            "disclosures": "CURRENT_PROMPT",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "history": "INCOMPLETE",
+            "stack": "PUBLIC_ROOT_STACK_V1"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p0",
+                "controller": "p0",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Hill Giant",
+                "types": "Creature - Giant",
+                "manaCost": "{3}{R}",
+                "power": 3,
+                "toughness": 3,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Lightning Greaves",
+                "types": "Artifact - Equipment",
+                "manaCost": "{2}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c2",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "entityRef": "c3",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Shivan Dragon",
+                "types": "Creature - Dragon",
+                "manaCost": "{4}{R}{R}",
+                "power": 5,
+                "toughness": 5,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "SINGLE_ENTITY",
+              "minimumPicks": 1,
+              "maximumPicks": 1,
+              "optional": false,
+              "relatedPlayer": null
+            },
+            "receivedParameters": {
+              "kind": "ENTITY_ATTACKER_ROLES",
+              "entities": [
+                "c3"
+              ]
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "cardBindings": [
+              {
+                "entityRef": "c0",
+                "gameTimestamp": 4,
+                "id": 4
+              },
+              {
+                "entityRef": "c1",
+                "gameTimestamp": 1,
+                "id": 1
+              },
+              {
+                "entityRef": "c2",
+                "gameTimestamp": 2,
+                "id": 2
+              },
+              {
+                "entityRef": "c3",
+                "gameTimestamp": 3,
+                "id": 3
+              }
+            ],
+            "playerBindings": [
+              {
+                "id": 0,
+                "entityRef": "p0"
+              },
+              {
+                "id": 1,
+                "entityRef": "p1"
+              }
+            ],
+            "stackBindings": [],
+            "optionBindings": {
+              "truncated": false,
+              "coverage": "DIAGNOSTIC_PUBLIC_CURRENT_V1",
+              "items": [
+                {
+                  "optionIndex": 0,
+                  "entityRef": "c0"
+                }
+              ]
+            }
+          },
+          "omissions": []
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:2",
+        "status": "COMPLETED",
+        "selection": {
+          "selected": {
+            "type": "CARD",
+            "id": 4,
+            "gameTimestamp": 4
+          },
+          "selectedOptionIndex": 0,
+          "match": "UNIQUE"
+        },
+        "elapsedNanos": 6860279
+      }
+    ],
+    "DUPLICATE_PLANNING": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:3",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "EFFECT_ENTITY_SELECTION",
+        "boundary": "CONTROLLER_EFFECT_ENTITY",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 16,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "PLANNING_WORKING_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "items": [
+            {
+              "type": "CARD",
+              "id": 2,
+              "gameTimestamp": 2
+            }
+          ],
+          "truncated": false,
+          "coverage": "OBSERVED_EFFECT_OPTIONS_DIAGNOSTIC_ONLY",
+          "optional": false,
+          "relatedPlayerId": null,
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "ENTITY_ATTACHMENT_ROLES",
+            "values": {
+              "entities": [
+                {
+                  "type": "CARD",
+                  "id": 2,
+                  "gameTimestamp": 2
+                },
+                {
+                  "type": "CARD",
+                  "id": 1,
+                  "gameTimestamp": 1
+                },
+                {
+                  "type": "CARD",
+                  "id": 2,
+                  "gameTimestamp": 2
+                }
+              ]
+            },
+            "reason": null
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 18,
+          "profile": "PERMITTED_CHOICE_VIEW_V18",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "PLANNING_WORKING_STATE",
+          "perspective": {
+            "chooserPlayerId": 1,
+            "controllingPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "prompt": "UNAVAILABLE",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1",
+            "options": "DIAGNOSTIC_ONLY",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "history": "INCOMPLETE",
+            "stack": "PUBLIC_ROOT_STACK_V1"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Lightning Greaves",
+                "types": "Artifact - Equipment",
+                "manaCost": "{2}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": {
+              "kind": "ENTITY_ATTACHMENT_ROLES",
+              "entities": [
+                "c1",
+                "c0",
+                "c1"
+              ]
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "cardBindings": [
+              {
+                "entityRef": "c0",
+                "gameTimestamp": 1,
+                "id": 1
+              },
+              {
+                "entityRef": "c1",
+                "gameTimestamp": 2,
+                "id": 2
+              }
+            ],
+            "playerBindings": [
+              {
+                "id": 0,
+                "entityRef": "p0"
+              },
+              {
+                "id": 1,
+                "entityRef": "p1"
+              }
+            ],
+            "stackBindings": [],
+            "optionBindings": {
+              "truncated": false,
+              "coverage": "DIAGNOSTIC_PUBLIC_CURRENT_V1",
+              "items": [
+                {
+                  "optionIndex": 0,
+                  "entityRef": "c1"
+                }
+              ]
+            }
+          },
+          "omissions": [
+            {
+              "reason": "UNSUPPORTED",
+              "component": "PROMPT"
+            },
+            {
+              "reason": "UNSUPPORTED",
+              "component": "DISCLOSURES"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:3",
+        "status": "COMPLETED",
+        "selection": {
+          "selected": {
+            "type": "CARD",
+            "id": 2,
+            "gameTimestamp": 2
+          },
+          "selectedOptionIndex": 0,
+          "match": "UNIQUE"
+        },
+        "elapsedNanos": 3358887
+      }
+    ],
+    "PRIVATE_MEMBER": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:4",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "EFFECT_ENTITY_SELECTION",
+        "boundary": "CONTROLLER_EFFECT_ENTITY",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 20,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "items": [
+            {
+              "type": "CARD",
+              "id": 2,
+              "gameTimestamp": 2
+            }
+          ],
+          "truncated": false,
+          "coverage": "OBSERVED_EFFECT_OPTIONS_DIAGNOSTIC_ONLY",
+          "optional": false,
+          "relatedPlayerId": null,
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "ENTITY_ATTACHMENT_ROLES",
+            "values": {
+              "entities": [
+                {
+                  "type": "CARD",
+                  "id": 2,
+                  "gameTimestamp": 2
+                },
+                {
+                  "type": "CARD",
+                  "id": 3,
+                  "gameTimestamp": 3
+                }
+              ]
+            },
+            "reason": null
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 18,
+          "profile": "PERMITTED_CHOICE_VIEW_V18",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "chooserPlayerId": 1,
+            "controllingPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "prompt": "CONTROLLER_REQUEST_V1",
+            "receivedParameters": "UNAVAILABLE",
+            "options": "DIAGNOSTIC_ONLY",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "history": "INCOMPLETE",
+            "stack": "PUBLIC_ROOT_STACK_V1"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 1,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Lightning Greaves",
+                "types": "Artifact - Equipment",
+                "manaCost": "{2}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "SINGLE_ENTITY",
+              "minimumPicks": 1,
+              "maximumPicks": 1,
+              "optional": false,
+              "relatedPlayer": null
+            },
+            "receivedParameters": null,
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "cardBindings": [
+              {
+                "entityRef": "c0",
+                "gameTimestamp": 1,
+                "id": 1
+              },
+              {
+                "entityRef": "c1",
+                "gameTimestamp": 2,
+                "id": 2
+              }
+            ],
+            "playerBindings": [
+              {
+                "id": 0,
+                "entityRef": "p0"
+              },
+              {
+                "id": 1,
+                "entityRef": "p1"
+              }
+            ],
+            "stackBindings": [],
+            "optionBindings": {
+              "truncated": false,
+              "coverage": "DIAGNOSTIC_PUBLIC_CURRENT_V1",
+              "items": [
+                {
+                  "optionIndex": 0,
+                  "entityRef": "c1"
+                }
+              ]
+            }
+          },
+          "omissions": [
+            {
+              "reason": "UNRESOLVED_BINDING",
+              "component": "PARAMETERS"
+            },
+            {
+              "reason": "UNSUPPORTED",
+              "component": "DISCLOSURES"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:4",
+        "status": "COMPLETED",
+        "selection": {
+          "selected": {
+            "type": "CARD",
+            "id": 2,
+            "gameTimestamp": 2
+          },
+          "selectedOptionIndex": 0,
+          "match": "UNIQUE"
+        },
+        "elapsedNanos": 1605584
+      }
+    ],
+    "OVERSIZED_REQUEST": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:5",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "EFFECT_ENTITY_SELECTION",
+        "boundary": "CONTROLLER_EFFECT_ENTITY",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 26,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "items": [
+            {
+              "type": "CARD",
+              "id": 2,
+              "gameTimestamp": 2
+            }
+          ],
+          "truncated": false,
+          "coverage": "OBSERVED_EFFECT_OPTIONS_DIAGNOSTIC_ONLY",
+          "optional": false,
+          "relatedPlayerId": null,
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "UNAVAILABLE",
+            "kind": "ENTITY_ATTACHMENT_ROLES",
+            "values": null,
+            "reason": "OUTSIDE_CAPTURED_PREFIX"
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 18,
+          "profile": "PERMITTED_CHOICE_VIEW_V18",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "chooserPlayerId": 1,
+            "controllingPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "prompt": "CONTROLLER_REQUEST_V1",
+            "receivedParameters": "UNAVAILABLE",
+            "options": "DIAGNOSTIC_ONLY",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "history": "INCOMPLETE",
+            "stack": "PUBLIC_ROOT_STACK_V1"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Lightning Greaves",
+                "types": "Artifact - Equipment",
+                "manaCost": "{2}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "SINGLE_ENTITY",
+              "minimumPicks": 1,
+              "maximumPicks": 1,
+              "optional": false,
+              "relatedPlayer": null
+            },
+            "receivedParameters": null,
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "cardBindings": [
+              {
+                "entityRef": "c0",
+                "gameTimestamp": 1,
+                "id": 1
+              },
+              {
+                "entityRef": "c1",
+                "gameTimestamp": 2,
+                "id": 2
+              }
+            ],
+            "playerBindings": [
+              {
+                "id": 0,
+                "entityRef": "p0"
+              },
+              {
+                "id": 1,
+                "entityRef": "p1"
+              }
+            ],
+            "stackBindings": [],
+            "optionBindings": {
+              "truncated": false,
+              "coverage": "DIAGNOSTIC_PUBLIC_CURRENT_V1",
+              "items": [
+                {
+                  "optionIndex": 0,
+                  "entityRef": "c1"
+                }
+              ]
+            }
+          },
+          "omissions": [
+            {
+              "reason": "OUTSIDE_CAPTURED_PREFIX",
+              "component": "PARAMETERS"
+            },
+            {
+              "reason": "UNSUPPORTED",
+              "component": "DISCLOSURES"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:5",
+        "status": "COMPLETED",
+        "selection": {
+          "selected": {
+            "type": "CARD",
+            "id": 2,
+            "gameTimestamp": 2
+          },
+          "selectedOptionIndex": 0,
+          "match": "UNIQUE"
+        },
+        "elapsedNanos": 3337131
+      }
+    ]
+  },
+  "fixtureKind": "ACTUAL_ROLE_REQUEST_CONTROLLER_EXCERPTS"
+}

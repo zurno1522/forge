@@ -1,0 +1,8 @@
+{
+  "revision": "3da332ed338",
+  "scope": "Two pre-V18 AI classes over otherwise current build; no checkout mutation or whole-build performance comparison.",
+  "sources": {
+    "forge-ai/src/main/java/forge/ai/AiInputContext.java": "39cb4b40206f985470139eec47d943393d7b2c52b75bd7e3430dff5f753594bb",
+    "forge-ai/src/main/java/forge/ai/AiReceivedParameters.java": "0f9bec81e27ffcbbdeb575d68200f2bb3f0c975730f004b0e6ca41e17bfa537a"
+  }
+}

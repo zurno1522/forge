@@ -1,0 +1,22 @@
+{
+  "ATTACH_EFFECT": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "MUST_BLOCK_EFFECT": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "DUPLICATE_PLANNING": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "PRIVATE_MEMBER": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "OVERSIZED_REQUEST": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  }
+}

@@ -1,15 +1,20 @@
 package forge.ai;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableList;
 import forge.game.GameEntity;
 import forge.game.card.Card;
+import forge.game.card.CardCollection;
 import forge.game.card.CounterCustomType;
 import forge.game.card.CounterEnumType;
 import forge.game.card.CounterKeywordType;
 import forge.game.card.CounterType;
 import forge.game.player.Player;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -17,11 +22,12 @@ import java.util.concurrent.atomic.AtomicReference;
 
 /** Bounded received shapes at audited numeric/entity callbacks; never an arbitrary map serializer. */
 final class AiReceivedParameters {
+    static final int MAX_ROLE_LIST = 64;
     enum Family { NUMBER, ENTITY }
     enum Kind { NONE, VOTER, COUNTER_AMOUNT, COUNTER_TRANSFER_AMOUNT, ENTITY_CARD_ROLE, ENTITY_TARGET_ROLE,
-        ENTITY_MANA_VALUE_LIMIT, ENTITY_COUNTER_REQUEST, TRIGGER_REQUIREMENT }
+        ENTITY_MANA_VALUE_LIMIT, ENTITY_COUNTER_REQUEST, TRIGGER_REQUIREMENT, ENTITY_ATTACHMENT_ROLES, ENTITY_ATTACKER_ROLES }
     record Carrier(AtomicReference<Input> receipt) { }
-    record Input(Kind kind, String coverage, String reason, Map<String, Object> values, Map<String, AiOptionInput.Entry> roles) {
+    record Input(Kind kind, String coverage, String reason, Map<String, Object> values, Map<String, AiOptionInput.Entry> roles, Map<String, List<AiOptionInput.Entry>> roleLists) {
         Map<String, Object> diagnostics() {
             final Map<String, Object> result = new LinkedHashMap<>();
             result.put("schemaVersion", 1); result.put("coverage", coverage); result.put("kind", kind == null ? null : kind.name());
@@ -34,7 +40,7 @@ final class AiReceivedParameters {
         return mandatory == null ? unsupported() : complete(Kind.TRIGGER_REQUIREMENT, Map.of("mandatory", mandatory), Map.of());
     }
 
-    private static Input unsupported() { return new Input(null, "UNSUPPORTED", "UNSUPPORTED", null, Map.of()); }
+    private static Input unsupported() { return new Input(null, "UNSUPPORTED", "UNSUPPORTED", null, Map.of(), Map.of()); }
     private static boolean nativeCounter(final Object value) {
         return value instanceof CounterEnumType || value != null && (value.getClass() == CounterCustomType.class || value.getClass() == CounterKeywordType.class);
     }
@@ -66,6 +72,8 @@ final class AiReceivedParameters {
             }
         } else {
             if (size == 1) {
+                if (params.containsKey("Attachments")) { return roleList(Kind.ENTITY_ATTACHMENT_ROLES, params.get("Attachments")); }
+                if (params.containsKey("Attackers")) { return roleList(Kind.ENTITY_ATTACKER_ROLES, params.get("Attackers")); }
                 for (final String key : new String[] {"Attach", "Attacker", "Partner"}) {
                     if (params.containsKey(key)) {
                         if (!(params.get(key) instanceof Card card)) { return unsupported(); }
@@ -97,7 +105,32 @@ final class AiReceivedParameters {
         }
         return unsupported();
     }
-    private static Input overlong(final Kind kind) { return new Input(kind, "UNAVAILABLE", "OUTSIDE_CAPTURED_PREFIX", null, Map.of()); }
+    private static Input roleList(final Kind kind, final Object value) {
+        final boolean knownEmpty = value == CardCollection.EMPTY || value == List.of() || value == Collections.emptyList()
+                || value == ImmutableList.of();
+        if (!knownEmpty && (value == null || value.getClass() != CardCollection.class && value.getClass() != ArrayList.class)) { return unsupported(); }
+        final List<Card> cards = new ArrayList<>();
+        if (!knownEmpty) {
+            final Collection<?> collection = (Collection<?>) value;
+            if (collection.size() > MAX_ROLE_LIST) { return overlong(kind); }
+            final var iterator = collection.iterator();
+            while (iterator.hasNext()) {
+                if (cards.size() == MAX_ROLE_LIST) { return overlong(kind); }
+                final Object item = iterator.next();
+                if (!(item instanceof Card card)) { return unsupported(); }
+                cards.add(card);
+            }
+        }
+        // Validate the whole bounded native collection before any entity identity getter.
+        final List<Map<String, Object>> references = new ArrayList<>();
+        final List<AiOptionInput.Entry> entries = new ArrayList<>();
+        for (final Card card : cards) {
+            final Map<String, Object> reference = Collections.unmodifiableMap(AiTargetChoiceRecorder.reference(card));
+            references.add(reference); entries.add(new AiOptionInput.Entry(card, reference));
+        }
+        return new Input(kind, "COMPLETE", null, Map.of("entities", List.copyOf(references)), Map.of(), Map.of("entities", List.copyOf(entries)));
+    }
+    private static Input overlong(final Kind kind) { return new Input(kind, "UNAVAILABLE", "OUTSIDE_CAPTURED_PREFIX", null, Map.of(), Map.of()); }
     private static Input roles(final Kind kind, final Map<String, Object> scalars, final Map<String, ? extends GameEntity> objects) {
         final Map<String, Object> values = new LinkedHashMap<>(scalars);
         final Map<String, AiOptionInput.Entry> roles = new LinkedHashMap<>();
@@ -112,6 +145,6 @@ final class AiReceivedParameters {
         return complete(kind, values, roles);
     }
     private static Input complete(final Kind kind, final Map<String, Object> values, final Map<String, AiOptionInput.Entry> roles) {
-        return new Input(kind, "COMPLETE", null, Collections.unmodifiableMap(new LinkedHashMap<>(values)), Map.copyOf(roles));
+        return new Input(kind, "COMPLETE", null, Collections.unmodifiableMap(new LinkedHashMap<>(values)), Map.copyOf(roles), Map.of());
     }
 }

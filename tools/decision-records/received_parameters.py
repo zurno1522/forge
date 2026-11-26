@@ -1,15 +1,18 @@
-"""Typed request arguments at two audited callbacks; no option-pool permission."""
+"""Typed request arguments at audited callbacks; no option-pool permission."""
 
 SHAPES = {
     'NONE': set(), 'VOTER': {'voter'}, 'TRIGGER_REQUIREMENT': {'mandatory'},
     'COUNTER_AMOUNT': {'target', 'counterType'}, 'COUNTER_TRANSFER_AMOUNT': {'source', 'target', 'counterType'},
     'ENTITY_CARD_ROLE': {'role', 'entity'}, 'ENTITY_TARGET_ROLE': {'target'},
+    'ENTITY_ATTACHMENT_ROLES': {'entities'}, 'ENTITY_ATTACKER_ROLES': {'entities'},
     'ENTITY_MANA_VALUE_LIMIT': {'manaValueLimit'}, 'ENTITY_COUNTER_REQUEST': {'counterType', 'amount', 'target'},
 }
 NUMBER_KINDS = {'NONE', 'VOTER', 'COUNTER_AMOUNT', 'COUNTER_TRANSFER_AMOUNT'}
-ENTITY_KINDS = {'NONE', 'ENTITY_CARD_ROLE', 'ENTITY_TARGET_ROLE', 'ENTITY_MANA_VALUE_LIMIT', 'ENTITY_COUNTER_REQUEST'}
+ENTITY_KINDS = {'NONE', 'ENTITY_CARD_ROLE', 'ENTITY_TARGET_ROLE', 'ENTITY_MANA_VALUE_LIMIT', 'ENTITY_COUNTER_REQUEST', 'ENTITY_ATTACHMENT_ROLES', 'ENTITY_ATTACKER_ROLES'}
 TRIGGER_KINDS = {'TRIGGER_REQUIREMENT'}
-MIN_PROFILE = {'TRIGGER_REQUIREMENT': 17}
+MIN_PROFILE = {'TRIGGER_REQUIREMENT': 17, 'ENTITY_ATTACHMENT_ROLES': 18, 'ENTITY_ATTACKER_ROLES': 18}
+ROLE_LIST_KINDS = {'ENTITY_ATTACHMENT_ROLES', 'ENTITY_ATTACKER_ROLES'}
+MAX_ROLE_LIST = 64
 
 
 def require(ok, message):
@@ -23,6 +26,12 @@ def roles(kind):
     if kind == 'VOTER': return {'voter': {'PLAYER'}}
     if kind == 'ENTITY_CARD_ROLE': return {'entity': {'CARD'}}
     return {key: {'CARD', 'PLAYER'} for key in SHAPES[kind] & {'source', 'target'}}
+
+
+def list_roles(kind): return {'entities'} if kind in ROLE_LIST_KINDS else set()
+
+def role_array(value):
+    require(isinstance(value, list) and len(value) <= MAX_ROLE_LIST, 'invalid whole role list')
 
 
 def scalars(kind, values):
@@ -47,6 +56,9 @@ def receipt(value, family, typed_reference, version=16):
     require(value['coverage'] == 'COMPLETE' and value['reason'] is None
             and isinstance(value['values'], dict) and set(value['values']) == SHAPES[kind], 'invalid complete shape')
     values = value['values']; scalars(kind, values)
+    for key in list_roles(kind):
+        role_array(values[key])
+        for ref in values[key]: typed_reference(ref, 'CARD')
     for key, kinds in roles(kind).items():
         ref = values[key]
         if kind == 'ENTITY_COUNTER_REQUEST' and ref is None: continue
@@ -65,6 +77,9 @@ def projection(value, coverage, player_refs, cards, omissions, allowed, version=
     kind = value['kind']; require(version >= MIN_PROFILE.get(kind, 16), 'shape requires a newer profile')
     require(set(value) == {'kind'} | SHAPES[kind], 'invalid projected fields'); scalars(kind, value)
     public = {c['entityRef'] for c in cards if c['zone'] in ('Battlefield','Command','Graveyard','Stack') or c['zone'] == 'Exile' and not c['faceDown']}
+    for key in list_roles(kind):
+        role_array(value[key])
+        for ref in value[key]: require(isinstance(ref, str) and ref in public, 'private or unresolved list role')
     for key, kinds in roles(kind).items():
         ref = value[key]
         if kind == 'ENTITY_COUNTER_REQUEST' and ref is None: continue
@@ -78,13 +93,15 @@ def arguments(choice):
     require(context['coverage']['receivedParameters'] != 'UNSUPPORTED', 'audited parameter capability silently absent')
     if value is None:
         reasons = {o['reason'] for o in context['omissions'] if o['component'] == 'PARAMETERS'}
-        require(('UNRESOLVED_BINDING' in reasons and any(received['values'][key] is not None for key in roles(received['kind']))) if received['coverage'] == 'COMPLETE' else received['reason'] in reasons, 'parameter refusal differs from receipt')
+        require(('UNRESOLVED_BINDING' in reasons and (any(received['values'][key] is not None for key in roles(received['kind'])) or any(received['values'][key] for key in list_roles(received['kind'])))) if received['coverage'] == 'COMPLETE' else received['reason'] in reasons, 'parameter refusal differs from receipt')
         return
     require(received['coverage'] == 'COMPLETE' and value['kind'] == received['kind'], 'unsupported/different received shape claims features')
     diagnostic = context['diagnostics']; kind = value['kind']
     bindings = {b['entityRef']: dict(type='PLAYER', id=b['id']) for b in diagnostic['playerBindings']}
     bindings.update({b['entityRef']: dict(type='CARD', id=b['id'], gameTimestamp=b['gameTimestamp']) for b in diagnostic['cardBindings']})
     for key, raw in received['values'].items():
-        if key in roles(kind):
+        if key in list_roles(kind):
+            require([bindings[ref] for ref in value[key]] == raw, 'received role list identity/incarnation/order differs')
+        elif key in roles(kind):
             require((None if value[key] is None else bindings[value[key]]) == raw, 'received role identity/incarnation differs')
         else: require(value[key] == raw, 'received scalar differs')

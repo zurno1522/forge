@@ -34,7 +34,7 @@ final class AiInputContext {
     static final int MAX_TEXT = 256;
     static final int MAX_REQUEST_ZONES = ZoneType.values().length;
     static final long MAX_GAME_WORK = 256_000;
-    static final String PROFILE = "PERMITTED_CHOICE_VIEW_V17";
+    static final String PROFILE = "PERMITTED_CHOICE_VIEW_V18";
     private static final List<ZoneType> ZONES = List.of(ZoneType.Battlefield, ZoneType.Command,
             ZoneType.Graveyard, ZoneType.Exile, ZoneType.Hand, ZoneType.Library);
 
@@ -114,7 +114,7 @@ final class AiInputContext {
 
     private static Map<String, Object> envelope(final Player chooser, final String timing, final String stateBasis) {
         final Map<String, Object> result = new LinkedHashMap<>();
-        result.put("schemaVersion", 17);
+        result.put("schemaVersion", 18);
         result.put("profile", PROFILE);
         result.put("timing", timing);
         result.put("stateBasis", stateBasis);
@@ -492,6 +492,17 @@ final class AiInputContext {
             final Map<String, Object> result = new LinkedHashMap<>(); result.put("kind", input.kind().name());
             for (final var field : input.values().entrySet()) {
                 if (!work("PARAMETERS")) { return null; }
+                final var roleList = input.roleLists().get(field.getKey());
+                if (roleList != null) {
+                    final List<String> refs = new ArrayList<>();
+                    for (final var receipt : roleList) {
+                        if (!work("PARAMETERS")) { return null; }
+                        final String ref = previousSelectionRef(receipt);
+                        if (ref == null) { omit("PARAMETERS", "UNRESOLVED_BINDING"); return null; }
+                        refs.add(ref);
+                    }
+                    result.put(field.getKey(), List.copyOf(refs)); continue;
+                }
                 final var role = input.roles().get(field.getKey());
                 final String ref = role == null ? null : previousSelectionRef(role);
                 if (role != null && ref == null) { omit("PARAMETERS", "UNRESOLVED_BINDING"); return null; }

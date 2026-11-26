@@ -1,0 +1,21 @@
+{
+  "focusedJava": {
+    "tests": 158,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "newCases": 8
+  },
+  "python": {
+    "tests": 266,
+    "failures": 0,
+    "errors": 0,
+    "newMethods": 6
+  },
+  "fullReactor": "Not repeated; prior V15 full-run scavenge instability remains separately documented.",
+  "logs": {
+    "/workspace/work/cov006-role-collections/focused.log": "585d3e63b96cbc710c8c506f85b3342b69e010eccaf262eeb83f3dfc61dde4eb",
+    "/workspace/work/cov006-role-collections/python.log": "f2709ee264cee2b20e11df247261e22f5102fdf418b15c816491f118e5e6fc62",
+    "/workspace/work/cov006-role-collections/validation-final.log": "4947e8801c2a2bdc2e9b440d2fdd707ad8ddacb666b5053b9dc1bcc0cba5d428"
+  }
+}

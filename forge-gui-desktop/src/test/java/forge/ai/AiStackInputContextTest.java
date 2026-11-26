@@ -40,8 +40,8 @@ public class AiStackInputContextTest extends AITest {
     public void emptyStackIsCapturedAsEmptyInItsOwnVersionedProfile() {
         final Game game = game();
         final Map<String, Object> context = capture(game.getPlayers().get(1));
-        Assert.assertEquals(context.get("schemaVersion"), 17);
-        Assert.assertEquals(context.get("profile"), "PERMITTED_CHOICE_VIEW_V17");
+        Assert.assertEquals(context.get("schemaVersion"), 18);
+        Assert.assertEquals(context.get("profile"), "PERMITTED_CHOICE_VIEW_V18");
         Assert.assertTrue(entries(context).isEmpty());
         Assert.assertEquals(stack(context).get("isResolving"), false);
         Assert.assertEquals(stack(context).get("resolvingCoverage"), "CAPTURED");
