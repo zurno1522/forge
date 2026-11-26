@@ -1,0 +1,7 @@
+{
+  "baseRevision": "151c82d17ca",
+  "sources": {
+    "forge-ai/src/main/java/forge/ai/AiEffectChoiceRecorder.java": "26648d4d6a19535286abc5c5191df320df1f599d52a00bad4157fa29637ed5fb",
+    "forge-gui-desktop/src/test/java/forge/ai/AiEntitySelectionHistoryTest.java": "f5fe59a39bcecb0d8da96775d9e74539cf72654cfcac2af7110713972bc87579"
+  }
+}

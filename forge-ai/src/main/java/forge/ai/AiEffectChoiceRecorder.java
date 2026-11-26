@@ -72,7 +72,9 @@ final class AiEffectChoiceRecorder {
     static <T extends GameEntity> List<T> multiple(final Player chooser, final SpellAbility ability,
             final Iterable<T> options, final int min, final int max, final Player relatedPlayer,
             final PlayerControllerAi receiver, final Supplier<List<T>> callback) {
-        if (!chooser.getGame().isRecordingAiDecisions()) { return callback.get(); }
+        if (!chooser.getGame().isRecordingAiDecisions()) {
+            return AiEntitySelectionHistory.operation(chooser, ability, receiver, min, max, relatedPlayer, null, callback);
+        }
         return AiChoiceRecorder.observeInput(chooser, ability, "EFFECT_MULTI_ENTITY_SELECTION", null,
                 "CONTROLLER_EFFECT_ENTITIES", "BEFORE_OPERATION", () -> {
                     final var captured = AiOptionInput.capture(options);

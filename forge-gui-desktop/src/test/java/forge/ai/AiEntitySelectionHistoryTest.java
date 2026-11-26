@@ -352,4 +352,29 @@ public class AiEntitySelectionHistoryTest extends AITest {
         Assert.assertEquals(prompt(foreign).get("kind"), "SINGLE_ENTITY");
         Assert.assertNull(game.getEventObservationFailure());
     }
+    @Test(groups = {"UnitTest", "fast"})
+    public void aDisabledNestedOperationMasksAnOlderPendingEntityDispatchThenRestoresIt() {
+        final Fixture f = fixture(); final var receiver = (PlayerControllerAi) f.chooser.getController();
+        final var result = AiEffectChoiceRecorder.multiple(f.chooser, f.ability, f.options, 0, 2, null, receiver, () -> {
+            AiEntitySelectionHistory.beforePick(f.chooser, f.ability, f.options, 0, true, null);
+            f.game.setRecordAiDecisions(false);
+            AiEffectChoiceRecorder.multiple(f.chooser, f.ability, f.options, 0, 1, null, receiver, () -> {
+                f.game.setRecordAiDecisions(true);
+                return List.of(AiEffectChoiceRecorder.single(f.chooser, f.ability, f.options, true, null, () -> f.options.get(1)));
+            });
+            final Card first = AiEffectChoiceRecorder.single(f.chooser, f.ability, f.options, true, null, () -> f.options.get(0));
+            AiEntitySelectionHistory.returned(f.chooser, f.ability, first, 1);
+            AiEntitySelectionHistory.beforePick(f.chooser, f.ability, f.options, 1, true, null);
+            final Card second = AiEffectChoiceRecorder.single(f.chooser, f.ability, f.options, true, null, () -> f.options.get(1));
+            AiEntitySelectionHistory.returned(f.chooser, f.ability, second, 2); return List.of(first, second);
+        });
+        Assert.assertEquals(result, new ArrayList<>(f.options)); final var picks = picks(f); Assert.assertEquals(picks.size(), 3);
+        Assert.assertNull(sequence(picks.get(0)), "disabled nested operation borrowed an older dispatch");
+        Assert.assertEquals(prompt(picks.get(0)).get("kind"), "SINGLE_ENTITY");
+        Assert.assertEquals(sequence(picks.get(1)).get("priorSelectionCount"), 0);
+        Assert.assertEquals(sequence(picks.get(2)).get("priorSelectionCount"), 1);
+        Assert.assertEquals(prompt(picks.get(2)).get("previousSelections"), List.of(ref(picks.get(2), f.options.get(0))));
+        Assert.assertNull(f.game.getEventObservationFailure());
+    }
+
 }

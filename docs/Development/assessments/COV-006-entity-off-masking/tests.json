@@ -1,0 +1,26 @@
+{
+  "unpatchedRegression": {
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "failure": "Disabled nested operation borrowed an older COMPLETE selectionSequence."
+  },
+  "patchedFocused": {
+    "tests": 116,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "fullReactor": "Not repeated; V15 full run and pre-existing scavenge scenario failure remain documented separately.",
+  "python": "No Python source changes; current exporter validates both new game streams. No new Python unit run is claimed.",
+  "unchangedExporter": {
+    "tools/decision-records/export.py": true,
+    "tools/decision-records/choice_events.py": true,
+    "tools/decision-records/input_context.py": true
+  },
+  "logs": {
+    "/workspace/work/cov006-entity-off-masking/unpatched.log": "92c8a080b04d60072346a7f8480f14f35240e50d988797a33266eeb576f2ba0b",
+    "/workspace/work/cov006-entity-off-masking/patched.log": "bea836179b4f23e78f48653cc9a11504afae29e8661bcacdd6ee8394fdcea61e",
+    "/workspace/work/cov006-entity-off-masking/validate.log": "b335681ccd00a74ce639755359bc791f065a7214477bb22c7c27718a95d75965"
+  }
+}

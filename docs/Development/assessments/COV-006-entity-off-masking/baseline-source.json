@@ -1,0 +1,6 @@
+{
+  "revision": "151c82d17ca",
+  "scope": "One old recorder class over otherwise patched build; no checkout mutation or whole-build performance comparison.",
+  "source": "forge-ai/src/main/java/forge/ai/AiEffectChoiceRecorder.java",
+  "sha256": "55a6cbbe0feba713cda39b6ba698f3c14cdf90bacf05743c7bdad471f772cd20"
+}
