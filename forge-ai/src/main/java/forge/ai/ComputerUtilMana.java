@@ -628,7 +628,7 @@ public class ComputerUtilMana {
 
     // returns null if unpayable
     private static List<SpellAbility> payManaCost(final ManaCostBeingPaid cost, final SpellAbility sa, final Player ai, final boolean test, boolean checkPlayable, boolean effect) {
-        if (test) { return payManaCostImpl(cost, sa, ai, true, checkPlayable, effect); }
+        if (test) { return AiChoiceRecorder.planning(ai, () -> payManaCostImpl(cost, sa, ai, true, checkPlayable, effect)); }
         return AiPaymentChoiceRecorder.manaPayment(ai, sa, cost, effect,
                 () -> payManaCostImpl(cost, sa, ai, false, checkPlayable, effect));
     }

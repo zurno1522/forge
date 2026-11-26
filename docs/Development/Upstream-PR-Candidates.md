@@ -134,3 +134,9 @@ Keep this as validation triage, not a confirmed engine/card defect or a ready PR
 ### Disabled nested entity-operation masking (2026-11-25)
 
 A nested entity operation entered while tracing is disabled could borrow an older pending history claim if its callback reenabled tracing. The regression fails before the fix and passes after routing the disabled path through the existing null-owner masking scope. This is a defect in this branch's PR-003 observation feature, not an established upstream engine/card issue. No new engine API, schema or feature permission is added. [Reproduction and review](Simulation-Entity-Off-Masking-Hardening.md).
+
+### Neutral floating-mana request bridge (2026-11-26)
+
+COV-007A adds a callback-local engine request carrying the paid ability, current shard, test flag and converge mask through the existing floating-mana tie-break. Default and AI bridges preserve old virtual controller dispatch, weighting/deduplication, selected-object identity, spending and refunds. Old direct APIs remain supported with unknown request context. The engine record contains no tracing types, IDs or AI dependency.
+
+Track this with PR-003 as an enhancement candidate; consider whether the neutral API should be proposed independently if upstream has a use for richer custom controllers. Losing a test flag from our trace attribution is a branch observation gap, not evidence of an upstream rules/card defect. A standalone proposal would need then-current upstream/PR review and portable controller-dispatch/refund tests separated from branch-specific trace fixtures. No upstream PR is opened here. [Contract, actual engine validation and limits](Simulation-Mana-Pool-Request-Contract.md).

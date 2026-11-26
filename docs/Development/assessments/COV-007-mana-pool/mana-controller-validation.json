@@ -1,0 +1,30 @@
+{
+  "REAL_ENGINE_SPENDING": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "TEST_ENGINE_UNDER_RULES_PARENT": {
+    "lifecycleEvents": 4,
+    "validatedObservations": 2
+  },
+  "AI_AFFORDABILITY": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "LEGACY_UNKNOWN": {
+    "lifecycleEvents": 4,
+    "validatedObservations": 2
+  },
+  "NON_TEST_IN_PLANNING": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "NULL_SHARD": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "ORIGINAL_ERROR": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  }
+}

@@ -10,6 +10,7 @@ import forge.game.card.CounterEnumType;
 import forge.game.card.CounterKeywordType;
 import forge.game.card.CounterType;
 import forge.game.player.Player;
+import forge.game.mana.ManaPoolChoiceContext;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,7 +26,7 @@ final class AiReceivedParameters {
     static final int MAX_ROLE_LIST = 64;
     enum Family { NUMBER, ENTITY }
     enum Kind { NONE, VOTER, COUNTER_AMOUNT, COUNTER_TRANSFER_AMOUNT, ENTITY_CARD_ROLE, ENTITY_TARGET_ROLE,
-        ENTITY_MANA_VALUE_LIMIT, ENTITY_COUNTER_REQUEST, TRIGGER_REQUIREMENT, ENTITY_ATTACHMENT_ROLES, ENTITY_ATTACKER_ROLES }
+        ENTITY_MANA_VALUE_LIMIT, ENTITY_COUNTER_REQUEST, TRIGGER_REQUIREMENT, ENTITY_ATTACHMENT_ROLES, ENTITY_ATTACKER_ROLES, MANA_POOL_REQUEST }
     record Carrier(AtomicReference<Input> receipt) { }
     record Input(Kind kind, String coverage, String reason, Map<String, Object> values, Map<String, AiOptionInput.Entry> roles, Map<String, List<AiOptionInput.Entry>> roleLists) {
         Map<String, Object> diagnostics() {
@@ -38,6 +39,11 @@ final class AiReceivedParameters {
 
     static Input trigger(final Boolean mandatory) {
         return mandatory == null ? unsupported() : complete(Kind.TRIGGER_REQUIREMENT, Map.of("mandatory", mandatory), Map.of());
+    }
+
+    static Input manaPool(final ManaPoolChoiceContext request) {
+        return request == null || request.shard() == null ? unsupported() : complete(Kind.MANA_POOL_REQUEST,
+                Map.of("testPayment", request.testPayment(), "shard", request.shard().name(), "colorsPaid", (int) request.colorsPaid()), Map.of());
     }
 
     private static Input unsupported() { return new Input(null, "UNSUPPORTED", "UNSUPPORTED", null, Map.of(), Map.of()); }

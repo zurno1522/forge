@@ -6,6 +6,7 @@ import forge.game.cost.CostPart;
 import forge.game.cost.PaymentDecision;
 import forge.game.mana.Mana;
 import forge.game.mana.ManaCostBeingPaid;
+import forge.game.mana.ManaPoolChoiceContext;
 import forge.game.player.Player;
 import forge.game.spellability.SpellAbility;
 
@@ -14,6 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -92,7 +94,50 @@ public final class AiPaymentChoiceRecorder {
                 result -> Map.of("paymentRoutineReturned", true, "costSatisfied", cost.isPaid(), "manaAbilities", refs(result)));
     }
 
+    private static final ThreadLocal<PoolRequest> POOL_REQUEST = new ThreadLocal<>();
+
+    private static final class PoolRequest {
+        final Player chooser;
+        final PlayerControllerAi receiver;
+        final List<Mana> options;
+        final ManaPoolChoiceContext request;
+        final boolean admitted;
+        boolean claimed;
+
+        PoolRequest(Player chooser, PlayerControllerAi receiver, List<Mana> options, ManaPoolChoiceContext request) {
+            this.chooser = chooser; this.receiver = receiver; this.options = options; this.request = request;
+            admitted = chooser.getGame().isRecordingAiDecisions();
+        }
+    }
+
+    static Mana withPoolRequest(final Player chooser, final PlayerControllerAi receiver, final List<Mana> options,
+            final ManaPoolChoiceContext request, final Supplier<Mana> callback) {
+        final PoolRequest previous = POOL_REQUEST.get();
+        final PoolRequest current = new PoolRequest(chooser, receiver, options, request);
+        POOL_REQUEST.set(current);
+        try {
+            return request != null && request.testPayment() ? AiChoiceRecorder.planning(chooser, callback) : callback.get();
+        } finally {
+            if (previous == null) { POOL_REQUEST.remove(); } else { POOL_REQUEST.set(previous); }
+        }
+    }
+
     public static Mana manaFromPool(final Player chooser, final List<Mana> options, final Supplier<Mana> callback) {
+        final PoolRequest pending = POOL_REQUEST.get();
+        if (pending != null && !pending.claimed && pending.chooser == chooser && pending.options == options
+                && pending.receiver == chooser.getController()) {
+            pending.claimed = true; // Claim before any observational getter; failed capture cannot lend this request.
+            if (!pending.admitted) { return callback.get(); }
+            if (pending.request != null && pending.receiver.getClass() == PlayerControllerAi.class) {
+                final var parameters = new AtomicReference<AiReceivedParameters.Input>();
+                return AiChoiceRecorder.observeParametersAt(chooser, pending.request.ability(), "PAYMENT_MANA_SELECTION", null,
+                        "MANA_POOL_OPTIONS", "BEFORE_SELECTOR", () -> {
+                            final var received = AiReceivedParameters.manaPool(pending.request); parameters.set(received);
+                            return Map.of("coverage", "OBSERVED_MANA_OPTIONS", "mana", prefix(options, AiPaymentChoiceRecorder::mana),
+                                    "callbackParameters", received.diagnostics());
+                        }, callback, AiPaymentChoiceRecorder::mana, null, null, new AiReceivedParameters.Carrier(parameters));
+            }
+        }
         final SpellAbility ability = AiChoiceRecorder.activeAbility(chooser);
         return AiChoiceRecorder.observe(chooser, ability, "PAYMENT_MANA_SELECTION", null, "MANA_POOL_OPTIONS",
                 () -> Map.of("coverage", "OBSERVED_MANA_OPTIONS", "mana", prefix(options, AiPaymentChoiceRecorder::mana)),

@@ -1,0 +1,36 @@
+{
+  "focusedJava": {
+    "tests": 184,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "newCases": 18,
+    "execution": "Initial Maven-focused run passed 183. Final additional installed-subclass regression compiled with --release 17 in an isolated directory, then all fourteen focused classes passed through TestNG over unchanged production classes."
+  },
+  "gameModule": {
+    "tests": 23,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "guiModule": {
+    "tests": 23,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "python": {
+    "tests": 272,
+    "failures": 0,
+    "errors": 0,
+    "newMethods": 6
+  },
+  "fullDesktopReactor": "Not repeated; the earlier reproduced scavenge instability remains a separate validation limit.",
+  "logs": {
+    "/workspace/work/cov007-mana-pool/focused.log": "07af08f0d2f579b301ec745c7b19daa340ad3a03fb52865c7353474bd37fd68d",
+    "/workspace/work/cov007-mana-pool/focused-final.log": "4a20661ef2373f3e2dbc739a336454a0966a9484ca5811714c8b81783d6dfdc3",
+    "/workspace/work/cov007-mana-pool/game-gui-tests.log": "a524c68e6417cd74b28d0f4203d5de0d302965bb5ac1414b5cd83aade24f73b7",
+    "/workspace/work/cov007-mana-pool/python-final.log": "586b9ff390017af7bed04a2667c479d3fdd4ed7318d97d49557a6bb2cca8be8d",
+    "/workspace/work/cov007-mana-pool/validation-final.log": "926a56550d8677bdd50962939abf4dfedf2ce6e4a9f313fee5b4840cac7f8f66"
+  }
+}

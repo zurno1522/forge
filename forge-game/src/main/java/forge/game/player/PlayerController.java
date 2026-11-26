@@ -22,6 +22,7 @@ import forge.game.keyword.KeywordInterface;
 import forge.game.mana.Mana;
 import forge.game.mana.ManaConversionMatrix;
 import forge.game.mana.ManaCostBeingPaid;
+import forge.game.mana.ManaPoolChoiceContext;
 import forge.game.replacement.ReplacementEffect;
 import forge.game.spellability.*;
 import forge.game.staticability.StaticAbility;
@@ -272,6 +273,11 @@ public abstract class PlayerController {
     public abstract Player chooseStartingPlayer(boolean isFirstGame);
     public abstract PlayerZone chooseStartingHand(List<PlayerZone> zones);
     public abstract Mana chooseManaFromPool(List<Mana> manaChoices);
+
+    /** Preserve existing controller overrides while supplying the engine's current payment request. */
+    public Mana chooseManaFromPool(List<Mana> manaChoices, ManaPoolChoiceContext context) {
+        return chooseManaFromPool(manaChoices);
+    }
 
     public abstract String chooseSomeType(String kindOfType, SpellAbility sa, Collection<String> validTypes, boolean isOptional);
     public final String chooseSomeType(String kindOfType, SpellAbility sa, Collection<String> validTypes) {

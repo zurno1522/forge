@@ -1,0 +1,31 @@
+{
+  "baseRevision": "4de8ad7b789",
+  "scope": "Final V19 production/engine bridge, decoder, unit source/current-profile assertions and game fixture. Final added subclass test compiled with --release 17 in an isolated test directory; all fourteen focused classes rerun against unchanged Maven-built production.",
+  "sources": {
+    "forge-ai/src/main/java/forge/ai/AiChoiceRecorder.java": "6918c531f459e7aab9ffe64b8c7581429d7bff837eb56d139df5c1896ff0be2f",
+    "forge-ai/src/main/java/forge/ai/AiInputContext.java": "7961f5e8a57726f8c024023fe56ed4e936d1b53d987c229380e7655932993475",
+    "forge-ai/src/main/java/forge/ai/AiPaymentChoiceRecorder.java": "89d557e78c3bacd71070998eec097ce84092b5eaa73cf950c7b47025b490e11c",
+    "forge-ai/src/main/java/forge/ai/AiReceivedParameters.java": "c5c258fa3abae218a840a70aa85928f9b8e1ddb777c9bbdca7a66410f6770d52",
+    "forge-ai/src/main/java/forge/ai/ComputerUtilMana.java": "1ca3d53bd0b41a16fb8f4202bc11a4206892a8de704d603dacd4f4b5d4c2e5fa",
+    "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java": "46146e7d910c17ae49a3184b7235d4008063494e2138d388661399e11da333af",
+    "forge-game/src/main/java/forge/game/cost/CostPayment.java": "12561c43f83fe2119e97922317538f4db008f8d38bdfd7fc9e3664a6bc88e554",
+    "forge-game/src/main/java/forge/game/mana/ManaPool.java": "1ab80c96f2879b31c4844f7308846f7f6adc28917d10c33929b5f49917a3ef79",
+    "forge-game/src/main/java/forge/game/player/PlayerController.java": "52f435cb9ab6bad30adf9912b659b9db40eb75f9a70f0b9e9c1b8ba235e21018",
+    "forge-gui-desktop/src/test/java/forge/ai/AiCopyTargetInputTest.java": "3f47f1bdf5759484542f377a5b20c694d2b4ecb9afda22beca9339d58c18f09b",
+    "forge-gui-desktop/src/test/java/forge/ai/AiEntitySelectionHistoryTest.java": "7c684c479580c70a8143345b7d7ff8943631185cdd07ee1b78d03d4eef22eb6b",
+    "forge-gui-desktop/src/test/java/forge/ai/AiModeInputContextTest.java": "3686e24d3e942238a5e7c6097fbfa1f42053825f53c46b19b98f4d6500e80806",
+    "forge-gui-desktop/src/test/java/forge/ai/AiModePromptInputTest.java": "c25ce1b1ff39c9eef76de6f4b4c7553d954f3d08a4210b21cffe92c51a4f582a",
+    "forge-gui-desktop/src/test/java/forge/ai/AiMultiEntityChoiceRecorderTest.java": "45e45818dd737ee1324f64a2f889da5bc62c4403fe11d056e493b75392904a66",
+    "forge-gui-desktop/src/test/java/forge/ai/AiStackInputContextTest.java": "c7a263a3a7180bf1baf18d8dc2c6234284b2722f5cd3a60690fa5f3b9d298cce",
+    "forge-gui-desktop/src/test/java/forge/ai/AiZoneOperationRecorderTest.java": "086c3702585e4ed408d310e6d504038f696761eaf3bf30a4e786e2330991b8fc",
+    "tools/decision-records/choice_events.py": "e9a8b2306b9727fe9eddd3f54497f69e20e687d28455bbfb01f9dac2e48317cb",
+    "tools/decision-records/coverage_audit.py": "2035c7ce3aa91cacab3113412bf0c95728b98706d4d5157905f4f9059924cc02",
+    "tools/decision-records/export.py": "9cefaa01bde98c44442ea9faa5bcd5eccbc7fc8fdb9e0188fab316abeba2fd33",
+    "tools/decision-records/input_context.py": "3c6e516e00e64865a1251ef2a6d8c468edb3b3fba5dc0c6b79c78bc73f1c2729",
+    "tools/decision-records/received_parameters.py": "dfb36499ec1cdc3a6f2357ff994b8fd67c03bb45acb94ce04cbb7ef876571eb7",
+    "forge-game/src/main/java/forge/game/mana/ManaPoolChoiceContext.java": "e321fc706714f9e80c0ad04cea22a62c62091b95b3f7c7daf5e047bb589ebbe5",
+    "forge-gui-desktop/src/test/java/forge/ai/AiManaPoolInputTest.java": "ee8090cc8926251619bcbefb21d7f5dd17a9314ee43a5523d4c98396cc5041c7",
+    "tools/decision-records/test_mana_pool_input.py": "762c4a729236079b29d420d8281fc749bd3a5e2495f2676d528f70a224e63751",
+    "tools/trace-test-decks/choice-mana-pool.dck": "99ad6165b34ea9debc3b71264fe8b90aa5f6d4b08fced50c134721fd7d646206"
+  }
+}

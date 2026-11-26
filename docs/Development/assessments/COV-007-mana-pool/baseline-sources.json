@@ -1,0 +1,15 @@
+{
+  "revision": "0257100e9ee",
+  "scope": "Nine pre-V19 AI/engine classes over the otherwise current build. All modified production classes reverted; the unused new request record remains on the classpath. No checkout/target mutation or whole-build performance claim.",
+  "sources": {
+    "forge-ai/src/main/java/forge/ai/AiInputContext.java": "de673b452a02f45a657437c18f12dca9d02d690417ed801228f580b37f40e033",
+    "forge-ai/src/main/java/forge/ai/AiReceivedParameters.java": "19b29bbadf2c0cad10d92196788e0b8b5d29196c1dcf871ca8efe5a0aa3382b5",
+    "forge-ai/src/main/java/forge/ai/AiPaymentChoiceRecorder.java": "746d213e571abecbf7f9ec6c038cbda7092727bbb8cb7ff9805e6027d06503cc",
+    "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java": "85743a73488e15d06dbd784bb4ebf9dd4d74016ccf19bb792a29c0e539339671",
+    "forge-ai/src/main/java/forge/ai/ComputerUtilMana.java": "3ad786f3ceb220e718e4c513e56b6891a4f48920f12aefa3a555682ee9898787",
+    "forge-ai/src/main/java/forge/ai/AiChoiceRecorder.java": "26432d80a2ef0d3246267d24e11f5b5ea0fc420ee5f9c56a1057103e8ae3df9f",
+    "forge-game/src/main/java/forge/game/cost/CostPayment.java": "0144297291e34b29e41e7a75d8405220546a951f759adcd0db57bbae4c912b98",
+    "forge-game/src/main/java/forge/game/mana/ManaPool.java": "e79ec59be283b7c0a4f45a13ed56657dab1c40d5f2bd3bfa738ff34f46894e9b",
+    "forge-game/src/main/java/forge/game/player/PlayerController.java": "c34e701a2a2117af67e520ba526af48f2fd71d448ee3105997b7a19370018eb9"
+  }
+}

@@ -131,7 +131,7 @@ public final class AiChoiceRecorder {
         return observeParametersAt(chooser, ability, type, null, boundary, "BEFORE_SELECTOR", options, callback, selection, prompt, optionInput, parameters);
     }
 
-    private static <T> T observeParametersAt(final Player chooser, final SpellAbility ability, final String type,
+    static <T> T observeParametersAt(final Player chooser, final SpellAbility ability, final String type,
             final String stage, final String boundary, final String timing, final Supplier<Map<String, Object>> options,
             final Supplier<T> callback, final Function<T, Object> selection, final Supplier<AiPromptInput> prompt,
             final Supplier<AiOptionInput> optionInput, final AiReceivedParameters.Carrier parameters) {

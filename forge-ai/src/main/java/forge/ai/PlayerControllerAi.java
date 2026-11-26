@@ -30,6 +30,7 @@ import forge.game.keyword.KeywordInterface;
 import forge.game.mana.Mana;
 import forge.game.mana.ManaConversionMatrix;
 import forge.game.mana.ManaCostBeingPaid;
+import forge.game.mana.ManaPoolChoiceContext;
 import forge.game.phase.PhaseHandler;
 import forge.game.phase.PhaseType;
 import forge.game.player.*;
@@ -828,6 +829,12 @@ public class PlayerControllerAi extends PlayerController {
             return new CardCollection(toDiscard);
         }
         return getAi().getCardsToDiscard(num, null, sa);
+    }
+
+    @Override
+    public Mana chooseManaFromPool(List<Mana> manaChoices, ManaPoolChoiceContext context) {
+        return AiPaymentChoiceRecorder.withPoolRequest(player, this, manaChoices, context,
+                () -> chooseManaFromPool(manaChoices));
     }
 
     @Override

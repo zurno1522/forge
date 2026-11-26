@@ -236,6 +236,16 @@ public class CostPayment extends ManaConversionMatrix {
      */
     public static Mana getMana(final Player player, final ManaCostShard shard, final SpellAbility saBeingPaidFor,
             final byte colorsPaid, Map<String, Integer> xManaCostPaidByColor) {
+        return getManaImpl(player, shard, saBeingPaidFor, colorsPaid, xManaCostPaidByColor, null);
+    }
+
+    public static Mana getMana(final Player player, final ManaCostShard shard, final SpellAbility saBeingPaidFor,
+            final byte colorsPaid, final Map<String, Integer> xManaCostPaidByColor, final boolean testPayment) {
+        return getManaImpl(player, shard, saBeingPaidFor, colorsPaid, xManaCostPaidByColor, testPayment);
+    }
+
+    private static Mana getManaImpl(final Player player, final ManaCostShard shard, final SpellAbility saBeingPaidFor,
+            final byte colorsPaid, final Map<String, Integer> xManaCostPaidByColor, final Boolean testPayment) {
         final List<Pair<Mana, Integer>> weightedOptions = selectManaToPayFor(player.getManaPool(), shard,
             saBeingPaidFor, colorsPaid, xManaCostPaidByColor);
 
@@ -277,7 +287,9 @@ public class CostPayment extends ManaConversionMatrix {
         }
 
         // Let them choose then
-        return player.getController().chooseManaFromPool(manaChoices);
+        return testPayment == null ? player.getController().chooseManaFromPool(manaChoices)
+                : player.getController().chooseManaFromPool(manaChoices,
+                        new ManaPoolChoiceContext(saBeingPaidFor, shard, testPayment, colorsPaid));
     }
 
     private static List<Pair<Mana, Integer>> selectManaToPayFor(final ManaPool manapool, final ManaCostShard shard,

@@ -79,6 +79,7 @@ CONTEXT_TIMING_V2 = {**{key: value for key, value in CONTEXT_TIMING.items() if k
 MODE_CONTEXT_TIMING = {'CHARM_MODE_HEURISTIC': 'BEFORE_SELECTOR', 'CONTROLLER_MODES': 'BEFORE_OPERATION'}
 MULTI_CONTEXT_TIMING = {'CONTROLLER_EFFECT_ENTITIES': 'BEFORE_OPERATION'}
 ZONE_OPERATION_CONTEXT_TIMING = {'CONTROLLER_ZONE_CHANGE_SELECTIONS': 'BEFORE_OPERATION'}
+MANA_POOL_CONTEXT_TIMING = {'MANA_POOL_OPTIONS': 'BEFORE_SELECTOR'}
 COPY_CONTEXT_TIMING = {'COPY_TARGETS': 'BEFORE_OPERATION'}
 PREPARATION_CONTEXT_TIMING = {'TRIGGER_PREPARATION': 'BEFORE_OPERATION'}
 SPELL_CONTEXT_TIMING = {'CONTROLLER_EFFECT_SPELL_ABILITIES': 'BEFORE_OPERATION', 'CONTROLLER_EFFECT_SPELL_ABILITY': 'BEFORE_SELECTOR'}
@@ -92,6 +93,9 @@ def input_boundary(value, boundary, stage=None, choice=None):
     if choice is not None and boundary in COPY_CONTEXT_TIMING and value['schemaVersion'] >= 17:
         require('entryLocation' in choice and stage == 'EFFECT_COPY_TARGET_SELECTION', 'copy input lacks own entry/stage')
         expected = COPY_CONTEXT_TIMING[boundary]
+    if choice is not None and boundary in MANA_POOL_CONTEXT_TIMING and value['schemaVersion'] >= 19:
+        require('entryLocation' in choice, 'mana pool input lacks own entry')
+        expected = MANA_POOL_CONTEXT_TIMING[boundary]
     spell_operation = choice is not None and choice['choiceType'] == 'EFFECT_MULTI_SPELL_ABILITY_SELECTION'
     if choice is not None and boundary in SPELL_CONTEXT_TIMING:
         require('entryLocation' in choice and value['schemaVersion'] >= 13, 'spell input lacks entry/profile')
@@ -154,6 +158,8 @@ def input_boundary(value, boundary, stage=None, choice=None):
 
 def parameter_boundary(choice):
     context = choice.get('inputContext')
+    if (choice['choiceType'], choice['boundary']) == ('PAYMENT_MANA_SELECTION', 'MANA_POOL_OPTIONS'):
+        return isinstance(context, dict) and integer(context.get('schemaVersion')) and context['schemaVersion'] >= 19
     if (choice['choiceType'], choice['boundary']) == ('TRIGGER_PREPARATION_RESULT', 'TRIGGER_PREPARATION'):
         return isinstance(context, dict) and integer(context.get('schemaVersion')) and context['schemaVersion'] >= 17
     return (choice['choiceType'], choice['boundary']) in (
@@ -451,6 +457,9 @@ def entry_location(choice, known_players=None):
     if choice['boundary'] in PREPARATION_CONTEXT_TIMING:
         require(choice.get('inputContext', {}).get('schemaVersion', 0) >= 17, 'preparation entry requires V17')
         expected = PREPARATION_CONTEXT_TIMING[choice['boundary']]
+    if choice['boundary'] in MANA_POOL_CONTEXT_TIMING:
+        require(choice.get('inputContext', {}).get('schemaVersion', 0) >= 19, 'mana pool entry requires V19')
+        expected = MANA_POOL_CONTEXT_TIMING[choice['boundary']]
     if choice['boundary'] in COPY_CONTEXT_TIMING:
         require(choice.get('inputContext', {}).get('schemaVersion', 0) >= 17, 'copy entry requires V17')
         expected = COPY_CONTEXT_TIMING[choice['boundary']]
@@ -616,9 +625,17 @@ def options(choice):
                 and choice['boundary'] == 'AUTO_MANA_PAYMENT', 'invalid mana requirement')
         return
     if choice['choiceType'] == 'PAYMENT_MANA_SELECTION':
-        require(isinstance(option, dict) and set(option) == {'coverage', 'mana'} and option['coverage'] == 'OBSERVED_MANA_OPTIONS'
+        extra = {'callbackParameters'} if parameter_options(choice) else set()
+        require(isinstance(option, dict) and set(option) == {'coverage', 'mana'} | extra and option['coverage'] == 'OBSERVED_MANA_OPTIONS'
                 and choice['boundary'] == 'MANA_POOL_OPTIONS', 'invalid mana options')
         prefix(option['mana'], mana_reference)
+        if extra:
+            require('entryLocation' in choice, 'mana request lacks entry')
+            raw = option['callbackParameters']; ctx = choice['inputContext']
+            _contexts._parameters.receipt(raw, 'MANA', typed_reference, ctx['schemaVersion'])
+            if raw['coverage'] == 'COMPLETE' and raw['values']['testPayment']:
+                require(ctx['stateBasis'] == 'PLANNING_WORKING_STATE', 'test payment claims rules-state input')
+                require(choice['entryLocation']['status'] != 'CAPTURED' or choice['entryLocation']['stateBasis'] == 'PLANNING_WORKING_STATE', 'test payment claims rules-state entry')
         return
     if choice['choiceType'] in ('NUMBER_SELECTION', 'X_SELECTION'):
         require(isinstance(option, dict), 'invalid numeric options')
