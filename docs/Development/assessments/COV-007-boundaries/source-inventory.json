@@ -1,0 +1,114 @@
+{
+  "baseRevision": "0257100e9ee3a6000bde6124940973e2f4a7d5cd",
+  "scope": "Qualified literal adapter calls plus manually inspected mana/source/X/visitor/engine callback implementations. Static counts are not runtime coverage or a complete call graph.",
+  "counts": {
+    "visitor": 1,
+    "cardPolicy": 3,
+    "autoPayment": 1,
+    "poolTie": 1,
+    "xAssignment": 1,
+    "xRefinementAssignment": 10
+  },
+  "sites": [
+    {
+      "family": "cardPolicy",
+      "path": "forge-ai/src/main/java/forge/ai/AiController.java",
+      "line": 1342
+    },
+    {
+      "family": "visitor",
+      "path": "forge-ai/src/main/java/forge/ai/AiCostDecision.java",
+      "line": 32
+    },
+    {
+      "family": "cardPolicy",
+      "path": "forge-ai/src/main/java/forge/ai/ComputerUtil.java",
+      "line": 627
+    },
+    {
+      "family": "cardPolicy",
+      "path": "forge-ai/src/main/java/forge/ai/ComputerUtil.java",
+      "line": 739
+    },
+    {
+      "family": "xAssignment",
+      "path": "forge-ai/src/main/java/forge/ai/ComputerUtilCost.java",
+      "line": 749
+    },
+    {
+      "family": "autoPayment",
+      "path": "forge-ai/src/main/java/forge/ai/ComputerUtilMana.java",
+      "line": 632
+    },
+    {
+      "family": "poolTie",
+      "path": "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java",
+      "line": 835
+    },
+    {
+      "family": "xRefinementAssignment",
+      "path": "forge-ai/src/main/java/forge/ai/ability/DamageDealAi.java",
+      "line": 220
+    },
+    {
+      "family": "xRefinementAssignment",
+      "path": "forge-ai/src/main/java/forge/ai/ability/DamageDealAi.java",
+      "line": 294
+    },
+    {
+      "family": "xRefinementAssignment",
+      "path": "forge-ai/src/main/java/forge/ai/ability/DamageDealAi.java",
+      "line": 962
+    },
+    {
+      "family": "xRefinementAssignment",
+      "path": "forge-ai/src/main/java/forge/ai/ability/DamageDealAi.java",
+      "line": 1029
+    },
+    {
+      "family": "xRefinementAssignment",
+      "path": "forge-ai/src/main/java/forge/ai/ability/DrawAi.java",
+      "line": 333
+    },
+    {
+      "family": "xRefinementAssignment",
+      "path": "forge-ai/src/main/java/forge/ai/ability/DrawAi.java",
+      "line": 360
+    },
+    {
+      "family": "xRefinementAssignment",
+      "path": "forge-ai/src/main/java/forge/ai/ability/DrawAi.java",
+      "line": 432
+    },
+    {
+      "family": "xRefinementAssignment",
+      "path": "forge-ai/src/main/java/forge/ai/ability/DrawAi.java",
+      "line": 445
+    },
+    {
+      "family": "xRefinementAssignment",
+      "path": "forge-ai/src/main/java/forge/ai/ability/DrawAi.java",
+      "line": 506
+    },
+    {
+      "family": "xRefinementAssignment",
+      "path": "forge-ai/src/main/java/forge/ai/ability/DrawAi.java",
+      "line": 517
+    }
+  ],
+  "sources": {
+    "forge-ai/src/main/java/forge/ai/AiController.java": "61c884ba7abacbcceece10599ebed9f931ce49339c10fca0006e281dd6d454b1",
+    "forge-ai/src/main/java/forge/ai/AiCostDecision.java": "e9d2aa634eb3f3660bb2bd877649a7eb288206312b082cc284c3cbdb98f38a39",
+    "forge-ai/src/main/java/forge/ai/ComputerUtil.java": "ad8a751ba025e9545c6f5e5f69c8989ca54f1b24081d53cb88a4b52bc4b30366",
+    "forge-ai/src/main/java/forge/ai/ComputerUtilCost.java": "0884f9c239c066511b53fa8fb92cb19c3373cf139f70b4109f94d00c122c6088",
+    "forge-ai/src/main/java/forge/ai/ComputerUtilMana.java": "3ad786f3ceb220e718e4c513e56b6891a4f48920f12aefa3a555682ee9898787",
+    "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java": "85743a73488e15d06dbd784bb4ebf9dd4d74016ccf19bb792a29c0e539339671",
+    "forge-ai/src/main/java/forge/ai/ability/DamageDealAi.java": "f982cbb5434f39f1eed372137a3717d185d16baa9bc6dca2745188a5ed293efe",
+    "forge-ai/src/main/java/forge/ai/ability/DrawAi.java": "6134afa9804fb30f723b1025bb2751bda34134db9baf08d487ceb9c08484fcf4",
+    "forge-game/src/main/java/forge/game/cost/CostPayment.java": "0144297291e34b29e41e7a75d8405220546a951f759adcd0db57bbae4c912b98",
+    "forge-game/src/main/java/forge/game/mana/ManaPool.java": "e79ec59be283b7c0a4f45a13ed56657dab1c40d5f2bd3bfa738ff34f46894e9b",
+    "forge-game/src/main/java/forge/game/player/PlayerController.java": "c34e701a2a2117af67e520ba526af48f2fd71d448ee3105997b7a19370018eb9",
+    "forge-ai/src/main/java/forge/ai/AiPaymentChoiceRecorder.java": "746d213e571abecbf7f9ec6c038cbda7092727bbb8cb7ff9805e6027d06503cc",
+    "forge-ai/src/main/java/forge/ai/AiNumberChoiceRecorder.java": "c6c2c6004a9510f6768f8b9966253ff8cb5e7c3042544f8bb08275cc337a5c28"
+  }
+}
