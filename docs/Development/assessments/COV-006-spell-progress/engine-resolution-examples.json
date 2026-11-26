@@ -1,0 +1,1561 @@
+{
+  "completeGameTrace": false,
+  "fixtureKind": "ACTUAL_ENGINE_AND_CONTROLLER_EXCERPTS",
+  "choices": {
+    "GENERIC": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:1",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "EFFECT_MULTI_SPELL_ABILITY_SELECTION",
+        "boundary": "CONTROLLER_EFFECT_SPELL_ABILITIES",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 3,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "coverage": "OBSERVED_SPELL_ABILITY_OPTIONS_DIAGNOSTIC_ONLY",
+          "items": [
+            {
+              "type": "SPELL_ABILITY",
+              "id": 4,
+              "stackId": null
+            },
+            {
+              "type": "SPELL_ABILITY",
+              "id": 5,
+              "stackId": null
+            }
+          ],
+          "truncated": false,
+          "requestedSelections": 2
+        },
+        "inputContext": {
+          "schemaVersion": 15,
+          "profile": "PERMITTED_CHOICE_VIEW_V15",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "chooserPlayerId": 1,
+            "controllingPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "options": "DIAGNOSTIC_ONLY",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "prompt": "RECEIVED_SPELL_OPERATION_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 1,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Time Beetle",
+                "types": "Creature - Alien Insect",
+                "manaCost": "{1}{U}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "SPELL_ABILITY_OPERATION_REQUEST",
+              "requestedSelections": 2
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "id": 0,
+                "entityRef": "p0"
+              },
+              {
+                "id": 1,
+                "entityRef": "p1"
+              }
+            ],
+            "cardBindings": [
+              {
+                "gameTimestamp": 1,
+                "entityRef": "c0",
+                "id": 1
+              }
+            ],
+            "optionBindings": {
+              "coverage": "UNSUPPORTED",
+              "truncated": false,
+              "items": []
+            }
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:2",
+        "parentChoiceId": "choice:1",
+        "status": "STARTED",
+        "choiceType": "EFFECT_SPELL_ABILITY_SELECTION",
+        "boundary": "CONTROLLER_EFFECT_SPELL_ABILITY",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 3,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "coverage": "OBSERVED_SPELL_ABILITY_OPTIONS_DIAGNOSTIC_ONLY",
+          "items": [
+            {
+              "type": "SPELL_ABILITY",
+              "id": 4,
+              "stackId": null
+            },
+            {
+              "type": "SPELL_ABILITY",
+              "id": 5,
+              "stackId": null
+            }
+          ],
+          "truncated": false,
+          "spellRequest": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "affectedPlayerId": null
+          },
+          "spellSelectionProgress": {
+            "schemaVersion": 1,
+            "progressCoverage": "COMPLETE",
+            "progressReason": null,
+            "attemptIndex": 0,
+            "priorNonNullReturnCount": 0,
+            "retainedCount": 0,
+            "requestedSelections": 2,
+            "receiptCoverage": "COMPLETE",
+            "receiptReason": null,
+            "priorReturns": []
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 15,
+          "profile": "PERMITTED_CHOICE_VIEW_V15",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "chooserPlayerId": 1,
+            "controllingPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "options": "DIAGNOSTIC_ONLY",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "prompt": "RECEIVED_SPELL_PROGRESS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 1,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Time Beetle",
+                "types": "Creature - Alien Insect",
+                "manaCost": "{1}{U}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "SPELL_ABILITY_PICK_PROGRESS",
+              "affectedPlayer": null,
+              "requestedSelections": 2,
+              "attemptIndex": 0,
+              "priorNonNullReturnCount": 0,
+              "retainedCount": 0,
+              "previousReturns": []
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "id": 0,
+                "entityRef": "p0"
+              },
+              {
+                "id": 1,
+                "entityRef": "p1"
+              }
+            ],
+            "cardBindings": [
+              {
+                "gameTimestamp": 1,
+                "entityRef": "c0",
+                "id": 1
+              }
+            ],
+            "optionBindings": {
+              "coverage": "UNSUPPORTED",
+              "truncated": false,
+              "items": []
+            }
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:2",
+        "status": "COMPLETED",
+        "selection": {
+          "selected": {
+            "type": "SPELL_ABILITY",
+            "id": 4,
+            "stackId": null
+          },
+          "selectedOptionIndex": 0,
+          "match": "UNIQUE"
+        },
+        "elapsedNanos": 54457281
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:3",
+        "parentChoiceId": "choice:1",
+        "status": "STARTED",
+        "choiceType": "EFFECT_SPELL_ABILITY_SELECTION",
+        "boundary": "CONTROLLER_EFFECT_SPELL_ABILITY",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 3,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "coverage": "OBSERVED_SPELL_ABILITY_OPTIONS_DIAGNOSTIC_ONLY",
+          "items": [
+            {
+              "type": "SPELL_ABILITY",
+              "id": 5,
+              "stackId": null
+            }
+          ],
+          "truncated": false,
+          "spellRequest": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "affectedPlayerId": null
+          },
+          "spellSelectionProgress": {
+            "schemaVersion": 1,
+            "progressCoverage": "COMPLETE",
+            "progressReason": null,
+            "attemptIndex": 1,
+            "priorNonNullReturnCount": 1,
+            "retainedCount": 1,
+            "requestedSelections": 2,
+            "receiptCoverage": "COMPLETE",
+            "receiptReason": null,
+            "priorReturns": [
+              {
+                "type": "SPELL_ABILITY",
+                "id": 4,
+                "stackId": null
+              }
+            ]
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 15,
+          "profile": "PERMITTED_CHOICE_VIEW_V15",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "chooserPlayerId": 1,
+            "controllingPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "options": "DIAGNOSTIC_ONLY",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "prompt": "RECEIVED_SPELL_PROGRESS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 1,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Time Beetle",
+                "types": "Creature - Alien Insect",
+                "manaCost": "{1}{U}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "SPELL_ABILITY_PICK_PROGRESS",
+              "affectedPlayer": null,
+              "requestedSelections": 2,
+              "attemptIndex": 1,
+              "priorNonNullReturnCount": 1,
+              "retainedCount": 1,
+              "previousReturns": [
+                null
+              ]
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "id": 0,
+                "entityRef": "p0"
+              },
+              {
+                "id": 1,
+                "entityRef": "p1"
+              }
+            ],
+            "cardBindings": [
+              {
+                "gameTimestamp": 1,
+                "entityRef": "c0",
+                "id": 1
+              }
+            ],
+            "optionBindings": {
+              "coverage": "UNSUPPORTED",
+              "truncated": false,
+              "items": []
+            }
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:3",
+        "status": "COMPLETED",
+        "selection": {
+          "selected": {
+            "type": "SPELL_ABILITY",
+            "id": 5,
+            "stackId": null
+          },
+          "selectedOptionIndex": 0,
+          "match": "UNIQUE"
+        },
+        "elapsedNanos": 793942
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:1",
+        "status": "COMPLETED",
+        "selection": {
+          "coverage": "OBSERVED_RETURNED_SPELL_ABILITY_PREFIX",
+          "truncated": false,
+          "selectedCount": 2,
+          "items": [
+            {
+              "type": "SPELL_ABILITY",
+              "id": 4,
+              "stackId": null
+            },
+            {
+              "type": "SPELL_ABILITY",
+              "id": 5,
+              "stackId": null
+            }
+          ]
+        },
+        "elapsedNanos": 79892762
+      }
+    ],
+    "VILLAINOUS": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:4",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "EFFECT_MULTI_SPELL_ABILITY_SELECTION",
+        "boundary": "CONTROLLER_EFFECT_SPELL_ABILITIES",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 12,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "coverage": "OBSERVED_SPELL_ABILITY_OPTIONS_DIAGNOSTIC_ONLY",
+          "items": [
+            {
+              "type": "SPELL_ABILITY",
+              "id": 13,
+              "stackId": null
+            },
+            {
+              "type": "SPELL_ABILITY",
+              "id": 14,
+              "stackId": null
+            }
+          ],
+          "truncated": false,
+          "requestedSelections": 1
+        },
+        "inputContext": {
+          "schemaVersion": 15,
+          "profile": "PERMITTED_CHOICE_VIEW_V15",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "chooserPlayerId": 1,
+            "controllingPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "options": "DIAGNOSTIC_ONLY",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "prompt": "RECEIVED_SPELL_OPERATION_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 1,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Time Beetle",
+                "types": "Creature - Alien Insect",
+                "manaCost": "{1}{U}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "SPELL_ABILITY_OPERATION_REQUEST",
+              "requestedSelections": 1
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "id": 0,
+                "entityRef": "p0"
+              },
+              {
+                "id": 1,
+                "entityRef": "p1"
+              }
+            ],
+            "cardBindings": [
+              {
+                "gameTimestamp": 1,
+                "entityRef": "c0",
+                "id": 1
+              }
+            ],
+            "optionBindings": {
+              "coverage": "UNSUPPORTED",
+              "truncated": false,
+              "items": []
+            }
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:5",
+        "parentChoiceId": "choice:4",
+        "status": "STARTED",
+        "choiceType": "EFFECT_SPELL_ABILITY_SELECTION",
+        "boundary": "CONTROLLER_EFFECT_SPELL_ABILITY",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 12,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "coverage": "OBSERVED_SPELL_ABILITY_OPTIONS_DIAGNOSTIC_ONLY",
+          "items": [
+            {
+              "type": "SPELL_ABILITY",
+              "id": 13,
+              "stackId": null
+            },
+            {
+              "type": "SPELL_ABILITY",
+              "id": 14,
+              "stackId": null
+            }
+          ],
+          "truncated": false,
+          "spellRequest": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "affectedPlayerId": null
+          },
+          "spellSelectionProgress": {
+            "schemaVersion": 1,
+            "progressCoverage": "COMPLETE",
+            "progressReason": null,
+            "attemptIndex": 0,
+            "priorNonNullReturnCount": 0,
+            "retainedCount": 0,
+            "requestedSelections": 1,
+            "receiptCoverage": "COMPLETE",
+            "receiptReason": null,
+            "priorReturns": []
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 15,
+          "profile": "PERMITTED_CHOICE_VIEW_V15",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "chooserPlayerId": 1,
+            "controllingPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "options": "DIAGNOSTIC_ONLY",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "prompt": "RECEIVED_SPELL_PROGRESS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 1,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Time Beetle",
+                "types": "Creature - Alien Insect",
+                "manaCost": "{1}{U}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "SPELL_ABILITY_PICK_PROGRESS",
+              "affectedPlayer": null,
+              "requestedSelections": 1,
+              "attemptIndex": 0,
+              "priorNonNullReturnCount": 0,
+              "retainedCount": 0,
+              "previousReturns": []
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "id": 0,
+                "entityRef": "p0"
+              },
+              {
+                "id": 1,
+                "entityRef": "p1"
+              }
+            ],
+            "cardBindings": [
+              {
+                "gameTimestamp": 1,
+                "entityRef": "c0",
+                "id": 1
+              }
+            ],
+            "optionBindings": {
+              "coverage": "UNSUPPORTED",
+              "truncated": false,
+              "items": []
+            }
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:5",
+        "status": "COMPLETED",
+        "selection": {
+          "selected": {
+            "type": "SPELL_ABILITY",
+            "id": 13,
+            "stackId": null
+          },
+          "selectedOptionIndex": 0,
+          "match": "UNIQUE"
+        },
+        "elapsedNanos": 11971630
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:4",
+        "status": "COMPLETED",
+        "selection": {
+          "coverage": "OBSERVED_RETURNED_SPELL_ABILITY_PREFIX",
+          "truncated": false,
+          "selectedCount": 1,
+          "items": [
+            {
+              "type": "SPELL_ABILITY",
+              "id": 13,
+              "stackId": null
+            }
+          ]
+        },
+        "elapsedNanos": 12980499
+      }
+    ],
+    "ZERO_REQUEST": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:6",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "EFFECT_MULTI_SPELL_ABILITY_SELECTION",
+        "boundary": "CONTROLLER_EFFECT_SPELL_ABILITIES",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 19,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "coverage": "OBSERVED_SPELL_ABILITY_OPTIONS_DIAGNOSTIC_ONLY",
+          "items": [
+            {
+              "type": "SPELL_ABILITY",
+              "id": 20,
+              "stackId": null
+            },
+            {
+              "type": "SPELL_ABILITY",
+              "id": 21,
+              "stackId": null
+            }
+          ],
+          "truncated": false,
+          "requestedSelections": 0
+        },
+        "inputContext": {
+          "schemaVersion": 15,
+          "profile": "PERMITTED_CHOICE_VIEW_V15",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "chooserPlayerId": 1,
+            "controllingPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "options": "DIAGNOSTIC_ONLY",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "prompt": "RECEIVED_SPELL_OPERATION_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 1,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Time Beetle",
+                "types": "Creature - Alien Insect",
+                "manaCost": "{1}{U}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "SPELL_ABILITY_OPERATION_REQUEST",
+              "requestedSelections": 0
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "id": 0,
+                "entityRef": "p0"
+              },
+              {
+                "id": 1,
+                "entityRef": "p1"
+              }
+            ],
+            "cardBindings": [
+              {
+                "gameTimestamp": 1,
+                "entityRef": "c0",
+                "id": 1
+              }
+            ],
+            "optionBindings": {
+              "coverage": "UNSUPPORTED",
+              "truncated": false,
+              "items": []
+            }
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:7",
+        "parentChoiceId": "choice:6",
+        "status": "STARTED",
+        "choiceType": "EFFECT_SPELL_ABILITY_SELECTION",
+        "boundary": "CONTROLLER_EFFECT_SPELL_ABILITY",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 19,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "coverage": "OBSERVED_SPELL_ABILITY_OPTIONS_DIAGNOSTIC_ONLY",
+          "items": [
+            {
+              "type": "SPELL_ABILITY",
+              "id": 20,
+              "stackId": null
+            },
+            {
+              "type": "SPELL_ABILITY",
+              "id": 21,
+              "stackId": null
+            }
+          ],
+          "truncated": false,
+          "spellRequest": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "affectedPlayerId": null
+          },
+          "spellSelectionProgress": {
+            "schemaVersion": 1,
+            "progressCoverage": "COMPLETE",
+            "progressReason": null,
+            "attemptIndex": 0,
+            "priorNonNullReturnCount": 0,
+            "retainedCount": 0,
+            "requestedSelections": 0,
+            "receiptCoverage": "COMPLETE",
+            "receiptReason": null,
+            "priorReturns": []
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 15,
+          "profile": "PERMITTED_CHOICE_VIEW_V15",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "chooserPlayerId": 1,
+            "controllingPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "options": "DIAGNOSTIC_ONLY",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "prompt": "RECEIVED_SPELL_PROGRESS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 1,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Time Beetle",
+                "types": "Creature - Alien Insect",
+                "manaCost": "{1}{U}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "SPELL_ABILITY_PICK_PROGRESS",
+              "affectedPlayer": null,
+              "requestedSelections": 0,
+              "attemptIndex": 0,
+              "priorNonNullReturnCount": 0,
+              "retainedCount": 0,
+              "previousReturns": []
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "id": 0,
+                "entityRef": "p0"
+              },
+              {
+                "id": 1,
+                "entityRef": "p1"
+              }
+            ],
+            "cardBindings": [
+              {
+                "gameTimestamp": 1,
+                "entityRef": "c0",
+                "id": 1
+              }
+            ],
+            "optionBindings": {
+              "coverage": "UNSUPPORTED",
+              "truncated": false,
+              "items": []
+            }
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:7",
+        "status": "COMPLETED",
+        "selection": {
+          "selected": {
+            "type": "SPELL_ABILITY",
+            "id": 20,
+            "stackId": null
+          },
+          "selectedOptionIndex": 0,
+          "match": "UNIQUE"
+        },
+        "elapsedNanos": 577184
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:6",
+        "status": "COMPLETED",
+        "selection": {
+          "coverage": "OBSERVED_RETURNED_SPELL_ABILITY_PREFIX",
+          "truncated": false,
+          "selectedCount": 1,
+          "items": [
+            {
+              "type": "SPELL_ABILITY",
+              "id": 20,
+              "stackId": null
+            }
+          ]
+        },
+        "elapsedNanos": 1498666
+      }
+    ],
+    "DECLINED": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:8",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "EFFECT_MULTI_SPELL_ABILITY_SELECTION",
+        "boundary": "CONTROLLER_EFFECT_SPELL_ABILITIES",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 26,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "coverage": "OBSERVED_SPELL_ABILITY_OPTIONS_DIAGNOSTIC_ONLY",
+          "items": [],
+          "truncated": false,
+          "requestedSelections": 2
+        },
+        "inputContext": {
+          "schemaVersion": 15,
+          "profile": "PERMITTED_CHOICE_VIEW_V15",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "chooserPlayerId": 1,
+            "controllingPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "options": "DIAGNOSTIC_ONLY",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "prompt": "RECEIVED_SPELL_OPERATION_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 1,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Time Beetle",
+                "types": "Creature - Alien Insect",
+                "manaCost": "{1}{U}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "SPELL_ABILITY_OPERATION_REQUEST",
+              "requestedSelections": 2
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "id": 0,
+                "entityRef": "p0"
+              },
+              {
+                "id": 1,
+                "entityRef": "p1"
+              }
+            ],
+            "cardBindings": [
+              {
+                "gameTimestamp": 1,
+                "entityRef": "c0",
+                "id": 1
+              }
+            ],
+            "optionBindings": {
+              "coverage": "UNSUPPORTED",
+              "truncated": false,
+              "items": []
+            }
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:9",
+        "parentChoiceId": "choice:8",
+        "status": "STARTED",
+        "choiceType": "EFFECT_SPELL_ABILITY_SELECTION",
+        "boundary": "CONTROLLER_EFFECT_SPELL_ABILITY",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 26,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "coverage": "OBSERVED_SPELL_ABILITY_OPTIONS_DIAGNOSTIC_ONLY",
+          "items": [],
+          "truncated": false,
+          "spellRequest": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "affectedPlayerId": null
+          },
+          "spellSelectionProgress": {
+            "schemaVersion": 1,
+            "progressCoverage": "COMPLETE",
+            "progressReason": null,
+            "attemptIndex": 0,
+            "priorNonNullReturnCount": 0,
+            "retainedCount": 0,
+            "requestedSelections": 2,
+            "receiptCoverage": "COMPLETE",
+            "receiptReason": null,
+            "priorReturns": []
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 15,
+          "profile": "PERMITTED_CHOICE_VIEW_V15",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "chooserPlayerId": 1,
+            "controllingPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "options": "DIAGNOSTIC_ONLY",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "prompt": "RECEIVED_SPELL_PROGRESS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 1,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Time Beetle",
+                "types": "Creature - Alien Insect",
+                "manaCost": "{1}{U}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "SPELL_ABILITY_PICK_PROGRESS",
+              "affectedPlayer": null,
+              "requestedSelections": 2,
+              "attemptIndex": 0,
+              "priorNonNullReturnCount": 0,
+              "retainedCount": 0,
+              "previousReturns": []
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "id": 0,
+                "entityRef": "p0"
+              },
+              {
+                "id": 1,
+                "entityRef": "p1"
+              }
+            ],
+            "cardBindings": [
+              {
+                "gameTimestamp": 1,
+                "entityRef": "c0",
+                "id": 1
+              }
+            ],
+            "optionBindings": {
+              "coverage": "UNSUPPORTED",
+              "truncated": false,
+              "items": []
+            }
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:9",
+        "status": "DECLINED",
+        "selection": null,
+        "elapsedNanos": 513481
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:8",
+        "status": "COMPLETED",
+        "selection": {
+          "coverage": "OBSERVED_RETURNED_SPELL_ABILITY_PREFIX",
+          "truncated": false,
+          "selectedCount": 0,
+          "items": []
+        },
+        "elapsedNanos": 1047047
+      }
+    ]
+  }
+}

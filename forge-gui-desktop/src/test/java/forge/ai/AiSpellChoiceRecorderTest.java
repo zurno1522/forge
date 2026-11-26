@@ -60,8 +60,8 @@ public class AiSpellChoiceRecorderTest extends AITest {
         for (var child : children) {
             Assert.assertEquals(child.get("parentChoiceId"), outer.get("choiceId"));
             Assert.assertEquals(((Map<?, ?>) child.get("entryLocation")).get("kind"), "SELECTOR");
-            Assert.assertEquals(prompt(child).get("kind"), "SPELL_ABILITY_REQUEST"); Assert.assertNull(prompt(child).get("affectedPlayer"));
-            Assert.assertEquals(((Map<?, ?>) input(child).get("coverage")).get("prompt"), "RECEIVED_SPELL_REQUEST_V1");
+            Assert.assertEquals(prompt(child).get("kind"), "SPELL_ABILITY_PICK_PROGRESS"); Assert.assertNull(prompt(child).get("affectedPlayer"));
+            Assert.assertEquals(((Map<?, ?>) input(child).get("coverage")).get("prompt"), "RECEIVED_SPELL_PROGRESS_V1");
             Assert.assertEquals(((Map<?, ?>) ((Map<?, ?>) input(child).get("diagnostics")).get("optionBindings")).get("coverage"), "UNSUPPORTED");
         }
         Assert.assertTrue(f.order.indexOf(outer.get("choiceId") + ":COMPLETED") < f.order.indexOf("MODE_APPLIED"));

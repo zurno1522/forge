@@ -120,7 +120,7 @@ def input_boundary(value, boundary, stage=None, choice=None):
         if value['schemaVersion'] >= 4 and value['diagnostics']['optionBindings']['coverage'] != 'UNSUPPORTED':
             require(boundary in ('CONTROLLER_EFFECT_ENTITY', 'CONTROLLER_ZONE_CHANGE_CARD') or target_pool, 'option links at unaudited input boundary')
         if prompt is not None:
-            if prompt['kind'] == 'SPELL_ABILITY_REQUEST':
+            if prompt['kind'] in ('SPELL_ABILITY_REQUEST', 'SPELL_ABILITY_PICK_PROGRESS'):
                 require(choice['choiceType'] == 'EFFECT_SPELL_ABILITY_SELECTION' and value['schemaVersion'] >= 14, 'single spell request at unaudited boundary')
             elif prompt['kind'] == 'SPELL_ABILITY_OPERATION_REQUEST':
                 require(spell_operation and value['schemaVersion'] >= 13, 'spell request at unaudited boundary')
@@ -149,7 +149,14 @@ def prompt_arguments(choice):
     prompt = (context['policy'] or {}).get('prompt')
     if prompt is None: return
     option = choice['options']
-    if prompt['kind'] == 'SPELL_ABILITY_REQUEST':
+    if 'spellSelectionProgress' in option:
+        require(prompt['kind'] == 'SPELL_ABILITY_PICK_PROGRESS', 'claimed spell history fell back to a different prompt')
+    if prompt['kind'] in ('SPELL_ABILITY_REQUEST', 'SPELL_ABILITY_PICK_PROGRESS'):
+        if prompt['kind'] == 'SPELL_ABILITY_PICK_PROGRESS':
+            progress = option.get('spellSelectionProgress')
+            require(progress is not None and progress['progressCoverage'] == progress['receiptCoverage'] == 'COMPLETE', 'incomplete spell history claims a prompt')
+            require(all(prompt[k] == progress[k] for k in ('requestedSelections','attemptIndex','priorNonNullReturnCount','retainedCount'))
+                    and len(prompt['previousReturns']) == len(progress['priorReturns']), 'spell progress prompt differs from received facts')
         receipt = option['spellRequest']
         require(receipt['coverage'] == 'COMPLETE', 'unsupported spell parameters claim a prompt')
         by_ref = {binding['entityRef']: binding['id'] for binding in context['diagnostics']['playerBindings']}
@@ -199,6 +206,67 @@ def prompt_arguments(choice):
         related = prompt['relatedPlayer']
         by_ref = {binding['entityRef']: binding['id'] for binding in context['diagnostics']['playerBindings']}
         require((None if related is None else by_ref[related]) == option['relatedPlayerId'], 'prompt player differs from callback arguments')
+
+
+def spell_progress_metadata(choice):
+    value = choice['options']['spellSelectionProgress']
+    require(choice['choiceType'] == 'EFFECT_SPELL_ABILITY_SELECTION' and 'entryLocation' in choice
+            and choice.get('inputContext', {}).get('schemaVersion', 0) >= 15, 'spell progress lacks entry/profile')
+    require(isinstance(value, dict) and set(value) == {'schemaVersion','progressCoverage','progressReason','attemptIndex',
+            'priorNonNullReturnCount','retainedCount','requestedSelections','receiptCoverage','receiptReason','priorReturns'}
+            and integer(value['schemaVersion']) and value['schemaVersion'] == 1, 'invalid spell progress fields')
+    require(integer(value['requestedSelections']) and -(1 << 31) <= value['requestedSelections'] < (1 << 31)
+            and integer(value['retainedCount']) and 0 <= value['retainedCount'] < (1 << 31), 'invalid spell progress integers')
+    require(all(value[k] is None or integer(value[k]) and 0 <= value[k] <= (1 << 63)-1
+            for k in ('attemptIndex','priorNonNullReturnCount')), 'invalid spell progress long counters')
+    if value['progressCoverage'] == 'COMPLETE':
+        require(value['progressReason'] is None and value['attemptIndex'] is not None
+                and value['attemptIndex'] == value['priorNonNullReturnCount'] == value['retainedCount'], 'incomplete spell progress claims completeness')
+    else:
+        require(value['progressCoverage'] == 'UNAVAILABLE' and value['progressReason'] in ('UNSUPPORTED','COUNTER_OVERFLOW'), 'invalid unavailable spell progress')
+    refs, count = value['priorReturns'], value['priorNonNullReturnCount']
+    require(isinstance(refs, list) and len(refs) <= 64 and (count is None or len(refs) <= count), 'invalid spell receipt prefix')
+    for ref in refs: typed_reference(ref, 'SPELL_ABILITY')
+    if value['receiptCoverage'] == 'COMPLETE':
+        require(value['progressCoverage'] == 'COMPLETE' and len(refs) == count and value['receiptReason'] is None, 'incomplete spell receipts claim completeness')
+    elif value['receiptCoverage'] == 'PREFIX':
+        require(value['progressCoverage'] == 'COMPLETE' and len(refs) < count and value['receiptReason'] == 'OUTSIDE_CAPTURED_PREFIX', 'invalid spell receipt truncation')
+    else:
+        require(value['receiptCoverage'] == 'UNAVAILABLE' and value['receiptReason'] in ('CAPTURE_FAILED','UNSUPPORTED','COUNTER_OVERFLOW'), 'invalid unavailable spell receipts')
+
+
+def spell_progress_owner(choice, states):
+    value = choice['options']['spellSelectionProgress']; parent_id = choice['parentChoiceId']
+    require(parent_id is not None, 'spell progress lacks outer owner')
+    state = states[parent_id]; parent = state['start']['choice']
+    require(parent['choiceType'] == 'EFFECT_MULTI_SPELL_ABILITY_SELECTION'
+            and all(parent[k] == choice[k] for k in ('chooserPlayerId','abilityId','sourceId'))
+            and value['requestedSelections'] == parent['options']['requestedSelections'], 'spell progress owner differs')
+    require(not state.get('spellProgressUnavailable') or value['progressCoverage'] == 'UNAVAILABLE', 'unavailable spell progress became complete')
+    require(not state.get('spellReceiptsIncomplete') or value['receiptCoverage'] != 'COMPLETE', 'incomplete spell receipts became complete')
+    index, count = value['attemptIndex'], value['priorNonNullReturnCount']; previous = state.get('spellLastProgress')
+    if index is not None:
+        require(index > state.get('spellLastIndex', -1), 'duplicate or reversed spell attempt')
+        state['spellLastIndex'] = index
+    refs = value['priorReturns']; old_refs = state.get('spellReceiptPrefix', [])
+    require(refs[:min(len(refs), len(old_refs))] == old_refs[:min(len(refs), len(old_refs))], 'spell receipt history changed')
+    if previous is not None and index is not None and count is not None:
+        gap, delta = index - previous['index'], count - previous['count']
+        require(0 <= delta <= gap, 'spell return count differs from attempt gap')
+        terminal = states[previous['choiceId']]['terminal']
+        if terminal is not None:
+            status = terminal['choice']['status']
+            require(status == 'COMPLETED' or value['progressCoverage'] == 'UNAVAILABLE', 'spell progress continued after decline/error')
+            if status == 'COMPLETED':
+                require(delta >= 1 and (gap != 1 or delta == 1), 'completed spell missing from count')
+                if previous['count'] < len(refs):
+                    require(refs[previous['count']]['id'] == terminal['choice']['selection']['selected']['id'], 'spell receipt differs from earlier return')
+    if index is not None and count is not None:
+        state['spellLastProgress'] = dict(index=index, count=count, choiceId=choice['choiceId'])
+    state['spellProgressUnavailable'] = state.get('spellProgressUnavailable', False) or value['progressCoverage'] == 'UNAVAILABLE'
+    state['spellReceiptsIncomplete'] = state.get('spellReceiptsIncomplete', False) or value['receiptCoverage'] != 'COMPLETE'
+    if len(refs) > len(old_refs): state['spellReceiptPrefix'] = refs
+    states[parent_id] = state
 
 
 def zone_progress_metadata(choice):
@@ -427,13 +495,15 @@ def options(choice):
         multiple = choice['choiceType'] == 'EFFECT_MULTI_SPELL_ABILITY_SELECTION'
         context = choice.get('inputContext')
         require('entryLocation' in choice and isinstance(context, dict) and integer(context.get('schemaVersion')) and context['schemaVersion'] >= 13, 'spell choice lacks entry/profile')
+        progress_fields = {'spellSelectionProgress'} if isinstance(option, dict) and 'spellSelectionProgress' in option else set()
         request_fields = {'spellRequest'} if not multiple and context['schemaVersion'] >= 14 else set()
-        require(isinstance(option, dict) and set(option) == {'coverage', 'items', 'truncated'} | ({'requestedSelections'} if multiple else set()) | request_fields
+        require(isinstance(option, dict) and set(option) == {'coverage', 'items', 'truncated'} | ({'requestedSelections'} if multiple else set()) | request_fields | progress_fields
                 and option['coverage'] in ('OBSERVED_SPELL_ABILITY_OPTIONS_DIAGNOSTIC_ONLY', 'UNAVAILABLE'), 'invalid spell choice options')
         require(isinstance(option['items'], list) and len(option['items']) <= 256 and isinstance(option['truncated'], bool), 'invalid spell option prefix')
         if option['coverage'] == 'UNAVAILABLE': require(not option['items'] and option['truncated'], 'unavailable spell options have items')
         if multiple: require(integer(option['requestedSelections']) and -(1 << 31) <= option['requestedSelections'] < (1 << 31), 'invalid requested spell selections')
         for ref in option['items']: typed_reference(ref, 'SPELL_ABILITY')
+        if progress_fields: spell_progress_metadata(choice)
         if request_fields:
             receipt = option['spellRequest']
             require(isinstance(receipt, dict) and set(receipt) == {'schemaVersion', 'coverage', 'affectedPlayerId'}
@@ -676,6 +746,7 @@ def accept(record, game):
         options(c)
         if 'selectionSequence' in c['options']: sequence_owner(c, states)
         if 'zoneSelectionProgress' in c['options']: zone_progress_owner(c, states)
+        if 'spellSelectionProgress' in c['options']: spell_progress_owner(c, states)
         if 'inputContext' in c:
             validate_input_context(c['inputContext'], c['chooserPlayerId'])
             input_boundary(c['inputContext'], c['boundary'], c['stage'], c)
@@ -699,6 +770,16 @@ def accept(record, game):
 
 def context(state, game):
     c = state['start']['choice']; parent = None
+    if 'spellSelectionProgress' in c['options']:
+        owner = game['choices'][c['parentChoiceId']]; terminal = owner['terminal']
+        if terminal is not None and terminal['choice']['status'] == 'COMPLETED':
+            result = terminal['choice']['selection']; progress = c['options']['spellSelectionProgress']
+            count = progress['priorNonNullReturnCount']; child = state['terminal']
+            returned = child is not None and child['choice']['status'] == 'COMPLETED'
+            require(count is None or result['selectedCount'] >= count + int(returned), 'spell progress exceeds actual outer return count')
+            refs = progress['priorReturns']; limit = min(len(refs), len(result['items']))
+            require(all(receipt['id'] == returned['id'] for receipt, returned in zip(refs[:limit], result['items'][:limit])),
+                    'spell receipt differs from outer returned ability prefix')
     if 'selectionSequence' in c['options']:
         owner = game['choices'][c['parentChoiceId']]
         terminal = owner['terminal']

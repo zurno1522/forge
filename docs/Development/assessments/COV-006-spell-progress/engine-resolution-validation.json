@@ -1,0 +1,18 @@
+{
+  "GENERIC": {
+    "lifecycleEvents": 6,
+    "validatedOperationsAndSelectors": 3
+  },
+  "VILLAINOUS": {
+    "lifecycleEvents": 4,
+    "validatedOperationsAndSelectors": 2
+  },
+  "ZERO_REQUEST": {
+    "lifecycleEvents": 4,
+    "validatedOperationsAndSelectors": 2
+  },
+  "DECLINED": {
+    "lifecycleEvents": 4,
+    "validatedOperationsAndSelectors": 2
+  }
+}

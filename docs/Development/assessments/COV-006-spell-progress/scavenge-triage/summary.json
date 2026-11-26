@@ -1,0 +1,24 @@
+{
+  "classification": "Pre-existing MC scenario instability; not an established trace, engine-rules or card-script defect. Exact cause and upstream status not established.",
+  "scope": "Same twelve seeds in separate fresh JVMs: initial V15 versus four pre-V15 classes over the same other classes. All scenarios have tracing disabled.",
+  "results": {
+    "initial-v15": {
+      "passes": 11,
+      "failedSeeds": [
+        1
+      ]
+    },
+    "v14-overlay": {
+      "passes": 11,
+      "failedSeeds": [
+        1
+      ]
+    }
+  },
+  "limits": "Both fail first seed 1 and pass 2\u201312; this is consistent with cold/deadline sensitivity, not proof of a unique timing cause or a statistical performance comparison.",
+  "logs": {
+    "/workspace/work/cov006-spell-progress/scavenge-diagnostic/run.log": "c16e1e569ff77cdbaa67551876fb1a39e1c8676e06d6e3a8481181710f55c0d4",
+    "/workspace/work/cov006-spell-progress/scavenge-diagnostic/initial-v15.log": "af6dd5de1d7e25fb4a706e3daf5e6d99e41767837d687d61fda8ff7a1de6fcec",
+    "/workspace/work/cov006-spell-progress/scavenge-diagnostic/v14-overlay.log": "25499c6df8d1de9f5527c89328b739aad7042006aef7a71f1627cbbfdd499ac6"
+  }
+}

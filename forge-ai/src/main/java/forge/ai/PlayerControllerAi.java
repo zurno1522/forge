@@ -472,16 +472,18 @@ public class PlayerControllerAi extends PlayerController {
     @Override
     public List<SpellAbility> chooseSpellAbilitiesForEffect(List<SpellAbility> spells, SpellAbility sa, String title,
             int num, Map<String, Object> params) {
-        return AiSpellChoiceRecorder.multiple(player, sa, spells, num, () -> {
+        return AiSpellChoiceRecorder.multiple(player, sa, spells, num, params, this, () -> {
             List<SpellAbility> remaining = Lists.newArrayList(spells);
             List<SpellAbility> selecteds = Lists.newArrayList();
             SpellAbility selected;
             do {
+                AiSpellSelectionHistory.beforePick(player, sa, this, remaining, params, selecteds.size());
                 selected = chooseSingleSpellForEffect(remaining, sa, title, params);
                 if (selected != null) {
                     remaining.remove(selected);
                     selecteds.add(selected);
                 }
+                AiSpellSelectionHistory.returned(player, sa, this, selected, selecteds.size());
             } while (selected != null && selecteds.size() < num);
             return selecteds;
         });
@@ -490,7 +492,7 @@ public class PlayerControllerAi extends PlayerController {
     @Override
     public SpellAbility chooseSingleSpellForEffect(List<SpellAbility> spells, SpellAbility sa, String title,
             Map<String, Object> params) {
-        return AiSpellChoiceRecorder.single(player, sa, spells, params,
+        return AiSpellChoiceRecorder.single(player, sa, spells, params, this,
                 () -> SpellApiToAi.Converter.get(sa).chooseSingleSpellAbility(player, sa, spells, params));
     }
 

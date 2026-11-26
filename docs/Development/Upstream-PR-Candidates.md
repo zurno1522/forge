@@ -124,3 +124,9 @@ Representative inline player-view contexts, scoped delivered facts, and exporter
 ### Spell-ability observation increment (2026-11-25)
 
 V13 adds controller spell-ability operation/selector records, own entry clocks and received outer counts, validated by the full reactor, legacy exports and normal constructed/Commander games. It preserves the original AI do-while, including one pick for a nonpositive direct request. No shipped zero-count caller or upstream rules defect is established; do not classify that test edge as an engine bug without a separate caller/requirements audit and upstream review. Typed single parameters and spell-choice history remain local recording work under PR-003's enhancement scope. See the [contract and review](Simulation-Spell-Ability-Choice-Contract.md).
+
+### Monte Carlo scavenge scenario reliability (2026-11-25)
+
+The V15 coverage reactor runs 2,887 desktop tests with one failure: `FlatMonteCarloActivatedScenarioTest.scavengeOntoACreature` chooses null instead of Slitherhead. A controlled twelve-seed harness reproduces this with both initial V15 and a four-class pre-V15 AI overlay (`3c8dac5aa44`), with tracing disabled in every sample. Each fresh JVM fails its first sample (seed 1), then passes seeds 2–12. This establishes pre-existing scenario instability and suggests cold/deadline sensitivity; the exact cause, broader frequency and current upstream status are unverified.
+
+Keep this as validation triage, not a confirmed engine/card defect or a ready PR. Investigate search/test reliability and check current upstream before proposing a fix. Do not weaken the assertion or increase production budgets to hide the failure. Final trace regressions pass independently. [Evidence and limits](assessments/COV-006-spell-progress/scavenge-triage/summary.json).

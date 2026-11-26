@@ -20,20 +20,38 @@ final class AiSpellChoiceRecorder {
 
     static SpellAbility single(final Player chooser, final SpellAbility ability, final List<SpellAbility> options,
             final Map<String, Object> params, final Supplier<SpellAbility> callback) {
+        return single(chooser, ability, options, params, null, callback);
+    }
+
+    static SpellAbility single(final Player chooser, final SpellAbility ability, final List<SpellAbility> options,
+            final Map<String, Object> params, final PlayerControllerAi receiver, final Supplier<SpellAbility> callback) {
         if (!chooser.getGame().isRecordingAiDecisions()) { return callback.get(); }
         final AtomicReference<List<Map<String, Object>>> offered = new AtomicReference<>();
         final AtomicReference<AiSpellRequestInput> request = new AtomicReference<>();
+        final AtomicReference<AiSpellSelectionHistory.Input> progress = new AtomicReference<>();
         return AiChoiceRecorder.observeInput(chooser, ability, "EFFECT_SPELL_ABILITY_SELECTION", null,
                 "CONTROLLER_EFFECT_SPELL_ABILITY", "BEFORE_SELECTOR", () -> {
+                    // Consume this dispatch before getters: a failed capture's nested probe cannot borrow it.
+                    final var history = AiSpellSelectionHistory.claim(chooser, ability, receiver, options, params); progress.set(history);
                     final Map<String, Object> result = pool(options, offered);
                     final var received = AiSpellRequestInput.capture(params); request.set(received);
-                    result.put("spellRequest", received.diagnostics()); return result;
-                }, callback, value -> AiEffectChoiceRecorder.selected(value, offered.get()), new AiPromptInput.SpellRequest(request));
+                    result.put("spellRequest", received.diagnostics());
+                    if (history != null) { result.put("spellSelectionProgress", history.diagnostics()); }
+                    return result;
+                }, callback, value -> AiEffectChoiceRecorder.selected(value, offered.get()), new AiSpellSelectionHistory.Prompt(progress, new AiPromptInput.SpellRequest(request)));
     }
 
     static List<SpellAbility> multiple(final Player chooser, final SpellAbility ability, final List<SpellAbility> options,
             final int requestedSelections, final Supplier<List<SpellAbility>> callback) {
-        if (!chooser.getGame().isRecordingAiDecisions()) { return callback.get(); }
+        return multiple(chooser, ability, options, requestedSelections, null, null, callback);
+    }
+
+    static List<SpellAbility> multiple(final Player chooser, final SpellAbility ability, final List<SpellAbility> options,
+            final int requestedSelections, final Map<String, Object> params, final PlayerControllerAi receiver,
+            final Supplier<List<SpellAbility>> callback) {
+        if (!chooser.getGame().isRecordingAiDecisions()) {
+            return AiSpellSelectionHistory.operation(chooser, ability, receiver, requestedSelections, params, null, callback);
+        }
         return AiChoiceRecorder.observeInput(chooser, ability, "EFFECT_MULTI_SPELL_ABILITY_SELECTION", null,
                 "CONTROLLER_EFFECT_SPELL_ABILITIES", "BEFORE_OPERATION", () -> {
                     final Map<String, Object> result = pool(options, new AtomicReference<>());
@@ -46,7 +64,8 @@ final class AiSpellChoiceRecorder {
                     return Map.of("coverage", captured == null ? "UNAVAILABLE" : "OBSERVED_RETURNED_SPELL_ABILITY_PREFIX",
                             "items", refs, "selectedCount", count,
                             "truncated", captured == null || captured.truncated() || count > refs.size());
-                }, new AiPromptInput.SpellOperation(requestedSelections));
+                }, new AiPromptInput.SpellOperation(requestedSelections), null,
+                (owner, original) -> AiSpellSelectionHistory.operation(chooser, ability, receiver, requestedSelections, params, owner, original));
     }
 
     private static Map<String, Object> pool(final List<SpellAbility> options,

@@ -1,0 +1,75 @@
+[
+  {
+    "seed": 1,
+    "passed": false,
+    "assertion": "two +1/+1 counters for {0} expected:\u003cSlitherhead\u003e but was:\u003cnull\u003e",
+    "recordingAiDecisions": false,
+    "elapsedNanos": 1345086005
+  },
+  {
+    "seed": 2,
+    "passed": true,
+    "recordingAiDecisions": false,
+    "elapsedNanos": 464896888
+  },
+  {
+    "seed": 3,
+    "passed": true,
+    "recordingAiDecisions": false,
+    "elapsedNanos": 316435509
+  },
+  {
+    "seed": 4,
+    "passed": true,
+    "recordingAiDecisions": false,
+    "elapsedNanos": 245075582
+  },
+  {
+    "seed": 5,
+    "passed": true,
+    "recordingAiDecisions": false,
+    "elapsedNanos": 249907643
+  },
+  {
+    "seed": 6,
+    "passed": true,
+    "recordingAiDecisions": false,
+    "elapsedNanos": 219969950
+  },
+  {
+    "seed": 7,
+    "passed": true,
+    "recordingAiDecisions": false,
+    "elapsedNanos": 208747681
+  },
+  {
+    "seed": 8,
+    "passed": true,
+    "recordingAiDecisions": false,
+    "elapsedNanos": 174052247
+  },
+  {
+    "seed": 9,
+    "passed": true,
+    "recordingAiDecisions": false,
+    "elapsedNanos": 142793055
+  },
+  {
+    "seed": 10,
+    "passed": true,
+    "recordingAiDecisions": false,
+    "elapsedNanos": 159298547
+  },
+  {
+    "seed": 11,
+    "passed": true,
+    "recordingAiDecisions": false,
+    "elapsedNanos": 128792656
+  },
+  {
+    "seed": 12,
+    "passed": true,
+    "recordingAiDecisions": false,
+    "elapsedNanos": 148111356
+  }
+]

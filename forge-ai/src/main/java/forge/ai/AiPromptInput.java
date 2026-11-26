@@ -10,8 +10,13 @@ import java.util.concurrent.atomic.AtomicReference;
 
 /** Temporary audited request arguments. Only AiInputContext projects these into frozen JSON. */
 record AiPromptInput(Kind kind, int minimum, int maximum, List<Integer> values, boolean optional,
-        Player relatedPlayer, boolean allowRepeat, AiEntitySelectionHistory.Input sequence, ZoneRequest zoneRequest, ZoneOperation zoneOperation, AiZoneSelectionHistory.Input zoneProgress) {
-    enum Kind { NUMBER_RANGE, NUMBER_OPTIONS, SINGLE_ENTITY, MODE_BOUNDS, ENTITY_BOUNDS, ENTITY_PICK_SEQUENCE, ZONE_CHANGE_REQUEST, ZONE_CHANGE_OPERATION_REQUEST, ZONE_PICK_PROGRESS, SPELL_ABILITY_OPERATION_REQUEST, SPELL_ABILITY_REQUEST, UNSUPPORTED_REQUEST }
+        Player relatedPlayer, boolean allowRepeat, AiEntitySelectionHistory.Input sequence, ZoneRequest zoneRequest, ZoneOperation zoneOperation, AiZoneSelectionHistory.Input zoneProgress, AiSpellSelectionHistory.Input spellProgress) {
+    AiPromptInput(Kind kind, int minimum, int maximum, List<Integer> values, boolean optional, Player relatedPlayer,
+            boolean allowRepeat, AiEntitySelectionHistory.Input sequence, ZoneRequest zoneRequest, ZoneOperation zoneOperation,
+            AiZoneSelectionHistory.Input zoneProgress) {
+        this(kind, minimum, maximum, values, optional, relatedPlayer, allowRepeat, sequence, zoneRequest, zoneOperation, zoneProgress, null);
+    }
+    enum Kind { NUMBER_RANGE, NUMBER_OPTIONS, SINGLE_ENTITY, MODE_BOUNDS, ENTITY_BOUNDS, ENTITY_PICK_SEQUENCE, ZONE_CHANGE_REQUEST, ZONE_CHANGE_OPERATION_REQUEST, ZONE_PICK_PROGRESS, SPELL_ABILITY_OPERATION_REQUEST, SPELL_ABILITY_REQUEST, SPELL_ABILITY_PICK_PROGRESS, UNSUPPORTED_REQUEST }
 
     /** Reads only the receipt captured by this entry's visible options supplier. */
     record SpellRequest(AtomicReference<AiSpellRequestInput> input) implements Supplier<AiPromptInput> {

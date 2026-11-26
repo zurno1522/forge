@@ -1,0 +1,10 @@
+{
+  "revision": "3c8dac5aa44",
+  "scope": "Four old AI classes over otherwise initial V15 build; not a checkout/build comparison. Recording remains disabled in this scenario.",
+  "sources": {
+    "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java": "405121b4ab5a0bfc014ae6513194cb4388c1d7a5e09ab423c03e921e026eb201",
+    "forge-ai/src/main/java/forge/ai/AiSpellChoiceRecorder.java": "43690ea2ff91f95151db3454da912df85e07a3a783bc9e1bd1a4f8be725448f5",
+    "forge-ai/src/main/java/forge/ai/AiInputContext.java": "6753765a9a6e8adf929bd1ef6230772883e5d9e6b7cb14db2a81ce32b1abfbd5",
+    "forge-ai/src/main/java/forge/ai/AiPromptInput.java": "723bb957782a6ff7062c30be68ea61b6c904b52d2fbbf982a99350d954389b3c"
+  }
+}

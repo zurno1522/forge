@@ -1,0 +1,42 @@
+{
+  "initialFullReactor": {
+    "forge-game": {
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "forge-gui": {
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "forge-gui-desktop": {
+      "tests": 2887,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 6
+    }
+  },
+  "initialFullReactorStatus": "FAILED: one scavenge MC assertion; reproduced with pre-V15 overlay and tracing disabled. All trace cases passed. Final getter-claim ordering/count guard changes and two new regressions followed this run.",
+  "finalFocusedJava": {
+    "tests": 132,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "newJavaCases": 21,
+  "python": {
+    "tests": 242,
+    "failures": 0,
+    "errors": 0,
+    "newMethods": 9
+  },
+  "logs": {
+    "/workspace/work/cov006-spell-progress/reactor.log": "03cc08ffa394b84e51ac984da6f499486fc7bc130dbc41f02177d7c9b67a0c5d",
+    "/workspace/work/cov006-spell-progress/focused-reviewed.log": "bbdc7aa79b4402c2e4b8382f18d7d8d37a171050416003d0ab249d8cce02b3f6",
+    "/workspace/work/cov006-spell-progress/python.log": "297f182d94173291390dd055ba98e1b5b02c3640363aca291f8660d3610d6f7d",
+    "/workspace/work/cov006-spell-progress/validate-reviewed-games.log": "df7358f0785f25a986643f20226155b9f46e206d071b6af35a6c255ea58131a1"
+  }
+}
