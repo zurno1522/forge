@@ -44,23 +44,32 @@ final class AiEffectChoiceRecorder {
 
     static <T extends GameEntity> T single(final Player chooser, final SpellAbility ability,
             final Iterable<T> options, final boolean optional, final Player relatedPlayer, final Supplier<T> callback) {
+        return single(chooser, ability, options, optional, relatedPlayer, null, callback);
+    }
+
+    static <T extends GameEntity> T single(final Player chooser, final SpellAbility ability,
+            final Iterable<T> options, final boolean optional, final Player relatedPlayer, final Map<String, Object> params,
+            final Supplier<T> callback) {
+        final AtomicReference<AiReceivedParameters.Input> parameters = new AtomicReference<>();
         final AtomicReference<List<Map<String, Object>>> offered = new AtomicReference<>();
         final AtomicReference<AiOptionInput> proof = new AtomicReference<>();
         final AtomicReference<AiEntitySelectionHistory.Input> sequence = AiEntitySelectionHistory.present(chooser, ability)
                 ? new AtomicReference<>() : null;
-        return AiChoiceRecorder.observeInput(chooser, ability, "EFFECT_ENTITY_SELECTION", null,
-                "CONTROLLER_EFFECT_ENTITY", "BEFORE_SELECTOR", () -> {
+        return AiChoiceRecorder.observeParameters(chooser, ability, "EFFECT_ENTITY_SELECTION",
+                "CONTROLLER_EFFECT_ENTITY", () -> {
                     final var history = sequence == null ? null : AiEntitySelectionHistory.claim(chooser, ability, options, optional, relatedPlayer);
                     if (sequence != null) { sequence.set(history); }
                     final Map<String, Object> result = pool(options, offered, proof);
                     result.put("coverage", offered.get() == null ? "UNAVAILABLE" : "OBSERVED_EFFECT_OPTIONS_DIAGNOSTIC_ONLY");
                     result.put("optional", optional);
                     result.put("relatedPlayerId", relatedPlayer == null ? null : relatedPlayer.getId());
+                    final var received = AiReceivedParameters.capture(AiReceivedParameters.Family.ENTITY, params); parameters.set(received);
+                    result.put("callbackParameters", received.diagnostics());
                     if (history != null) { result.put("selectionSequence", history.diagnostics()); }
                     return result;
                 }, callback, value -> selected(value, offered.get()),
                 sequence == null ? () -> AiPromptInput.single(optional, relatedPlayer)
-                        : new AiEntitySelectionHistory.Prompt(sequence, optional, relatedPlayer), proof::get);
+                        : new AiEntitySelectionHistory.Prompt(sequence, optional, relatedPlayer), proof::get, new AiReceivedParameters.Carrier(parameters));
     }
 
     static <T extends GameEntity> List<T> multiple(final Player chooser, final SpellAbility ability,

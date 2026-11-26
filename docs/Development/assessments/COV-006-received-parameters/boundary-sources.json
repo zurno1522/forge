@@ -1,0 +1,14 @@
+{
+  "forge-game/src/main/java/forge/game/ability/effects/VoteEffect.java": "5c8f39ec2519d1eaeab503779fdcf2a78ae3c33705a6c69ca53429e7e248a5ce",
+  "forge-game/src/main/java/forge/game/ability/effects/CountersRemoveEffect.java": "871a2a1c2e54c33cea2aa81def4ac0cad24a95a9360e1fd46b84763fd4e63fe9",
+  "forge-game/src/main/java/forge/game/ability/effects/CountersMoveEffect.java": "53935404a6d77b9d8dcbae09e91a723332f672e68e2d7859b989814db69464a4",
+  "forge-game/src/main/java/forge/game/ability/effects/CountersPutEffect.java": "7deac47f0a2b6b437e7cb4c39260a9b68af5ae695def5feee99d63acd90150a6",
+  "forge-game/src/main/java/forge/game/ability/effects/AttachEffect.java": "cd18b8a7dcdff8aabb53c0f2e69454468056cc648e7b090f5a3549c287d4a299",
+  "forge-game/src/main/java/forge/game/ability/effects/AmassEffect.java": "6e03e4d1375ee0b9fc9ccf7cd01d8585a583e36481e3636c94b3972bd4d99d7e",
+  "forge-game/src/main/java/forge/game/ability/effects/EmpowerEffect.java": "73a2aec075d94df273254263794c3d8d05d3b0aec6d3b7fbfe5da1db84600419",
+  "forge-game/src/main/java/forge/game/ability/effects/PlayEffect.java": "8f9df7385bb9b2d9a7c1fd98e62eac9c516c886459a5d1df5846af157b740fe9",
+  "forge-game/src/main/java/forge/game/ability/effects/BondEffect.java": "c228941d2896cfedc9230ab73dbb2d77700edcb920cb09c750603efbb7f98032",
+  "forge-game/src/main/java/forge/game/ability/effects/MustBlockEffect.java": "e609d89f32e29ac5695bc85ecd7aa81f30b929f6147b0b79a2d550c50c65724b",
+  "forge-game/src/main/java/forge/game/ability/SpellAbilityEffect.java": "11ec502b124be39f2a5a83228d69100d1113adedc44beadbc20c9717b75889e3",
+  "forge-gui/res/cardsfolder/t/the_reality_chip.txt": "22c251a0eb5a93556cc1955daf564bc3fb63c39c93375709113bc1bf0b2c99e6"
+}

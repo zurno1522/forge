@@ -34,7 +34,7 @@ final class AiInputContext {
     static final int MAX_TEXT = 256;
     static final int MAX_REQUEST_ZONES = ZoneType.values().length;
     static final long MAX_GAME_WORK = 256_000;
-    static final String PROFILE = "PERMITTED_CHOICE_VIEW_V15";
+    static final String PROFILE = "PERMITTED_CHOICE_VIEW_V16";
     private static final List<ZoneType> ZONES = List.of(ZoneType.Battlefield, ZoneType.Command,
             ZoneType.Graveyard, ZoneType.Exile, ZoneType.Hand, ZoneType.Library);
 
@@ -76,6 +76,12 @@ final class AiInputContext {
     static Map<String, Object> capture(final Player chooser, final SpellAbility ability, final String timing,
             final String stateBasis, final BooleanSupplier open, final Supplier<AiPromptInput> prompt,
             final Supplier<AiOptionInput> options) {
+        return capture(chooser, ability, timing, stateBasis, open, prompt, options, null);
+    }
+
+    static Map<String, Object> capture(final Player chooser, final SpellAbility ability, final String timing,
+            final String stateBasis, final BooleanSupplier open, final Supplier<AiPromptInput> prompt,
+            final Supplier<AiOptionInput> options, final AiReceivedParameters.Carrier parameters) {
         final Game game = chooser.getGame();
         if (!game.isRecordingAiDecisions() || !open.getAsBoolean() || Thread.currentThread().isInterrupted()) {
             return unavailable(chooser, timing, stateBasis, "INTERRUPTED");
@@ -91,14 +97,14 @@ final class AiInputContext {
         }
         final State state = controller.inputContextState();
         if (!state.acquireWork()) { return unavailable(chooser, timing, stateBasis, "BUDGET_EXHAUSTED"); }
-        return new Capture(chooser, timing, stateBasis, open, state, prompt, options).build();
+        return new Capture(chooser, timing, stateBasis, open, state, prompt, options, parameters).build();
     }
 
     static Map<String, Object> unavailable(final Player chooser, final String timing,
             final String stateBasis, final String reason) {
         final Map<String, Object> result = envelope(chooser, timing, stateBasis);
         result.put("status", "UNAVAILABLE");
-        result.put("coverage", coverage("UNAVAILABLE", "UNAVAILABLE", "UNAVAILABLE"));
+        result.put("coverage", coverage("UNAVAILABLE", "UNAVAILABLE", "UNAVAILABLE", "UNAVAILABLE"));
         result.put("policy", null);
         result.put("diagnostics", Map.of("playerBindings", List.of(), "cardBindings", List.of(), "stackBindings", List.of(),
                 "optionBindings", Map.of("coverage", "UNAVAILABLE", "items", List.of(), "truncated", true)));
@@ -108,7 +114,7 @@ final class AiInputContext {
 
     private static Map<String, Object> envelope(final Player chooser, final String timing, final String stateBasis) {
         final Map<String, Object> result = new LinkedHashMap<>();
-        result.put("schemaVersion", 15);
+        result.put("schemaVersion", 16);
         result.put("profile", PROFILE);
         result.put("timing", timing);
         result.put("stateBasis", stateBasis);
@@ -118,9 +124,9 @@ final class AiInputContext {
         return result;
     }
 
-    private static Map<String, Object> coverage(final String view, final String disclosures, final String prompt) {
+    private static Map<String, Object> coverage(final String view, final String disclosures, final String prompt, final String parameters) {
         return Map.of("playerView", view, "stack", "UNAVAILABLE".equals(view) ? "UNAVAILABLE" : "PUBLIC_ROOT_STACK_V1", "disclosures", disclosures,
-                "history", "INCOMPLETE", "options", "DIAGNOSTIC_ONLY", "prompt", prompt);
+                "history", "INCOMPLETE", "options", "DIAGNOSTIC_ONLY", "prompt", prompt, "receivedParameters", parameters);
     }
 
     private record CardSnapshot(Map<String, Object> permitted, Card card, long id, long timestamp) { }
@@ -134,6 +140,8 @@ final class AiInputContext {
         private final Supplier<AiPromptInput> promptInput;
         private final Supplier<AiOptionInput> optionInput;
         private String promptCoverage = "UNSUPPORTED";
+        private final AiReceivedParameters.Carrier parameterInput;
+        private String parameterCoverage = "UNSUPPORTED";
         private final List<Map<String, Object>> omissions = new ArrayList<>();
         private final List<Map<String, Object>> players = new ArrayList<>();
         private final List<Map<String, Object>> playerBindings = new ArrayList<>();
@@ -147,7 +155,7 @@ final class AiInputContext {
 
         Capture(final Player chooser, final String timing, final String stateBasis,
                 final BooleanSupplier open, final State state, final Supplier<AiPromptInput> promptInput,
-                final Supplier<AiOptionInput> optionInput) {
+                final Supplier<AiOptionInput> optionInput, final AiReceivedParameters.Carrier parameterInput) {
             this.chooser = chooser;
             this.timing = timing;
             this.stateBasis = stateBasis;
@@ -155,6 +163,7 @@ final class AiInputContext {
             this.state = state;
             this.promptInput = promptInput;
             this.optionInput = optionInput;
+            this.parameterInput = parameterInput;
         }
 
         private boolean active() {
@@ -472,6 +481,25 @@ final class AiInputContext {
             return result;
         }
 
+        private Map<String, Object> receivedParameters() {
+            if (parameterInput == null) { return null; }
+            parameterCoverage = "UNAVAILABLE";
+            if (!work("PARAMETERS")) { return null; }
+            final var input = parameterInput.receipt().get();
+            if (input == null || !"COMPLETE".equals(input.coverage())) {
+                omit("PARAMETERS", input == null ? "UNSUPPORTED" : input.reason()); return null;
+            }
+            final Map<String, Object> result = new LinkedHashMap<>(); result.put("kind", input.kind().name());
+            for (final var field : input.values().entrySet()) {
+                if (!work("PARAMETERS")) { return null; }
+                final var role = input.roles().get(field.getKey());
+                final String ref = role == null ? null : previousSelectionRef(role);
+                if (role != null && ref == null) { omit("PARAMETERS", "UNRESOLVED_BINDING"); return null; }
+                result.put(field.getKey(), role == null ? field.getValue() : ref);
+            }
+            parameterCoverage = "RECEIVED_CALLBACK_PARAMETERS_V1"; return result;
+        }
+
         private String previousSelectionRef(final AiOptionInput.Entry receipt) {
             if (receipt.object() instanceof Player player) { return currentPlayerRef(player); }
             if (receipt.object() instanceof Card card && !card.isLKI()
@@ -551,6 +579,7 @@ final class AiInputContext {
             final Map<String, Object> stack = stack();
             final Map<String, Object> prompt = prompt();
             final Map<String, Object> optionBindings = optionBindings();
+            final Map<String, Object> parameters = receivedParameters();
             if (state.remainingWork() <= 0) { return unavailable(chooser, timing, stateBasis, "BUDGET_EXHAUSTED"); }
             final AiContextDisclosures.Snapshot disclosed = state.disclosures().snapshot();
             final List<Map<String, Object>> facts = new ArrayList<>();
@@ -578,10 +607,11 @@ final class AiInputContext {
             policy.put("cards", cards);
             policy.put("stack", stack);
             policy.put("prompt", prompt);
+            policy.put("receivedParameters", parameters);
             policy.put("disclosedFacts", facts);
             final Map<String, Object> result = envelope(chooser, timing, stateBasis);
             result.put("status", omissions.isEmpty() ? "CAPTURED" : "PARTIAL");
-            result.put("coverage", coverage("PERMITTED_CURRENT_FIELDS_V1", disclosed.coverage(), promptCoverage));
+            result.put("coverage", coverage("PERMITTED_CURRENT_FIELDS_V1", disclosed.coverage(), promptCoverage, parameterCoverage));
             result.put("policy", policy);
             result.put("diagnostics", Map.of("playerBindings", playerBindings, "cardBindings", cardBindings, "stackBindings", stackBindings,
                     "optionBindings", optionBindings));

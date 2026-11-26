@@ -1,0 +1,34 @@
+{
+  "VOTER_SELF": {
+    "lifecycleEvents": 2,
+    "validatedSelectors": 1
+  },
+  "VOTER_OTHER": {
+    "lifecycleEvents": 2,
+    "validatedSelectors": 1
+  },
+  "COUNTER_AMOUNT": {
+    "lifecycleEvents": 2,
+    "validatedSelectors": 1
+  },
+  "COUNTER_TRANSFER": {
+    "lifecycleEvents": 2,
+    "validatedSelectors": 1
+  },
+  "ENTITY_ROLE": {
+    "lifecycleEvents": 2,
+    "validatedSelectors": 1
+  },
+  "ENTITY_COUNTER": {
+    "lifecycleEvents": 2,
+    "validatedSelectors": 1
+  },
+  "UNSUPPORTED_MAP": {
+    "lifecycleEvents": 2,
+    "validatedSelectors": 1
+  },
+  "PRIVATE_ROLE": {
+    "lifecycleEvents": 2,
+    "validatedSelectors": 1
+  }
+}

@@ -123,6 +123,15 @@ public final class AiChoiceRecorder {
                 open -> AiInputContext.capture(chooser, ability, timing, stateBasis(chooser, ability), open, prompt, optionInput), ownedCallback);
     }
 
+    /** A separate audited request component, independent of prompt/sequence projection. */
+    static <T> T observeParameters(final Player chooser, final SpellAbility ability, final String type,
+            final String boundary, final Supplier<Map<String, Object>> options, final Supplier<T> callback,
+            final Function<T, Object> selection, final Supplier<AiPromptInput> prompt,
+            final Supplier<AiOptionInput> optionInput, final AiReceivedParameters.Carrier parameters) {
+        return observe(chooser, ability, type, null, boundary, options, callback, selection, "BEFORE_SELECTOR",
+                open -> AiInputContext.capture(chooser, ability, "BEFORE_SELECTOR", stateBasis(chooser, ability), open, prompt, optionInput, parameters));
+    }
+
     private static String stateBasis(final Player chooser, final SpellAbility ability) {
         final Observation active = ACTIVE.get();
         return PLANNING.get() == chooser.getGame() || evaluation(chooser, ability) != null || active != null && active.game == chooser.getGame()

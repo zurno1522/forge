@@ -21,8 +21,17 @@ public final class AiNumberChoiceRecorder {
 
     static int controllerRange(final Player chooser, final SpellAbility ability,
             final int min, final int max, final Supplier<Integer> callback) {
-        return range(chooser, ability, "CONTROLLER_NUMBER_RANGE", min, max, callback,
-                () -> AiPromptInput.range(min, max));
+        return controllerRange(chooser, ability, min, max, null, callback);
+    }
+
+    static int controllerRange(final Player chooser, final SpellAbility ability, final int min, final int max,
+            final Map<String, Object> params, final Supplier<Integer> callback) {
+        final AtomicReference<AiReceivedParameters.Input> parameters = new AtomicReference<>();
+        return AiChoiceRecorder.observeParameters(chooser, ability, "NUMBER_SELECTION", "CONTROLLER_NUMBER_RANGE", () -> {
+            final var received = AiReceivedParameters.capture(AiReceivedParameters.Family.NUMBER, params); parameters.set(received);
+            return Map.of("coverage", "OBSERVED_RANGE", "minimum", min, "maximum", max, "callbackParameters", received.diagnostics());
+        }, callback, value -> numeric(value, null, value >= min && value <= max ? "WITHIN_OBSERVED_DOMAIN" : "OUTSIDE_OBSERVED_DOMAIN"),
+                () -> AiPromptInput.range(min, max), null, new AiReceivedParameters.Carrier(parameters));
     }
 
     private static Integer range(final Player chooser, final SpellAbility ability, final String boundary,

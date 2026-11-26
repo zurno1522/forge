@@ -5,9 +5,16 @@ Validation checks the producer contract; it cannot reconstruct permission grants
 from a privileged trace or prove that an uninstrumented heuristic used this view.
 """
 
+import importlib.util
+from pathlib import Path
+
+_parameter_spec = importlib.util.spec_from_file_location('forge_received_parameters', Path(__file__).with_name('received_parameters.py'))
+_parameters = importlib.util.module_from_spec(_parameter_spec)
+_parameter_spec.loader.exec_module(_parameters)
+
 PROFILE = 'PERMITTED_CHOICE_VIEW_V1'
 PROFILES = {1: PROFILE, 2: 'PERMITTED_CHOICE_VIEW_V2', 3: 'PERMITTED_CHOICE_VIEW_V3', 4: 'PERMITTED_CHOICE_VIEW_V4',
-            5: 'PERMITTED_CHOICE_VIEW_V5', 6: 'PERMITTED_CHOICE_VIEW_V6', 7: 'PERMITTED_CHOICE_VIEW_V7', 8: 'PERMITTED_CHOICE_VIEW_V8', 9: 'PERMITTED_CHOICE_VIEW_V9', 10: 'PERMITTED_CHOICE_VIEW_V10', 11: 'PERMITTED_CHOICE_VIEW_V11', 12: 'PERMITTED_CHOICE_VIEW_V12', 13: 'PERMITTED_CHOICE_VIEW_V13', 14: 'PERMITTED_CHOICE_VIEW_V14', 15: 'PERMITTED_CHOICE_VIEW_V15'}
+            5: 'PERMITTED_CHOICE_VIEW_V5', 6: 'PERMITTED_CHOICE_VIEW_V6', 7: 'PERMITTED_CHOICE_VIEW_V7', 8: 'PERMITTED_CHOICE_VIEW_V8', 9: 'PERMITTED_CHOICE_VIEW_V9', 10: 'PERMITTED_CHOICE_VIEW_V10', 11: 'PERMITTED_CHOICE_VIEW_V11', 12: 'PERMITTED_CHOICE_VIEW_V12', 13: 'PERMITTED_CHOICE_VIEW_V13', 14: 'PERMITTED_CHOICE_VIEW_V14', 15: 'PERMITTED_CHOICE_VIEW_V15', 16: 'PERMITTED_CHOICE_VIEW_V16'}
 ZONE_BRANCHES = {'ORDINARY_HIDDEN_ORIGIN', 'SAME_NAME_HIDDEN_ORIGIN', 'EACH_TYPE_HIDDEN_ORIGIN', 'HEIST', 'DRAFT'}
 TIMINGS = {'BEFORE_SELECTOR', 'BEFORE_OPERATION', 'AFTER_SELECTION_BEFORE_APPLICATION', 'UNESTABLISHED'}
 STATE_BASES = {'RULES_STATE', 'PLANNING_WORKING_STATE', 'UNESTABLISHED'}
@@ -40,7 +47,7 @@ def fields(value, expected, message):
     require(isinstance(value, dict) and set(value) == set(expected.split()), message)
 
 
-def validate(value, chooser_id, known_players=None):
+def validate(value, chooser_id, known_players=None, *, parameters_allowed=False):
     """Validate a present context, never substituting a default for legacy absence."""
     fields(value, 'schemaVersion profile status timing stateBasis perspective coverage policy diagnostics omissions',
            'invalid envelope fields')
@@ -57,7 +64,7 @@ def validate(value, chooser_id, known_players=None):
     if known_players is not None:
         require(all(perspective[k] in known_players for k in perspective), 'unknown perspective player')
     coverage = value['coverage']
-    fields(coverage, 'playerView stack disclosures history options' + (' prompt' if version >= 3 else ''), 'invalid coverage fields')
+    fields(coverage, 'playerView stack disclosures history options' + (' prompt' if version >= 3 else '') + (' receivedParameters' if version >= 16 else ''), 'invalid coverage fields')
     require(coverage['playerView'] in ('PERMITTED_CURRENT_FIELDS_V1', 'UNAVAILABLE'), 'unknown player-view coverage')
     require(coverage['stack'] in ({'UNSUPPORTED'} if version == 1 else {'PUBLIC_ROOT_STACK_V1', 'UNAVAILABLE'}) and coverage['history'] == 'INCOMPLETE'
             and coverage['options'] == 'DIAGNOSTIC_ONLY', 'unsupported coverage claim')
@@ -67,7 +74,7 @@ def validate(value, chooser_id, known_players=None):
     require(isinstance(omissions, list) and len(omissions) <= 16, 'invalid omissions')
     for omission in omissions:
         fields(omission, 'component reason', 'invalid omission fields')
-        require(omission['component'] in COMPONENTS | ({'STACK'} if version >= 2 else set()) | ({'PROMPT'} if version >= 3 else set())
+        require(omission['component'] in COMPONENTS | ({'STACK'} if version >= 2 else set()) | ({'PROMPT'} if version >= 3 else set()) | ({'PARAMETERS'} if version >= 16 else set())
                 and omission['reason'] in (REASONS | ({'COUNTER_OVERFLOW'} if version >= 10 else set())), 'unknown omission')
     require(bool(omissions) == (value['status'] != 'CAPTURED'), 'capture status/omission mismatch')
     diagnostic = value['diagnostics']
@@ -84,13 +91,14 @@ def validate(value, chooser_id, known_players=None):
         if version >= 2:
             require(coverage['stack'] == 'UNAVAILABLE' and diagnostic['stackBindings'] == [], 'unavailable stack has bindings')
         if version >= 3: require(coverage['prompt'] == 'UNAVAILABLE', 'unavailable prompt claims coverage')
+        if version >= 16: require(coverage['receivedParameters'] == 'UNAVAILABLE', 'unavailable parameters claim coverage')
         if version >= 4:
             require(diagnostic['optionBindings'] == dict(coverage='UNAVAILABLE', items=[], truncated=True), 'unavailable option links have data')
         return
     if version >= 2: require(coverage['stack'] == 'PUBLIC_ROOT_STACK_V1', 'stack coverage/policy mismatch')
     require(perspective['controllingPlayerId'] == chooser_id, 'unsupported controlled perspective has policy')
     fields(policy, 'turn phase turnPlayer chooser players cards disclosedFacts' + (' stack' if version >= 2 else '')
-           + (' prompt' if version >= 3 else ''), 'invalid policy fields')
+           + (' prompt' if version >= 3 else '') + (' receivedParameters' if version >= 16 else ''), 'invalid policy fields')
     require(integer(policy['turn']) and policy['turn'] >= 0 and text(policy['phase']), 'invalid turn/phase')
     players = policy['players']
     require(isinstance(players, list) and 0 < len(players) <= 16, 'invalid player prefix')
@@ -175,6 +183,8 @@ def validate(value, chooser_id, known_players=None):
         validate_stack(policy['stack'], diagnostic['stackBindings'], players, cards, omissions, value['stateBasis'])
     if version >= 3:
         validate_prompt(policy['prompt'], coverage['prompt'], refs, omissions, value['stateBasis'], version)
+    if version >= 16:
+        _parameters.projection(policy['receivedParameters'], coverage['receivedParameters'], refs, cards, omissions, parameters_allowed)
     if version >= 4:
         validate_option_links(diagnostic['optionBindings'], refs, cards)
 

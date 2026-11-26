@@ -144,9 +144,21 @@ def input_boundary(value, boundary, stage=None, choice=None):
                                      'SINGLE_ENTITY': 'CONTROLLER_EFFECT_ENTITY'}[prompt['kind']], 'typed prompt at unaudited boundary')
 
 
+def parameter_boundary(choice):
+    return (choice['choiceType'], choice['boundary']) in (
+        ('NUMBER_SELECTION', 'CONTROLLER_NUMBER_RANGE'), ('EFFECT_ENTITY_SELECTION', 'CONTROLLER_EFFECT_ENTITY'))
+
+
+def parameter_options(choice):
+    context = choice.get('inputContext')
+    current = isinstance(context, dict) and integer(context.get('schemaVersion')) and context['schemaVersion'] >= 16
+    return parameter_boundary(choice) and current
+
+
 def prompt_arguments(choice):
     context = choice['inputContext']
     prompt = (context['policy'] or {}).get('prompt')
+    if context['schemaVersion'] >= 16 and parameter_boundary(choice): _contexts._parameters.arguments(choice)
     if prompt is None: return
     option = choice['options']
     if 'spellSelectionProgress' in option:
@@ -540,6 +552,10 @@ def options(choice):
         common = {'coverage', 'items', 'truncated', 'optional'}
         zone = choice['choiceType'] == 'ZONE_CHANGE_CARD_SELECTION'
         expected = common | ({'destination', 'origins', 'deciderPlayerId'} if zone else {'relatedPlayerId'})
+        if parameter_options(choice):
+            expected.add('callbackParameters')
+            require('entryLocation' in choice, 'received parameters lack own entry')
+            _contexts._parameters.receipt(option.get('callbackParameters'), 'ENTITY', typed_reference)
         if 'zoneSelectionProgress' in option:
             require(zone, 'entity callback claims zone progress')
             expected |= {'zoneSelectionProgress'}
@@ -598,7 +614,11 @@ def options(choice):
             else:
                 require(option['minimum'] == 0 and integer(option['minimum']) and integer(option['maximum']), 'invalid X heuristic bound')
         elif coverage == 'OBSERVED_RANGE':
-            require(set(option) == {'coverage', 'minimum', 'maximum'} and integer(option['minimum']) and integer(option['maximum']), 'invalid observed numeric range')
+            extra = {'callbackParameters'} if parameter_options(choice) else set()
+            require(set(option) == {'coverage', 'minimum', 'maximum'} | extra and integer(option['minimum']) and integer(option['maximum']), 'invalid observed numeric range')
+            if extra:
+                require('entryLocation' in choice, 'received numeric parameters lack own entry')
+                _contexts._parameters.receipt(option['callbackParameters'], 'NUMBER', typed_reference)
         else:
             require(set(option) == {'coverage', 'items', 'truncated'} and coverage == 'OBSERVED_DISCRETE_OPTIONS'
                     and isinstance(option['items'], list) and len(option['items']) <= 256
@@ -748,7 +768,7 @@ def accept(record, game):
         if 'zoneSelectionProgress' in c['options']: zone_progress_owner(c, states)
         if 'spellSelectionProgress' in c['options']: spell_progress_owner(c, states)
         if 'inputContext' in c:
-            validate_input_context(c['inputContext'], c['chooserPlayerId'])
+            validate_input_context(c['inputContext'], c['chooserPlayerId'], parameters_allowed=parameter_boundary(c))
             input_boundary(c['inputContext'], c['boundary'], c['stage'], c)
             input_envelope(c['inputContext'], record)
             prompt_arguments(c)
@@ -810,7 +830,7 @@ def context(state, game):
                 and action['events'][0]['eventIndex'] < state['start']['eventIndex'], 'choice precedes parent attempt')
     if game['start'] is not None:
         require(c['chooserPlayerId'] in game['players'], 'unknown standalone choice chooser')
-        if 'inputContext' in c: validate_input_context(c['inputContext'], c['chooserPlayerId'], game['players'])
+        if 'inputContext' in c: validate_input_context(c['inputContext'], c['chooserPlayerId'], game['players'], parameters_allowed=parameter_boundary(c))
         entry_location(c, game['players'])
     if state['terminal'] is None:
         require(game['execution']['status'] != 'NORMAL' or parent is not None and parent['status'] != 'COMPLETED', 'normal choice lacks terminal result')

@@ -1,0 +1,22 @@
+{
+  "finalFocusedJava": {
+    "tests": 120,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "newCases": 18
+  },
+  "python": {
+    "tests": 250,
+    "failures": 0,
+    "errors": 0,
+    "newMethods": 8
+  },
+  "fullReactor": "Not repeated for V16. V15 full-run scavenge instability was separately reproduced with pre-V15 classes and tracing disabled; no green full-suite claim.",
+  "initialCorrections": "Removed an unused test import, corrected synthetic numeric prompt coverage, and passed the audited capability through final context validation as well as start validation. Final checks pass.",
+  "logs": {
+    "/workspace/work/cov006-received-parameters/focused-final.log": "1d17770b03af9f86f3d50f0c190a13449fd25980e75e3e79720f6e64e7c34da0",
+    "/workspace/work/cov006-received-parameters/python.log": "62b2d36c0f67570d3422249d01d82c345cbc8bde34720b1e64989f57fb79fecd",
+    "/workspace/work/cov006-received-parameters/validate-games.log": "097c998890cb6481f824a9b2dabf008e0562baaabac1b7924c3fef4f0eca6632"
+  }
+}

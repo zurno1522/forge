@@ -441,7 +441,7 @@ public class PlayerControllerAi extends PlayerController {
     public <T extends GameEntity> T chooseSingleEntityForEffect(FCollectionView<T> optionList, DelayedReveal delayedReveal, SpellAbility sa, String title, boolean isOptional, Player targetedPlayer, Map<String, Object> params) {
         return AiEffectChoiceRecorder.prompt(player, () -> {
             if (delayedReveal != null) { reveal(delayedReveal); }
-            return AiEffectChoiceRecorder.single(player, sa, optionList, isOptional, targetedPlayer,
+            return AiEffectChoiceRecorder.single(player, sa, optionList, isOptional, targetedPlayer, params,
                     () -> SpellApiToAi.Converter.get(sa).chooseSingleEntity(player, sa, optionList, isOptional, targetedPlayer, params));
         });
     }
@@ -1153,7 +1153,7 @@ public class PlayerControllerAi extends PlayerController {
 
     @Override
     public int chooseNumber(SpellAbility sa, String string, int min, int max, Map<String, Object> params) {
-        return AiNumberChoiceRecorder.controllerRange(player, sa, min, max,
+        return AiNumberChoiceRecorder.controllerRange(player, sa, min, max, params,
                 () -> SpellApiToAi.Converter.get(sa).chooseNumber(player, sa, min, max, params));
     }
 

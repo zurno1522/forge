@@ -1,0 +1,1554 @@
+{
+  "choices": {
+    "VOTER_SELF": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:1",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "NUMBER_SELECTION",
+        "boundary": "CONTROLLER_NUMBER_RANGE",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 4,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "VOTER",
+            "values": {
+              "voter": {
+                "type": "PLAYER",
+                "id": 1
+              }
+            },
+            "reason": null
+          },
+          "coverage": "OBSERVED_RANGE",
+          "maximum": 3,
+          "minimum": 0
+        },
+        "inputContext": {
+          "schemaVersion": 16,
+          "profile": "PERMITTED_CHOICE_VIEW_V16",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "history": "INCOMPLETE",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "prompt": "CONTROLLER_REQUEST_V1",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1",
+            "options": "DIAGNOSTIC_ONLY"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Time Beetle",
+                "types": "Creature - Alien Insect",
+                "manaCost": "{1}{U}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "NUMBER_RANGE",
+              "minimum": 0,
+              "maximum": 3
+            },
+            "receivedParameters": {
+              "kind": "VOTER",
+              "voter": "p1"
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "stackBindings": [],
+            "optionBindings": {
+              "coverage": "UNSUPPORTED",
+              "items": [],
+              "truncated": false
+            },
+            "cardBindings": [
+              {
+                "gameTimestamp": 1,
+                "id": 1,
+                "entityRef": "c0"
+              },
+              {
+                "gameTimestamp": 2,
+                "id": 2,
+                "entityRef": "c1"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "reason": "UNSUPPORTED",
+              "component": "DISCLOSURES"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:1",
+        "status": "COMPLETED",
+        "selection": {
+          "value": 3,
+          "optionIndex": null,
+          "domainMatch": "WITHIN_OBSERVED_DOMAIN"
+        },
+        "elapsedNanos": 187021983
+      }
+    ],
+    "VOTER_OTHER": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:2",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "NUMBER_SELECTION",
+        "boundary": "CONTROLLER_NUMBER_RANGE",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 8,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "VOTER",
+            "values": {
+              "voter": {
+                "type": "PLAYER",
+                "id": 0
+              }
+            },
+            "reason": null
+          },
+          "coverage": "OBSERVED_RANGE",
+          "maximum": 3,
+          "minimum": 0
+        },
+        "inputContext": {
+          "schemaVersion": 16,
+          "profile": "PERMITTED_CHOICE_VIEW_V16",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "history": "INCOMPLETE",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "prompt": "CONTROLLER_REQUEST_V1",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1",
+            "options": "DIAGNOSTIC_ONLY"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Time Beetle",
+                "types": "Creature - Alien Insect",
+                "manaCost": "{1}{U}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "NUMBER_RANGE",
+              "minimum": 0,
+              "maximum": 3
+            },
+            "receivedParameters": {
+              "kind": "VOTER",
+              "voter": "p0"
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "stackBindings": [],
+            "optionBindings": {
+              "coverage": "UNSUPPORTED",
+              "items": [],
+              "truncated": false
+            },
+            "cardBindings": [
+              {
+                "gameTimestamp": 1,
+                "id": 1,
+                "entityRef": "c0"
+              },
+              {
+                "gameTimestamp": 2,
+                "id": 2,
+                "entityRef": "c1"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "reason": "UNSUPPORTED",
+              "component": "DISCLOSURES"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:2",
+        "status": "COMPLETED",
+        "selection": {
+          "value": 0,
+          "optionIndex": null,
+          "domainMatch": "WITHIN_OBSERVED_DOMAIN"
+        },
+        "elapsedNanos": 1085773
+      }
+    ],
+    "COUNTER_AMOUNT": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:3",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "NUMBER_SELECTION",
+        "boundary": "CONTROLLER_NUMBER_RANGE",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 12,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "COUNTER_AMOUNT",
+            "values": {
+              "counterType": "Poison",
+              "target": {
+                "type": "PLAYER",
+                "id": 0
+              }
+            },
+            "reason": null
+          },
+          "coverage": "OBSERVED_RANGE",
+          "maximum": 3,
+          "minimum": 0
+        },
+        "inputContext": {
+          "schemaVersion": 16,
+          "profile": "PERMITTED_CHOICE_VIEW_V16",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "history": "INCOMPLETE",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "prompt": "CONTROLLER_REQUEST_V1",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1",
+            "options": "DIAGNOSTIC_ONLY"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Time Beetle",
+                "types": "Creature - Alien Insect",
+                "manaCost": "{1}{U}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "NUMBER_RANGE",
+              "minimum": 0,
+              "maximum": 3
+            },
+            "receivedParameters": {
+              "kind": "COUNTER_AMOUNT",
+              "counterType": "Poison",
+              "target": "p0"
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "stackBindings": [],
+            "optionBindings": {
+              "coverage": "UNSUPPORTED",
+              "items": [],
+              "truncated": false
+            },
+            "cardBindings": [
+              {
+                "gameTimestamp": 1,
+                "id": 1,
+                "entityRef": "c0"
+              },
+              {
+                "gameTimestamp": 2,
+                "id": 2,
+                "entityRef": "c1"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "reason": "UNSUPPORTED",
+              "component": "DISCLOSURES"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:3",
+        "status": "COMPLETED",
+        "selection": {
+          "value": 0,
+          "optionIndex": null,
+          "domainMatch": "WITHIN_OBSERVED_DOMAIN"
+        },
+        "elapsedNanos": 1263954
+      }
+    ],
+    "COUNTER_TRANSFER": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:4",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "NUMBER_SELECTION",
+        "boundary": "CONTROLLER_NUMBER_RANGE",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 16,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "COUNTER_TRANSFER_AMOUNT",
+            "values": {
+              "counterType": "Charge",
+              "source": {
+                "type": "CARD",
+                "id": 2,
+                "gameTimestamp": 2
+              },
+              "target": {
+                "type": "PLAYER",
+                "id": 0
+              }
+            },
+            "reason": null
+          },
+          "coverage": "OBSERVED_RANGE",
+          "maximum": 3,
+          "minimum": 0
+        },
+        "inputContext": {
+          "schemaVersion": 16,
+          "profile": "PERMITTED_CHOICE_VIEW_V16",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "history": "INCOMPLETE",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "prompt": "CONTROLLER_REQUEST_V1",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1",
+            "options": "DIAGNOSTIC_ONLY"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Time Beetle",
+                "types": "Creature - Alien Insect",
+                "manaCost": "{1}{U}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "NUMBER_RANGE",
+              "minimum": 0,
+              "maximum": 3
+            },
+            "receivedParameters": {
+              "kind": "COUNTER_TRANSFER_AMOUNT",
+              "counterType": "Charge",
+              "source": "c1",
+              "target": "p0"
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "stackBindings": [],
+            "optionBindings": {
+              "coverage": "UNSUPPORTED",
+              "items": [],
+              "truncated": false
+            },
+            "cardBindings": [
+              {
+                "gameTimestamp": 1,
+                "id": 1,
+                "entityRef": "c0"
+              },
+              {
+                "gameTimestamp": 2,
+                "id": 2,
+                "entityRef": "c1"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "reason": "UNSUPPORTED",
+              "component": "DISCLOSURES"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:4",
+        "status": "COMPLETED",
+        "selection": {
+          "value": 2,
+          "optionIndex": null,
+          "domainMatch": "WITHIN_OBSERVED_DOMAIN"
+        },
+        "elapsedNanos": 1000783
+      }
+    ],
+    "ENTITY_ROLE": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:5",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "EFFECT_ENTITY_SELECTION",
+        "boundary": "CONTROLLER_EFFECT_ENTITY",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 20,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "items": [
+            {
+              "type": "CARD",
+              "id": 2,
+              "gameTimestamp": 2
+            }
+          ],
+          "truncated": false,
+          "coverage": "OBSERVED_EFFECT_OPTIONS_DIAGNOSTIC_ONLY",
+          "optional": false,
+          "relatedPlayerId": null,
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "ENTITY_CARD_ROLE",
+            "values": {
+              "role": "Partner",
+              "entity": {
+                "type": "CARD",
+                "id": 2,
+                "gameTimestamp": 2
+              }
+            },
+            "reason": null
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 16,
+          "profile": "PERMITTED_CHOICE_VIEW_V16",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "CAPTURED",
+          "coverage": {
+            "disclosures": "CURRENT_PROMPT",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "history": "INCOMPLETE",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "prompt": "CONTROLLER_REQUEST_V1",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1",
+            "options": "DIAGNOSTIC_ONLY"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Time Beetle",
+                "types": "Creature - Alien Insect",
+                "manaCost": "{1}{U}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "SINGLE_ENTITY",
+              "minimumPicks": 1,
+              "maximumPicks": 1,
+              "optional": false,
+              "relatedPlayer": null
+            },
+            "receivedParameters": {
+              "kind": "ENTITY_CARD_ROLE",
+              "role": "Partner",
+              "entity": "c1"
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "stackBindings": [],
+            "optionBindings": {
+              "coverage": "DIAGNOSTIC_PUBLIC_CURRENT_V1",
+              "items": [
+                {
+                  "optionIndex": 0,
+                  "entityRef": "c1"
+                }
+              ],
+              "truncated": false
+            },
+            "cardBindings": [
+              {
+                "gameTimestamp": 1,
+                "id": 1,
+                "entityRef": "c0"
+              },
+              {
+                "gameTimestamp": 2,
+                "id": 2,
+                "entityRef": "c1"
+              }
+            ]
+          },
+          "omissions": []
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:5",
+        "status": "COMPLETED",
+        "selection": {
+          "selected": {
+            "type": "CARD",
+            "id": 2,
+            "gameTimestamp": 2
+          },
+          "selectedOptionIndex": 0,
+          "match": "UNIQUE"
+        },
+        "elapsedNanos": 1988099
+      }
+    ],
+    "ENTITY_COUNTER": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:6",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "EFFECT_ENTITY_SELECTION",
+        "boundary": "CONTROLLER_EFFECT_ENTITY",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 24,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "items": [
+            {
+              "type": "CARD",
+              "id": 2,
+              "gameTimestamp": 2
+            }
+          ],
+          "truncated": false,
+          "coverage": "OBSERVED_EFFECT_OPTIONS_DIAGNOSTIC_ONLY",
+          "optional": false,
+          "relatedPlayerId": null,
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "ENTITY_COUNTER_REQUEST",
+            "values": {
+              "counterType": "Loyalty",
+              "amount": 2,
+              "target": {
+                "type": "CARD",
+                "id": 2,
+                "gameTimestamp": 2
+              }
+            },
+            "reason": null
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 16,
+          "profile": "PERMITTED_CHOICE_VIEW_V16",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "CAPTURED",
+          "coverage": {
+            "disclosures": "CURRENT_PROMPT",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "history": "INCOMPLETE",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "prompt": "CONTROLLER_REQUEST_V1",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1",
+            "options": "DIAGNOSTIC_ONLY"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Time Beetle",
+                "types": "Creature - Alien Insect",
+                "manaCost": "{1}{U}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "SINGLE_ENTITY",
+              "minimumPicks": 1,
+              "maximumPicks": 1,
+              "optional": false,
+              "relatedPlayer": null
+            },
+            "receivedParameters": {
+              "kind": "ENTITY_COUNTER_REQUEST",
+              "counterType": "Loyalty",
+              "amount": 2,
+              "target": "c1"
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "stackBindings": [],
+            "optionBindings": {
+              "coverage": "DIAGNOSTIC_PUBLIC_CURRENT_V1",
+              "items": [
+                {
+                  "optionIndex": 0,
+                  "entityRef": "c1"
+                }
+              ],
+              "truncated": false
+            },
+            "cardBindings": [
+              {
+                "gameTimestamp": 1,
+                "id": 1,
+                "entityRef": "c0"
+              },
+              {
+                "gameTimestamp": 2,
+                "id": 2,
+                "entityRef": "c1"
+              }
+            ]
+          },
+          "omissions": []
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:6",
+        "status": "COMPLETED",
+        "selection": {
+          "selected": {
+            "type": "CARD",
+            "id": 2,
+            "gameTimestamp": 2
+          },
+          "selectedOptionIndex": 0,
+          "match": "UNIQUE"
+        },
+        "elapsedNanos": 5088490
+      }
+    ],
+    "UNSUPPORTED_MAP": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:7",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "NUMBER_SELECTION",
+        "boundary": "CONTROLLER_NUMBER_RANGE",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 28,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "UNSUPPORTED",
+            "kind": null,
+            "values": null,
+            "reason": "UNSUPPORTED"
+          },
+          "coverage": "OBSERVED_RANGE",
+          "maximum": 3,
+          "minimum": 0
+        },
+        "inputContext": {
+          "schemaVersion": 16,
+          "profile": "PERMITTED_CHOICE_VIEW_V16",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "history": "INCOMPLETE",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "prompt": "CONTROLLER_REQUEST_V1",
+            "receivedParameters": "UNAVAILABLE",
+            "options": "DIAGNOSTIC_ONLY"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Time Beetle",
+                "types": "Creature - Alien Insect",
+                "manaCost": "{1}{U}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "NUMBER_RANGE",
+              "minimum": 0,
+              "maximum": 3
+            },
+            "receivedParameters": null,
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "stackBindings": [],
+            "optionBindings": {
+              "coverage": "UNSUPPORTED",
+              "items": [],
+              "truncated": false
+            },
+            "cardBindings": [
+              {
+                "gameTimestamp": 1,
+                "id": 1,
+                "entityRef": "c0"
+              },
+              {
+                "gameTimestamp": 2,
+                "id": 2,
+                "entityRef": "c1"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "reason": "UNSUPPORTED",
+              "component": "PARAMETERS"
+            },
+            {
+              "reason": "UNSUPPORTED",
+              "component": "DISCLOSURES"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:7",
+        "status": "COMPLETED",
+        "selection": {
+          "value": 2,
+          "optionIndex": null,
+          "domainMatch": "WITHIN_OBSERVED_DOMAIN"
+        },
+        "elapsedNanos": 993850
+      }
+    ],
+    "PRIVATE_ROLE": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:8",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "EFFECT_ENTITY_SELECTION",
+        "boundary": "CONTROLLER_EFFECT_ENTITY",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 32,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "items": [
+            {
+              "type": "CARD",
+              "id": 2,
+              "gameTimestamp": 2
+            }
+          ],
+          "truncated": false,
+          "coverage": "OBSERVED_EFFECT_OPTIONS_DIAGNOSTIC_ONLY",
+          "optional": false,
+          "relatedPlayerId": null,
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "ENTITY_CARD_ROLE",
+            "values": {
+              "role": "Attach",
+              "entity": {
+                "type": "CARD",
+                "id": 3,
+                "gameTimestamp": 3
+              }
+            },
+            "reason": null
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 16,
+          "profile": "PERMITTED_CHOICE_VIEW_V16",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "disclosures": "CURRENT_PROMPT",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "history": "INCOMPLETE",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "prompt": "CONTROLLER_REQUEST_V1",
+            "receivedParameters": "UNAVAILABLE",
+            "options": "DIAGNOSTIC_ONLY"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 1,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Time Beetle",
+                "types": "Creature - Alien Insect",
+                "manaCost": "{1}{U}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": {
+              "kind": "SINGLE_ENTITY",
+              "minimumPicks": 1,
+              "maximumPicks": 1,
+              "optional": false,
+              "relatedPlayer": null
+            },
+            "receivedParameters": null,
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "stackBindings": [],
+            "optionBindings": {
+              "coverage": "DIAGNOSTIC_PUBLIC_CURRENT_V1",
+              "items": [
+                {
+                  "optionIndex": 0,
+                  "entityRef": "c1"
+                }
+              ],
+              "truncated": false
+            },
+            "cardBindings": [
+              {
+                "gameTimestamp": 1,
+                "id": 1,
+                "entityRef": "c0"
+              },
+              {
+                "gameTimestamp": 2,
+                "id": 2,
+                "entityRef": "c1"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "reason": "UNRESOLVED_BINDING",
+              "component": "PARAMETERS"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:8",
+        "status": "COMPLETED",
+        "selection": {
+          "selected": {
+            "type": "CARD",
+            "id": 2,
+            "gameTimestamp": 2
+          },
+          "selectedOptionIndex": 0,
+          "match": "UNIQUE"
+        },
+        "elapsedNanos": 1283484
+      }
+    ]
+  },
+  "fixtureKind": "ACTUAL_CONTROLLER_AND_AUDITED_ADAPTER_EXCERPTS",
+  "completeGameTrace": false
+}
