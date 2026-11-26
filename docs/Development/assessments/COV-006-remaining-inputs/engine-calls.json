@@ -1,0 +1,505 @@
+{
+  "baseRevision": "358d66c63d8875ce8a9d687672d3c6432b1f4faa",
+  "scope": "Qualified literal chooseNumber/chooseSingleEntityForEffect call occurrences in forge-game main sources; not dynamic invocation coverage, all AI choices, or a complete call graph. Includes overloads and a few framework helpers. Unqualified forwarding definitions are excluded.",
+  "counts": {
+    "chooseNumber": 19,
+    "chooseSingleEntityForEffect": 69
+  },
+  "sites": [
+    {
+      "path": "forge-game/src/main/java/forge/game/GameAction.java",
+      "line": 1712,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/GameAction.java",
+      "line": 2087,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/GameAction.java",
+      "line": 2100,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/GameAction.java",
+      "line": 2529,
+      "method": "chooseNumber"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/GameAction.java",
+      "line": 2902,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/GameAction.java",
+      "line": 2927,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/GameActionUtil.java",
+      "line": 638,
+      "method": "chooseNumber"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/GameActionUtil.java",
+      "line": 742,
+      "method": "chooseNumber"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/SpellAbilityEffect.java",
+      "line": 794,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/SpellAbilityEffect.java",
+      "line": 1088,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/AmassEffect.java",
+      "line": 95,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/AttachEffect.java",
+      "line": 57,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/AttachEffect.java",
+      "line": 109,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/AttachEffect.java",
+      "line": 118,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/BidLifeEffect.java",
+      "line": 58,
+      "method": "chooseNumber"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/BlightEffect.java",
+      "line": 48,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/BondEffect.java",
+      "line": 44,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/ChangeZoneEffect.java",
+      "line": 647,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/ChangeZoneEffect.java",
+      "line": 662,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/ChangeZoneEffect.java",
+      "line": 725,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/ChangeZoneEffect.java",
+      "line": 916,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/ChangeZoneEffect.java",
+      "line": 1276,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/ChangeZoneEffect.java",
+      "line": 1293,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/ChangeZoneEffect.java",
+      "line": 1321,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/CharmEffect.java",
+      "line": 283,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/ChooseCardEffect.java",
+      "line": 123,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/ChooseCardEffect.java",
+      "line": 137,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/ChooseCardEffect.java",
+      "line": 152,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/ChooseCardEffect.java",
+      "line": 180,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/ChooseCardEffect.java",
+      "line": 200,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/ChooseCardEffect.java",
+      "line": 224,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/ChooseNumberEffect.java",
+      "line": 83,
+      "method": "chooseNumber"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/ChooseNumberEffect.java",
+      "line": 85,
+      "method": "chooseNumber"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/ChooseNumberEffect.java",
+      "line": 107,
+      "method": "chooseNumber"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/ChoosePlayerEffect.java",
+      "line": 50,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/ChooseSourceEffect.java",
+      "line": 129,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/ClashEffect.java",
+      "line": 39,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/CloneEffect.java",
+      "line": 100,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/ConniveEffect.java",
+      "line": 69,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/ControlGainVariantEffect.java",
+      "line": 70,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/ControlGainVariantEffect.java",
+      "line": 79,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/CopyPermanentEffect.java",
+      "line": 213,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/CopyPermanentEffect.java",
+      "line": 223,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/CopySpellAbilityEffect.java",
+      "line": 112,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/CopySpellAbilityEffect.java",
+      "line": 141,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/CountersMoveEffect.java",
+      "line": 214,
+      "method": "chooseNumber"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/CountersMoveEffect.java",
+      "line": 355,
+      "method": "chooseNumber"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/CountersPutEffect.java",
+      "line": 352,
+      "method": "chooseNumber"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/CountersPutEffect.java",
+      "line": 468,
+      "method": "chooseNumber"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/CountersPutEffect.java",
+      "line": 479,
+      "method": "chooseNumber"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/CountersPutEffect.java",
+      "line": 527,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/CountersRemoveEffect.java",
+      "line": 200,
+      "method": "chooseNumber"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/CountersRemoveEffect.java",
+      "line": 260,
+      "method": "chooseNumber"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/DigEffect.java",
+      "line": 218,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/DigEffect.java",
+      "line": 275,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/DigEffect.java",
+      "line": 294,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/DigEffect.java",
+      "line": 308,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/DigUntilEffect.java",
+      "line": 251,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/DrawEffect.java",
+      "line": 97,
+      "method": "chooseNumber"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/EmpowerEffect.java",
+      "line": 93,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/EncodeEffect.java",
+      "line": 61,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/LifeSetEffect.java",
+      "line": 80,
+      "method": "chooseNumber"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/ManifestDreadEffect.java",
+      "line": 22,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/MeldEffect.java",
+      "line": 40,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/MustBlockEffect.java",
+      "line": 53,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/MutateEffect.java",
+      "line": 38,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/PlayEffect.java",
+      "line": 243,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/PutStickerEffect.java",
+      "line": 69,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/ReplaceCounterEffect.java",
+      "line": 56,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/ReplaceTokenEffect.java",
+      "line": 96,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/RingTemptsYouEffect.java",
+      "line": 35,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/RollDiceEffect.java",
+      "line": 158,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/RollDiceEffect.java",
+      "line": 198,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/RollDiceEffect.java",
+      "line": 241,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/RollDiceEffect.java",
+      "line": 502,
+      "method": "chooseNumber"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/TwoPilesEffect.java",
+      "line": 59,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/TwoPilesEffect.java",
+      "line": 67,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/UnlockDoorEffect.java",
+      "line": 38,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/VoteEffect.java",
+      "line": 101,
+      "method": "chooseNumber"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/ability/effects/ZoneExchangeEffect.java",
+      "line": 77,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/combat/Combat.java",
+      "line": 772,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/phase/Untap.java",
+      "line": 135,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/player/PlaySpellAbility.java",
+      "line": 291,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/player/PlaySpellAbility.java",
+      "line": 804,
+      "method": "chooseNumber"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/player/PlaySpellAbility.java",
+      "line": 809,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/player/Player.java",
+      "line": 3288,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/replacement/ReplacementHandler.java",
+      "line": 791,
+      "method": "chooseSingleEntityForEffect"
+    },
+    {
+      "path": "forge-game/src/main/java/forge/game/spellability/SpellAbility.java",
+      "line": 2149,
+      "method": "chooseSingleEntityForEffect"
+    }
+  ],
+  "sources": {
+    "forge-game/src/main/java/forge/game/GameAction.java": "971b7c48ff3af7348a3cec65e596dd07d7b5935da5519649f91fb1dd915fc977",
+    "forge-game/src/main/java/forge/game/GameActionUtil.java": "dc6789faf68842fc58e1bdeb92d3b0533ca81187a0ebb7f10148e7ae5935d2f6",
+    "forge-game/src/main/java/forge/game/ability/SpellAbilityEffect.java": "11ec502b124be39f2a5a83228d69100d1113adedc44beadbc20c9717b75889e3",
+    "forge-game/src/main/java/forge/game/ability/effects/AmassEffect.java": "6e03e4d1375ee0b9fc9ccf7cd01d8585a583e36481e3636c94b3972bd4d99d7e",
+    "forge-game/src/main/java/forge/game/ability/effects/AttachEffect.java": "cd18b8a7dcdff8aabb53c0f2e69454468056cc648e7b090f5a3549c287d4a299",
+    "forge-game/src/main/java/forge/game/ability/effects/BidLifeEffect.java": "db058e9939d37e338baed72e528df064f9d2b27a15ede7ae7242e531b45fe701",
+    "forge-game/src/main/java/forge/game/ability/effects/BlightEffect.java": "0732b961686acec11158fe3269ebbf7ea9a9cb46416d94b3480e61b186a446dd",
+    "forge-game/src/main/java/forge/game/ability/effects/BondEffect.java": "c228941d2896cfedc9230ab73dbb2d77700edcb920cb09c750603efbb7f98032",
+    "forge-game/src/main/java/forge/game/ability/effects/ChangeZoneEffect.java": "345bfbceb9d0cae604839ae14636f8b5f01f98825a467a811c643da850e933d8",
+    "forge-game/src/main/java/forge/game/ability/effects/CharmEffect.java": "b510d52c336d80602d6ea550cd1025a0f6c57d56ce7f849bc9587586938fb4e8",
+    "forge-game/src/main/java/forge/game/ability/effects/ChooseCardEffect.java": "262833d9dcfe3c9c5112e646adeaadc6147df7f7dab5dfef6dffbe92e218c53a",
+    "forge-game/src/main/java/forge/game/ability/effects/ChooseNumberEffect.java": "86537f1ebdbf722641d97c05e7399a9c9e1737e24c412edbcd0b6c191541e0ac",
+    "forge-game/src/main/java/forge/game/ability/effects/ChoosePlayerEffect.java": "a3105fa306a8a4acbda177abf9680fdcf0527cc26362e2b5a3613abca52f5d27",
+    "forge-game/src/main/java/forge/game/ability/effects/ChooseSourceEffect.java": "6bf66744ac070f2427621889a51263a416c70c0aee51037c82120c5ee5f4412b",
+    "forge-game/src/main/java/forge/game/ability/effects/ClashEffect.java": "3625840a2621252d2361d901b231af053b5c881709c89dc04190529e150e6e81",
+    "forge-game/src/main/java/forge/game/ability/effects/CloneEffect.java": "429fe0a5dc8236477a04e1375141b47913e190dc51848fc6c13ffcadbd86eccb",
+    "forge-game/src/main/java/forge/game/ability/effects/ConniveEffect.java": "a5aa9a697a2bbef5302a12b4129e8498b311ce159f158cb39d1f514a7d35831f",
+    "forge-game/src/main/java/forge/game/ability/effects/ControlGainVariantEffect.java": "10ccf8c4db8acf80bc98f697499606d4ecfb641a4aa616dee9ba2bc91dffc743",
+    "forge-game/src/main/java/forge/game/ability/effects/CopyPermanentEffect.java": "4033118bb19874579c3e9394ced6579c4a1869e9934e2b676e0211362858e1c8",
+    "forge-game/src/main/java/forge/game/ability/effects/CopySpellAbilityEffect.java": "1474928054b84608021ea6f94cb38a41d3301647887347b8d9fdda2eaa9e41df",
+    "forge-game/src/main/java/forge/game/ability/effects/CountersMoveEffect.java": "53935404a6d77b9d8dcbae09e91a723332f672e68e2d7859b989814db69464a4",
+    "forge-game/src/main/java/forge/game/ability/effects/CountersPutEffect.java": "7deac47f0a2b6b437e7cb4c39260a9b68af5ae695def5feee99d63acd90150a6",
+    "forge-game/src/main/java/forge/game/ability/effects/CountersRemoveEffect.java": "871a2a1c2e54c33cea2aa81def4ac0cad24a95a9360e1fd46b84763fd4e63fe9",
+    "forge-game/src/main/java/forge/game/ability/effects/DigEffect.java": "39dc36477b73e339210461e92612f84d8566a9701f4e8d95610ec27d81a9478f",
+    "forge-game/src/main/java/forge/game/ability/effects/DigUntilEffect.java": "98e34198c940a221be7604b33f003369756046d53c3ed01947433617fe0b38c6",
+    "forge-game/src/main/java/forge/game/ability/effects/DrawEffect.java": "5fea8730e0ff86f71fba98f5ed45358a60554c895fa1371350c1b3a9cb26a6fe",
+    "forge-game/src/main/java/forge/game/ability/effects/EmpowerEffect.java": "73a2aec075d94df273254263794c3d8d05d3b0aec6d3b7fbfe5da1db84600419",
+    "forge-game/src/main/java/forge/game/ability/effects/EncodeEffect.java": "2bf2ff16882422ad16bf29fed5d0a162a6c340bb06287e76306cead9e8d0feee",
+    "forge-game/src/main/java/forge/game/ability/effects/LifeSetEffect.java": "8d4fa88ad01a3a2ab9babe503417ca47ed23325f242dba56e1bd1e0213fef41f",
+    "forge-game/src/main/java/forge/game/ability/effects/ManifestDreadEffect.java": "92a057f65b0336431d19954f74218c7253701706fded95647950ad197158572b",
+    "forge-game/src/main/java/forge/game/ability/effects/MeldEffect.java": "76f1f255f585f5c4262cf5476c4696604c431ad42462316bd1edf72584b18c5e",
+    "forge-game/src/main/java/forge/game/ability/effects/MustBlockEffect.java": "e609d89f32e29ac5695bc85ecd7aa81f30b929f6147b0b79a2d550c50c65724b",
+    "forge-game/src/main/java/forge/game/ability/effects/MutateEffect.java": "2647d9e91c97d24925eac7702fe144192a66fbfae589c417864deed123ce18fc",
+    "forge-game/src/main/java/forge/game/ability/effects/PlayEffect.java": "8f9df7385bb9b2d9a7c1fd98e62eac9c516c886459a5d1df5846af157b740fe9",
+    "forge-game/src/main/java/forge/game/ability/effects/PutStickerEffect.java": "3552525d17d7c86d264c0546d2cccff1d828283cfcc3be3a41c922ac8957b7a1",
+    "forge-game/src/main/java/forge/game/ability/effects/ReplaceCounterEffect.java": "049609488a1a925945ff2bd9ca6ac783639e70567ec5b75bcdb422205cfa36db",
+    "forge-game/src/main/java/forge/game/ability/effects/ReplaceTokenEffect.java": "5b24f7f8127596b63f58d96509bd6613c28fa3dffd4d4f17b58766d7d43ac6e2",
+    "forge-game/src/main/java/forge/game/ability/effects/RingTemptsYouEffect.java": "9089bc5a9ffdb08e7d91274296396e754ca05824ec9d649f8199cbe775755ee4",
+    "forge-game/src/main/java/forge/game/ability/effects/RollDiceEffect.java": "24779656780ee10f2e906b0ba268098778c57b752c83d029666e8dd17c013239",
+    "forge-game/src/main/java/forge/game/ability/effects/TwoPilesEffect.java": "0dedc9fa8a1f44721c8ae9b6b8f00ab4ada00ae7d47cb6b99a77f962736047e9",
+    "forge-game/src/main/java/forge/game/ability/effects/UnlockDoorEffect.java": "2ae4970335fb7c39ca855a4f59331ae87ecaa197844e37227ff943d7f458f435",
+    "forge-game/src/main/java/forge/game/ability/effects/VoteEffect.java": "5c8f39ec2519d1eaeab503779fdcf2a78ae3c33705a6c69ca53429e7e248a5ce",
+    "forge-game/src/main/java/forge/game/ability/effects/ZoneExchangeEffect.java": "5dbb1f003cb5ce78485255dc2254265519786ee3290e317a098fe2e12b774ee3",
+    "forge-game/src/main/java/forge/game/combat/Combat.java": "b7e4048e8be05e2be710f6b6351af50b7a441e33f5a34b06b9f02540fa5c3508",
+    "forge-game/src/main/java/forge/game/phase/Untap.java": "0c1e4a36deb46cf3558c5b640f902c6df9a60d22782efa9ff154f02327dd1ef9",
+    "forge-game/src/main/java/forge/game/player/PlaySpellAbility.java": "0ac48e3c3cb1c182c14eedf7743576106aa8507680448bdfd730fcee38e44ac1",
+    "forge-game/src/main/java/forge/game/player/Player.java": "05767d8b69f5d4de5638eaef8d13111a24678799eed2a6834953467b7a6b154d",
+    "forge-game/src/main/java/forge/game/replacement/ReplacementHandler.java": "a52411bde96e4fa4e395b69eb2b42f6bcac4779470505f6c9b04c6f9d3b8131f",
+    "forge-game/src/main/java/forge/game/spellability/SpellAbility.java": "07b3a04a2c1a754ca909d195bc6992b270dc3bf6d2431986535363f000fcaf13",
+    "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java": "c89a0447b9ee3df277c953b5bba296fb86e6c6a18fb23bf0c3a940f8870c7da6",
+    "forge-ai/src/main/java/forge/ai/SpellAbilityAi.java": "777af6c3a3a43a4ef7c26f8bfd980f75344d0e27589c57ba2d7491b13a1f505b",
+    "forge-ai/src/main/java/forge/ai/ability/CharmAi.java": "639c50c188b6e1978442d3f690bce97574b66e95d23e33cc1c90e8cc2c3bd329",
+    "forge-gui/src/main/java/forge/player/PlayerControllerHuman.java": "298a62b3fd86af82ad85d3c3fbd25f4330183f734f5ac9f65ec1265b8440f2d6"
+  }
+}

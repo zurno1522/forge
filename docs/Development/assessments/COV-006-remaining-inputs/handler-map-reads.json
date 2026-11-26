@@ -1,0 +1,142 @@
+{
+  "scope": "Direct literal map reads in audited method families, including inherited card/player dispatch; not all engine paths or runtime coverage.",
+  "sites": [
+    {
+      "path": "forge-ai/src/main/java/forge/ai/ability/AssignGroupAi.java",
+      "method": "chooseSingleSpellAbility",
+      "line": 22,
+      "keys": [
+        "Affected"
+      ]
+    },
+    {
+      "path": "forge-ai/src/main/java/forge/ai/ability/BondAi.java",
+      "method": "chooseSingleCard",
+      "line": 59,
+      "keys": [
+        "Partner"
+      ]
+    },
+    {
+      "path": "forge-ai/src/main/java/forge/ai/ability/ChangeZoneAi.java",
+      "method": "chooseSingleCard",
+      "line": 1748,
+      "keys": [
+        "Attach"
+      ]
+    },
+    {
+      "path": "forge-ai/src/main/java/forge/ai/ability/ChangeZoneAi.java",
+      "method": "chooseSinglePlayer",
+      "line": 1762,
+      "keys": [
+        "Attacker"
+      ]
+    },
+    {
+      "path": "forge-ai/src/main/java/forge/ai/ability/ChangeZoneAi.java",
+      "method": "chooseSingleAttackableEntity",
+      "line": 1771,
+      "keys": [
+        "Attacker"
+      ]
+    },
+    {
+      "path": "forge-ai/src/main/java/forge/ai/ability/CopyPermanentAi.java",
+      "method": "chooseSinglePlayer",
+      "line": 260,
+      "keys": [
+        "Attacker"
+      ]
+    },
+    {
+      "path": "forge-ai/src/main/java/forge/ai/ability/CopyPermanentAi.java",
+      "method": "chooseSingleAttackableEntity",
+      "line": 270,
+      "keys": [
+        "Attacker"
+      ]
+    },
+    {
+      "path": "forge-ai/src/main/java/forge/ai/ability/CountersPutAi.java",
+      "method": "chooseSingleCard",
+      "line": 947,
+      "keys": [
+        "CounterType"
+      ]
+    },
+    {
+      "path": "forge-ai/src/main/java/forge/ai/ability/CountersRemoveAi.java",
+      "method": "chooseNumber",
+      "line": 345,
+      "keys": [
+        "CounterType",
+        "Target"
+      ]
+    },
+    {
+      "path": "forge-ai/src/main/java/forge/ai/ability/DigAi.java",
+      "method": "chooseSinglePlayer",
+      "line": 184,
+      "keys": [
+        "Attacker"
+      ]
+    },
+    {
+      "path": "forge-ai/src/main/java/forge/ai/ability/DigAi.java",
+      "method": "chooseSingleAttackableEntity",
+      "line": 193,
+      "keys": [
+        "Attacker"
+      ]
+    },
+    {
+      "path": "forge-ai/src/main/java/forge/ai/ability/TokenAi.java",
+      "method": "chooseSinglePlayer",
+      "line": 322,
+      "keys": [
+        "Attacker"
+      ]
+    },
+    {
+      "path": "forge-ai/src/main/java/forge/ai/ability/TokenAi.java",
+      "method": "chooseSingleAttackableEntity",
+      "line": 333,
+      "keys": [
+        "Attacker"
+      ]
+    },
+    {
+      "path": "forge-ai/src/main/java/forge/ai/ability/VoteAi.java",
+      "method": "chooseNumber",
+      "line": 55,
+      "keys": [
+        "Voter"
+      ]
+    }
+  ],
+  "sources": {
+    "forge-ai/src/main/java/forge/ai/ability/AssignGroupAi.java": "6696f78736ff2c4249c74e57e8d35959d0b2cb688d31764a340a63ca0593802f",
+    "forge-ai/src/main/java/forge/ai/ability/BondAi.java": "c4f6da373ff704e1b65c2e46dadb5089419088eaa87f9c774610c2c508316517",
+    "forge-ai/src/main/java/forge/ai/ability/ChangeZoneAi.java": "57cca816e75bcf97f9cc50f7a81917fa4bcb7e4d70fb5f53c2d8cd1b5e1e02b1",
+    "forge-ai/src/main/java/forge/ai/ability/CopyPermanentAi.java": "a1a2256818d71a8a54f8f6a2e6f212c3b68410b2e6d9aaf99c1fa9d537a6f6dd",
+    "forge-ai/src/main/java/forge/ai/ability/CountersPutAi.java": "34c97d4cbd8c4025fcfe0ab94db541e079044502a111427ac791991a1ebed4ce",
+    "forge-ai/src/main/java/forge/ai/ability/CountersRemoveAi.java": "701eac07333963fba2d940e60c4340e588069a0fadfa96216008dea672af6afc",
+    "forge-ai/src/main/java/forge/ai/ability/DigAi.java": "d73ee5b3de70a1bf9b4785c043fd4f8162cbef6d08a7f451e8f18d5d3f480eda",
+    "forge-ai/src/main/java/forge/ai/ability/TokenAi.java": "f43760f54c1510563a0f6b44c50c57189a8abde12321bd070ee0ff7f015427a4",
+    "forge-ai/src/main/java/forge/ai/ability/VoteAi.java": "cbd4467944f07fb95786195dbb5be08730ab8d24d806783ab966bea2d335895f",
+    "forge-ai/src/main/java/forge/ai/ability/PlayAi.java": "31e5810a0b4787ebffcdc0d82767562de21a10df00d555c21795cafe5b6e7eb3"
+  },
+  "transitiveReads": [
+    {
+      "path": "forge-ai/src/main/java/forge/ai/ability/PlayAi.java",
+      "entry": "chooseSingleCard",
+      "delegate": "chooseSingleCardInPlanning",
+      "line": 157,
+      "keys": [
+        "CMCLimit"
+      ]
+    }
+  ],
+  "baseRevision": "358d66c63d8875ce8a9d687672d3c6432b1f4faa"
+}
