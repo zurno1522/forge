@@ -1,0 +1,130 @@
+{
+  "games/damage-12073-off-full.jsonl": {
+    "bytes": 6282787,
+    "sha256": "6db5f3f54bfa09832236c1657fdb4e04a4ea67d6e582c383b842981a87941d8c"
+  },
+  "games/damage-12073-off-decisions.jsonl": {
+    "bytes": 6110160,
+    "sha256": "2d3c7c89584586f6ab350f9c6f6c6cd9b464e1da7ec14962aaeaaed2c14b3a73"
+  },
+  "games/damage-12073-off-resources.json": {
+    "bytes": 952,
+    "sha256": "6fa27bc104b658b95fd056b2134545c856a63c87343d941243ca29a190361127"
+  },
+  "games/damage-12073-off.log": {
+    "bytes": 3668,
+    "sha256": "caf503cdf6538c698cbecb2974b3edaaf4d7a648431bee3273e67ff120e4e9fc"
+  },
+  "games/damage-12073-on-full.jsonl": {
+    "bytes": 16693612,
+    "sha256": "d7311031827d0f160beae313c64d72eabc99e06f9a2b97a3cd23677528ba1842"
+  },
+  "games/damage-12073-on-decisions.jsonl": {
+    "bytes": 16450335,
+    "sha256": "fcab54ea6260bde2f7d5866718cfcb6a4f379b3b668bcff56aa8c395ae1d1906"
+  },
+  "games/damage-12073-on-resources.json": {
+    "bytes": 949,
+    "sha256": "a0479827b3712bfd63901755513d2614c63a7043676cc395170936886d3bbd43"
+  },
+  "games/damage-12073-on.log": {
+    "bytes": 4444,
+    "sha256": "f7fe9ff226ee56070e2f0a8fe7155194f761c2ba1ccea3c018f3842015df906c"
+  },
+  "games/damage-12074-on-full.jsonl": {
+    "bytes": 11211043,
+    "sha256": "f31b59cddb517f64d64d8f416db9a4883d79be18bebebc734e748695c66cb196"
+  },
+  "games/damage-12074-on-decisions.jsonl": {
+    "bytes": 11052163,
+    "sha256": "7b6dadd8b02d1eb79eced74e3b2bd092feb1452f95078e4acf866a1803a51b61"
+  },
+  "games/damage-12074-on-resources.json": {
+    "bytes": 948,
+    "sha256": "6cf5072ee11677c380c565d49644940a89dc80e124bb9addac2b690dc2363682"
+  },
+  "games/damage-12074-on.log": {
+    "bytes": 4470,
+    "sha256": "76e3bf024719028dbdb4e9030271e2571e8ef28a6a72454f2b9f20838a58d7c1"
+  },
+  "games/damage-12074-off-full.jsonl": {
+    "bytes": 11016924,
+    "sha256": "aa1b418257311049cfe2045f354e4d35ab9c41a04fddc419474c656eb0c988db"
+  },
+  "games/damage-12074-off-decisions.jsonl": {
+    "bytes": 10820469,
+    "sha256": "0fd0f1bc12eacbdfcc1e5b22a4d26b98885132af0df3345fd513a42860a9bb1d"
+  },
+  "games/damage-12074-off-resources.json": {
+    "bytes": 952,
+    "sha256": "b34df88491a5cbea74397488ca2995f6111da25d0479d2ef0e79126556cbd2b0"
+  },
+  "games/damage-12074-off.log": {
+    "bytes": 3668,
+    "sha256": "c7a48cadb5749d0c6b9bff7b386a7a35407c968653870bf1daf72b288dd598ca"
+  },
+  "games/commander-a-31009-off-full.jsonl": {
+    "bytes": 16245109,
+    "sha256": "2fc08c24dbafa0e1462621031934cc076d3eed973799283571481d7fd480361f"
+  },
+  "games/commander-a-31009-off-decisions.jsonl": {
+    "bytes": 15197262,
+    "sha256": "95dc032bd7559dfc3cffc6516b95613c3814ceee9f505e501ac2b8c8c3b93a68"
+  },
+  "games/commander-a-31009-off-resources.json": {
+    "bytes": 1043,
+    "sha256": "704205fcbc437267d600b842817adceb58b04bcd606603b91dc15658665a01ee"
+  },
+  "games/commander-a-31009-off.log": {
+    "bytes": 4927,
+    "sha256": "ce4d8d3ac79f807071177c08844f56284179e396f80edb78d4af052d67ddbce2"
+  },
+  "games/commander-a-31009-on-full.jsonl": {
+    "bytes": 11608990,
+    "sha256": "94cb6ee3349d4c649652f6d6f9e52738f7e1acace656aaeaa17f5634a2c592c2"
+  },
+  "games/commander-a-31009-on-decisions.jsonl": {
+    "bytes": 10669283,
+    "sha256": "b958b6074c981cbf47f1af9c980f38e46e23a729b8c208a35bcd8b5bdef6a5a9"
+  },
+  "games/commander-a-31009-on-resources.json": {
+    "bytes": 1040,
+    "sha256": "51dfb6262ea402bed68069f9b501daba80cabf0e3deace37681bda7b9d3ed537"
+  },
+  "games/commander-a-31009-on.log": {
+    "bytes": 9627,
+    "sha256": "dc8047afaf25759654ba1baf2b98790d3e0c1d28873d5105995ff37ebc7df5b8"
+  },
+  "games/commander-a-31010-on-full.jsonl": {
+    "bytes": 15060806,
+    "sha256": "96bf1efa7f1608c1a1de8efe823e4291a6a301ebabd43d3be660119001cb624d"
+  },
+  "games/commander-a-31010-on-decisions.jsonl": {
+    "bytes": 14639485,
+    "sha256": "ba8e85a4b5f929b7706647770e049906d7a0e0946643c7466fcc502a6db0f2fa"
+  },
+  "games/commander-a-31010-on-resources.json": {
+    "bytes": 1040,
+    "sha256": "87fc898b115635833fe5e1daa8d857b5bfe0e85f01477aadcfc071924fd00ef0"
+  },
+  "games/commander-a-31010-on.log": {
+    "bytes": 9615,
+    "sha256": "bdeb3c025c47b390d5655576f6976d4ddcb02280c065620f776c1afa9b222cc3"
+  },
+  "games/commander-a-31010-off-full.jsonl": {
+    "bytes": 16074730,
+    "sha256": "7e988ee4e2d129b0cee4f72849e8a387bbd577251040c9a1fe38bfcada8ddbe9"
+  },
+  "games/commander-a-31010-off-decisions.jsonl": {
+    "bytes": 15519596,
+    "sha256": "491cbc352d309fa7cb16ff0bdc064b1cf847e067674b4c2cc9a6933860665e75"
+  },
+  "games/commander-a-31010-off-resources.json": {
+    "bytes": 1040,
+    "sha256": "155e66904a492b6aabe488f9e4d11f560d2b7d3bf1d0a7ad8fa6bd99ef1b91b1"
+  },
+  "games/commander-a-31010-off.log": {
+    "bytes": 4931,
+    "sha256": "d595dc498be63fa9e44f824571c8f71d3802d67f98a2e91cc5f696d194a6997d"
+  }
+}

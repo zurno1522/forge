@@ -1,0 +1,552 @@
+{
+  "scope": "TRACED_NATIVE_WORKLOAD_RESOURCES_NOT_OVERHEAD_CONTROLS",
+  "trainingReady": false,
+  "rows": [
+    {
+      "label": "damage-12073-off",
+      "status": "NORMAL",
+      "seed": 12073,
+      "pilot": "HEURISTIC",
+      "gameLimitSeconds": 90,
+      "processWallSeconds": 20.581956403999357,
+      "counterWallSeconds": 20.205650395,
+      "processCpuSeconds": 36.76,
+      "javaAllocatedBytes": 2372060928,
+      "peakResidentBytes": 834355200,
+      "heapUsedAtShutdown": 199477368,
+      "heapPoolPeaksSinceJvmStart": {
+        "G1 Eden Space": 248512512,
+        "G1 Old Gen": 213436176,
+        "G1 Survivor Space": 32505856
+      },
+      "gcSinceJvmStart": {
+        "G1 Young Generation": {
+          "collections": 21,
+          "milliseconds": 1569
+        },
+        "G1 Concurrent GC": {
+          "collections": 2,
+          "milliseconds": 7
+        },
+        "G1 Old Generation": {
+          "collections": 1,
+          "milliseconds": 421
+        }
+      },
+      "search": {
+        "records": 0,
+        "rollouts": 0,
+        "candidatesEvaluated": 0
+      },
+      "inputStatuses": {
+        "PARTIAL": 650,
+        "ABSENT": 31,
+        "CAPTURED": 4
+      },
+      "inputOmissions": {
+        "DISCLOSURES:UNSUPPORTED": 650
+      },
+      "outcomeEligibleDecisions": 74,
+      "initialShuffles": 2,
+      "standaloneAccounting": {
+        "entered": 549,
+        "prepared": 549,
+        "omitted": 0,
+        "callbackStarted": 549,
+        "callbackReturned": 549,
+        "callbackThrew": 0,
+        "inputUnavailable": 0,
+        "startAttempts": 549,
+        "startReturned": 549,
+        "terminalAttempts": 549,
+        "terminalReturned": 549,
+        "finished": 549,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      }
+    },
+    {
+      "label": "damage-12073-on",
+      "status": "NORMAL",
+      "seed": 12073,
+      "pilot": "FLAT_MONTE_CARLO",
+      "gameLimitSeconds": 45,
+      "processWallSeconds": 30.35822368999652,
+      "counterWallSeconds": 29.916054903,
+      "processCpuSeconds": 57.16,
+      "javaAllocatedBytes": 5461806080,
+      "peakResidentBytes": 858054656,
+      "heapUsedAtShutdown": 205844272,
+      "heapPoolPeaksSinceJvmStart": {
+        "G1 Eden Space": 390070272,
+        "G1 Old Gen": 204795696,
+        "G1 Survivor Space": 34603008
+      },
+      "gcSinceJvmStart": {
+        "G1 Young Generation": {
+          "collections": 29,
+          "milliseconds": 1497
+        },
+        "G1 Concurrent GC": {
+          "collections": 2,
+          "milliseconds": 5
+        },
+        "G1 Old Generation": {
+          "collections": 1,
+          "milliseconds": 280
+        }
+      },
+      "search": {
+        "records": 21,
+        "rollouts": 93,
+        "candidatesEvaluated": 50
+      },
+      "inputStatuses": {
+        "PARTIAL": 1504,
+        "ABSENT": 146,
+        "CAPTURED": 4
+      },
+      "inputOmissions": {
+        "DISCLOSURES:UNSUPPORTED": 1504
+      },
+      "outcomeEligibleDecisions": 97,
+      "initialShuffles": 2,
+      "standaloneAccounting": {
+        "entered": 1401,
+        "prepared": 1401,
+        "omitted": 0,
+        "callbackStarted": 1401,
+        "callbackReturned": 1401,
+        "callbackThrew": 0,
+        "inputUnavailable": 0,
+        "startAttempts": 1401,
+        "startReturned": 1401,
+        "terminalAttempts": 1401,
+        "terminalReturned": 1401,
+        "finished": 1401,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      }
+    },
+    {
+      "label": "damage-12074-on",
+      "status": "NORMAL",
+      "seed": 12074,
+      "pilot": "FLAT_MONTE_CARLO",
+      "gameLimitSeconds": 45,
+      "processWallSeconds": 19.443167057004757,
+      "counterWallSeconds": 19.175284479,
+      "processCpuSeconds": 36.64,
+      "javaAllocatedBytes": 3580154664,
+      "peakResidentBytes": 780742656,
+      "heapUsedAtShutdown": 200915968,
+      "heapPoolPeaksSinceJvmStart": {
+        "G1 Eden Space": 346030080,
+        "G1 Old Gen": 202426128,
+        "G1 Survivor Space": 36700160
+      },
+      "gcSinceJvmStart": {
+        "G1 Young Generation": {
+          "collections": 21,
+          "milliseconds": 738
+        },
+        "G1 Concurrent GC": {
+          "collections": 2,
+          "milliseconds": 6
+        },
+        "G1 Old Generation": {
+          "collections": 1,
+          "milliseconds": 288
+        }
+      },
+      "search": {
+        "records": 16,
+        "rollouts": 65,
+        "candidatesEvaluated": 34
+      },
+      "inputStatuses": {
+        "PARTIAL": 1238,
+        "ABSENT": 82,
+        "CAPTURED": 2
+      },
+      "inputOmissions": {
+        "DISCLOSURES:UNSUPPORTED": 1238,
+        "STACK:UNRESOLVED_BINDING": 3
+      },
+      "outcomeEligibleDecisions": 68,
+      "initialShuffles": 2,
+      "standaloneAccounting": {
+        "entered": 1145,
+        "prepared": 1140,
+        "omitted": 5,
+        "callbackStarted": 1145,
+        "callbackReturned": 1145,
+        "callbackThrew": 0,
+        "inputUnavailable": 0,
+        "startAttempts": 1140,
+        "startReturned": 1140,
+        "terminalAttempts": 1140,
+        "terminalReturned": 1140,
+        "finished": 1145,
+        "observationFailures": 0,
+        "omittedUnsupported": 5,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      }
+    },
+    {
+      "label": "damage-12074-off",
+      "status": "NORMAL",
+      "seed": 12074,
+      "pilot": "HEURISTIC",
+      "gameLimitSeconds": 90,
+      "processWallSeconds": 17.450018532996182,
+      "counterWallSeconds": 17.190516258,
+      "processCpuSeconds": 32.75,
+      "javaAllocatedBytes": 2654232096,
+      "peakResidentBytes": 733437952,
+      "heapUsedAtShutdown": 198151144,
+      "heapPoolPeaksSinceJvmStart": {
+        "G1 Eden Space": 308281344,
+        "G1 Old Gen": 214484752,
+        "G1 Survivor Space": 40894464
+      },
+      "gcSinceJvmStart": {
+        "G1 Young Generation": {
+          "collections": 20,
+          "milliseconds": 817
+        },
+        "G1 Concurrent GC": {
+          "collections": 2,
+          "milliseconds": 10
+        },
+        "G1 Old Generation": {
+          "collections": 1,
+          "milliseconds": 297
+        }
+      },
+      "search": {
+        "records": 0,
+        "rollouts": 0,
+        "candidatesEvaluated": 0
+      },
+      "inputStatuses": {
+        "PARTIAL": 1181,
+        "ABSENT": 63,
+        "CAPTURED": 4
+      },
+      "inputOmissions": {
+        "DISCLOSURES:UNSUPPORTED": 1181,
+        "STACK:UNRESOLVED_BINDING": 6
+      },
+      "outcomeEligibleDecisions": 75,
+      "initialShuffles": 2,
+      "standaloneAccounting": {
+        "entered": 1085,
+        "prepared": 1080,
+        "omitted": 5,
+        "callbackStarted": 1085,
+        "callbackReturned": 1085,
+        "callbackThrew": 0,
+        "inputUnavailable": 0,
+        "startAttempts": 1080,
+        "startReturned": 1080,
+        "terminalAttempts": 1080,
+        "terminalReturned": 1080,
+        "finished": 1085,
+        "observationFailures": 0,
+        "omittedUnsupported": 5,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      }
+    },
+    {
+      "label": "commander-a-31009-off",
+      "status": "NORMAL",
+      "seed": 31009,
+      "pilot": "HEURISTIC",
+      "gameLimitSeconds": 90,
+      "processWallSeconds": 72.05875428900617,
+      "counterWallSeconds": 71.804567616,
+      "processCpuSeconds": 137.79,
+      "javaAllocatedBytes": 17222169112,
+      "peakResidentBytes": 752787456,
+      "heapUsedAtShutdown": 280581312,
+      "heapPoolPeaksSinceJvmStart": {
+        "G1 Eden Space": 278921216,
+        "G1 Old Gen": 279532736,
+        "G1 Survivor Space": 39845888
+      },
+      "gcSinceJvmStart": {
+        "G1 Young Generation": {
+          "collections": 83,
+          "milliseconds": 1752
+        },
+        "G1 Concurrent GC": {
+          "collections": 30,
+          "milliseconds": 245
+        },
+        "G1 Old Generation": {
+          "collections": 1,
+          "milliseconds": 318
+        }
+      },
+      "search": {
+        "records": 0,
+        "rollouts": 0,
+        "candidatesEvaluated": 0
+      },
+      "inputStatuses": {
+        "PARTIAL": 640,
+        "UNAVAILABLE": 1996,
+        "CAPTURED": 21,
+        "ABSENT": 180
+      },
+      "inputOmissions": {
+        "DISCLOSURES:UNSUPPORTED": 623,
+        "ENTITIES:OUTSIDE_CAPTURED_PREFIX": 197,
+        "CONTEXT:BUDGET_EXHAUSTED": 1992,
+        "STACK:UNRESOLVED_BINDING": 19,
+        "DISCLOSURES:OUTSIDE_CAPTURED_PREFIX": 6,
+        "CONTEXT:HIDDEN": 4
+      },
+      "outcomeEligibleDecisions": 187,
+      "initialShuffles": 4,
+      "standaloneAccounting": {
+        "entered": 2589,
+        "prepared": 2589,
+        "omitted": 0,
+        "callbackStarted": 2589,
+        "callbackReturned": 2589,
+        "callbackThrew": 0,
+        "inputUnavailable": 1857,
+        "startAttempts": 2589,
+        "startReturned": 2589,
+        "terminalAttempts": 2589,
+        "terminalReturned": 2589,
+        "finished": 2589,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      }
+    },
+    {
+      "label": "commander-a-31009-on",
+      "status": "TIMEOUT",
+      "seed": 31009,
+      "pilot": "FLAT_MONTE_CARLO",
+      "gameLimitSeconds": 45,
+      "processWallSeconds": 55.790272621998156,
+      "counterWallSeconds": 55.529720229,
+      "processCpuSeconds": 108.27,
+      "javaAllocatedBytes": 16838388528,
+      "peakResidentBytes": 812826624,
+      "heapUsedAtShutdown": 254108968,
+      "heapPoolPeaksSinceJvmStart": {
+        "G1 Eden Space": 319815680,
+        "G1 Old Gen": 279445504,
+        "G1 Survivor Space": 42991616
+      },
+      "gcSinceJvmStart": {
+        "G1 Young Generation": {
+          "collections": 71,
+          "milliseconds": 1443
+        },
+        "G1 Concurrent GC": {
+          "collections": 18,
+          "milliseconds": 177
+        },
+        "G1 Old Generation": {
+          "collections": 1,
+          "milliseconds": 356
+        }
+      },
+      "search": {
+        "records": 41,
+        "rollouts": 131,
+        "candidatesEvaluated": 90
+      },
+      "inputStatuses": {
+        "PARTIAL": 604,
+        "UNAVAILABLE": 553,
+        "CAPTURED": 25,
+        "ABSENT": 5
+      },
+      "inputOmissions": {
+        "DISCLOSURES:UNSUPPORTED": 588,
+        "ENTITIES:OUTSIDE_CAPTURED_PREFIX": 215,
+        "CONTEXT:BUDGET_EXHAUSTED": 523,
+        "STACK:UNRESOLVED_BINDING": 12,
+        "DISCLOSURES:OUTSIDE_CAPTURED_PREFIX": 6,
+        "CONTEXT:HIDDEN": 30
+      },
+      "outcomeEligibleDecisions": 0,
+      "initialShuffles": 4,
+      "standaloneAccounting": {
+        "entered": 1000,
+        "prepared": 1000,
+        "omitted": 0,
+        "callbackStarted": 1000,
+        "callbackReturned": 1000,
+        "callbackThrew": 0,
+        "inputUnavailable": 501,
+        "startAttempts": 1000,
+        "startReturned": 1000,
+        "terminalAttempts": 1000,
+        "terminalReturned": 1000,
+        "finished": 1000,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      }
+    },
+    {
+      "label": "commander-a-31010-on",
+      "status": "TIMEOUT",
+      "seed": 31010,
+      "pilot": "FLAT_MONTE_CARLO",
+      "gameLimitSeconds": 45,
+      "processWallSeconds": 54.76226264300203,
+      "counterWallSeconds": 54.50091515,
+      "processCpuSeconds": 107.37,
+      "javaAllocatedBytes": 16749292240,
+      "peakResidentBytes": 786993152,
+      "heapUsedAtShutdown": 250484176,
+      "heapPoolPeaksSinceJvmStart": {
+        "G1 Eden Space": 310378496,
+        "G1 Old Gen": 256901120,
+        "G1 Survivor Space": 40894464
+      },
+      "gcSinceJvmStart": {
+        "G1 Young Generation": {
+          "collections": 73,
+          "milliseconds": 1415
+        },
+        "G1 Concurrent GC": {
+          "collections": 14,
+          "milliseconds": 146
+        },
+        "G1 Old Generation": {
+          "collections": 1,
+          "milliseconds": 391
+        }
+      },
+      "search": {
+        "records": 42,
+        "rollouts": 112,
+        "candidatesEvaluated": 89
+      },
+      "inputStatuses": {
+        "PARTIAL": 741,
+        "UNAVAILABLE": 266,
+        "ABSENT": 21,
+        "CAPTURED": 13
+      },
+      "inputOmissions": {
+        "DISCLOSURES:UNSUPPORTED": 682,
+        "ENTITIES:OUTSIDE_CAPTURED_PREFIX": 544,
+        "CONTEXT:BUDGET_EXHAUSTED": 266,
+        "STACK:UNRESOLVED_BINDING": 7,
+        "DISCLOSURES:OUTSIDE_CAPTURED_PREFIX": 7
+      },
+      "outcomeEligibleDecisions": 0,
+      "initialShuffles": 4,
+      "standaloneAccounting": {
+        "entered": 895,
+        "prepared": 895,
+        "omitted": 0,
+        "callbackStarted": 895,
+        "callbackReturned": 895,
+        "callbackThrew": 0,
+        "inputUnavailable": 240,
+        "startAttempts": 895,
+        "startReturned": 895,
+        "terminalAttempts": 895,
+        "terminalReturned": 895,
+        "finished": 895,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      }
+    },
+    {
+      "label": "commander-a-31010-off",
+      "status": "NORMAL",
+      "seed": 31010,
+      "pilot": "HEURISTIC",
+      "gameLimitSeconds": 90,
+      "processWallSeconds": 43.82550037899637,
+      "counterWallSeconds": 43.493785215,
+      "processCpuSeconds": 84.3,
+      "javaAllocatedBytes": 10737300784,
+      "peakResidentBytes": 889479168,
+      "heapUsedAtShutdown": 240327856,
+      "heapPoolPeaksSinceJvmStart": {
+        "G1 Eden Space": 389021696,
+        "G1 Old Gen": 238230704,
+        "G1 Survivor Space": 42991616
+      },
+      "gcSinceJvmStart": {
+        "G1 Young Generation": {
+          "collections": 42,
+          "milliseconds": 1415
+        },
+        "G1 Concurrent GC": {
+          "collections": 4,
+          "milliseconds": 39
+        },
+        "G1 Old Generation": {
+          "collections": 1,
+          "milliseconds": 349
+        }
+      },
+      "search": {
+        "records": 0,
+        "rollouts": 0,
+        "candidatesEvaluated": 0
+      },
+      "inputStatuses": {
+        "PARTIAL": 788,
+        "UNAVAILABLE": 676,
+        "ABSENT": 7,
+        "CAPTURED": 17
+      },
+      "inputOmissions": {
+        "DISCLOSURES:UNSUPPORTED": 716,
+        "ENTITIES:OUTSIDE_CAPTURED_PREFIX": 545,
+        "CONTEXT:BUDGET_EXHAUSTED": 634,
+        "STACK:UNRESOLVED_BINDING": 5,
+        "DISCLOSURES:OUTSIDE_CAPTURED_PREFIX": 7,
+        "STACK:UNSUPPORTED": 2,
+        "CONTEXT:HIDDEN": 42
+      },
+      "outcomeEligibleDecisions": 138,
+      "initialShuffles": 4,
+      "standaloneAccounting": {
+        "entered": 1346,
+        "prepared": 1346,
+        "omitted": 0,
+        "callbackStarted": 1346,
+        "callbackReturned": 1346,
+        "callbackThrew": 0,
+        "inputUnavailable": 639,
+        "startAttempts": 1346,
+        "startReturned": 1346,
+        "terminalAttempts": 1346,
+        "terminalReturned": 1346,
+        "finished": 1346,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      }
+    }
+  ]
+}

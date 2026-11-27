@@ -333,3 +333,15 @@ engine/AI/RNG equality against its original normal control. A longer diagnostic
 limit does not change the original execution status or the production default.
 Ensure xvfb-run is on PATH, as for the primary runner. The runner honors
 --java-home for both compilation and execution.
+
+## Native process-resource checkpoint
+
+`run-native-costs.py` accepts the required classpath/JDK/profile/output paths shown
+above and runs eight sequential ordinary traced games: two seeds each for damage
+and four-player Commander, with heuristic and Monte Carlo pilots. It requires
+actual Monte Carlo rollouts, validates full/filtered reports, initial shuffle order
+and timeout censoring, and binds strict resource sidecars to the native arguments.
+The development launcher needs JDK 21; production remains Java 17. No phase agent
+is installed. CPU/all-thread allocation, JVM-lifetime RSS/pool peaks and shutdown
+heap have different scopes; none isolates capture retention or tracing overhead.
+See the [native resource assessment](../../../docs/Development/Simulation-Native-Resource-Cost-Assessment.md).

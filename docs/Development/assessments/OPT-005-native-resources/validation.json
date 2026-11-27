@@ -1,0 +1,27 @@
+{
+  "games": 8,
+  "normal": 6,
+  "censoredTimeouts": 2,
+  "fullFilteredParity": true,
+  "sourceScopesComplete": true,
+  "observationFailures": 0,
+  "initialShufflesBeforeGameStarted": true,
+  "monteCarloActualRollouts": true,
+  "productionClassesUnchanged": true,
+  "strictResourceValidation": "POST_EXECUTION",
+  "pythonTests": 382,
+  "pythonLogSha256": "ef9a54e6d559823532ad2e0fe3645b8922183c8792e054f54ac0ebbfc417715b",
+  "executionRunnerSha256": "95ec65d40db7a87eae619c8ba1aa845d11fe38fecf29abceb2a04191c461c108",
+  "finalSourcesSha256": {
+    "tools/decision-records/input-context-benchmark/NativeGameCostLauncher.java": "4af6111bcc383c78d4e177ca3ffb8f2d649d69181b83c1fdb08bf52b0ce63103",
+    "tools/decision-records/input-context-benchmark/run-native-costs.py": "7c84bd5fac64e39ea3837c55fdec5ff7c00a7fea298558b0d4175658b2856a62",
+    "tools/decision-records/input-context-benchmark/native_resource_metrics.py": "340b7dbc22d08b5dd7a434c3195fe26e15c1d80b372d87c756c02a855da2b900",
+    "tools/decision-records/test_native_resource_metrics.py": "08044169c174c160b676065c1d1abdcad8921c02d274ac6e0f321509ff15651b",
+    "tools/decision-records/input-context-benchmark/fixtures/native-resource-cases.json": "f166b220124a82c24b7e5a0d12707aecb0ae1eb28bb42da3013678cc830d5ab6",
+    "tools/decision-records/export.py": "6d794e022d5b4fc9348a23dcc6d737649bebef4b45798a7c02b21d9cc75be24d",
+    "tools/decision-records/input_context.py": "86dcb1e2ebf3e362d26747036fa4329f865c3de94effcfbf62d7b0aa7d645c50"
+  },
+  "executionNote": "Runner snapshot predates strict resource helper and final runner source-freeze/version additions. Every actual sidecar was revalidated with the final helper after execution. Launcher and production classes did not change.",
+  "javaRelease": "IMPLEMENTOR=\"Debian\"\nJAVA_RUNTIME_VERSION=\"21.0.12.1+1-1-deb13u1-Debian\"\nJAVA_VERSION=\"21.0.12.1\"\nJAVA_VERSION_DATE=\"2026-08-18\"\nLIBC=\"gnu\"\nMODULES=\"java.base java.compiler java.datatransfer java.xml java.prefs java.desktop java.instrument java.logging java.management java.security.sasl java.naming java.rmi java.management.rmi java.net.http java.scripting java.security.jgss java.transaction.xa java.sql java.sql.rowset java.xml.crypto java.se java.smartcardio jdk.accessibility jdk.internal.jvmstat jdk.attach jdk.charsets jdk.internal.opt jdk.zipfs jdk.compiler jdk.crypto.ec jdk.crypto.cryptoki jdk.dynalink jdk.internal.ed jdk.editpad jdk.hotspot.agent jdk.httpserver jdk.incubator.vector jdk.internal.le jdk.internal.vm.ci jdk.internal.vm.compiler jdk.internal.vm.compiler.management jdk.jartool jdk.javadoc jdk.jcmd jdk.management jdk.management.agent jdk.jconsole jdk.jdeps jdk.jdwp.agent jdk.jdi jdk.jfr jdk.jlink jdk.jpackage jdk.jshell jdk.jsobject jdk.jstatd jdk.localedata jdk.management.jfr jdk.naming.dns jdk.naming.rmi jdk.net jdk.nio.mapmode jdk.random jdk.sctp jdk.security.auth jdk.security.jgss jdk.unsupported jdk.unsupported.desktop jdk.xml.dom\"\nOS_ARCH=\"x86_64\"\nOS_NAME=\"Linux\"\nSOURCE=\"\"\n",
+  "trainingReady": false
+}

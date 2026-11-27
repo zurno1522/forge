@@ -1,0 +1,213 @@
+{
+  "scope": "ACTUAL_NATIVE_DAMAGE_PROCESS_ENVELOPES",
+  "cases": [
+    {
+      "schemaVersion": 1,
+      "scope": "MAIN_COUNTER_SETUP_TO_JVM_SHUTDOWN_HOOK",
+      "wallNanos": 20205650395,
+      "processCpuNanos": 36760000000,
+      "allThreadsJavaAllocatedBytes": 2372060928,
+      "peakResidentBytesSinceJvmStart": 834355200,
+      "heapUsedAtShutdown": 199477368,
+      "heapPoolPeaksSinceJvmStart": {
+        "G1 Eden Space": 248512512,
+        "G1 Old Gen": 213436176,
+        "G1 Survivor Space": 32505856
+      },
+      "gcSinceJvmStart": {
+        "G1 Young Generation": {
+          "collections": 21,
+          "milliseconds": 1569
+        },
+        "G1 Concurrent GC": {
+          "collections": 2,
+          "milliseconds": 7
+        },
+        "G1 Old Generation": {
+          "collections": 1,
+          "milliseconds": 421
+        }
+      },
+      "commandArguments": [
+        "sim",
+        "-f",
+        "constructed",
+        "-mc",
+        "off",
+        "-q",
+        "-D",
+        "/workspace/forge/tools/trace-test-decks",
+        "-d",
+        "choice-damage-x.dck",
+        "choice-damage-x.dck",
+        "-n",
+        "1",
+        "-s",
+        "12073",
+        "-c",
+        "90",
+        "-log-game",
+        "/workspace/work/opt005-native-resources-final/games/damage-12073-off-full.jsonl",
+        "-log-decisions",
+        "/workspace/work/opt005-native-resources-final/games/damage-12073-off-decisions.jsonl"
+      ],
+      "trainingReady": false
+    },
+    {
+      "schemaVersion": 1,
+      "scope": "MAIN_COUNTER_SETUP_TO_JVM_SHUTDOWN_HOOK",
+      "wallNanos": 29916054903,
+      "processCpuNanos": 57160000000,
+      "allThreadsJavaAllocatedBytes": 5461806080,
+      "peakResidentBytesSinceJvmStart": 858054656,
+      "heapUsedAtShutdown": 205844272,
+      "heapPoolPeaksSinceJvmStart": {
+        "G1 Eden Space": 390070272,
+        "G1 Old Gen": 204795696,
+        "G1 Survivor Space": 34603008
+      },
+      "gcSinceJvmStart": {
+        "G1 Young Generation": {
+          "collections": 29,
+          "milliseconds": 1497
+        },
+        "G1 Concurrent GC": {
+          "collections": 2,
+          "milliseconds": 5
+        },
+        "G1 Old Generation": {
+          "collections": 1,
+          "milliseconds": 280
+        }
+      },
+      "commandArguments": [
+        "sim",
+        "-f",
+        "constructed",
+        "-mc",
+        "on",
+        "-q",
+        "-D",
+        "/workspace/forge/tools/trace-test-decks",
+        "-d",
+        "choice-damage-x.dck",
+        "choice-damage-x.dck",
+        "-n",
+        "1",
+        "-s",
+        "12073",
+        "-c",
+        "45",
+        "-log-game",
+        "/workspace/work/opt005-native-resources-final/games/damage-12073-on-full.jsonl",
+        "-log-decisions",
+        "/workspace/work/opt005-native-resources-final/games/damage-12073-on-decisions.jsonl"
+      ],
+      "trainingReady": false
+    },
+    {
+      "schemaVersion": 1,
+      "scope": "MAIN_COUNTER_SETUP_TO_JVM_SHUTDOWN_HOOK",
+      "wallNanos": 17190516258,
+      "processCpuNanos": 32750000000,
+      "allThreadsJavaAllocatedBytes": 2654232096,
+      "peakResidentBytesSinceJvmStart": 733437952,
+      "heapUsedAtShutdown": 198151144,
+      "heapPoolPeaksSinceJvmStart": {
+        "G1 Eden Space": 308281344,
+        "G1 Old Gen": 214484752,
+        "G1 Survivor Space": 40894464
+      },
+      "gcSinceJvmStart": {
+        "G1 Young Generation": {
+          "collections": 20,
+          "milliseconds": 817
+        },
+        "G1 Concurrent GC": {
+          "collections": 2,
+          "milliseconds": 10
+        },
+        "G1 Old Generation": {
+          "collections": 1,
+          "milliseconds": 297
+        }
+      },
+      "commandArguments": [
+        "sim",
+        "-f",
+        "constructed",
+        "-mc",
+        "off",
+        "-q",
+        "-D",
+        "/workspace/forge/tools/trace-test-decks",
+        "-d",
+        "choice-damage-x.dck",
+        "choice-damage-x.dck",
+        "-n",
+        "1",
+        "-s",
+        "12074",
+        "-c",
+        "90",
+        "-log-game",
+        "/workspace/work/opt005-native-resources-final/games/damage-12074-off-full.jsonl",
+        "-log-decisions",
+        "/workspace/work/opt005-native-resources-final/games/damage-12074-off-decisions.jsonl"
+      ],
+      "trainingReady": false
+    },
+    {
+      "schemaVersion": 1,
+      "scope": "MAIN_COUNTER_SETUP_TO_JVM_SHUTDOWN_HOOK",
+      "wallNanos": 19175284479,
+      "processCpuNanos": 36640000000,
+      "allThreadsJavaAllocatedBytes": 3580154664,
+      "peakResidentBytesSinceJvmStart": 780742656,
+      "heapUsedAtShutdown": 200915968,
+      "heapPoolPeaksSinceJvmStart": {
+        "G1 Eden Space": 346030080,
+        "G1 Old Gen": 202426128,
+        "G1 Survivor Space": 36700160
+      },
+      "gcSinceJvmStart": {
+        "G1 Young Generation": {
+          "collections": 21,
+          "milliseconds": 738
+        },
+        "G1 Concurrent GC": {
+          "collections": 2,
+          "milliseconds": 6
+        },
+        "G1 Old Generation": {
+          "collections": 1,
+          "milliseconds": 288
+        }
+      },
+      "commandArguments": [
+        "sim",
+        "-f",
+        "constructed",
+        "-mc",
+        "on",
+        "-q",
+        "-D",
+        "/workspace/forge/tools/trace-test-decks",
+        "-d",
+        "choice-damage-x.dck",
+        "choice-damage-x.dck",
+        "-n",
+        "1",
+        "-s",
+        "12074",
+        "-c",
+        "45",
+        "-log-game",
+        "/workspace/work/opt005-native-resources-final/games/damage-12074-on-full.jsonl",
+        "-log-decisions",
+        "/workspace/work/opt005-native-resources-final/games/damage-12074-on-decisions.jsonl"
+      ],
+      "trainingReady": false
+    }
+  ]
+}

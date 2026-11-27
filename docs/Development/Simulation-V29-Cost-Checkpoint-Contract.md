@@ -2,11 +2,11 @@
 
 Status: measurement design after [prefix V29](Simulation-Prefix-Admission-Assessment.md), baseline a54a34c7c58. This is separate from coverage-policy implementation and changes no runtime defaults, serializer or capture representation. Review each measurement increment before selecting a runtime change.
 
-The [controlled producer/metadata increment](Simulation-V29-Controlled-Cost-Assessment.md) is delivered. Complete the remaining collector/physical UTF-8, failure/later-family and native Monte Carlo cohorts before the optional-policy gate.
+The [controlled producer/metadata increment](Simulation-V29-Controlled-Cost-Assessment.md) is delivered. The collector/physical UTF-8, representative failure/later-family and native Monte Carlo/resource increments are also delivered; the isolated optional-policy candidate gate is next.
 
 The prerequisite [profiler exception-unwinding audit/fix](Simulation-Profiler-Exception-Hardening.md) is delivered with fail-before/pass-after and actual Forge boundary checks. Its workload smoke validates class verification and counters; it is not a new timing cohort.
 
-The [collector/physical UTF-8 and representative later-family/failure cohort](Simulation-V29-Pipeline-Cost-Assessment.md) is delivered. Native Monte Carlo and process-resource validation are next before the optional hash candidate gate.
+The [collector/physical UTF-8 and representative later-family/failure cohort](Simulation-V29-Pipeline-Cost-Assessment.md) is delivered. The [native heuristic/Monte Carlo resource cohort](Simulation-Native-Resource-Cost-Assessment.md) is also delivered. The production-shaped optional hash candidate cost/availability gate is next.
 
 ## Questions and cohorts
 
