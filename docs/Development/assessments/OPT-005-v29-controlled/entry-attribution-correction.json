@@ -1,0 +1,19 @@
+{
+  "scope": "ENTRY_LOCATION_ATTRIBUTION_CORRECTION",
+  "originalAssessmentCommit": "159b6c05bce",
+  "rawMeasurementsUnchanged": true,
+  "allCostAndExhaustionFiguresUnchanged": true,
+  "cohortsRevalidated": 4,
+  "measuredProfiles": [
+    "PERMITTED_CHOICE_VIEW_V28",
+    "PERMITTED_CHOICE_VIEW_V29"
+  ],
+  "extraFreezeSource": "AiEntryLocation.capture",
+  "extraFreezeSourceSha256": "bf35fc5a70adea9cc00b3b35828c62b2d3a782c0001bf929bbdf80d665814fab",
+  "finalValidatorSha256": "bf748b3ed744dc6c333beaa5c5629becbb0bf68e1cb1e15c1cc0a7b1ccb4fd48",
+  "pythonTests": 368,
+  "pythonLogSha256": "c7c376b7c9d60e3a6ae214932ebe6154cdcd73e4bccd35cee25544d5f2160958",
+  "rawMeasurementsSha256": "68ce84474de4adef41908de47c331bae2f53c241c83fca3100b799a0473394c1",
+  "correctedSummariesSha256": "eebc827d8eecbbae423097939a466acbf9f3ff0b056d6ace556a57381175e4e2",
+  "trainingReady": false
+}

@@ -57,7 +57,7 @@ def measurements(profiled):
 
 
 class WorkloadMeasurementTests(unittest.TestCase):
-    def test_modern_typed_preparation_freezes_are_versioned_and_do_not_inflate_event_delivery(self):
+    def test_entry_location_freezes_are_versioned_and_do_not_inflate_event_delivery(self):
         control, profiled = measurements(False), measurements(True)
         for r in control + profiled:
             r.update(measurementSchemaVersion=2, inputContextProfile='PERMITTED_CHOICE_VIEW_V29')
@@ -65,11 +65,14 @@ class WorkloadMeasurementTests(unittest.TestCase):
                 r['phases']['eventFreeze']['calls'] += r['iterations']
         result = summary.summarize(control, profiled)
         self.assertEqual(result['measurementSchemaVersion'], 2)
-        self.assertIn('preparation receipts', result['phaseDefinitions']['eventFreeze'])
+        self.assertIn('entry-location receipts', result['phaseDefinitions']['eventFreeze'])
         numeric = next(r for r in profiled if r['mode'] == 'NUMERIC')
         self.assertEqual(numeric['events'], 2 * numeric['iterations'])
         numeric['phases']['eventFreeze']['calls'] -= 1
         with self.assertRaisesRegex(ValueError, 'Phase calls'): summary.summarize(control, profiled)
+        numeric['phases']['eventFreeze']['calls'] += 1
+        for r in control + profiled: r['inputContextProfile'] = 'PERMITTED_CHOICE_VIEW_V27'
+        with self.assertRaisesRegex(ValueError, 'audited only'): summary.summarize(control, profiled)
 
     def test_measurement_scope_versions_cannot_be_mixed_unknown_or_boolean(self):
         for version in (2, 3, True):

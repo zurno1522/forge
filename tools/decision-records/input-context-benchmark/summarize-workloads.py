@@ -67,8 +67,7 @@ def validate(rows, profiled):
             expected = dict(capture=n if mode in INPUTS else 0, eventFreeze=0 if off or mode == 'CAPTURE' else 2*n,
                             publication=0 if off or mode == 'CAPTURE' else 2*n, serialization=0 if off or mode == 'CAPTURE' else 2*n)
             if r.get('measurementSchemaVersion', 1) == 2 and mode in ('NUMERIC', 'ENTITY'):
-                version = int(r['inputContextProfile'].rsplit('V', 1)[1])
-                if version >= 16: expected['eventFreeze'] += n
+                expected['eventFreeze'] += n  # AiEntryLocation.capture freezes one entry receipt.
             require(all(calls[key] == value for key, value in expected.items()), 'Phase calls do not reconcile')
             require(calls['contextFreeze'] == (n if mode in INPUTS else 0), 'Context freeze count')
             if r['memorySample']: require(r['phases']['peakSampledPayloadBytes'] > 0, 'Missing memory sample')
@@ -106,6 +105,8 @@ def summarize(control, profiled):
     profiles = {row.get('inputContextProfile', 'PERMITTED_CHOICE_VIEW_V4') for row in rows}
     require(len(profiles) == 1 and profiles <= {'PERMITTED_CHOICE_VIEW_V4', 'PERMITTED_CHOICE_VIEW_V5', 'PERMITTED_CHOICE_VIEW_V6', 'PERMITTED_CHOICE_VIEW_V7', 'PERMITTED_CHOICE_VIEW_V8', 'PERMITTED_CHOICE_VIEW_V9', 'PERMITTED_CHOICE_VIEW_V10', 'PERMITTED_CHOICE_VIEW_V11', 'PERMITTED_CHOICE_VIEW_V12', 'PERMITTED_CHOICE_VIEW_V13', 'PERMITTED_CHOICE_VIEW_V14', 'PERMITTED_CHOICE_VIEW_V15', 'PERMITTED_CHOICE_VIEW_V16', 'PERMITTED_CHOICE_VIEW_V17', 'PERMITTED_CHOICE_VIEW_V18', 'PERMITTED_CHOICE_VIEW_V19', 'PERMITTED_CHOICE_VIEW_V20', 'PERMITTED_CHOICE_VIEW_V21', 'PERMITTED_CHOICE_VIEW_V22', 'PERMITTED_CHOICE_VIEW_V23', 'PERMITTED_CHOICE_VIEW_V24', 'PERMITTED_CHOICE_VIEW_V25', 'PERMITTED_CHOICE_VIEW_V26', 'PERMITTED_CHOICE_VIEW_V27', 'PERMITTED_CHOICE_VIEW_V28', 'PERMITTED_CHOICE_VIEW_V29'},
             'Unknown or mismatched producer profiles')
+    if measurement_version == 2:
+        require(profiles <= {'PERMITTED_CHOICE_VIEW_V28', 'PERMITTED_CHOICE_VIEW_V29'}, 'V2 entry-freeze accounting is audited only for V28/V29')
     groups = defaultdict(list)
     for label, rows in [('control', validate(control, False)), ('profiled', validate(profiled, True))]:
         for row in rows: groups[label, row['workload'], row['mode']].append(row)
@@ -144,8 +145,8 @@ def summarize(control, profiled):
                     'Control/profile differences include instrumentation and JIT variation; these ranges are not capacity or deadline-neutrality guarantees.'])
     if measurement_version == 2:
         result['measurementSchemaVersion'] = 2
-        result['phaseDefinitions'] = dict(eventFreeze='All outermost freezeMap calls outside input capture, including typed preparation receipts and event construction. Not an event-only span.')
-        result['limitations'].append('The historical eventFreeze field also includes preparation receipt freezing; V2 reconciles that extra call in numeric/entity workloads from V16. Publication/event counts remain separate.')
+        result['phaseDefinitions'] = dict(eventFreeze='All outermost freezeMap calls outside input capture, including entry-location receipts and event construction. Not an event-only span.')
+        result['limitations'].append('The historical eventFreeze field also includes AiEntryLocation.capture receipt freezing; V2 reconciles that extra call in the measured V28/V29 numeric/entity workloads. Publication/event counts remain separate.')
     return result
 
 

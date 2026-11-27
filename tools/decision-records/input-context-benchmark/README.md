@@ -36,8 +36,8 @@ Existing V4 assessments remain historical results; this metadata update does not
 measure the subsequent coverage increments.
 
 Current workload rows use measurement schema V2. The historical eventFreeze key
-counts all outermost freezes outside capture, including modern typed preparation
-receipts; it is not an event-only span. V2 validates that extra freeze without
+counts all outermost freezes outside capture, including entry-location
+receipts; it is not an event-only span. V2 validates that extra freeze for V28/V29 without
 changing event/publication totals. Mixed/unknown/boolean declarations are rejected.
 The producer-profile declaration alone does not certify all newly added families.
 For a matched V28 control, pass `--reference 555c3fbbb35` to `run-workloads.py`;
