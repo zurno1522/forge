@@ -1,0 +1,26 @@
+{
+  "baseRevision": "b08162e4e47",
+  "scope": "Final V22 production, decoder, new/current-profile tests and fixture; final additional two blocked-prior-identity cases compiled with --release 17 in an isolated directory and all eighteen focused classes rerun over unchanged Maven-built production.",
+  "sources": {
+    "forge-ai/src/main/java/forge/ai/AiInputContext.java": "a1ec0970ff22e391dd2d48f5b927c3b1546ef336927dbe82e3afbe8fed4d0517",
+    "forge-ai/src/main/java/forge/ai/AiObservationAccounting.java": "1ad0b08911d532ed9a56a7c42cb8fe04dc5f303bae1742d8ca43f7030c7cbafd",
+    "forge-ai/src/main/java/forge/ai/AiPaymentChoiceRecorder.java": "9d75daccb25c66e366653ad4d62e8627803fbf751a6de26b6f987ade14c18c8b",
+    "forge-ai/src/main/java/forge/ai/AiReceivedParameters.java": "da49e15cf3b1bece7db68f0898f7006e77feec5e5b00b81779955f2e3a156f20",
+    "forge-ai/src/main/java/forge/ai/ComputerUtil.java": "e0d62d5934596962e830c6acc029d28732ef197e797dde9505d6f57f087f5b17",
+    "forge-gui-desktop/src/test/java/forge/ai/AiCopyTargetInputTest.java": "d395237142de87d15caf3f64ae747325a5a5263c6512f844f47df85d5036b87d",
+    "forge-gui-desktop/src/test/java/forge/ai/AiEntitySelectionHistoryTest.java": "e5733ec890d87ea08eba621450a0756db0b84984050d06edeb5370226e6b94b8",
+    "forge-gui-desktop/src/test/java/forge/ai/AiModeInputContextTest.java": "15d434d4efde70104d917687bfa475b98bdd39b190384d4405851c74edb68295",
+    "forge-gui-desktop/src/test/java/forge/ai/AiModePromptInputTest.java": "07e9f6236b31523eac95c01f7e0129df00442de0a6a6e389f0ef6ca8c7db5b42",
+    "forge-gui-desktop/src/test/java/forge/ai/AiMultiEntityChoiceRecorderTest.java": "76aeac82bff9e5751e33b10a7876012c0a6ddb0824c2481e8d3745303ef13dda",
+    "forge-gui-desktop/src/test/java/forge/ai/AiStackInputContextTest.java": "fab2b2de3238b3522acdd137b01a73ad246943d0afe123a07b071b9b0439710d",
+    "forge-gui-desktop/src/test/java/forge/ai/AiZoneOperationRecorderTest.java": "7f341a8de93625f2ba446db21cdb9892a33c12ae951e33d8369015da6e34227c",
+    "tools/decision-records/choice_events.py": "674fc428d2ec284fe09810d2c0ae7257d6c5b53ac0351fd54c9e1c8fde6c7033",
+    "tools/decision-records/coverage_audit.py": "d5e4530c05876c9b0e83fdcaada8578a9a588ece30db0eafa5907db219cbe3b2",
+    "tools/decision-records/export.py": "972e49d6bfd13319e87506f1595ccc258e394fde43e049fc35e40caf93f8aceb",
+    "tools/decision-records/input_context.py": "2ffc5368fb7057289e4093a7e8d30f8b985b3638dd06f371a629f2444afc3a3b",
+    "tools/decision-records/received_parameters.py": "4edfe0a5aad2e09ec2ce8f9e4deecd7cdc15c1a70dd27d2aaad69867af114889",
+    "forge-gui-desktop/src/test/java/forge/ai/AiSacrificePickInputTest.java": "c968139c808975aa75c1a45f34f4bfc2ae2f5aa3a2f2cdce44b403aeb9c2c597",
+    "tools/decision-records/test_sacrifice_pick_input.py": "0c9642be9e2e057d912a166e6f5d42316c1867a4010a68f70e34cacbe60e87bd",
+    "tools/trace-test-decks/choice-sacrifice-picks.dck": "6e39cd1cc3355b6942078c887836c71418bfcf055517af98eef329224f0abc41"
+  }
+}

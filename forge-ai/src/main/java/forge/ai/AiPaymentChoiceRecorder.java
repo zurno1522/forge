@@ -3,6 +3,7 @@ package forge.ai;
 import forge.game.GameObject;
 import forge.card.mana.ManaCostShard;
 import forge.game.card.CardCollection;
+import forge.game.card.Card;
 import forge.game.cost.CostPart;
 import forge.game.cost.PaymentDecision;
 import forge.game.mana.Mana;
@@ -97,6 +98,17 @@ public final class AiPaymentChoiceRecorder {
                 () -> Map.of("coverage", "OBSERVED_REQUIREMENT_NOT_ALTERNATIVE_PLANS", "remainingManaValue", cost.getConvertedManaCost(),
                         "effect", effect), callback,
                 result -> Map.of("paymentRoutineReturned", true, "costSatisfied", cost.isPaid(), "manaAbilities", refs(result)));
+    }
+
+    static Card sacrificePick(final Player chooser, final SpellAbility ability, final CardCollection options,
+            final int requested, final int priorCount, final CardCollection prior, final Supplier<Card> callback) {
+        final var parameters = new AtomicReference<AiReceivedParameters.Input>();
+        return AiChoiceRecorder.observeParametersAt(chooser, ability, "PAYMENT_CARD_PICK", null,
+                "PAYMENT_SACRIFICE_PICK", "BEFORE_SELECTOR", () -> {
+                    final var received = AiReceivedParameters.sacrificePick(requested, priorCount, prior); parameters.set(received);
+                    return Map.of("coverage", "OBSERVED_CARD_OPTIONS_NOT_ALL_LEGAL_PAYMENT_PLANS", "cards", refs(options),
+                            "callbackParameters", received.diagnostics());
+                }, callback, AiTargetChoiceRecorder::reference, null, null, new AiReceivedParameters.Carrier(parameters));
     }
 
     static SpellAbility manaSource(final Player chooser, final SpellAbility ability, final ManaCostBeingPaid cost,

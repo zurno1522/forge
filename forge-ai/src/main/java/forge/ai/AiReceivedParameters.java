@@ -28,7 +28,7 @@ final class AiReceivedParameters {
     static final int MAX_ROLE_LIST = 64;
     enum Family { NUMBER, ENTITY }
     enum Kind { NONE, VOTER, COUNTER_AMOUNT, COUNTER_TRANSFER_AMOUNT, ENTITY_CARD_ROLE, ENTITY_TARGET_ROLE,
-        ENTITY_MANA_VALUE_LIMIT, ENTITY_COUNTER_REQUEST, TRIGGER_REQUIREMENT, ENTITY_ATTACHMENT_ROLES, ENTITY_ATTACKER_ROLES, MANA_POOL_REQUEST, MANA_SOURCE_REQUEST, CARD_PAYMENT_REQUEST }
+        ENTITY_MANA_VALUE_LIMIT, ENTITY_COUNTER_REQUEST, TRIGGER_REQUIREMENT, ENTITY_ATTACHMENT_ROLES, ENTITY_ATTACKER_ROLES, MANA_POOL_REQUEST, MANA_SOURCE_REQUEST, CARD_PAYMENT_REQUEST, SACRIFICE_PICK_REQUEST }
     record Carrier(AtomicReference<Input> receipt) { }
     record Input(Kind kind, String coverage, String reason, Map<String, Object> values, Map<String, AiOptionInput.Entry> roles, Map<String, List<AiOptionInput.Entry>> roleLists) {
         Map<String, Object> diagnostics() {
@@ -57,6 +57,14 @@ final class AiReceivedParameters {
         final String kind = "PAYMENT_DISCARD_POOL".equals(boundary) ? "DISCARD" : "PAYMENT_SACRIFICE_POOL".equals(boundary) ? "SACRIFICE" : null;
         return kind == null ? unsupported() : complete(Kind.CARD_PAYMENT_REQUEST,
                 Map.of("paymentKind", kind, "minimum", minimum, "maximum", maximum), Map.of());
+    }
+
+    static Input sacrificePick(final int requested, final int priorCount, final CardCollection prior) {
+        if (prior == null || prior.getClass() != CardCollection.class || requested <= priorCount || priorCount < 0
+                || priorCount != prior.size()) { return unsupported(); }
+        if (priorCount > MAX_ROLE_LIST) { return overlong(Kind.SACRIFICE_PICK_REQUEST); }
+        return roleList(Kind.SACRIFICE_PICK_REQUEST, prior, "previousSelections",
+                Map.of("requestedSelections", requested, "priorSelectionCount", priorCount));
     }
 
     private static Input unsupported() { return new Input(null, "UNSUPPORTED", "UNSUPPORTED", null, Map.of(), Map.of()); }
@@ -125,6 +133,9 @@ final class AiReceivedParameters {
         return unsupported();
     }
     private static Input roleList(final Kind kind, final Object value) {
+        return roleList(kind, value, "entities", Map.of());
+    }
+    private static Input roleList(final Kind kind, final Object value, final String field, final Map<String, Object> scalars) {
         final boolean knownEmpty = value == CardCollection.EMPTY || value == List.of() || value == Collections.emptyList()
                 || value == ImmutableList.of();
         if (!knownEmpty && (value == null || value.getClass() != CardCollection.class && value.getClass() != ArrayList.class)) { return unsupported(); }
@@ -147,7 +158,8 @@ final class AiReceivedParameters {
             final Map<String, Object> reference = Collections.unmodifiableMap(AiTargetChoiceRecorder.reference(card));
             references.add(reference); entries.add(new AiOptionInput.Entry(card, reference));
         }
-        return new Input(kind, "COMPLETE", null, Map.of("entities", List.copyOf(references)), Map.of(), Map.of("entities", List.copyOf(entries)));
+        final Map<String, Object> values = new LinkedHashMap<>(scalars); values.put(field, List.copyOf(references));
+        return new Input(kind, "COMPLETE", null, Collections.unmodifiableMap(values), Map.of(), Map.of(field, List.copyOf(entries)));
     }
     private static Input overlong(final Kind kind) { return new Input(kind, "UNAVAILABLE", "OUTSIDE_CAPTURED_PREFIX", null, Map.of(), Map.of()); }
     private static Input roles(final Kind kind, final Map<String, Object> scalars, final Map<String, ? extends GameEntity> objects) {

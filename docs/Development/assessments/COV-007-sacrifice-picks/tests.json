@@ -1,0 +1,23 @@
+{
+  "focusedJava": {
+    "tests": 225,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "newCases": 13,
+    "execution": "Initial Maven run passed 223. Two final blocked-prior-identity cases compiled with --release 17 into an isolated directory, then all eighteen focused classes passed over unchanged production."
+  },
+  "python": {
+    "tests": 290,
+    "failures": 0,
+    "errors": 0,
+    "newMethods": 6
+  },
+  "fullDesktopReactor": "Not repeated; the earlier reproduced scavenge instability remains a separate validation limit.",
+  "logs": {
+    "/workspace/work/cov007-sacrifice-picks/focused.log": "998f169a1aaef8a9615cc785521d2f8e8520455e4a04b37f4b2f368e15cc644d",
+    "/workspace/work/cov007-sacrifice-picks/focused-final.log": "1f04f738c276c017ee95a08a0e8968d80919c91c588ec3b31d6e1146b825f88d",
+    "/workspace/work/cov007-sacrifice-picks/python.log": "75482abb5aa43b721473b15e6be4865677dd8d7772c585d9b516cac97e95758c",
+    "/workspace/work/cov007-sacrifice-picks/validation.log": "6d46fb28be4e4643b29565b9c00df0a6ee0c46f5c2ac88960109508a2df3f8d5"
+  }
+}

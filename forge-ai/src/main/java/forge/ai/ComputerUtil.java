@@ -634,14 +634,17 @@ public class ComputerUtil {
         int count = 0;
 
         while (count < amount) {
-            Card prefCard = getCardPreference(ai, source, "SacCost", typeList, ability);
-            if (prefCard == null && ability.isManaAbility()) {
-                // paying for mana: give up what the AI would miss least (a token, a creature that comes back)
-                prefCard = ManaSacrifice.chooseFodder(ai, typeList);
-            }
-            if (prefCard == null) {
-                prefCard = ComputerUtilCard.getWorstAI(typeList);
-            }
+            final Card prefCard = AiPaymentChoiceRecorder.sacrificePick(ai, ability, typeList, amount, count, sacList, () -> {
+                Card preferred = getCardPreference(ai, source, "SacCost", typeList, ability);
+                if (preferred == null && ability.isManaAbility()) {
+                    // paying for mana: give up what the AI would miss least (a token, a creature that comes back)
+                    preferred = ManaSacrifice.chooseFodder(ai, typeList);
+                }
+                if (preferred == null) {
+                    preferred = ComputerUtilCard.getWorstAI(typeList);
+                }
+                return preferred;
+            });
             if (prefCard == null) {
                 return null;
             }

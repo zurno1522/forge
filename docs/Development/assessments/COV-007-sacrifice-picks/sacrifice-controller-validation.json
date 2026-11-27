@@ -1,0 +1,26 @@
+{
+  "ACTUAL_TWO_PICKS": {
+    "lifecycleEvents": 8,
+    "validatedObservations": 4
+  },
+  "FROZEN_PLANNING": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "PRIVATE_PRIOR": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "OVERSIZED_PRIOR": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "DECLINE": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "ORIGINAL_ERROR": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  }
+}
