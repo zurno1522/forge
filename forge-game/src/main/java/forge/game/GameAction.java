@@ -2396,7 +2396,12 @@ public class GameAction {
 
             runPreOpeningHandActions(first);
 
-            game.setAge(GameStage.Mulligan);
+            synchronized (game) {
+                // Cancellation may finish the game while opening-hand actions are running.
+                // Use the same monitor as setGameOver so this transition cannot revive it.
+                if (game.isGameOver()) { break; }
+                game.setAge(GameStage.Mulligan);
+            }
             for (final Player p1 : game.getPlayers()) {
                 // Choose starting hand for each player with multiple hands
                 if (StaticData.instance().getFilteredHandsEnabled() ) {
@@ -2421,7 +2426,10 @@ public class GameAction {
                 p1.runStartGameScripts();
             }
 
-            game.setAge(GameStage.Play);
+            synchronized (game) {
+                if (game.isGameOver()) { break; }
+                game.setAge(GameStage.Play);
+            }
 
             //<THIS CODE WILL WORK WITH PHASE = NULL>
             if (game.getRules().hasAppliedVariant(GameType.Planechase)) {

@@ -1,0 +1,42 @@
+{
+  "before": {
+    "tests": 2,
+    "failures": 2,
+    "errors": 0,
+    "details": [
+      {
+        "test": "completedDrawCannotBeRevivedByTheNextStartupStage",
+        "parameter": "false",
+        "failure": "Startup replaced the completed outcome expected [forge.game.GameOutcome@6bfbab1c] but found [forge.game.GameOutcome@349aeec4]"
+      },
+      {
+        "test": "completedDrawCannotBeRevivedByTheNextStartupStage",
+        "parameter": "true",
+        "failure": "Startup replaced the completed outcome expected [forge.game.GameOutcome@631678e6] but found [forge.game.GameOutcome@1344f7fe]"
+      }
+    ]
+  },
+  "after": {
+    "tests": 37,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "classes": [
+      "forge.ai.ability.RestartGameTest",
+      "forge.view.GameStartTerminationTest",
+      "forge.view.SimulateMatchTest",
+      "forge.view.SimulationTraceCollectorFailureTest",
+      "forge.view.SimulationTraceCollectorTest",
+      "forge.view.SimulationTraceRunTest",
+      "forge.view.TimeLimitedCodeBlockTest"
+    ]
+  },
+  "sourceSha256Before": "971b7c48ff3af7348a3cec65e596dd07d7b5935da5519649f91fb1dd915fc977",
+  "sourceSha256After": "294caa309202f6fdebceaaa81019426f959672f391434707f53f685ac0dc668d",
+  "testSourceSha256": "6dae2fd6594036dc38c87a744711f760c62a0c77a7189cf2965e1f9478aeb1cd",
+  "logs": {
+    "before.log": "ac4cffb88a5293f75f177d0311abe5e31fa3d79d192ef411c79897f713ea727e",
+    "focused.log": "1ad3ce00adc4e7ad02340052b94c199ac06c77c3c8e4c7f07aed95e0c4e2f289"
+  },
+  "classification": "Core startup lifecycle race; not a card-script or admission-policy defect. No global setAge or snapshot/restore API change."
+}

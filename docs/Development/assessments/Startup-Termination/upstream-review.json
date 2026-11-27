@@ -1,0 +1,1342 @@
+{
+  "reviewDate": "2026-11-27",
+  "openPullRequests": [
+    {
+      "number": 13101,
+      "title": "Restore Narset\u2019s missing boons for Rogue Commander and extend Planechase support",
+      "url": "https://github.com/Card-Forge/forge/pull/13101"
+    },
+    {
+      "number": 13098,
+      "title": "AI: Mulligan",
+      "url": "https://github.com/Card-Forge/forge/pull/13098"
+    },
+    {
+      "number": 13080,
+      "title": "Limit Henzie's granted blitz to eligible creature spells",
+      "url": "https://github.com/Card-Forge/forge/pull/13080"
+    },
+    {
+      "number": 13071,
+      "title": "Evaluate Devour sacrifices using prospective creature value",
+      "url": "https://github.com/Card-Forge/forge/pull/13071"
+    },
+    {
+      "number": 13070,
+      "title": "Improve Aristocrat outlet decisions and sacrifice fodder",
+      "url": "https://github.com/Card-Forge/forge/pull/13070"
+    },
+    {
+      "number": 13069,
+      "title": "Improve optional and mixed-permanent sacrifice choices",
+      "url": "https://github.com/Card-Forge/forge/pull/13069"
+    },
+    {
+      "number": 13065,
+      "title": "Token: a zero amount still creates the AtEOT delayed trigger (Mobilize X = 0)",
+      "url": "https://github.com/Card-Forge/forge/pull/13065"
+    },
+    {
+      "number": 13064,
+      "title": "State-based actions: one owner ordering for the whole graveyard batch",
+      "url": "https://github.com/Card-Forge/forge/pull/13064"
+    },
+    {
+      "number": 13061,
+      "title": "Myriad: no end-of-combat exile trigger when no token was created",
+      "url": "https://github.com/Card-Forge/forge/pull/13061"
+    },
+    {
+      "number": 13060,
+      "title": "Dig: ForgetOtherRemembered also clears when nothing was dug (Primal Surge)",
+      "url": "https://github.com/Card-Forge/forge/pull/13060"
+    },
+    {
+      "number": 13057,
+      "title": "Changeling, Devoid: keep the CDA after an immediate loses-all-abilities",
+      "url": "https://github.com/Card-Forge/forge/pull/13057"
+    },
+    {
+      "number": 13051,
+      "title": "Add a \"puzzle <file>\" launch mode to the desktop client",
+      "url": "https://github.com/Card-Forge/forge/pull/13051"
+    },
+    {
+      "number": 13036,
+      "title": "Add per-output UI scaling and native Wayland window support",
+      "url": "https://github.com/Card-Forge/forge/pull/13036"
+    },
+    {
+      "number": 13032,
+      "title": "Card-script param declarations: batch 2 (BecomeMonarch\u2013ChangeX)",
+      "url": "https://github.com/Card-Forge/forge/pull/13032"
+    },
+    {
+      "number": 12990,
+      "title": "Add forge.assetsDir property so desktop can run from outside its install folder",
+      "url": "https://github.com/Card-Forge/forge/pull/12990"
+    },
+    {
+      "number": 12983,
+      "title": "WebP image support",
+      "url": "https://github.com/Card-Forge/forge/pull/12983"
+    },
+    {
+      "number": 12981,
+      "title": "Add a Borderless Fullscreen display mode",
+      "url": "https://github.com/Card-Forge/forge/pull/12981"
+    },
+    {
+      "number": 12978,
+      "title": "Unknown Event Philadelphia 23 as a sealed format",
+      "url": "https://github.com/Card-Forge/forge/pull/12978"
+    },
+    {
+      "number": 12977,
+      "title": "Unknown Event Philadelphia 23: Team and Score (13 Cards)",
+      "url": "https://github.com/Card-Forge/forge/pull/12977"
+    },
+    {
+      "number": 12976,
+      "title": "Unknown Event Philadelphia 23: Poison Tolerance (6 Cards)",
+      "url": "https://github.com/Card-Forge/forge/pull/12976"
+    },
+    {
+      "number": 12975,
+      "title": "Unknown Event Philadelphia 23: minor engine changes (4 Cards)",
+      "url": "https://github.com/Card-Forge/forge/pull/12975"
+    },
+    {
+      "number": 12974,
+      "title": "Unknown Event Philadelphia 23: no engine changes (15 Cards)",
+      "url": "https://github.com/Card-Forge/forge/pull/12974"
+    },
+    {
+      "number": 12961,
+      "title": "update beast within logic to remove warning",
+      "url": "https://github.com/Card-Forge/forge/pull/12961"
+    },
+    {
+      "number": 12946,
+      "title": "Funny Card Doc: Playtest cards from recent MagicCon ",
+      "url": "https://github.com/Card-Forge/forge/pull/12946"
+    },
+    {
+      "number": 12916,
+      "title": "GameCopier: copy what the turn keeps (morbid, raid, life gained, cards drawn, activations)",
+      "url": "https://github.com/Card-Forge/forge/pull/12916"
+    },
+    {
+      "number": 12906,
+      "title": "forge-gui-web: MVP",
+      "url": "https://github.com/Card-Forge/forge/pull/12906"
+    },
+    {
+      "number": 12864,
+      "title": "Combat: keep the declare blockers and damage steps when every declared attacker left combat (CR 508.8)",
+      "url": "https://github.com/Card-Forge/forge/pull/12864"
+    },
+    {
+      "number": 12852,
+      "title": "Skip CI test categories a PR cannot affect",
+      "url": "https://github.com/Card-Forge/forge/pull/12852"
+    },
+    {
+      "number": 12845,
+      "title": "GameState: look up scheme, plane and other variant cards too",
+      "url": "https://github.com/Card-Forge/forge/pull/12845"
+    },
+    {
+      "number": 12837,
+      "title": "Fix Desert Were-Worm missing attacks made earlier in the turn",
+      "url": "https://github.com/Card-Forge/forge/pull/12837"
+    },
+    {
+      "number": 12821,
+      "title": "[YECL] Aquatic Subtlety",
+      "url": "https://github.com/Card-Forge/forge/pull/12821"
+    },
+    {
+      "number": 12820,
+      "title": "[YFRA] Flourishing Forces + LifeGainedThisGame support",
+      "url": "https://github.com/Card-Forge/forge/pull/12820"
+    },
+    {
+      "number": 12808,
+      "title": "Auto-merge PRs from allowlisted authors",
+      "url": "https://github.com/Card-Forge/forge/pull/12808"
+    },
+    {
+      "number": 12792,
+      "title": "AI: play winning sacrifice loops (persist/undying with Melira or Solemnity, sacrifice-untap, sacrifice-for-mana drain)",
+      "url": "https://github.com/Card-Forge/forge/pull/12792"
+    },
+    {
+      "number": 12791,
+      "title": "Use pre-event life totals for Duskmourn lands entering with a shock land",
+      "url": "https://github.com/Card-Forge/forge/pull/12791"
+    },
+    {
+      "number": 12790,
+      "title": "Reveal and log sticker sheet choices, and rebuild sheets and nontraditional decks on restart",
+      "url": "https://github.com/Card-Forge/forge/pull/12790"
+    },
+    {
+      "number": 12779,
+      "title": "Mark a card as ignored in auto-pass available actions check",
+      "url": "https://github.com/Card-Forge/forge/pull/12779"
+    },
+    {
+      "number": 12722,
+      "title": "Give priority in the combat damage step when no creature assigns damage",
+      "url": "https://github.com/Card-Forge/forge/pull/12722"
+    },
+    {
+      "number": 12713,
+      "title": "AI mulligan: stop counting tucked cards twice",
+      "url": "https://github.com/Card-Forge/forge/pull/12713"
+    },
+    {
+      "number": 12679,
+      "title": "Adventure Shandalar: Added Arzakon, the original final boss from Shandalar 1996",
+      "url": "https://github.com/Card-Forge/forge/pull/12679"
+    },
+    {
+      "number": 12677,
+      "title": "AI planeswalker and wheel logic improvements",
+      "url": "https://github.com/Card-Forge/forge/pull/12677"
+    },
+    {
+      "number": 12675,
+      "title": "Fixed a freeze on the load screen when unknown card script is read",
+      "url": "https://github.com/Card-Forge/forge/pull/12675"
+    },
+    {
+      "number": 12608,
+      "title": "Describe a charm with every printed mode",
+      "url": "https://github.com/Card-Forge/forge/pull/12608"
+    },
+    {
+      "number": 12584,
+      "title": "(YFRA) Enter the Eternities + Drafting Planeswalker Abilities",
+      "url": "https://github.com/Card-Forge/forge/pull/12584"
+    },
+    {
+      "number": 12583,
+      "title": "[Advanced search] Add is:phyreixan, is:hybrid and mana: support",
+      "url": "https://github.com/Card-Forge/forge/pull/12583"
+    },
+    {
+      "number": 12577,
+      "title": "Fix TDM and FRA booster odds and add seeded prerelease and echoed pair support",
+      "url": "https://github.com/Card-Forge/forge/pull/12577"
+    },
+    {
+      "number": 12569,
+      "title": "(YECL) Limitless Rekindling",
+      "url": "https://github.com/Card-Forge/forge/pull/12569"
+    },
+    {
+      "number": 12564,
+      "title": "Speed up and improve card image downloading",
+      "url": "https://github.com/Card-Forge/forge/pull/12564"
+    },
+    {
+      "number": 12544,
+      "title": "Detect assets dir from the filesystem instead of a hardcoded path",
+      "url": "https://github.com/Card-Forge/forge/pull/12544"
+    },
+    {
+      "number": 12538,
+      "title": "Keep AI commanders on delayed battlefield returns",
+      "url": "https://github.com/Card-Forge/forge/pull/12538"
+    },
+    {
+      "number": 12536,
+      "title": "[card] Cogwork Tracker: name the noted defender with MustAttack$",
+      "url": "https://github.com/Card-Forge/forge/pull/12536"
+    },
+    {
+      "number": 12525,
+      "title": "Alchemy: Card not from your starting deck mechanic",
+      "url": "https://github.com/Card-Forge/forge/pull/12525"
+    },
+    {
+      "number": 12520,
+      "title": "Fix blanket effects slow down",
+      "url": "https://github.com/Card-Forge/forge/pull/12520"
+    },
+    {
+      "number": 12519,
+      "title": "Add regression tests for three netplay fixes",
+      "url": "https://github.com/Card-Forge/forge/pull/12519"
+    },
+    {
+      "number": 12511,
+      "title": "Count each creature once in \"attacked this turn\" counts across multiple combats",
+      "url": "https://github.com/Card-Forge/forge/pull/12511"
+    },
+    {
+      "number": 12499,
+      "title": "Implements: Curse of the Fire Penguin (UNH)",
+      "url": "https://github.com/Card-Forge/forge/pull/12499"
+    },
+    {
+      "number": 12462,
+      "title": "AI: let one filter pay for another",
+      "url": "https://github.com/Card-Forge/forge/pull/12462"
+    },
+    {
+      "number": 12450,
+      "title": "Add missing translations keys - English fallback.",
+      "url": "https://github.com/Card-Forge/forge/pull/12450"
+    },
+    {
+      "number": 12427,
+      "title": "add streamReplacementEffects",
+      "url": "https://github.com/Card-Forge/forge/pull/12427"
+    },
+    {
+      "number": 12418,
+      "title": "Update Bomb Squad",
+      "url": "https://github.com/Card-Forge/forge/pull/12418"
+    },
+    {
+      "number": 12395,
+      "title": "Stop a LAN device's unreadable UPnP description from flooding the log",
+      "url": "https://github.com/Card-Forge/forge/pull/12395"
+    },
+    {
+      "number": 12385,
+      "title": "Spark Fiend: note the entry roll (read a plain-number SVar behind SVar$)",
+      "url": "https://github.com/Card-Forge/forge/pull/12385"
+    },
+    {
+      "number": 12379,
+      "title": "Count CopySpell copies per spell, not across every spell of one effect",
+      "url": "https://github.com/Card-Forge/forge/pull/12379"
+    },
+    {
+      "number": 12376,
+      "title": "Guard five unchecked combat and zone reads (null battle protector, empty chooser, left combat)",
+      "url": "https://github.com/Card-Forge/forge/pull/12376"
+    },
+    {
+      "number": 12367,
+      "title": "Let an item manager choose its price symbol in the image view",
+      "url": "https://github.com/Card-Forge/forge/pull/12367"
+    },
+    {
+      "number": 12299,
+      "title": "Implements the Augment Mechanic (UND/UST)",
+      "url": "https://github.com/Card-Forge/forge/pull/12299"
+    },
+    {
+      "number": 12290,
+      "title": "Simultaneous entry: rule-style statics, sacrifices, look-back triggers and copies follow the board before the event",
+      "url": "https://github.com/Card-Forge/forge/pull/12290"
+    },
+    {
+      "number": 12287,
+      "title": "AI: spend a spare counter for a remove-any-counter cost, and check that cost before a library search",
+      "url": "https://github.com/Card-Forge/forge/pull/12287"
+    },
+    {
+      "number": 12284,
+      "title": "AI: put a spell back where it came from when casting it fails",
+      "url": "https://github.com/Card-Forge/forge/pull/12284"
+    },
+    {
+      "number": 12279,
+      "title": "Fix AI commander handling for delayed exile returns",
+      "url": "https://github.com/Card-Forge/forge/pull/12279"
+    },
+    {
+      "number": 12278,
+      "title": "Ignore OK on a stack target prompt until enough targets are picked",
+      "url": "https://github.com/Card-Forge/forge/pull/12278"
+    },
+    {
+      "number": 12271,
+      "title": "Fix AwaitNextInput task",
+      "url": "https://github.com/Card-Forge/forge/pull/12271"
+    },
+    {
+      "number": 12264,
+      "title": "Add DanDan shared-zone matches with desktop and network play",
+      "url": "https://github.com/Card-Forge/forge/pull/12264"
+    },
+    {
+      "number": 12260,
+      "title": "Add engine and editor support for one-time Adventure quests",
+      "url": "https://github.com/Card-Forge/forge/pull/12260"
+    },
+    {
+      "number": 12254,
+      "title": "Add foldable device support for Android port",
+      "url": "https://github.com/Card-Forge/forge/pull/12254"
+    },
+    {
+      "number": 12253,
+      "title": "Offer a draw instead of auto-ending the game on a suspected loop",
+      "url": "https://github.com/Card-Forge/forge/pull/12253"
+    },
+    {
+      "number": 12252,
+      "title": "AI: turn a defender's land into an Island to unlock attackers",
+      "url": "https://github.com/Card-Forge/forge/pull/12252"
+    },
+    {
+      "number": 12251,
+      "title": "Allow eight more Fallen Empires cards in authored AI decks",
+      "url": "https://github.com/Card-Forge/forge/pull/12251"
+    },
+    {
+      "number": 12250,
+      "title": "AI: tap untapped storage lands at the end of the opponent's turn",
+      "url": "https://github.com/Card-Forge/forge/pull/12250"
+    },
+    {
+      "number": 12246,
+      "title": "harden snapshot",
+      "url": "https://github.com/Card-Forge/forge/pull/12246"
+    },
+    {
+      "number": 12241,
+      "title": "AI: cast a damage sweeper when its targets are about to kill it",
+      "url": "https://github.com/Card-Forge/forge/pull/12241"
+    },
+    {
+      "number": 12240,
+      "title": "AI: fetch a companion last, in main 2",
+      "url": "https://github.com/Card-Forge/forge/pull/12240"
+    },
+    {
+      "number": 12228,
+      "title": "Quest Mode: Planechase and Archenemy Rumble",
+      "url": "https://github.com/Card-Forge/forge/pull/12228"
+    },
+    {
+      "number": 12225,
+      "title": "Send library cards to netplay clients as placeholders",
+      "url": "https://github.com/Card-Forge/forge/pull/12225"
+    },
+    {
+      "number": 12223,
+      "title": "Add Online Deck Library sync for public Deckbox decks",
+      "url": "https://github.com/Card-Forge/forge/pull/12223"
+    },
+    {
+      "number": 12220,
+      "title": "fix(gui): prevent headless crash report deadlock in ExceptionHandler and BugReporter",
+      "url": "https://github.com/Card-Forge/forge/pull/12220"
+    },
+    {
+      "number": 12219,
+      "title": "fix(cards): add default SVar:X:1 for Clay Golem monstrosity roll",
+      "url": "https://github.com/Card-Forge/forge/pull/12219"
+    },
+    {
+      "number": 12218,
+      "title": "Garruk, Veiled Butcher: fix the Beast token and the discard (and twelve other cards)",
+      "url": "https://github.com/Card-Forge/forge/pull/12218"
+    },
+    {
+      "number": 12209,
+      "title": "AI: let the missing shards decide a land fetch that is otherwise a tie",
+      "url": "https://github.com/Card-Forge/forge/pull/12209"
+    },
+    {
+      "number": 12198,
+      "title": "Finish #9484: a single-card leaves-the-battlefield trigger checks look-back for itself",
+      "url": "https://github.com/Card-Forge/forge/pull/12198"
+    },
+    {
+      "number": 12194,
+      "title": "Automate must attack legal attacker",
+      "url": "https://github.com/Card-Forge/forge/pull/12194"
+    },
+    {
+      "number": 12182,
+      "title": "Allow adding basic lands while sideboarding in limited games",
+      "url": "https://github.com/Card-Forge/forge/pull/12182"
+    },
+    {
+      "number": 12180,
+      "title": "AI: opt-in decision log on the AI tag of IHasForgeLog",
+      "url": "https://github.com/Card-Forge/forge/pull/12180"
+    },
+    {
+      "number": 12174,
+      "title": "Remove the ready announcement from lobby chat",
+      "url": "https://github.com/Card-Forge/forge/pull/12174"
+    },
+    {
+      "number": 12172,
+      "title": "Add hover preview for card lists on desktop",
+      "url": "https://github.com/Card-Forge/forge/pull/12172"
+    },
+    {
+      "number": 12170,
+      "title": "Find legal attacks for creatures that depend on other attackers (fixes for #9913)",
+      "url": "https://github.com/Card-Forge/forge/pull/12170"
+    },
+    {
+      "number": 12158,
+      "title": "Added sound asset for life gain events.",
+      "url": "https://github.com/Card-Forge/forge/pull/12158"
+    },
+    {
+      "number": 12146,
+      "title": "Explain why blockers can't be declared",
+      "url": "https://github.com/Card-Forge/forge/pull/12146"
+    },
+    {
+      "number": 12129,
+      "title": "[UNF] Wicker Picker",
+      "url": "https://github.com/Card-Forge/forge/pull/12129"
+    },
+    {
+      "number": 12123,
+      "title": "Let AIManaPref name several colours, and use it on the evoke elementals",
+      "url": "https://github.com/Card-Forge/forge/pull/12123"
+    },
+    {
+      "number": 12122,
+      "title": "UNF: Gray Merchant of Alphabet, Leading Performance, Disemvowel",
+      "url": "https://github.com/Card-Forge/forge/pull/12122"
+    },
+    {
+      "number": 12120,
+      "title": "Enable Always Yes/No auto-yields for mandatory triggers",
+      "url": "https://github.com/Card-Forge/forge/pull/12120"
+    },
+    {
+      "number": 12114,
+      "title": "Clear Itazura's highest-bidder note after choosing the player",
+      "url": "https://github.com/Card-Forge/forge/pull/12114"
+    },
+    {
+      "number": 12110,
+      "title": "Separate priority questions from input handling in human controller",
+      "url": "https://github.com/Card-Forge/forge/pull/12110"
+    },
+    {
+      "number": 12101,
+      "title": "EmpowerJace: better hardcoded into Jace",
+      "url": "https://github.com/Card-Forge/forge/pull/12101"
+    },
+    {
+      "number": 12097,
+      "title": "Improve the release build with QOL features and native installers",
+      "url": "https://github.com/Card-Forge/forge/pull/12097"
+    },
+    {
+      "number": 12090,
+      "title": "Duel Commander",
+      "url": "https://github.com/Card-Forge/forge/pull/12090"
+    },
+    {
+      "number": 12089,
+      "title": "Update TrigProvoke SVar to include ValidTgts",
+      "url": "https://github.com/Card-Forge/forge/pull/12089"
+    },
+    {
+      "number": 12087,
+      "title": "Extend mobile's duplicate-deck prompt to desktop precon lists",
+      "url": "https://github.com/Card-Forge/forge/pull/12087"
+    },
+    {
+      "number": 12078,
+      "title": "Save AI decks in network limited events + add event deletion UI",
+      "url": "https://github.com/Card-Forge/forge/pull/12078"
+    },
+    {
+      "number": 12077,
+      "title": "CI: fix: add install step",
+      "url": "https://github.com/Card-Forge/forge/pull/12077"
+    },
+    {
+      "number": 12072,
+      "title": "Add Pauper Commander (PDH) game format",
+      "url": "https://github.com/Card-Forge/forge/pull/12072"
+    },
+    {
+      "number": 12064,
+      "title": "Prevent brocken drafts in quest mode",
+      "url": "https://github.com/Card-Forge/forge/pull/12064"
+    },
+    {
+      "number": 12025,
+      "title": "Planechase: don't freeze the game when a planar deck is empty",
+      "url": "https://github.com/Card-Forge/forge/pull/12025"
+    },
+    {
+      "number": 11981,
+      "title": "Group interchangeable blockers when evaluating combat",
+      "url": "https://github.com/Card-Forge/forge/pull/11981"
+    },
+    {
+      "number": 11964,
+      "title": "Skip rebuilding statics and triggers when every source is empty",
+      "url": "https://github.com/Card-Forge/forge/pull/11964"
+    },
+    {
+      "number": 11933,
+      "title": "perf(game): resolve a bare type name before the property chain",
+      "url": "https://github.com/Card-Forge/forge/pull/11933"
+    },
+    {
+      "number": 11931,
+      "title": "perf(game): cache a card's trait lists and the static source cards on versions",
+      "url": "https://github.com/Card-Forge/forge/pull/11931"
+    },
+    {
+      "number": 11913,
+      "title": "Fix missing and malformed translations across all languages",
+      "url": "https://github.com/Card-Forge/forge/pull/11913"
+    },
+    {
+      "number": 11910,
+      "title": "Fix card zoom being drawn behind dialog windows - desktop",
+      "url": "https://github.com/Card-Forge/forge/pull/11910"
+    },
+    {
+      "number": 11896,
+      "title": "Fix deck editor tabs vanishing, deck name bleed, and the commander tab crashFix/deck editor state",
+      "url": "https://github.com/Card-Forge/forge/pull/11896"
+    },
+    {
+      "number": 11891,
+      "title": "Prefer language-available printing when no edition is specified and 'Prefer My Language for Unique Cards' is enabled",
+      "url": "https://github.com/Card-Forge/forge/pull/11891"
+    },
+    {
+      "number": 11887,
+      "title": "Desktop: explain a headless Java runtime instead of failing to open a window",
+      "url": "https://github.com/Card-Forge/forge/pull/11887"
+    },
+    {
+      "number": 11879,
+      "title": "Make Conspiracy draft network compatible",
+      "url": "https://github.com/Card-Forge/forge/pull/11879"
+    },
+    {
+      "number": 11873,
+      "title": "Rework RestrictValid for mana abilities.",
+      "url": "https://github.com/Card-Forge/forge/pull/11873"
+    },
+    {
+      "number": 11862,
+      "title": "Restore Android 10 support / fix external storage initialization",
+      "url": "https://github.com/Card-Forge/forge/pull/11862"
+    },
+    {
+      "number": 11857,
+      "title": "Add Pauper Commander (PDH) format",
+      "url": "https://github.com/Card-Forge/forge/pull/11857"
+    },
+    {
+      "number": 11856,
+      "title": "AutoUpdater: install updates in place instead of only downloading them",
+      "url": "https://github.com/Card-Forge/forge/pull/11856"
+    },
+    {
+      "number": 11817,
+      "title": "Implement DeckRuleCopies + cache tokenized DeckRule lines per CardFace",
+      "url": "https://github.com/Card-Forge/forge/pull/11817"
+    },
+    {
+      "number": 11797,
+      "title": "Implements 3 Non-Legal die roll cards",
+      "url": "https://github.com/Card-Forge/forge/pull/11797"
+    },
+    {
+      "number": 11751,
+      "title": "Add AI targeting logic for Metamorphic Alteration",
+      "url": "https://github.com/Card-Forge/forge/pull/11751"
+    },
+    {
+      "number": 11746,
+      "title": "Let ReplaySpell evaluate responses on the stack",
+      "url": "https://github.com/Card-Forge/forge/pull/11746"
+    },
+    {
+      "number": 11736,
+      "title": "Prefer card printings in the selected language in Adventure Mode",
+      "url": "https://github.com/Card-Forge/forge/pull/11736"
+    },
+    {
+      "number": 11733,
+      "title": "Make Liliana Master Black Wizard deck more focused",
+      "url": "https://github.com/Card-Forge/forge/pull/11733"
+    },
+    {
+      "number": 11731,
+      "title": "Add an option to preload deck card images at match start",
+      "url": "https://github.com/Card-Forge/forge/pull/11731"
+    },
+    {
+      "number": 11720,
+      "title": "Implement Host keyword",
+      "url": "https://github.com/Card-Forge/forge/pull/11720"
+    },
+    {
+      "number": 11717,
+      "title": "Improve Homarid Spawning Bed AI",
+      "url": "https://github.com/Card-Forge/forge/pull/11717"
+    },
+    {
+      "number": 11676,
+      "title": "Improve High Tide AI usage",
+      "url": "https://github.com/Card-Forge/forge/pull/11676"
+    },
+    {
+      "number": 11663,
+      "title": "cards: use SubCounter if able",
+      "url": "https://github.com/Card-Forge/forge/pull/11663"
+    },
+    {
+      "number": 11659,
+      "title": "Implement Coststorm keyword",
+      "url": "https://github.com/Card-Forge/forge/pull/11659"
+    },
+    {
+      "number": 11657,
+      "title": "Implement Aggressive and Equipment swap keywords",
+      "url": "https://github.com/Card-Forge/forge/pull/11657"
+    },
+    {
+      "number": 11631,
+      "title": "CardState: move IntrinsicSpell into LandTraitChanges",
+      "url": "https://github.com/Card-Forge/forge/pull/11631"
+    },
+    {
+      "number": 11627,
+      "title": "Add headless simulation and terminal gameplay",
+      "url": "https://github.com/Card-Forge/forge/pull/11627"
+    },
+    {
+      "number": 11622,
+      "title": "Update Oracle Text and Descriptions: Letter J",
+      "url": "https://github.com/Card-Forge/forge/pull/11622"
+    },
+    {
+      "number": 11577,
+      "title": "Added command line modes to launch forge into the lobby",
+      "url": "https://github.com/Card-Forge/forge/pull/11577"
+    },
+    {
+      "number": 11525,
+      "title": "Feature/11167: Randomizer mode for Adventure",
+      "url": "https://github.com/Card-Forge/forge/pull/11525"
+    },
+    {
+      "number": 11499,
+      "title": "Let the AI use Goblin Welder",
+      "url": "https://github.com/Card-Forge/forge/pull/11499"
+    },
+    {
+      "number": 11493,
+      "title": "Improve hybrid AI evaluation of costs and delayed effects",
+      "url": "https://github.com/Card-Forge/forge/pull/11493"
+    },
+    {
+      "number": 11491,
+      "title": "AI: don't let a RemoveCounterAll sub-ability veto its own parent",
+      "url": "https://github.com/Card-Forge/forge/pull/11491"
+    },
+    {
+      "number": 11490,
+      "title": "Update Oracle Text and Descriptions: Letter I",
+      "url": "https://github.com/Card-Forge/forge/pull/11490"
+    },
+    {
+      "number": 11489,
+      "title": "Update Oracle Text and Descriptions: Letter H",
+      "url": "https://github.com/Card-Forge/forge/pull/11489"
+    },
+    {
+      "number": 11486,
+      "title": "Let the AI count converge before it decides whether to cast",
+      "url": "https://github.com/Card-Forge/forge/pull/11486"
+    },
+    {
+      "number": 11473,
+      "title": "Update Oracle Text and Descriptions: Letter G",
+      "url": "https://github.com/Card-Forge/forge/pull/11473"
+    },
+    {
+      "number": 11471,
+      "title": "Update Oracle Text and Descriptions: Letter F",
+      "url": "https://github.com/Card-Forge/forge/pull/11471"
+    },
+    {
+      "number": 11463,
+      "title": "Update Oracle Text and Descriptions: Letter E",
+      "url": "https://github.com/Card-Forge/forge/pull/11463"
+    },
+    {
+      "number": 11457,
+      "title": "Rate limit and bound chat from remote clients",
+      "url": "https://github.com/Card-Forge/forge/pull/11457"
+    },
+    {
+      "number": 11449,
+      "title": "Update Oracle Text and Descriptions: Letter D",
+      "url": "https://github.com/Card-Forge/forge/pull/11449"
+    },
+    {
+      "number": 11448,
+      "title": "Stop the AI seeking a card its library cannot supply",
+      "url": "https://github.com/Card-Forge/forge/pull/11448"
+    },
+    {
+      "number": 11427,
+      "title": "Fix #11375: Russian is blocked on Android/iOS and unreadable on Desktop",
+      "url": "https://github.com/Card-Forge/forge/pull/11427"
+    },
+    {
+      "number": 11418,
+      "title": "Clean up the ability when a cast is rolled back via snapshot",
+      "url": "https://github.com/Card-Forge/forge/pull/11418"
+    },
+    {
+      "number": 11406,
+      "title": "Store text field in CardState",
+      "url": "https://github.com/Card-Forge/forge/pull/11406"
+    },
+    {
+      "number": 11402,
+      "title": "Only report a library search when the searcher owns the library",
+      "url": "https://github.com/Card-Forge/forge/pull/11402"
+    },
+    {
+      "number": 11396,
+      "title": "Let the AI use Venser, the Sojourner (and two other mass-unblockable cards)",
+      "url": "https://github.com/Card-Forge/forge/pull/11396"
+    },
+    {
+      "number": 11394,
+      "title": "Only interrupt auto-pass on targeting when an opponent is the activator",
+      "url": "https://github.com/Card-Forge/forge/pull/11394"
+    },
+    {
+      "number": 11393,
+      "title": "Let the AI use Thespian's Stage",
+      "url": "https://github.com/Card-Forge/forge/pull/11393"
+    },
+    {
+      "number": 11390,
+      "title": "Let the AI use Hex Parasite",
+      "url": "https://github.com/Card-Forge/forge/pull/11390"
+    },
+    {
+      "number": 11373,
+      "title": "AI: make the untap-for-ramp logic fire, and point it at the mana source",
+      "url": "https://github.com/Card-Forge/forge/pull/11373"
+    },
+    {
+      "number": 11366,
+      "title": "Cache the per-card trigger and static ability lists",
+      "url": "https://github.com/Card-Forge/forge/pull/11366"
+    },
+    {
+      "number": 11339,
+      "title": "Fix auto-tap highlight never showing",
+      "url": "https://github.com/Card-Forge/forge/pull/11339"
+    },
+    {
+      "number": 11337,
+      "title": "Fix AI implementation of Toxic Deluge and Flowstone Slide",
+      "url": "https://github.com/Card-Forge/forge/pull/11337"
+    },
+    {
+      "number": 11323,
+      "title": "Stream card zones",
+      "url": "https://github.com/Card-Forge/forge/pull/11323"
+    },
+    {
+      "number": 11314,
+      "title": "Improve AI play speed",
+      "url": "https://github.com/Card-Forge/forge/pull/11314"
+    },
+    {
+      "number": 11309,
+      "title": "DestoryEffect: filter for canBeDestroyed first",
+      "url": "https://github.com/Card-Forge/forge/pull/11309"
+    },
+    {
+      "number": 11287,
+      "title": "Update Oracle Text and Descriptions: Letter C",
+      "url": "https://github.com/Card-Forge/forge/pull/11287"
+    },
+    {
+      "number": 11273,
+      "title": "Improve multiplayer AI attack targeting with TTK and softmax selection",
+      "url": "https://github.com/Card-Forge/forge/pull/11273"
+    },
+    {
+      "number": 11259,
+      "title": "Update Oracle Text and Descriptions: Letter B",
+      "url": "https://github.com/Card-Forge/forge/pull/11259"
+    },
+    {
+      "number": 11244,
+      "title": "Update Oracle Text and Descriptions: Letter A",
+      "url": "https://github.com/Card-Forge/forge/pull/11244"
+    },
+    {
+      "number": 11229,
+      "title": "Added TriggerCounterTypeRemovedAll + Cloudsculpt Armorer [YEOE]",
+      "url": "https://github.com/Card-Forge/forge/pull/11229"
+    },
+    {
+      "number": 11208,
+      "title": "Auto-tap: Add a tracer to easily see what it selected",
+      "url": "https://github.com/Card-Forge/forge/pull/11208"
+    },
+    {
+      "number": 11198,
+      "title": "Add bounded mana payment planner for costed mana abilities",
+      "url": "https://github.com/Card-Forge/forge/pull/11198"
+    },
+    {
+      "number": 11193,
+      "title": "Change decks directory option",
+      "url": "https://github.com/Card-Forge/forge/pull/11193"
+    },
+    {
+      "number": 11167,
+      "title": "Add Randomizer & Archipelago functionality to Forge Adventure",
+      "url": "https://github.com/Card-Forge/forge/pull/11167"
+    },
+    {
+      "number": 11154,
+      "title": "MagicStack: use Multimap for Spells Cast",
+      "url": "https://github.com/Card-Forge/forge/pull/11154"
+    },
+    {
+      "number": 11148,
+      "title": "PutCounterAll: update cards with ValidCardsDesc",
+      "url": "https://github.com/Card-Forge/forge/pull/11148"
+    },
+    {
+      "number": 11137,
+      "title": "Improve alternate desktop sound playback with shared PCM mixer",
+      "url": "https://github.com/Card-Forge/forge/pull/11137"
+    },
+    {
+      "number": 11124,
+      "title": "Avoid X=0 PumpAll AI choices",
+      "url": "https://github.com/Card-Forge/forge/pull/11124"
+    },
+    {
+      "number": 11093,
+      "title": "Replace Scryfall's API with custom API using Scryfall data",
+      "url": "https://github.com/Card-Forge/forge/pull/11093"
+    },
+    {
+      "number": 11019,
+      "title": "Flashback support for no mana cost provided",
+      "url": "https://github.com/Card-Forge/forge/pull/11019"
+    },
+    {
+      "number": 10989,
+      "title": "Implement gauntlet options for booster draft",
+      "url": "https://github.com/Card-Forge/forge/pull/10989"
+    },
+    {
+      "number": 10952,
+      "title": "Improve lobby sleeve icon downscaling",
+      "url": "https://github.com/Card-Forge/forge/pull/10952"
+    },
+    {
+      "number": 10948,
+      "title": "Add optional CommanderBracket.app integration for bracket estimation",
+      "url": "https://github.com/Card-Forge/forge/pull/10948"
+    },
+    {
+      "number": 10900,
+      "title": "Keep focus on prompt during opponent-hand reveal",
+      "url": "https://github.com/Card-Forge/forge/pull/10900"
+    },
+    {
+      "number": 10824,
+      "title": "ManaPool: use Multiset for floatingMana",
+      "url": "https://github.com/Card-Forge/forge/pull/10824"
+    },
+    {
+      "number": 10808,
+      "title": "UNK: 15 cards, 4 tokens",
+      "url": "https://github.com/Card-Forge/forge/pull/10808"
+    },
+    {
+      "number": 10774,
+      "title": "Improve card-based Commander deck generation legality and weighting",
+      "url": "https://github.com/Card-Forge/forge/pull/10774"
+    },
+    {
+      "number": 10747,
+      "title": "Text Changes using Records",
+      "url": "https://github.com/Card-Forge/forge/pull/10747"
+    },
+    {
+      "number": 10746,
+      "title": "Add dockable Macro Window with readable replay diagnostics",
+      "url": "https://github.com/Card-Forge/forge/pull/10746"
+    },
+    {
+      "number": 10719,
+      "title": "DualCardBox widget for CardView prompts",
+      "url": "https://github.com/Card-Forge/forge/pull/10719"
+    },
+    {
+      "number": 10636,
+      "title": "Add unified Deck Browser for home and deck editor",
+      "url": "https://github.com/Card-Forge/forge/pull/10636"
+    },
+    {
+      "number": 10585,
+      "title": "Player: store Land Played as LKI",
+      "url": "https://github.com/Card-Forge/forge/pull/10585"
+    },
+    {
+      "number": 10539,
+      "title": "Token selection settings on desktop",
+      "url": "https://github.com/Card-Forge/forge/pull/10539"
+    },
+    {
+      "number": 10533,
+      "title": "Auto-call coin flips for win/lose outcomes",
+      "url": "https://github.com/Card-Forge/forge/pull/10533"
+    },
+    {
+      "number": 10514,
+      "title": "Improve multiplayer AI interaction decisions",
+      "url": "https://github.com/Card-Forge/forge/pull/10514"
+    },
+    {
+      "number": 10376,
+      "title": "fix(ui): scale auto-icons by min(w,h) to prevent overflow in narrow panels",
+      "url": "https://github.com/Card-Forge/forge/pull/10376"
+    },
+    {
+      "number": 10232,
+      "title": "DanDan Variant",
+      "url": "https://github.com/Card-Forge/forge/pull/10232"
+    },
+    {
+      "number": 10213,
+      "title": "CounterListType: add List for easy extending counters",
+      "url": "https://github.com/Card-Forge/forge/pull/10213"
+    },
+    {
+      "number": 10000,
+      "title": "Fixed duplicates in commander generated decks",
+      "url": "https://github.com/Card-Forge/forge/pull/10000"
+    },
+    {
+      "number": 9913,
+      "title": "Attack block req",
+      "url": "https://github.com/Card-Forge/forge/pull/9913"
+    },
+    {
+      "number": 9863,
+      "title": "feat: make \"Auto\" mulligan button smarter",
+      "url": "https://github.com/Card-Forge/forge/pull/9863"
+    },
+    {
+      "number": 9724,
+      "title": "Add options to set the user/cache dirs",
+      "url": "https://github.com/Card-Forge/forge/pull/9724"
+    },
+    {
+      "number": 9680,
+      "title": "Perpetual: use StaticAbilities",
+      "url": "https://github.com/Card-Forge/forge/pull/9680"
+    },
+    {
+      "number": 9429,
+      "title": "ImageKeys: Fix image loading for sets with modern folder names",
+      "url": "https://github.com/Card-Forge/forge/pull/9429"
+    },
+    {
+      "number": 9421,
+      "title": "Added flying animation for flying creatures",
+      "url": "https://github.com/Card-Forge/forge/pull/9421"
+    },
+    {
+      "number": 9414,
+      "title": "Protection: replace with Pump when defined",
+      "url": "https://github.com/Card-Forge/forge/pull/9414"
+    },
+    {
+      "number": 9354,
+      "title": "CanBlockAmount: moved from Rules Layer to Static",
+      "url": "https://github.com/Card-Forge/forge/pull/9354"
+    },
+    {
+      "number": 9325,
+      "title": "Create illusory_thoughts.txt",
+      "url": "https://github.com/Card-Forge/forge/pull/9325"
+    },
+    {
+      "number": 9068,
+      "title": "Allow NameCard | ValidCards$ to filter on colors",
+      "url": "https://github.com/Card-Forge/forge/pull/9068"
+    },
+    {
+      "number": 8916,
+      "title": "Proposition: Put some expensive queries into cache",
+      "url": "https://github.com/Card-Forge/forge/pull/8916"
+    },
+    {
+      "number": 8877,
+      "title": "Update immaculate_magistrate.txt",
+      "url": "https://github.com/Card-Forge/forge/pull/8877"
+    },
+    {
+      "number": 8861,
+      "title": "Cleave: turn it into a keyword",
+      "url": "https://github.com/Card-Forge/forge/pull/8861"
+    },
+    {
+      "number": 8825,
+      "title": "Draft rankings for unranked cards",
+      "url": "https://github.com/Card-Forge/forge/pull/8825"
+    },
+    {
+      "number": 8498,
+      "title": "HumanPlay: Offering & Emerge cleanup",
+      "url": "https://github.com/Card-Forge/forge/pull/8498"
+    },
+    {
+      "number": 8404,
+      "title": "Update vorpal_sword.txt",
+      "url": "https://github.com/Card-Forge/forge/pull/8404"
+    },
+    {
+      "number": 8378,
+      "title": "build: add macOS app bundle support",
+      "url": "https://github.com/Card-Forge/forge/pull/8378"
+    },
+    {
+      "number": 8347,
+      "title": "Don't search library while opponent controls Ob Nixilis, Unshackled (#8346)",
+      "url": "https://github.com/Card-Forge/forge/pull/8347"
+    },
+    {
+      "number": 8323,
+      "title": "Flowstone Blade not used as removal (#7817)",
+      "url": "https://github.com/Card-Forge/forge/pull/8323"
+    },
+    {
+      "number": 7994,
+      "title": "runeblade_raiser.txt and support",
+      "url": "https://github.com/Card-Forge/forge/pull/7994"
+    },
+    {
+      "number": 7959,
+      "title": "Use ImmutableList.Builder",
+      "url": "https://github.com/Card-Forge/forge/pull/7959"
+    },
+    {
+      "number": 7907,
+      "title": "Show related cards in shop / rewards screen",
+      "url": "https://github.com/Card-Forge/forge/pull/7907"
+    },
+    {
+      "number": 7846,
+      "title": "add ImageKey class",
+      "url": "https://github.com/Card-Forge/forge/pull/7846"
+    },
+    {
+      "number": 7831,
+      "title": "Cleanup: Delayed cantrips",
+      "url": "https://github.com/Card-Forge/forge/pull/7831"
+    },
+    {
+      "number": 7757,
+      "title": "ImageKeys: unify PaperCard imageKeys",
+      "url": "https://github.com/Card-Forge/forge/pull/7757"
+    },
+    {
+      "number": 7101,
+      "title": "Prompt and stack display cleanup: Land.Basic pass",
+      "url": "https://github.com/Card-Forge/forge/pull/7101"
+    },
+    {
+      "number": 7024,
+      "title": "DA1: Updating Phila, Introducing Delphia",
+      "url": "https://github.com/Card-Forge/forge/pull/7024"
+    },
+    {
+      "number": 6992,
+      "title": "Bestow as Static Effect",
+      "url": "https://github.com/Card-Forge/forge/pull/6992"
+    },
+    {
+      "number": 6919,
+      "title": "Additional Discard Cost to RaiseCost",
+      "url": "https://github.com/Card-Forge/forge/pull/6919"
+    },
+    {
+      "number": 6646,
+      "title": "Convoke improvise delve",
+      "url": "https://github.com/Card-Forge/forge/pull/6646"
+    },
+    {
+      "number": 6420,
+      "title": "Support engine tracking card mover vs. controller",
+      "url": "https://github.com/Card-Forge/forge/pull/6420"
+    },
+    {
+      "number": 4572,
+      "title": "Adventure: check restrictedEditions and allowedEditions when generating rewards",
+      "url": "https://github.com/Card-Forge/forge/pull/4572"
+    },
+    {
+      "number": 4338,
+      "title": "Make random commander decks able to use different-color partners",
+      "url": "https://github.com/Card-Forge/forge/pull/4338"
+    },
+    {
+      "number": 3556,
+      "title": "Card: add Table for SwitchPT",
+      "url": "https://github.com/Card-Forge/forge/pull/3556"
+    },
+    {
+      "number": 143,
+      "title": "LinkedAbilities V2",
+      "url": "https://github.com/Card-Forge/forge/pull/143"
+    }
+  ],
+  "changedFileInspections": [
+    {
+      "number": 12253,
+      "filenames": [
+        "forge-game/src/main/java/forge/game/DrawOffer.java",
+        "forge-game/src/main/java/forge/game/Game.java",
+        "forge-game/src/main/java/forge/game/player/PlayerController.java",
+        "forge-game/src/main/java/forge/game/zone/MagicStack.java",
+        "forge-gui-desktop/src/main/java/forge/screens/match/views/VDrawOfferDialog.java",
+        "forge-gui-desktop/src/test/java/forge/game/trigger/MandatoryLoopTest.java",
+        "forge-gui-mobile/src/forge/screens/match/views/VDrawOfferDialog.java",
+        "forge-gui/res/languages/en-US.properties",
+        "forge-gui/src/main/java/forge/gamemodes/match/DrawOfferCoordinator.java",
+        "forge-gui/src/main/java/forge/gamemodes/match/DrawOfferMessage.java",
+        "forge-gui/src/main/java/forge/player/PlayerControllerHuman.java"
+      ]
+    },
+    {
+      "number": 13098,
+      "filenames": [
+        "forge-ai/src/main/java/forge/ai/ComputerUtil.java",
+        "forge-ai/src/main/java/forge/ai/simulation/OpeningHand.java",
+        "forge-game/src/main/java/forge/game/mulligan/AbstractMulligan.java",
+        "forge-game/src/main/java/forge/game/mulligan/HoustonMulligan.java",
+        "forge-game/src/main/java/forge/game/mulligan/MulliganService.java",
+        "forge-gui-desktop/src/test/java/forge/ai/simulation/OpeningHandTest.java"
+      ]
+    },
+    {
+      "number": 12246,
+      "filenames": [
+        "forge-game/src/main/java/forge/game/undo/GameMemento.java",
+        "forge-game/src/main/java/forge/game/undo/UndoManager.java"
+      ]
+    },
+    {
+      "number": 12790,
+      "filenames": [
+        "forge-game/src/main/java/forge/game/ability/effects/SubgameEffect.java",
+        "forge-game/src/main/java/forge/game/player/Player.java",
+        "forge-gui-desktop/src/test/java/forge/ai/StickerSheetTest.java",
+        "forge-gui-desktop/src/test/java/forge/ai/ability/RestartGameTest.java",
+        "forge-gui/res/languages/de-DE.properties",
+        "forge-gui/res/languages/en-US.properties",
+        "forge-gui/res/languages/es-ES.properties",
+        "forge-gui/res/languages/fr-FR.properties",
+        "forge-gui/res/languages/it-IT.properties",
+        "forge-gui/res/languages/ja-JP.properties",
+        "forge-gui/res/languages/ko-KR.properties",
+        "forge-gui/res/languages/pt-BR.properties",
+        "forge-gui/res/languages/ru-RU.properties",
+        "forge-gui/res/languages/zh-CN.properties"
+      ]
+    },
+    {
+      "number": 11627,
+      "filenames": [
+        "forge-gui-desktop/pom.xml",
+        "forge-gui-desktop/src/main/java/forge/view/SimulateMatch.java",
+        "forge-headless/README.md",
+        "forge-headless/pom.xml",
+        "forge-headless/src/main/java/forge/headless/AgentType.java",
+        "forge-headless/src/main/java/forge/headless/HeadlessGuiBase.java",
+        "forge-headless/src/main/java/forge/headless/LobbyPlayerRandom.java",
+        "forge-headless/src/main/java/forge/headless/Main.java",
+        "forge-headless/src/main/java/forge/headless/PlayerControllerRandom.java",
+        "forge-headless/src/main/java/forge/headless/PlayerControllerTUI.java",
+        "forge-headless/src/main/java/forge/headless/PlayerControllerZero.java",
+        "forge-headless/src/main/java/forge/headless/RandomController.java",
+        "forge-headless/src/main/java/forge/headless/SimulateMatch.java",
+        "forge-headless/src/main/java/forge/headless/TUICommand.java",
+        "forge-headless/src/main/java/forge/headless/TUIGuiBase.java",
+        "forge-headless/src/main/java/forge/headless/TextUIGame.java",
+        "forge-headless/src/main/java/forge/headless/TimeLimitedCodeBlock.java",
+        "forge-headless/src/test/java/forge/headless/GameLogCapture.java",
+        "forge-headless/src/test/java/forge/headless/MainHelpTest.java",
+        "forge-headless/src/test/java/forge/headless/SimulateMatchTest.java",
+        "forge-headless/src/test/java/forge/headless/SystemOutputCapture.java",
+        "forge-headless/src/test/java/forge/headless/TUIGameTest.java",
+        "forge-headless/src/test/java/forge/headless/TUIInteractiveTest.java",
+        "forge-headless/src/test/java/forge/headless/TargetingTest.java",
+        "forge-headless/src/test/java/forge/headless/TestPassController.java",
+        "forge-headless/src/test/java/forge/headless/TestRandomController.java",
+        "forge-headless/test_decks/grizzly_bears.dck",
+        "forge-headless/test_decks/monored.dck",
+        "forge-headless/test_decks/simple_bolt.dck",
+        "headless.sh",
+        "pom.xml"
+      ]
+    },
+    {
+      "number": 11314,
+      "filenames": [
+        "forge-ai/src/main/java/forge/ai/AiAttackController.java",
+        "forge-ai/src/main/java/forge/ai/AiBlockController.java",
+        "forge-ai/src/main/java/forge/ai/AiCache.java",
+        "forge-ai/src/main/java/forge/ai/AiCombatEvaluationMatrix.java",
+        "forge-ai/src/main/java/forge/ai/AiController.java",
+        "forge-ai/src/main/java/forge/ai/ComputerUtil.java",
+        "forge-ai/src/main/java/forge/ai/ComputerUtilAbility.java",
+        "forge-ai/src/main/java/forge/ai/ComputerUtilCard.java",
+        "forge-ai/src/main/java/forge/ai/ComputerUtilCombat.java",
+        "forge-ai/src/main/java/forge/ai/ability/FogAi.java",
+        "forge-game/src/main/java/forge/game/card/Card.java",
+        "forge-game/src/main/java/forge/game/card/CardTraitViewCache.java",
+        "forge-game/src/main/java/forge/game/combat/CombatUtil.java"
+      ]
+    },
+    {
+      "number": 12180,
+      "filenames": [
+        "forge-ai/src/main/java/forge/ai/AiAttackController.java",
+        "forge-ai/src/main/java/forge/ai/AiController.java",
+        "forge-gui/src/main/resources/tinylog.properties"
+      ]
+    }
+  ],
+  "masterFileUrls": [
+    "https://github.com/Card-Forge/forge/blob/master/forge-game/src/main/java/forge/game/GameAction.java",
+    "https://github.com/Card-Forge/forge/blob/master/forge-game/src/main/java/forge/game/Game.java"
+  ],
+  "masterSourceSha256": {
+    "upstream-GameAction.java": "c9da1a17f417ded9405143f4053edc095cc12e9e0225949c290b9ed0961b86d4",
+    "upstream-Game.java": "b4081ff999b096808650b47558f55a6936c2d85694f64473338a6821864ad03b"
+  },
+  "reviewScope": "All 242 open PR titles/bodies inspected for startup, cancellation, stage and simulation relevance; changed filenames inspected for seven nearest candidates. Not an exhaustive patch audit of every unrelated PR.",
+  "finding": "Fetched master has both unguarded startup setters and an unconditional Game.setAge; no superseding fix identified in this review. Upstream-portable runtime reproduction/CI still required before a PR."
+}

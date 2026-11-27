@@ -11,6 +11,7 @@ Last review and upstream validation: **2026-11-14**, upstream master `eace840dc3
 | PR-003 | Structured AI decision observations and optional simulation output | Enhancement to discuss; overlaps an existing upstream proposal | Review upstream interest and PR #12180 before proposing a separate feature PR |
 | PR-004 | Widen engine identifiers and dependent lookups to 64 bits | Implemented locally; classification and upstream review pending | Capacity/hardening enhancement candidate; review public API and multiplayer compatibility costs before proposing |
 | PR-005 | Preserve full IDs in multiplayer delta keys | Implemented with PR-004; classification and upstream review pending | Review the packed-key range limitation independently; determine whether it warrants a separate bug-fix PR |
+| PR-006 | Prevent startup stage writes from reviving a completed game | Reproduced locally; same unguarded source on fetched master; no superseding fix identified in scoped open-PR review | Separate engine lifecycle fix; adapt portable regression and rerun current upstream/CI before submission |
 
 ## PR-001: temporary grants and expiry in copied games
 
@@ -140,3 +141,9 @@ A nested entity operation entered while tracing is disabled could borrow an olde
 COV-007A adds a callback-local engine request carrying the paid ability, current shard, test flag and converge mask through the existing floating-mana tie-break. Default and AI bridges preserve old virtual controller dispatch, weighting/deduplication, selected-object identity, spending and refunds. Old direct APIs remain supported with unknown request context. The engine record contains no tracing types, IDs or AI dependency.
 
 Track this with PR-003 as an enhancement candidate; consider whether the neutral API should be proposed independently if upstream has a use for richer custom controllers. Losing a test flag from our trace attribution is a branch observation gap, not evidence of an upstream rules/card defect. A standalone proposal would need then-current upstream/PR review and portable controller-dispatch/refund tests separated from branch-specific trace fixtures. No upstream PR is opened here. [Contract, actual engine validation and limits](Simulation-Mana-Pool-Request-Contract.md).
+
+## PR-006: startup can overwrite a terminal game stage
+
+COV-008B native timeout testing exposed two outcomes from one game: initialization overwrote GameOver with Mulligan/Play after a forced draw. No admission State had been created, so the experimental policy had not run. GameAction now checks terminal state and writes each startup stage under Game's existing monitor. Public setAge and snapshot/restart semantics remain unchanged. Both native regression paths fail before the fix and pass after it; the focused suite passes 37 cases.
+
+On 2026-11-27, fetched master GameAction/Game sources still contain the unguarded assignments and setter. Review covered all 242 open PR titles/bodies and changed filenames for the seven nearest candidates (#12253, #13098, #12246, #12790, #11627, #11314, #12180); no superseding fix was identified in that scoped review. This is not an exhaustive unrelated-patch audit or upstream runtime validation. Adapt the regression's branch draw helper and rerun then-current upstream CI before a PR. No upstream PR opened. [Reproduction, retained invalid trace and review](Simulation-Startup-Termination-Hardening.md).
