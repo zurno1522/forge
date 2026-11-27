@@ -28,7 +28,7 @@ final class AiReceivedParameters {
     static final int MAX_ROLE_LIST = 64;
     enum Family { NUMBER, ENTITY }
     enum Kind { NONE, VOTER, COUNTER_AMOUNT, COUNTER_TRANSFER_AMOUNT, ENTITY_CARD_ROLE, ENTITY_TARGET_ROLE,
-        ENTITY_MANA_VALUE_LIMIT, ENTITY_COUNTER_REQUEST, TRIGGER_REQUIREMENT, ENTITY_ATTACHMENT_ROLES, ENTITY_ATTACKER_ROLES, MANA_POOL_REQUEST, MANA_SOURCE_REQUEST, CARD_PAYMENT_REQUEST, SACRIFICE_PICK_REQUEST, DISCARD_BATCH_REQUEST }
+        ENTITY_MANA_VALUE_LIMIT, ENTITY_COUNTER_REQUEST, TRIGGER_REQUIREMENT, ENTITY_ATTACHMENT_ROLES, ENTITY_ATTACKER_ROLES, MANA_POOL_REQUEST, MANA_SOURCE_REQUEST, CARD_PAYMENT_REQUEST, SACRIFICE_PICK_REQUEST, DISCARD_BATCH_REQUEST, DISCARD_PICK_REQUEST }
     record Carrier(AtomicReference<Input> receipt) { }
     record Input(Kind kind, String coverage, String reason, Map<String, Object> values, Map<String, AiOptionInput.Entry> roles, Map<String, List<AiOptionInput.Entry>> roleLists) {
         Map<String, Object> diagnostics() {
@@ -65,6 +65,15 @@ final class AiReceivedParameters {
         if (priorCount > MAX_ROLE_LIST) { return overlong(Kind.SACRIFICE_PICK_REQUEST); }
         return roleList(Kind.SACRIFICE_PICK_REQUEST, prior, "previousSelections",
                 Map.of("requestedSelections", requested, "priorSelectionCount", priorCount));
+    }
+
+    static Input discardPick(final AiPaymentChoiceRecorder.DiscardStrategy strategy, final int minimum, final int maximum,
+            final int priorCount, final CardCollection prior) {
+        if (strategy == null || prior == null || prior.getClass() != CardCollection.class || minimum <= priorCount || priorCount < 0
+                || priorCount != prior.size()) { return unsupported(); }
+        if (priorCount > MAX_ROLE_LIST) { return overlong(Kind.DISCARD_PICK_REQUEST); }
+        return roleList(Kind.DISCARD_PICK_REQUEST, prior, "previousSelections",
+                Map.of("strategy", strategy.name(), "effectiveMinimum", minimum, "maximum", maximum, "priorSelectionCount", priorCount));
     }
 
     static Input discardBatch(final AiPaymentChoiceRecorder.DiscardBranch branch, final int minimum, final int maximum, final Integer manaValue) {

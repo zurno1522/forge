@@ -1,0 +1,23 @@
+{
+  "focusedJava": {
+    "tests": 255,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "newCases": 20,
+    "execution": "Final Maven run passed all 255. An isolated --release 17 rerun of all twenty focused classes includes strengthened viewable-opponent-private refusal over unchanged production."
+  },
+  "python": {
+    "tests": 304,
+    "failures": 0,
+    "errors": 0,
+    "newMethods": 8
+  },
+  "fullDesktopReactor": "Not repeated; the earlier reproduced scavenge instability remains a separate validation limit.",
+  "logs": {
+    "/workspace/work/cov007-discard-picks/focused-hardened.log": "0a4aad6b30d40e59c934c78b14ba1c93dfabc8f7c03d03ffb66f1479c026cce4",
+    "/workspace/work/cov007-discard-picks/focused-final.log": "c8dbc7d89006276f61e2d512e772c6a0bf5a91cb9b3f6c08f97dd67666b42911",
+    "/workspace/work/cov007-discard-picks/python.log": "6c2084655658d76f8cffaadd31bc3f61a0b71dcf9e8575a9e97e22aa3251fe13",
+    "/workspace/work/cov007-discard-picks/validation.log": "3d4860a22797300235b10a2a9fd088941c75fc85f95d39300de36fa0efa559e2"
+  }
+}

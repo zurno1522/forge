@@ -34,7 +34,7 @@ final class AiInputContext {
     static final int MAX_TEXT = 256;
     static final int MAX_REQUEST_ZONES = ZoneType.values().length;
     static final long MAX_GAME_WORK = 256_000;
-    static final String PROFILE = "PERMITTED_CHOICE_VIEW_V23";
+    static final String PROFILE = "PERMITTED_CHOICE_VIEW_V24";
     private static final List<ZoneType> ZONES = List.of(ZoneType.Battlefield, ZoneType.Command,
             ZoneType.Graveyard, ZoneType.Exile, ZoneType.Hand, ZoneType.Library);
 
@@ -114,7 +114,7 @@ final class AiInputContext {
 
     private static Map<String, Object> envelope(final Player chooser, final String timing, final String stateBasis) {
         final Map<String, Object> result = new LinkedHashMap<>();
-        result.put("schemaVersion", 23);
+        result.put("schemaVersion", 24);
         result.put("profile", PROFILE);
         result.put("timing", timing);
         result.put("stateBasis", stateBasis);
@@ -497,7 +497,8 @@ final class AiInputContext {
                     final List<String> refs = new ArrayList<>();
                     for (final var receipt : roleList) {
                         if (!work("PARAMETERS")) { return null; }
-                        final String ref = previousSelectionRef(receipt);
+                        final String ref = input.kind() == AiReceivedParameters.Kind.DISCARD_PICK_REQUEST
+                                ? discardPreviousSelectionRef(receipt) : previousSelectionRef(receipt);
                         if (ref == null) { omit("PARAMETERS", "UNRESOLVED_BINDING"); return null; }
                         refs.add(ref);
                     }
@@ -509,6 +510,34 @@ final class AiInputContext {
                 result.put(field.getKey(), role == null ? field.getValue() : ref);
             }
             parameterCoverage = "RECEIVED_CALLBACK_PARAMETERS_V1"; return result;
+        }
+
+        private String discardPreviousSelectionRef(final AiOptionInput.Entry receipt) {
+            final String publicRef = previousSelectionRef(receipt);
+            if (publicRef != null) { return publicRef; }
+            if (!(receipt.object() instanceof Card card) || card.isLKI()
+                    || !java.util.Objects.equals(receipt.reference().get("gameTimestamp"), cardIncarnations.get(card))) { return null; }
+            final String ref = currentCardRefs.get(card);
+            if (ref == null || card.getZone() == null || card.getZone().getZoneType() != ZoneType.Hand
+                    || card.getZone().getPlayer() != chooser || card.getOwner() != chooser || card.getController() != chooser
+                    || card.getGameTimestamp() != cardIncarnations.get(card) || !card.getView().canBeShownTo(chooser.getView())) { return null; }
+            final Map<String, Object> visible = cards.get(Integer.parseInt(ref.substring(1)));
+            if (!"Hand".equals(visible.get("zone")) || !Boolean.TRUE.equals(visible.get("identityKnown"))
+                    || !playerRefs.get(chooser.getId()).equals(visible.get("owner"))
+                    || !playerRefs.get(chooser.getId()).equals(visible.get("controller"))) { return null; }
+            // Exact identity must not break a tie in the hidden-hand canonical presentation.
+            int matches = 0;
+            for (final Map<String, Object> candidate : cards) {
+                if (!work("PARAMETERS")) { return null; }
+                boolean same = true;
+                for (final var field : visible.entrySet()) {
+                    if (!"entityRef".equals(field.getKey()) && !java.util.Objects.equals(field.getValue(), candidate.get(field.getKey()))) {
+                        same = false; break;
+                    }
+                }
+                if (same && ++matches > 1) { return null; }
+            }
+            return matches == 1 ? ref : null;
         }
 
         private String previousSelectionRef(final AiOptionInput.Entry receipt) {

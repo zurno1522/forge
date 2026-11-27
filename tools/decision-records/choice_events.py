@@ -52,7 +52,7 @@ TYPE_BOUNDARIES = {
     'PAYMENT_MANA': {'AUTO_MANA_PAYMENT'},
     'PAYMENT_MANA_SELECTION': {'MANA_POOL_OPTIONS'},
     'PAYMENT_CARD_BATCH': {'PAYMENT_DISCARD_BATCH'},
-    'PAYMENT_CARD_PICK': {'PAYMENT_SACRIFICE_PICK'},
+    'PAYMENT_CARD_PICK': {'PAYMENT_SACRIFICE_PICK','PAYMENT_DISCARD_PREFERENCE','PAYMENT_DISCARD_FALLBACK'},
     'PAYMENT_MANA_SOURCE_SELECTION': {'MANA_SOURCE_OPTIONS'},
     'MASKED_CHOICE': {'MASKED_CHOICE'},
     'EFFECT_ENTITY_SELECTION': {'CONTROLLER_EFFECT_ENTITY'},
@@ -62,6 +62,7 @@ TYPE_BOUNDARIES = {
     'EFFECT_MULTI_SPELL_ABILITY_SELECTION': {'CONTROLLER_EFFECT_SPELL_ABILITIES'},
     'EFFECT_SPELL_ABILITY_SELECTION': {'CONTROLLER_EFFECT_SPELL_ABILITY'},
 }
+BOUNDARIES.update(('PAYMENT_DISCARD_PREFERENCE','PAYMENT_DISCARD_FALLBACK'))
 BOUNDARIES.update(('MANA_SOURCE_OPTIONS','PAYMENT_SACRIFICE_PICK','PAYMENT_DISCARD_BATCH'))
 BOUNDARIES.update(('CONTROLLER_EFFECT_ENTITIES', 'CONTROLLER_ZONE_CHANGE_SELECTIONS', 'CONTROLLER_EFFECT_SPELL_ABILITIES', 'CONTROLLER_EFFECT_SPELL_ABILITY'))
 
@@ -84,6 +85,7 @@ CONTEXT_TIMING_V2 = {**{key: value for key, value in CONTEXT_TIMING.items() if k
 MODE_CONTEXT_TIMING = {'CHARM_MODE_HEURISTIC': 'BEFORE_SELECTOR', 'CONTROLLER_MODES': 'BEFORE_OPERATION'}
 MULTI_CONTEXT_TIMING = {'CONTROLLER_EFFECT_ENTITIES': 'BEFORE_OPERATION'}
 ZONE_OPERATION_CONTEXT_TIMING = {'CONTROLLER_ZONE_CHANGE_SELECTIONS': 'BEFORE_OPERATION'}
+DISCARD_PICK_CONTEXT_TIMING = {'PAYMENT_DISCARD_PREFERENCE':'BEFORE_SELECTOR','PAYMENT_DISCARD_FALLBACK':'BEFORE_OPERATION'}
 DISCARD_BATCH_CONTEXT_TIMING = {'PAYMENT_DISCARD_BATCH': 'BEFORE_OPERATION'}
 SACRIFICE_PICK_CONTEXT_TIMING = {'PAYMENT_SACRIFICE_PICK': 'BEFORE_SELECTOR'}
 MANA_SOURCE_CONTEXT_TIMING = {'MANA_SOURCE_OPTIONS': 'BEFORE_SELECTOR'}
@@ -110,6 +112,9 @@ def input_boundary(value, boundary, stage=None, choice=None):
     if choice is not None and boundary in SACRIFICE_PICK_CONTEXT_TIMING and value['schemaVersion'] >= 22:
         require('entryLocation' in choice, 'sacrifice pick lacks own entry')
         expected = SACRIFICE_PICK_CONTEXT_TIMING[boundary]
+    if choice is not None and boundary in DISCARD_PICK_CONTEXT_TIMING and value['schemaVersion'] >= 24:
+        require('entryLocation' in choice, 'discard pick lacks own entry')
+        expected = DISCARD_PICK_CONTEXT_TIMING[boundary]
     if choice is not None and boundary in DISCARD_BATCH_CONTEXT_TIMING and value['schemaVersion'] >= 23:
         require('entryLocation' in choice, 'discard batch lacks own entry')
         expected = DISCARD_BATCH_CONTEXT_TIMING[boundary]
@@ -175,6 +180,8 @@ def input_boundary(value, boundary, stage=None, choice=None):
 
 def parameter_boundary(choice):
     context = choice.get('inputContext')
+    if choice['choiceType']=='PAYMENT_CARD_PICK' and choice['boundary'] in DISCARD_PICK_CONTEXT_TIMING:
+        return isinstance(context, dict) and integer(context.get('schemaVersion')) and context['schemaVersion'] >= 24
     if (choice['choiceType'],choice['boundary']) == ('PAYMENT_CARD_BATCH','PAYMENT_DISCARD_BATCH'):
         return isinstance(context, dict) and integer(context.get('schemaVersion')) and context['schemaVersion'] >= 23
     if (choice['choiceType'],choice['boundary']) == ('PAYMENT_CARD_PICK','PAYMENT_SACRIFICE_PICK'):
@@ -482,6 +489,9 @@ def entry_location(choice, known_players=None):
     if choice['boundary'] in PREPARATION_CONTEXT_TIMING:
         require(choice.get('inputContext', {}).get('schemaVersion', 0) >= 17, 'preparation entry requires V17')
         expected = PREPARATION_CONTEXT_TIMING[choice['boundary']]
+    if choice['boundary'] in DISCARD_PICK_CONTEXT_TIMING:
+        require(choice.get('inputContext', {}).get('schemaVersion', 0) >= 24, 'discard pick requires V24')
+        expected = DISCARD_PICK_CONTEXT_TIMING[choice['boundary']]
     if choice['boundary'] in DISCARD_BATCH_CONTEXT_TIMING:
         require(choice.get('inputContext', {}).get('schemaVersion', 0) >= 23, 'discard batch requires V23')
         expected = DISCARD_BATCH_CONTEXT_TIMING[choice['boundary']]
@@ -659,10 +669,15 @@ def options(choice):
         return
     if choice['choiceType'] == 'PAYMENT_CARD_PICK':
         require(parameter_options(choice) and 'entryLocation' in choice, 'card pick lacks own entry/profile')
-        require(isinstance(option, dict) and set(option) == {'coverage','cards','callbackParameters'}
+        discard = choice['boundary'] in DISCARD_PICK_CONTEXT_TIMING
+        require(isinstance(option, dict) and set(option) == {'coverage','cards','callbackParameters'} | ({'strategy'} if discard else set())
                 and option['coverage'] == 'OBSERVED_CARD_OPTIONS_NOT_ALL_LEGAL_PAYMENT_PLANS', 'invalid card pick options')
         prefix(option['cards'], lambda v: typed_reference(v, 'CARD'))
-        _contexts._parameters.receipt(option['callbackParameters'], 'SACRIFICE_PICK', typed_reference, choice['inputContext']['schemaVersion'])
+        raw=option['callbackParameters']; _contexts._parameters.receipt(raw, 'DISCARD_PICK' if discard else 'SACRIFICE_PICK', typed_reference, choice['inputContext']['schemaVersion'])
+        if discard:
+            expected={'PAYMENT_DISCARD_PREFERENCE':'PREFERENCE','PAYMENT_DISCARD_FALLBACK':'FALLBACK'}[choice['boundary']]
+            require(option['strategy']==expected, 'discard strategy differs from boundary')
+            if raw['coverage']=='COMPLETE': require(raw['values']['strategy']==expected, 'discard strategy differs from receipt')
         return
     if choice['choiceType'] == 'PAYMENT_CARD_SELECTION':
         extra = {'callbackParameters'} if parameter_options(choice) else set()

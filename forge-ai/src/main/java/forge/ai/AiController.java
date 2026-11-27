@@ -1432,23 +1432,27 @@ public class AiController {
         }
 
         // look for good discards
+        final Card preferenceSource = sourceCard;
         while (count < min) {
-            Card prefCard = null;
-            if (sa != null && sa.getActivatingPlayer() != null && sa.getActivatingPlayer().isOpponentOf(player)) {
-                for (Card c : validCards) {
-                    if (c.hasSVar("DiscardMeByOpp")) {
-                        prefCard = c;
-                        break;
+            final Card prefCard = AiPaymentChoiceRecorder.discardPreference(player, sa, validCards, min, max, count, discardList, () -> {
+                Card preferred = null;
+                if (sa != null && sa.getActivatingPlayer() != null && sa.getActivatingPlayer().isOpponentOf(player)) {
+                    for (Card c : validCards) {
+                        if (c.hasSVar("DiscardMeByOpp")) {
+                            preferred = c;
+                            break;
+                        }
                     }
                 }
-            }
-            if (prefCard == null) {
-                prefCard = ComputerUtil.getCardPreference(player, sourceCard, "DiscardCost", validCards);
-                // TODO use DiscardMe:0 instead so each card without is just treated as 1
-                if (prefCard != null && prefCard.hasSVar("DoNotDiscardIfAble")) {
-                    prefCard = null;
+                if (preferred == null) {
+                    preferred = ComputerUtil.getCardPreference(player, preferenceSource, "DiscardCost", validCards);
+                    // TODO use DiscardMe:0 instead so each card without is just treated as 1
+                    if (preferred != null && preferred.hasSVar("DoNotDiscardIfAble")) {
+                        preferred = null;
+                    }
                 }
-            }
+                return preferred;
+            });
             if (prefCard != null) {
                 discardList.add(prefCard);
                 validCards.remove(prefCard);
@@ -1465,77 +1469,80 @@ public class AiController {
             if (validCards.isEmpty()) {
                 continue;
             }
-            final int numLandsInPlay = CardLists.count(player.getCardsIn(ZoneType.Battlefield), CardPredicates.LANDS_PRODUCING_MANA);
-            final CardCollection landsInHand = CardLists.filter(validCards, CardPredicates.LANDS);
-            final int numLandsInHand = landsInHand.size();
+            AiPaymentChoiceRecorder.discardFallback(player, sa, validCards, min, max, count + i, discardList, () -> {
+                final int numLandsInPlay = CardLists.count(player.getCardsIn(ZoneType.Battlefield), CardPredicates.LANDS_PRODUCING_MANA);
+                final CardCollection landsInHand = CardLists.filter(validCards, CardPredicates.LANDS);
+                final int numLandsInHand = landsInHand.size();
 
-            // Discard a land
-            boolean canDiscardLands = numLandsInHand > 3 || (numLandsInHand > 2 && numLandsInPlay > 0)
-                    || (numLandsInHand > 1 && numLandsInPlay > 2) || (numLandsInHand > 0 && numLandsInPlay > 5);
+                // Discard a land
+                boolean canDiscardLands = numLandsInHand > 3 || (numLandsInHand > 2 && numLandsInPlay > 0)
+                        || (numLandsInHand > 1 && numLandsInPlay > 2) || (numLandsInHand > 0 && numLandsInPlay > 5);
 
-            if (canDiscardLands) {
-                discardList.add(landsInHand.get(0));
-                validCards.remove(landsInHand.get(0));
-            } else { // Discard other stuff
-                CardLists.sortByCmcDesc(validCards);
-                int numLandsAvailable = numLandsInPlay;
-                if (numLandsInHand > 0) {
-                    numLandsAvailable++;
-                }
-
-                // Discard unplayable card (checks by CMC)
-                // But check if there is a card in play that allows casting spells for free!
-                // if yes, nothing is unplayable based on CMC alone
-                boolean discardedUnplayable = false;
-                boolean freeCastAllowed = ComputerUtilCost.isFreeCastAllowedByPermanent(player, null);
-
-                for (int j = 0; j < validCards.size(); j++) {
-                    if ((validCards.get(j).getCMC() > numLandsAvailable || freeCastAllowed) && !validCards.get(j).hasSVar("DoNotDiscardIfAble")) {
-                        discardList.add(validCards.get(j));
-                        validCards.remove(validCards.get(j));
-                        discardedUnplayable = true;
-                        break;
-                    } else if (validCards.get(j).getCMC() <= numLandsAvailable) {
-                        // cut short to avoid looping over cards which are guaranteed not to fit the criteria
-                        break;
+                if (canDiscardLands) {
+                    discardList.add(landsInHand.get(0));
+                    validCards.remove(landsInHand.get(0));
+                } else { // Discard other stuff
+                    CardLists.sortByCmcDesc(validCards);
+                    int numLandsAvailable = numLandsInPlay;
+                    if (numLandsInHand > 0) {
+                        numLandsAvailable++;
                     }
-                }
 
-                if (!discardedUnplayable) {
-                    // discard worst card
-                    Card worst = ComputerUtilCard.getWorstAI(validCards);
-                    if (worst == null) {
-                        // there were only instants and sorceries, and maybe cards that are not good to discard, so look
-                        // for more discard options
-                        worst = ComputerUtilCard.getCheapestSpellAI(validCards);
-                    }
-                    if (worst == null && !validCards.isEmpty()) {
-                        // still nothing chosen, so choose the first thing that works, trying not to make DoNotDiscardIfAble
-                        // discards
-                        for (Card c : validCards) {
-                            if (!c.hasSVar("DoNotDiscardIfAble")) {
-                                worst = c;
-                                break;
-                            }
+                    // Discard unplayable card (checks by CMC)
+                    // But check if there is a card in play that allows casting spells for free!
+                    // if yes, nothing is unplayable based on CMC alone
+                    boolean discardedUnplayable = false;
+                    boolean freeCastAllowed = ComputerUtilCost.isFreeCastAllowedByPermanent(player, null);
+
+                    for (int j = 0; j < validCards.size(); j++) {
+                        if ((validCards.get(j).getCMC() > numLandsAvailable || freeCastAllowed) && !validCards.get(j).hasSVar("DoNotDiscardIfAble")) {
+                            discardList.add(validCards.get(j));
+                            validCards.remove(validCards.get(j));
+                            discardedUnplayable = true;
+                            break;
+                        } else if (validCards.get(j).getCMC() <= numLandsAvailable) {
+                            // cut short to avoid looping over cards which are guaranteed not to fit the criteria
+                            break;
                         }
-                        // Only DoNotDiscardIfAble cards? If we have a duplicate for something, discard it
+                    }
+
+                    if (!discardedUnplayable) {
+                        // discard worst card
+                        Card worst = ComputerUtilCard.getWorstAI(validCards);
                         if (worst == null) {
+                            // there were only instants and sorceries, and maybe cards that are not good to discard, so look
+                            // for more discard options
+                            worst = ComputerUtilCard.getCheapestSpellAI(validCards);
+                        }
+                        if (worst == null && !validCards.isEmpty()) {
+                            // still nothing chosen, so choose the first thing that works, trying not to make DoNotDiscardIfAble
+                            // discards
                             for (Card c : validCards) {
-                                if (CardLists.count(player.getCardsIn(ZoneType.Hand), CardPredicates.nameEquals(c.getName())) > 1) {
+                                if (!c.hasSVar("DoNotDiscardIfAble")) {
                                     worst = c;
                                     break;
                                 }
                             }
+                            // Only DoNotDiscardIfAble cards? If we have a duplicate for something, discard it
                             if (worst == null) {
-                                // Otherwise just grab a random card and discard it
-                                worst = Aggregates.random(validCards);
+                                for (Card c : validCards) {
+                                    if (CardLists.count(player.getCardsIn(ZoneType.Hand), CardPredicates.nameEquals(c.getName())) > 1) {
+                                        worst = c;
+                                        break;
+                                    }
+                                }
+                                if (worst == null) {
+                                    // Otherwise just grab a random card and discard it
+                                    worst = Aggregates.random(validCards);
+                                }
                             }
                         }
+                        discardList.add(worst);
+                        validCards.remove(worst);
                     }
-                    discardList.add(worst);
-                    validCards.remove(worst);
                 }
-            }
+                return discardList;
+            });
         }
         return discardList;
     }

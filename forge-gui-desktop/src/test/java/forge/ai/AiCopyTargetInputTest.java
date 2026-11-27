@@ -49,7 +49,7 @@ public class AiCopyTargetInputTest extends AITest {
         final var start = start(f); final var ctx = context(start); final var entry = (Map<?, ?>) start.get("entryLocation");
         Assert.assertEquals(start.get("stage"), "EFFECT_COPY_TARGET_SELECTION"); Assert.assertEquals(entry.get("kind"), "OPERATION");
         Assert.assertEquals(entry.get("timing"), "BEFORE_OPERATION"); Assert.assertEquals(entry.get("stateBasis"), "RULES_STATE");
-        Assert.assertEquals(ctx.get("schemaVersion"), 23); Assert.assertEquals(((Map<?, ?>) ctx.get("coverage")).get("receivedParameters"), "UNSUPPORTED");
+        Assert.assertEquals(ctx.get("schemaVersion"), 24); Assert.assertEquals(((Map<?, ?>) ctx.get("coverage")).get("receivedParameters"), "UNSUPPORTED");
         final var policy = (Map<?, ?>) ctx.get("policy"); Assert.assertNull(policy.get("receivedParameters")); Assert.assertNull(policy.get("prompt"));
         Assert.assertEquals(((Map<?, ?>) ((List<?>) policy.get("players")).get(1)).get("life"), 20);
         final var options = (Map<?, ?>) start.get("options"); Assert.assertEquals(options.size(), 2);

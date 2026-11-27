@@ -118,6 +118,33 @@ public final class AiPaymentChoiceRecorder {
                 }, callback, AiPaymentChoiceRecorder::refs, null, null, new AiReceivedParameters.Carrier(parameters));
     }
 
+    enum DiscardStrategy { PREFERENCE, FALLBACK }
+
+    static Card discardPreference(final Player chooser, final SpellAbility ability, final CardCollection options,
+            final int minimum, final int maximum, final int priorCount, final CardCollection prior, final Supplier<Card> callback) {
+        return discardPick(chooser, ability, options, minimum, maximum, priorCount, prior, DiscardStrategy.PREFERENCE,
+                callback, AiTargetChoiceRecorder::reference);
+    }
+
+    static CardCollection discardFallback(final Player chooser, final SpellAbility ability, final CardCollection options,
+            final int minimum, final int maximum, final int priorCount, final CardCollection prior, final Supplier<CardCollection> callback) {
+        // The native operation appends its proposal and removes it from options. Read its result only during observation serialization.
+        return discardPick(chooser, ability, options, minimum, maximum, priorCount, prior, DiscardStrategy.FALLBACK,
+                callback, result -> AiTargetChoiceRecorder.reference(result.get(result.size() - 1)));
+    }
+
+    private static <T> T discardPick(final Player chooser, final SpellAbility ability, final CardCollection options,
+            final int minimum, final int maximum, final int priorCount, final CardCollection prior, final DiscardStrategy strategy,
+            final Supplier<T> callback, final java.util.function.Function<T, Object> selection) {
+        final var parameters = new AtomicReference<AiReceivedParameters.Input>();
+        return AiChoiceRecorder.observeParametersAt(chooser, ability, "PAYMENT_CARD_PICK", null,
+                "PAYMENT_DISCARD_" + strategy.name(), strategy == DiscardStrategy.PREFERENCE ? "BEFORE_SELECTOR" : "BEFORE_OPERATION", () -> {
+                    final var received = AiReceivedParameters.discardPick(strategy, minimum, maximum, priorCount, prior); parameters.set(received);
+                    return Map.of("coverage", "OBSERVED_CARD_OPTIONS_NOT_ALL_LEGAL_PAYMENT_PLANS", "strategy", strategy.name(),
+                            "cards", refs(options), "callbackParameters", received.diagnostics());
+                }, callback, selection, null, null, new AiReceivedParameters.Carrier(parameters));
+    }
+
     static Card sacrificePick(final Player chooser, final SpellAbility ability, final CardCollection options,
             final int requested, final int priorCount, final CardCollection prior, final Supplier<Card> callback) {
         final var parameters = new AtomicReference<AiReceivedParameters.Input>();

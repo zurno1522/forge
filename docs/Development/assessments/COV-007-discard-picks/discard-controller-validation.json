@@ -1,0 +1,42 @@
+{
+  "PREFERENCE_HAND_HISTORY": {
+    "lifecycleEvents": 10,
+    "validatedObservations": 5
+  },
+  "DECLINE_TO_FALLBACK": {
+    "lifecycleEvents": 12,
+    "validatedObservations": 6
+  },
+  "COUNT_OVERRIDE": {
+    "lifecycleEvents": 10,
+    "validatedObservations": 5
+  },
+  "LAND_FALLBACK": {
+    "lifecycleEvents": 10,
+    "validatedObservations": 5
+  },
+  "RANDOM_FALLBACK": {
+    "lifecycleEvents": 10,
+    "validatedObservations": 5
+  },
+  "FROZEN_PLANNING": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "OPPONENT_PRIVATE_REFUSAL": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "AMBIGUOUS_HAND_REFUSAL": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "OVERSIZED_HISTORY": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "ORIGINAL_ERROR": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  }
+}
