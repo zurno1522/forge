@@ -1,0 +1,14 @@
+{
+  "valid": true,
+  "inputs": 1,
+  "decisions": 189,
+  "checks": [
+    "run/game boundaries",
+    "event order",
+    "schemas and identities",
+    "engine-event references",
+    "visibility constraints",
+    "status/outcome agreement",
+    "timeout/error censoring"
+  ]
+}

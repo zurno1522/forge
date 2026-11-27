@@ -122,3 +122,26 @@ fact payloads do not establish exclusive retention and must not be blindly
 summed. The [checkpoint assessment](../../../docs/Development/Simulation-V4-Workload-Assessment.md)
 records results, a real four-player sample, coverage-policy assignments and the
 remaining OPT-005 measurement limits.
+
+## COV-008 observed availability
+
+Use an existing validated exporter output; this development report does not add
+fields to the seven exporter artifacts or select a runtime sampling policy:
+
+```sh
+python3 tools/decision-records/input-context-benchmark/summarize-availability.py \
+  /path/to/export/coverage.json --turn-window 10 \
+  --output /path/to/availability.json
+```
+
+The report reconciles observed-record totals against both turn and boundary
+marginals. Player groups include run/game identity. Known parent capture
+omissions stay separate from the observed-record denominator; absent contexts
+and unavailable input are separate counts. Turn windows retain their clock
+basis and unknown clocks. Earliest observed budget turns do not identify the
+exact exhaustion instant. Available means a captured/partial named profile,
+not complete inputs or a learning-ready example. Player/boundary marginals do
+not establish their joint distribution. Source accounting is copied as declared;
+missing scope is unknown. Use the normal exporter/validation gates first.
+
+See the [staged availability design](../../../docs/Development/Simulation-Sustained-Availability-Design.md).

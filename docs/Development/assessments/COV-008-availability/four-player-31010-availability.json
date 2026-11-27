@@ -1,0 +1,1838 @@
+{
+  "schemaVersion": 1,
+  "scope": "OBSERVED_RECORD_AVAILABILITY_MARGINALS",
+  "turnWindow": 10,
+  "totals": {
+    "observedRecords": 1488,
+    "presentContexts": 1481,
+    "profileViewsAvailable": 805,
+    "contextStatuses": {
+      "PARTIAL": 788,
+      "UNAVAILABLE": 676,
+      "ABSENT": 7,
+      "CAPTURED": 17
+    },
+    "budgetAffectedRecords": 634,
+    "profileViewFractionOfObservedRecords": 0.540994623655914,
+    "budgetReasonFractionOfPresentContexts": 0.42808912896691426,
+    "omissionReasons": {
+      "UNSUPPORTED": 716,
+      "OUTSIDE_CAPTURED_PREFIX": 552,
+      "BUDGET_EXHAUSTED": 634,
+      "UNRESOLVED_BINDING": 5,
+      "HIDDEN": 42
+    },
+    "knownUnrecordedParentCaptures": {
+      "NESTED_TARGET:budget": 0,
+      "NESTED_TARGET:interrupted": 0
+    }
+  },
+  "byPlayer": [
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 0,
+      "measures": {
+        "observedRecords": 703,
+        "presentContexts": 703,
+        "profileViewsAvailable": 157,
+        "contextStatuses": {
+          "PARTIAL": 141,
+          "UNAVAILABLE": 546,
+          "CAPTURED": 16
+        },
+        "budgetAffectedRecords": 504,
+        "profileViewFractionOfObservedRecords": 0.2233285917496444,
+        "budgetReasonFractionOfPresentContexts": 0.716927453769559,
+        "omissionReasons": {
+          "UNSUPPORTED": 138,
+          "BUDGET_EXHAUSTED": 504,
+          "UNRESOLVED_BINDING": 2,
+          "OUTSIDE_CAPTURED_PREFIX": 10,
+          "HIDDEN": 42
+        },
+        "knownUnrecordedParentCaptures": {
+          "NESTED_TARGET:budget": 0,
+          "NESTED_TARGET:interrupted": 0
+        }
+      },
+      "earliestObservedBudgetTurnByBasis": {
+        "PARENT_BASELINE": 17,
+        "ENTRY_LOCATION": 15
+      },
+      "unknownTurnBudgetAffectedRecords": 0
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 1,
+      "measures": {
+        "observedRecords": 277,
+        "presentContexts": 277,
+        "profileViewsAvailable": 206,
+        "contextStatuses": {
+          "PARTIAL": 205,
+          "UNAVAILABLE": 71,
+          "CAPTURED": 1
+        },
+        "budgetAffectedRecords": 71,
+        "profileViewFractionOfObservedRecords": 0.7436823104693141,
+        "budgetReasonFractionOfPresentContexts": 0.2563176895306859,
+        "omissionReasons": {
+          "UNSUPPORTED": 176,
+          "OUTSIDE_CAPTURED_PREFIX": 156,
+          "BUDGET_EXHAUSTED": 71
+        },
+        "knownUnrecordedParentCaptures": {
+          "NESTED_TARGET:budget": 0,
+          "NESTED_TARGET:interrupted": 0
+        }
+      },
+      "earliestObservedBudgetTurnByBasis": {
+        "PARENT_BASELINE": 26,
+        "ENTRY_LOCATION": 26
+      },
+      "unknownTurnBudgetAffectedRecords": 0
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 2,
+      "measures": {
+        "observedRecords": 198,
+        "presentContexts": 198,
+        "profileViewsAvailable": 198,
+        "contextStatuses": {
+          "PARTIAL": 198
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "UNSUPPORTED": 184,
+          "OUTSIDE_CAPTURED_PREFIX": 162,
+          "UNRESOLVED_BINDING": 3
+        },
+        "knownUnrecordedParentCaptures": {
+          "NESTED_TARGET:budget": 0,
+          "NESTED_TARGET:interrupted": 0
+        }
+      },
+      "earliestObservedBudgetTurnByBasis": {},
+      "unknownTurnBudgetAffectedRecords": 0
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 3,
+      "measures": {
+        "observedRecords": 310,
+        "presentContexts": 303,
+        "profileViewsAvailable": 244,
+        "contextStatuses": {
+          "PARTIAL": 244,
+          "ABSENT": 7,
+          "UNAVAILABLE": 59
+        },
+        "budgetAffectedRecords": 59,
+        "profileViewFractionOfObservedRecords": 0.7870967741935484,
+        "budgetReasonFractionOfPresentContexts": 0.19471947194719472,
+        "omissionReasons": {
+          "UNSUPPORTED": 218,
+          "OUTSIDE_CAPTURED_PREFIX": 224,
+          "BUDGET_EXHAUSTED": 59
+        },
+        "knownUnrecordedParentCaptures": {
+          "NESTED_TARGET:budget": 0,
+          "NESTED_TARGET:interrupted": 0
+        }
+      },
+      "earliestObservedBudgetTurnByBasis": {
+        "ENTRY_LOCATION": 37
+      },
+      "unknownTurnBudgetAffectedRecords": 0
+    }
+  ],
+  "byTurnWindow": [
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 0,
+      "turnBasis": "PARENT_BASELINE",
+      "turnFrom": 0,
+      "turnThrough": 9,
+      "measures": {
+        "observedRecords": 11,
+        "presentContexts": 11,
+        "profileViewsAvailable": 11,
+        "contextStatuses": {
+          "PARTIAL": 11
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "UNSUPPORTED": 11
+        },
+        "knownUnrecordedParentCaptures": {
+          "NESTED_TARGET:budget": 0,
+          "NESTED_TARGET:interrupted": 0
+        }
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 1,
+      "turnBasis": "PARENT_BASELINE",
+      "turnFrom": 0,
+      "turnThrough": 9,
+      "measures": {
+        "observedRecords": 6,
+        "presentContexts": 6,
+        "profileViewsAvailable": 6,
+        "contextStatuses": {
+          "PARTIAL": 6
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "UNSUPPORTED": 6
+        },
+        "knownUnrecordedParentCaptures": {
+          "NESTED_TARGET:budget": 0,
+          "NESTED_TARGET:interrupted": 0
+        }
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 2,
+      "turnBasis": "PARENT_BASELINE",
+      "turnFrom": 0,
+      "turnThrough": 9,
+      "measures": {
+        "observedRecords": 6,
+        "presentContexts": 6,
+        "profileViewsAvailable": 6,
+        "contextStatuses": {
+          "PARTIAL": 6
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "UNSUPPORTED": 6
+        },
+        "knownUnrecordedParentCaptures": {
+          "NESTED_TARGET:budget": 0,
+          "NESTED_TARGET:interrupted": 0
+        }
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 3,
+      "turnBasis": "PARENT_BASELINE",
+      "turnFrom": 0,
+      "turnThrough": 9,
+      "measures": {
+        "observedRecords": 6,
+        "presentContexts": 6,
+        "profileViewsAvailable": 6,
+        "contextStatuses": {
+          "PARTIAL": 6
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "UNSUPPORTED": 6
+        },
+        "knownUnrecordedParentCaptures": {
+          "NESTED_TARGET:budget": 0,
+          "NESTED_TARGET:interrupted": 0
+        }
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 1,
+      "turnBasis": "PARENT_BASELINE",
+      "turnFrom": 10,
+      "turnThrough": 19,
+      "measures": {
+        "observedRecords": 12,
+        "presentContexts": 12,
+        "profileViewsAvailable": 12,
+        "contextStatuses": {
+          "PARTIAL": 12
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "UNSUPPORTED": 12,
+          "OUTSIDE_CAPTURED_PREFIX": 8
+        },
+        "knownUnrecordedParentCaptures": {
+          "NESTED_TARGET:budget": 0,
+          "NESTED_TARGET:interrupted": 0
+        }
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 2,
+      "turnBasis": "PARENT_BASELINE",
+      "turnFrom": 10,
+      "turnThrough": 19,
+      "measures": {
+        "observedRecords": 12,
+        "presentContexts": 12,
+        "profileViewsAvailable": 12,
+        "contextStatuses": {
+          "PARTIAL": 12
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "UNSUPPORTED": 12,
+          "OUTSIDE_CAPTURED_PREFIX": 8
+        },
+        "knownUnrecordedParentCaptures": {
+          "NESTED_TARGET:budget": 0,
+          "NESTED_TARGET:interrupted": 0
+        }
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 3,
+      "turnBasis": "PARENT_BASELINE",
+      "turnFrom": 10,
+      "turnThrough": 19,
+      "measures": {
+        "observedRecords": 7,
+        "presentContexts": 7,
+        "profileViewsAvailable": 7,
+        "contextStatuses": {
+          "PARTIAL": 7
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "UNSUPPORTED": 7,
+          "OUTSIDE_CAPTURED_PREFIX": 4
+        },
+        "knownUnrecordedParentCaptures": {
+          "NESTED_TARGET:budget": 0,
+          "NESTED_TARGET:interrupted": 0
+        }
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 0,
+      "turnBasis": "PARENT_BASELINE",
+      "turnFrom": 10,
+      "turnThrough": 19,
+      "measures": {
+        "observedRecords": 8,
+        "presentContexts": 8,
+        "profileViewsAvailable": 4,
+        "contextStatuses": {
+          "PARTIAL": 4,
+          "UNAVAILABLE": 4
+        },
+        "budgetAffectedRecords": 4,
+        "profileViewFractionOfObservedRecords": 0.5,
+        "budgetReasonFractionOfPresentContexts": 0.5,
+        "omissionReasons": {
+          "UNSUPPORTED": 4,
+          "BUDGET_EXHAUSTED": 4
+        },
+        "knownUnrecordedParentCaptures": {
+          "NESTED_TARGET:budget": 0,
+          "NESTED_TARGET:interrupted": 0
+        }
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 2,
+      "turnBasis": "ENTRY_LOCATION",
+      "turnFrom": 10,
+      "turnThrough": 19,
+      "measures": {
+        "observedRecords": 60,
+        "presentContexts": 60,
+        "profileViewsAvailable": 60,
+        "contextStatuses": {
+          "PARTIAL": 60
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "OUTSIDE_CAPTURED_PREFIX": 44,
+          "UNSUPPORTED": 59
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 3,
+      "turnBasis": "PARENT_BASELINE",
+      "turnFrom": 20,
+      "turnThrough": 29,
+      "measures": {
+        "observedRecords": 10,
+        "presentContexts": 10,
+        "profileViewsAvailable": 10,
+        "contextStatuses": {
+          "PARTIAL": 10
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "OUTSIDE_CAPTURED_PREFIX": 10,
+          "UNSUPPORTED": 10
+        },
+        "knownUnrecordedParentCaptures": {
+          "NESTED_TARGET:budget": 0,
+          "NESTED_TARGET:interrupted": 0
+        }
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 0,
+      "turnBasis": "PARENT_BASELINE",
+      "turnFrom": 20,
+      "turnThrough": 29,
+      "measures": {
+        "observedRecords": 12,
+        "presentContexts": 12,
+        "profileViewsAvailable": 0,
+        "contextStatuses": {
+          "UNAVAILABLE": 12
+        },
+        "budgetAffectedRecords": 12,
+        "profileViewFractionOfObservedRecords": 0.0,
+        "budgetReasonFractionOfPresentContexts": 1.0,
+        "omissionReasons": {
+          "BUDGET_EXHAUSTED": 12
+        },
+        "knownUnrecordedParentCaptures": {
+          "NESTED_TARGET:budget": 0,
+          "NESTED_TARGET:interrupted": 0
+        }
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 1,
+      "turnBasis": "PARENT_BASELINE",
+      "turnFrom": 20,
+      "turnThrough": 29,
+      "measures": {
+        "observedRecords": 8,
+        "presentContexts": 8,
+        "profileViewsAvailable": 7,
+        "contextStatuses": {
+          "PARTIAL": 7,
+          "UNAVAILABLE": 1
+        },
+        "budgetAffectedRecords": 1,
+        "profileViewFractionOfObservedRecords": 0.875,
+        "budgetReasonFractionOfPresentContexts": 0.125,
+        "omissionReasons": {
+          "OUTSIDE_CAPTURED_PREFIX": 7,
+          "UNSUPPORTED": 7,
+          "BUDGET_EXHAUSTED": 1
+        },
+        "knownUnrecordedParentCaptures": {
+          "NESTED_TARGET:budget": 0,
+          "NESTED_TARGET:interrupted": 0
+        }
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 2,
+      "turnBasis": "PARENT_BASELINE",
+      "turnFrom": 20,
+      "turnThrough": 29,
+      "measures": {
+        "observedRecords": 8,
+        "presentContexts": 8,
+        "profileViewsAvailable": 8,
+        "contextStatuses": {
+          "PARTIAL": 8
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "OUTSIDE_CAPTURED_PREFIX": 8,
+          "UNSUPPORTED": 8
+        },
+        "knownUnrecordedParentCaptures": {
+          "NESTED_TARGET:budget": 0,
+          "NESTED_TARGET:interrupted": 0
+        }
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 1,
+      "turnBasis": "PARENT_BASELINE",
+      "turnFrom": 30,
+      "turnThrough": 39,
+      "measures": {
+        "observedRecords": 7,
+        "presentContexts": 7,
+        "profileViewsAvailable": 0,
+        "contextStatuses": {
+          "UNAVAILABLE": 7
+        },
+        "budgetAffectedRecords": 7,
+        "profileViewFractionOfObservedRecords": 0.0,
+        "budgetReasonFractionOfPresentContexts": 1.0,
+        "omissionReasons": {
+          "BUDGET_EXHAUSTED": 7
+        },
+        "knownUnrecordedParentCaptures": {
+          "NESTED_TARGET:budget": 0,
+          "NESTED_TARGET:interrupted": 0
+        }
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 2,
+      "turnBasis": "PARENT_BASELINE",
+      "turnFrom": 30,
+      "turnThrough": 39,
+      "measures": {
+        "observedRecords": 4,
+        "presentContexts": 4,
+        "profileViewsAvailable": 4,
+        "contextStatuses": {
+          "PARTIAL": 4
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "OUTSIDE_CAPTURED_PREFIX": 4,
+          "UNSUPPORTED": 4
+        },
+        "knownUnrecordedParentCaptures": {
+          "NESTED_TARGET:budget": 0,
+          "NESTED_TARGET:interrupted": 0
+        }
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 3,
+      "turnBasis": "PARENT_BASELINE",
+      "turnFrom": 30,
+      "turnThrough": 39,
+      "measures": {
+        "observedRecords": 9,
+        "presentContexts": 9,
+        "profileViewsAvailable": 9,
+        "contextStatuses": {
+          "PARTIAL": 9
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "OUTSIDE_CAPTURED_PREFIX": 8,
+          "UNSUPPORTED": 9
+        },
+        "knownUnrecordedParentCaptures": {
+          "NESTED_TARGET:budget": 0,
+          "NESTED_TARGET:interrupted": 0
+        }
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 0,
+      "turnBasis": "PARENT_BASELINE",
+      "turnFrom": 30,
+      "turnThrough": 39,
+      "measures": {
+        "observedRecords": 13,
+        "presentContexts": 13,
+        "profileViewsAvailable": 0,
+        "contextStatuses": {
+          "UNAVAILABLE": 13
+        },
+        "budgetAffectedRecords": 13,
+        "profileViewFractionOfObservedRecords": 0.0,
+        "budgetReasonFractionOfPresentContexts": 1.0,
+        "omissionReasons": {
+          "BUDGET_EXHAUSTED": 13
+        },
+        "knownUnrecordedParentCaptures": {
+          "NESTED_TARGET:budget": 0,
+          "NESTED_TARGET:interrupted": 0
+        }
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 0,
+      "turnBasis": "ENTRY_LOCATION",
+      "turnFrom": 0,
+      "turnThrough": 9,
+      "measures": {
+        "observedRecords": 71,
+        "presentContexts": 71,
+        "profileViewsAvailable": 71,
+        "contextStatuses": {
+          "PARTIAL": 59,
+          "CAPTURED": 12
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "UNSUPPORTED": 56,
+          "UNRESOLVED_BINDING": 2,
+          "OUTSIDE_CAPTURED_PREFIX": 1
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 1,
+      "turnBasis": "ENTRY_LOCATION",
+      "turnFrom": 0,
+      "turnThrough": 9,
+      "measures": {
+        "observedRecords": 8,
+        "presentContexts": 8,
+        "profileViewsAvailable": 8,
+        "contextStatuses": {
+          "PARTIAL": 8
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "UNSUPPORTED": 8
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 3,
+      "turnBasis": "ENTRY_LOCATION",
+      "turnFrom": 0,
+      "turnThrough": 9,
+      "measures": {
+        "observedRecords": 6,
+        "presentContexts": 6,
+        "profileViewsAvailable": 6,
+        "contextStatuses": {
+          "PARTIAL": 6
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "UNSUPPORTED": 6
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 3,
+      "turnBasis": "CHOICE_START_EVENT",
+      "turnFrom": 0,
+      "turnThrough": 9,
+      "measures": {
+        "observedRecords": 4,
+        "presentContexts": 0,
+        "profileViewsAvailable": 0,
+        "contextStatuses": {
+          "ABSENT": 4
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 0.0,
+        "budgetReasonFractionOfPresentContexts": null,
+        "omissionReasons": {},
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 2,
+      "turnBasis": "ENTRY_LOCATION",
+      "turnFrom": 0,
+      "turnThrough": 9,
+      "measures": {
+        "observedRecords": 10,
+        "presentContexts": 10,
+        "profileViewsAvailable": 10,
+        "contextStatuses": {
+          "PARTIAL": 10
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "UNSUPPORTED": 10
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 1,
+      "turnBasis": "ENTRY_LOCATION",
+      "turnFrom": 10,
+      "turnThrough": 19,
+      "measures": {
+        "observedRecords": 88,
+        "presentContexts": 88,
+        "profileViewsAvailable": 88,
+        "contextStatuses": {
+          "PARTIAL": 87,
+          "CAPTURED": 1
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "UNSUPPORTED": 74,
+          "OUTSIDE_CAPTURED_PREFIX": 56
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 0,
+      "turnBasis": "ENTRY_LOCATION",
+      "turnFrom": 10,
+      "turnThrough": 19,
+      "measures": {
+        "observedRecords": 172,
+        "presentContexts": 172,
+        "profileViewsAvailable": 71,
+        "contextStatuses": {
+          "PARTIAL": 67,
+          "CAPTURED": 4,
+          "UNAVAILABLE": 101
+        },
+        "budgetAffectedRecords": 101,
+        "profileViewFractionOfObservedRecords": 0.4127906976744186,
+        "budgetReasonFractionOfPresentContexts": 0.5872093023255814,
+        "omissionReasons": {
+          "UNSUPPORTED": 67,
+          "OUTSIDE_CAPTURED_PREFIX": 9,
+          "BUDGET_EXHAUSTED": 101
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 3,
+      "turnBasis": "ENTRY_LOCATION",
+      "turnFrom": 10,
+      "turnThrough": 19,
+      "measures": {
+        "observedRecords": 23,
+        "presentContexts": 23,
+        "profileViewsAvailable": 23,
+        "contextStatuses": {
+          "PARTIAL": 23
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "UNSUPPORTED": 23,
+          "OUTSIDE_CAPTURED_PREFIX": 19
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 3,
+      "turnBasis": "CHOICE_START_EVENT",
+      "turnFrom": 10,
+      "turnThrough": 19,
+      "measures": {
+        "observedRecords": 3,
+        "presentContexts": 0,
+        "profileViewsAvailable": 0,
+        "contextStatuses": {
+          "ABSENT": 3
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 0.0,
+        "budgetReasonFractionOfPresentContexts": null,
+        "omissionReasons": {},
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 0,
+      "turnBasis": "ENTRY_LOCATION",
+      "turnFrom": 20,
+      "turnThrough": 29,
+      "measures": {
+        "observedRecords": 235,
+        "presentContexts": 235,
+        "profileViewsAvailable": 0,
+        "contextStatuses": {
+          "UNAVAILABLE": 235
+        },
+        "budgetAffectedRecords": 235,
+        "profileViewFractionOfObservedRecords": 0.0,
+        "budgetReasonFractionOfPresentContexts": 1.0,
+        "omissionReasons": {
+          "BUDGET_EXHAUSTED": 235
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 3,
+      "turnBasis": "ENTRY_LOCATION",
+      "turnFrom": 20,
+      "turnThrough": 29,
+      "measures": {
+        "observedRecords": 67,
+        "presentContexts": 67,
+        "profileViewsAvailable": 67,
+        "contextStatuses": {
+          "PARTIAL": 67
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "OUTSIDE_CAPTURED_PREFIX": 67,
+          "UNSUPPORTED": 65
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 1,
+      "turnBasis": "ENTRY_LOCATION",
+      "turnFrom": 20,
+      "turnThrough": 29,
+      "measures": {
+        "observedRecords": 86,
+        "presentContexts": 86,
+        "profileViewsAvailable": 85,
+        "contextStatuses": {
+          "PARTIAL": 85,
+          "UNAVAILABLE": 1
+        },
+        "budgetAffectedRecords": 1,
+        "profileViewFractionOfObservedRecords": 0.9883720930232558,
+        "budgetReasonFractionOfPresentContexts": 0.011627906976744186,
+        "omissionReasons": {
+          "OUTSIDE_CAPTURED_PREFIX": 85,
+          "UNSUPPORTED": 69,
+          "BUDGET_EXHAUSTED": 1
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 2,
+      "turnBasis": "ENTRY_LOCATION",
+      "turnFrom": 20,
+      "turnThrough": 29,
+      "measures": {
+        "observedRecords": 62,
+        "presentContexts": 62,
+        "profileViewsAvailable": 62,
+        "contextStatuses": {
+          "PARTIAL": 62
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "OUTSIDE_CAPTURED_PREFIX": 62,
+          "UNSUPPORTED": 52
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 1,
+      "turnBasis": "ENTRY_LOCATION",
+      "turnFrom": 30,
+      "turnThrough": 39,
+      "measures": {
+        "observedRecords": 62,
+        "presentContexts": 62,
+        "profileViewsAvailable": 0,
+        "contextStatuses": {
+          "UNAVAILABLE": 62
+        },
+        "budgetAffectedRecords": 62,
+        "profileViewFractionOfObservedRecords": 0.0,
+        "budgetReasonFractionOfPresentContexts": 1.0,
+        "omissionReasons": {
+          "BUDGET_EXHAUSTED": 62
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 0,
+      "turnBasis": "ENTRY_LOCATION",
+      "turnFrom": 30,
+      "turnThrough": 39,
+      "measures": {
+        "observedRecords": 139,
+        "presentContexts": 139,
+        "profileViewsAvailable": 0,
+        "contextStatuses": {
+          "UNAVAILABLE": 139
+        },
+        "budgetAffectedRecords": 139,
+        "profileViewFractionOfObservedRecords": 0.0,
+        "budgetReasonFractionOfPresentContexts": 1.0,
+        "omissionReasons": {
+          "BUDGET_EXHAUSTED": 139
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 2,
+      "turnBasis": "ENTRY_LOCATION",
+      "turnFrom": 30,
+      "turnThrough": 39,
+      "measures": {
+        "observedRecords": 36,
+        "presentContexts": 36,
+        "profileViewsAvailable": 36,
+        "contextStatuses": {
+          "PARTIAL": 36
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "OUTSIDE_CAPTURED_PREFIX": 36,
+          "UNSUPPORTED": 33,
+          "UNRESOLVED_BINDING": 3
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 3,
+      "turnBasis": "ENTRY_LOCATION",
+      "turnFrom": 30,
+      "turnThrough": 39,
+      "measures": {
+        "observedRecords": 175,
+        "presentContexts": 175,
+        "profileViewsAvailable": 116,
+        "contextStatuses": {
+          "PARTIAL": 116,
+          "UNAVAILABLE": 59
+        },
+        "budgetAffectedRecords": 59,
+        "profileViewFractionOfObservedRecords": 0.6628571428571428,
+        "budgetReasonFractionOfPresentContexts": 0.33714285714285713,
+        "omissionReasons": {
+          "OUTSIDE_CAPTURED_PREFIX": 116,
+          "UNSUPPORTED": 92,
+          "BUDGET_EXHAUSTED": 59
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "game": 1,
+      "playerId": 0,
+      "turnBasis": "ENTRY_LOCATION_UNAVAILABLE",
+      "turnFrom": null,
+      "turnThrough": null,
+      "measures": {
+        "observedRecords": 42,
+        "presentContexts": 42,
+        "profileViewsAvailable": 0,
+        "contextStatuses": {
+          "UNAVAILABLE": 42
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 0.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "HIDDEN": 42
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    }
+  ],
+  "byBoundary": [
+    {
+      "owner": "DECISION",
+      "boundary": "MAIN_PHASE_PLAY_SELECTION",
+      "measures": {
+        "observedRecords": 139,
+        "presentContexts": 139,
+        "profileViewsAvailable": 102,
+        "contextStatuses": {
+          "PARTIAL": 102,
+          "UNAVAILABLE": 37
+        },
+        "budgetAffectedRecords": 37,
+        "profileViewFractionOfObservedRecords": 0.7338129496402878,
+        "budgetReasonFractionOfPresentContexts": 0.26618705035971224,
+        "omissionReasons": {
+          "UNSUPPORTED": 102,
+          "OUTSIDE_CAPTURED_PREFIX": 57,
+          "BUDGET_EXHAUSTED": 37
+        },
+        "knownUnrecordedParentCaptures": {
+          "NESTED_TARGET:budget": 0,
+          "NESTED_TARGET:interrupted": 0
+        }
+      }
+    },
+    {
+      "owner": "NESTED_TARGET",
+      "boundary": "ATTACH_CARD_POOL",
+      "measures": {
+        "observedRecords": 3,
+        "presentContexts": 3,
+        "profileViewsAvailable": 3,
+        "contextStatuses": {
+          "PARTIAL": 3
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "OUTSIDE_CAPTURED_PREFIX": 3,
+          "UNSUPPORTED": 3
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "owner": "CHOICE",
+      "boundary": "DRAW_AMOUNT_TARGET_POLICY",
+      "measures": {
+        "observedRecords": 133,
+        "presentContexts": 133,
+        "profileViewsAvailable": 35,
+        "contextStatuses": {
+          "PARTIAL": 35,
+          "UNAVAILABLE": 98
+        },
+        "budgetAffectedRecords": 98,
+        "profileViewFractionOfObservedRecords": 0.2631578947368421,
+        "budgetReasonFractionOfPresentContexts": 0.7368421052631579,
+        "omissionReasons": {
+          "UNSUPPORTED": 35,
+          "BUDGET_EXHAUSTED": 98
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "owner": "CHOICE",
+      "boundary": "COST_VISITOR",
+      "measures": {
+        "observedRecords": 483,
+        "presentContexts": 483,
+        "profileViewsAvailable": 279,
+        "contextStatuses": {
+          "PARTIAL": 272,
+          "CAPTURED": 7,
+          "UNAVAILABLE": 204
+        },
+        "budgetAffectedRecords": 204,
+        "profileViewFractionOfObservedRecords": 0.577639751552795,
+        "budgetReasonFractionOfPresentContexts": 0.422360248447205,
+        "omissionReasons": {
+          "UNSUPPORTED": 243,
+          "UNRESOLVED_BINDING": 2,
+          "OUTSIDE_CAPTURED_PREFIX": 215,
+          "BUDGET_EXHAUSTED": 204
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "owner": "CHOICE",
+      "boundary": "AUTO_MANA_PAYMENT",
+      "measures": {
+        "observedRecords": 337,
+        "presentContexts": 337,
+        "profileViewsAvailable": 194,
+        "contextStatuses": {
+          "PARTIAL": 187,
+          "CAPTURED": 7,
+          "UNAVAILABLE": 143
+        },
+        "budgetAffectedRecords": 143,
+        "profileViewFractionOfObservedRecords": 0.5756676557863502,
+        "budgetReasonFractionOfPresentContexts": 0.42433234421364985,
+        "omissionReasons": {
+          "UNSUPPORTED": 158,
+          "UNRESOLVED_BINDING": 2,
+          "OUTSIDE_CAPTURED_PREFIX": 148,
+          "BUDGET_EXHAUSTED": 143
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "owner": "CHOICE",
+      "boundary": "MANA_SOURCE_OPTIONS",
+      "measures": {
+        "observedRecords": 140,
+        "presentContexts": 140,
+        "profileViewsAvailable": 84,
+        "contextStatuses": {
+          "PARTIAL": 84,
+          "UNAVAILABLE": 56
+        },
+        "budgetAffectedRecords": 56,
+        "profileViewFractionOfObservedRecords": 0.6,
+        "budgetReasonFractionOfPresentContexts": 0.4,
+        "omissionReasons": {
+          "UNSUPPORTED": 84,
+          "OUTSIDE_CAPTURED_PREFIX": 67,
+          "BUDGET_EXHAUSTED": 56
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "owner": "CHOICE",
+      "boundary": "CHARM_MODE_HEURISTIC",
+      "measures": {
+        "observedRecords": 98,
+        "presentContexts": 98,
+        "profileViewsAvailable": 41,
+        "contextStatuses": {
+          "PARTIAL": 41,
+          "UNAVAILABLE": 57
+        },
+        "budgetAffectedRecords": 57,
+        "profileViewFractionOfObservedRecords": 0.41836734693877553,
+        "budgetReasonFractionOfPresentContexts": 0.5816326530612245,
+        "omissionReasons": {
+          "UNSUPPORTED": 41,
+          "OUTSIDE_CAPTURED_PREFIX": 16,
+          "BUDGET_EXHAUSTED": 57
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "owner": "CHOICE",
+      "boundary": "MAX_X_CALCULATION",
+      "measures": {
+        "observedRecords": 7,
+        "presentContexts": 7,
+        "profileViewsAvailable": 7,
+        "contextStatuses": {
+          "PARTIAL": 7
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "UNSUPPORTED": 7,
+          "OUTSIDE_CAPTURED_PREFIX": 1
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "owner": "CHOICE",
+      "boundary": "MAX_X_HEURISTIC",
+      "measures": {
+        "observedRecords": 7,
+        "presentContexts": 0,
+        "profileViewsAvailable": 0,
+        "contextStatuses": {
+          "ABSENT": 7
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 0.0,
+        "budgetReasonFractionOfPresentContexts": null,
+        "omissionReasons": {},
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "owner": "CHOICE",
+      "boundary": "TRIGGER_PREPARATION",
+      "measures": {
+        "observedRecords": 70,
+        "presentContexts": 70,
+        "profileViewsAvailable": 38,
+        "contextStatuses": {
+          "PARTIAL": 38,
+          "UNAVAILABLE": 32
+        },
+        "budgetAffectedRecords": 32,
+        "profileViewFractionOfObservedRecords": 0.5428571428571428,
+        "budgetReasonFractionOfPresentContexts": 0.45714285714285713,
+        "omissionReasons": {
+          "UNSUPPORTED": 38,
+          "OUTSIDE_CAPTURED_PREFIX": 31,
+          "BUDGET_EXHAUSTED": 32
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "owner": "CHOICE",
+      "boundary": "PAYMENT_DISCARD_POOL",
+      "measures": {
+        "observedRecords": 1,
+        "presentContexts": 1,
+        "profileViewsAvailable": 1,
+        "contextStatuses": {
+          "PARTIAL": 1
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "UNSUPPORTED": 1
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "owner": "CHOICE",
+      "boundary": "PAYMENT_DISCARD_BATCH",
+      "measures": {
+        "observedRecords": 2,
+        "presentContexts": 2,
+        "profileViewsAvailable": 2,
+        "contextStatuses": {
+          "PARTIAL": 2
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "UNSUPPORTED": 2
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "owner": "CHOICE",
+      "boundary": "PAYMENT_DISCARD_PREFERENCE",
+      "measures": {
+        "observedRecords": 1,
+        "presentContexts": 1,
+        "profileViewsAvailable": 1,
+        "contextStatuses": {
+          "PARTIAL": 1
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "UNSUPPORTED": 1
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "owner": "CHOICE",
+      "boundary": "PAYMENT_DISCARD_FALLBACK",
+      "measures": {
+        "observedRecords": 1,
+        "presentContexts": 1,
+        "profileViewsAvailable": 1,
+        "contextStatuses": {
+          "PARTIAL": 1
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "UNSUPPORTED": 1
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "owner": "CHOICE",
+      "boundary": "CONTROLLER_EFFECT_ENTITY",
+      "measures": {
+        "observedRecords": 8,
+        "presentContexts": 8,
+        "profileViewsAvailable": 8,
+        "contextStatuses": {
+          "CAPTURED": 1,
+          "PARTIAL": 7
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "OUTSIDE_CAPTURED_PREFIX": 7,
+          "UNRESOLVED_BINDING": 1
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "owner": "CHOICE",
+      "boundary": "CONTROLLER_ZONE_CHANGE_SELECTIONS",
+      "measures": {
+        "observedRecords": 4,
+        "presentContexts": 4,
+        "profileViewsAvailable": 4,
+        "contextStatuses": {
+          "CAPTURED": 2,
+          "PARTIAL": 2
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "OUTSIDE_CAPTURED_PREFIX": 2
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "owner": "CHOICE",
+      "boundary": "CONTROLLER_ZONE_CHANGE_CARD",
+      "measures": {
+        "observedRecords": 5,
+        "presentContexts": 5,
+        "profileViewsAvailable": 5,
+        "contextStatuses": {
+          "PARTIAL": 5
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 1.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "OUTSIDE_CAPTURED_PREFIX": 5
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "owner": "CHOICE",
+      "boundary": "CONTROLLER_MODES",
+      "measures": {
+        "observedRecords": 2,
+        "presentContexts": 2,
+        "profileViewsAvailable": 0,
+        "contextStatuses": {
+          "UNAVAILABLE": 2
+        },
+        "budgetAffectedRecords": 2,
+        "profileViewFractionOfObservedRecords": 0.0,
+        "budgetReasonFractionOfPresentContexts": 1.0,
+        "omissionReasons": {
+          "BUDGET_EXHAUSTED": 2
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "owner": "CHOICE",
+      "boundary": "DAMAGE_TRIGGER_POLICY",
+      "measures": {
+        "observedRecords": 5,
+        "presentContexts": 5,
+        "profileViewsAvailable": 0,
+        "contextStatuses": {
+          "UNAVAILABLE": 5
+        },
+        "budgetAffectedRecords": 5,
+        "profileViewFractionOfObservedRecords": 0.0,
+        "budgetReasonFractionOfPresentContexts": 1.0,
+        "omissionReasons": {
+          "BUDGET_EXHAUSTED": 5
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    },
+    {
+      "owner": "CHOICE",
+      "boundary": "MASKED_CHOICE",
+      "measures": {
+        "observedRecords": 42,
+        "presentContexts": 42,
+        "profileViewsAvailable": 0,
+        "contextStatuses": {
+          "UNAVAILABLE": 42
+        },
+        "budgetAffectedRecords": 0,
+        "profileViewFractionOfObservedRecords": 0.0,
+        "budgetReasonFractionOfPresentContexts": 0.0,
+        "omissionReasons": {
+          "HIDDEN": 42
+        },
+        "knownUnrecordedParentCaptures": {}
+      }
+    }
+  ],
+  "sourceInvocationAccounting": {
+    "schemaVersion": 1,
+    "scope": "ORIGINAL_AI_STANDALONE_CALLBACKS",
+    "runsPresent": 1,
+    "runsAbsent": 0,
+    "scopeComplete": true,
+    "overflowed": false,
+    "counts": {
+      "entered": 1346,
+      "prepared": 1346,
+      "omitted": 0,
+      "callbackStarted": 1346,
+      "callbackReturned": 1346,
+      "callbackThrew": 0,
+      "inputUnavailable": 639,
+      "startAttempts": 1346,
+      "startReturned": 1346,
+      "terminalAttempts": 1346,
+      "terminalReturned": 1346,
+      "finished": 1346,
+      "observationFailures": 0,
+      "omittedUnsupported": 0,
+      "omittedClosed": 0,
+      "omittedFailure": 0
+    },
+    "collector": {
+      "collectorStarts": 1346,
+      "collectorTerminals": 1346
+    },
+    "byBoundary": {
+      "AUTO_MANA_PAYMENT": {
+        "entered": 337,
+        "prepared": 337,
+        "omitted": 0,
+        "callbackStarted": 337,
+        "callbackReturned": 337,
+        "callbackThrew": 0,
+        "inputUnavailable": 143,
+        "startAttempts": 337,
+        "startReturned": 337,
+        "terminalAttempts": 337,
+        "terminalReturned": 337,
+        "finished": 337,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "CHARM_MODE_HEURISTIC": {
+        "entered": 98,
+        "prepared": 98,
+        "omitted": 0,
+        "callbackStarted": 98,
+        "callbackReturned": 98,
+        "callbackThrew": 0,
+        "inputUnavailable": 57,
+        "startAttempts": 98,
+        "startReturned": 98,
+        "terminalAttempts": 98,
+        "terminalReturned": 98,
+        "finished": 98,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "CONTROLLER_EFFECT_ENTITY": {
+        "entered": 8,
+        "prepared": 8,
+        "omitted": 0,
+        "callbackStarted": 8,
+        "callbackReturned": 8,
+        "callbackThrew": 0,
+        "inputUnavailable": 0,
+        "startAttempts": 8,
+        "startReturned": 8,
+        "terminalAttempts": 8,
+        "terminalReturned": 8,
+        "finished": 8,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "CONTROLLER_MODES": {
+        "entered": 2,
+        "prepared": 2,
+        "omitted": 0,
+        "callbackStarted": 2,
+        "callbackReturned": 2,
+        "callbackThrew": 0,
+        "inputUnavailable": 2,
+        "startAttempts": 2,
+        "startReturned": 2,
+        "terminalAttempts": 2,
+        "terminalReturned": 2,
+        "finished": 2,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "CONTROLLER_ZONE_CHANGE_CARD": {
+        "entered": 5,
+        "prepared": 5,
+        "omitted": 0,
+        "callbackStarted": 5,
+        "callbackReturned": 5,
+        "callbackThrew": 0,
+        "inputUnavailable": 0,
+        "startAttempts": 5,
+        "startReturned": 5,
+        "terminalAttempts": 5,
+        "terminalReturned": 5,
+        "finished": 5,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "CONTROLLER_ZONE_CHANGE_SELECTIONS": {
+        "entered": 4,
+        "prepared": 4,
+        "omitted": 0,
+        "callbackStarted": 4,
+        "callbackReturned": 4,
+        "callbackThrew": 0,
+        "inputUnavailable": 0,
+        "startAttempts": 4,
+        "startReturned": 4,
+        "terminalAttempts": 4,
+        "terminalReturned": 4,
+        "finished": 4,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "COST_VISITOR": {
+        "entered": 483,
+        "prepared": 483,
+        "omitted": 0,
+        "callbackStarted": 483,
+        "callbackReturned": 483,
+        "callbackThrew": 0,
+        "inputUnavailable": 204,
+        "startAttempts": 483,
+        "startReturned": 483,
+        "terminalAttempts": 483,
+        "terminalReturned": 483,
+        "finished": 483,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "DAMAGE_TRIGGER_POLICY": {
+        "entered": 5,
+        "prepared": 5,
+        "omitted": 0,
+        "callbackStarted": 5,
+        "callbackReturned": 5,
+        "callbackThrew": 0,
+        "inputUnavailable": 5,
+        "startAttempts": 5,
+        "startReturned": 5,
+        "terminalAttempts": 5,
+        "terminalReturned": 5,
+        "finished": 5,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "DRAW_AMOUNT_TARGET_POLICY": {
+        "entered": 133,
+        "prepared": 133,
+        "omitted": 0,
+        "callbackStarted": 133,
+        "callbackReturned": 133,
+        "callbackThrew": 0,
+        "inputUnavailable": 98,
+        "startAttempts": 133,
+        "startReturned": 133,
+        "terminalAttempts": 133,
+        "terminalReturned": 133,
+        "finished": 133,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "MANA_SOURCE_OPTIONS": {
+        "entered": 140,
+        "prepared": 140,
+        "omitted": 0,
+        "callbackStarted": 140,
+        "callbackReturned": 140,
+        "callbackThrew": 0,
+        "inputUnavailable": 56,
+        "startAttempts": 140,
+        "startReturned": 140,
+        "terminalAttempts": 140,
+        "terminalReturned": 140,
+        "finished": 140,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "MASKED_CHOICE": {
+        "entered": 42,
+        "prepared": 42,
+        "omitted": 0,
+        "callbackStarted": 42,
+        "callbackReturned": 42,
+        "callbackThrew": 0,
+        "inputUnavailable": 42,
+        "startAttempts": 42,
+        "startReturned": 42,
+        "terminalAttempts": 42,
+        "terminalReturned": 42,
+        "finished": 42,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "MAX_X_CALCULATION": {
+        "entered": 7,
+        "prepared": 7,
+        "omitted": 0,
+        "callbackStarted": 7,
+        "callbackReturned": 7,
+        "callbackThrew": 0,
+        "inputUnavailable": 0,
+        "startAttempts": 7,
+        "startReturned": 7,
+        "terminalAttempts": 7,
+        "terminalReturned": 7,
+        "finished": 7,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "MAX_X_HEURISTIC": {
+        "entered": 7,
+        "prepared": 7,
+        "omitted": 0,
+        "callbackStarted": 7,
+        "callbackReturned": 7,
+        "callbackThrew": 0,
+        "inputUnavailable": 0,
+        "startAttempts": 7,
+        "startReturned": 7,
+        "terminalAttempts": 7,
+        "terminalReturned": 7,
+        "finished": 7,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "PAYMENT_DISCARD_BATCH": {
+        "entered": 2,
+        "prepared": 2,
+        "omitted": 0,
+        "callbackStarted": 2,
+        "callbackReturned": 2,
+        "callbackThrew": 0,
+        "inputUnavailable": 0,
+        "startAttempts": 2,
+        "startReturned": 2,
+        "terminalAttempts": 2,
+        "terminalReturned": 2,
+        "finished": 2,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "PAYMENT_DISCARD_FALLBACK": {
+        "entered": 1,
+        "prepared": 1,
+        "omitted": 0,
+        "callbackStarted": 1,
+        "callbackReturned": 1,
+        "callbackThrew": 0,
+        "inputUnavailable": 0,
+        "startAttempts": 1,
+        "startReturned": 1,
+        "terminalAttempts": 1,
+        "terminalReturned": 1,
+        "finished": 1,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "PAYMENT_DISCARD_POOL": {
+        "entered": 1,
+        "prepared": 1,
+        "omitted": 0,
+        "callbackStarted": 1,
+        "callbackReturned": 1,
+        "callbackThrew": 0,
+        "inputUnavailable": 0,
+        "startAttempts": 1,
+        "startReturned": 1,
+        "terminalAttempts": 1,
+        "terminalReturned": 1,
+        "finished": 1,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "PAYMENT_DISCARD_PREFERENCE": {
+        "entered": 1,
+        "prepared": 1,
+        "omitted": 0,
+        "callbackStarted": 1,
+        "callbackReturned": 1,
+        "callbackThrew": 0,
+        "inputUnavailable": 0,
+        "startAttempts": 1,
+        "startReturned": 1,
+        "terminalAttempts": 1,
+        "terminalReturned": 1,
+        "finished": 1,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      },
+      "TRIGGER_PREPARATION": {
+        "entered": 70,
+        "prepared": 70,
+        "omitted": 0,
+        "callbackStarted": 70,
+        "callbackReturned": 70,
+        "callbackThrew": 0,
+        "inputUnavailable": 32,
+        "startAttempts": 70,
+        "startReturned": 70,
+        "terminalAttempts": 70,
+        "terminalReturned": 70,
+        "finished": 70,
+        "observationFailures": 0,
+        "omittedUnsupported": 0,
+        "omittedClosed": 0,
+        "omittedFailure": 0
+      }
+    },
+    "invocationsInFlightAtCutoffs": 0,
+    "callbacksInFlightAtCutoffs": 0,
+    "startsMissingAtCutoffs": 0,
+    "startRecordMissingFractionAtCutoffs": 0.0,
+    "nestedInvocationCount": null,
+    "uninstrumentedDecisionCount": null
+  },
+  "runExecutions": [
+    {
+      "runId": "31aa0c50-4ca2-4d66-b632-9e5bcc2366d8",
+      "decks": [
+        "Doctor Who - The Thirteenth Doctor and Yasmin Khan",
+        "Draconic Domination [C17] [2017]",
+        "Doctor Who - The Thirteenth Doctor and Yasmin Khan",
+        "Draconic Domination [C17] [2017]"
+      ],
+      "pilotMode": "HEURISTIC",
+      "seed": 31010,
+      "status": "NORMAL",
+      "decisions": 139
+    }
+  ],
+  "trainingReady": false,
+  "limitations": [
+    "Captured/partial means the named partial profile is available, not a complete decision input.",
+    "Observed records overlap; unavailable input, absent context and missing lifecycle delivery are distinct.",
+    "Parent-container turns are not independent selector clocks. Earliest observed budget turns are not exact exhaustion times.",
+    "Player and boundary marginals do not provide their joint distribution. Null turn/player identities stay unknown.",
+    "Known parent capture omissions have a separate denominator. Uninstrumented decision totals remain unknown.",
+    "No sampling policy, per-context work debits, counterfactual late-view costs, CPU overhead or inclusion probabilities can be inferred from these counts."
+  ]
+}

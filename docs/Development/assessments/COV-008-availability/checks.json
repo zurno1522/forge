@@ -1,0 +1,39 @@
+{
+  "runtimeRevision": "45fc4137a53a9bfbd090cdb1d0fa8e061ea90902",
+  "gameRecordedRevision": [
+    {
+      "runId": "f0959e9f-27a2-4234-a7a5-4276384ae5c3",
+      "decks": [
+        "Doctor Who - The Thirteenth Doctor and Yasmin Khan",
+        "Draconic Domination [C17] [2017]",
+        "Doctor Who - The Thirteenth Doctor and Yasmin Khan",
+        "Draconic Domination [C17] [2017]"
+      ],
+      "pilotMode": "HEURISTIC",
+      "seed": 31009,
+      "status": "NORMAL",
+      "decisions": 189
+    }
+  ],
+  "sourceSha256": {
+    "tools/decision-records/input-context-benchmark/summarize-availability.py": "51c2c9416bdf81bd2f0ee0a98bc4f385d739ba205a52338a6ac2ef31e80a952a",
+    "tools/decision-records/test_availability_measurements.py": "25d5703717511173ce971e44260c60347c5ceaecd77205943a38affe1851e03f",
+    "tools/decision-records/export.py": "4f8671adc06df336561287500d77ea8c61adc0e785e2c6e3bdfcbb71be26f1fa",
+    "tools/decision-records/coverage_audit.py": "7765a954f4d9f411e40ec394a0dc873d5c0c3a29add76f6e363da8f8d9cf0a59",
+    "forge-ai/src/main/java/forge/ai/AiInputContext.java": "8bb4b85141ba6f6661e896c393f9c3a185dd9a08de8c6206c98295a9dc2fe6be",
+    "forge-ai/src/main/java/forge/ai/AiObservationAccounting.java": "9f3f420871a98cbae97ed3fe32a73519d36c486e2359b08c8a22f4bfd99f2a9e"
+  },
+  "toolTests": {
+    "total": 335,
+    "newMethods": 7,
+    "failures": 0,
+    "errors": 0,
+    "command": "python3 -m unittest discover -s tools/decision-records",
+    "logSha256": "a8cf23996d8226865a078a33d05785327bc35b272de80c2cce4682b303263f4a"
+  },
+  "javaTests": "No Java changes; V28 focused 323-case result remains the current runtime validation.",
+  "legacyArtifacts": "Exporter and audit sources unchanged from V28; 330-stream seven-artifact parity result remains applicable. Fresh full/filtered parity rechecked.",
+  "validationLogSha256": "2a1825355394f2cf36cec9881debae5bb060ad5cdf9826dbfc139227bfab901a",
+  "runtimePolicyChanged": false,
+  "trainingReady": false
+}
