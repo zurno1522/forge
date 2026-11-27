@@ -1,6 +1,7 @@
 """Typed request arguments at audited callbacks; no option-pool permission."""
 
 SHAPES = {
+    'MAX_X_CALCULATION_REQUEST': {'effect'},
     'EXILE_RANKING_REQUEST': {'requestedSelections','effect'},
     'DISCARD_PICK_REQUEST': {'strategy','effectiveMinimum','maximum','priorSelectionCount','previousSelections'},
     'DISCARD_BATCH_REQUEST': {'branch','minimum','maximum','manaValue'},
@@ -26,7 +27,8 @@ DISCARD_BRANCHES = {'POLICY','COMBO','SHAPESHIFTER','MANA_VALUE','UNCASTABLE_EXC
 DISCARD_PICK_KINDS = {'DISCARD_PICK_REQUEST'}
 DISCARD_STRATEGIES = {'PREFERENCE','FALLBACK'}
 EXILE_RANKING_KINDS = {'EXILE_RANKING_REQUEST'}
-MIN_PROFILE = {'EXILE_RANKING_REQUEST': 25, 'DISCARD_PICK_REQUEST': 24, 'DISCARD_BATCH_REQUEST': 23, 'SACRIFICE_PICK_REQUEST': 22, 'CARD_PAYMENT_REQUEST': 21, 'MANA_SOURCE_REQUEST': 20, 'MANA_POOL_REQUEST': 19, 'TRIGGER_REQUIREMENT': 17, 'ENTITY_ATTACHMENT_ROLES': 18, 'ENTITY_ATTACKER_ROLES': 18}
+MAX_X_CALCULATION_KINDS = {'MAX_X_CALCULATION_REQUEST'}
+MIN_PROFILE = {'MAX_X_CALCULATION_REQUEST': 26, 'EXILE_RANKING_REQUEST': 25, 'DISCARD_PICK_REQUEST': 24, 'DISCARD_BATCH_REQUEST': 23, 'SACRIFICE_PICK_REQUEST': 22, 'CARD_PAYMENT_REQUEST': 21, 'MANA_SOURCE_REQUEST': 20, 'MANA_POOL_REQUEST': 19, 'TRIGGER_REQUIREMENT': 17, 'ENTITY_ATTACHMENT_ROLES': 18, 'ENTITY_ATTACKER_ROLES': 18}
 ROLE_LIST_KINDS = {'ENTITY_ATTACHMENT_ROLES', 'ENTITY_ATTACKER_ROLES'}
 MAX_ROLE_LIST = 64
 MANA_SHARDS = {'B2', 'BG', 'BGP', 'BLACK', 'BLUE', 'BP', 'BR', 'BRP', 'CB', 'CG', 'COLORED_X', 'COLORLESS', 'CR', 'CU', 'CW', 'G2', 'GENERIC', 'GP', 'GREEN', 'GU', 'GUP', 'GW', 'GWP', 'R2', 'RED', 'RG', 'RGP', 'RP', 'RW', 'RWP', 'S', 'U2', 'UB', 'UBP', 'UP', 'UR', 'URP', 'W2', 'WB', 'WBP', 'WHITE', 'WP', 'WU', 'WUP', 'X'}
@@ -52,6 +54,7 @@ def role_array(value):
 
 
 def scalars(kind, values):
+    if kind == 'MAX_X_CALCULATION_REQUEST': require(isinstance(values['effect'],bool), 'invalid max-X calculation flag')
     if kind == 'EXILE_RANKING_REQUEST':
         require(integer(values['requestedSelections']) and -(1 << 31) <= values['requestedSelections'] < (1 << 31) and isinstance(values['effect'],bool), 'invalid exile ranking request')
     if kind == 'DISCARD_PICK_REQUEST':
@@ -87,7 +90,7 @@ def scalars(kind, values):
 def receipt(value, family, typed_reference, version=16):
     require(isinstance(value, dict) and set(value) == {'schemaVersion','coverage','kind','values','reason'}
             and integer(value['schemaVersion']) and value['schemaVersion'] == 1, 'invalid diagnostic fields')
-    kind = value['kind']; allowed = NUMBER_KINDS if family == 'NUMBER' else TRIGGER_KINDS if family == 'TRIGGER' else MANA_KINDS if family == 'MANA' else MANA_SOURCE_KINDS if family == 'MANA_SOURCE' else CARD_PAYMENT_KINDS if family == 'CARD_PAYMENT' else SACRIFICE_PICK_KINDS if family == 'SACRIFICE_PICK' else DISCARD_BATCH_KINDS if family == 'DISCARD_BATCH' else DISCARD_PICK_KINDS if family == 'DISCARD_PICK' else EXILE_RANKING_KINDS if family == 'EXILE_RANKING' else ENTITY_KINDS
+    kind = value['kind']; allowed = NUMBER_KINDS if family == 'NUMBER' else TRIGGER_KINDS if family == 'TRIGGER' else MANA_KINDS if family == 'MANA' else MANA_SOURCE_KINDS if family == 'MANA_SOURCE' else CARD_PAYMENT_KINDS if family == 'CARD_PAYMENT' else SACRIFICE_PICK_KINDS if family == 'SACRIFICE_PICK' else DISCARD_BATCH_KINDS if family == 'DISCARD_BATCH' else DISCARD_PICK_KINDS if family == 'DISCARD_PICK' else EXILE_RANKING_KINDS if family == 'EXILE_RANKING' else MAX_X_CALCULATION_KINDS if family == 'MAX_X_CALCULATION' else ENTITY_KINDS
     if value['coverage'] == 'UNSUPPORTED':
         require(kind is None and value['values'] is None and value['reason'] == 'UNSUPPORTED', 'unsupported shape carries values'); return
     require(isinstance(kind, str) and kind in allowed, 'unknown or wrong-family shape')

@@ -46,7 +46,7 @@ TYPE_BOUNDARIES = {
     'TARGET_POOL_SELECTION': POOL_BOUNDARIES,
     'MODE_SELECTION': {'CHARM_MODE_HEURISTIC', 'CONTROLLER_MODES'},
     'NUMBER_SELECTION': {'CONTROLLER_NUMBER_RANGE', 'CONTROLLER_NUMBER_OPTIONS', 'CONTROLLER_ANNOUNCEMENT'},
-    'X_SELECTION': {'MAX_X_HEURISTIC', 'X_ANNOUNCEMENT_REFINEMENT'},
+    'X_SELECTION': {'MAX_X_HEURISTIC', 'X_ANNOUNCEMENT_REFINEMENT','MAX_X_CALCULATION'},
     'PAYMENT_DECISION': {'COST_VISITOR'},
     'PAYMENT_CARD_SELECTION': {'PAYMENT_DISCARD_POOL', 'PAYMENT_SACRIFICE_POOL', 'PAYMENT_EXILE_POOL'},
     'PAYMENT_MANA': {'AUTO_MANA_PAYMENT'},
@@ -62,6 +62,7 @@ TYPE_BOUNDARIES = {
     'EFFECT_MULTI_SPELL_ABILITY_SELECTION': {'CONTROLLER_EFFECT_SPELL_ABILITIES'},
     'EFFECT_SPELL_ABILITY_SELECTION': {'CONTROLLER_EFFECT_SPELL_ABILITY'},
 }
+BOUNDARIES.add('MAX_X_CALCULATION')
 BOUNDARIES.add('PAYMENT_EXILE_RANKING')
 BOUNDARIES.update(('PAYMENT_DISCARD_PREFERENCE','PAYMENT_DISCARD_FALLBACK'))
 BOUNDARIES.update(('MANA_SOURCE_OPTIONS','PAYMENT_SACRIFICE_PICK','PAYMENT_DISCARD_BATCH'))
@@ -86,6 +87,7 @@ CONTEXT_TIMING_V2 = {**{key: value for key, value in CONTEXT_TIMING.items() if k
 MODE_CONTEXT_TIMING = {'CHARM_MODE_HEURISTIC': 'BEFORE_SELECTOR', 'CONTROLLER_MODES': 'BEFORE_OPERATION'}
 MULTI_CONTEXT_TIMING = {'CONTROLLER_EFFECT_ENTITIES': 'BEFORE_OPERATION'}
 ZONE_OPERATION_CONTEXT_TIMING = {'CONTROLLER_ZONE_CHANGE_SELECTIONS': 'BEFORE_OPERATION'}
+MAX_X_CALCULATION_CONTEXT_TIMING = {'MAX_X_CALCULATION':'BEFORE_OPERATION'}
 EXILE_RANKING_CONTEXT_TIMING = {'PAYMENT_EXILE_RANKING':'BEFORE_OPERATION'}
 DISCARD_PICK_CONTEXT_TIMING = {'PAYMENT_DISCARD_PREFERENCE':'BEFORE_SELECTOR','PAYMENT_DISCARD_FALLBACK':'BEFORE_OPERATION'}
 DISCARD_BATCH_CONTEXT_TIMING = {'PAYMENT_DISCARD_BATCH': 'BEFORE_OPERATION'}
@@ -114,6 +116,9 @@ def input_boundary(value, boundary, stage=None, choice=None):
     if choice is not None and boundary in SACRIFICE_PICK_CONTEXT_TIMING and value['schemaVersion'] >= 22:
         require('entryLocation' in choice, 'sacrifice pick lacks own entry')
         expected = SACRIFICE_PICK_CONTEXT_TIMING[boundary]
+    if choice is not None and boundary in MAX_X_CALCULATION_CONTEXT_TIMING and value['schemaVersion'] >= 26:
+        require('entryLocation' in choice, 'max-X calculation lacks own entry')
+        expected = MAX_X_CALCULATION_CONTEXT_TIMING[boundary]
     if choice is not None and boundary in EXILE_RANKING_CONTEXT_TIMING and value['schemaVersion'] >= 25:
         require('entryLocation' in choice, 'exile ranking lacks own entry')
         expected = EXILE_RANKING_CONTEXT_TIMING[boundary]
@@ -185,6 +190,8 @@ def input_boundary(value, boundary, stage=None, choice=None):
 
 def parameter_boundary(choice):
     context = choice.get('inputContext')
+    if (choice['choiceType'],choice['boundary'])==('X_SELECTION','MAX_X_CALCULATION'):
+        return isinstance(context, dict) and integer(context.get('schemaVersion')) and context['schemaVersion'] >= 26
     if (choice['choiceType'],choice['boundary'])==('PAYMENT_CARD_BATCH','PAYMENT_EXILE_RANKING'):
         return isinstance(context, dict) and integer(context.get('schemaVersion')) and context['schemaVersion'] >= 25
     if choice['choiceType']=='PAYMENT_CARD_PICK' and choice['boundary'] in DISCARD_PICK_CONTEXT_TIMING:
@@ -496,6 +503,9 @@ def entry_location(choice, known_players=None):
     if choice['boundary'] in PREPARATION_CONTEXT_TIMING:
         require(choice.get('inputContext', {}).get('schemaVersion', 0) >= 17, 'preparation entry requires V17')
         expected = PREPARATION_CONTEXT_TIMING[choice['boundary']]
+    if choice['boundary'] in MAX_X_CALCULATION_CONTEXT_TIMING:
+        require(choice.get('inputContext',{}).get('schemaVersion',0)>=26, 'max-X calculation requires V26')
+        expected=MAX_X_CALCULATION_CONTEXT_TIMING[choice['boundary']]
     if choice['boundary'] in EXILE_RANKING_CONTEXT_TIMING:
         require(choice.get('inputContext',{}).get('schemaVersion',0)>=25, 'exile ranking requires V25')
         expected=EXILE_RANKING_CONTEXT_TIMING[choice['boundary']]
@@ -736,6 +746,11 @@ def options(choice):
                 require(ctx['stateBasis'] == 'PLANNING_WORKING_STATE', 'test payment claims rules-state input')
                 require(choice['entryLocation']['status'] != 'CAPTURED' or choice['entryLocation']['stateBasis'] == 'PLANNING_WORKING_STATE', 'test payment claims rules-state entry')
         return
+    if choice['choiceType']=='X_SELECTION' and choice['boundary']=='MAX_X_CALCULATION':
+        require(parameter_options(choice) and 'entryLocation' in choice, 'max-X calculation lacks own entry/profile')
+        require(isinstance(option,dict) and set(option)=={'coverage','callbackParameters'} and option['coverage']=='COMPUTATION_NOT_LEGAL_DOMAIN', 'invalid max-X calculation input')
+        _contexts._parameters.receipt(option['callbackParameters'],'MAX_X_CALCULATION',typed_reference,choice['inputContext']['schemaVersion'])
+        return
     if choice['choiceType'] in ('NUMBER_SELECTION', 'X_SELECTION'):
         require(isinstance(option, dict), 'invalid numeric options')
         coverage = option.get('coverage')
@@ -838,6 +853,7 @@ def selection(start, terminal):
         return
     if start['choiceType'] in ('NUMBER_SELECTION', 'X_SELECTION'):
         require(isinstance(value, dict) and set(value) == {'value', 'optionIndex', 'domainMatch'} and integer(value['value']), 'invalid numeric return')
+        if start['boundary']=='MAX_X_CALCULATION': require(-(1<<31)<=value['value']<(1<<31), 'max-X return exceeds native int')
         option, index = start['options'], value['optionIndex']
         require(index is None or integer(index), 'invalid numeric option index')
         if option['coverage'] == 'OBSERVED_DISCRETE_OPTIONS':
@@ -846,7 +862,7 @@ def selection(start, terminal):
             require(index is not None and 0 <= index < len(option['items']) and option['items'][index] == value['value'] if matches == 1 else index is None, 'numeric return/option mismatch')
         else:
             require(index is None, 'range/unknown numeric result claims an index')
-            expected = 'UNAVAILABLE' if option['coverage'] == 'OBSERVED_SELECTION_ONLY' else 'WITHIN_OBSERVED_DOMAIN' if option['minimum'] <= value['value'] <= option['maximum'] else 'OUTSIDE_OBSERVED_DOMAIN'
+            expected = 'UNAVAILABLE' if option['coverage'] in ('OBSERVED_SELECTION_ONLY','COMPUTATION_NOT_LEGAL_DOMAIN') else 'WITHIN_OBSERVED_DOMAIN' if option['minimum'] <= value['value'] <= option['maximum'] else 'OUTSIDE_OBSERVED_DOMAIN'
         require(value['domainMatch'] == expected, 'invalid numeric domain match')
         return
     if start['choiceType'] == 'MODE_SELECTION':

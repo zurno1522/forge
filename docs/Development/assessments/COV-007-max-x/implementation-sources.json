@@ -1,0 +1,25 @@
+{
+  "baseRevision": "8080e9ae561",
+  "sources": {
+    "forge-ai/src/main/java/forge/ai/AiInputContext.java": "1f40e63f529c7b993e83a014dc1741b8a6a3b7fe9755175c096be3d1a462c6c7",
+    "forge-ai/src/main/java/forge/ai/AiNumberChoiceRecorder.java": "ed5157e50543300b9f326bc39b375e1d98d3b4818612446a912cce00bfd75c39",
+    "forge-ai/src/main/java/forge/ai/AiObservationAccounting.java": "a320e579b6848ca8f9d97b4b69c423736c6f2e602dd326388b94b659aad5f555",
+    "forge-ai/src/main/java/forge/ai/AiReceivedParameters.java": "c599f87aeb72affe66bd0c8b2c33b1009d7d9c75878c07dcf7d52a11f68bdb5b",
+    "forge-ai/src/main/java/forge/ai/ComputerUtilCost.java": "b0845146b2c93eaa2efcb0bf38426b7e65b922b5c0aa8799523341938e05a4ce",
+    "forge-gui-desktop/src/test/java/forge/ai/AiCopyTargetInputTest.java": "ed52658093279c2157837f66f87d9027c8f1626af2bd5a065049d673fa98946f",
+    "forge-gui-desktop/src/test/java/forge/ai/AiEntitySelectionHistoryTest.java": "110eebc464a3259084b1982a6149ed42d7c2c10e155e03b3b10e8585f7308a51",
+    "forge-gui-desktop/src/test/java/forge/ai/AiModeInputContextTest.java": "27830abba78f55f72d5ad9645aa730f79ebcdf8eb5b29418e4e6c50e5df10aec",
+    "forge-gui-desktop/src/test/java/forge/ai/AiModePromptInputTest.java": "4c4f96639db764a23bda6db9d378be853a29accc2708c0fca7caf3448aa1b13a",
+    "forge-gui-desktop/src/test/java/forge/ai/AiMultiEntityChoiceRecorderTest.java": "9195ae54f423759c06e2aca0f39ab65e600ecfaa14f3d654b77de0a465f41afb",
+    "forge-gui-desktop/src/test/java/forge/ai/AiStackInputContextTest.java": "82b715ab40a417c2092ce85be019eaef15b5c96ccd62017968facedccc2608a4",
+    "forge-gui-desktop/src/test/java/forge/ai/AiZoneOperationRecorderTest.java": "f160fe8f41d5dc4665a6921f81340d6eeb8cf92d11824438fa40a12a883c0049",
+    "tools/decision-records/choice_events.py": "a53b7da3d93000abcee9bb1d0378bf877e9fff1d2e81af6bd288be6db4f5b53b",
+    "tools/decision-records/coverage_audit.py": "b1e272435fbbf28cc7e5c12d926572870a9590fb4f6f7237587205bf4ee8d70a",
+    "tools/decision-records/export.py": "6b65ded4afa3d864c91cf44049552a0adb3e903ab2193ea4de89dbaa0bc5c6c5",
+    "tools/decision-records/input_context.py": "cd67606b15ff3c35869a5146785e5c83bc3334df3227b50131aa83a97ed0a78a",
+    "tools/decision-records/received_parameters.py": "5cf801d5ee5d66d34a9c2566c4e9bac073be80fd046c27623f7c7d32b7fb6218",
+    "forge-gui-desktop/src/test/java/forge/ai/AiMaxXCalculationInputTest.java": "a31b43aad73c571032c471e747a417d72fdbc57afb1cfd8106a3f26dff219a90",
+    "tools/decision-records/test_max_x_calculation_input.py": "a6e1334ed95be384d2bf54504b8be67547cc22ef09d60ad414ed2e217d99af9a",
+    "tools/trace-test-decks/choice-modal-x.dck": "6147733fab371831137416a52a2d38ebc3c4b114992f45c1aa77defe2ad14710"
+  }
+}

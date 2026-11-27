@@ -28,7 +28,7 @@ final class AiReceivedParameters {
     static final int MAX_ROLE_LIST = 64;
     enum Family { NUMBER, ENTITY }
     enum Kind { NONE, VOTER, COUNTER_AMOUNT, COUNTER_TRANSFER_AMOUNT, ENTITY_CARD_ROLE, ENTITY_TARGET_ROLE,
-        ENTITY_MANA_VALUE_LIMIT, ENTITY_COUNTER_REQUEST, TRIGGER_REQUIREMENT, ENTITY_ATTACHMENT_ROLES, ENTITY_ATTACKER_ROLES, MANA_POOL_REQUEST, MANA_SOURCE_REQUEST, CARD_PAYMENT_REQUEST, SACRIFICE_PICK_REQUEST, DISCARD_BATCH_REQUEST, DISCARD_PICK_REQUEST, EXILE_RANKING_REQUEST }
+        ENTITY_MANA_VALUE_LIMIT, ENTITY_COUNTER_REQUEST, TRIGGER_REQUIREMENT, ENTITY_ATTACHMENT_ROLES, ENTITY_ATTACKER_ROLES, MANA_POOL_REQUEST, MANA_SOURCE_REQUEST, CARD_PAYMENT_REQUEST, SACRIFICE_PICK_REQUEST, DISCARD_BATCH_REQUEST, DISCARD_PICK_REQUEST, EXILE_RANKING_REQUEST, MAX_X_CALCULATION_REQUEST }
     record Carrier(AtomicReference<Input> receipt) { }
     record Input(Kind kind, String coverage, String reason, Map<String, Object> values, Map<String, AiOptionInput.Entry> roles, Map<String, List<AiOptionInput.Entry>> roleLists) {
         Map<String, Object> diagnostics() {
@@ -65,6 +65,10 @@ final class AiReceivedParameters {
         if (priorCount > MAX_ROLE_LIST) { return overlong(Kind.SACRIFICE_PICK_REQUEST); }
         return roleList(Kind.SACRIFICE_PICK_REQUEST, prior, "previousSelections",
                 Map.of("requestedSelections", requested, "priorSelectionCount", priorCount));
+    }
+
+    static Input maxXCalculation(final boolean effect) {
+        return complete(Kind.MAX_X_CALCULATION_REQUEST, Map.of("effect", effect), Map.of());
     }
 
     static Input exileRanking(final int amount, final boolean effect) {

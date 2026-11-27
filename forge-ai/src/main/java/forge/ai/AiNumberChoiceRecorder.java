@@ -67,6 +67,17 @@ public final class AiNumberChoiceRecorder {
         }, () -> AiPromptInput.numbers(possible, relatedPlayer));
     }
 
+    static int calculateMaxX(final Player chooser, final SpellAbility ability, final boolean effect,
+            final java.util.function.IntSupplier callback) {
+        final var parameters = new AtomicReference<AiReceivedParameters.Input>();
+        return AiChoiceRecorder.observeParametersAt(chooser, ability, "X_SELECTION", null,
+                "MAX_X_CALCULATION", "BEFORE_OPERATION", () -> {
+                    final var received = AiReceivedParameters.maxXCalculation(effect); parameters.set(received);
+                    return Map.of("coverage", "COMPUTATION_NOT_LEGAL_DOMAIN", "callbackParameters", received.diagnostics());
+                }, callback::getAsInt, value -> numeric(value, null, "UNAVAILABLE"), null, null,
+                new AiReceivedParameters.Carrier(parameters));
+    }
+
     public static int announceX(final Player chooser, final SpellAbility ability, final Integer bound,
             final int selected, final String boundary) {
         return AiChoiceRecorder.observe(chooser, ability, "X_SELECTION", null, boundary, () -> {

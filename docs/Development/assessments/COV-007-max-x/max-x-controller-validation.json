@@ -1,0 +1,42 @@
+{
+  "FIREBALL": {
+    "lifecycleEvents": 4,
+    "validatedObservations": 2
+  },
+  "DOUBLE_X": {
+    "lifecycleEvents": 4,
+    "validatedObservations": 2
+  },
+  "ZERO": {
+    "lifecycleEvents": 4,
+    "validatedObservations": 2
+  },
+  "AIXMAX_SUBABILITY": {
+    "lifecycleEvents": 4,
+    "validatedObservations": 2
+  },
+  "TARGET_X": {
+    "lifecycleEvents": 4,
+    "validatedObservations": 2
+  },
+  "NON_MANA_X": {
+    "lifecycleEvents": 4,
+    "validatedObservations": 2
+  },
+  "NON_FREE_GUARD": {
+    "lifecycleEvents": 0,
+    "validatedObservations": 0
+  },
+  "CACHED_CHARM": {
+    "lifecycleEvents": 0,
+    "validatedObservations": 0
+  },
+  "FROZEN_PLANNING": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "ORIGINAL_ERROR": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  }
+}

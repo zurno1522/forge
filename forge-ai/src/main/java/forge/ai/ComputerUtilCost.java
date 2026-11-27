@@ -696,6 +696,12 @@ public class ComputerUtilCost {
             return root.getXManaCostPaid();
         }
 
+        return AiNumberChoiceRecorder.calculateMaxX(ai, sa, effect,
+                () -> calculateMaxXValue(sa, ai, effect, source, root, abCost));
+    }
+
+    private static int calculateMaxXValue(final SpellAbility sa, final Player ai, final boolean effect,
+            final Card source, final SpellAbility root, final Cost abCost) {
         Integer val = null;
 
         if (root.costHasManaX()) {

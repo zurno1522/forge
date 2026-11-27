@@ -1,0 +1,23 @@
+{
+  "focusedJava": {
+    "tests": 287,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "newCases": 15,
+    "execution": "Maven compiled production; corrected sparse-ledger/subability fixtures compiled with --release 17 in an isolated directory, then all twenty-three focused classes passed. Includes six existing AiNumberChoiceRecorderTest cases added to the focused set."
+  },
+  "python": {
+    "tests": 316,
+    "failures": 0,
+    "errors": 0,
+    "newMethods": 6
+  },
+  "fullDesktopReactor": "Not repeated; the earlier reproduced scavenge instability remains a separate validation limit.",
+  "logs": {
+    "/workspace/work/cov007-max-x/focused.log": "18bf861fb9a87cd54a5b3cfe23124dfeb0939c17f1456c869fb1a6e74cfe1b30",
+    "/workspace/work/cov007-max-x/focused-final.log": "333ac82180ced57e495e22aa752d17945be917989dc9f687a8b409450f0ab6cd",
+    "/workspace/work/cov007-max-x/python.log": "857f6ebd482f57024e0f77627cd4520a6002061add7ef6a5e6f122ba26fb5953",
+    "/workspace/work/cov007-max-x/validation.log": "c28aa627401183c06d1eb37bb2c0387645ad446f35491bdb10a6562da37bec49"
+  }
+}
