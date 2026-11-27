@@ -7,8 +7,10 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -67,9 +69,24 @@ public final class InputContextPhaseMetrics {
         boolean outer = s.depth[phase] == 1;
         exit(phase);
         if (outer && s.memory) {
-            sample(s.freezeSource[phase - 2], result);
-            s.freezeSource[phase - 2] = null;
+            try { sample(s.freezeSource[phase - 2], result); }
+            finally { s.freezeSource[phase - 2] = null; }
         }
+    }
+    public static void freezeFailed() {
+        State s = LOCAL.get(); if (!s.enabled) { return; }
+        int phase = s.depth[0] > 0 ? 2 : 3;
+        // A diagnostic thrown by freezeExit's sampler occurs after that span was retired.
+        if (s.depth[phase] == 0) { return; }
+        boolean outer = s.depth[phase] == 1;
+        exit(phase);
+        if (outer && s.memory) { s.freezeSource[phase - 2] = null; }
+    }
+    /** Keep the original comparator exception and retire the ordering span on every path. */
+    public static <T> void sort(List<T> values, Comparator<? super T> comparator) {
+        enter(1);
+        try { values.sort(comparator); }
+        finally { exit(1); }
     }
     static void sample(Object... roots) {
         State s = LOCAL.get();

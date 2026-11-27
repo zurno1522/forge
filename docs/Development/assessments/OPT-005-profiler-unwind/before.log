@@ -1,0 +1,3 @@
+Exception in thread "main" java.lang.IllegalStateException: Unbalanced instrumentation
+	at forge.ai.InputContextPhaseMetrics.finish(InputContextPhaseMetrics.java:80)
+	at forge.ai.PhaseAgentFailureProbe.main(PhaseAgentFailureProbe.java:40)

@@ -1,0 +1,12 @@
+{
+  "sources": {
+    "InputContextNativeFailureProbe.java": "1e1393eda66086f28cfef2343b389acbd9257803387ca62e6a7c94eaf22ffb74",
+    "InputContextPhaseAgent.java": "698de0532514d8b5ffeabe790d70c22cd7a986d116a8c4b961a825868db7c6cd",
+    "InputContextPhaseMetrics.java": "87905f0502c2a3eb31272b395bc67bcde55baa4d64d988ee76f9e562c09c8727",
+    "fixtures/phase-agent-exceptions/forge/ai/AiDecisionEvent.java": "4c3646aaa15c649f8254f92a1c751ae65f9ec60341815ec2d8c3f3d31a5d9459",
+    "fixtures/phase-agent-exceptions/forge/ai/AiInputContext.java": "752d9d9960d9f58ebb2800f973e2cf07dee97b97b59f58b7fea0c510ee13556b",
+    "fixtures/phase-agent-exceptions/forge/ai/PhaseAgentFailureProbe.java": "269352583aee9562fb406d8b83b525283b35b486f624de338c50e0a985234d10",
+    "fixtures/phase-agent-exceptions/forge/game/Game.java": "974c262c74937794b9955e65e68f47f637a4e5fb2ce963d44430842934ce7bcd",
+    "run-agent-unwind-check.py": "7b2ff35201c8edff022af24c00fc5c65d6960080192fcbd9f17c7ac656dac7c0"
+  }
+}

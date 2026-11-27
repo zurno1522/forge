@@ -1,0 +1,28 @@
+{
+  "command": [
+    "/workspace/.forge-tools/jdk/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+    "--add-exports=java.base/jdk.internal.org.objectweb.asm=ALL-UNNAMED",
+    "--add-exports=java.base/jdk.internal.org.objectweb.asm.commons=ALL-UNNAMED",
+    "--add-opens=java.base/java.util=ALL-UNNAMED",
+    "--add-opens=java.base/java.lang=ALL-UNNAMED",
+    "-Dforge.context.profile=true",
+    "-javaagent:/workspace/work/opt005-unwind-before-final/agent.jar",
+    "-cp",
+    "/workspace/work/opt005-unwind-before-final/fixtures:/workspace/work/opt005-unwind-before-final/agent",
+    "forge.ai.PhaseAgentFailureProbe"
+  ],
+  "agentReference": "159b6c05bce952288426e22dfd3e8bc13c509198",
+  "fixtureScope": "ISOLATED_AGENT_UNIT_NOT_GAMEPLAY",
+  "sources": {
+    "InputContextPhaseAgent.java": "6adb020eb6bf2b8d8e26ffe5e366bbf44a67fb960e2da814d2b7bb3731c67233",
+    "InputContextPhaseMetrics.java": "bbcd3bbcb4ed4c6cdac47e7eac93c1d8152a9980519fc217d262cade545d880d"
+  },
+  "fixtures": {
+    "fixtures/phase-agent-exceptions/forge/ai/AiDecisionEvent.java": "4c3646aaa15c649f8254f92a1c751ae65f9ec60341815ec2d8c3f3d31a5d9459",
+    "fixtures/phase-agent-exceptions/forge/ai/AiInputContext.java": "752d9d9960d9f58ebb2800f973e2cf07dee97b97b59f58b7fea0c510ee13556b",
+    "fixtures/phase-agent-exceptions/forge/ai/PhaseAgentFailureProbe.java": "269352583aee9562fb406d8b83b525283b35b486f624de338c50e0a985234d10",
+    "fixtures/phase-agent-exceptions/forge/game/Game.java": "974c262c74937794b9955e65e68f47f637a4e5fb2ce963d44430842934ce7bcd"
+  },
+  "trainingReady": false,
+  "exitCode": 1
+}

@@ -66,6 +66,21 @@ See the [profile and measured results](../../../docs/Development/Simulation-Inpu
 
 ## OPT-001 phase probe
 
+Before measuring failed operations, validate the agent's exception cleanup:
+
+```sh
+python3 tools/decision-records/input-context-benchmark/run-agent-unwind-check.py \
+  --java-home /path/to/jdk-21 --output-dir /path/to/new-unwind-results \
+  --classpath-file /path/to/classpath.txt --user-home /path/to/writable-profile
+```
+
+Omit the last two arguments for the isolated agent unit only. Its fixture classes
+are separate from the agent JAR and the real Forge classpath. Pass
+`--agent-reference 159b6c05bce` to reproduce the expected isolated fail-before result;
+that run exits nonzero.
+The [exception-hardening assessment](../../../docs/Development/Simulation-Profiler-Exception-Hardening.md)
+records the scope; these checks are not cost samples or played games.
+
 The historical probe above uses Gson; its serialization measurements are not
 measurements of Forge's production JSONL encoder. The new phase probe uses the
 actual `SimulationTraceWriter.write` path through `TraceWriterProbeSink`, with a

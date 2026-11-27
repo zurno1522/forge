@@ -1,0 +1,19 @@
+{
+  "sameFinalFixtureFailsBefore": true,
+  "pinnedAgent": "159b6c05bce952288426e22dfd3e8bc13c509198",
+  "unitAfterPass": true,
+  "timingFailureCases": 9,
+  "originalThrowablesPreserved": true,
+  "failedMemoryRootsCleared": true,
+  "nestedSamplingDiagnosticsVisible": true,
+  "nativeBoundaryCheckPass": true,
+  "nativeWorkloadSmokePass": true,
+  "pythonTests": 368,
+  "pythonFailures": 0,
+  "pythonErrors": 0,
+  "pythonLogSha256": "fa4564d545f699ca27ab0b3fe7dd002501025dd092447c5eeb8873b9d0e4638f",
+  "productionRuntimeUnchanged": true,
+  "playedGames": 0,
+  "costSamplesForComparison": 0,
+  "trainingReady": false
+}

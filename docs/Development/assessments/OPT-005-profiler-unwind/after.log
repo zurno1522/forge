@@ -1,0 +1,1 @@
+PASS: nine timing failures preserve original throwables; capture/freeze/publication/sort unwound; failed memory roots cleared; nested sampler diagnostics preserved
