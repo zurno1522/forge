@@ -1,6 +1,7 @@
 """Typed request arguments at audited callbacks; no option-pool permission."""
 
 SHAPES = {
+    'CARD_PAYMENT_REQUEST': {'paymentKind','minimum','maximum'},
     'MANA_SOURCE_REQUEST': {'shard','remainingManaValue','checkCosts','effect'},
     'MANA_POOL_REQUEST': {'testPayment','shard','colorsPaid'},
     'NONE': set(), 'VOTER': {'voter'}, 'TRIGGER_REQUIREMENT': {'mandatory'},
@@ -14,7 +15,8 @@ ENTITY_KINDS = {'NONE', 'ENTITY_CARD_ROLE', 'ENTITY_TARGET_ROLE', 'ENTITY_MANA_V
 TRIGGER_KINDS = {'TRIGGER_REQUIREMENT'}
 MANA_KINDS = {'MANA_POOL_REQUEST'}
 MANA_SOURCE_KINDS = {'MANA_SOURCE_REQUEST'}
-MIN_PROFILE = {'MANA_SOURCE_REQUEST': 20, 'MANA_POOL_REQUEST': 19, 'TRIGGER_REQUIREMENT': 17, 'ENTITY_ATTACHMENT_ROLES': 18, 'ENTITY_ATTACKER_ROLES': 18}
+CARD_PAYMENT_KINDS = {'CARD_PAYMENT_REQUEST'}
+MIN_PROFILE = {'CARD_PAYMENT_REQUEST': 21, 'MANA_SOURCE_REQUEST': 20, 'MANA_POOL_REQUEST': 19, 'TRIGGER_REQUIREMENT': 17, 'ENTITY_ATTACHMENT_ROLES': 18, 'ENTITY_ATTACKER_ROLES': 18}
 ROLE_LIST_KINDS = {'ENTITY_ATTACHMENT_ROLES', 'ENTITY_ATTACKER_ROLES'}
 MAX_ROLE_LIST = 64
 MANA_SHARDS = {'B2', 'BG', 'BGP', 'BLACK', 'BLUE', 'BP', 'BR', 'BRP', 'CB', 'CG', 'COLORED_X', 'COLORLESS', 'CR', 'CU', 'CW', 'G2', 'GENERIC', 'GP', 'GREEN', 'GU', 'GUP', 'GW', 'GWP', 'R2', 'RED', 'RG', 'RGP', 'RP', 'RW', 'RWP', 'S', 'U2', 'UB', 'UBP', 'UP', 'UR', 'URP', 'W2', 'WB', 'WBP', 'WHITE', 'WP', 'WU', 'WUP', 'X'}
@@ -40,6 +42,8 @@ def role_array(value):
 
 
 def scalars(kind, values):
+    if kind == 'CARD_PAYMENT_REQUEST':
+        require(values['paymentKind'] in ('DISCARD','SACRIFICE') and all(integer(values[key]) and -(1 << 31) <= values[key] < (1 << 31) for key in ('minimum','maximum')), 'invalid card payment request')
     if kind == 'MANA_SOURCE_REQUEST':
         require(isinstance(values['shard'], str) and values['shard'] in MANA_SHARDS
                 and integer(values['remainingManaValue']) and -(1 << 31) <= values['remainingManaValue'] < (1 << 31)
@@ -58,7 +62,7 @@ def scalars(kind, values):
 def receipt(value, family, typed_reference, version=16):
     require(isinstance(value, dict) and set(value) == {'schemaVersion','coverage','kind','values','reason'}
             and integer(value['schemaVersion']) and value['schemaVersion'] == 1, 'invalid diagnostic fields')
-    kind = value['kind']; allowed = NUMBER_KINDS if family == 'NUMBER' else TRIGGER_KINDS if family == 'TRIGGER' else MANA_KINDS if family == 'MANA' else MANA_SOURCE_KINDS if family == 'MANA_SOURCE' else ENTITY_KINDS
+    kind = value['kind']; allowed = NUMBER_KINDS if family == 'NUMBER' else TRIGGER_KINDS if family == 'TRIGGER' else MANA_KINDS if family == 'MANA' else MANA_SOURCE_KINDS if family == 'MANA_SOURCE' else CARD_PAYMENT_KINDS if family == 'CARD_PAYMENT' else ENTITY_KINDS
     if value['coverage'] == 'UNSUPPORTED':
         require(kind is None and value['values'] is None and value['reason'] == 'UNSUPPORTED', 'unsupported shape carries values'); return
     require(isinstance(kind, str) and kind in allowed, 'unknown or wrong-family shape')

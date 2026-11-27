@@ -1,0 +1,1471 @@
+{
+  "completeGameTrace": false,
+  "fixtureKind": "CARD_POLICY_AND_ADAPTER_EXCERPTS",
+  "choices": {
+    "FORCED_DISCARD_ALIAS": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:1",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "PAYMENT_CARD_SELECTION",
+        "boundary": "PAYMENT_DISCARD_POOL",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 1,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "CARD_PAYMENT_REQUEST",
+            "values": {
+              "paymentKind": "DISCARD",
+              "maximum": 2,
+              "minimum": 2
+            },
+            "reason": null
+          },
+          "maximum": 2,
+          "minimum": 2,
+          "coverage": "OBSERVED_CARD_OPTIONS_NOT_ALL_LEGAL_PAYMENT_PLANS",
+          "cards": {
+            "truncated": false,
+            "items": [
+              {
+                "type": "CARD",
+                "id": 2,
+                "gameTimestamp": 2
+              },
+              {
+                "type": "CARD",
+                "id": 3,
+                "gameTimestamp": 3
+              }
+            ]
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 21,
+          "profile": "PERMITTED_CHOICE_VIEW_V21",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "chooserPlayerId": 1,
+            "controllingPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1",
+            "prompt": "UNSUPPORTED",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 3,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Forest",
+                "types": "Basic Land - Forest",
+                "manaCost": "no cost",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Lightning Bolt",
+                "types": "Instant",
+                "manaCost": "{R}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c2",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Mountain",
+                "types": "Basic Land - Mountain",
+                "manaCost": "no cost",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": {
+              "kind": "CARD_PAYMENT_REQUEST",
+              "paymentKind": "DISCARD",
+              "maximum": 2,
+              "minimum": 2
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "playerBindings": [
+              {
+                "id": 0,
+                "entityRef": "p0"
+              },
+              {
+                "id": 1,
+                "entityRef": "p1"
+              }
+            ],
+            "cardBindings": [
+              {
+                "entityRef": "c0",
+                "id": 2,
+                "gameTimestamp": 2
+              },
+              {
+                "entityRef": "c1",
+                "id": 1,
+                "gameTimestamp": 1
+              },
+              {
+                "entityRef": "c2",
+                "id": 3,
+                "gameTimestamp": 3
+              }
+            ],
+            "optionBindings": {
+              "truncated": false,
+              "items": [],
+              "coverage": "UNSUPPORTED"
+            },
+            "stackBindings": []
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:1",
+        "status": "COMPLETED",
+        "selection": {
+          "truncated": false,
+          "items": [
+            {
+              "type": "CARD",
+              "id": 2,
+              "gameTimestamp": 2
+            },
+            {
+              "type": "CARD",
+              "id": 3,
+              "gameTimestamp": 3
+            }
+          ]
+        },
+        "elapsedNanos": 67648644
+      }
+    ],
+    "ACTUAL_SACRIFICE_PROPOSAL": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:2",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "PAYMENT_DECISION",
+        "boundary": "COST_VISITOR",
+        "stage": "PAYMENT",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 6,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "costKind": "CostSacrifice",
+          "effect": false,
+          "coverage": "PAYMENT_VISITOR_INPUT_NOT_ALTERNATIVES"
+        },
+        "inputContext": {
+          "schemaVersion": 21,
+          "profile": "PERMITTED_CHOICE_VIEW_V21",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "chooserPlayerId": 1,
+            "controllingPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "UNSUPPORTED",
+            "prompt": "UNSUPPORTED",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 3,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Llanowar Elves",
+                "types": "Creature - Elf Druid",
+                "manaCost": "{G}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "entityRef": "c2",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Forest",
+                "types": "Basic Land - Forest",
+                "manaCost": "no cost",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c3",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Lightning Bolt",
+                "types": "Instant",
+                "manaCost": "{R}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c4",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Mountain",
+                "types": "Basic Land - Mountain",
+                "manaCost": "no cost",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": null,
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "playerBindings": [
+              {
+                "id": 0,
+                "entityRef": "p0"
+              },
+              {
+                "id": 1,
+                "entityRef": "p1"
+              }
+            ],
+            "cardBindings": [
+              {
+                "entityRef": "c0",
+                "id": 4,
+                "gameTimestamp": 4
+              },
+              {
+                "entityRef": "c1",
+                "id": 5,
+                "gameTimestamp": 5
+              },
+              {
+                "entityRef": "c2",
+                "id": 2,
+                "gameTimestamp": 2
+              },
+              {
+                "entityRef": "c3",
+                "id": 1,
+                "gameTimestamp": 1
+              },
+              {
+                "entityRef": "c4",
+                "id": 3,
+                "gameTimestamp": 3
+              }
+            ],
+            "optionBindings": {
+              "truncated": false,
+              "items": [],
+              "coverage": "UNSUPPORTED"
+            },
+            "stackBindings": []
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:3",
+        "parentChoiceId": "choice:2",
+        "status": "STARTED",
+        "choiceType": "PAYMENT_CARD_SELECTION",
+        "boundary": "PAYMENT_SACRIFICE_POOL",
+        "stage": "PAYMENT",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 6,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "CARD_PAYMENT_REQUEST",
+            "values": {
+              "paymentKind": "SACRIFICE",
+              "maximum": 2,
+              "minimum": 2
+            },
+            "reason": null
+          },
+          "maximum": 2,
+          "minimum": 2,
+          "coverage": "OBSERVED_CARD_OPTIONS_NOT_ALL_LEGAL_PAYMENT_PLANS",
+          "cards": {
+            "truncated": false,
+            "items": [
+              {
+                "type": "CARD",
+                "id": 4,
+                "gameTimestamp": 4
+              },
+              {
+                "type": "CARD",
+                "id": 5,
+                "gameTimestamp": 5
+              }
+            ]
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 21,
+          "profile": "PERMITTED_CHOICE_VIEW_V21",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "chooserPlayerId": 1,
+            "controllingPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1",
+            "prompt": "UNSUPPORTED",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 3,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Llanowar Elves",
+                "types": "Creature - Elf Druid",
+                "manaCost": "{G}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Grizzly Bears",
+                "types": "Creature - Bear",
+                "manaCost": "{1}{G}",
+                "power": 2,
+                "toughness": 2,
+                "counters": {}
+              },
+              {
+                "entityRef": "c2",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Forest",
+                "types": "Basic Land - Forest",
+                "manaCost": "no cost",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c3",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Lightning Bolt",
+                "types": "Instant",
+                "manaCost": "{R}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c4",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Mountain",
+                "types": "Basic Land - Mountain",
+                "manaCost": "no cost",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": {
+              "kind": "CARD_PAYMENT_REQUEST",
+              "paymentKind": "SACRIFICE",
+              "maximum": 2,
+              "minimum": 2
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "playerBindings": [
+              {
+                "id": 0,
+                "entityRef": "p0"
+              },
+              {
+                "id": 1,
+                "entityRef": "p1"
+              }
+            ],
+            "cardBindings": [
+              {
+                "entityRef": "c0",
+                "id": 4,
+                "gameTimestamp": 4
+              },
+              {
+                "entityRef": "c1",
+                "id": 5,
+                "gameTimestamp": 5
+              },
+              {
+                "entityRef": "c2",
+                "id": 2,
+                "gameTimestamp": 2
+              },
+              {
+                "entityRef": "c3",
+                "id": 1,
+                "gameTimestamp": 1
+              },
+              {
+                "entityRef": "c4",
+                "id": 3,
+                "gameTimestamp": 3
+              }
+            ],
+            "optionBindings": {
+              "truncated": false,
+              "items": [],
+              "coverage": "UNSUPPORTED"
+            },
+            "stackBindings": []
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:3",
+        "status": "COMPLETED",
+        "selection": {
+          "truncated": false,
+          "items": [
+            {
+              "type": "CARD",
+              "id": 4,
+              "gameTimestamp": 4
+            },
+            {
+              "type": "CARD",
+              "id": 5,
+              "gameTimestamp": 5
+            }
+          ]
+        },
+        "elapsedNanos": 81131701
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:2",
+        "status": "COMPLETED",
+        "selection": {
+          "decisionCount": 0,
+          "cards": {
+            "truncated": false,
+            "items": [
+              {
+                "type": "CARD",
+                "id": 4,
+                "gameTimestamp": 4
+              },
+              {
+                "type": "CARD",
+                "id": 5,
+                "gameTimestamp": 5
+              }
+            ]
+          },
+          "mana": null,
+          "players": null,
+          "abilities": null,
+          "colorMask": null,
+          "unrecordedDetails": []
+        },
+        "elapsedNanos": 176474924
+      }
+    ],
+    "FROZEN_PLANNING": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:4",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "PAYMENT_CARD_SELECTION",
+        "boundary": "PAYMENT_DISCARD_POOL",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 14,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "PLANNING_WORKING_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "CARD_PAYMENT_REQUEST",
+            "values": {
+              "paymentKind": "DISCARD",
+              "maximum": 2,
+              "minimum": 1
+            },
+            "reason": null
+          },
+          "maximum": 2,
+          "minimum": 1,
+          "coverage": "OBSERVED_CARD_OPTIONS_NOT_ALL_LEGAL_PAYMENT_PLANS",
+          "cards": {
+            "truncated": false,
+            "items": [
+              {
+                "type": "CARD",
+                "id": 2,
+                "gameTimestamp": 2
+              },
+              {
+                "type": "CARD",
+                "id": 3,
+                "gameTimestamp": 3
+              }
+            ]
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 21,
+          "profile": "PERMITTED_CHOICE_VIEW_V21",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "PLANNING_WORKING_STATE",
+          "perspective": {
+            "chooserPlayerId": 1,
+            "controllingPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1",
+            "prompt": "UNSUPPORTED",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 3,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Forest",
+                "types": "Basic Land - Forest",
+                "manaCost": "no cost",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Lightning Bolt",
+                "types": "Instant",
+                "manaCost": "{R}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c2",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Mountain",
+                "types": "Basic Land - Mountain",
+                "manaCost": "no cost",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": {
+              "kind": "CARD_PAYMENT_REQUEST",
+              "paymentKind": "DISCARD",
+              "maximum": 2,
+              "minimum": 1
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "playerBindings": [
+              {
+                "id": 0,
+                "entityRef": "p0"
+              },
+              {
+                "id": 1,
+                "entityRef": "p1"
+              }
+            ],
+            "cardBindings": [
+              {
+                "entityRef": "c0",
+                "id": 2,
+                "gameTimestamp": 2
+              },
+              {
+                "entityRef": "c1",
+                "id": 1,
+                "gameTimestamp": 1
+              },
+              {
+                "entityRef": "c2",
+                "id": 3,
+                "gameTimestamp": 3
+              }
+            ],
+            "optionBindings": {
+              "truncated": false,
+              "items": [],
+              "coverage": "UNSUPPORTED"
+            },
+            "stackBindings": []
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:4",
+        "status": "COMPLETED",
+        "selection": {
+          "truncated": false,
+          "items": [
+            {
+              "type": "CARD",
+              "id": 2,
+              "gameTimestamp": 2
+            }
+          ]
+        },
+        "elapsedNanos": 953385
+      }
+    ],
+    "REVERSED_RECEIVED_BOUNDS": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:5",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "PAYMENT_CARD_SELECTION",
+        "boundary": "PAYMENT_SACRIFICE_POOL",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 19,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "CARD_PAYMENT_REQUEST",
+            "values": {
+              "paymentKind": "SACRIFICE",
+              "maximum": 1,
+              "minimum": 3
+            },
+            "reason": null
+          },
+          "maximum": 1,
+          "minimum": 3,
+          "coverage": "OBSERVED_CARD_OPTIONS_NOT_ALL_LEGAL_PAYMENT_PLANS",
+          "cards": {
+            "truncated": false,
+            "items": [
+              {
+                "type": "CARD",
+                "id": 2,
+                "gameTimestamp": 2
+              },
+              {
+                "type": "CARD",
+                "id": 3,
+                "gameTimestamp": 3
+              }
+            ]
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 21,
+          "profile": "PERMITTED_CHOICE_VIEW_V21",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "chooserPlayerId": 1,
+            "controllingPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1",
+            "prompt": "UNSUPPORTED",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 3,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Forest",
+                "types": "Basic Land - Forest",
+                "manaCost": "no cost",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Lightning Bolt",
+                "types": "Instant",
+                "manaCost": "{R}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c2",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Mountain",
+                "types": "Basic Land - Mountain",
+                "manaCost": "no cost",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": {
+              "kind": "CARD_PAYMENT_REQUEST",
+              "paymentKind": "SACRIFICE",
+              "maximum": 1,
+              "minimum": 3
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "playerBindings": [
+              {
+                "id": 0,
+                "entityRef": "p0"
+              },
+              {
+                "id": 1,
+                "entityRef": "p1"
+              }
+            ],
+            "cardBindings": [
+              {
+                "entityRef": "c0",
+                "id": 2,
+                "gameTimestamp": 2
+              },
+              {
+                "entityRef": "c1",
+                "id": 1,
+                "gameTimestamp": 1
+              },
+              {
+                "entityRef": "c2",
+                "id": 3,
+                "gameTimestamp": 3
+              }
+            ],
+            "optionBindings": {
+              "truncated": false,
+              "items": [],
+              "coverage": "UNSUPPORTED"
+            },
+            "stackBindings": []
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:5",
+        "status": "COMPLETED",
+        "selection": {
+          "truncated": false,
+          "items": [
+            {
+              "type": "CARD",
+              "id": 2,
+              "gameTimestamp": 2
+            },
+            {
+              "type": "CARD",
+              "id": 3,
+              "gameTimestamp": 3
+            }
+          ]
+        },
+        "elapsedNanos": 4356486
+      }
+    ],
+    "EXILE_LEGACY": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:6",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "PAYMENT_CARD_SELECTION",
+        "boundary": "PAYMENT_EXILE_POOL",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 24,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "options": {
+          "minimum": 1,
+          "cards": {
+            "truncated": false,
+            "items": [
+              {
+                "type": "CARD",
+                "id": 2,
+                "gameTimestamp": 2
+              },
+              {
+                "type": "CARD",
+                "id": 3,
+                "gameTimestamp": 3
+              }
+            ]
+          },
+          "maximum": 1,
+          "coverage": "OBSERVED_CARD_OPTIONS_NOT_ALL_LEGAL_PAYMENT_PLANS"
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:6",
+        "status": "COMPLETED",
+        "selection": {
+          "truncated": false,
+          "items": [
+            {
+              "type": "CARD",
+              "id": 2,
+              "gameTimestamp": 2
+            },
+            {
+              "type": "CARD",
+              "id": 3,
+              "gameTimestamp": 3
+            }
+          ]
+        },
+        "elapsedNanos": 2538495
+      }
+    ],
+    "ORIGINAL_ERROR": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:7",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "PAYMENT_CARD_SELECTION",
+        "boundary": "PAYMENT_DISCARD_POOL",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 29,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "SELECTOR",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "CARD_PAYMENT_REQUEST",
+            "values": {
+              "paymentKind": "DISCARD",
+              "maximum": 2,
+              "minimum": 1
+            },
+            "reason": null
+          },
+          "maximum": 2,
+          "minimum": 1,
+          "coverage": "OBSERVED_CARD_OPTIONS_NOT_ALL_LEGAL_PAYMENT_PLANS",
+          "cards": {
+            "truncated": false,
+            "items": [
+              {
+                "type": "CARD",
+                "id": 2,
+                "gameTimestamp": 2
+              },
+              {
+                "type": "CARD",
+                "id": 3,
+                "gameTimestamp": 3
+              }
+            ]
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 21,
+          "profile": "PERMITTED_CHOICE_VIEW_V21",
+          "timing": "BEFORE_SELECTOR",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "chooserPlayerId": 1,
+            "controllingPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1",
+            "prompt": "UNSUPPORTED",
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 3,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Forest",
+                "types": "Basic Land - Forest",
+                "manaCost": "no cost",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Lightning Bolt",
+                "types": "Instant",
+                "manaCost": "{R}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c2",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Mountain",
+                "types": "Basic Land - Mountain",
+                "manaCost": "no cost",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": {
+              "kind": "CARD_PAYMENT_REQUEST",
+              "paymentKind": "DISCARD",
+              "maximum": 2,
+              "minimum": 1
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "playerBindings": [
+              {
+                "id": 0,
+                "entityRef": "p0"
+              },
+              {
+                "id": 1,
+                "entityRef": "p1"
+              }
+            ],
+            "cardBindings": [
+              {
+                "entityRef": "c0",
+                "id": 2,
+                "gameTimestamp": 2
+              },
+              {
+                "entityRef": "c1",
+                "id": 1,
+                "gameTimestamp": 1
+              },
+              {
+                "entityRef": "c2",
+                "id": 3,
+                "gameTimestamp": 3
+              }
+            ],
+            "optionBindings": {
+              "truncated": false,
+              "items": [],
+              "coverage": "UNSUPPORTED"
+            },
+            "stackBindings": []
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:7",
+        "status": "ERROR",
+        "selection": null,
+        "elapsedNanos": 5126617
+      }
+    ]
+  }
+}

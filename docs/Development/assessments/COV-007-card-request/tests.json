@@ -1,0 +1,21 @@
+{
+  "focusedJava": {
+    "tests": 212,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "newCases": 6
+  },
+  "python": {
+    "tests": 284,
+    "failures": 0,
+    "errors": 0,
+    "newMethods": 6
+  },
+  "fullDesktopReactor": "Not repeated; the earlier reproduced scavenge instability remains a separate validation limit.",
+  "logs": {
+    "/workspace/work/cov007-card-request/focused.log": "cb7ad78304f488fe079b41fdd76463a0a8f279cf882554aab4dff6c3ed9c004b",
+    "/workspace/work/cov007-card-request/python.log": "e64c4508af5ee07c28b1c57bd68c470ecff294a1cba1ed2ff63063d7560b5cae",
+    "/workspace/work/cov007-card-request/validation.log": "218fa18d8b1c682e5656795bb1e514e80b7463e149d02e89f22841df5f98c1e9"
+  }
+}

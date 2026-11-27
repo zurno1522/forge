@@ -81,8 +81,8 @@ public class AiMultiEntityChoiceRecorderTest extends AITest {
         final Fixture f = fixture(); choose(f, 0, 1);
         final var input = (Map<?, ?>) outer(f).get("inputContext");
         final var policy = (Map<?, ?>) input.get("policy");
-        Assert.assertEquals(input.get("schemaVersion"), 20);
-        Assert.assertEquals(input.get("profile"), "PERMITTED_CHOICE_VIEW_V20");
+        Assert.assertEquals(input.get("schemaVersion"), 21);
+        Assert.assertEquals(input.get("profile"), "PERMITTED_CHOICE_VIEW_V21");
         Assert.assertEquals(input.get("timing"), "BEFORE_OPERATION");
         Assert.assertEquals(policy.get("prompt"), Map.of("kind", "ENTITY_BOUNDS", "minimumPicks", 0,
                 "maximumPicks", 1, "relatedPlayer", "p0"));
@@ -195,7 +195,7 @@ public class AiMultiEntityChoiceRecorderTest extends AITest {
             Assert.assertEquals(f.events.size(), 2);
             Assert.assertEquals(f.events.get(0).get("boundary"), "MASKED_CHOICE");
             final var input = (Map<?, ?>) f.events.get(0).get("inputContext");
-            Assert.assertEquals(input.get("profile"), "PERMITTED_CHOICE_VIEW_V20");
+            Assert.assertEquals(input.get("profile"), "PERMITTED_CHOICE_VIEW_V21");
             Assert.assertEquals(input.get("timing"), "UNESTABLISHED");
             Assert.assertEquals(input.get("stateBasis"), "UNESTABLISHED");
             Assert.assertNull(f.events.get(1).get("selection"));

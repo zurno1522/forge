@@ -50,7 +50,7 @@ public class AiZoneOperationRecorderTest extends AITest {
         final var start = f.events.get(0);
         Assert.assertEquals(start.get("choiceType"), "ZONE_CHANGE_SELECTION_OPERATION");
         Assert.assertEquals(((Map<?, ?>) start.get("entryLocation")).get("kind"), "OPERATION");
-        Assert.assertEquals(input(start).get("timing"), "BEFORE_OPERATION"); Assert.assertEquals(input(start).get("schemaVersion"), 20);
+        Assert.assertEquals(input(start).get("timing"), "BEFORE_OPERATION"); Assert.assertEquals(input(start).get("schemaVersion"), 21);
         Assert.assertEquals(prompt(start), Map.of("branch", "ORDINARY_HIDDEN_ORIGIN", "kind", "ZONE_CHANGE_OPERATION_REQUEST", "requestedIterations", -3,
                 "destination", "Hand", "origins", List.of("Library"), "sourcePlayer", "p0", "decider", "p1"));
         Assert.assertEquals(((Map<?, ?>) ((List<?>) ((Map<?, ?>) input(start).get("policy")).get("players")).get(1)).get("life"), 20);

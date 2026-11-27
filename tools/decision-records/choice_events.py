@@ -165,6 +165,8 @@ def input_boundary(value, boundary, stage=None, choice=None):
 
 def parameter_boundary(choice):
     context = choice.get('inputContext')
+    if choice['choiceType'] == 'PAYMENT_CARD_SELECTION' and choice['boundary'] in ('PAYMENT_DISCARD_POOL','PAYMENT_SACRIFICE_POOL'):
+        return isinstance(context, dict) and integer(context.get('schemaVersion')) and context['schemaVersion'] >= 21
     if (choice['choiceType'], choice['boundary']) == ('PAYMENT_MANA_SOURCE_SELECTION', 'MANA_SOURCE_OPTIONS'):
         return isinstance(context, dict) and integer(context.get('schemaVersion')) and context['schemaVersion'] >= 20
     if (choice['choiceType'], choice['boundary']) == ('PAYMENT_MANA_SELECTION', 'MANA_POOL_OPTIONS'):
@@ -624,11 +626,19 @@ def options(choice):
                 and isinstance(option['effect'], bool) and choice['boundary'] == 'COST_VISITOR', 'invalid payment visitor input')
         return
     if choice['choiceType'] == 'PAYMENT_CARD_SELECTION':
-        require(isinstance(option, dict) and set(option) == {'coverage', 'cards', 'minimum', 'maximum'}
+        extra = {'callbackParameters'} if parameter_options(choice) else set()
+        require(isinstance(option, dict) and set(option) == {'coverage', 'cards', 'minimum', 'maximum'} | extra
                 and option['coverage'] == 'OBSERVED_CARD_OPTIONS_NOT_ALL_LEGAL_PAYMENT_PLANS'
                 and integer(option['minimum']) and integer(option['maximum'])
                 and choice['boundary'] in ('PAYMENT_DISCARD_POOL', 'PAYMENT_SACRIFICE_POOL', 'PAYMENT_EXILE_POOL'), 'invalid payment card pool')
         prefix(option['cards'], lambda v: typed_reference(v, 'CARD'))
+        if extra:
+            require('entryLocation' in choice, 'card request lacks entry')
+            _contexts._parameters.receipt(option['callbackParameters'], 'CARD_PAYMENT', typed_reference, choice['inputContext']['schemaVersion'])
+            raw = option['callbackParameters']
+            if raw['coverage'] == 'COMPLETE':
+                require(raw['values']['paymentKind'] == {'PAYMENT_DISCARD_POOL':'DISCARD','PAYMENT_SACRIFICE_POOL':'SACRIFICE'}[choice['boundary']]
+                        and all(raw['values'][key] == option[key] for key in ('minimum','maximum')), 'card request differs from boundary/options')
         return
     if choice['choiceType'] == 'PAYMENT_MANA':
         require(isinstance(option, dict) and set(option) == {'coverage', 'remainingManaValue', 'effect'}

@@ -79,9 +79,12 @@ public final class AiPaymentChoiceRecorder {
     public static CardCollection cards(final Player chooser, final SpellAbility ability, final String boundary,
             final CardCollection options, final int min, final int max, final Supplier<CardCollection> callback) {
         if ("PAYMENT_DISCARD_POOL".equals(boundary) || "PAYMENT_SACRIFICE_POOL".equals(boundary)) {
-            return AiChoiceRecorder.observeInput(chooser, ability, "PAYMENT_CARD_SELECTION", null, boundary, "BEFORE_SELECTOR",
-                    () -> Map.of("coverage", "OBSERVED_CARD_OPTIONS_NOT_ALL_LEGAL_PAYMENT_PLANS", "cards", refs(options),
-                            "minimum", min, "maximum", max), callback, AiPaymentChoiceRecorder::refs);
+            final var parameters = new AtomicReference<AiReceivedParameters.Input>();
+            return AiChoiceRecorder.observeParametersAt(chooser, ability, "PAYMENT_CARD_SELECTION", null, boundary, "BEFORE_SELECTOR", () -> {
+                final var received = AiReceivedParameters.cardPayment(boundary, min, max); parameters.set(received);
+                return Map.of("coverage", "OBSERVED_CARD_OPTIONS_NOT_ALL_LEGAL_PAYMENT_PLANS", "cards", refs(options),
+                        "minimum", min, "maximum", max, "callbackParameters", received.diagnostics());
+            }, callback, AiPaymentChoiceRecorder::refs, null, null, new AiReceivedParameters.Carrier(parameters));
         }
         return AiChoiceRecorder.observe(chooser, ability, "PAYMENT_CARD_SELECTION", null, boundary,
                 () -> Map.of("coverage", "OBSERVED_CARD_OPTIONS_NOT_ALL_LEGAL_PAYMENT_PLANS", "cards", refs(options),

@@ -1,0 +1,26 @@
+{
+  "FORCED_DISCARD_ALIAS": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "ACTUAL_SACRIFICE_PROPOSAL": {
+    "lifecycleEvents": 4,
+    "validatedObservations": 2
+  },
+  "FROZEN_PLANNING": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "REVERSED_RECEIVED_BOUNDS": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "EXILE_LEGACY": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "ORIGINAL_ERROR": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  }
+}

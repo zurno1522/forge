@@ -1,0 +1,22 @@
+{
+  "baseRevision": "3d57d0847e4",
+  "sources": {
+    "forge-ai/src/main/java/forge/ai/AiInputContext.java": "bb0660672a43c298e3f5e3c3a9850a753e4545102cadee5273e8ea6123b47b7b",
+    "forge-ai/src/main/java/forge/ai/AiPaymentChoiceRecorder.java": "f19f50afd745692a5237634b8142b00d6772dcda9d6b8d13e8de3a9a81bce25c",
+    "forge-ai/src/main/java/forge/ai/AiReceivedParameters.java": "b4a14452ff83711411ca1406536d4d60498d97e926badb11a1608b9cf5530e83",
+    "forge-gui-desktop/src/test/java/forge/ai/AiCopyTargetInputTest.java": "880ed1684de51bd8f5719f1637699b90570512bf2f27cb19c8f974a0bb98c0e3",
+    "forge-gui-desktop/src/test/java/forge/ai/AiEntitySelectionHistoryTest.java": "c76ee25bee0e27a4b2e9be21465b630c2908744e9e82c866fe57264e86761799",
+    "forge-gui-desktop/src/test/java/forge/ai/AiModeInputContextTest.java": "a0f691ac1c84d169673e4515db10aa9abf4a075f2c2f2a42c8021709ea669022",
+    "forge-gui-desktop/src/test/java/forge/ai/AiModePromptInputTest.java": "e4fd4bceaf3d0071057c4cd48f37ac3b7f9d957a449ff9d97dc050dc5952b3a5",
+    "forge-gui-desktop/src/test/java/forge/ai/AiMultiEntityChoiceRecorderTest.java": "6adad4cc0d675904901fc06f59a0d377a09946b46bf426b5e4034be98f75bf7b",
+    "forge-gui-desktop/src/test/java/forge/ai/AiStackInputContextTest.java": "6ee691f75677f5e1bd36dacd6add0f058baf559bbc2085d8f2252dca46d81721",
+    "forge-gui-desktop/src/test/java/forge/ai/AiZoneOperationRecorderTest.java": "ee58f677706d1717a70cedef5546490ad1df1248434c69e51ac27997aa4fef3f",
+    "tools/decision-records/choice_events.py": "09d5307e4fa2d606a87e15dc2799057df1d0a81af56f40ecf5304397f742c91e",
+    "tools/decision-records/export.py": "cb072756c6e12def3c15301dbaa5f5576afae31733c372c7c9fd5b16595767ed",
+    "tools/decision-records/input_context.py": "77777b37f1cf76030686b187fb64088c0258fcdcce4f249414e22913d979e414",
+    "tools/decision-records/received_parameters.py": "5b0b8c50050eea1a9d5c02eee062ddb6164dcde49b9120c9209abd0471ba7612",
+    "forge-gui-desktop/src/test/java/forge/ai/AiCardPaymentRequestTest.java": "05813512f2b3bb68a02539b1dfd9e0c59aec3c4ef3c394e27f944d9f8a9830f5",
+    "tools/decision-records/test_card_payment_request.py": "5bb4ef06b3ec832f15eb35f9ecfe0a4f8af33693387e295bad38ccafc9aa4c10",
+    "tools/trace-test-decks/choice-card-payments.dck": "2c12ff3e4be5fc3fc18f58bd53a59c60ab634f897233ca2bcf6aa2ea39b97f67"
+  }
+}

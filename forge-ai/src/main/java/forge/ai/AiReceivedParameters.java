@@ -28,7 +28,7 @@ final class AiReceivedParameters {
     static final int MAX_ROLE_LIST = 64;
     enum Family { NUMBER, ENTITY }
     enum Kind { NONE, VOTER, COUNTER_AMOUNT, COUNTER_TRANSFER_AMOUNT, ENTITY_CARD_ROLE, ENTITY_TARGET_ROLE,
-        ENTITY_MANA_VALUE_LIMIT, ENTITY_COUNTER_REQUEST, TRIGGER_REQUIREMENT, ENTITY_ATTACHMENT_ROLES, ENTITY_ATTACKER_ROLES, MANA_POOL_REQUEST, MANA_SOURCE_REQUEST }
+        ENTITY_MANA_VALUE_LIMIT, ENTITY_COUNTER_REQUEST, TRIGGER_REQUIREMENT, ENTITY_ATTACHMENT_ROLES, ENTITY_ATTACKER_ROLES, MANA_POOL_REQUEST, MANA_SOURCE_REQUEST, CARD_PAYMENT_REQUEST }
     record Carrier(AtomicReference<Input> receipt) { }
     record Input(Kind kind, String coverage, String reason, Map<String, Object> values, Map<String, AiOptionInput.Entry> roles, Map<String, List<AiOptionInput.Entry>> roleLists) {
         Map<String, Object> diagnostics() {
@@ -51,6 +51,12 @@ final class AiReceivedParameters {
     static Input manaSource(final ManaCostBeingPaid cost, final ManaCostShard shard, final boolean checkCosts, final boolean effect) {
         return cost == null || cost.getClass() != ManaCostBeingPaid.class || shard == null ? unsupported() : complete(Kind.MANA_SOURCE_REQUEST,
                 Map.of("shard", shard.name(), "remainingManaValue", cost.getConvertedManaCost(), "checkCosts", checkCosts, "effect", effect), Map.of());
+    }
+
+    static Input cardPayment(final String boundary, final int minimum, final int maximum) {
+        final String kind = "PAYMENT_DISCARD_POOL".equals(boundary) ? "DISCARD" : "PAYMENT_SACRIFICE_POOL".equals(boundary) ? "SACRIFICE" : null;
+        return kind == null ? unsupported() : complete(Kind.CARD_PAYMENT_REQUEST,
+                Map.of("paymentKind", kind, "minimum", minimum, "maximum", maximum), Map.of());
     }
 
     private static Input unsupported() { return new Input(null, "UNSUPPORTED", "UNSUPPORTED", null, Map.of(), Map.of()); }
