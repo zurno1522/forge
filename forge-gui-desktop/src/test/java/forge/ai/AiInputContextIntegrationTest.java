@@ -56,6 +56,7 @@ public class AiInputContextIntegrationTest extends AITest {
         Assert.assertEquals(events.size(), 2);
         Assert.assertEquals(context(events.get(0)).get("status"), "UNAVAILABLE");
         Assert.assertTrue(context(events.get(0)).toString().contains("CAPTURE_FAILED"));
+        Assert.assertEquals(((Map<?, ?>) context(events.get(0)).get("admission")).get("status"), "UNESTABLISHED");
         Assert.assertSame(game.getEventObservationFailure(), failure);
         Assert.assertFalse(events.toString().contains("private observation detail"));
         final RuntimeException callbackError = new IllegalArgumentException("callback");
@@ -109,6 +110,9 @@ public class AiInputContextIntegrationTest extends AITest {
         Assert.assertEquals(outer.get("stateBasis"), "RULES_STATE");
         Assert.assertNotEquals(policy(outer), policy(inner));
         Assert.assertEquals(policy(parent), policy(outer));
+        Assert.assertEquals(((Map<?, ?>) parent.get("admission")).get("ordinal"), 1L);
+        Assert.assertEquals(((Map<?, ?>) outer.get("admission")).get("ordinal"), 2L);
+        Assert.assertEquals(((Map<?, ?>) inner.get("admission")).get("ordinal"), 3L);
         Assert.assertTrue(policy(outer).toString().contains("tapped=false"));
         Assert.assertTrue(policy(inner).toString().contains("tapped=true"));
         Assert.assertEquals(chooserLife(outer), 20);

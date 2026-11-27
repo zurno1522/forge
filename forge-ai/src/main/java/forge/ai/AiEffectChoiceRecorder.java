@@ -21,7 +21,8 @@ final class AiEffectChoiceRecorder {
     static <T> T prompt(final Player chooser, final Supplier<T> callback) {
         AiContextDisclosures disclosures = null;
         AiContextDisclosures.Prompt prompt = null;
-        if (chooser.getGame().isRecordingAiDecisions() && chooser.getController() instanceof PlayerControllerAi ai) {
+        if (chooser.getGame().isRecordingAiDecisions() && chooser.getController() instanceof PlayerControllerAi ai
+                && ai.ownsInputContext(chooser)) {
             try {
                 disclosures = ai.inputContextState().disclosures();
                 prompt = disclosures.prompt();

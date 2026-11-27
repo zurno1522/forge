@@ -22,6 +22,11 @@ def add(count, context, audited, parent_omissions=None):
                 count['knownUnrecordedCaptures'][kind + ':' + reason] += value
     if context is None:
         return
+    if 'admission' in context:
+        a = context['admission']
+        count.setdefault('admissionStatuses', Counter())[a['status']] += 1
+        if a['policy'] is not None:
+            count.setdefault('admissionPolicies', Counter())[a['policy']] += 1
     count['timings'][context['timing']] += 1
     count['stateBases'][context['stateBasis']] += 1
     for component, value in context['coverage'].items():
@@ -95,6 +100,15 @@ class CoverageAudit:
             for version, inventory in self.observed_entry_extensions.items():
                 result['entryLocationAudit']['knownInputBoundaryInventoryExtensionV' + str(version)] = inventory
             result['definitions']['byTurn'] += ' Present entry components supply their own clock with ENTRY_LOCATION; unavailable entries stay null with ENTRY_LOCATION_UNAVAILABLE. playerId remains the owning chooser, not the turn player.'
+        if 'admissionStatuses' in self.total:
+            result['admissionAudit'] = dict(schemaVersion=1, scope='OBSERVED_V29_CONTEXT_REFERENCES_ONLY',
+                                          records=sum(self.total['admissionStatuses'].values()),
+                                          statuses=dict(self.total['admissionStatuses']),
+                                          policies=dict(self.total.get('admissionPolicies', {})))
+            result['definitions']['admission'] = ('V29 gate receipts, not successful captures or delivered callbacks. '
+                'Repeated frozen references count repeatedly. Gaps and publication order do not establish lost attempts. '
+                'Legacy/absent contexts have unknown admission and are outside this admission denominator. '
+                'UNESTABLISHED can include failed charged work; BYPASSED is a known pre-gate refusal.')
         return result
 
 
@@ -102,6 +116,9 @@ def markdown(audit):
     yield '\n## Observed input coverage audit\n\n'
     if 'entryLocationAudit' in audit:
         yield 'Independent entry components: ' + json.dumps(audit['entryLocationAudit'], sort_keys=True) + '\n\n'
+    if 'admissionAudit' in audit:
+        yield 'Observed V29 admission receipts: ' + json.dumps(audit['admissionAudit'], sort_keys=True) + '\n\n'
+        yield audit['definitions']['admission'] + '\n\n'
     yield (f"Denominator: {audit['totals']['records']} observed records across parent decisions, standalone starts, "
            'nested target records and search operations. These overlap; they are not unique gameplay decisions. '
            'Unobserved decision count and complete learning-example count are unknown.\n\n')

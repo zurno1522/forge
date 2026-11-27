@@ -1,6 +1,6 @@
 # COV-008C: production admission contract
 
-Status: design, following the [controlled](Simulation-Admission-Experiment-Assessment.md) and [native-game](Simulation-Native-Admission-Assessment.md) experiments. This document changes no runtime behavior. Implementation, cost measurement and optional-policy enablement are separate commits with a gap review after each.
+Status: prefix V29 is [implemented and reviewed](Simulation-Prefix-Admission-Assessment.md); optional hash enablement remains behind its cost gate. The original design follows the [controlled](Simulation-Admission-Experiment-Assessment.md) and [native-game](Simulation-Native-Admission-Assessment.md) experiments. The design commit changed no runtime behavior. Prefix implementation, cost measurement and optional-policy enablement retain separate commits with a gap review after each.
 
 ## Selection and execution order
 
@@ -88,4 +88,4 @@ Design review assigns these findings before implementation:
 | Extra metadata and locks can change costs without changing represented policy | OPT-005 measures production V29 against the same V28 information and reports metadata cost separately |
 | Finite allowance, incomplete domains/history and permission limitations remain | COV-004 readiness and COV-008 optional-policy work stay open; no complete-example claim |
 
-No executable implementation is included in this design commit. Prefix V29 implementation is the next increment, followed by its gap review and the measurement gate above.
+The original design commit included no executable implementation. The [prefix V29 implementation and gap review](Simulation-Prefix-Admission-Assessment.md) now complete the first increment. The broader OPT-005 checkpoint is next; optional hash enablement remains behind the measurement gate above.

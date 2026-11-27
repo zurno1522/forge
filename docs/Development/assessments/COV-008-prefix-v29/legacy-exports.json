@@ -1,0 +1,59 @@
+{
+  "reference": "555c3fbbb35",
+  "sameBytes": true,
+  "cases": {
+    "legacy": {
+      "manifest.json": "e250edd84f5b223184d7a0c45e88e2391fdba4d82c5f462a295731f85bc00a3d",
+      "coverage.md": "815080ca1119287b27963973b6836b66b77bdb91b75f3856774365b096a2c9d0",
+      "coverage.json": "eb6130c9547d8edd457eb0d92bf5ba055d2b043fbce623cc92a243a91e743674",
+      "examples.jsonl": "2c066b7e549a4207dd0bf6fbf5477bb75de1d6ed65826272b108ec4529bfd129",
+      "validation.json": "1bd3a5faae3b1c74a5c2c230fbb65e7957502daec2885cc4e271cdb811083645",
+      "dataset.jsonl": "2c066b7e549a4207dd0bf6fbf5477bb75de1d6ed65826272b108ec4529bfd129"
+    },
+    "v3": {
+      "manifest.json": "d41a5f4913a74d1e694b36b4255a90dd805b7053dcc4f99dcafa9595d3b984eb",
+      "coverage.md": "c09235915c8612da5971ddf99f3f42e37cb8088f9e3dc4721ebaf8548ee70924",
+      "coverage.json": "7fcf09fee80c211cb9f556f2faf04481055dd27134a6def6d284da12d68c5a56",
+      "examples.jsonl": "837a0d60fa5623143731d409c6517671a443f8f2b35bc04f196807d321fb9e30",
+      "validation.json": "1bd3a5faae3b1c74a5c2c230fbb65e7957502daec2885cc4e271cdb811083645",
+      "dataset.jsonl": "837a0d60fa5623143731d409c6517671a443f8f2b35bc04f196807d321fb9e30",
+      "choices.jsonl": "1500361b8d05c06601c11a125bf8689bebda3f91ec99c8967626bfd1c62dcc87"
+    },
+    "v4": {
+      "manifest.json": "1902cbdc471ba6d9072bc2ca2a4954fa87ca5afb5d43aa1aabd8a41da72eb8bc",
+      "coverage.md": "8cd338df23596a996f3b434a49af368f39f894b02be414bf69c8d125f594b88e",
+      "coverage.json": "f66afb6e8f0ebb3214719aca1a6337f0d748e75a74bd308a57005a9d9e88fa71",
+      "examples.jsonl": "837a0d60fa5623143731d409c6517671a443f8f2b35bc04f196807d321fb9e30",
+      "validation.json": "1bd3a5faae3b1c74a5c2c230fbb65e7957502daec2885cc4e271cdb811083645",
+      "dataset.jsonl": "837a0d60fa5623143731d409c6517671a443f8f2b35bc04f196807d321fb9e30",
+      "choices.jsonl": "0f1b6e0ec7101ab04efe1312a9f98aa26eaf2604752de60a259117eada55dd3b"
+    },
+    "mode": {
+      "manifest.json": "17d7950194d2fd0ac7664b95e73463304ea6d1b5034d1a21358a28ccd3453eab",
+      "coverage.md": "f19b4170ff82b14e2fe9b2d019881bc54a2562f8040b9f571a0756562f289049",
+      "coverage.json": "54e4cb8e6235e3f65548c9cfdb948bb3cc46fcf7989388660d73e478b2bea677",
+      "examples.jsonl": "837a0d60fa5623143731d409c6517671a443f8f2b35bc04f196807d321fb9e30",
+      "validation.json": "1bd3a5faae3b1c74a5c2c230fbb65e7957502daec2885cc4e271cdb811083645",
+      "dataset.jsonl": "837a0d60fa5623143731d409c6517671a443f8f2b35bc04f196807d321fb9e30",
+      "choices.jsonl": "42e44f264386ed19dcfe9d9fc7393ef80a3dff5774f3c443969877443380f54f"
+    },
+    "payment": {
+      "manifest.json": "1f39d03cf411c34bda116cc13e9df8a86abeafe91114e91216d067e6a307ca2d",
+      "coverage.md": "2a87fd18bf45079e72698ec710889adbcbd835b848c6150f0ebe5ac14bf8aeff",
+      "coverage.json": "e53ff0d5a9fc1e569cddd5691f5f17ef29edd1f1666128c3a66917ef93b3d3ab",
+      "examples.jsonl": "837a0d60fa5623143731d409c6517671a443f8f2b35bc04f196807d321fb9e30",
+      "validation.json": "1bd3a5faae3b1c74a5c2c230fbb65e7957502daec2885cc4e271cdb811083645",
+      "dataset.jsonl": "837a0d60fa5623143731d409c6517671a443f8f2b35bc04f196807d321fb9e30",
+      "choices.jsonl": "8159d0667d506286dd7d0c64d4257cb701e3a8f5320f9163b546022ebb44072d"
+    },
+    "damage": {
+      "manifest.json": "2ef139c0f115f211faa59cdc71eb31b3e7e43a66f246a8fcfded230c575e9af0",
+      "coverage.md": "ae82bde3ea6c18f7dd63f45d1bf2a5769c322edf4c6dbc77bd50c557f6545ea2",
+      "coverage.json": "0faab22f1f0b8eda2e6ddeea37b7df65c327dddf2daddf6ce661a42c05a67b78",
+      "examples.jsonl": "837a0d60fa5623143731d409c6517671a443f8f2b35bc04f196807d321fb9e30",
+      "validation.json": "1bd3a5faae3b1c74a5c2c230fbb65e7957502daec2885cc4e271cdb811083645",
+      "dataset.jsonl": "837a0d60fa5623143731d409c6517671a443f8f2b35bc04f196807d321fb9e30",
+      "choices.jsonl": "055ce0a8ba581ff2b761f36efef62d8310cdc82c169e97c47509a8269541c0bb"
+    }
+  }
+}

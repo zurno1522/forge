@@ -1,0 +1,49 @@
+{
+  "java": {
+    "tests": 397,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "newAdmissionCases": 13,
+    "logSha256": "e2481dc3cb224164da5152b2a5a8d5c4c87c77bb24d7d9aa0c13aa9f877f044b"
+  },
+  "python": {
+    "tests": 366,
+    "newAdmissionMethods": 8,
+    "failures": 0,
+    "errors": 0,
+    "logSha256": "f02386b44a912d1ae883cf7eba2e2006b2b87998d57015d0e5c9405dcefe4e6e"
+  },
+  "native": {
+    "finalGames": 8,
+    "normal": 6,
+    "censoredTimeout": 2,
+    "normalPairsEqualIncludingRepresentedInputs": 3,
+    "fullFilteredParity": true,
+    "ordinaryReader": true,
+    "observationFailures": 0,
+    "sourceScopesComplete": true,
+    "experimentalSamplingOverlays": 0,
+    "nativeLearningExports": 0,
+    "preliminaryGamesExcluded": 8,
+    "logSha256": "fc745d72ebcb39f4866f32928e525462e18cea7d0e017f18c5b2bb826f81c846"
+  },
+  "legacy": {
+    "fixtures": 6,
+    "byteIdenticalArtifacts": 41
+  },
+  "foreignReceiverRegression": {
+    "failsBefore": true,
+    "passesAfter": true,
+    "beforeMessage": "expected BYPASSED / actual ADMITTED"
+  },
+  "productionPolicy": "FIXED_SHARE_PREFIX_V1",
+  "unchangedBudgets": true,
+  "trainingReady": false,
+  "representativeMessages": 4,
+  "limitations": [
+    "Native elapsed durations are not an admission overhead comparison.",
+    "Timeouts are censored; no same-cutoff or normal-result comparison.",
+    "Observed admission references do not supply unique attempt or uninstrumented decision totals."
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "sources": {
+    "forge-ai/src/main/java/forge/ai/AiEffectChoiceRecorder.java": "5cf120119ffdee0ec13cb3a4a25692105703c239f3701e93fa522031668ef880",
+    "forge-ai/src/main/java/forge/ai/AiInputAdmission.java": "4b808cca48d836a4783bf6ba5a1beccd9e01e9b98f1118806a3e25e740a6a059",
+    "forge-ai/src/main/java/forge/ai/AiInputContext.java": "5709ee828b607dc6f0cd57fd727c5e250d47ed9295ba171f95f25533b57c9f26",
+    "forge-ai/src/main/java/forge/ai/PlayerControllerAi.java": "504dabae28958cb4798cb019de737947b471f4cf4db664a9040d4b161d616002",
+    "forge-gui-desktop/src/main/java/forge/view/SimulationTraceCollector.java": "ce0b05eb8f7ec0592eaa5b11ce6da8f73d6c93cb5b4cf1f46c529a1748b96ded",
+    "forge-gui-desktop/src/test/java/forge/ai/AiCopyTargetInputTest.java": "422e8c8a52a28b7b50062773b5d2c15299b5ce6aa87c25c8c120e3a8149af815",
+    "forge-gui-desktop/src/test/java/forge/ai/AiDamagePolicyInputTest.java": "c7d8cf2c9186495fc843bab4bef920f6416cf2d3fc2c76741b84b59d5627eddd",
+    "forge-gui-desktop/src/test/java/forge/ai/AiDrawPolicyInputTest.java": "c01025800ad2f5696811ca53b1344aa7cf448d6076478133988f299ecaeabfd6",
+    "forge-gui-desktop/src/test/java/forge/ai/AiEntitySelectionHistoryTest.java": "e8289519df23a63c13cb530bb5f833b5950954074ef273d00898faf40034f602",
+    "forge-gui-desktop/src/test/java/forge/ai/AiInputAdmissionTest.java": "678773aa97a3942cb716b8247ce54f8d4c09874bfa46a5cc62b52653048a3d75",
+    "forge-gui-desktop/src/test/java/forge/ai/AiInputContextIntegrationTest.java": "bc1db3024bc80e29d3e33de43f3a89e2566d19b4bc449865a60e38deedad2f67",
+    "forge-gui-desktop/src/test/java/forge/ai/AiMaxXCalculationInputTest.java": "51df581134595d6a1f7a2bdcbb984b43f74cf318bd3d585dd4cea1f29e2d9281",
+    "forge-gui-desktop/src/test/java/forge/ai/AiModeInputContextTest.java": "6c3c35447f1756ecf1b8a12c0001cacccd391205ae58065eb42362fadd8f2a7a",
+    "forge-gui-desktop/src/test/java/forge/ai/AiModePromptInputTest.java": "4637c691767f2e124030bd8513345ee36c207ba699d91c5cc23df0828b17c526",
+    "forge-gui-desktop/src/test/java/forge/ai/AiMultiEntityChoiceRecorderTest.java": "44318e7d2a58791b63043374663af335a230fa82a0409aece5a954e91f3aa204",
+    "forge-gui-desktop/src/test/java/forge/ai/AiStackInputContextTest.java": "d246aacfb69646200d7f7c82ade245d8a22d5017df98f538d6db0aaa6e9441c8",
+    "forge-gui-desktop/src/test/java/forge/ai/AiZoneOperationRecorderTest.java": "f1596735d1219c5f759ea12f0ee3ce634fa4019cf80406b303c3c0ff88a26dac",
+    "tools/decision-records/coverage_audit.py": "27b425e83fc7c3a6cb95dad8264045058eba886834a7b8281c523a493fe1c250",
+    "tools/decision-records/export.py": "6d794e022d5b4fc9348a23dcc6d737649bebef4b45798a7c02b21d9cc75be24d",
+    "tools/decision-records/input-context-benchmark/run-game-admission.py": "a756160ce68b5b29b4383631896cc37d8c051cc70332de185b3814c5533f2692",
+    "tools/decision-records/input-context-benchmark/run-prefix-compatibility.py": "bc2416bbed128cf0750f047d3ddd202f3a219e95c0299362bb463b6a9b1bfb12",
+    "tools/decision-records/input_context.py": "86dcb1e2ebf3e362d26747036fa4329f865c3de94effcfbf62d7b0aa7d645c50",
+    "tools/decision-records/test_game_admission.py": "f0f396edd6dd4876f50280edd9af0cc32545b3fb12451a79d706a09b88679f8b",
+    "tools/decision-records/test_input_admission.py": "b04867bab7faca85b7e39b002183896c4e83b9dca543d0dfe935f1b1f71fbbeb"
+  }
+}

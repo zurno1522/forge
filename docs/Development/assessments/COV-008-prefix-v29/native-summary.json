@@ -1,0 +1,229 @@
+{
+  "damage-V28": {
+    "status": "NORMAL",
+    "gameStartedObserved": true,
+    "initialShuffles": 2,
+    "inputProfiles": {
+      "PERMITTED_CHOICE_VIEW_V28": 654
+    },
+    "admissionAudit": null,
+    "rngCalls": 1092,
+    "files": {
+      "damage-V28-full.jsonl": {
+        "sha256": "01e11c58dbc26faceda5cf8283820de2ffb0a633450738db5e04e01be45ab427",
+        "bytes": 6192954
+      },
+      "damage-V28-decisions.jsonl": {
+        "sha256": "0372d83004f344dcaba33e82815f6f7b9d383af7c7831b4f3b80644d9d4218a7",
+        "bytes": 6020327
+      },
+      "damage-V28-rng.json": {
+        "sha256": "fef11cff29e4493a3093e09bc4259992d1e86e3cd8e9d83826f843acc609c6b4",
+        "bytes": 679
+      }
+    },
+    "normalCompatibilityMatches": null
+  },
+  "damage-V29": {
+    "status": "NORMAL",
+    "gameStartedObserved": true,
+    "initialShuffles": 2,
+    "inputProfiles": {
+      "PERMITTED_CHOICE_VIEW_V29": 654
+    },
+    "admissionAudit": {
+      "schemaVersion": 1,
+      "scope": "OBSERVED_V29_CONTEXT_REFERENCES_ONLY",
+      "records": 654,
+      "statuses": {
+        "ADMITTED": 654
+      },
+      "policies": {
+        "FIXED_SHARE_PREFIX_V1": 654
+      }
+    },
+    "rngCalls": 1092,
+    "files": {
+      "damage-V29-full.jsonl": {
+        "sha256": "9221ad8a176d1be7b72fbf3e73db9f03446c9a164298e7db1a54679fd5fc4073",
+        "bytes": 6282922
+      },
+      "damage-V29-decisions.jsonl": {
+        "sha256": "3233c56a4fcd293aa43513db01896a9f747d74479443800a8aade1a4a87193a5",
+        "bytes": 6110295
+      },
+      "damage-V29-rng.json": {
+        "sha256": "abc7879b6857470a3d32afdef4b3390d398d369ac1c76a8cf273ae6ed53c9d25",
+        "bytes": 679
+      }
+    },
+    "normalCompatibilityMatches": true
+  },
+  "repeated-V29": {
+    "status": "NORMAL",
+    "gameStartedObserved": true,
+    "initialShuffles": 2,
+    "inputProfiles": {
+      "PERMITTED_CHOICE_VIEW_V29": 202
+    },
+    "admissionAudit": {
+      "schemaVersion": 1,
+      "scope": "OBSERVED_V29_CONTEXT_REFERENCES_ONLY",
+      "records": 202,
+      "statuses": {
+        "ADMITTED": 202
+      },
+      "policies": {
+        "FIXED_SHARE_PREFIX_V1": 202
+      }
+    },
+    "rngCalls": 448,
+    "files": {
+      "repeated-V29-full.jsonl": {
+        "sha256": "ed19d3a7563aa303897f46c4dc6bcfbe8fe3f36b66c1cc96dd5b0ac021c863ac",
+        "bytes": 1611696
+      },
+      "repeated-V29-decisions.jsonl": {
+        "sha256": "ce15a3d5532c9fddc8d5df62d8ea3b35b27b34187fbe792379d052deef1ded7f",
+        "bytes": 1501611
+      },
+      "repeated-V29-rng.json": {
+        "sha256": "59a48e7147e93fff788cfaab2274382956d2b456c5a227c779413b4c78f352ab",
+        "bytes": 686
+      }
+    },
+    "normalCompatibilityMatches": true
+  },
+  "repeated-V28": {
+    "status": "NORMAL",
+    "gameStartedObserved": true,
+    "initialShuffles": 2,
+    "inputProfiles": {
+      "PERMITTED_CHOICE_VIEW_V28": 202
+    },
+    "admissionAudit": null,
+    "rngCalls": 448,
+    "files": {
+      "repeated-V28-full.jsonl": {
+        "sha256": "b18647575c1e9f6981c4f1f628b43e0565bf148fe87962faf8100e1085811ec9",
+        "bytes": 1584017
+      },
+      "repeated-V28-decisions.jsonl": {
+        "sha256": "e8ebca7aedcfa719fb6f8830bb08b20e7866c4cc0377f408fc9c615fe19964d2",
+        "bytes": 1473932
+      },
+      "repeated-V28-rng.json": {
+        "sha256": "4100014434b7dddc43fd00448b5a123fbc9d764ee4cc4612a24c3ef78aa4fcab",
+        "bytes": 686
+      }
+    },
+    "normalCompatibilityMatches": null
+  },
+  "commander-a-V28": {
+    "status": "NORMAL",
+    "gameStartedObserved": true,
+    "initialShuffles": 4,
+    "inputProfiles": {
+      "PERMITTED_CHOICE_VIEW_V28": 2657
+    },
+    "admissionAudit": null,
+    "rngCalls": 13796,
+    "files": {
+      "commander-a-V28-full.jsonl": {
+        "sha256": "67e70965834b7c0e922dc38413e6d997a43ac267d392e72b3e8a3d505aceed6c",
+        "bytes": 15878856
+      },
+      "commander-a-V28-decisions.jsonl": {
+        "sha256": "811f2216c7591928031e07905c9125674fc0a749dd986c0ccd647ec8c8e18fbc",
+        "bytes": 14831009
+      },
+      "commander-a-V28-rng.json": {
+        "sha256": "f275b6752d0fc5f2aed4c9407a0306f1b4850d49e8ecf7f58b161aec9b1f5d1d",
+        "bytes": 767
+      }
+    },
+    "normalCompatibilityMatches": null
+  },
+  "commander-a-V29": {
+    "status": "NORMAL",
+    "gameStartedObserved": true,
+    "initialShuffles": 4,
+    "inputProfiles": {
+      "PERMITTED_CHOICE_VIEW_V29": 2657
+    },
+    "admissionAudit": {
+      "schemaVersion": 1,
+      "scope": "OBSERVED_V29_CONTEXT_REFERENCES_ONLY",
+      "records": 2657,
+      "statuses": {
+        "ADMITTED": 2653,
+        "BYPASSED": 4
+      },
+      "policies": {
+        "FIXED_SHARE_PREFIX_V1": 2653
+      }
+    },
+    "rngCalls": 13796,
+    "files": {
+      "commander-a-V29-full.jsonl": {
+        "sha256": "8348a327558b08eaf42116249b070e7296931025b1d5f0c59ee365d21a8870ba",
+        "bytes": 16245192
+      },
+      "commander-a-V29-decisions.jsonl": {
+        "sha256": "5e1f50a660ffa1c09e13e22bdb726d19c0a00ea6e6f87ba6078e7b2e1bef7a42",
+        "bytes": 15197345
+      },
+      "commander-a-V29-rng.json": {
+        "sha256": "47ea3d19205fb27098bf7643566f86a87e9890e34627d2438034f04dce1b5b5d",
+        "bytes": 767
+      }
+    },
+    "normalCompatibilityMatches": true
+  },
+  "timeout-V29": {
+    "status": "TIMEOUT",
+    "gameStartedObserved": true,
+    "initialShuffles": 4,
+    "inputProfiles": {},
+    "admissionAudit": null,
+    "rngCalls": 391,
+    "files": {
+      "timeout-V29-full.jsonl": {
+        "sha256": "eab56d266aa0366067852a5f46e6d76d54bffe81dda2be287ff01ad079fb8ae8",
+        "bytes": 30079
+      },
+      "timeout-V29-decisions.jsonl": {
+        "sha256": "6e23d5dd6f1cdb092f2460aed91abf5e858cdc33873dac3718c57945a75872a5",
+        "bytes": 16984
+      },
+      "timeout-V29-rng.json": {
+        "sha256": "9668283d23bb02d9efb1b3e6af071948d45b9c190f4683757c9c453b79bc61d0",
+        "bytes": 754
+      }
+    },
+    "normalCompatibilityMatches": null
+  },
+  "timeout-V28": {
+    "status": "TIMEOUT",
+    "gameStartedObserved": true,
+    "initialShuffles": 4,
+    "inputProfiles": {},
+    "admissionAudit": null,
+    "rngCalls": 391,
+    "files": {
+      "timeout-V28-full.jsonl": {
+        "sha256": "213a91b3ea3652be41ae4d6d061513c7eabbc6c92396b0cd748ae616675237a8",
+        "bytes": 30080
+      },
+      "timeout-V28-decisions.jsonl": {
+        "sha256": "bf096fd5e3992c7ba0c4be5552b0a5ad5dc1889ffec208beb5486ab6902e0eff",
+        "bytes": 16985
+      },
+      "timeout-V28-rng.json": {
+        "sha256": "a8f28ab2c5253fbe1d4473fb93e717c78cfb581eab5c29ca445aa0b3eb0fbc51",
+        "bytes": 754
+      }
+    },
+    "normalCompatibilityMatches": null
+  }
+}

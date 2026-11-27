@@ -70,7 +70,7 @@ public class AiMaxXCalculationInputTest extends AITest {
     @DataProvider public Object[][] bypass(){return new Object[][]{{"OFF"},{"COPY"},{"HIDDEN"}};}
     @Test(dataProvider="bypass",groups={"UnitTest","fast"})
     public void bypassedCalculationsKeepCallbackOnceWithoutInputTraversal(String mode){
-        final var f=fixture("Fireball",1);if(mode.equals("OFF")){f.game.setRecordAiDecisions(false);}if(mode.equals("COPY")){f.game.markAsSimulationCopy();}if(mode.equals("HIDDEN")){f.ability.getHostCard().turnFaceDown();}final var state=((PlayerControllerAi)f.ai.getController()).inputContextState();final long before=state.remainingWork();final var calls=new AtomicInteger();Assert.assertEquals(AiNumberChoiceRecorder.calculateMaxX(f.ai,f.ability,false,()->{calls.incrementAndGet();return 3;}),3);Assert.assertEquals(calls.get(),1);Assert.assertEquals(state.remainingWork(),before);Assert.assertNull(f.game.getEventObservationFailure());
+        final var f=fixture("Fireball",1);final var state=((PlayerControllerAi)f.ai.getController()).inputContextState();final long before=state.remainingWork();if(mode.equals("OFF")){f.game.setRecordAiDecisions(false);}if(mode.equals("COPY")){f.game.markAsSimulationCopy();}if(mode.equals("HIDDEN")){f.ability.getHostCard().turnFaceDown();}final var calls=new AtomicInteger();Assert.assertEquals(AiNumberChoiceRecorder.calculateMaxX(f.ai,f.ability,false,()->{calls.incrementAndGet();return 3;}),3);Assert.assertEquals(calls.get(),1);Assert.assertEquals(state.remainingWork(),before);Assert.assertNull(f.game.getEventObservationFailure());
     }
 
     @Test(groups={"UnitTest","fast"})

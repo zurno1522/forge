@@ -15,6 +15,8 @@ def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def overlay_source(original):
+    if 'PROFILE = "PERMITTED_CHOICE_VIEW_V28"' not in original:
+        raise ValueError('The V28 experimental overlay requires a fresh source-boundary review for this profile')
     share = 'MAX_GAME_WORK / Math.max(1, chooser.getGame().getRegisteredPlayers().size())'
     substitutions = [
         ('private final AtomicLong remaining;', 'private final AtomicLong remaining;\n        private final GameAdmissionExperiment.Actor experimentActor;'),

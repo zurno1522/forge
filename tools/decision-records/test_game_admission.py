@@ -123,8 +123,8 @@ class NativeAdmissionValidationTests(unittest.TestCase):
             self.assertEqual(result['observedInputTotals']['records'],0);self.assertEqual(result['outcomeEligibleDecisions'],0)
             self.assertIsNone(result['sourceAccounting']['startRecordMissingFractionAtCutoffs'])
 
-    def test_overlay_hooks_refuse_stale_source_instead_of_replacing_the_wrong_loop(self):
-        production=Path(__file__).resolve().parents[2]/'forge-ai/src/main/java/forge/ai/AiInputContext.java';source=production.read_text();overlay=runner.overlay_source(source)
-        self.assertIn('GameAdmissionExperiment.debit(experimentActor)',overlay)
+    def test_v28_experimental_overlay_refuses_new_production_admission_instead_of_replacing_its_gate(self):
+        production=Path(__file__).resolve().parents[2]/'forge-ai/src/main/java/forge/ai/AiInputContext.java';source=production.read_text()
+        self.assertIn('PERMITTED_CHOICE_VIEW_V29', source)
         self.assertEqual(production.read_text(),source)
-        with self.assertRaises(ValueError):runner.overlay_source(source.replace('private final AtomicLong remaining;','private final AtomicLong renamed;'))
+        with self.assertRaisesRegex(ValueError, 'source-boundary review'):runner.overlay_source(source)

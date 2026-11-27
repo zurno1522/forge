@@ -66,6 +66,25 @@ public class PlayerControllerAi extends PlayerController {
     private final AiController brains;
     private AiInputContext.State inputContextState;
     private volatile AiObservationAccounting observationAccounting;
+    private final Game inputContextGame;
+    private final boolean originalInputContextOwner;
+
+    /** Setup only; never resets an existing budget or capture counter. Prefix is the only supported policy. */
+    public synchronized void configureInputCapture() {
+        if (!ownsInputContext() || inputContextGame.isSimulationCopy()
+                || inputContextState != null || inputContextGame.isRecordingAiDecisions()) {
+            throw new IllegalStateException("Input capture must be configured on the original controller before recording or disclosure intake");
+        }
+    }
+
+    boolean ownsInputContext() {
+        return ownsInputContext(player);
+    }
+
+    boolean ownsInputContext(final Player chooser) {
+        return chooser == player && originalInputContextOwner && player.getGame() == inputContextGame
+                && player.getController() == this;
+    }
 
     /** Explicitly configured by the trace adapter for original participant controllers only. */
     public synchronized AiObservationAccounting configureObservationAccounting() {
@@ -77,6 +96,9 @@ public class PlayerControllerAi extends PlayerController {
 
     /** Allocated only on an enabled observation path, never by copied-game policy. */
     synchronized AiInputContext.State inputContextState() {
+        if (!ownsInputContext() || inputContextGame.isSimulationCopy()) {
+            throw new IllegalStateException("Input context belongs to the original controller and game");
+        }
         if (inputContextState == null) { inputContextState = new AiInputContext.State(player); }
         return inputContextState;
     }
@@ -94,6 +116,9 @@ public class PlayerControllerAi extends PlayerController {
 
     public PlayerControllerAi(Game game, Player p, LobbyPlayer lp) {
         super(game, p, lp);
+
+        inputContextGame = game;
+        originalInputContextOwner = p.getController() == null;
 
         brains = new AiController(p, game);
     }
@@ -612,7 +637,7 @@ public class PlayerControllerAi extends PlayerController {
 
     @Override
     public void reveal(CardCollectionView cards, ZoneType zone, Player owner, String messagePrefix, boolean addSuffix) {
-        if (player.getGame().isRecordingAiDecisions()) {
+        if (player.getGame().isRecordingAiDecisions() && ownsInputContext()) {
             try { inputContextState().disclosures().cards(cards, zone); }
             catch (RuntimeException failure) { disclosureFailed(failure); }
         }
@@ -623,7 +648,7 @@ public class PlayerControllerAi extends PlayerController {
 
     @Override
     public void reveal(List<CardView> cards, ZoneType zone, PlayerView owner, String messagePrefix, boolean addSuffix) {
-        if (player.getGame().isRecordingAiDecisions()) {
+        if (player.getGame().isRecordingAiDecisions() && ownsInputContext()) {
             try { inputContextState().disclosures().views(cards, zone); }
             catch (RuntimeException failure) { disclosureFailed(failure); }
         }

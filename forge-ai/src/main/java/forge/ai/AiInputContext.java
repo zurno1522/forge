@@ -34,7 +34,7 @@ final class AiInputContext {
     static final int MAX_TEXT = 256;
     static final int MAX_REQUEST_ZONES = ZoneType.values().length;
     static final long MAX_GAME_WORK = 256_000;
-    static final String PROFILE = "PERMITTED_CHOICE_VIEW_V28";
+    static final String PROFILE = "PERMITTED_CHOICE_VIEW_V29";
     private static final List<ZoneType> ZONES = List.of(ZoneType.Battlefield, ZoneType.Command,
             ZoneType.Graveyard, ZoneType.Exile, ZoneType.Hand, ZoneType.Library);
 
@@ -44,6 +44,7 @@ final class AiInputContext {
     static final class State {
         private final AtomicLong remaining;
         private final AiContextDisclosures disclosures;
+        private final AiInputAdmission admission = new AiInputAdmission();
 
         State(final Player chooser) {
             remaining = new AtomicLong(MAX_GAME_WORK / Math.max(1, chooser.getGame().getRegisteredPlayers().size()));
@@ -52,6 +53,7 @@ final class AiInputContext {
 
         AiContextDisclosures disclosures() { return disclosures; }
         long remainingWork() { return remaining.get(); }
+        Map<String, Object> nextAdmission() { return admission.next(); }
 
         private boolean acquireWork() {
             long available = remaining.get();
@@ -87,7 +89,8 @@ final class AiInputContext {
             return unavailable(chooser, timing, stateBasis, "INTERRUPTED");
         }
         if (chooser.isControlled() || game.getRules().hasSharedTeamTurns()
-                || !(chooser.getController() instanceof PlayerControllerAi controller)) {
+                || !(chooser.getController() instanceof PlayerControllerAi controller)
+                || !controller.ownsInputContext(chooser)) {
             return unavailable(chooser, timing, stateBasis, "UNSUPPORTED");
         }
         for (final Player player : game.getPlayers()) {
@@ -96,13 +99,24 @@ final class AiInputContext {
             }
         }
         final State state = controller.inputContextState();
-        if (!state.acquireWork()) { return unavailable(chooser, timing, stateBasis, "BUDGET_EXHAUSTED"); }
-        return new Capture(chooser, timing, stateBasis, open, state, prompt, options, parameters).build();
+        final Map<String, Object> admission = state.nextAdmission();
+        if ("COUNTER_OVERFLOW".equals(admission.get("status"))) {
+            return unavailable(chooser, timing, stateBasis, "COUNTER_OVERFLOW", admission);
+        }
+        if (!state.acquireWork()) { return unavailable(chooser, timing, stateBasis, "BUDGET_EXHAUSTED", admission); }
+        return new Capture(chooser, timing, stateBasis, open, state, prompt, options, parameters, admission).build();
     }
 
     static Map<String, Object> unavailable(final Player chooser, final String timing,
             final String stateBasis, final String reason) {
-        final Map<String, Object> result = envelope(chooser, timing, stateBasis);
+        return unavailable(chooser, timing, stateBasis, reason,
+                List.of("INTERRUPTED", "UNSUPPORTED", "HIDDEN").contains(reason)
+                        ? AiInputAdmission.BYPASSED : AiInputAdmission.UNKNOWN);
+    }
+
+    private static Map<String, Object> unavailable(final Player chooser, final String timing,
+            final String stateBasis, final String reason, final Map<String, Object> admission) {
+        final Map<String, Object> result = envelope(chooser, timing, stateBasis, admission);
         result.put("status", "UNAVAILABLE");
         result.put("coverage", coverage("UNAVAILABLE", "UNAVAILABLE", "UNAVAILABLE", "UNAVAILABLE"));
         result.put("policy", null);
@@ -112,12 +126,14 @@ final class AiInputContext {
         return AiDecisionEvent.freezeMap(result);
     }
 
-    private static Map<String, Object> envelope(final Player chooser, final String timing, final String stateBasis) {
+    private static Map<String, Object> envelope(final Player chooser, final String timing, final String stateBasis,
+            final Map<String, Object> admission) {
         final Map<String, Object> result = new LinkedHashMap<>();
-        result.put("schemaVersion", 28);
+        result.put("schemaVersion", 29);
         result.put("profile", PROFILE);
         result.put("timing", timing);
         result.put("stateBasis", stateBasis);
+        result.put("admission", admission);
         final Player controlling = chooser.getControllingPlayer();
         result.put("perspective", Map.of("chooserPlayerId", chooser.getId(),
                 "controllingPlayerId", controlling == null ? chooser.getId() : controlling.getId()));
@@ -137,6 +153,7 @@ final class AiInputContext {
         private final String stateBasis;
         private final BooleanSupplier open;
         private final State state;
+        private final Map<String, Object> admission;
         private final Supplier<AiPromptInput> promptInput;
         private final Supplier<AiOptionInput> optionInput;
         private String promptCoverage = "UNSUPPORTED";
@@ -155,12 +172,14 @@ final class AiInputContext {
 
         Capture(final Player chooser, final String timing, final String stateBasis,
                 final BooleanSupplier open, final State state, final Supplier<AiPromptInput> promptInput,
-                final Supplier<AiOptionInput> optionInput, final AiReceivedParameters.Carrier parameterInput) {
+                final Supplier<AiOptionInput> optionInput, final AiReceivedParameters.Carrier parameterInput,
+                final Map<String, Object> admission) {
             this.chooser = chooser;
             this.timing = timing;
             this.stateBasis = stateBasis;
             this.open = open;
             this.state = state;
+            this.admission = admission;
             this.promptInput = promptInput;
             this.optionInput = optionInput;
             this.parameterInput = parameterInput;
@@ -574,7 +593,7 @@ final class AiInputContext {
             if (!playerRefs.containsKey(chooser.getId())) {
                 return unavailable(chooser, timing, stateBasis,
                         !active() ? "INTERRUPTED" : state.remainingWork() <= 0
-                                ? "BUDGET_EXHAUSTED" : "OUTSIDE_CAPTURED_PREFIX");
+                                ? "BUDGET_EXHAUSTED" : "OUTSIDE_CAPTURED_PREFIX", admission);
             }
             boolean complete = true;
             for (final Player player : game.getPlayers()) {
@@ -620,7 +639,7 @@ final class AiInputContext {
             final Map<String, Object> prompt = prompt();
             final Map<String, Object> optionBindings = optionBindings();
             final Map<String, Object> parameters = receivedParameters();
-            if (state.remainingWork() <= 0) { return unavailable(chooser, timing, stateBasis, "BUDGET_EXHAUSTED"); }
+            if (state.remainingWork() <= 0) { return unavailable(chooser, timing, stateBasis, "BUDGET_EXHAUSTED", admission); }
             final AiContextDisclosures.Snapshot disclosed = state.disclosures().snapshot();
             final List<Map<String, Object>> facts = new ArrayList<>();
             for (final Map<String, Object> fact : disclosed.facts()) {
@@ -636,7 +655,7 @@ final class AiInputContext {
             for (final Map<String, Object> omission : disclosed.omissions()) {
                 omit((String) omission.get("component"), (String) omission.get("reason"));
             }
-            if (!active()) { return unavailable(chooser, timing, stateBasis, "INTERRUPTED"); }
+            if (!active()) { return unavailable(chooser, timing, stateBasis, "INTERRUPTED", admission); }
             final Map<String, Object> policy = new LinkedHashMap<>();
             policy.put("turn", game.getPhaseHandler().getTurn());
             policy.put("phase", game.getPhaseHandler().getPhase() == null ? "UNESTABLISHED" : game.getPhaseHandler().getPhase().name());
@@ -649,7 +668,7 @@ final class AiInputContext {
             policy.put("prompt", prompt);
             policy.put("receivedParameters", parameters);
             policy.put("disclosedFacts", facts);
-            final Map<String, Object> result = envelope(chooser, timing, stateBasis);
+            final Map<String, Object> result = envelope(chooser, timing, stateBasis, admission);
             result.put("status", omissions.isEmpty() ? "CAPTURED" : "PARTIAL");
             result.put("coverage", coverage("PERMITTED_CURRENT_FIELDS_V1", disclosed.coverage(), promptCoverage, parameterCoverage));
             result.put("policy", policy);

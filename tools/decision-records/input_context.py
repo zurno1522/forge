@@ -16,6 +16,7 @@ PROFILE = 'PERMITTED_CHOICE_VIEW_V1'
 PROFILES = {1: PROFILE, 2: 'PERMITTED_CHOICE_VIEW_V2', 3: 'PERMITTED_CHOICE_VIEW_V3', 4: 'PERMITTED_CHOICE_VIEW_V4',
             5: 'PERMITTED_CHOICE_VIEW_V5', 6: 'PERMITTED_CHOICE_VIEW_V6', 7: 'PERMITTED_CHOICE_VIEW_V7', 8: 'PERMITTED_CHOICE_VIEW_V8', 9: 'PERMITTED_CHOICE_VIEW_V9', 10: 'PERMITTED_CHOICE_VIEW_V10', 11: 'PERMITTED_CHOICE_VIEW_V11', 12: 'PERMITTED_CHOICE_VIEW_V12', 13: 'PERMITTED_CHOICE_VIEW_V13', 14: 'PERMITTED_CHOICE_VIEW_V14', 15: 'PERMITTED_CHOICE_VIEW_V15', 16: 'PERMITTED_CHOICE_VIEW_V16', 17: 'PERMITTED_CHOICE_VIEW_V17', 18: 'PERMITTED_CHOICE_VIEW_V18', 19: 'PERMITTED_CHOICE_VIEW_V19', 20: 'PERMITTED_CHOICE_VIEW_V20', 21: 'PERMITTED_CHOICE_VIEW_V21', 22: 'PERMITTED_CHOICE_VIEW_V22', 23: 'PERMITTED_CHOICE_VIEW_V23', 24: 'PERMITTED_CHOICE_VIEW_V24', 25: 'PERMITTED_CHOICE_VIEW_V25', 26: 'PERMITTED_CHOICE_VIEW_V26', 27: 'PERMITTED_CHOICE_VIEW_V27', 28: 'PERMITTED_CHOICE_VIEW_V28'}
 ZONE_BRANCHES = {'ORDINARY_HIDDEN_ORIGIN', 'SAME_NAME_HIDDEN_ORIGIN', 'EACH_TYPE_HIDDEN_ORIGIN', 'HEIST', 'DRAFT'}
+PROFILES[29] = 'PERMITTED_CHOICE_VIEW_V29'
 TIMINGS = {'BEFORE_SELECTOR', 'BEFORE_OPERATION', 'AFTER_SELECTION_BEFORE_APPLICATION', 'UNESTABLISHED'}
 STATE_BASES = {'RULES_STATE', 'PLANNING_WORKING_STATE', 'UNESTABLISHED'}
 REASONS = {'HIDDEN', 'UNSUPPORTED', 'OUTSIDE_CAPTURED_PREFIX', 'UNRESOLVED_BINDING',
@@ -47,12 +48,39 @@ def fields(value, expected, message):
     require(isinstance(value, dict) and set(value) == set(expected.split()), message)
 
 
+def validate_admission(context):
+    a = context['admission']
+    fields(a, 'schemaVersion policy denominator observationSeed ordinal status', 'invalid admission fields')
+    require(integer(a['schemaVersion']) and a['schemaVersion'] == 1, 'unsupported admission version')
+    require(a['observationSeed'] is None, 'prefix admission has an observation seed')
+    require(a['status'] in ('ADMITTED', 'BYPASSED', 'UNESTABLISHED', 'COUNTER_OVERFLOW'), 'unknown admission status')
+    known = a['status'] in ('ADMITTED', 'COUNTER_OVERFLOW')
+    if known:
+        require(a['policy'] == 'FIXED_SHARE_PREFIX_V1' and integer(a['denominator']) and a['denominator'] == 1,
+                'unsupported admission policy/denominator')
+    else:
+        require(a['policy'] is None and a['denominator'] is None, 'unknown gate claims a policy')
+    if a['status'] == 'ADMITTED':
+        require(integer(a['ordinal']) and 0 < a['ordinal'] < 1 << 63, 'invalid admission ordinal')
+        require(not any(o['component'] in ('CONTEXT', 'PERSPECTIVE') and o['reason'] in
+                        ('HIDDEN', 'UNSUPPORTED', 'CAPTURE_FAILED', 'NO_AUDITED_INPUT_BOUNDARY', 'COUNTER_OVERFLOW')
+                        for o in context['omissions']), 'admitted gate has a bypass/unknown omission')
+    else:
+        require(a['ordinal'] is None and context['status'] == 'UNAVAILABLE', 'unissued ticket claims captured input')
+        permitted = {'BYPASSED': [('CONTEXT', 'INTERRUPTED'), ('CONTEXT', 'HIDDEN'), ('PERSPECTIVE', 'UNSUPPORTED')],
+                     'UNESTABLISHED': [('CONTEXT', 'CAPTURE_FAILED'), ('CONTEXT', 'NO_AUDITED_INPUT_BOUNDARY')],
+                     'COUNTER_OVERFLOW': [('CONTEXT', 'COUNTER_OVERFLOW')]}[a['status']]
+        require(context['omissions'] in [[dict(component=c, reason=r)] for c, r in permitted],
+                'admission status/omission mismatch')
+
+
 def validate(value, chooser_id, known_players=None, *, parameters_allowed=False):
     """Validate a present context, never substituting a default for legacy absence."""
-    fields(value, 'schemaVersion profile status timing stateBasis perspective coverage policy diagnostics omissions',
-           'invalid envelope fields')
-    version = value['schemaVersion']
+    require(isinstance(value, dict), 'invalid envelope fields')
+    version = value.get('schemaVersion')
     require(integer(version) and version in PROFILES, 'unsupported schema version')
+    fields(value, 'schemaVersion profile status timing stateBasis perspective coverage policy diagnostics omissions'
+           + (' admission' if version >= 29 else ''), 'invalid envelope fields')
     require(value['profile'] == PROFILES[version], 'unsupported profile')
     require(value['status'] in ('CAPTURED', 'PARTIAL', 'UNAVAILABLE'), 'invalid capture status')
     require(value['timing'] in TIMINGS and value['stateBasis'] in STATE_BASES, 'invalid timing/state basis')
@@ -77,6 +105,7 @@ def validate(value, chooser_id, known_players=None, *, parameters_allowed=False)
         require(omission['component'] in COMPONENTS | ({'STACK'} if version >= 2 else set()) | ({'PROMPT'} if version >= 3 else set()) | ({'PARAMETERS'} if version >= 16 else set())
                 and omission['reason'] in (REASONS | ({'COUNTER_OVERFLOW'} if version >= 10 else set())), 'unknown omission')
     require(bool(omissions) == (value['status'] != 'CAPTURED'), 'capture status/omission mismatch')
+    if version >= 29: validate_admission(value)
     diagnostic = value['diagnostics']
     fields(diagnostic, 'playerBindings cardBindings' + (' stackBindings' if version >= 2 else '')
            + (' optionBindings' if version >= 4 else ''), 'invalid diagnostic fields')

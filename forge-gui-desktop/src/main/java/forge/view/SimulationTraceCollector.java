@@ -88,6 +88,7 @@ final class SimulationTraceCollector {
         for (final Player player : game.getPlayers()) {
             if (participants++ == 16) { accountingReceipt.incomplete(); break; }
             if (player.getController() instanceof PlayerControllerAi ai) {
+                ai.configureInputCapture();
                 accountingPlayers.put(player.getId(), ai);
                 accountingSources.add(ai.configureObservationAccounting());
             }

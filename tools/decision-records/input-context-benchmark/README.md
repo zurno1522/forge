@@ -1,5 +1,33 @@
 # Development cost probe
 
+## V29 prefix admission compatibility
+
+V29 adds gate receipts while retaining prefix capture. Run the source-pinned V28
+comparison with the built desktop runtime/test classpath and no overlapping JVMs:
+
+```sh
+python3 tools/decision-records/input-context-benchmark/run-prefix-compatibility.py \
+  --classpath-file /path/to/classpath.txt --java-home /path/to/jdk-21 \
+  --user-home /path/to/writable-profile --output-dir /path/to/new-prefix-results
+```
+
+The runner compiles the four changed V28 classes from reference `555c3fbbb35`
+into an isolated directory, never overwriting production classes. It checks that
+GameAction matches that reference. The launcher records engine RNG snapshots
+only; no experimental sampling overlay is loaded. Damage/X, repeated choices,
+four-player Commander and a one-second timeout each run under V28 and V29.
+Normal games must match engine events, native AI results, all represented inputs
+and RNG state/counts after removing the expected envelope/admission metadata.
+Both streams pass the ordinary reader and reconcile source/collector accounting.
+Timeouts remain censored and have no normal-behavior equivalence claim.
+
+The older `run-game-admission.py` and controlled admission experiments are pinned
+to the V28 producer boundaries. Their checked hooks refuse V29; do not use them
+to replace the new production gate or reinterpret their archived evidence as V29
+measurements. Native process durations include startup/gameplay/host effects;
+validation time is separate. Neither isolates admission overhead. OPT-005 owns cost
+measurement against the actual production V29 baseline.
+
 The workload probe now declares `inputContextProfile` from the built producer on
 every row. The workload summarizer preserves historical rows without this field
 as the frozen V4 format, and rejects mixed legacy/declarations, differing profiles

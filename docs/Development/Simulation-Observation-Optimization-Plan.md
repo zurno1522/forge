@@ -10,7 +10,7 @@ The [current combined execution order](Simulation-Observation-Roadmap.md) has co
 
 ## Ordered backlog
 
-The [COV-008C production admission contract](Simulation-Production-Admission-Contract.md) places the broader OPT-005 checkpoint after prefix V29 metadata implementation and before optional hash-policy enablement. Measure the same represented V28 information with metadata costs named separately, and include a production-shaped candidate check before enabling sampling. The isolated experiment monitor is not the production cost baseline.
+The [COV-008C production admission contract](Simulation-Production-Admission-Contract.md) places the broader OPT-005 checkpoint after the now [implemented prefix V29 metadata](Simulation-Prefix-Admission-Assessment.md) and before optional hash-policy enablement. Measure the same represented V28 information with metadata costs named separately, and include a production-shaped candidate check before enabling sampling. The isolated experiment monitor is not the production cost baseline.
 
 | Priority | Item | Design and completion criteria |
 | --- | --- | --- |
