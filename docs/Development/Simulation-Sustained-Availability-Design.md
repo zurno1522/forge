@@ -28,7 +28,7 @@ A finite game allowance cannot guarantee captured inputs throughout an arbitrari
 | Capture all then keep a reservoir | Bounded retained sample | Does not bound capture work; not a solution to traversal exhaustion |
 | Smaller per-view representation | Lower cost or more views under the same allowance | Changes information/permission semantics; separate representation design and measured validation |
 
-No runtime policy is selected yet. The [V28 baseline and gap review](Simulation-V28-Availability-Assessment.md) complete COV-008A. Next prototype admission using actual producer work accounting. A report from existing traces cannot infer what a skipped or exhausted context would have contained. Equal original-player shares guarantee equal allowance, not equal view counts: players have different invocation counts and view costs. Compare distributions without calling a difference an engine bug.
+No runtime policy is selected yet. The [V28 baseline and gap review](Simulation-V28-Availability-Assessment.md) complete COV-008A. The [controlled admission experiments and gap review](Simulation-Admission-Experiment-Assessment.md) are delivered using actual producer work accounting. Next evaluate actual-game admission before policy selection. A report from existing traces cannot infer what a skipped or exhausted context would have contained. Equal original-player shares guarantee equal allowance, not equal view counts: players have different invocation counts and view costs. Compare distributions without calling a difference an engine bug.
 
 ## Review gates
 

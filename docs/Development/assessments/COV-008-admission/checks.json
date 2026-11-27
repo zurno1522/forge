@@ -1,0 +1,22 @@
+{
+  "python": {
+    "tests": 344,
+    "newMethods": 9,
+    "failures": 0,
+    "errors": 0,
+    "command": "python3 -m unittest discover -s tools/decision-records",
+    "logSha256": "6b334de36979972c4baa3f3a0471a5b01c7325ca4bf86d9dc759184eb2c2136a"
+  },
+  "java": "Development probes compiled with --release 17 and ran 378 measured/126 discarded-warmup trials across three sequential JVMs. No production Java changes or new Maven/full-reactor claim.",
+  "measuredRows": {
+    "production": 18,
+    "forward": 180,
+    "reverse": 180
+  },
+  "sourceAccounting": "All original supported wrappers/callbacks/START/terminals reconcile in each row. No collector participates.",
+  "prefixControl": "Every overlay prefix agrees with unmodified production in source/debit/represented-policy/availability evidence; writer character widths may vary with diagnostic IDs.",
+  "runtimePolicyChanged": false,
+  "budgetsChanged": false,
+  "trainingReady": false,
+  "preliminaryRuns": "Smoke and intermediate runs excluded. Final runs retain represented-profile quality and verified public-proof bindings; an earlier fixture phase reset invalidated proofs and was removed before final measurement."
+}

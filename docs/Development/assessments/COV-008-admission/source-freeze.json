@@ -1,0 +1,20 @@
+{
+  "scope": "Selected probe/validator/fixture and producer sources; not a whole-build reproducibility claim.",
+  "sourceSha256": {
+    "tools/decision-records/input-context-benchmark/AvailabilityAdmissionProbe.java": "41283282a2f1ce6f938ebc44de5a38a08aa0bb9daffea885c4d0c4ac5d171aae",
+    "tools/decision-records/input-context-benchmark/run-admission.py": "7621b6b7c9805cf378d3bb33dfd083454bf4d53112e76085e0501e175abe1cfb",
+    "tools/decision-records/input-context-benchmark/summarize-admission.py": "f1aef14b23326e864d554931b1f03704c7d8a3cb984dab9da04c18808e153948",
+    "tools/decision-records/input-context-benchmark/TraceWriterProbeSink.java": "ed99a4f5d198edff45b8ce84e82f2cf4e65ae60cf3d4b7be3a822eaa872d3ad0",
+    "tools/decision-records/input-context-benchmark/fixtures/admission-cases.json": "e82e8384031a72d30360697ced0704e1756e88a79e8a464d3616067c90408553",
+    "tools/decision-records/test_admission_measurements.py": "3dceb333b2ad17595fa7c6b56c2afcd5de980ee32974e21f6ba4fb0f9ce08cb2",
+    "forge-ai/src/main/java/forge/ai/AiInputContext.java": "8bb4b85141ba6f6661e896c393f9c3a185dd9a08de8c6206c98295a9dc2fe6be",
+    "forge-ai/src/main/java/forge/ai/AiContextDisclosures.java": "09625c00ff9c801a78afd42252578081969253c0055936c25f1054295a45ccac",
+    "forge-ai/src/main/java/forge/ai/AiChoiceRecorder.java": "6918c531f459e7aab9ffe64b8c7581429d7bff837eb56d139df5c1896ff0be2f",
+    "forge-ai/src/main/java/forge/ai/AiObservationAccounting.java": "9f3f420871a98cbae97ed3fe32a73519d36c486e2359b08c8a22f4bfd99f2a9e",
+    "forge-ai/src/main/java/forge/ai/AiReceivedParameters.java": "ef0c2e69512df91144aa24f18150b276648cd9d6dc8f58b325241d1bbf7b035e",
+    "forge-ai/src/main/java/forge/ai/AiNumberChoiceRecorder.java": "ed5157e50543300b9f326bc39b375e1d98d3b4818612446a912cce00bfd75c39",
+    "forge-ai/src/main/java/forge/ai/AiEffectChoiceRecorder.java": "9d6bf0ff42ad880f65ab0e7482007deec2263095dd4150b11fe04e88bfb83470",
+    "forge-ai/src/main/java/forge/ai/AiDamageChoiceRecorder.java": "c1e0f9290885a840942f7c730cb410cc0fab9d37f30240ea12c61922b36c45ad",
+    "forge-ai/src/main/java/forge/ai/AiDrawChoiceRecorder.java": "cc30ba3e0e64e32940a594317a7aeb6ac9d4834d583324801c3d726932fd91df"
+  }
+}

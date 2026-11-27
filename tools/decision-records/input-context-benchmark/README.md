@@ -145,3 +145,44 @@ not establish their joint distribution. Source accounting is copied as declared;
 missing scope is unknown. Use the normal exporter/validation gates first.
 
 See the [staged availability design](../../../docs/Development/Simulation-Sustained-Availability-Design.md).
+
+## COV-008 controlled admission trials
+
+The [experiment contract](../../../docs/Development/Simulation-Availability-Experiment-Contract.md)
+describes the fixed fixtures, isolated funding/capture hooks and acceptance gates.
+The runner compiles into its output directory and verifies that selected production
+class hashes do not change. It never replaces target/classes. Three sequential
+JVMs supply an unmodified production prefix control, all candidate policies and
+a reversed candidate order, with discarded warmups and three measured rounds.
+
+```sh
+python3 tools/decision-records/input-context-benchmark/run-admission.py \
+  --classpath-file /path/to/classpath.txt --java-home /path/to/jdk-21 \
+  --user-home /path/to/writable-profile --output-dir /path/to/admission
+python3 tools/decision-records/input-context-benchmark/summarize-admission.py \
+  /path/to/admission --output /path/to/admission/summary.json
+```
+
+Run without concurrent game/test JVMs. An optional `--smoke` checks one long
+public-disclosure fixture; its incomplete matrix is refused as an assessment.
+The generated overlay admits exactly the same inputs as production for PREFIX.
+STRIDE/HASH omit only input traversal; original recorders, callbacks and streaming
+START/terminal writes still run. RESERVE funds half the original share, unlocking
+the remaining half once at fixture turn 31. Its developer-only reflection is
+confined to the isolated State. No allowance is refunded or borrowed.
+
+Experimental omission reasons are deliberately unsupported by the ordinary trace
+reader. The output is aggregate development telemetry, not exported gameplay or
+training records. Turn windows are an explicit fixture schedule (cycles 0–9 are
+fixture turn 1); they are not independently captured engine turn clocks. All four
+source families have fixed callback behavior to isolate observation costs.
+
+Work debits reconcile with actual State allowances, including disclosure deliveries
+and charged failed traversals. Profile-quality counters retain represented card/
+zone/disclosure occurrences and overlapping omission reasons. More available
+partial views do not establish more complete inputs. Healthy, unavailable and
+sampled entry spans stay separate. Entry spans end after START serialization;
+whole-run measurements include their parents and must not be added to them.
+Metric/validation/bookkeeping overhead remains included; uncapped rules-state proof bindings are verified against received facts, including legitimate losses when a shared allowance blocks later deliveries; initial fixture/disclosure setup, board creation and final
+result hashing/encoding are excluded. Writer counts are characters, without UTF-8
+conversion or physical I/O. No collector delivery or exact heap claim is made.
