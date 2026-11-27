@@ -1,0 +1,37 @@
+# COV-008: sustained capture availability
+
+The V4 checkpoint established a prefix bias: the fixed four-player chooser fixture captured 246 of 1,200 views, and a Commander sample lost 755 of 1,490 contexts to the work budget. COV-006/007 subsequently added many overlapping entry views. Recheck the current V28 producer before choosing a policy. These older samples describe their own versions; their percentages are not a current regression estimate.
+
+## Contract and invariants
+
+Keep original callbacks, results, RNG, cancellation, publication lifetimes and engine event order. Input availability and record delivery are different dimensions. A callback may retain its lifecycle while its input is unavailable. Source-ledger omissions/failures, absent legacy contexts, deliberate sampling, budget exhaustion, unsupported perspectives and interrupted capture must remain distinguishable. None establishes the number of uninstrumented decisions or complete learning examples. All examples remain trainingReady=false.
+
+The current resource is 256,000 traversal units per game, divided by the original registered-player count using integer division. Unused player shares are not transferred. Disclosure ingestion/proofs also spend this allowance; it is not a context-only allowance. Per-view structural caps remain in force. Traversal units bound instrumented visits, not total CPU, bytes, heap or the number of lifecycle records. Controller replacement/team perspectives remain governed by the existing supported-perspective contract. Work cannot be refunded after a partial failed traversal, replenished each turn, or borrowed from another player implicitly.
+
+A finite game allowance cannot guarantee captured inputs throughout an arbitrarily long game. A revised policy must state whether it improves a bounded horizon, samples records, reduces representation or permits growing work. None may be presented as complete coverage. Sampling cannot recover information from a skipped entry after the action mutates state. Retrospective reservoir sampling of complete views would still pay every capture cost.
+
+## Execution order and acceptance
+
+1. **COV-008A: current baseline.** Reuse validated coverage audits and generate a separate development availability report. Reconcile totals with per-turn and per-boundary marginals. Report each run/game/owning chooser and each timing basis separately; include absent contexts, captured/partial profiles, unavailable views and explicit budget reasons. Use declared turn windows, keeping null clocks separate. An independently captured entry is distinct from parent-container attribution. An earliest observed budget turn is not the exact exhaustion time. Boundary/player marginals do not establish their joint distribution. Preserve known parent capture omissions separately from observed-record denominators and retain unknown source totals.
+2. **COV-008B: candidate experiments.** Compare the unchanged prefix baseline with deterministic admission thinning and explicit early/late reservation under the same total work and player shares. Admission may depend only on declared stable per-player counters/public clocks and a separate observation-only seed; never consume engine RNG or choose based on action result, private state, card identity or eventual outcome. Fixed stride can alias repeated callback order; test phase offsets and looping/nested families. Sampling must be visible per record, with policy/version/seed and admission rule, without pretending dependent or exhausted observations have a simple unbiased inclusion probability. Reserve policies need a declared bounded horizon and behavior when it is exceeded; turn replenishment is not constant total work. Account for disclosure cost, failed admitted captures and nested observations. An aggregate trace has no counterfactual capture cost after exhaustion; do not estimate recovered late views from missing data.
+3. **COV-008C: select and implement.** Select a policy only after comparing availability by player/turn/family, healthy and exhausted capture CPU/allocation, and emitted bytes. Implement the admission/reporting contract with producer/consumer versioning in its own coverage commit. Keep lifecycle/entry information whenever permitted, even when policy input is deliberately omitted. Do not silently alter old profiles, budgets or player allocation. A future configurable larger budget is an explicit policy choice, not the default remedy.
+4. **OPT-005: measurement checkpoint.** Keep broader CPU calibration, transient-retention/full-writer attribution and conditional optimizations in their separate design and implementation commits. Candidate cost measurement can precede the full checkpoint; a single game duration or cheaper unavailable capture cannot establish overhead improvement.
+
+## Policy candidates
+
+| Candidate | Benefit to investigate | Limitation / decision |
+| --- | --- | --- |
+| Existing fixed-share prefix | Deterministic hard total visit limit; every eligible early entry attempted | Late-game starvation; retain as control |
+| Deterministic pre-capture thinning | Can spread attempts farther for bounded cost without storing missed state | Finite exhaustion remains; stride aliasing and unequal family rates require measurement; first prototype candidate |
+| Fixed early/late work reservations | Protects some later opportunities within a declared horizon | Can strand allowance in short games and miss important early observations; prototype only with explicit horizon rules |
+| Per-turn replenishment / larger default budget | More views | Changes total cost bound; not selected by this design |
+| Capture all then keep a reservoir | Bounded retained sample | Does not bound capture work; not a solution to traversal exhaustion |
+| Smaller per-view representation | Lower cost or more views under the same allowance | Changes information/permission semantics; separate representation design and measured validation |
+
+No runtime policy is selected yet. First produce V28 baseline evidence, then prototype admission using actual producer work accounting. A report from existing traces cannot infer what a skipped or exhausted context would have contained. Equal original-player shares guarantee equal allowance, not equal view counts: players have different invocation counts and view costs. Compare distributions without calling a difference an engine bug.
+
+## Review gates
+
+For baseline tooling, test unknown clocks/players, reused IDs across runs/games, zero-record groups, mixed timing bases, reason overlap, absent versus unavailable contexts, counter reconciliation and parent-omission denominators. Existing seven exporter artifacts must remain unchanged. Fresh games require source/collector reconciliation, full/filtered parity and all initial shuffles before GAME_STARTED; timeouts remain censored executions.
+
+For runtime candidates, additionally test off/copied/hidden/unsupported/closed paths without traversal, failed admission without policy reruns, admitted failures charged once, disclosure contention, per-player isolation, nested calls, deterministic replay without engine RNG, no carryover across games/controllers, cancellation/overflow and bounded state. Review gaps after each increment. COV-004 retains complete semantics/domains/bindings/readiness; COV-008 owns admission availability, while OPT-005 owns broad resource measurement.
