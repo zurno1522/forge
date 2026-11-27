@@ -1347,7 +1347,9 @@ public class AiController {
         if (validCards.size() > min) {
             final ComboPlan combos = deckPlan(player).combos;
             // a deck that wants creatures in the graveyard throws away the right ones
-            final CardCollection forCombo = combos.preferredDiscards(player, validCards, min);
+            final CardCollection forCombo = AiPaymentChoiceRecorder.discardBatch(player, sa,
+                    AiPaymentChoiceRecorder.DiscardBranch.COMBO, min, max, null, validCards,
+                    () -> combos.preferredDiscards(player, validCards, min));
             if (forCombo != null) {
                 return forCombo;
             }
@@ -1361,7 +1363,12 @@ public class AiController {
         return chooseCardsToDiscard(min, max, validCards, sa);
     }
 
-    private CardCollection chooseCardsToDiscard(int min, final int max, final CardCollection validCards, final SpellAbility sa) {
+    private CardCollection chooseCardsToDiscard(final int min, final int max, final CardCollection validCards, final SpellAbility sa) {
+        return AiPaymentChoiceRecorder.discardBatch(player, sa, AiPaymentChoiceRecorder.DiscardBranch.POLICY,
+                min, max, null, validCards, () -> chooseCardsToDiscardImpl(min, max, validCards, sa));
+    }
+
+    private CardCollection chooseCardsToDiscardImpl(int min, final int max, final CardCollection validCards, final SpellAbility sa) {
         if (validCards.size() <= min) {
             return validCards; //return all valid cards since they will be discarded without filtering needed
         }
@@ -1380,41 +1387,46 @@ public class AiController {
                     min = 1;
                 }
             } else if ("VolrathsShapeshifter".equals(logic)) {
-                return SpecialCardAi.VolrathsShapeshifter.targetBestCreature(player, sa);
+                return AiPaymentChoiceRecorder.discardBatch(player, sa, AiPaymentChoiceRecorder.DiscardBranch.SHAPESHIFTER,
+                        min, max, null, null, () -> SpecialCardAi.VolrathsShapeshifter.targetBestCreature(player, sa));
             } else if ("DiscardCMCX".equals(logic)) {
                 final int cmc = sa.getXManaCostPaid();
-                CardCollection discards = CardLists.filter(player.getCardsIn(ZoneType.Hand), CardPredicates.hasCMC(cmc));
-                if (discards.isEmpty()) {
-                    return null;
-                }
-                return new CardCollection(ComputerUtilCard.getWorstAI(discards));
+                return AiPaymentChoiceRecorder.discardBatch(player, sa, AiPaymentChoiceRecorder.DiscardBranch.MANA_VALUE, min, max, cmc, null, () -> {
+                    CardCollection discards = CardLists.filter(player.getCardsIn(ZoneType.Hand), CardPredicates.hasCMC(cmc));
+                    if (discards.isEmpty()) {
+                        return null;
+                    }
+                    return new CardCollection(ComputerUtilCard.getWorstAI(discards));
+                });
             }
 
             if (sa.hasParam("AnyNumber")) {
                 if ("DiscardUncastableAndExcess".equals(sa.getParam("AILogic"))) {
-                    CardCollection discards = new CardCollection();
-                    final CardCollectionView inHand = player.getCardsIn(ZoneType.Hand);
-                    final int numLandsOTB = CardLists.count(inHand, CardPredicates.LANDS);
-                    int numOppInHand = 0;
-                    for (Player p : player.getGame().getPlayers()) {
-                        if (p.getCardsIn(ZoneType.Hand).size() > numOppInHand) {
-                            numOppInHand = p.getCardsIn(ZoneType.Hand).size();
-                        }
-                    }
-                    for (Card c : inHand) {
-                        if (c.hasSVar("DoNotDiscardIfAble") || c.hasSVar("IsReanimatorCard")) {
-                            continue;
-                        }
-                        if (c.isCreature() && !ComputerUtilMana.hasEnoughManaSourcesToCast(c.getSpellPermanent(), player)) {
-                            discards.add(c);
-                        }
-                        if ((c.isLand() && numLandsOTB >= 5) || (c.getFirstSpellAbility() != null && !ComputerUtilMana.hasEnoughManaSourcesToCast(c.getFirstSpellAbility(), player))) {
-                            if (discards.size() + 1 <= numOppInHand) {
-                                discards.add(c);
+                    return AiPaymentChoiceRecorder.discardBatch(player, sa, AiPaymentChoiceRecorder.DiscardBranch.UNCASTABLE_EXCESS, min, max, null, null, () -> {
+                        CardCollection discards = new CardCollection();
+                        final CardCollectionView inHand = player.getCardsIn(ZoneType.Hand);
+                        final int numLandsOTB = CardLists.count(inHand, CardPredicates.LANDS);
+                        int numOppInHand = 0;
+                        for (Player p : player.getGame().getPlayers()) {
+                            if (p.getCardsIn(ZoneType.Hand).size() > numOppInHand) {
+                                numOppInHand = p.getCardsIn(ZoneType.Hand).size();
                             }
                         }
-                    }
-                    return discards;
+                        for (Card c : inHand) {
+                            if (c.hasSVar("DoNotDiscardIfAble") || c.hasSVar("IsReanimatorCard")) {
+                                continue;
+                            }
+                            if (c.isCreature() && !ComputerUtilMana.hasEnoughManaSourcesToCast(c.getSpellPermanent(), player)) {
+                                discards.add(c);
+                            }
+                            if ((c.isLand() && numLandsOTB >= 5) || (c.getFirstSpellAbility() != null && !ComputerUtilMana.hasEnoughManaSourcesToCast(c.getFirstSpellAbility(), player))) {
+                                if (discards.size() + 1 <= numOppInHand) {
+                                    discards.add(c);
+                                }
+                            }
+                        }
+                        return discards;
+                    });
                 }
             }
         }

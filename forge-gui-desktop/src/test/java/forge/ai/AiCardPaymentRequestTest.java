@@ -29,7 +29,7 @@ public class AiCardPaymentRequestTest extends AITest {
     public void actualForcedDiscardBatchKeepsTheOriginalCollectionAliasAndReceivedBounds() {
         final Fixture f = fixture(); final var result = ((PlayerControllerAi) f.ai.getController()).getAi().getCardsToDiscard(2, 2, f.cards, f.ability);
         Assert.assertSame(result, f.cards); Assert.assertEquals(parameters(start(f, "PAYMENT_DISCARD_POOL")), Map.of("kind", "CARD_PAYMENT_REQUEST", "paymentKind", "DISCARD", "minimum", 2, "maximum", 2));
-        Assert.assertEquals(f.events.size(), 2); Assert.assertTrue(f.cards.stream().allMatch(c -> c.isInZone(ZoneType.Hand))); Assert.assertNull(f.game.getEventObservationFailure());
+        Assert.assertEquals(f.events.stream().filter(c -> "STARTED".equals(c.get("status")) && "PAYMENT_CARD_BATCH".equals(c.get("choiceType"))).count(), 1L); Assert.assertTrue(f.cards.stream().allMatch(c -> c.isInZone(ZoneType.Hand))); Assert.assertNull(f.game.getEventObservationFailure());
     }
 
     @Test(groups = {"UnitTest", "fast"})

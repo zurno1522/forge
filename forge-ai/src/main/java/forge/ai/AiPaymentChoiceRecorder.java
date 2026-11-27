@@ -3,6 +3,7 @@ package forge.ai;
 import forge.game.GameObject;
 import forge.card.mana.ManaCostShard;
 import forge.game.card.CardCollection;
+import forge.game.card.CardCollectionView;
 import forge.game.card.Card;
 import forge.game.cost.CostPart;
 import forge.game.cost.PaymentDecision;
@@ -98,6 +99,23 @@ public final class AiPaymentChoiceRecorder {
                 () -> Map.of("coverage", "OBSERVED_REQUIREMENT_NOT_ALTERNATIVE_PLANS", "remainingManaValue", cost.getConvertedManaCost(),
                         "effect", effect), callback,
                 result -> Map.of("paymentRoutineReturned", true, "costSatisfied", cost.isPaid(), "manaAbilities", refs(result)));
+    }
+
+    enum DiscardBranch { POLICY, COMBO, SHAPESHIFTER, MANA_VALUE, UNCASTABLE_EXCESS }
+
+    static CardCollection discardBatch(final Player chooser, final SpellAbility ability, final DiscardBranch branch,
+            final int minimum, final int maximum, final Integer manaValue, final CardCollectionView supplied,
+            final Supplier<CardCollection> callback) {
+        final var parameters = new AtomicReference<AiReceivedParameters.Input>();
+        return AiChoiceRecorder.observeParametersAt(chooser, ability, "PAYMENT_CARD_BATCH", null,
+                "PAYMENT_DISCARD_BATCH", "BEFORE_OPERATION", () -> {
+                    final var received = AiReceivedParameters.discardBatch(branch, minimum, maximum, manaValue); parameters.set(received);
+                    final Map<String, Object> options = new LinkedHashMap<>();
+                    options.put("coverage", "DISCARD_OPERATION_NOT_ALL_LEGAL_PLANS"); options.put("branch", branch.name());
+                    options.put("poolCoverage", supplied == null ? "NO_RECEIVED_CARD_POOL" : "RECEIVED_CARD_POOL");
+                    options.put("cards", supplied == null ? null : refs(supplied)); options.put("callbackParameters", received.diagnostics());
+                    return options;
+                }, callback, AiPaymentChoiceRecorder::refs, null, null, new AiReceivedParameters.Carrier(parameters));
     }
 
     static Card sacrificePick(final Player chooser, final SpellAbility ability, final CardCollection options,

@@ -1,0 +1,11 @@
+{
+  "revision": "8136b6bb60b",
+  "scope": "Five pre-V23 AI classes over otherwise current build; no checkout mutation or whole-build performance comparison.",
+  "sources": {
+    "forge-ai/src/main/java/forge/ai/AiInputContext.java": "a1ec0970ff22e391dd2d48f5b927c3b1546ef336927dbe82e3afbe8fed4d0517",
+    "forge-ai/src/main/java/forge/ai/AiReceivedParameters.java": "da49e15cf3b1bece7db68f0898f7006e77feec5e5b00b81779955f2e3a156f20",
+    "forge-ai/src/main/java/forge/ai/AiPaymentChoiceRecorder.java": "9d75daccb25c66e366653ad4d62e8627803fbf751a6de26b6f987ade14c18c8b",
+    "forge-ai/src/main/java/forge/ai/AiController.java": "61c884ba7abacbcceece10599ebed9f931ce49339c10fca0006e281dd6d454b1",
+    "forge-ai/src/main/java/forge/ai/AiObservationAccounting.java": "1ad0b08911d532ed9a56a7c42cb8fe04dc5f303bae1742d8ca43f7030c7cbafd"
+  }
+}

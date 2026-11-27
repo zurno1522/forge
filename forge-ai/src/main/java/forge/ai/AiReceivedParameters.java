@@ -28,7 +28,7 @@ final class AiReceivedParameters {
     static final int MAX_ROLE_LIST = 64;
     enum Family { NUMBER, ENTITY }
     enum Kind { NONE, VOTER, COUNTER_AMOUNT, COUNTER_TRANSFER_AMOUNT, ENTITY_CARD_ROLE, ENTITY_TARGET_ROLE,
-        ENTITY_MANA_VALUE_LIMIT, ENTITY_COUNTER_REQUEST, TRIGGER_REQUIREMENT, ENTITY_ATTACHMENT_ROLES, ENTITY_ATTACKER_ROLES, MANA_POOL_REQUEST, MANA_SOURCE_REQUEST, CARD_PAYMENT_REQUEST, SACRIFICE_PICK_REQUEST }
+        ENTITY_MANA_VALUE_LIMIT, ENTITY_COUNTER_REQUEST, TRIGGER_REQUIREMENT, ENTITY_ATTACHMENT_ROLES, ENTITY_ATTACKER_ROLES, MANA_POOL_REQUEST, MANA_SOURCE_REQUEST, CARD_PAYMENT_REQUEST, SACRIFICE_PICK_REQUEST, DISCARD_BATCH_REQUEST }
     record Carrier(AtomicReference<Input> receipt) { }
     record Input(Kind kind, String coverage, String reason, Map<String, Object> values, Map<String, AiOptionInput.Entry> roles, Map<String, List<AiOptionInput.Entry>> roleLists) {
         Map<String, Object> diagnostics() {
@@ -65,6 +65,12 @@ final class AiReceivedParameters {
         if (priorCount > MAX_ROLE_LIST) { return overlong(Kind.SACRIFICE_PICK_REQUEST); }
         return roleList(Kind.SACRIFICE_PICK_REQUEST, prior, "previousSelections",
                 Map.of("requestedSelections", requested, "priorSelectionCount", priorCount));
+    }
+
+    static Input discardBatch(final AiPaymentChoiceRecorder.DiscardBranch branch, final int minimum, final int maximum, final Integer manaValue) {
+        if (branch == null || (branch == AiPaymentChoiceRecorder.DiscardBranch.MANA_VALUE) != (manaValue != null)) { return unsupported(); }
+        final Map<String, Object> values = new LinkedHashMap<>(); values.put("branch", branch.name()); values.put("minimum", minimum);
+        values.put("maximum", maximum); values.put("manaValue", manaValue); return complete(Kind.DISCARD_BATCH_REQUEST, values, Map.of());
     }
 
     private static Input unsupported() { return new Input(null, "UNSUPPORTED", "UNSUPPORTED", null, Map.of(), Map.of()); }

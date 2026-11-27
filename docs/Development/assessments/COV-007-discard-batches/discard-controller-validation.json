@@ -1,0 +1,34 @@
+{
+  "FORCED_ALIAS": {
+    "lifecycleEvents": 4,
+    "validatedObservations": 2
+  },
+  "COMBO_SELECTION": {
+    "lifecycleEvents": 4,
+    "validatedObservations": 2
+  },
+  "PROTECTED_NARROWING": {
+    "lifecycleEvents": 6,
+    "validatedObservations": 3
+  },
+  "MANA_VALUE_HAND": {
+    "lifecycleEvents": 8,
+    "validatedObservations": 4
+  },
+  "SHAPESHIFTER_HAND": {
+    "lifecycleEvents": 8,
+    "validatedObservations": 4
+  },
+  "UNCASTABLE_HAND": {
+    "lifecycleEvents": 8,
+    "validatedObservations": 4
+  },
+  "FROZEN_PLANNING": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "ORIGINAL_ERROR": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  }
+}
