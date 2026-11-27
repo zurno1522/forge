@@ -51,7 +51,7 @@ TYPE_BOUNDARIES = {
     'PAYMENT_CARD_SELECTION': {'PAYMENT_DISCARD_POOL', 'PAYMENT_SACRIFICE_POOL', 'PAYMENT_EXILE_POOL'},
     'PAYMENT_MANA': {'AUTO_MANA_PAYMENT'},
     'PAYMENT_MANA_SELECTION': {'MANA_POOL_OPTIONS'},
-    'PAYMENT_CARD_BATCH': {'PAYMENT_DISCARD_BATCH'},
+    'PAYMENT_CARD_BATCH': {'PAYMENT_DISCARD_BATCH','PAYMENT_EXILE_RANKING'},
     'PAYMENT_CARD_PICK': {'PAYMENT_SACRIFICE_PICK','PAYMENT_DISCARD_PREFERENCE','PAYMENT_DISCARD_FALLBACK'},
     'PAYMENT_MANA_SOURCE_SELECTION': {'MANA_SOURCE_OPTIONS'},
     'MASKED_CHOICE': {'MASKED_CHOICE'},
@@ -62,6 +62,7 @@ TYPE_BOUNDARIES = {
     'EFFECT_MULTI_SPELL_ABILITY_SELECTION': {'CONTROLLER_EFFECT_SPELL_ABILITIES'},
     'EFFECT_SPELL_ABILITY_SELECTION': {'CONTROLLER_EFFECT_SPELL_ABILITY'},
 }
+BOUNDARIES.add('PAYMENT_EXILE_RANKING')
 BOUNDARIES.update(('PAYMENT_DISCARD_PREFERENCE','PAYMENT_DISCARD_FALLBACK'))
 BOUNDARIES.update(('MANA_SOURCE_OPTIONS','PAYMENT_SACRIFICE_PICK','PAYMENT_DISCARD_BATCH'))
 BOUNDARIES.update(('CONTROLLER_EFFECT_ENTITIES', 'CONTROLLER_ZONE_CHANGE_SELECTIONS', 'CONTROLLER_EFFECT_SPELL_ABILITIES', 'CONTROLLER_EFFECT_SPELL_ABILITY'))
@@ -85,6 +86,7 @@ CONTEXT_TIMING_V2 = {**{key: value for key, value in CONTEXT_TIMING.items() if k
 MODE_CONTEXT_TIMING = {'CHARM_MODE_HEURISTIC': 'BEFORE_SELECTOR', 'CONTROLLER_MODES': 'BEFORE_OPERATION'}
 MULTI_CONTEXT_TIMING = {'CONTROLLER_EFFECT_ENTITIES': 'BEFORE_OPERATION'}
 ZONE_OPERATION_CONTEXT_TIMING = {'CONTROLLER_ZONE_CHANGE_SELECTIONS': 'BEFORE_OPERATION'}
+EXILE_RANKING_CONTEXT_TIMING = {'PAYMENT_EXILE_RANKING':'BEFORE_OPERATION'}
 DISCARD_PICK_CONTEXT_TIMING = {'PAYMENT_DISCARD_PREFERENCE':'BEFORE_SELECTOR','PAYMENT_DISCARD_FALLBACK':'BEFORE_OPERATION'}
 DISCARD_BATCH_CONTEXT_TIMING = {'PAYMENT_DISCARD_BATCH': 'BEFORE_OPERATION'}
 SACRIFICE_PICK_CONTEXT_TIMING = {'PAYMENT_SACRIFICE_PICK': 'BEFORE_SELECTOR'}
@@ -112,6 +114,9 @@ def input_boundary(value, boundary, stage=None, choice=None):
     if choice is not None and boundary in SACRIFICE_PICK_CONTEXT_TIMING and value['schemaVersion'] >= 22:
         require('entryLocation' in choice, 'sacrifice pick lacks own entry')
         expected = SACRIFICE_PICK_CONTEXT_TIMING[boundary]
+    if choice is not None and boundary in EXILE_RANKING_CONTEXT_TIMING and value['schemaVersion'] >= 25:
+        require('entryLocation' in choice, 'exile ranking lacks own entry')
+        expected = EXILE_RANKING_CONTEXT_TIMING[boundary]
     if choice is not None and boundary in DISCARD_PICK_CONTEXT_TIMING and value['schemaVersion'] >= 24:
         require('entryLocation' in choice, 'discard pick lacks own entry')
         expected = DISCARD_PICK_CONTEXT_TIMING[boundary]
@@ -180,6 +185,8 @@ def input_boundary(value, boundary, stage=None, choice=None):
 
 def parameter_boundary(choice):
     context = choice.get('inputContext')
+    if (choice['choiceType'],choice['boundary'])==('PAYMENT_CARD_BATCH','PAYMENT_EXILE_RANKING'):
+        return isinstance(context, dict) and integer(context.get('schemaVersion')) and context['schemaVersion'] >= 25
     if choice['choiceType']=='PAYMENT_CARD_PICK' and choice['boundary'] in DISCARD_PICK_CONTEXT_TIMING:
         return isinstance(context, dict) and integer(context.get('schemaVersion')) and context['schemaVersion'] >= 24
     if (choice['choiceType'],choice['boundary']) == ('PAYMENT_CARD_BATCH','PAYMENT_DISCARD_BATCH'):
@@ -489,6 +496,9 @@ def entry_location(choice, known_players=None):
     if choice['boundary'] in PREPARATION_CONTEXT_TIMING:
         require(choice.get('inputContext', {}).get('schemaVersion', 0) >= 17, 'preparation entry requires V17')
         expected = PREPARATION_CONTEXT_TIMING[choice['boundary']]
+    if choice['boundary'] in EXILE_RANKING_CONTEXT_TIMING:
+        require(choice.get('inputContext',{}).get('schemaVersion',0)>=25, 'exile ranking requires V25')
+        expected=EXILE_RANKING_CONTEXT_TIMING[choice['boundary']]
     if choice['boundary'] in DISCARD_PICK_CONTEXT_TIMING:
         require(choice.get('inputContext', {}).get('schemaVersion', 0) >= 24, 'discard pick requires V24')
         expected = DISCARD_PICK_CONTEXT_TIMING[choice['boundary']]
@@ -654,6 +664,12 @@ def options(choice):
         require(isinstance(option, dict) and set(option) == {'coverage', 'costKind', 'effect'}
                 and option['coverage'] == 'PAYMENT_VISITOR_INPUT_NOT_ALTERNATIVES' and option['costKind'] in COST_KINDS
                 and isinstance(option['effect'], bool) and choice['boundary'] == 'COST_VISITOR', 'invalid payment visitor input')
+        return
+    if choice['choiceType']=='PAYMENT_CARD_BATCH' and choice['boundary']=='PAYMENT_EXILE_RANKING':
+        require(parameter_options(choice) and 'entryLocation' in choice, 'exile ranking lacks own entry/profile')
+        require(isinstance(option,dict) and set(option)=={'coverage','cards','callbackParameters'} and option['coverage']=='EXILE_RANKING_NOT_ALL_LEGAL_PLANS', 'invalid exile ranking options')
+        prefix(option['cards'], lambda v:typed_reference(v,'CARD'))
+        _contexts._parameters.receipt(option['callbackParameters'],'EXILE_RANKING',typed_reference,choice['inputContext']['schemaVersion'])
         return
     if choice['choiceType'] == 'PAYMENT_CARD_BATCH':
         require(parameter_options(choice) and 'entryLocation' in choice, 'discard batch lacks own entry/profile')

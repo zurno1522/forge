@@ -1,0 +1,46 @@
+{
+  "POWER_ORDER": {
+    "lifecycleEvents": 4,
+    "validatedObservations": 2
+  },
+  "TARGET_FILTER": {
+    "lifecycleEvents": 4,
+    "validatedObservations": 2
+  },
+  "CRAFT_ORDER": {
+    "lifecycleEvents": 4,
+    "validatedObservations": 2
+  },
+  "CRAFT_DECLINE": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "INSUFFICIENT": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "PROTECTED_COST": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "PROTECTED_EFFECT": {
+    "lifecycleEvents": 4,
+    "validatedObservations": 2
+  },
+  "ZERO": {
+    "lifecycleEvents": 4,
+    "validatedObservations": 2
+  },
+  "NEGATIVE_ERROR": {
+    "lifecycleEvents": 4,
+    "validatedObservations": 2
+  },
+  "FROZEN_PLANNING": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "ORIGINAL_ERROR": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  }
+}

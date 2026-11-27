@@ -691,7 +691,12 @@ public class ComputerUtil {
         return chooseExileFromList(ai, typeList, activate, amount, sa, effect);
     }
 
-    public static CardCollection chooseExileFromList(final Player ai, CardCollection typeList, final Card activate, final int amount, SpellAbility sa, final boolean effect) {
+    public static CardCollection chooseExileFromList(final Player ai, final CardCollection typeList, final Card activate, final int amount, final SpellAbility sa, final boolean effect) {
+        return AiPaymentChoiceRecorder.exileRanking(ai, sa, typeList, amount, effect,
+                () -> chooseExileFromListImpl(ai, typeList, activate, amount, sa, effect));
+    }
+
+    private static CardCollection chooseExileFromListImpl(final Player ai, CardCollection typeList, final Card activate, final int amount, SpellAbility sa, final boolean effect) {
         typeList = CardLists.filter(typeList, CardPredicates.canExiledBy(sa, effect));
 
         // don't exile the card we're pumping

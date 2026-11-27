@@ -101,6 +101,17 @@ public final class AiPaymentChoiceRecorder {
                 result -> Map.of("paymentRoutineReturned", true, "costSatisfied", cost.isPaid(), "manaAbilities", refs(result)));
     }
 
+    static CardCollection exileRanking(final Player chooser, final SpellAbility ability, final CardCollection options,
+            final int amount, final boolean effect, final Supplier<CardCollection> callback) {
+        final var parameters = new AtomicReference<AiReceivedParameters.Input>();
+        return AiChoiceRecorder.observeParametersAt(chooser, ability, "PAYMENT_CARD_BATCH", null,
+                "PAYMENT_EXILE_RANKING", "BEFORE_OPERATION", () -> {
+                    final var received = AiReceivedParameters.exileRanking(amount, effect); parameters.set(received);
+                    return Map.of("coverage", "EXILE_RANKING_NOT_ALL_LEGAL_PLANS", "cards", refs(options),
+                            "callbackParameters", received.diagnostics());
+                }, callback, AiPaymentChoiceRecorder::refs, null, null, new AiReceivedParameters.Carrier(parameters));
+    }
+
     enum DiscardBranch { POLICY, COMBO, SHAPESHIFTER, MANA_VALUE, UNCASTABLE_EXCESS }
 
     static CardCollection discardBatch(final Player chooser, final SpellAbility ability, final DiscardBranch branch,

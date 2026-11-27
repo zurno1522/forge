@@ -1,0 +1,2853 @@
+{
+  "choices": {
+    "POWER_ORDER": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:1",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "PAYMENT_CARD_BATCH",
+        "boundary": "PAYMENT_EXILE_RANKING",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 1,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "EXILE_RANKING_REQUEST",
+            "values": {
+              "requestedSelections": 1,
+              "effect": false
+            },
+            "reason": null
+          },
+          "coverage": "EXILE_RANKING_NOT_ALL_LEGAL_PLANS",
+          "cards": {
+            "items": [
+              {
+                "type": "CARD",
+                "id": 2,
+                "gameTimestamp": 2
+              },
+              {
+                "type": "CARD",
+                "id": 3,
+                "gameTimestamp": 3
+              }
+            ],
+            "truncated": false
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 25,
+          "profile": "PERMITTED_CHOICE_VIEW_V25",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1",
+            "prompt": "UNSUPPORTED"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 1,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Shivan Dragon",
+                "types": "Creature - Dragon",
+                "manaCost": "{4}{R}{R}",
+                "power": 5,
+                "toughness": 5,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Llanowar Elves",
+                "types": "Creature - Elf Druid",
+                "manaCost": "{G}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "entityRef": "c2",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Lightning Bolt",
+                "types": "Instant",
+                "manaCost": "{R}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": {
+              "kind": "EXILE_RANKING_REQUEST",
+              "requestedSelections": 1,
+              "effect": false
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "UNSUPPORTED",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 3,
+                "gameTimestamp": 3,
+                "entityRef": "c1"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c2"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:2",
+        "parentChoiceId": "choice:1",
+        "status": "STARTED",
+        "choiceType": "PAYMENT_CARD_SELECTION",
+        "boundary": "PAYMENT_EXILE_POOL",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 1,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "options": {
+          "cards": {
+            "items": [
+              {
+                "type": "CARD",
+                "id": 3,
+                "gameTimestamp": 3
+              },
+              {
+                "type": "CARD",
+                "id": 2,
+                "gameTimestamp": 2
+              }
+            ],
+            "truncated": false
+          },
+          "maximum": 1,
+          "coverage": "OBSERVED_CARD_OPTIONS_NOT_ALL_LEGAL_PAYMENT_PLANS",
+          "minimum": 1
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:2",
+        "status": "COMPLETED",
+        "selection": {
+          "items": [
+            {
+              "type": "CARD",
+              "id": 3,
+              "gameTimestamp": 3
+            }
+          ],
+          "truncated": false
+        },
+        "elapsedNanos": 341974
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:1",
+        "status": "COMPLETED",
+        "selection": {
+          "items": [
+            {
+              "type": "CARD",
+              "id": 3,
+              "gameTimestamp": 3
+            }
+          ],
+          "truncated": false
+        },
+        "elapsedNanos": 205891569
+      }
+    ],
+    "TARGET_FILTER": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:3",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "PAYMENT_CARD_BATCH",
+        "boundary": "PAYMENT_EXILE_RANKING",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 6,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "EXILE_RANKING_REQUEST",
+            "values": {
+              "requestedSelections": 1,
+              "effect": false
+            },
+            "reason": null
+          },
+          "coverage": "EXILE_RANKING_NOT_ALL_LEGAL_PLANS",
+          "cards": {
+            "items": [
+              {
+                "type": "CARD",
+                "id": 2,
+                "gameTimestamp": 2
+              },
+              {
+                "type": "CARD",
+                "id": 3,
+                "gameTimestamp": 3
+              }
+            ],
+            "truncated": false
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 25,
+          "profile": "PERMITTED_CHOICE_VIEW_V25",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1",
+            "prompt": "UNSUPPORTED"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 1,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Shivan Dragon",
+                "types": "Creature - Dragon",
+                "manaCost": "{4}{R}{R}",
+                "power": 5,
+                "toughness": 5,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Llanowar Elves",
+                "types": "Creature - Elf Druid",
+                "manaCost": "{G}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "entityRef": "c2",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Lightning Bolt",
+                "types": "Instant",
+                "manaCost": "{R}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": {
+              "kind": "EXILE_RANKING_REQUEST",
+              "requestedSelections": 1,
+              "effect": false
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "UNSUPPORTED",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 3,
+                "gameTimestamp": 3,
+                "entityRef": "c1"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c2"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:4",
+        "parentChoiceId": "choice:3",
+        "status": "STARTED",
+        "choiceType": "PAYMENT_CARD_SELECTION",
+        "boundary": "PAYMENT_EXILE_POOL",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 6,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "options": {
+          "cards": {
+            "items": [
+              {
+                "type": "CARD",
+                "id": 2,
+                "gameTimestamp": 2
+              }
+            ],
+            "truncated": false
+          },
+          "maximum": 1,
+          "coverage": "OBSERVED_CARD_OPTIONS_NOT_ALL_LEGAL_PAYMENT_PLANS",
+          "minimum": 1
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:4",
+        "status": "COMPLETED",
+        "selection": {
+          "items": [
+            {
+              "type": "CARD",
+              "id": 2,
+              "gameTimestamp": 2
+            }
+          ],
+          "truncated": false
+        },
+        "elapsedNanos": 211238
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:3",
+        "status": "COMPLETED",
+        "selection": {
+          "items": [
+            {
+              "type": "CARD",
+              "id": 2,
+              "gameTimestamp": 2
+            }
+          ],
+          "truncated": false
+        },
+        "elapsedNanos": 4991398
+      }
+    ],
+    "CRAFT_ORDER": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:5",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "PAYMENT_CARD_BATCH",
+        "boundary": "PAYMENT_EXILE_RANKING",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 19,
+        "sourceId": 4,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "EXILE_RANKING_REQUEST",
+            "values": {
+              "requestedSelections": 2,
+              "effect": false
+            },
+            "reason": null
+          },
+          "coverage": "EXILE_RANKING_NOT_ALL_LEGAL_PLANS",
+          "cards": {
+            "items": [
+              {
+                "type": "CARD",
+                "id": 5,
+                "gameTimestamp": 5
+              },
+              {
+                "type": "CARD",
+                "id": 6,
+                "gameTimestamp": 6
+              },
+              {
+                "type": "CARD",
+                "id": 7,
+                "gameTimestamp": 7
+              },
+              {
+                "type": "CARD",
+                "id": 8,
+                "gameTimestamp": 8
+              }
+            ],
+            "truncated": false
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 25,
+          "profile": "PERMITTED_CHOICE_VIEW_V25",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1",
+            "prompt": "UNSUPPORTED"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 1,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Shivan Dragon",
+                "types": "Creature - Dragon",
+                "manaCost": "{4}{R}{R}",
+                "power": 5,
+                "toughness": 5,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Llanowar Elves",
+                "types": "Creature - Elf Druid",
+                "manaCost": "{G}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "entityRef": "c2",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Clay-Fired Bricks",
+                "types": "Artifact",
+                "manaCost": "{1}{W}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c3",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Worn Powerstone",
+                "types": "Artifact",
+                "manaCost": "{3}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c4",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Sol Ring",
+                "types": "Artifact",
+                "manaCost": "{1}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c5",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Graveyard",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Darksteel Ingot",
+                "types": "Artifact",
+                "manaCost": "{3}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c6",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Graveyard",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Mind Stone",
+                "types": "Artifact",
+                "manaCost": "{2}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c7",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Lightning Bolt",
+                "types": "Instant",
+                "manaCost": "{R}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": {
+              "kind": "EXILE_RANKING_REQUEST",
+              "requestedSelections": 2,
+              "effect": false
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "UNSUPPORTED",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 3,
+                "gameTimestamp": 3,
+                "entityRef": "c1"
+              },
+              {
+                "id": 4,
+                "gameTimestamp": 4,
+                "entityRef": "c2"
+              },
+              {
+                "id": 5,
+                "gameTimestamp": 5,
+                "entityRef": "c3"
+              },
+              {
+                "id": 6,
+                "gameTimestamp": 6,
+                "entityRef": "c4"
+              },
+              {
+                "id": 7,
+                "gameTimestamp": 7,
+                "entityRef": "c5"
+              },
+              {
+                "id": 8,
+                "gameTimestamp": 8,
+                "entityRef": "c6"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c7"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:6",
+        "parentChoiceId": "choice:5",
+        "status": "STARTED",
+        "choiceType": "PAYMENT_CARD_SELECTION",
+        "boundary": "PAYMENT_EXILE_POOL",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 19,
+        "sourceId": 4,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "options": {
+          "cards": {
+            "items": [
+              {
+                "type": "CARD",
+                "id": 8,
+                "gameTimestamp": 8
+              },
+              {
+                "type": "CARD",
+                "id": 7,
+                "gameTimestamp": 7
+              },
+              {
+                "type": "CARD",
+                "id": 6,
+                "gameTimestamp": 6
+              }
+            ],
+            "truncated": false
+          },
+          "maximum": 2,
+          "coverage": "OBSERVED_CARD_OPTIONS_NOT_ALL_LEGAL_PAYMENT_PLANS",
+          "minimum": 2
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:6",
+        "status": "COMPLETED",
+        "selection": {
+          "items": [
+            {
+              "type": "CARD",
+              "id": 8,
+              "gameTimestamp": 8
+            },
+            {
+              "type": "CARD",
+              "id": 7,
+              "gameTimestamp": 7
+            }
+          ],
+          "truncated": false
+        },
+        "elapsedNanos": 220620
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:5",
+        "status": "COMPLETED",
+        "selection": {
+          "items": [
+            {
+              "type": "CARD",
+              "id": 8,
+              "gameTimestamp": 8
+            },
+            {
+              "type": "CARD",
+              "id": 7,
+              "gameTimestamp": 7
+            }
+          ],
+          "truncated": false
+        },
+        "elapsedNanos": 4720518
+      }
+    ],
+    "CRAFT_DECLINE": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:7",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "PAYMENT_CARD_BATCH",
+        "boundary": "PAYMENT_EXILE_RANKING",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 39,
+        "sourceId": 4,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "EXILE_RANKING_REQUEST",
+            "values": {
+              "requestedSelections": 1,
+              "effect": false
+            },
+            "reason": null
+          },
+          "coverage": "EXILE_RANKING_NOT_ALL_LEGAL_PLANS",
+          "cards": {
+            "items": [
+              {
+                "type": "CARD",
+                "id": 5,
+                "gameTimestamp": 5
+              }
+            ],
+            "truncated": false
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 25,
+          "profile": "PERMITTED_CHOICE_VIEW_V25",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1",
+            "prompt": "UNSUPPORTED"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 1,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Shivan Dragon",
+                "types": "Creature - Dragon",
+                "manaCost": "{4}{R}{R}",
+                "power": 5,
+                "toughness": 5,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Llanowar Elves",
+                "types": "Creature - Elf Druid",
+                "manaCost": "{G}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "entityRef": "c2",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Clay-Fired Bricks",
+                "types": "Artifact",
+                "manaCost": "{1}{W}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c3",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Worn Powerstone",
+                "types": "Artifact",
+                "manaCost": "{3}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c4",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Lightning Bolt",
+                "types": "Instant",
+                "manaCost": "{R}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": {
+              "kind": "EXILE_RANKING_REQUEST",
+              "requestedSelections": 1,
+              "effect": false
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "UNSUPPORTED",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 3,
+                "gameTimestamp": 3,
+                "entityRef": "c1"
+              },
+              {
+                "id": 4,
+                "gameTimestamp": 4,
+                "entityRef": "c2"
+              },
+              {
+                "id": 5,
+                "gameTimestamp": 5,
+                "entityRef": "c3"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c4"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:7",
+        "status": "DECLINED",
+        "selection": null,
+        "elapsedNanos": 1649058
+      }
+    ],
+    "INSUFFICIENT": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:8",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "PAYMENT_CARD_BATCH",
+        "boundary": "PAYMENT_EXILE_RANKING",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 44,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "EXILE_RANKING_REQUEST",
+            "values": {
+              "requestedSelections": 3,
+              "effect": false
+            },
+            "reason": null
+          },
+          "coverage": "EXILE_RANKING_NOT_ALL_LEGAL_PLANS",
+          "cards": {
+            "items": [
+              {
+                "type": "CARD",
+                "id": 2,
+                "gameTimestamp": 2
+              },
+              {
+                "type": "CARD",
+                "id": 3,
+                "gameTimestamp": 3
+              }
+            ],
+            "truncated": false
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 25,
+          "profile": "PERMITTED_CHOICE_VIEW_V25",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1",
+            "prompt": "UNSUPPORTED"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 1,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Shivan Dragon",
+                "types": "Creature - Dragon",
+                "manaCost": "{4}{R}{R}",
+                "power": 5,
+                "toughness": 5,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Llanowar Elves",
+                "types": "Creature - Elf Druid",
+                "manaCost": "{G}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "entityRef": "c2",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Lightning Bolt",
+                "types": "Instant",
+                "manaCost": "{R}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": {
+              "kind": "EXILE_RANKING_REQUEST",
+              "requestedSelections": 3,
+              "effect": false
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "UNSUPPORTED",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 3,
+                "gameTimestamp": 3,
+                "entityRef": "c1"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c2"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:8",
+        "status": "DECLINED",
+        "selection": null,
+        "elapsedNanos": 9184237
+      }
+    ],
+    "PROTECTED_COST": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:9",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "PAYMENT_CARD_BATCH",
+        "boundary": "PAYMENT_EXILE_RANKING",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 49,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "EXILE_RANKING_REQUEST",
+            "values": {
+              "requestedSelections": 1,
+              "effect": false
+            },
+            "reason": null
+          },
+          "coverage": "EXILE_RANKING_NOT_ALL_LEGAL_PLANS",
+          "cards": {
+            "items": [
+              {
+                "type": "CARD",
+                "id": 36,
+                "gameTimestamp": 36
+              }
+            ],
+            "truncated": false
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 25,
+          "profile": "PERMITTED_CHOICE_VIEW_V25",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1",
+            "prompt": "UNSUPPORTED"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 2,
+                "libraryCount": 32,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Shivan Dragon",
+                "types": "Creature - Dragon",
+                "manaCost": "{4}{R}{R}",
+                "power": 5,
+                "toughness": 5,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Llanowar Elves",
+                "types": "Creature - Elf Druid",
+                "manaCost": "{G}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "entityRef": "c2",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Lightning Bolt",
+                "types": "Instant",
+                "manaCost": "{R}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c3",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Reanimate",
+                "types": "Sorcery",
+                "manaCost": "{B}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": {
+              "kind": "EXILE_RANKING_REQUEST",
+              "requestedSelections": 1,
+              "effect": false
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "UNSUPPORTED",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 3,
+                "gameTimestamp": 3,
+                "entityRef": "c1"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c2"
+              },
+              {
+                "id": 36,
+                "gameTimestamp": 36,
+                "entityRef": "c3"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:9",
+        "status": "DECLINED",
+        "selection": null,
+        "elapsedNanos": 49442939
+      }
+    ],
+    "PROTECTED_EFFECT": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:10",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "PAYMENT_CARD_BATCH",
+        "boundary": "PAYMENT_EXILE_RANKING",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 161,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "EXILE_RANKING_REQUEST",
+            "values": {
+              "requestedSelections": 1,
+              "effect": true
+            },
+            "reason": null
+          },
+          "coverage": "EXILE_RANKING_NOT_ALL_LEGAL_PLANS",
+          "cards": {
+            "items": [
+              {
+                "type": "CARD",
+                "id": 36,
+                "gameTimestamp": 36
+              }
+            ],
+            "truncated": false
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 25,
+          "profile": "PERMITTED_CHOICE_VIEW_V25",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1",
+            "prompt": "UNSUPPORTED"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 2,
+                "libraryCount": 32,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Shivan Dragon",
+                "types": "Creature - Dragon",
+                "manaCost": "{4}{R}{R}",
+                "power": 5,
+                "toughness": 5,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Llanowar Elves",
+                "types": "Creature - Elf Druid",
+                "manaCost": "{G}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "entityRef": "c2",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Lightning Bolt",
+                "types": "Instant",
+                "manaCost": "{R}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              },
+              {
+                "entityRef": "c3",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Reanimate",
+                "types": "Sorcery",
+                "manaCost": "{B}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": {
+              "kind": "EXILE_RANKING_REQUEST",
+              "requestedSelections": 1,
+              "effect": true
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "UNSUPPORTED",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 3,
+                "gameTimestamp": 3,
+                "entityRef": "c1"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c2"
+              },
+              {
+                "id": 36,
+                "gameTimestamp": 36,
+                "entityRef": "c3"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:11",
+        "parentChoiceId": "choice:10",
+        "status": "STARTED",
+        "choiceType": "PAYMENT_CARD_SELECTION",
+        "boundary": "PAYMENT_EXILE_POOL",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 161,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "options": {
+          "cards": {
+            "items": [
+              {
+                "type": "CARD",
+                "id": 36,
+                "gameTimestamp": 36
+              }
+            ],
+            "truncated": false
+          },
+          "maximum": 1,
+          "coverage": "OBSERVED_CARD_OPTIONS_NOT_ALL_LEGAL_PAYMENT_PLANS",
+          "minimum": 1
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:11",
+        "status": "COMPLETED",
+        "selection": {
+          "items": [
+            {
+              "type": "CARD",
+              "id": 36,
+              "gameTimestamp": 36
+            }
+          ],
+          "truncated": false
+        },
+        "elapsedNanos": 169559
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:10",
+        "status": "COMPLETED",
+        "selection": {
+          "items": [
+            {
+              "type": "CARD",
+              "id": 36,
+              "gameTimestamp": 36
+            }
+          ],
+          "truncated": false
+        },
+        "elapsedNanos": 14620514
+      }
+    ],
+    "ZERO": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:12",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "PAYMENT_CARD_BATCH",
+        "boundary": "PAYMENT_EXILE_RANKING",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 273,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "EXILE_RANKING_REQUEST",
+            "values": {
+              "requestedSelections": 0,
+              "effect": false
+            },
+            "reason": null
+          },
+          "coverage": "EXILE_RANKING_NOT_ALL_LEGAL_PLANS",
+          "cards": {
+            "items": [
+              {
+                "type": "CARD",
+                "id": 2,
+                "gameTimestamp": 2
+              },
+              {
+                "type": "CARD",
+                "id": 3,
+                "gameTimestamp": 3
+              }
+            ],
+            "truncated": false
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 25,
+          "profile": "PERMITTED_CHOICE_VIEW_V25",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1",
+            "prompt": "UNSUPPORTED"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 1,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Shivan Dragon",
+                "types": "Creature - Dragon",
+                "manaCost": "{4}{R}{R}",
+                "power": 5,
+                "toughness": 5,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Llanowar Elves",
+                "types": "Creature - Elf Druid",
+                "manaCost": "{G}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "entityRef": "c2",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Lightning Bolt",
+                "types": "Instant",
+                "manaCost": "{R}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": {
+              "kind": "EXILE_RANKING_REQUEST",
+              "requestedSelections": 0,
+              "effect": false
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "UNSUPPORTED",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 3,
+                "gameTimestamp": 3,
+                "entityRef": "c1"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c2"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:13",
+        "parentChoiceId": "choice:12",
+        "status": "STARTED",
+        "choiceType": "PAYMENT_CARD_SELECTION",
+        "boundary": "PAYMENT_EXILE_POOL",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 273,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "options": {
+          "cards": {
+            "items": [
+              {
+                "type": "CARD",
+                "id": 3,
+                "gameTimestamp": 3
+              },
+              {
+                "type": "CARD",
+                "id": 2,
+                "gameTimestamp": 2
+              }
+            ],
+            "truncated": false
+          },
+          "maximum": 0,
+          "coverage": "OBSERVED_CARD_OPTIONS_NOT_ALL_LEGAL_PAYMENT_PLANS",
+          "minimum": 0
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:13",
+        "status": "COMPLETED",
+        "selection": {
+          "items": [],
+          "truncated": false
+        },
+        "elapsedNanos": 344313
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:12",
+        "status": "COMPLETED",
+        "selection": {
+          "items": [],
+          "truncated": false
+        },
+        "elapsedNanos": 4321730
+      }
+    ],
+    "NEGATIVE_ERROR": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:14",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "PAYMENT_CARD_BATCH",
+        "boundary": "PAYMENT_EXILE_RANKING",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 278,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "EXILE_RANKING_REQUEST",
+            "values": {
+              "requestedSelections": -1,
+              "effect": false
+            },
+            "reason": null
+          },
+          "coverage": "EXILE_RANKING_NOT_ALL_LEGAL_PLANS",
+          "cards": {
+            "items": [
+              {
+                "type": "CARD",
+                "id": 2,
+                "gameTimestamp": 2
+              },
+              {
+                "type": "CARD",
+                "id": 3,
+                "gameTimestamp": 3
+              }
+            ],
+            "truncated": false
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 25,
+          "profile": "PERMITTED_CHOICE_VIEW_V25",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1",
+            "prompt": "UNSUPPORTED"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 1,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Shivan Dragon",
+                "types": "Creature - Dragon",
+                "manaCost": "{4}{R}{R}",
+                "power": 5,
+                "toughness": 5,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Llanowar Elves",
+                "types": "Creature - Elf Druid",
+                "manaCost": "{G}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "entityRef": "c2",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Lightning Bolt",
+                "types": "Instant",
+                "manaCost": "{R}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": {
+              "kind": "EXILE_RANKING_REQUEST",
+              "requestedSelections": -1,
+              "effect": false
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "UNSUPPORTED",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 3,
+                "gameTimestamp": 3,
+                "entityRef": "c1"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c2"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:15",
+        "parentChoiceId": "choice:14",
+        "status": "STARTED",
+        "choiceType": "PAYMENT_CARD_SELECTION",
+        "boundary": "PAYMENT_EXILE_POOL",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 278,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "options": {
+          "cards": {
+            "items": [
+              {
+                "type": "CARD",
+                "id": 3,
+                "gameTimestamp": 3
+              },
+              {
+                "type": "CARD",
+                "id": 2,
+                "gameTimestamp": 2
+              }
+            ],
+            "truncated": false
+          },
+          "maximum": -1,
+          "coverage": "OBSERVED_CARD_OPTIONS_NOT_ALL_LEGAL_PAYMENT_PLANS",
+          "minimum": -1
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:15",
+        "status": "ERROR",
+        "selection": null,
+        "elapsedNanos": 5157677
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:14",
+        "status": "ERROR",
+        "selection": null,
+        "elapsedNanos": 6084172
+      }
+    ],
+    "FROZEN_PLANNING": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:16",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "PAYMENT_CARD_BATCH",
+        "boundary": "PAYMENT_EXILE_RANKING",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 283,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "PLANNING_WORKING_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "EXILE_RANKING_REQUEST",
+            "values": {
+              "requestedSelections": -2147483648,
+              "effect": true
+            },
+            "reason": null
+          },
+          "coverage": "EXILE_RANKING_NOT_ALL_LEGAL_PLANS",
+          "cards": {
+            "items": [
+              {
+                "type": "CARD",
+                "id": 2,
+                "gameTimestamp": 2
+              },
+              {
+                "type": "CARD",
+                "id": 3,
+                "gameTimestamp": 3
+              }
+            ],
+            "truncated": false
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 25,
+          "profile": "PERMITTED_CHOICE_VIEW_V25",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "PLANNING_WORKING_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1",
+            "prompt": "UNSUPPORTED"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 1,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Shivan Dragon",
+                "types": "Creature - Dragon",
+                "manaCost": "{4}{R}{R}",
+                "power": 5,
+                "toughness": 5,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Llanowar Elves",
+                "types": "Creature - Elf Druid",
+                "manaCost": "{G}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "entityRef": "c2",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Lightning Bolt",
+                "types": "Instant",
+                "manaCost": "{R}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": {
+              "kind": "EXILE_RANKING_REQUEST",
+              "requestedSelections": -2147483648,
+              "effect": true
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "UNSUPPORTED",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 3,
+                "gameTimestamp": 3,
+                "entityRef": "c1"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c2"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:16",
+        "status": "COMPLETED",
+        "selection": {
+          "items": [
+            {
+              "type": "CARD",
+              "id": 2,
+              "gameTimestamp": 2
+            }
+          ],
+          "truncated": false
+        },
+        "elapsedNanos": 5471741
+      }
+    ],
+    "ORIGINAL_ERROR": [
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:17",
+        "parentChoiceId": null,
+        "status": "STARTED",
+        "choiceType": "PAYMENT_CARD_BATCH",
+        "boundary": "PAYMENT_EXILE_RANKING",
+        "stage": "CONTROLLER_CALLBACK",
+        "chooserPlayerId": 1,
+        "chooserKind": "AI",
+        "abilityId": 288,
+        "sourceId": 1,
+        "decisionId": null,
+        "actionId": null,
+        "candidateAbilityId": null,
+        "assessmentId": null,
+        "resolvingAbilityId": null,
+        "entryLocation": {
+          "schemaVersion": 1,
+          "status": "CAPTURED",
+          "kind": "OPERATION",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "turn": 1,
+          "phase": "MAIN1",
+          "turnPlayerId": 1,
+          "reason": null
+        },
+        "options": {
+          "callbackParameters": {
+            "schemaVersion": 1,
+            "coverage": "COMPLETE",
+            "kind": "EXILE_RANKING_REQUEST",
+            "values": {
+              "requestedSelections": 1,
+              "effect": false
+            },
+            "reason": null
+          },
+          "coverage": "EXILE_RANKING_NOT_ALL_LEGAL_PLANS",
+          "cards": {
+            "items": [
+              {
+                "type": "CARD",
+                "id": 2,
+                "gameTimestamp": 2
+              },
+              {
+                "type": "CARD",
+                "id": 3,
+                "gameTimestamp": 3
+              }
+            ],
+            "truncated": false
+          }
+        },
+        "inputContext": {
+          "schemaVersion": 25,
+          "profile": "PERMITTED_CHOICE_VIEW_V25",
+          "timing": "BEFORE_OPERATION",
+          "stateBasis": "RULES_STATE",
+          "perspective": {
+            "controllingPlayerId": 1,
+            "chooserPlayerId": 1
+          },
+          "status": "PARTIAL",
+          "coverage": {
+            "stack": "PUBLIC_ROOT_STACK_V1",
+            "history": "INCOMPLETE",
+            "playerView": "PERMITTED_CURRENT_FIELDS_V1",
+            "disclosures": "UNSUPPORTED_PRIOR_SCOPE",
+            "options": "DIAGNOSTIC_ONLY",
+            "receivedParameters": "RECEIVED_CALLBACK_PARAMETERS_V1",
+            "prompt": "UNSUPPORTED"
+          },
+          "policy": {
+            "turn": 1,
+            "phase": "MAIN1",
+            "turnPlayer": "p1",
+            "chooser": "p1",
+            "players": [
+              {
+                "entityRef": "p0",
+                "life": 20,
+                "handCount": 0,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              },
+              {
+                "entityRef": "p1",
+                "life": 20,
+                "handCount": 1,
+                "libraryCount": 0,
+                "floatingManaColors": []
+              }
+            ],
+            "cards": [
+              {
+                "entityRef": "c0",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Shivan Dragon",
+                "types": "Creature - Dragon",
+                "manaCost": "{4}{R}{R}",
+                "power": 5,
+                "toughness": 5,
+                "counters": {}
+              },
+              {
+                "entityRef": "c1",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Battlefield",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Llanowar Elves",
+                "types": "Creature - Elf Druid",
+                "manaCost": "{G}",
+                "power": 1,
+                "toughness": 1,
+                "counters": {}
+              },
+              {
+                "entityRef": "c2",
+                "owner": "p1",
+                "controller": "p1",
+                "zone": "Hand",
+                "tapped": false,
+                "faceDown": false,
+                "identityKnown": true,
+                "name": "Lightning Bolt",
+                "types": "Instant",
+                "manaCost": "{R}",
+                "power": null,
+                "toughness": null,
+                "counters": {}
+              }
+            ],
+            "stack": {
+              "entries": [],
+              "truncated": false,
+              "isResolving": false,
+              "resolving": null,
+              "resolvingCoverage": "CAPTURED"
+            },
+            "prompt": null,
+            "receivedParameters": {
+              "kind": "EXILE_RANKING_REQUEST",
+              "requestedSelections": 1,
+              "effect": false
+            },
+            "disclosedFacts": []
+          },
+          "diagnostics": {
+            "optionBindings": {
+              "items": [],
+              "coverage": "UNSUPPORTED",
+              "truncated": false
+            },
+            "stackBindings": [],
+            "playerBindings": [
+              {
+                "entityRef": "p0",
+                "id": 0
+              },
+              {
+                "entityRef": "p1",
+                "id": 1
+              }
+            ],
+            "cardBindings": [
+              {
+                "id": 2,
+                "gameTimestamp": 2,
+                "entityRef": "c0"
+              },
+              {
+                "id": 3,
+                "gameTimestamp": 3,
+                "entityRef": "c1"
+              },
+              {
+                "id": 1,
+                "gameTimestamp": 1,
+                "entityRef": "c2"
+              }
+            ]
+          },
+          "omissions": [
+            {
+              "component": "DISCLOSURES",
+              "reason": "UNSUPPORTED"
+            }
+          ]
+        }
+      },
+      {
+        "choiceSchemaVersion": 1,
+        "choiceId": "choice:17",
+        "status": "ERROR",
+        "selection": null,
+        "elapsedNanos": 3137874
+      }
+    ]
+  },
+  "completeGameTrace": false,
+  "fixtureKind": "EXILE_RANKING_AND_ADAPTER_EXCERPTS"
+}
