@@ -64,7 +64,30 @@ heap. Disclosure buffers are empty in this fixture. These samples do not certify
 all game sizes, control perspectives, timeouts or historical-knowledge coverage.
 See the [profile and measured results](../../../docs/Development/Simulation-Input-Context.md).
 
-## OPT-001 phase probe
+## OPT-005 collector/UTF-8 and failure cohort
+
+With desktop classes built, run `run-pipeline-costs.py` using the same required
+classpath/JDK/profile/output arguments as the compatibility runner. Use the
+default four rounds, four warmup calls and eight measured calls. Repeat with
+`--order profile-first` into a second new directory. Validate each with:
+
+```sh
+python3 tools/decision-records/input-context-benchmark/summarize-pipeline-costs.py \
+  /path/to/pipeline-results --output /path/to/pipeline-summary.json
+```
+
+`--smoke --rounds 1 --iterations 2 --warmup 1` is an explicit small verification
+run; its validator also requires `--smoke`. It cannot pass as a complete study.
+These are fixed synthetic callbacks through the actual collector and UTF-8
+writer, not games or standalone exportable traces. Matched byte offsets/hashes,
+event order and ordinary context/entry validation establish what was delivered.
+Intentional capture/writer failures remain separate from healthy costs.
+The pipeline agent instruments writer calls and the final flush; that flush is
+outside publication, so the overlapping spans are not additive. The controlled
+phase probe retains its original instrumentation unless this pipeline flag is set.
+See the [pipeline assessment](../../../docs/Development/Simulation-V29-Pipeline-Cost-Assessment.md).
+
+## Agent failure prerequisite
 
 Before measuring failed operations, validate the agent's exception cleanup:
 
@@ -80,6 +103,8 @@ are separate from the agent JAR and the real Forge classpath. Pass
 that run exits nonzero.
 The [exception-hardening assessment](../../../docs/Development/Simulation-Profiler-Exception-Hardening.md)
 records the scope; these checks are not cost samples or played games.
+
+## OPT-001 phase probe
 
 The historical probe above uses Gson; its serialization measurements are not
 measurements of Forge's production JSONL encoder. The new phase probe uses the

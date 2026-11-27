@@ -27,7 +27,8 @@ public final class InputContextPhaseAgent {
                     ProtectionDomain domain, byte[] bytes) {
                 if (name == null) { return null; }
                 if (!name.equals("forge/ai/AiInputContext") && !name.equals("forge/ai/AiInputContext$Capture")
-                        && !name.equals("forge/ai/AiDecisionEvent") && !name.equals("forge/game/Game")) { return null; }
+                        && !name.equals("forge/ai/AiDecisionEvent") && !name.equals("forge/game/Game")
+                        && !(Boolean.getBoolean("forge.context.pipeline") && name.equals("forge/view/SimulationTraceWriter"))) { return null; }
                 ClassReader reader = new ClassReader(bytes);
                 ClassWriter writer = new ClassWriter(reader, ClassWriter.COMPUTE_MAXS);
                 reader.accept(new ClassVisitor(Opcodes.ASM8, writer) {
@@ -35,7 +36,8 @@ public final class InputContextPhaseAgent {
                         MethodVisitor visitor = super.visitMethod(access, method, desc, signature, errors);
                         boolean freeze = name.equals("forge/ai/AiDecisionEvent") && method.equals("freezeMap");
                         int phase = name.equals("forge/ai/AiInputContext") && method.equals("capture") ? 0
-                                : name.equals("forge/game/Game") && method.equals("fireEvent") ? 4 : -1;
+                                : name.equals("forge/game/Game") && method.equals("fireEvent") ? 4
+                                : name.equals("forge/view/SimulationTraceWriter") && (method.equals("write") || method.equals("flush")) ? 5 : -1;
                         boolean sort = name.equals("forge/ai/AiInputContext$Capture") && method.equals("build");
                         if (!freeze && phase < 0 && !sort) { return visitor; }
                         return new AdviceAdapter(Opcodes.ASM8, visitor, access, method, desc) {

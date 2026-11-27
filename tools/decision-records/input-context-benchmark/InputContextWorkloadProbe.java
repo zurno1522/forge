@@ -30,7 +30,7 @@ import java.util.Map;
 public final class InputContextWorkloadProbe extends AITest {
     private static final Gson GSON = new GsonBuilder().serializeNulls().create();
     private static volatile Object consumed;
-    private record Workload(String name, int players, int board, int stack, String delivery) { }
+    record Workload(String name, int players, int board, int stack, String delivery) { }
     private static final List<Workload> WORKLOADS = List.of(
             new Workload("SMALL", 2, 4, 0, "NONE"),
             new Workload("PRIVATE32", 2, 30, 4, "PRIVATE32"),
@@ -39,7 +39,7 @@ public final class InputContextWorkloadProbe extends AITest {
             new Workload("CAPPED", 4, 40, 12, "PUBLIC32"));
     private static final List<String> MODES = List.of("DISABLED", "COPY", "UNACCOUNTED_BASE", "ACCOUNTED_BASE", "NUMERIC", "ENTITY", "CAPTURE");
 
-    private Game fixture(Workload w) {
+    Game fixture(Workload w) {
         List<RegisteredPlayer> players = new ArrayList<>();
         for (int i = 0; i < w.players; i++) {
             players.add(new RegisteredPlayer(new Deck()).setPlayer(new LobbyPlayerAi("p" + i, null)));

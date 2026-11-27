@@ -1,0 +1,11 @@
+{
+  "sources": {
+    "tools/decision-records/input-context-benchmark/InputContextPhaseAgent.java": "c21e1cd402d847851dd1b8ffa486c8ca8092166502502219ba33cb8427f9e581",
+    "tools/decision-records/input-context-benchmark/InputContextPipelineProbe.java": "f7dec8ea856fc4f969f4fa4ba185c01ce19577d325fbf776e84b9dbbcfb8e39d",
+    "tools/decision-records/input-context-benchmark/InputContextWorkloadProbe.java": "873500584d2bed5fee882eabde4833c9d664753212bc673919e6932cac6a8a2b",
+    "tools/decision-records/input-context-benchmark/TraceCollectorProbeSink.java": "60dc1f985c07a2272ed64122ff2a9bb0d906e97c226c0bcf988ea5b2b3e1fdf7",
+    "tools/decision-records/input-context-benchmark/run-pipeline-costs.py": "f1996c8cfdfd0a01e4fc954ee571eeecb7efcb6c0e42532352be717091aac5a2",
+    "tools/decision-records/input-context-benchmark/summarize-pipeline-costs.py": "3be8ad646b7fcf7f637f1f574c775e868d34b5fea2f4911787296df4df925e2c",
+    "tools/decision-records/test_pipeline_measurements.py": "f91a972076bf3a38a8cc435158c4f323cb76a8a67ce6484252827981126e289e"
+  }
+}

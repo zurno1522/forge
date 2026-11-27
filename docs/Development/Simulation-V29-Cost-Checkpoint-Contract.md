@@ -6,6 +6,8 @@ The [controlled producer/metadata increment](Simulation-V29-Controlled-Cost-Asse
 
 The prerequisite [profiler exception-unwinding audit/fix](Simulation-Profiler-Exception-Hardening.md) is delivered with fail-before/pass-after and actual Forge boundary checks. Its workload smoke validates class verification and counters; it is not a new timing cohort.
 
+The [collector/physical UTF-8 and representative later-family/failure cohort](Simulation-V29-Pipeline-Cost-Assessment.md) is delivered. Native Monte Carlo and process-resource validation are next before the optional hash candidate gate.
+
 ## Questions and cohorts
 
 Establish the cost of the actual V29 implementation, including its admission receipts and controller ownership fields. The V28 experiment monitor is not a production baseline. Match represented information when comparing prefix versions; deliberate sampled/unavailable input is not a capture optimization. Native Monte Carlo outcomes and work counts can differ with deadlines and cannot serve as deterministic same-seed equivalence controls.

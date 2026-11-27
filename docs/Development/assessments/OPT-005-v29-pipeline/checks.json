@@ -1,0 +1,31 @@
+{
+  "nonoverlappingJvms": 4,
+  "measuredRounds": 288,
+  "measuredCallbacks": 2304,
+  "healthyCallbacks": 1152,
+  "exhaustedCallbacks": 384,
+  "captureFailureCallbacks": 384,
+  "writerFailureCallbacks": 384,
+  "discardedRounds": 72,
+  "pythonTests": 377,
+  "newPythonMethods": 9,
+  "pythonFailures": 0,
+  "pythonLogSha256": "d0ed0048de1d1ee5d8d75e866ab9e3ac4ed89ccbd4817dc0eae9a72d496a0945",
+  "sourceWorkAndPolicyEqualAcrossAllRounds": true,
+  "physicalFilesAndByteSlicesValidated": true,
+  "ordinaryContextEntryValidation": true,
+  "originalCallbacksPreserved": true,
+  "expectedWriterLossNotHealthy": true,
+  "controllerShallowBytes": 56,
+  "stateShallowBytes": 24,
+  "admissionCounterReachableBytes": 40,
+  "productionRuntimeUnchanged": true,
+  "playedGames": 0,
+  "trainingReady": false,
+  "limitations": [
+    "Synthetic fixed callbacks; no heuristic or Monte Carlo policy timing.",
+    "Encoding/writing includes the final flush outside publication; spans must not be subtracted blindly.",
+    "File flush reaches OS cache; no additional fsync.",
+    "Heap-pool peaks are through cleanup, not exact exclusive transient live capture memory."
+  ]
+}

@@ -12,7 +12,9 @@ The [current combined execution order](Simulation-Observation-Roadmap.md) has co
 
 The [COV-008C production admission contract](Simulation-Production-Admission-Contract.md) places the broader OPT-005 checkpoint after the now [implemented prefix V29 metadata](Simulation-Prefix-Admission-Assessment.md) and before optional hash-policy enablement. Measure the same represented V28 information with metadata costs named separately, and include a production-shaped candidate check before enabling sampling. The isolated experiment monitor is not the production cost baseline.
 
-The [V29 checkpoint contract](Simulation-V29-Cost-Checkpoint-Contract.md) has its [controlled V28/V29 comparison](Simulation-V29-Controlled-Cost-Assessment.md) delivered. Collector/physical UTF-8, later-family/failure and native Monte Carlo measurements remain next within OPT-005. The controlled refresh selects no runtime optimization or sampling policy.
+The [V29 checkpoint contract](Simulation-V29-Cost-Checkpoint-Contract.md) has its [controlled V28/V29 comparison](Simulation-V29-Controlled-Cost-Assessment.md) delivered. The controlled refresh selects no runtime optimization or sampling policy.
+
+The [collector/UTF-8 and representative later-family/failure cohort](Simulation-V29-Pipeline-Cost-Assessment.md) is now delivered, following the profiler unwind hardening. Native Monte Carlo/process-resource validation is the next measurement increment. Encoding/writing remains the leading CPU candidate; optimization and optional sampling remain separate subsequent commits.
 
 | Priority | Item | Design and completion criteria |
 | --- | --- | --- |
