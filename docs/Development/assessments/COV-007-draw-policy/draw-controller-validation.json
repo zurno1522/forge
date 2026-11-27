@@ -1,0 +1,42 @@
+{
+  "FIXED_DRAW": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "LIBRARY_SAFETY": {
+    "lifecycleEvents": 12,
+    "validatedObservations": 6
+  },
+  "DREDGE_ZERO": {
+    "lifecycleEvents": 4,
+    "validatedObservations": 2
+  },
+  "OPPONENT_LIFE": {
+    "lifecycleEvents": 12,
+    "validatedObservations": 6
+  },
+  "NEGATIVE_GAIN": {
+    "lifecycleEvents": 12,
+    "validatedObservations": 6
+  },
+  "CACHED_HAND_SAFETY": {
+    "lifecycleEvents": 8,
+    "validatedObservations": 4
+  },
+  "FALSE_AFTER_X": {
+    "lifecycleEvents": 8,
+    "validatedObservations": 4
+  },
+  "MANDATORY_FIXED": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "FROZEN_PLANNING": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "ORIGINAL_ERROR": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  }
+}

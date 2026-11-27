@@ -300,6 +300,10 @@ public class DrawAi extends SpellAbilityAi {
     }
 
     private boolean targetAI(final Player ai, final SpellAbility sa, final boolean mandatory) {
+        return AiDrawChoiceRecorder.policy(ai, sa, mandatory, () -> targetAIImpl(ai, sa, mandatory));
+    }
+
+    private boolean targetAIImpl(final Player ai, final SpellAbility sa, final boolean mandatory) {
         final Card source = sa.getHostCard();
         final Game game = ai.getGame();
         final String logic = sa.getParamOrDefault("AILogic", "");

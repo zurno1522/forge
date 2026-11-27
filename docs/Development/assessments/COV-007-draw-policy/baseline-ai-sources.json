@@ -1,0 +1,10 @@
+{
+  "revision": "d1ea6582bc7",
+  "scope": "Four pre-V27 AI classes over otherwise current build; no checkout mutation or whole-build performance comparison.",
+  "sources": {
+    "forge-ai/src/main/java/forge/ai/AiInputContext.java": "1f40e63f529c7b993e83a014dc1741b8a6a3b7fe9755175c096be3d1a462c6c7",
+    "forge-ai/src/main/java/forge/ai/AiReceivedParameters.java": "c599f87aeb72affe66bd0c8b2c33b1009d7d9c75878c07dcf7d52a11f68bdb5b",
+    "forge-ai/src/main/java/forge/ai/AiObservationAccounting.java": "a320e579b6848ca8f9d97b4b69c423736c6f2e602dd326388b94b659aad5f555",
+    "forge-ai/src/main/java/forge/ai/ability/DrawAi.java": "6134afa9804fb30f723b1025bb2751bda34134db9baf08d487ceb9c08484fcf4"
+  }
+}

@@ -209,7 +209,7 @@ public class AiModeInputContextTest extends AITest {
             Assert.assertEquals(f.events.get(0).get("boundary"), "MASKED_CHOICE");
             Assert.assertEquals(entry(f.events.get(0)).get("reason"), "HIDDEN");
             Assert.assertEquals(input(f.events.get(0)).get("timing"), "UNESTABLISHED");
-            Assert.assertEquals(input(f.events.get(0)).get("profile"), "PERMITTED_CHOICE_VIEW_V26");
+            Assert.assertEquals(input(f.events.get(0)).get("profile"), "PERMITTED_CHOICE_VIEW_V27");
             Assert.assertNull(f.events.get(1).get("selection"));
         } else { Assert.assertTrue(f.events.isEmpty()); }
         Assert.assertNull(f.game.getEventObservationFailure());
