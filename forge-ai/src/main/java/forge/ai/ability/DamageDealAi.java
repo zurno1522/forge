@@ -95,6 +95,10 @@ public class DamageDealAi extends DamageAiBase {
 
     @Override
     protected AiAbilityDecision canPlay(Player ai, SpellAbility sa) {
+        return AiDamageChoiceRecorder.canPlay(ai, sa, () -> canPlayImpl(ai, sa));
+    }
+
+    private AiAbilityDecision canPlayImpl(Player ai, SpellAbility sa) {
         final Cost abCost = sa.getPayCosts();
         final Card source = sa.getHostCard();
         final String sourceName = ComputerUtilAbility.getAbilitySourceName(sa);
@@ -917,6 +921,10 @@ public class DamageDealAi extends DamageAiBase {
 
     @Override
     protected AiAbilityDecision doTriggerNoCost(Player ai, SpellAbility sa, boolean mandatory) {
+        return AiDamageChoiceRecorder.trigger(ai, sa, mandatory, () -> triggerImpl(ai, sa, mandatory));
+    }
+
+    private AiAbilityDecision triggerImpl(Player ai, SpellAbility sa, boolean mandatory) {
         final Card source = sa.getHostCard();
         final String damage = sa.getParam("NumDmg");
 
@@ -977,6 +985,10 @@ public class DamageDealAi extends DamageAiBase {
     }
 
     private boolean doXLifeDrainLogic(Player ai, SpellAbility sa) {
+        return AiDamageChoiceRecorder.lifeDrain(ai, sa, () -> lifeDrainImpl(ai, sa));
+    }
+
+    private boolean lifeDrainImpl(Player ai, SpellAbility sa) {
         Card source = sa.getHostCard();
         String sourceName = ComputerUtilAbility.getAbilitySourceName(sa);
 

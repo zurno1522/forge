@@ -1,0 +1,22 @@
+{
+  "focusedJava": {
+    "tests": 323,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "newCases": 13,
+    "execution": "Maven focused twenty-seven-class test run over current production."
+  },
+  "python": {
+    "tests": 328,
+    "failures": 0,
+    "errors": 0,
+    "newMethods": 6
+  },
+  "fullDesktopReactor": "Not repeated; the earlier reproduced scavenge instability remains a separate validation limit.",
+  "logs": {
+    "/workspace/work/cov007-damage-policy/focused.log": "0de0ea70aa696ed72d5b5786ac63e6b7fa4b24b1a4e0cb50b47e14ee9bd33601",
+    "/workspace/work/cov007-damage-policy/python.log": "16f6780f823cefec36e2fc0e28ffb7dcd4323d7314601309c167f5ef2989cece",
+    "/workspace/work/cov007-damage-policy/validation.log": "dd60ff9a5bb29fbca9d602e41227322850e95f891812d4bbfb1870ab417c191f"
+  }
+}

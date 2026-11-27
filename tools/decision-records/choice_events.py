@@ -33,6 +33,8 @@ COST_KINDS = {
     'CostUntapType', 'CostWaterbend', 'OTHER'
 }
 TYPES = {'TRIGGER_PREPARATION_RESULT', 'PAYMENT_DECISION', 'PAYMENT_CARD_SELECTION', 'PAYMENT_MANA', 'PAYMENT_MANA_SELECTION', 'TARGET_SELECTION_RESULT', 'EFFECT_COPY_TARGET_RESULT', 'RETARGET_RESULT', 'TARGET_POOL_SELECTION', 'MODE_SELECTION', 'NUMBER_SELECTION', 'X_SELECTION', 'MASKED_CHOICE', 'EFFECT_ENTITY_SELECTION', 'ZONE_CHANGE_CARD_SELECTION'}
+AI_PLAY_DECISIONS = {'TimingRestrictions', 'Tempo', 'DoesntImpactGame', 'StackNotEmpty', 'CardAdvantage', 'WaitForEndOfTurn', 'MissingNeededCards', 'AddBoardPresence', 'CostNotAcceptable', 'MandatoryPlay', 'CantPlaySa', 'MissingPhaseRestrictions', 'AnotherTime', 'DoesntImpactCombat', 'MissingLogic', 'WaitForCombat', 'NeedsToPlayCriteriaNotMet', 'CantPlayAi', 'CantAffordX', 'WouldDestroyLegend', 'ImpactCombat', 'TargetingFailed', 'IncreasesLifeInDanger', 'ResponseToStackResolve', 'WaitForMain2', 'CantAfford', 'StopRunawayActivations', 'Removal', 'WouldDestroyWorldEnchantment', 'ConditionsNotMet', 'PlayToEmptyHand', 'WillPlay', 'WouldBecomeZeroToughnessCreature', 'CurseEffects', 'HybridSimRejected', 'BadEtbEffects'}
+TYPES.add('DAMAGE_POLICY_RESULT')
 TYPES.add('DRAW_POLICY_RESULT')
 TYPES.update(('PAYMENT_MANA_SOURCE_SELECTION','PAYMENT_CARD_PICK','PAYMENT_CARD_BATCH'))
 TYPES.update(('EFFECT_MULTI_ENTITY_SELECTION', 'ZONE_CHANGE_SELECTION_OPERATION', 'EFFECT_MULTI_SPELL_ABILITY_SELECTION', 'EFFECT_SPELL_ABILITY_SELECTION'))
@@ -47,6 +49,7 @@ TYPE_BOUNDARIES = {
     'TARGET_POOL_SELECTION': POOL_BOUNDARIES,
     'MODE_SELECTION': {'CHARM_MODE_HEURISTIC', 'CONTROLLER_MODES'},
     'NUMBER_SELECTION': {'CONTROLLER_NUMBER_RANGE', 'CONTROLLER_NUMBER_OPTIONS', 'CONTROLLER_ANNOUNCEMENT'},
+    'DAMAGE_POLICY_RESULT': {'DAMAGE_CAN_PLAY_POLICY','DAMAGE_TRIGGER_POLICY','DAMAGE_LIFE_DRAIN_POLICY'},
     'DRAW_POLICY_RESULT': {'DRAW_AMOUNT_TARGET_POLICY'},
     'X_SELECTION': {'MAX_X_HEURISTIC', 'X_ANNOUNCEMENT_REFINEMENT','MAX_X_CALCULATION'},
     'PAYMENT_DECISION': {'COST_VISITOR'},
@@ -64,6 +67,7 @@ TYPE_BOUNDARIES = {
     'EFFECT_MULTI_SPELL_ABILITY_SELECTION': {'CONTROLLER_EFFECT_SPELL_ABILITIES'},
     'EFFECT_SPELL_ABILITY_SELECTION': {'CONTROLLER_EFFECT_SPELL_ABILITY'},
 }
+BOUNDARIES.update(('DAMAGE_CAN_PLAY_POLICY','DAMAGE_TRIGGER_POLICY','DAMAGE_LIFE_DRAIN_POLICY'))
 BOUNDARIES.add('DRAW_AMOUNT_TARGET_POLICY')
 BOUNDARIES.add('MAX_X_CALCULATION')
 BOUNDARIES.add('PAYMENT_EXILE_RANKING')
@@ -90,6 +94,7 @@ CONTEXT_TIMING_V2 = {**{key: value for key, value in CONTEXT_TIMING.items() if k
 MODE_CONTEXT_TIMING = {'CHARM_MODE_HEURISTIC': 'BEFORE_SELECTOR', 'CONTROLLER_MODES': 'BEFORE_OPERATION'}
 MULTI_CONTEXT_TIMING = {'CONTROLLER_EFFECT_ENTITIES': 'BEFORE_OPERATION'}
 ZONE_OPERATION_CONTEXT_TIMING = {'CONTROLLER_ZONE_CHANGE_SELECTIONS': 'BEFORE_OPERATION'}
+DAMAGE_POLICY_CONTEXT_TIMING = {k:'BEFORE_OPERATION' for k in ('DAMAGE_CAN_PLAY_POLICY','DAMAGE_TRIGGER_POLICY','DAMAGE_LIFE_DRAIN_POLICY')}
 DRAW_POLICY_CONTEXT_TIMING = {'DRAW_AMOUNT_TARGET_POLICY':'BEFORE_OPERATION'}
 MAX_X_CALCULATION_CONTEXT_TIMING = {'MAX_X_CALCULATION':'BEFORE_OPERATION'}
 EXILE_RANKING_CONTEXT_TIMING = {'PAYMENT_EXILE_RANKING':'BEFORE_OPERATION'}
@@ -120,6 +125,9 @@ def input_boundary(value, boundary, stage=None, choice=None):
     if choice is not None and boundary in SACRIFICE_PICK_CONTEXT_TIMING and value['schemaVersion'] >= 22:
         require('entryLocation' in choice, 'sacrifice pick lacks own entry')
         expected = SACRIFICE_PICK_CONTEXT_TIMING[boundary]
+    if choice is not None and boundary in DAMAGE_POLICY_CONTEXT_TIMING and value['schemaVersion'] >= 28:
+        require('entryLocation' in choice, 'Damage policy lacks own entry')
+        expected = DAMAGE_POLICY_CONTEXT_TIMING[boundary]
     if choice is not None and boundary in DRAW_POLICY_CONTEXT_TIMING and value['schemaVersion'] >= 27:
         require('entryLocation' in choice, 'Draw policy lacks own entry')
         expected = DRAW_POLICY_CONTEXT_TIMING[boundary]
@@ -197,6 +205,8 @@ def input_boundary(value, boundary, stage=None, choice=None):
 
 def parameter_boundary(choice):
     context = choice.get('inputContext')
+    if choice['choiceType']=='DAMAGE_POLICY_RESULT' and choice['boundary'] in DAMAGE_POLICY_CONTEXT_TIMING:
+        return isinstance(context, dict) and integer(context.get('schemaVersion')) and context['schemaVersion'] >= 28
     if (choice['choiceType'],choice['boundary'])==('DRAW_POLICY_RESULT','DRAW_AMOUNT_TARGET_POLICY'):
         return isinstance(context, dict) and integer(context.get('schemaVersion')) and context['schemaVersion'] >= 27
     if (choice['choiceType'],choice['boundary'])==('X_SELECTION','MAX_X_CALCULATION'):
@@ -512,6 +522,9 @@ def entry_location(choice, known_players=None):
     if choice['boundary'] in PREPARATION_CONTEXT_TIMING:
         require(choice.get('inputContext', {}).get('schemaVersion', 0) >= 17, 'preparation entry requires V17')
         expected = PREPARATION_CONTEXT_TIMING[choice['boundary']]
+    if choice['boundary'] in DAMAGE_POLICY_CONTEXT_TIMING:
+        require(choice.get('inputContext',{}).get('schemaVersion',0)>=28, 'Damage policy requires V28')
+        expected=DAMAGE_POLICY_CONTEXT_TIMING[choice['boundary']]
     if choice['boundary'] in DRAW_POLICY_CONTEXT_TIMING:
         require(choice.get('inputContext',{}).get('schemaVersion',0)>=27, 'Draw policy requires V27')
         expected=DRAW_POLICY_CONTEXT_TIMING[choice['boundary']]
@@ -758,6 +771,14 @@ def options(choice):
                 require(ctx['stateBasis'] == 'PLANNING_WORKING_STATE', 'test payment claims rules-state input')
                 require(choice['entryLocation']['status'] != 'CAPTURED' or choice['entryLocation']['stateBasis'] == 'PLANNING_WORKING_STATE', 'test payment claims rules-state entry')
         return
+    if choice['choiceType']=='DAMAGE_POLICY_RESULT':
+        require(parameter_options(choice) and 'entryLocation' in choice, 'Damage policy lacks own entry/profile')
+        require(isinstance(option,dict) and set(option)=={'coverage','operation','callbackParameters'} and option['coverage']=='DAMAGE_POLICY_NOT_LEGAL_DOMAIN', 'invalid Damage policy input')
+        operation=choice['boundary'].removeprefix('DAMAGE_').removesuffix('_POLICY')
+        require(option['operation']==operation and operation in _contexts._parameters.DAMAGE_OPERATIONS, 'Damage operation differs from boundary')
+        raw=option['callbackParameters'];_contexts._parameters.receipt(raw,'DAMAGE_POLICY',typed_reference,choice['inputContext']['schemaVersion'])
+        if raw['coverage']=='COMPLETE':require(raw['values']['operation']==operation, 'Damage operation differs from receipt')
+        return
     if choice['choiceType']=='DRAW_POLICY_RESULT':
         require(parameter_options(choice) and 'entryLocation' in choice, 'Draw policy lacks own entry/profile')
         require(isinstance(option,dict) and set(option)=={'coverage','callbackParameters'} and option['coverage']=='DRAW_POLICY_NOT_LEGAL_DOMAIN', 'invalid Draw policy input')
@@ -824,6 +845,13 @@ def selection(start, terminal):
     value = terminal['selection']
     if terminal['status'] in ('DECLINED', 'ERROR') or start['choiceType'] == 'MASKED_CHOICE':
         require(value is None, 'unavailable choice carries selection')
+        return
+    if start['choiceType']=='DAMAGE_POLICY_RESULT':
+        if start['options']['operation']=='LIFE_DRAIN':
+            require(isinstance(value,dict) and set(value)=={'result'} and isinstance(value['result'],bool), 'invalid life-drain return')
+        else:
+            require(isinstance(value,dict) and set(value)=={'rating','decision'} and integer(value['rating']) and -(1<<31)<=value['rating']<(1<<31)
+                    and isinstance(value['decision'],str) and value['decision'] in AI_PLAY_DECISIONS, 'invalid native Damage decision')
         return
     if start['choiceType']=='DRAW_POLICY_RESULT':
         require(isinstance(value,dict) and set(value)=={'result'} and isinstance(value['result'],bool), 'invalid Draw policy return')

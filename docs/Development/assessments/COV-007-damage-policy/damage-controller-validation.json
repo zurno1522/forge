@@ -1,0 +1,42 @@
+{
+  "PLAY_KILL": {
+    "lifecycleEvents": 12,
+    "validatedObservations": 6
+  },
+  "SORIN": {
+    "lifecycleEvents": 12,
+    "validatedObservations": 6
+  },
+  "TRIGGER_OPTIONAL": {
+    "lifecycleEvents": 12,
+    "validatedObservations": 6
+  },
+  "TRIGGER_MANDATORY": {
+    "lifecycleEvents": 12,
+    "validatedObservations": 6
+  },
+  "LIFE_DRAIN": {
+    "lifecycleEvents": 4,
+    "validatedObservations": 2
+  },
+  "LIFE_DRAIN_FALSE": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "FIXED_DAMAGE": {
+    "lifecycleEvents": 4,
+    "validatedObservations": 2
+  },
+  "ZERO_ASSESSMENT": {
+    "lifecycleEvents": 6,
+    "validatedObservations": 3
+  },
+  "FROZEN_PLANNING": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  },
+  "ORIGINAL_ERROR": {
+    "lifecycleEvents": 2,
+    "validatedObservations": 1
+  }
+}
