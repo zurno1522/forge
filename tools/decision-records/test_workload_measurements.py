@@ -57,6 +57,29 @@ def measurements(profiled):
 
 
 class WorkloadMeasurementTests(unittest.TestCase):
+    def test_modern_typed_preparation_freezes_are_versioned_and_do_not_inflate_event_delivery(self):
+        control, profiled = measurements(False), measurements(True)
+        for r in control + profiled:
+            r.update(measurementSchemaVersion=2, inputContextProfile='PERMITTED_CHOICE_VIEW_V29')
+            if r['profiled'] and r['mode'] in ('NUMERIC', 'ENTITY'):
+                r['phases']['eventFreeze']['calls'] += r['iterations']
+        result = summary.summarize(control, profiled)
+        self.assertEqual(result['measurementSchemaVersion'], 2)
+        self.assertIn('preparation receipts', result['phaseDefinitions']['eventFreeze'])
+        numeric = next(r for r in profiled if r['mode'] == 'NUMERIC')
+        self.assertEqual(numeric['events'], 2 * numeric['iterations'])
+        numeric['phases']['eventFreeze']['calls'] -= 1
+        with self.assertRaisesRegex(ValueError, 'Phase calls'): summary.summarize(control, profiled)
+
+    def test_measurement_scope_versions_cannot_be_mixed_unknown_or_boolean(self):
+        for version in (2, 3, True):
+            for position in ('first', 'last'):
+                control, profiled = measurements(False), measurements(True)
+                row = control[0] if position == 'first' else profiled[-1]
+                row['measurementSchemaVersion'] = version
+                with self.subTest(version=version, position=position), self.assertRaises(ValueError):
+                    summary.summarize(control, profiled)
+
     def test_profile_declarations_preserve_legacy_v4_and_prevent_mislabeled_new_measurements(self):
         control, profiled = measurements(False), measurements(True)
         self.assertEqual(summary.summarize(control, profiled)['profile'], 'PERMITTED_CHOICE_VIEW_V4')
@@ -78,7 +101,7 @@ class WorkloadMeasurementTests(unittest.TestCase):
         self.assertEqual(summary.summarize(control, profiled)['profile'], 'PERMITTED_CHOICE_VIEW_V12')
         for r in control + profiled: r['inputContextProfile'] = 'PERMITTED_CHOICE_VIEW_V13'
         self.assertEqual(summary.summarize(control, profiled)['profile'], 'PERMITTED_CHOICE_VIEW_V13')
-        for version in (14, 15, 16, 17):
+        for version in range(14, 30):
             for r in control + profiled: r['inputContextProfile'] = f'PERMITTED_CHOICE_VIEW_V{version}'
             self.assertEqual(summary.summarize(control, profiled)['profile'], f'PERMITTED_CHOICE_VIEW_V{version}')
         control[0]['inputContextProfile'] = 'PERMITTED_CHOICE_VIEW_V4'

@@ -66,6 +66,9 @@ def validate(rows, profiled):
         else:
             expected = dict(capture=n if mode in INPUTS else 0, eventFreeze=0 if off or mode == 'CAPTURE' else 2*n,
                             publication=0 if off or mode == 'CAPTURE' else 2*n, serialization=0 if off or mode == 'CAPTURE' else 2*n)
+            if r.get('measurementSchemaVersion', 1) == 2 and mode in ('NUMERIC', 'ENTITY'):
+                version = int(r['inputContextProfile'].rsplit('V', 1)[1])
+                if version >= 16: expected['eventFreeze'] += n
             require(all(calls[key] == value for key, value in expected.items()), 'Phase calls do not reconcile')
             require(calls['contextFreeze'] == (n if mode in INPUTS else 0), 'Context freeze count')
             if r['memorySample']: require(r['phases']['peakSampledPayloadBytes'] > 0, 'Missing memory sample')
@@ -91,10 +94,17 @@ def validate(rows, profiled):
 
 def summarize(control, profiled):
     rows = control + profiled
+    declarations = [r.get('measurementSchemaVersion', 1) for r in rows]
+    require(all(type(v) is int and v in (1, 2) for v in declarations), 'Unknown measurement schema')
+    versions = set(declarations)
+    require(len(versions) == 1, 'Mixed measurement schema')
+    measurement_version = next(iter(versions))
+    if measurement_version == 2:
+        require(all('inputContextProfile' in r for r in rows), 'V2 measurements require producer profiles')
     declared = {'inputContextProfile' in row for row in rows}
     require(len(declared) == 1, 'Mixed legacy and declared producer profiles')
     profiles = {row.get('inputContextProfile', 'PERMITTED_CHOICE_VIEW_V4') for row in rows}
-    require(len(profiles) == 1 and profiles <= {'PERMITTED_CHOICE_VIEW_V4', 'PERMITTED_CHOICE_VIEW_V5', 'PERMITTED_CHOICE_VIEW_V6', 'PERMITTED_CHOICE_VIEW_V7', 'PERMITTED_CHOICE_VIEW_V8', 'PERMITTED_CHOICE_VIEW_V9', 'PERMITTED_CHOICE_VIEW_V10', 'PERMITTED_CHOICE_VIEW_V11', 'PERMITTED_CHOICE_VIEW_V12', 'PERMITTED_CHOICE_VIEW_V13', 'PERMITTED_CHOICE_VIEW_V14', 'PERMITTED_CHOICE_VIEW_V15', 'PERMITTED_CHOICE_VIEW_V16', 'PERMITTED_CHOICE_VIEW_V17'},
+    require(len(profiles) == 1 and profiles <= {'PERMITTED_CHOICE_VIEW_V4', 'PERMITTED_CHOICE_VIEW_V5', 'PERMITTED_CHOICE_VIEW_V6', 'PERMITTED_CHOICE_VIEW_V7', 'PERMITTED_CHOICE_VIEW_V8', 'PERMITTED_CHOICE_VIEW_V9', 'PERMITTED_CHOICE_VIEW_V10', 'PERMITTED_CHOICE_VIEW_V11', 'PERMITTED_CHOICE_VIEW_V12', 'PERMITTED_CHOICE_VIEW_V13', 'PERMITTED_CHOICE_VIEW_V14', 'PERMITTED_CHOICE_VIEW_V15', 'PERMITTED_CHOICE_VIEW_V16', 'PERMITTED_CHOICE_VIEW_V17', 'PERMITTED_CHOICE_VIEW_V18', 'PERMITTED_CHOICE_VIEW_V19', 'PERMITTED_CHOICE_VIEW_V20', 'PERMITTED_CHOICE_VIEW_V21', 'PERMITTED_CHOICE_VIEW_V22', 'PERMITTED_CHOICE_VIEW_V23', 'PERMITTED_CHOICE_VIEW_V24', 'PERMITTED_CHOICE_VIEW_V25', 'PERMITTED_CHOICE_VIEW_V26', 'PERMITTED_CHOICE_VIEW_V27', 'PERMITTED_CHOICE_VIEW_V28', 'PERMITTED_CHOICE_VIEW_V29'},
             'Unknown or mismatched producer profiles')
     groups = defaultdict(list)
     for label, rows in [('control', validate(control, False)), ('profiled', validate(profiled, True))]:
@@ -122,7 +132,7 @@ def summarize(control, profiled):
         fixture['memorySample'] = {key: sample[key] for key in ('lastContextReachableBytes', 'controllerLedgersReachableBytes', 'disclosureFactPayloadReachableBytes', 'publicProofSlots', 'proofShellShallowBytes')}
         fixture['memorySample']['payloadUnionSampledPeak'] = sample['phases']['peakSampledPayloadBytes']
         fixtures.append(fixture)
-    return dict(schemaVersion=1, profile=next(iter(profiles)), fixtures=fixtures,
+    result = dict(schemaVersion=1, profile=next(iter(profiles)), fixtures=fixtures,
                 exhaustion=[{key: row[key] for key in ('profiled', 'iterations', 'statuses', 'remainingWork', 'accountingDelta', 'windows')}
                             for rows in (control, profiled) for row in rows if row['exhaustionSample']],
                 limitations=[
@@ -132,6 +142,11 @@ def summarize(control, profiled):
                     'Retained graph sizes include shared objects; proof shells exclude the referenced Game graph. Sizes must not be blindly summed.',
                     'Sampled payload-union peaks are lower bounds, not exact transient heap peaks. Builder locals, writer buffers and other roots remain outside the sample.',
                     'Control/profile differences include instrumentation and JIT variation; these ranges are not capacity or deadline-neutrality guarantees.'])
+    if measurement_version == 2:
+        result['measurementSchemaVersion'] = 2
+        result['phaseDefinitions'] = dict(eventFreeze='All outermost freezeMap calls outside input capture, including typed preparation receipts and event construction. Not an event-only span.')
+        result['limitations'].append('The historical eventFreeze field also includes preparation receipt freezing; V2 reconciles that extra call in numeric/entity workloads from V16. Publication/event counts remain separate.')
+    return result
 
 
 def main():

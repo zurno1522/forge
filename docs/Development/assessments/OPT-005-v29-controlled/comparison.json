@@ -1,0 +1,2541 @@
+{
+  "scope": "CONTROLLED_PRODUCTION_PREFIX_V28_V29",
+  "measurementSchemaVersion": 2,
+  "nonoverlappingJvms": 8,
+  "measuredRoundsPerProducerMode": 8,
+  "policyStatusesOmissionsEqual": true,
+  "exhaustionStatusesEqual": true,
+  "workloads": {
+    "SMALL": {
+      "DISABLED": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 1.4319875,
+            "minimum": 1.1625750000000001,
+            "maximum": 2.6274,
+            "rounds": [
+              2.6274,
+              1.4837,
+              1.49625,
+              1.609175,
+              1.3802750000000001,
+              1.336625,
+              1.352125,
+              1.1625750000000001
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 136.0,
+            "minimum": 136.0,
+            "maximum": 136.0,
+            "rounds": [
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 1.62075,
+            "minimum": 1.001775,
+            "maximum": 2.51895,
+            "rounds": [
+              2.0876,
+              1.450375,
+              1.57425,
+              1.407675,
+              2.062575,
+              2.51895,
+              1.66725,
+              1.001775
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 136.0,
+            "minimum": 136.0,
+            "maximum": 136.0,
+            "rounds": [
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "cpuMedianDeltaMicros": 0.18876249999999994,
+        "allocationMedianDeltaBytes": 0.0
+      },
+      "COPY": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 1.6597125000000001,
+            "minimum": 1.249175,
+            "maximum": 5.225425,
+            "rounds": [
+              3.0574250000000003,
+              2.75675,
+              1.5589000000000002,
+              1.467575,
+              1.7605250000000001,
+              1.279025,
+              1.249175,
+              5.225425
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 136.0,
+            "minimum": 136.0,
+            "maximum": 136.0,
+            "rounds": [
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 1.94145,
+            "minimum": 0.9032,
+            "maximum": 3.8235,
+            "rounds": [
+              2.6886750000000004,
+              2.620175,
+              1.5947,
+              0.9032,
+              3.8235,
+              2.2882,
+              1.444875,
+              1.574275
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 136.0,
+            "minimum": 136.0,
+            "maximum": 136.0,
+            "rounds": [
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "cpuMedianDeltaMicros": 0.28173749999999975,
+        "allocationMedianDeltaBytes": 0.0
+      },
+      "UNACCOUNTED_BASE": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 34.8158875,
+            "minimum": 21.674375,
+            "maximum": 96.43925,
+            "rounds": [
+              96.43925,
+              33.68985,
+              45.910650000000004,
+              35.941925000000005,
+              33.586775,
+              21.674375,
+              39.335699999999996,
+              24.779799999999998
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 5096.0,
+            "minimum": 4896.0,
+            "maximum": 5296.0,
+            "rounds": [
+              5296.0,
+              4896.0,
+              4896.0,
+              4896.0,
+              5296.0,
+              5296.0,
+              5296.0,
+              4896.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 31.6667125,
+            "minimum": 24.86705,
+            "maximum": 47.776325,
+            "rounds": [
+              42.79355,
+              30.576700000000002,
+              24.86705,
+              27.0158,
+              47.776325,
+              46.44325,
+              26.100175,
+              32.756724999999996
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 5096.0,
+            "minimum": 4896.0,
+            "maximum": 5296.0,
+            "rounds": [
+              5296.0,
+              5296.0,
+              4896.0,
+              4896.0,
+              5296.0,
+              5296.0,
+              4896.0,
+              4896.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "cpuMedianDeltaMicros": -3.149175000000003,
+        "allocationMedianDeltaBytes": 0.0
+      },
+      "ACCOUNTED_BASE": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 30.6941,
+            "minimum": 27.13315,
+            "maximum": 58.071525,
+            "rounds": [
+              58.071525,
+              52.773475,
+              27.13315,
+              28.805025,
+              31.016,
+              28.42955,
+              32.739375,
+              30.3722
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 5128.0,
+            "minimum": 4928.0,
+            "maximum": 5328.0,
+            "rounds": [
+              5328.0,
+              4928.0,
+              4928.0,
+              4928.0,
+              5328.0,
+              5328.0,
+              5328.0,
+              4928.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 33.768150000000006,
+            "minimum": 24.576974999999997,
+            "maximum": 62.217699999999994,
+            "rounds": [
+              39.560475,
+              32.21975,
+              34.286,
+              26.774475,
+              62.217699999999994,
+              35.48495,
+              33.2503,
+              24.576974999999997
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 4928.0,
+            "minimum": 4928.0,
+            "maximum": 5336.0,
+            "rounds": [
+              5328.0,
+              4928.0,
+              4928.0,
+              4928.0,
+              5336.0,
+              5328.0,
+              4928.0,
+              4928.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "cpuMedianDeltaMicros": 3.074050000000007,
+        "allocationMedianDeltaBytes": -200.0
+      },
+      "NUMERIC": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 419.833725,
+            "minimum": 283.25282500000003,
+            "maximum": 690.353875,
+            "rounds": [
+              690.353875,
+              566.2871,
+              460.382975,
+              421.55690000000004,
+              418.11055,
+              382.260475,
+              392.07922499999995,
+              283.25282500000003
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 144238.8,
+            "minimum": 140901.2,
+            "maximum": 147618.0,
+            "rounds": [
+              147618.0,
+              141794.0,
+              141794.0,
+              140901.2,
+              147618.0,
+              147618.0,
+              146491.6,
+              141986.0
+            ]
+          },
+          "contextReachableBytes": 33256,
+          "rawContextBytes": 5614
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 589.4874125,
+            "minimum": 457.93307500000003,
+            "maximum": 790.8046999999999,
+            "rounds": [
+              693.8208000000001,
+              654.74535,
+              471.88365000000005,
+              457.93307500000003,
+              790.8046999999999,
+              684.84075,
+              503.58684999999997,
+              524.229475
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 143994.0,
+            "minimum": 142077.2,
+            "maximum": 149738.0,
+            "rounds": [
+              149738.0,
+              143802.0,
+              143802.0,
+              142077.2,
+              149738.0,
+              145011.2,
+              143994.0,
+              143994.0
+            ]
+          },
+          "contextReachableBytes": 34104,
+          "rawContextBytes": 5751
+        },
+        "cpuMedianDeltaMicros": 169.6536875,
+        "allocationMedianDeltaBytes": -244.79999999998836
+      },
+      "ENTITY": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 567.5547875,
+            "minimum": 351.50765,
+            "maximum": 1472.745975,
+            "rounds": [
+              1472.745975,
+              636.7401,
+              581.1039000000001,
+              571.2703,
+              519.8335999999999,
+              563.839275,
+              521.871325,
+              351.50765
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 163762.0,
+            "minimum": 162674.0,
+            "maximum": 170306.0,
+            "rounds": [
+              170306.0,
+              163572.4,
+              163166.8,
+              162674.0,
+              170306.0,
+              170306.0,
+              163762.0,
+              163762.0
+            ]
+          },
+          "contextReachableBytes": 37064,
+          "rawContextBytes": 6043
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 721.1193000000001,
+            "minimum": 558.871125,
+            "maximum": 920.309725,
+            "rounds": [
+              894.2269,
+              743.1541,
+              596.633075,
+              699.0845,
+              920.309725,
+              822.973075,
+              582.1142,
+              558.871125
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 165674.0,
+            "minimum": 163850.0,
+            "maximum": 172426.0,
+            "rounds": [
+              172426.0,
+              165578.0,
+              165578.0,
+              163850.0,
+              172426.0,
+              165770.0,
+              165770.0,
+              164042.0
+            ]
+          },
+          "contextReachableBytes": 37912,
+          "rawContextBytes": 6180
+        },
+        "cpuMedianDeltaMicros": 153.5645125000001,
+        "allocationMedianDeltaBytes": 1912.0
+      },
+      "CAPTURE": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 115.13707500000001,
+            "minimum": 92.2228,
+            "maximum": 253.62107500000002,
+            "rounds": [
+              253.62107500000002,
+              163.01489999999998,
+              147.246175,
+              121.9256,
+              107.87365,
+              92.2228,
+              105.2033,
+              108.34855
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 87930.0,
+            "minimum": 87034.0,
+            "maximum": 87930.0,
+            "rounds": [
+              87930.0,
+              87930.0,
+              87034.0,
+              87037.6,
+              87930.0,
+              87930.0,
+              87930.0,
+              87930.0
+            ]
+          },
+          "contextReachableBytes": 32296,
+          "rawContextBytes": 5614
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 170.3098125,
+            "minimum": 84.60305,
+            "maximum": 325.96265,
+            "rounds": [
+              169.53775,
+              84.60305,
+              121.97992500000001,
+              119.95345,
+              325.96265,
+              194.418025,
+              268.5191,
+              171.081875
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 89034.0,
+            "minimum": 87306.0,
+            "maximum": 89046.0,
+            "rounds": [
+              89034.0,
+              89046.0,
+              87306.0,
+              87309.6,
+              89034.0,
+              89034.0,
+              89034.0,
+              87306.0
+            ]
+          },
+          "contextReachableBytes": 33104,
+          "rawContextBytes": 5751
+        },
+        "cpuMedianDeltaMicros": 55.17273749999998,
+        "allocationMedianDeltaBytes": 1104.0
+      }
+    },
+    "PRIVATE32": {
+      "DISABLED": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 1.5980750000000001,
+            "minimum": 1.3785999999999998,
+            "maximum": 7.945425,
+            "rounds": [
+              3.161175,
+              1.398375,
+              1.5448250000000001,
+              1.3785999999999998,
+              7.945425,
+              1.6513250000000002,
+              1.5303499999999999,
+              1.722375
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 136.0,
+            "minimum": 136.0,
+            "maximum": 136.0,
+            "rounds": [
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 1.5203000000000002,
+            "minimum": 1.349175,
+            "maximum": 4.2968,
+            "rounds": [
+              3.177775,
+              1.660725,
+              1.4132,
+              1.349175,
+              4.2968,
+              1.5475750000000001,
+              1.3539,
+              1.493025
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 136.0,
+            "minimum": 136.0,
+            "maximum": 136.0,
+            "rounds": [
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "cpuMedianDeltaMicros": -0.07777499999999993,
+        "allocationMedianDeltaBytes": 0.0
+      },
+      "COPY": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 1.5290875,
+            "minimum": 1.322125,
+            "maximum": 2.2176750000000003,
+            "rounds": [
+              1.395875,
+              1.5308499999999998,
+              1.322125,
+              1.406,
+              1.527325,
+              1.6682249999999998,
+              2.2176750000000003,
+              1.625125
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 136.0,
+            "minimum": 136.0,
+            "maximum": 136.0,
+            "rounds": [
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 1.4202625000000002,
+            "minimum": 1.298375,
+            "maximum": 1.613475,
+            "rounds": [
+              1.49465,
+              1.483025,
+              1.298375,
+              1.399675,
+              1.4033250000000002,
+              1.613475,
+              1.347275,
+              1.4372
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 136.0,
+            "minimum": 136.0,
+            "maximum": 136.0,
+            "rounds": [
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "cpuMedianDeltaMicros": -0.10882499999999973,
+        "allocationMedianDeltaBytes": 0.0
+      },
+      "UNACCOUNTED_BASE": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 25.842525,
+            "minimum": 22.896175,
+            "maximum": 27.61275,
+            "rounds": [
+              27.258825,
+              23.523375,
+              25.13525,
+              22.896175,
+              27.070425,
+              27.61275,
+              24.2415,
+              26.549799999999998
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 4920.0,
+            "minimum": 4920.0,
+            "maximum": 4920.0,
+            "rounds": [
+              4920.0,
+              4920.0,
+              4920.0,
+              4920.0,
+              4920.0,
+              4920.0,
+              4920.0,
+              4920.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 26.4272375,
+            "minimum": 22.664825,
+            "maximum": 152.75639999999999,
+            "rounds": [
+              25.229025,
+              27.62545,
+              30.027099999999997,
+              24.5355,
+              24.383975,
+              152.75639999999999,
+              28.531875,
+              22.664825
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 4920.0,
+            "minimum": 4920.0,
+            "maximum": 4920.0,
+            "rounds": [
+              4920.0,
+              4920.0,
+              4920.0,
+              4920.0,
+              4920.0,
+              4920.0,
+              4920.0,
+              4920.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "cpuMedianDeltaMicros": 0.584712500000002,
+        "allocationMedianDeltaBytes": 0.0
+      },
+      "ACCOUNTED_BASE": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 25.669925,
+            "minimum": 23.47015,
+            "maximum": 30.665599999999998,
+            "rounds": [
+              25.12745,
+              30.665599999999998,
+              23.47015,
+              27.150125,
+              26.1585,
+              28.741400000000002,
+              25.18135,
+              24.05195
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 4952.0,
+            "minimum": 4952.0,
+            "maximum": 4952.0,
+            "rounds": [
+              4952.0,
+              4952.0,
+              4952.0,
+              4952.0,
+              4952.0,
+              4952.0,
+              4952.0,
+              4952.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 27.86195,
+            "minimum": 26.027375,
+            "maximum": 83.02075,
+            "rounds": [
+              40.3575,
+              26.407875,
+              26.027375,
+              26.6573,
+              29.066599999999998,
+              83.02075,
+              26.2364,
+              29.943099999999998
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 4952.0,
+            "minimum": 4952.0,
+            "maximum": 4952.0,
+            "rounds": [
+              4952.0,
+              4952.0,
+              4952.0,
+              4952.0,
+              4952.0,
+              4952.0,
+              4952.0,
+              4952.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "cpuMedianDeltaMicros": 2.192025000000001,
+        "allocationMedianDeltaBytes": 0.0
+      },
+      "NUMERIC": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 1714.2459875,
+            "minimum": 1433.5481000000002,
+            "maximum": 2535.22705,
+            "rounds": [
+              2535.22705,
+              1665.287425,
+              2068.436275,
+              1693.9689250000001,
+              2138.832625,
+              1660.6576,
+              1734.52305,
+              1433.5481000000002
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 577513.0,
+            "minimum": 573529.0,
+            "maximum": 587737.0,
+            "rounds": [
+              583129.0,
+              578329.0,
+              573529.0,
+              573529.0,
+              587737.0,
+              578617.0,
+              576697.0,
+              575293.2
+            ]
+          },
+          "contextReachableBytes": 142944,
+          "rawContextBytes": 29945
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 1771.852375,
+            "minimum": 1586.117525,
+            "maximum": 4142.417625,
+            "rounds": [
+              2086.606075,
+              1586.117525,
+              1671.9453500000002,
+              1729.5658,
+              1814.13895,
+              4142.417625,
+              1666.305825,
+              1903.43035
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 577758.6,
+            "minimum": 576977.0,
+            "maximum": 583985.0,
+            "rounds": [
+              583981.4,
+              576977.0,
+              576990.6,
+              577018.6,
+              583985.0,
+              581057.0,
+              578250.6,
+              577266.6
+            ]
+          },
+          "contextReachableBytes": 143768,
+          "rawContextBytes": 30082
+        },
+        "cpuMedianDeltaMicros": 57.60638749999998,
+        "allocationMedianDeltaBytes": 245.59999999997672
+      },
+      "ENTITY": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 2146.8189125,
+            "minimum": 1996.01775,
+            "maximum": 2818.108225,
+            "rounds": [
+              2625.650875,
+              2081.651675,
+              2818.108225,
+              2033.9842749999998,
+              2068.492075,
+              2211.9861499999997,
+              1996.01775,
+              2252.39395
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 704727.0,
+            "minimum": 702369.0,
+            "maximum": 711969.0,
+            "rounds": [
+              711969.0,
+              702369.0,
+              702369.0,
+              702409.8,
+              710817.0,
+              707313.0,
+              705357.0,
+              704097.0
+            ]
+          },
+          "contextReachableBytes": 163064,
+          "rawContextBytes": 32294
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 2067.4371625,
+            "minimum": 1919.373175,
+            "maximum": 6256.8206,
+            "rounds": [
+              2139.3676,
+              2081.788275,
+              2096.942725,
+              1919.373175,
+              2053.08605,
+              6256.8206,
+              1965.4784750000001,
+              1989.172325
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 706105.0,
+            "minimum": 705817.0,
+            "maximum": 712825.0,
+            "rounds": [
+              709177.0,
+              705817.0,
+              705817.0,
+              705817.0,
+              712825.0,
+              709465.0,
+              706105.0,
+              706105.0
+            ]
+          },
+          "contextReachableBytes": 163888,
+          "rawContextBytes": 32431
+        },
+        "cpuMedianDeltaMicros": -79.38175000000001,
+        "allocationMedianDeltaBytes": 1378.0
+      },
+      "CAPTURE": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 465.2618625,
+            "minimum": 293.79425,
+            "maximum": 658.792075,
+            "rounds": [
+              658.792075,
+              513.8525,
+              408.904175,
+              336.728725,
+              557.6206500000001,
+              471.85177500000003,
+              458.67195000000004,
+              293.79425
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 359791.8,
+            "minimum": 358345.0,
+            "maximum": 367945.0,
+            "rounds": [
+              367945.0,
+              358348.0,
+              358358.6,
+              358345.0,
+              366505.0,
+              361234.8,
+              359798.6,
+              359785.0
+            ]
+          },
+          "contextReachableBytes": 139624,
+          "rawContextBytes": 29945
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 456.741175,
+            "minimum": 380.95457500000003,
+            "maximum": 1372.9208999999998,
+            "rounds": [
+              483.613825,
+              457.11785,
+              434.91377500000004,
+              456.3645,
+              619.612,
+              1372.9208999999998,
+              402.0972,
+              380.95457500000003
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 360889.0,
+            "minimum": 360889.0,
+            "maximum": 367609.0,
+            "rounds": [
+              360889.0,
+              360892.0,
+              360889.0,
+              360889.0,
+              367609.0,
+              362332.0,
+              360889.0,
+              360889.0
+            ]
+          },
+          "contextReachableBytes": 140408,
+          "rawContextBytes": 30082
+        },
+        "cpuMedianDeltaMicros": -8.520687500000008,
+        "allocationMedianDeltaBytes": 1097.2000000000116
+      }
+    },
+    "PUBLIC32": {
+      "DISABLED": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 1.4683,
+            "minimum": 1.0497999999999998,
+            "maximum": 2.646725,
+            "rounds": [
+              1.414925,
+              1.388175,
+              2.646725,
+              1.0497999999999998,
+              1.6882249999999999,
+              1.5216749999999999,
+              1.560675,
+              1.3437999999999999
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 136.0,
+            "minimum": 136.0,
+            "maximum": 136.0,
+            "rounds": [
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 1.3906,
+            "minimum": 1.1375250000000001,
+            "maximum": 4.475149999999999,
+            "rounds": [
+              1.6672,
+              1.4287,
+              1.246075,
+              1.211725,
+              4.475149999999999,
+              1.3525,
+              1.4419000000000002,
+              1.1375250000000001
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 136.0,
+            "minimum": 136.0,
+            "maximum": 136.0,
+            "rounds": [
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "cpuMedianDeltaMicros": -0.07769999999999988,
+        "allocationMedianDeltaBytes": 0.0
+      },
+      "COPY": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 2.1831875,
+            "minimum": 1.292625,
+            "maximum": 2.6768,
+            "rounds": [
+              1.292625,
+              2.5675,
+              2.183475,
+              2.107775,
+              1.602725,
+              2.2916,
+              2.1829,
+              2.6768
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 136.0,
+            "minimum": 136.0,
+            "maximum": 136.0,
+            "rounds": [
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 1.7742749999999998,
+            "minimum": 1.13715,
+            "maximum": 2.352975,
+            "rounds": [
+              1.3925,
+              2.12065,
+              2.301925,
+              1.13715,
+              1.62255,
+              2.352975,
+              1.926,
+              1.14205
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 136.0,
+            "minimum": 136.0,
+            "maximum": 136.0,
+            "rounds": [
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "cpuMedianDeltaMicros": -0.4089125,
+        "allocationMedianDeltaBytes": 0.0
+      },
+      "UNACCOUNTED_BASE": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 23.237550000000002,
+            "minimum": 21.830075,
+            "maximum": 31.043599999999998,
+            "rounds": [
+              31.043599999999998,
+              22.937900000000003,
+              22.9082,
+              21.830075,
+              27.896375,
+              23.537200000000002,
+              25.90375,
+              22.450200000000002
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 4920.0,
+            "minimum": 4920.0,
+            "maximum": 4920.0,
+            "rounds": [
+              4920.0,
+              4920.0,
+              4920.0,
+              4920.0,
+              4920.0,
+              4920.0,
+              4920.0,
+              4920.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 24.827962499999998,
+            "minimum": 21.867275000000003,
+            "maximum": 29.790174999999998,
+            "rounds": [
+              29.327599999999997,
+              29.790174999999998,
+              25.432625,
+              22.1022,
+              24.2233,
+              27.175175,
+              24.108900000000002,
+              21.867275000000003
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 4920.0,
+            "minimum": 4920.0,
+            "maximum": 4920.0,
+            "rounds": [
+              4920.0,
+              4920.0,
+              4920.0,
+              4920.0,
+              4920.0,
+              4920.0,
+              4920.0,
+              4920.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "cpuMedianDeltaMicros": 1.5904124999999958,
+        "allocationMedianDeltaBytes": 0.0
+      },
+      "ACCOUNTED_BASE": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 28.757887500000002,
+            "minimum": 18.129424999999998,
+            "maximum": 44.741875,
+            "rounds": [
+              38.31015,
+              44.741875,
+              22.65875,
+              28.390625,
+              18.129424999999998,
+              30.406325000000002,
+              29.12515,
+              26.3461
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 4952.0,
+            "minimum": 4952.0,
+            "maximum": 4952.0,
+            "rounds": [
+              4952.0,
+              4952.0,
+              4952.0,
+              4952.0,
+              4952.0,
+              4952.0,
+              4952.0,
+              4952.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 24.0508125,
+            "minimum": 22.2889,
+            "maximum": 29.94075,
+            "rounds": [
+              23.030775000000002,
+              29.385724999999997,
+              23.50175,
+              22.2889,
+              29.94075,
+              22.894,
+              24.599875,
+              24.624075
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 4952.0,
+            "minimum": 4952.0,
+            "maximum": 4952.0,
+            "rounds": [
+              4952.0,
+              4952.0,
+              4952.0,
+              4952.0,
+              4952.0,
+              4952.0,
+              4952.0,
+              4952.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "cpuMedianDeltaMicros": -4.707075000000003,
+        "allocationMedianDeltaBytes": 0.0
+      },
+      "NUMERIC": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 1809.9782875,
+            "minimum": 1694.267375,
+            "maximum": 2104.891025,
+            "rounds": [
+              1777.3927250000002,
+              1694.267375,
+              1812.1982,
+              1725.11915,
+              2104.891025,
+              1877.9996999999998,
+              1836.477875,
+              1807.758375
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 585657.9,
+            "minimum": 584793.0,
+            "maximum": 586522.8,
+            "rounds": [
+              584793.0,
+              584793.0,
+              584794.8,
+              584793.0,
+              586521.0,
+              586521.0,
+              586521.0,
+              586522.8
+            ]
+          },
+          "contextReachableBytes": 140944,
+          "rawContextBytes": 30199
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 1885.4221,
+            "minimum": 1722.0075,
+            "maximum": 1959.91565,
+            "rounds": [
+              1924.2257,
+              1838.118025,
+              1921.18125,
+              1887.638025,
+              1722.0075,
+              1959.91565,
+              1819.6749750000001,
+              1883.206175
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 589921.0,
+            "minimum": 588529.0,
+            "maximum": 591314.8,
+            "rounds": [
+              591314.8,
+              591313.0,
+              591313.0,
+              591313.0,
+              588529.0,
+              588529.0,
+              588529.0,
+              588529.0
+            ]
+          },
+          "contextReachableBytes": 141768,
+          "rawContextBytes": 30336
+        },
+        "cpuMedianDeltaMicros": 75.44381249999992,
+        "allocationMedianDeltaBytes": 4263.099999999977
+      },
+      "ENTITY": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 2100.070025,
+            "minimum": 2023.859125,
+            "maximum": 2222.3175499999998,
+            "rounds": [
+              2222.3175499999998,
+              2192.8971,
+              2023.859125,
+              2057.201125,
+              2142.938925,
+              2050.142,
+              2150.4219249999996,
+              2031.4255
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 714497.0,
+            "minimum": 713633.0,
+            "maximum": 715361.0,
+            "rounds": [
+              713633.0,
+              713633.0,
+              713633.0,
+              713633.0,
+              715361.0,
+              715361.0,
+              715361.0,
+              715361.0
+            ]
+          },
+          "contextReachableBytes": 161064,
+          "rawContextBytes": 32548
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 2100.2499375,
+            "minimum": 2049.442025,
+            "maximum": 2588.8219249999997,
+            "rounds": [
+              2092.839925,
+              2136.10655,
+              2116.2944500000003,
+              2068.7651,
+              2588.8219249999997,
+              2059.681975,
+              2049.442025,
+              2107.65995
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 718762.5,
+            "minimum": 717369.0,
+            "maximum": 720156.0,
+            "rounds": [
+              720154.6,
+              720156.0,
+              720155.2,
+              720153.0,
+              717369.0,
+              717369.0,
+              717372.0,
+              717369.0
+            ]
+          },
+          "contextReachableBytes": 161888,
+          "rawContextBytes": 32685
+        },
+        "cpuMedianDeltaMicros": 0.17991250000022774,
+        "allocationMedianDeltaBytes": 4265.5
+      },
+      "CAPTURE": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 596.8436,
+            "minimum": 492.732425,
+            "maximum": 685.523,
+            "rounds": [
+              594.511925,
+              599.175275,
+              534.0709499999999,
+              505.4658,
+              656.0484250000001,
+              492.732425,
+              629.696775,
+              685.523
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 370329.0,
+            "minimum": 369609.0,
+            "maximum": 371049.0,
+            "rounds": [
+              369609.0,
+              369609.0,
+              369609.0,
+              369609.0,
+              371049.0,
+              371049.0,
+              371049.0,
+              371049.0
+            ]
+          },
+          "contextReachableBytes": 137624,
+          "rawContextBytes": 30199
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 603.8265125,
+            "minimum": 374.160825,
+            "maximum": 672.1628000000001,
+            "rounds": [
+              632.057325,
+              531.26485,
+              553.94455,
+              575.5957,
+              649.3388,
+              672.1628000000001,
+              374.160825,
+              670.5272
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 373689.9,
+            "minimum": 372153.0,
+            "maximum": 375225.0,
+            "rounds": [
+              375225.0,
+              375225.0,
+              375225.0,
+              375225.0,
+              372153.0,
+              372154.8,
+              372153.0,
+              372153.0
+            ]
+          },
+          "contextReachableBytes": 138408,
+          "rawContextBytes": 30336
+        },
+        "cpuMedianDeltaMicros": 6.982912499999998,
+        "allocationMedianDeltaBytes": 3360.9000000000233
+      }
+    },
+    "MULTIPLAYER": {
+      "DISABLED": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 1.4997625,
+            "minimum": 1.116725,
+            "maximum": 10.490675,
+            "rounds": [
+              3.61885,
+              1.238575,
+              1.20225,
+              1.116725,
+              10.490675,
+              1.729,
+              4.241175,
+              1.2705250000000001
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 136.0,
+            "minimum": 136.0,
+            "maximum": 136.0,
+            "rounds": [
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 1.1697000000000002,
+            "minimum": 1.062675,
+            "maximum": 3.5533,
+            "rounds": [
+              2.50055,
+              3.5533,
+              1.062675,
+              1.1085999999999998,
+              1.596025,
+              1.1571500000000001,
+              1.129125,
+              1.18225
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 136.0,
+            "minimum": 136.0,
+            "maximum": 136.0,
+            "rounds": [
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "cpuMedianDeltaMicros": -0.3300624999999999,
+        "allocationMedianDeltaBytes": 0.0
+      },
+      "COPY": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 1.1671125,
+            "minimum": 0.87475,
+            "maximum": 1.41935,
+            "rounds": [
+              1.09575,
+              1.202075,
+              1.16285,
+              0.87475,
+              1.41935,
+              1.3320750000000001,
+              1.1626500000000002,
+              1.171375
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 136.0,
+            "minimum": 136.0,
+            "maximum": 136.0,
+            "rounds": [
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 1.1075875000000002,
+            "minimum": 0.964625,
+            "maximum": 2.40345,
+            "rounds": [
+              2.40345,
+              1.0926500000000001,
+              1.078775,
+              1.122525,
+              1.3587,
+              0.964625,
+              1.0910499999999999,
+              1.3369000000000002
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 136.0,
+            "minimum": 136.0,
+            "maximum": 136.0,
+            "rounds": [
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "cpuMedianDeltaMicros": -0.05952499999999983,
+        "allocationMedianDeltaBytes": 0.0
+      },
+      "UNACCOUNTED_BASE": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 23.5105125,
+            "minimum": 21.207150000000002,
+            "maximum": 24.582675,
+            "rounds": [
+              24.582675,
+              22.310325000000002,
+              24.210150000000002,
+              23.930575,
+              24.581,
+              21.207150000000002,
+              23.09045,
+              22.634025
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 4872.0,
+            "minimum": 4824.0,
+            "maximum": 4920.0,
+            "rounds": [
+              4920.0,
+              4920.0,
+              4824.0,
+              4824.0,
+              4920.0,
+              4920.0,
+              4824.0,
+              4824.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 22.4466,
+            "minimum": 19.231275,
+            "maximum": 32.9602,
+            "rounds": [
+              24.919925,
+              21.996425,
+              20.828799999999998,
+              31.541825,
+              21.1365,
+              22.896775,
+              19.231275,
+              32.9602
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 4824.0,
+            "minimum": 4824.0,
+            "maximum": 4920.0,
+            "rounds": [
+              4824.0,
+              4824.0,
+              4824.0,
+              4824.0,
+              4920.0,
+              4846.2,
+              4824.0,
+              4824.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "cpuMedianDeltaMicros": -1.0639125000000007,
+        "allocationMedianDeltaBytes": -48.0
+      },
+      "ACCOUNTED_BASE": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 22.686862499999997,
+            "minimum": 21.034200000000002,
+            "maximum": 27.116975,
+            "rounds": [
+              22.533375,
+              27.116975,
+              22.840349999999997,
+              21.779925,
+              23.73895,
+              21.0639,
+              21.034200000000002,
+              25.80395
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 4856.0,
+            "minimum": 4856.0,
+            "maximum": 4952.0,
+            "rounds": [
+              4952.0,
+              4856.0,
+              4856.0,
+              4856.0,
+              4952.0,
+              4952.0,
+              4856.0,
+              4856.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 23.48945,
+            "minimum": 19.868,
+            "maximum": 32.075325,
+            "rounds": [
+              21.70055,
+              22.0804,
+              24.361025,
+              23.3195,
+              32.075325,
+              19.868,
+              26.571925,
+              23.6594
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 4856.0,
+            "minimum": 4856.0,
+            "maximum": 4856.0,
+            "rounds": [
+              4856.0,
+              4856.0,
+              4856.0,
+              4856.0,
+              4856.0,
+              4856.0,
+              4856.0,
+              4856.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "cpuMedianDeltaMicros": 0.8025875000000049,
+        "allocationMedianDeltaBytes": 0.0
+      },
+      "NUMERIC": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 2070.620425,
+            "minimum": 1392.0460500000002,
+            "maximum": 2268.394175,
+            "rounds": [
+              2031.576125,
+              1392.0460500000002,
+              2109.664725,
+              1991.4004750000001,
+              2178.934325,
+              2120.814725,
+              2268.394175,
+              1948.76175
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 708345.0,
+            "minimum": 707217.0,
+            "maximum": 709473.0,
+            "rounds": [
+              707313.0,
+              707217.0,
+              707217.0,
+              707217.0,
+              709473.0,
+              709473.0,
+              709377.0,
+              709378.8
+            ]
+          },
+          "contextReachableBytes": 171144,
+          "rawContextBytes": 35719
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 2066.598075,
+            "minimum": 1524.35665,
+            "maximum": 2194.6686,
+            "rounds": [
+              1524.35665,
+              2151.228575,
+              1558.997625,
+              2069.880975,
+              2194.6686,
+              2063.315175,
+              2015.772625,
+              2117.3029500000002
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 712705.0,
+            "minimum": 711385.0,
+            "maximum": 714047.2,
+            "rounds": [
+              714025.0,
+              714047.2,
+              714025.0,
+              714025.0,
+              711385.0,
+              711385.0,
+              711385.0,
+              711385.0
+            ]
+          },
+          "contextReachableBytes": 171968,
+          "rawContextBytes": 35856
+        },
+        "cpuMedianDeltaMicros": -4.022350000000188,
+        "allocationMedianDeltaBytes": 4360.0
+      },
+      "ENTITY": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 2362.7895875000004,
+            "minimum": 1839.636725,
+            "maximum": 3805.359225,
+            "rounds": [
+              2360.8146,
+              2364.764575,
+              2273.8594249999996,
+              2350.0294,
+              3805.359225,
+              2432.5353,
+              3452.31775,
+              1839.636725
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 863379.2,
+            "minimum": 861185.0,
+            "maximum": 865804.8,
+            "rounds": [
+              861281.0,
+              861185.0,
+              861185.0,
+              863642.8,
+              863441.0,
+              863413.4,
+              863345.0,
+              865804.8
+            ]
+          },
+          "contextReachableBytes": 195008,
+          "rawContextBytes": 38512
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 2300.0459625,
+            "minimum": 1760.7211499999999,
+            "maximum": 2440.141625,
+            "rounds": [
+              2387.6046749999996,
+              2245.0265499999996,
+              1760.7211499999999,
+              2138.08355,
+              2355.065375,
+              2440.141625,
+              2029.96705,
+              2431.6565499999997
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 867866.2,
+            "minimum": 865353.0,
+            "maximum": 867995.0,
+            "rounds": [
+              867993.0,
+              867993.0,
+              867995.0,
+              867993.0,
+              865353.0,
+              865353.0,
+              865353.0,
+              867739.4
+            ]
+          },
+          "contextReachableBytes": 195832,
+          "rawContextBytes": 38649
+        },
+        "cpuMedianDeltaMicros": -62.74362500000052,
+        "allocationMedianDeltaBytes": 4487.0
+      },
+      "CAPTURE": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 673.861375,
+            "minimum": 604.67765,
+            "maximum": 1253.068525,
+            "rounds": [
+              652.2856999999999,
+              604.67765,
+              667.086325,
+              617.445775,
+              1253.068525,
+              918.852,
+              1090.696375,
+              680.636425
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 447345.0,
+            "minimum": 446433.0,
+            "maximum": 448209.0,
+            "rounds": [
+              446481.0,
+              446481.0,
+              446481.0,
+              446433.0,
+              448209.0,
+              448209.0,
+              448209.0,
+              448209.0
+            ]
+          },
+          "contextReachableBytes": 166944,
+          "rawContextBytes": 35719
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 688.4537,
+            "minimum": 557.11625,
+            "maximum": 776.8800500000001,
+            "rounds": [
+              716.0441,
+              557.11625,
+              671.3521750000001,
+              647.547,
+              776.8800500000001,
+              668.33825,
+              724.7009250000001,
+              705.555225
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 450849.0,
+            "minimum": 449313.0,
+            "maximum": 452385.0,
+            "rounds": [
+              452385.0,
+              452385.0,
+              452385.0,
+              452385.0,
+              449313.0,
+              449313.0,
+              449313.0,
+              449313.0
+            ]
+          },
+          "contextReachableBytes": 167728,
+          "rawContextBytes": 35856
+        },
+        "cpuMedianDeltaMicros": 14.592325000000073,
+        "allocationMedianDeltaBytes": 3504.0
+      }
+    },
+    "CAPPED": {
+      "DISABLED": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 1.1111375000000001,
+            "minimum": 1.01325,
+            "maximum": 4.066075,
+            "rounds": [
+              1.114575,
+              1.01325,
+              1.09295,
+              1.040075,
+              1.438,
+              1.18045,
+              1.1077000000000001,
+              4.066075
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 136.0,
+            "minimum": 136.0,
+            "maximum": 136.0,
+            "rounds": [
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 1.1443124999999998,
+            "minimum": 1.100225,
+            "maximum": 1.257475,
+            "rounds": [
+              1.257475,
+              1.1329749999999998,
+              1.145075,
+              1.100225,
+              1.2323250000000001,
+              1.1142999999999998,
+              1.1435499999999998,
+              1.24245
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 136.0,
+            "minimum": 136.0,
+            "maximum": 136.0,
+            "rounds": [
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "cpuMedianDeltaMicros": 0.03317499999999973,
+        "allocationMedianDeltaBytes": 0.0
+      },
+      "COPY": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 1.0721749999999999,
+            "minimum": 0.9875,
+            "maximum": 1.1839000000000002,
+            "rounds": [
+              1.0581749999999999,
+              1.122175,
+              1.086175,
+              1.0324,
+              1.1839000000000002,
+              1.1031,
+              1.0195,
+              0.9875
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 136.0,
+            "minimum": 136.0,
+            "maximum": 136.0,
+            "rounds": [
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 1.1202874999999999,
+            "minimum": 1.021925,
+            "maximum": 4.1531,
+            "rounds": [
+              1.154925,
+              1.08565,
+              1.038375,
+              1.021925,
+              1.179725,
+              1.171775,
+              4.1531,
+              1.03755
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 136.0,
+            "minimum": 136.0,
+            "maximum": 136.0,
+            "rounds": [
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0,
+              136.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "cpuMedianDeltaMicros": 0.0481125,
+        "allocationMedianDeltaBytes": 0.0
+      },
+      "UNACCOUNTED_BASE": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 22.0179625,
+            "minimum": 19.235375,
+            "maximum": 28.929175,
+            "rounds": [
+              28.929175,
+              21.886924999999998,
+              27.3413,
+              20.303525,
+              19.235375,
+              22.149,
+              28.887275000000002,
+              19.896575000000002
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 4824.0,
+            "minimum": 4824.0,
+            "maximum": 4824.0,
+            "rounds": [
+              4824.0,
+              4824.0,
+              4824.0,
+              4824.0,
+              4824.0,
+              4824.0,
+              4824.0,
+              4824.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 22.517775,
+            "minimum": 20.130599999999998,
+            "maximum": 28.1003,
+            "rounds": [
+              20.719875,
+              20.5169,
+              23.114525,
+              22.341125,
+              22.694425,
+              28.1003,
+              23.016,
+              20.130599999999998
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 4824.0,
+            "minimum": 4824.0,
+            "maximum": 4824.0,
+            "rounds": [
+              4824.0,
+              4824.0,
+              4824.0,
+              4824.0,
+              4824.0,
+              4824.0,
+              4824.0,
+              4824.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "cpuMedianDeltaMicros": 0.4998125000000009,
+        "allocationMedianDeltaBytes": 0.0
+      },
+      "ACCOUNTED_BASE": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 22.025225,
+            "minimum": 19.961299999999998,
+            "maximum": 39.1578,
+            "rounds": [
+              21.32355,
+              39.1578,
+              19.961299999999998,
+              24.9786,
+              25.20275,
+              22.7269,
+              20.69135,
+              21.06175
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 4856.0,
+            "minimum": 4856.0,
+            "maximum": 4856.0,
+            "rounds": [
+              4856.0,
+              4856.0,
+              4856.0,
+              4856.0,
+              4856.0,
+              4856.0,
+              4856.0,
+              4856.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 22.4767875,
+            "minimum": 15.8542,
+            "maximum": 39.335675,
+            "rounds": [
+              21.837175,
+              31.292375,
+              23.116400000000002,
+              15.8542,
+              26.521875,
+              20.151625,
+              20.41575,
+              39.335675
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 4856.0,
+            "minimum": 4856.0,
+            "maximum": 4856.0,
+            "rounds": [
+              4856.0,
+              4856.0,
+              4856.0,
+              4856.0,
+              4856.0,
+              4856.0,
+              4856.0,
+              4856.0
+            ]
+          },
+          "contextReachableBytes": 48,
+          "rawContextBytes": 2
+        },
+        "cpuMedianDeltaMicros": 0.4515625000000014,
+        "allocationMedianDeltaBytes": 0.0
+      },
+      "NUMERIC": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 2566.7771000000002,
+            "minimum": 2522.9581749999998,
+            "maximum": 2807.632125,
+            "rounds": [
+              2585.622975,
+              2547.263475,
+              2807.632125,
+              2547.9312250000003,
+              2535.291075,
+              2522.9581749999998,
+              2647.8907000000004,
+              2654.749175
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 974300.0,
+            "minimum": 972740.0,
+            "maximum": 975860.0,
+            "rounds": [
+              972740.0,
+              972740.0,
+              972740.0,
+              972740.0,
+              975860.0,
+              975860.0,
+              975860.0,
+              975860.0
+            ]
+          },
+          "contextReachableBytes": 232184,
+          "rawContextBytes": 47971
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 2663.21165,
+            "minimum": 2508.19825,
+            "maximum": 2743.450625,
+            "rounds": [
+              2712.970725,
+              2679.3068,
+              2743.450625,
+              2575.05205,
+              2586.39065,
+              2718.119575,
+              2647.1165,
+              2508.19825
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 977436.0,
+            "minimum": 977028.0,
+            "maximum": 977772.0,
+            "rounds": [
+              977772.0,
+              977772.0,
+              977772.0,
+              977772.0,
+              977100.0,
+              977028.0,
+              977028.0,
+              977028.0
+            ]
+          },
+          "contextReachableBytes": 233008,
+          "rawContextBytes": 48108
+        },
+        "cpuMedianDeltaMicros": 96.43454999999994,
+        "allocationMedianDeltaBytes": 3136.0
+      },
+      "ENTITY": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 3271.7895625,
+            "minimum": 3072.248575,
+            "maximum": 3445.0117250000003,
+            "rounds": [
+              3247.876,
+              3072.248575,
+              3078.816175,
+              3168.66605,
+              3329.831225,
+              3314.641925,
+              3295.703125,
+              3445.0117250000003
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 1312020.0,
+            "minimum": 1310428.0,
+            "maximum": 1313580.0,
+            "rounds": [
+              1310460.0,
+              1310428.0,
+              1310428.0,
+              1310428.0,
+              1313580.0,
+              1313580.0,
+              1313580.0,
+              1313580.0
+            ]
+          },
+          "contextReachableBytes": 283864,
+          "rawContextBytes": 54068
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 3319.526525,
+            "minimum": 3061.846375,
+            "maximum": 3577.27355,
+            "rounds": [
+              3319.465225,
+              3577.27355,
+              3408.1561,
+              3428.2477999999996,
+              3215.2891,
+              3319.587825,
+              3174.899225,
+              3061.846375
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 1315124.7,
+            "minimum": 1314716.0,
+            "maximum": 1315492.0,
+            "rounds": [
+              1315492.0,
+              1315492.0,
+              1315492.0,
+              1315492.0,
+              1314757.4,
+              1314716.0,
+              1314716.0,
+              1314716.0
+            ]
+          },
+          "contextReachableBytes": 284688,
+          "rawContextBytes": 54205
+        },
+        "cpuMedianDeltaMicros": 47.73696250000012,
+        "allocationMedianDeltaBytes": 3104.6999999999534
+      },
+      "CAPTURE": {
+        "v28": {
+          "cpuMicrosPerOperation": {
+            "median": 744.75205,
+            "minimum": 579.5479250000001,
+            "maximum": 839.408525,
+            "rounds": [
+              787.21175,
+              579.5479250000001,
+              630.4703499999999,
+              618.485875,
+              802.7456,
+              839.408525,
+              789.693875,
+              702.2923499999999
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 620684.0,
+            "minimum": 619244.0,
+            "maximum": 622124.0,
+            "rounds": [
+              619244.0,
+              619244.0,
+              619244.0,
+              619244.0,
+              622124.0,
+              622124.0,
+              622124.0,
+              622124.0
+            ]
+          },
+          "contextReachableBytes": 226264,
+          "rawContextBytes": 47971
+        },
+        "v29": {
+          "cpuMicrosPerOperation": {
+            "median": 767.9721625,
+            "minimum": 616.8601,
+            "maximum": 867.98435,
+            "rounds": [
+              774.3077,
+              788.2001,
+              697.599425,
+              776.8290999999999,
+              867.98435,
+              638.165875,
+              761.636625,
+              616.8601
+            ]
+          },
+          "allocatedBytesPerOperation": {
+            "median": 622880.0,
+            "minimum": 622388.0,
+            "maximum": 623372.0,
+            "rounds": [
+              623372.0,
+              623372.0,
+              623372.0,
+              623372.0,
+              622388.0,
+              622388.0,
+              622388.0,
+              622388.0
+            ]
+          },
+          "contextReachableBytes": 227048,
+          "rawContextBytes": 48108
+        },
+        "cpuMedianDeltaMicros": 23.220112499999914,
+        "allocationMedianDeltaBytes": 2196.0
+      }
+    }
+  },
+  "trainingReady": false
+}

@@ -2,6 +2,8 @@
 
 Status: measurement design after [prefix V29](Simulation-Prefix-Admission-Assessment.md), baseline a54a34c7c58. This is separate from coverage-policy implementation and changes no runtime defaults, serializer or capture representation. Review each measurement increment before selecting a runtime change.
 
+The [controlled producer/metadata increment](Simulation-V29-Controlled-Cost-Assessment.md) is delivered. Complete the remaining collector/physical UTF-8, failure/later-family and native Monte Carlo cohorts before the optional-policy gate.
+
 ## Questions and cohorts
 
 Establish the cost of the actual V29 implementation, including its admission receipts and controller ownership fields. The V28 experiment monitor is not a production baseline. Match represented information when comparing prefix versions; deliberate sampled/unavailable input is not a capture optimization. Native Monte Carlo outcomes and work counts can differ with deadlines and cannot serve as deterministic same-seed equivalence controls.

@@ -1,0 +1,22 @@
+{
+  "nonoverlappingJvms": 8,
+  "controlProfilePairs": 4,
+  "measuredRounds": 1120,
+  "memorySamples": 20,
+  "exhaustionTrials": 8,
+  "discardedWholePassRounds": 280,
+  "healthyOperationsPerRound": 40,
+  "warmupOperationsPerRound": 12,
+  "pythonTests": 368,
+  "pythonFailures": 0,
+  "pythonErrors": 0,
+  "pythonLogSha256": "e722e8ee520d2dbe822a049448d48cb3761feedfd0c47b73e9d1954f9439c28a",
+  "boolRegressionFailsBefore": true,
+  "boolBeforeLogSha256": "87db8920826f0d560650dc5eb36c54597ed5d375f213cca9c3eaba163d292373",
+  "finalValidationSha256": "aa11f5c4a8dd495cef9e09fa7d27e94a68cdcfc45213bb030d5732be58c5e22a",
+  "allRawRepresentationsWorkAndSourceReceiptsEqual": true,
+  "earlyUnversionedPairExcluded": true,
+  "productionRuntimeUnchanged": true,
+  "broaderCheckpointComplete": false,
+  "trainingReady": false
+}

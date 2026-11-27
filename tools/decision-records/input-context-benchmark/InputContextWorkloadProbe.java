@@ -217,6 +217,7 @@ public final class InputContextWorkloadProbe extends AITest {
             if (field.get(controller) != null || controller.observationAccounting() != null) { throw new IllegalStateException("Disabled/copy state"); }
         }
         Map<String, Object> result = new LinkedHashMap<>();
+        result.put("measurementSchemaVersion", 2);
         result.put("inputContextProfile", AiInputContext.PROFILE);
         result.put("workload", w.name); result.put("players", w.players); result.put("boardCardsPerPlayer", w.board);
         result.put("stackEntries", w.stack); result.put("delivery", w.delivery); result.put("mode", mode);

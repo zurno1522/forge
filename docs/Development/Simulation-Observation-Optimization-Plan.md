@@ -12,6 +12,8 @@ The [current combined execution order](Simulation-Observation-Roadmap.md) has co
 
 The [COV-008C production admission contract](Simulation-Production-Admission-Contract.md) places the broader OPT-005 checkpoint after the now [implemented prefix V29 metadata](Simulation-Prefix-Admission-Assessment.md) and before optional hash-policy enablement. Measure the same represented V28 information with metadata costs named separately, and include a production-shaped candidate check before enabling sampling. The isolated experiment monitor is not the production cost baseline.
 
+The [V29 checkpoint contract](Simulation-V29-Cost-Checkpoint-Contract.md) has its [controlled V28/V29 comparison](Simulation-V29-Controlled-Cost-Assessment.md) delivered. Collector/physical UTF-8, later-family/failure and native Monte Carlo measurements remain next within OPT-005. The controlled refresh selects no runtime optimization or sampling policy.
+
 | Priority | Item | Design and completion criteria |
 | --- | --- | --- |
 | OPT-001 | Attribute cost and improve measurement | Separate projection, canonical ordering, freezing, event publication and serialization costs. Measure calling-thread CPU, allocation, garbage collection, peak transient capture retention, retained frozen contexts, populated disclosure buffers and raw/compressed bytes. Include disabled/copy paths, warmup, repeated samples and nonoverlapping benchmark JVMs. Record fixture sizes, profile/budget status and source revision; unavailable contexts must not make a benchmark appear faster. |

@@ -1,0 +1,8 @@
+{
+  "sources": {
+    "tools/decision-records/input-context-benchmark/InputContextWorkloadProbe.java": "ca4842b4719abe232d693c0762b88ee6de18f17fdd3a83106c8600876711aae9",
+    "tools/decision-records/input-context-benchmark/run-workloads.py": "0b2fe3c291e23619dc09cc8dcf0d9e6888cdf2e385cf8bee17b405f3d536245c",
+    "tools/decision-records/input-context-benchmark/summarize-workloads.py": "aa11f5c4a8dd495cef9e09fa7d27e94a68cdcfc45213bb030d5732be58c5e22a",
+    "tools/decision-records/test_workload_measurements.py": "5cfbdce58dfa850c60aee0b69db12c5b3e4d9ccfa7c6dddd43e5f3a2c502d349"
+  }
+}

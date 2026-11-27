@@ -28,12 +28,22 @@ measurements. Native process durations include startup/gameplay/host effects;
 validation time is separate. Neither isolates admission overhead. OPT-005 owns cost
 measurement against the actual production V29 baseline.
 
-The workload probe now declares `inputContextProfile` from the built producer on
+The workload probe declares `inputContextProfile` from the built producer on
 every row. The workload summarizer preserves historical rows without this field
 as the frozen V4 format, and rejects mixed legacy/declarations, differing profiles
-or unsupported profiles. Current V6 measurements must not be reported as V4/V5.
+or unsupported profiles. Current V29 measurements must not be reported as older profiles.
 Existing V4 assessments remain historical results; this metadata update does not
 measure the subsequent coverage increments.
+
+Current workload rows use measurement schema V2. The historical eventFreeze key
+counts all outermost freezes outside capture, including modern typed preparation
+receipts; it is not an event-only span. V2 validates that extra freeze without
+changing event/publication totals. Mixed/unknown/boolean declarations are rejected.
+The producer-profile declaration alone does not certify all newly added families.
+For a matched V28 control, pass `--reference 555c3fbbb35` to `run-workloads.py`;
+it compiles source-pinned classes into an isolated directory and checks GameAction
+compatibility instead of borrowing an earlier checkout. Reverse control/profile
+order in a second pair. See the [controlled V29 assessment](../../../docs/Development/Simulation-V29-Controlled-Cost-Assessment.md).
 
 `InputContextProbe` measures calling-thread CPU/allocation for disabled choices,
 base choices, choices with contexts, the unchanged legacy view and the new view.
