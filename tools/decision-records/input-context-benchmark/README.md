@@ -186,3 +186,72 @@ whole-run measurements include their parents and must not be added to them.
 Metric/validation/bookkeeping overhead remains included; uncapped rules-state proof bindings are verified against received facts, including legitimate losses when a shared allowance blocks later deliveries; initial fixture/disclosure setup, board creation and final
 result hashing/encoding are excluded. Writer counts are characters, without UTF-8
 conversion or physical I/O. No collector delivery or exact heap claim is made.
+
+## COV-008 native game admission
+
+The [actual-game contract](../../../docs/Development/Simulation-Game-Admission-Contract.md)
+keeps the meter and admission gates in an isolated development classpath. This
+campaign runs native heuristic games, including the real collector and physical
+full/filtered writers. Its monitor/telemetry overhead is not a production cost
+estimate. Run game JVMs sequentially:
+
+```sh
+python3 tools/decision-records/input-context-benchmark/run-game-admission.py \
+  --classpath-file /path/to/classpath.txt --java-home /path/to/jdk-21 \
+  --user-home /path/to/writable-profile --output-dir /path/to/native-admission
+python3 tools/decision-records/input-context-benchmark/validate-game-admission.py \
+  /path/to/native-admission --output /path/to/native-admission/reports
+```
+
+The full matrix has native damage/X and repeated-choice games, two four-player
+Commander seeds and a one-second Commander timeout, each with production,
+prefix, hash-four, hash-eight (two salts) and reserve variants. `--smoke` runs
+three damage/X variants; `--cases` selects explicitly declared subcampaigns.
+Strict validation requires every command in the declared matrix to finish;
+`--partial` on the validator is only for incremental progress checks.
+
+Validation loads a fresh private reader instance and extends its reason set by
+exactly the two experimental reasons. It invokes validation/coverage only, never
+a dataset export directory. The ordinary reader remains unchanged and rejects
+those records. Input views and parent target/search `inputUnavailable` counters
+are excluded from native-result comparison; all other delivery counters,
+assessments/actions/targets/costs/results remain. Each is still structurally
+validated and parent accounting is reported separately. Normally completed
+variants must match the production engine, AI-result and serialized RNG-state
+projections. Timeout outcomes stay censored and their partial sequences are not
+normal-game controls.
+
+The sidecar owns actual capture-attempt/debit receipts, including calls which a
+parent never publishes. The joint reader audit owns observed records and retains
+its independent entry/container clocks. Their denominators/cutoffs differ.
+Outside-capture work includes disclosure intake; it is not refunded by sampling.
+Per-State monitors seal coherent snapshots while worker tickets can be in flight;
+late completions do not rewrite those snapshots. These development semantics do
+not implement a production seed/budget/lifetime API.
+
+`GameAdmissionHooksCheck` is compiled against the development meter and run with
+the generated overlay first on its classpath for PREFIX, HASH8 and RESERVE. It
+checks native closed/disabled guards, a fixed hash vector, charged original
+exceptions, actual outside debits, one-time native-turn release and blocked-worker
+cutoff/late receipts. It runs no synthetic gameplay policy and writes no dataset.
+
+`--record-invalid` is an explicit diagnostic mode: a rejected input receives
+INVALID_TRACE and an error/hash receipt, with no coverage or learning claim.
+Strict validation still fails on malformed outcomes. `campaign-summary.json`
+reports valid/rejected counts separately. Startup timeouts can precede
+GAME_STARTED and meter registration; initial shuffle events are retained and
+no game-start ordering/capture-coverage claim is invented. Complete sparse
+zero-invocation ledgers retain an unknown missing-start rate.
+
+A normally completed diagnostic replay can be run separately after validation:
+
+```sh
+python3 tools/decision-records/input-context-benchmark/replay-game-admission.py \
+  /path/to/native-admission --output-dir /path/to/diagnostic-replays --seconds 180
+```
+
+Replays retain the original censored trace and require normally completed
+engine/AI/RNG equality against its original normal control. A longer diagnostic
+limit does not change the original execution status or the production default.
+Ensure xvfb-run is on PATH, as for the primary runner. The runner honors
+--java-home for both compilation and execution.

@@ -1,0 +1,13 @@
+{
+  "originalCampaignRevision": "88d7e275bb22d9af89b851dff67111a1bfcd3af1",
+  "replayRevision": "77c8b454ff602398175f7deb481700db30e092f7",
+  "sourceSha256": {
+    "forge-game/src/main/java/forge/game/GameAction.java": "294caa309202f6fdebceaaa81019426f959672f391434707f53f685ac0dc668d",
+    "forge-ai/src/main/java/forge/ai/AiInputContext.java": "8bb4b85141ba6f6661e896c393f9c3a185dd9a08de8c6206c98295a9dc2fe6be",
+    "tools/decision-records/input-context-benchmark/GameAdmissionExperiment.java": "d97fbe71c53c9fd43e3ae557241b9468a3169537c7fe2bf01cdbc93e44fa3c58"
+  },
+  "selectedClassSha256": {
+    "forge-game/target/classes/forge/game/GameAction.class": "c4b4a370aeb69aaed3e4ac36c9c5bcc1dae2826301d836c6248367e68f79ca9b",
+    "forge-ai/target/classes/forge/ai/AiInputContext.class": "05e98db0c31b8136712b0ce4e9123f4c6372badb3ca7bd2d6cc60a420becf4c0"
+  }
+}

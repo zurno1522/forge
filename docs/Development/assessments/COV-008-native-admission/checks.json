@@ -1,0 +1,43 @@
+{
+  "python": {
+    "tests": 358,
+    "newMethods": 14,
+    "failures": 0,
+    "errors": 0,
+    "logSha256": "58fbd60577f50cf834ae3d042b6ca7e6a9cebcc85f848fd553421a44f3572fb8"
+  },
+  "nativeMeterUnits": {
+    "policies": [
+      "PREFIX",
+      "HASH8",
+      "RESERVE"
+    ],
+    "sourceSha256": {
+      "GameAdmissionExperiment.java": "d97fbe71c53c9fd43e3ae557241b9468a3169537c7fe2bf01cdbc93e44fa3c58",
+      "GameAdmissionHooksCheck.java": "fe31376904d319b18d2f28a4929c457ef09771ebac2536a648b7a72b3f83d7b7"
+    },
+    "logSha256": {
+      "PREFIX": "b568f76a4d5430a3ec1c05dae8f5c9a8c174498fb7f7b0f8f44b9912fd9d980e",
+      "HASH8": "633bebd0e1ae1114c1aa63180b4075ac690257eb7bfd2fa78ab3e7adfd2c90c9",
+      "RESERVE": "047e6be645bebf19d45ff9b835ef6d769a25b2be861f297e803be7a47df9725b"
+    }
+  },
+  "nativeGames": {
+    "primary": 30,
+    "primaryValid": 29,
+    "primaryRejected": 1,
+    "postFixValid": 12,
+    "diagnosticValid": 1
+  },
+  "startupFix": "77c8b454ff6; separate engine fix with two fail-before/pass-after regressions and 37 focused Java cases.",
+  "unchangedProductionAdmission": true,
+  "unchangedBudgets": true,
+  "ordinaryReaderUnchanged": true,
+  "experimentalLearningExports": 0,
+  "trainingReady": false,
+  "validationLogs": {
+    "/workspace/work/cov008-native-admission-validation-final.log": "b8d6d3290d9207347eac85a513961a6f66b9fffa24b82e9f39444995368ac5bd",
+    "/workspace/work/cov008-native-admission-postfix-validation.log": "9a9bd235ae55d3472619e77801a4d0e8e3be78d4b2a7f904f7a40a7749afbf00",
+    "/workspace/work/cov008-native-admission-diagnostic.log": "6bc673ab8279201bd86b94949f6e6f903f6816a38133ff91fdf40de9490c0084"
+  }
+}

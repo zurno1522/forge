@@ -1,0 +1,3636 @@
+{
+  "origin": "Actual native damage/X final-campaign sidecars; resource/receipt unit fixtures. Command/source binding is asserted by the independent campaign validator.",
+  "cases": {
+    "production": {
+      "commandArguments": [
+        "sim",
+        "-f",
+        "constructed",
+        "-mc",
+        "off",
+        "-q",
+        "-D",
+        "/workspace/forge/tools/trace-test-decks",
+        "-d",
+        "choice-damage-x.dck",
+        "choice-damage-x.dck",
+        "-n",
+        "1",
+        "-s",
+        "12073",
+        "-c",
+        "90",
+        "-log-game",
+        "/workspace/work/cov008-native-admission/games/damage-production-0-full.jsonl",
+        "-log-decisions",
+        "/workspace/work/cov008-native-admission/games/damage-production-0-decisions.jsonl"
+      ],
+      "schemaVersion": 1,
+      "scope": "DEVELOPMENT_CAPTURE_ATTEMPTS_AT_PROCESS_SHUTDOWN",
+      "policy": "PRODUCTION",
+      "salt": 0,
+      "releaseThreshold": 31,
+      "maximumGroups": 8192,
+      "trainingReady": false,
+      "actors": [],
+      "rngCalls": 1092,
+      "rngCallsAfterSnapshot": 1092,
+      "rngStateSha256": "60cda5695b17ca0389c6328bd521c6f78b71f07ffe271a27a4a8c74351d8a1f4"
+    },
+    "prefix": {
+      "commandArguments": [
+        "sim",
+        "-f",
+        "constructed",
+        "-mc",
+        "off",
+        "-q",
+        "-D",
+        "/workspace/forge/tools/trace-test-decks",
+        "-d",
+        "choice-damage-x.dck",
+        "choice-damage-x.dck",
+        "-n",
+        "1",
+        "-s",
+        "12073",
+        "-c",
+        "90",
+        "-log-game",
+        "/workspace/work/cov008-native-admission/games/damage-prefix-0-full.jsonl",
+        "-log-decisions",
+        "/workspace/work/cov008-native-admission/games/damage-prefix-0-decisions.jsonl"
+      ],
+      "schemaVersion": 1,
+      "scope": "DEVELOPMENT_CAPTURE_ATTEMPTS_AT_PROCESS_SHUTDOWN",
+      "policy": "PREFIX",
+      "salt": 0,
+      "releaseThreshold": 31,
+      "maximumGroups": 8192,
+      "trainingReady": false,
+      "actors": [
+        {
+          "playerId": 0,
+          "share": 128000,
+          "funded": 128000,
+          "held": 0,
+          "remaining": 79458,
+          "releaseTurn": -1,
+          "finalGameTurn": 22,
+          "entered": 390,
+          "returned": 390,
+          "threw": 0,
+          "inFlight": 0,
+          "maximumInFlight": 1,
+          "captureWork": 48537,
+          "outsideCaptureWork": 5,
+          "returnedWork": 48537,
+          "failedWork": 0,
+          "inFlightWork": 0,
+          "overflow": false,
+          "groups": {
+            "1:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 7,
+              "work": 882,
+              "available": 7,
+              "partial": 7,
+              "representedCards": 55,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 7
+              },
+              "representedZones": {
+                "Hand": 49,
+                "Battlefield": 6
+              }
+            },
+            "1:BEFORE_SELECTOR:RULES_STATE:AVAILABLE": {
+              "records": 7,
+              "work": 861,
+              "available": 7,
+              "partial": 7,
+              "representedCards": 55,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 7
+              },
+              "representedZones": {
+                "Hand": 49,
+                "Battlefield": 6
+              }
+            },
+            "2:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 9,
+              "work": 1125,
+              "available": 9,
+              "partial": 9,
+              "representedCards": 80,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 9
+              },
+              "representedZones": {
+                "Hand": 65,
+                "Battlefield": 15
+              }
+            },
+            "2:BEFORE_SELECTOR:RULES_STATE:AVAILABLE": {
+              "records": 6,
+              "work": 738,
+              "available": 6,
+              "partial": 6,
+              "representedCards": 53,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 6
+              },
+              "representedZones": {
+                "Hand": 43,
+                "Battlefield": 10
+              }
+            },
+            "2:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 10,
+              "work": 1258,
+              "available": 10,
+              "partial": 10,
+              "representedCards": 90,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 10
+              },
+              "representedZones": {
+                "Battlefield": 20,
+                "Hand": 70
+              }
+            },
+            "2:BEFORE_SELECTOR:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 246,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 18,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 4,
+                "Hand": 14
+              }
+            },
+            "3:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 9,
+              "work": 1136,
+              "available": 9,
+              "partial": 9,
+              "representedCards": 91,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 9
+              },
+              "representedZones": {
+                "Battlefield": 27,
+                "Hand": 63,
+                "Stack": 1
+              }
+            },
+            "3:BEFORE_SELECTOR:RULES_STATE:AVAILABLE": {
+              "records": 11,
+              "work": 1355,
+              "available": 11,
+              "partial": 11,
+              "representedCards": 113,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 11
+              },
+              "representedZones": {
+                "Battlefield": 35,
+                "Hand": 77,
+                "Stack": 1
+              }
+            },
+            "4:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 9,
+              "work": 1105,
+              "available": 9,
+              "partial": 9,
+              "representedCards": 97,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 9
+              },
+              "representedZones": {
+                "Battlefield": 35,
+                "Hand": 56,
+                "Graveyard": 6
+              }
+            },
+            "4:BEFORE_SELECTOR:RULES_STATE:AVAILABLE": {
+              "records": 3,
+              "work": 373,
+              "available": 3,
+              "partial": 3,
+              "representedCards": 32,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 3
+              },
+              "representedZones": {
+                "Battlefield": 12,
+                "Hand": 20
+              }
+            },
+            "4:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 8,
+              "work": 1006,
+              "available": 8,
+              "partial": 8,
+              "representedCards": 96,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 8
+              },
+              "representedZones": {
+                "Battlefield": 32,
+                "Graveyard": 16,
+                "Hand": 48
+              }
+            },
+            "6:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 3,
+              "work": 369,
+              "available": 3,
+              "partial": 3,
+              "representedCards": 42,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 3
+              },
+              "representedZones": {
+                "Battlefield": 17,
+                "Graveyard": 6,
+                "Hand": 19
+              }
+            },
+            "6:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 7,
+              "work": 881,
+              "available": 7,
+              "partial": 7,
+              "representedCards": 98,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 7
+              },
+              "representedZones": {
+                "Battlefield": 42,
+                "Graveyard": 14,
+                "Hand": 42
+              }
+            },
+            "6:BEFORE_SELECTOR:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 123,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 14,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Battlefield": 6,
+                "Graveyard": 2,
+                "Hand": 6
+              }
+            },
+            "8:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 3,
+              "work": 369,
+              "available": 3,
+              "partial": 3,
+              "representedCards": 45,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 3
+              },
+              "representedZones": {
+                "Battlefield": 20,
+                "Graveyard": 6,
+                "Hand": 19
+              }
+            },
+            "8:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 6,
+              "work": 756,
+              "available": 6,
+              "partial": 6,
+              "representedCards": 90,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 6
+              },
+              "representedZones": {
+                "Battlefield": 42,
+                "Graveyard": 12,
+                "Hand": 36
+              }
+            },
+            "8:BEFORE_SELECTOR:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 246,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 30,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 14,
+                "Graveyard": 4,
+                "Hand": 12
+              }
+            },
+            "10:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 246,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 34,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 16,
+                "Graveyard": 4,
+                "Hand": 14
+              }
+            },
+            "10:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 6,
+              "work": 756,
+              "available": 6,
+              "partial": 6,
+              "representedCards": 102,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 6
+              },
+              "representedZones": {
+                "Battlefield": 48,
+                "Graveyard": 12,
+                "Hand": 42
+              }
+            },
+            "10:BEFORE_SELECTOR:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 246,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 34,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 16,
+                "Graveyard": 4,
+                "Hand": 14
+              }
+            },
+            "12:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 3,
+              "work": 369,
+              "available": 3,
+              "partial": 3,
+              "representedCards": 54,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 3
+              },
+              "representedZones": {
+                "Battlefield": 26,
+                "Graveyard": 6,
+                "Hand": 22
+              }
+            },
+            "12:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 6,
+              "work": 756,
+              "available": 6,
+              "partial": 6,
+              "representedCards": 108,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 6
+              },
+              "representedZones": {
+                "Battlefield": 54,
+                "Graveyard": 12,
+                "Hand": 42
+              }
+            },
+            "12:BEFORE_SELECTOR:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 246,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 36,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 18,
+                "Graveyard": 4,
+                "Hand": 14
+              }
+            },
+            "14:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 30,
+              "work": 3679,
+              "available": 30,
+              "partial": 28,
+              "representedCards": 581,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 28
+              },
+              "representedZones": {
+                "Battlefield": 304,
+                "Graveyard": 90,
+                "Hand": 185,
+                "Stack": 2
+              }
+            },
+            "14:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 10,
+              "work": 1265,
+              "available": 10,
+              "partial": 10,
+              "representedCards": 205,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 10
+              },
+              "representedZones": {
+                "Battlefield": 107,
+                "Graveyard": 30,
+                "Hand": 68
+              }
+            },
+            "14:BEFORE_SELECTOR:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 8,
+              "work": 991,
+              "available": 8,
+              "partial": 8,
+              "representedCards": 161,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 8
+              },
+              "representedZones": {
+                "Battlefield": 87,
+                "Graveyard": 24,
+                "Hand": 50
+              }
+            },
+            "14:BEFORE_SELECTOR:RULES_STATE:AVAILABLE": {
+              "records": 6,
+              "work": 762,
+              "available": 6,
+              "partial": 6,
+              "representedCards": 114,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 6
+              },
+              "representedZones": {
+                "Battlefield": 60,
+                "Graveyard": 18,
+                "Hand": 36
+              }
+            },
+            "16:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 27,
+              "work": 3329,
+              "available": 27,
+              "partial": 27,
+              "representedCards": 652,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 27
+              },
+              "representedZones": {
+                "Battlefield": 337,
+                "Graveyard": 109,
+                "Hand": 206
+              }
+            },
+            "16:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 15,
+              "work": 1902,
+              "available": 15,
+              "partial": 15,
+              "representedCards": 375,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 15
+              },
+              "representedZones": {
+                "Battlefield": 189,
+                "Graveyard": 66,
+                "Hand": 120
+              }
+            },
+            "16:BEFORE_SELECTOR:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 3,
+              "work": 372,
+              "available": 3,
+              "partial": 3,
+              "representedCards": 75,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 3
+              },
+              "representedZones": {
+                "Battlefield": 37,
+                "Graveyard": 12,
+                "Hand": 26
+              }
+            },
+            "16:BEFORE_SELECTOR:RULES_STATE:AVAILABLE": {
+              "records": 5,
+              "work": 640,
+              "available": 5,
+              "partial": 5,
+              "representedCards": 120,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 5
+              },
+              "representedZones": {
+                "Battlefield": 63,
+                "Graveyard": 20,
+                "Hand": 37
+              }
+            },
+            "16:AFTER_SELECTION_BEFORE_APPLICATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 124,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 25,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Battlefield": 13,
+                "Graveyard": 4,
+                "Hand": 8
+              }
+            },
+            "18:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 30,
+              "work": 3680,
+              "available": 30,
+              "partial": 28,
+              "representedCards": 822,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 28
+              },
+              "representedZones": {
+                "Battlefield": 397,
+                "Graveyard": 210,
+                "Hand": 213,
+                "Stack": 2
+              }
+            },
+            "18:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 13,
+              "work": 1641,
+              "available": 13,
+              "partial": 13,
+              "representedCards": 369,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 13
+              },
+              "representedZones": {
+                "Battlefield": 181,
+                "Graveyard": 91,
+                "Hand": 97
+              }
+            },
+            "18:BEFORE_SELECTOR:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 9,
+              "work": 1114,
+              "available": 9,
+              "partial": 9,
+              "representedCards": 253,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 9
+              },
+              "representedZones": {
+                "Battlefield": 125,
+                "Graveyard": 63,
+                "Hand": 65
+              }
+            },
+            "18:BEFORE_SELECTOR:RULES_STATE:AVAILABLE": {
+              "records": 6,
+              "work": 762,
+              "available": 6,
+              "partial": 6,
+              "representedCards": 162,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 6
+              },
+              "representedZones": {
+                "Battlefield": 78,
+                "Graveyard": 42,
+                "Hand": 42
+              }
+            },
+            "18:AFTER_SELECTION_BEFORE_APPLICATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 124,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 29,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Battlefield": 15,
+                "Graveyard": 7,
+                "Hand": 7
+              }
+            },
+            "20:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 28,
+              "work": 3452,
+              "available": 28,
+              "partial": 28,
+              "representedCards": 899,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 28
+              },
+              "representedZones": {
+                "Battlefield": 475,
+                "Graveyard": 225,
+                "Hand": 199
+              }
+            },
+            "20:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 12,
+              "work": 1522,
+              "available": 12,
+              "partial": 12,
+              "representedCards": 396,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 12
+              },
+              "representedZones": {
+                "Battlefield": 204,
+                "Graveyard": 100,
+                "Hand": 92
+              }
+            },
+            "20:BEFORE_SELECTOR:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 4,
+              "work": 496,
+              "available": 4,
+              "partial": 4,
+              "representedCards": 132,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 4
+              },
+              "representedZones": {
+                "Battlefield": 68,
+                "Graveyard": 33,
+                "Hand": 31
+              }
+            },
+            "20:AFTER_SELECTION_BEFORE_APPLICATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 124,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 33,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Battlefield": 17,
+                "Graveyard": 8,
+                "Hand": 8
+              }
+            },
+            "20:BEFORE_SELECTOR:RULES_STATE:AVAILABLE": {
+              "records": 6,
+              "work": 768,
+              "available": 6,
+              "partial": 6,
+              "representedCards": 192,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 6
+              },
+              "representedZones": {
+                "Battlefield": 102,
+                "Graveyard": 48,
+                "Hand": 42
+              }
+            },
+            "22:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 35,
+              "work": 4311,
+              "available": 35,
+              "partial": 35,
+              "representedCards": 1226,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 35
+              },
+              "representedZones": {
+                "Battlefield": 664,
+                "Graveyard": 315,
+                "Hand": 247
+              }
+            },
+            "22:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 4,
+              "work": 507,
+              "available": 4,
+              "partial": 4,
+              "representedCards": 144,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 4
+              },
+              "representedZones": {
+                "Battlefield": 76,
+                "Graveyard": 36,
+                "Hand": 32
+              }
+            },
+            "22:BEFORE_SELECTOR:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 124,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 36,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Battlefield": 19,
+                "Graveyard": 9,
+                "Hand": 8
+              }
+            },
+            "22:AFTER_SELECTION_BEFORE_APPLICATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 248,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 72,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 38,
+                "Graveyard": 18,
+                "Hand": 16
+              }
+            },
+            "22:BEFORE_SELECTOR:RULES_STATE:AVAILABLE": {
+              "records": 9,
+              "work": 1152,
+              "available": 9,
+              "partial": 9,
+              "representedCards": 315,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 9
+              },
+              "representedZones": {
+                "Battlefield": 171,
+                "Graveyard": 81,
+                "Hand": 63
+              }
+            }
+          }
+        },
+        {
+          "playerId": 1,
+          "share": 128000,
+          "funded": 128000,
+          "held": 0,
+          "remaining": 95135,
+          "releaseTurn": -1,
+          "finalGameTurn": 22,
+          "entered": 264,
+          "returned": 264,
+          "threw": 0,
+          "inFlight": 0,
+          "maximumInFlight": 1,
+          "captureWork": 32860,
+          "outsideCaptureWork": 5,
+          "returnedWork": 32860,
+          "failedWork": 0,
+          "inFlightWork": 0,
+          "overflow": false,
+          "groups": {
+            "1:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 3,
+              "work": 369,
+              "available": 3,
+              "partial": 3,
+              "representedCards": 21,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 3
+              },
+              "representedZones": {
+                "Hand": 19,
+                "Battlefield": 2
+              }
+            },
+            "1:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 6,
+              "work": 754,
+              "available": 6,
+              "partial": 6,
+              "representedCards": 42,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 6
+              },
+              "representedZones": {
+                "Battlefield": 6,
+                "Hand": 36
+              }
+            },
+            "3:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 12,
+              "work": 1468,
+              "available": 12,
+              "partial": 12,
+              "representedCards": 100,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 12
+              },
+              "representedZones": {
+                "Battlefield": 36,
+                "Hand": 64
+              }
+            },
+            "3:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 6,
+              "work": 755,
+              "available": 6,
+              "partial": 6,
+              "representedCards": 54,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 6
+              },
+              "representedZones": {
+                "Battlefield": 20,
+                "Hand": 34
+              }
+            },
+            "3:BEFORE_SELECTOR:RULES_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 254,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 16,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 6,
+                "Hand": 10
+              }
+            },
+            "3:BEFORE_SELECTOR:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 123,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 9,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Battlefield": 4,
+                "Hand": 5
+              }
+            },
+            "5:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 3,
+              "work": 369,
+              "available": 3,
+              "partial": 3,
+              "representedCards": 36,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 3
+              },
+              "representedZones": {
+                "Battlefield": 14,
+                "Graveyard": 6,
+                "Hand": 16
+              }
+            },
+            "5:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 4,
+              "work": 504,
+              "available": 4,
+              "partial": 4,
+              "representedCards": 48,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 4
+              },
+              "representedZones": {
+                "Battlefield": 20,
+                "Graveyard": 8,
+                "Hand": 20
+              }
+            },
+            "5:BEFORE_SELECTOR:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 246,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 24,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 10,
+                "Graveyard": 4,
+                "Hand": 10
+              }
+            },
+            "7:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 246,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 28,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 12,
+                "Graveyard": 4,
+                "Hand": 12
+              }
+            },
+            "7:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 4,
+              "work": 504,
+              "available": 4,
+              "partial": 4,
+              "representedCards": 56,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 4
+              },
+              "representedZones": {
+                "Battlefield": 24,
+                "Graveyard": 8,
+                "Hand": 24
+              }
+            },
+            "7:BEFORE_SELECTOR:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 246,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 28,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 12,
+                "Graveyard": 4,
+                "Hand": 12
+              }
+            },
+            "9:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 3,
+              "work": 369,
+              "available": 3,
+              "partial": 3,
+              "representedCards": 48,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 3
+              },
+              "representedZones": {
+                "Battlefield": 23,
+                "Graveyard": 6,
+                "Hand": 19
+              }
+            },
+            "9:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 4,
+              "work": 504,
+              "available": 4,
+              "partial": 4,
+              "representedCards": 64,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 4
+              },
+              "representedZones": {
+                "Battlefield": 32,
+                "Graveyard": 8,
+                "Hand": 24
+              }
+            },
+            "9:BEFORE_SELECTOR:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 246,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 32,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 16,
+                "Graveyard": 4,
+                "Hand": 12
+              }
+            },
+            "11:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 246,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 34,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 16,
+                "Graveyard": 4,
+                "Hand": 14
+              }
+            },
+            "11:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 4,
+              "work": 504,
+              "available": 4,
+              "partial": 4,
+              "representedCards": 68,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 4
+              },
+              "representedZones": {
+                "Battlefield": 32,
+                "Graveyard": 8,
+                "Hand": 28
+              }
+            },
+            "11:BEFORE_SELECTOR:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 246,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 34,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 16,
+                "Graveyard": 4,
+                "Hand": 14
+              }
+            },
+            "13:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 16,
+              "work": 1975,
+              "available": 16,
+              "partial": 16,
+              "representedCards": 296,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 16
+              },
+              "representedZones": {
+                "Battlefield": 144,
+                "Graveyard": 34,
+                "Hand": 118
+              }
+            },
+            "13:BEFORE_SELECTOR:RULES_STATE:AVAILABLE": {
+              "records": 7,
+              "work": 869,
+              "available": 7,
+              "partial": 7,
+              "representedCards": 131,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 7
+              },
+              "representedZones": {
+                "Battlefield": 63,
+                "Graveyard": 15,
+                "Hand": 53
+              }
+            },
+            "13:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 9,
+              "work": 1133,
+              "available": 9,
+              "partial": 9,
+              "representedCards": 171,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 9
+              },
+              "representedZones": {
+                "Battlefield": 81,
+                "Graveyard": 22,
+                "Hand": 68
+              }
+            },
+            "13:BEFORE_SELECTOR:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 4,
+              "work": 492,
+              "available": 4,
+              "partial": 4,
+              "representedCards": 76,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 4
+              },
+              "representedZones": {
+                "Battlefield": 36,
+                "Graveyard": 9,
+                "Hand": 31
+              }
+            },
+            "13:AFTER_SELECTION_BEFORE_APPLICATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 123,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 19,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Battlefield": 9,
+                "Graveyard": 2,
+                "Hand": 8
+              }
+            },
+            "14:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 10,
+              "work": 1267,
+              "available": 10,
+              "partial": 10,
+              "representedCards": 202,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 10
+              },
+              "representedZones": {
+                "Battlefield": 101,
+                "Graveyard": 30,
+                "Hand": 70,
+                "Stack": 1
+              }
+            },
+            "14:BEFORE_SELECTOR:RULES_STATE:AVAILABLE": {
+              "records": 13,
+              "work": 1611,
+              "available": 13,
+              "partial": 13,
+              "representedCards": 265,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 13
+              },
+              "representedZones": {
+                "Battlefield": 134,
+                "Graveyard": 39,
+                "Hand": 91,
+                "Stack": 1
+              }
+            },
+            "15:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 9,
+              "work": 1114,
+              "available": 9,
+              "partial": 9,
+              "representedCards": 187,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 9
+              },
+              "representedZones": {
+                "Battlefield": 101,
+                "Graveyard": 30,
+                "Hand": 56
+              }
+            },
+            "15:BEFORE_SELECTOR:RULES_STATE:AVAILABLE": {
+              "records": 3,
+              "work": 376,
+              "available": 3,
+              "partial": 3,
+              "representedCards": 62,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 3
+              },
+              "representedZones": {
+                "Battlefield": 33,
+                "Graveyard": 9,
+                "Hand": 20
+              }
+            },
+            "15:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 6,
+              "work": 760,
+              "available": 6,
+              "partial": 6,
+              "representedCards": 132,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 6
+              },
+              "representedZones": {
+                "Battlefield": 72,
+                "Graveyard": 24,
+                "Hand": 36
+              }
+            },
+            "17:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 24,
+              "work": 2954,
+              "available": 24,
+              "partial": 24,
+              "representedCards": 580,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 24
+              },
+              "representedZones": {
+                "Battlefield": 333,
+                "Graveyard": 124,
+                "Hand": 123
+              }
+            },
+            "17:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 9,
+              "work": 1134,
+              "available": 9,
+              "partial": 9,
+              "representedCards": 225,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 9
+              },
+              "representedZones": {
+                "Battlefield": 120,
+                "Graveyard": 57,
+                "Hand": 48
+              }
+            },
+            "17:BEFORE_SELECTOR:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 248,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 50,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 28,
+                "Graveyard": 10,
+                "Hand": 12
+              }
+            },
+            "17:BEFORE_SELECTOR:RULES_STATE:AVAILABLE": {
+              "records": 6,
+              "work": 768,
+              "available": 6,
+              "partial": 6,
+              "representedCards": 144,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 6
+              },
+              "representedZones": {
+                "Battlefield": 84,
+                "Graveyard": 30,
+                "Hand": 30
+              }
+            },
+            "19:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 27,
+              "work": 3325,
+              "available": 27,
+              "partial": 27,
+              "representedCards": 733,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 27
+              },
+              "representedZones": {
+                "Battlefield": 431,
+                "Graveyard": 191,
+                "Hand": 111
+              }
+            },
+            "19:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 5,
+              "work": 634,
+              "available": 5,
+              "partial": 5,
+              "representedCards": 140,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 5
+              },
+              "representedZones": {
+                "Battlefield": 80,
+                "Graveyard": 37,
+                "Hand": 23
+              }
+            },
+            "19:BEFORE_SELECTOR:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 248,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 56,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 32,
+                "Graveyard": 14,
+                "Hand": 10
+              }
+            },
+            "19:BEFORE_SELECTOR:RULES_STATE:AVAILABLE": {
+              "records": 7,
+              "work": 896,
+              "available": 7,
+              "partial": 7,
+              "representedCards": 189,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 7
+              },
+              "representedZones": {
+                "Battlefield": 112,
+                "Graveyard": 49,
+                "Hand": 28
+              }
+            },
+            "21:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 23,
+              "work": 2832,
+              "available": 23,
+              "partial": 23,
+              "representedCards": 693,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 23
+              },
+              "representedZones": {
+                "Battlefield": 392,
+                "Graveyard": 207,
+                "Hand": 94
+              }
+            },
+            "21:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 6,
+              "work": 760,
+              "available": 6,
+              "partial": 6,
+              "representedCards": 186,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 6
+              },
+              "representedZones": {
+                "Battlefield": 105,
+                "Graveyard": 54,
+                "Hand": 27
+              }
+            },
+            "21:BEFORE_SELECTOR:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 3,
+              "work": 372,
+              "available": 3,
+              "partial": 3,
+              "representedCards": 93,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 3
+              },
+              "representedZones": {
+                "Battlefield": 51,
+                "Graveyard": 27,
+                "Hand": 15
+              }
+            },
+            "21:AFTER_SELECTION_BEFORE_APPLICATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 248,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 62,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 34,
+                "Graveyard": 18,
+                "Hand": 10
+              }
+            },
+            "21:BEFORE_SELECTOR:RULES_STATE:AVAILABLE": {
+              "records": 6,
+              "work": 768,
+              "available": 6,
+              "partial": 6,
+              "representedCards": 180,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 6
+              },
+              "representedZones": {
+                "Battlefield": 102,
+                "Graveyard": 54,
+                "Hand": 24
+              }
+            }
+          }
+        }
+      ],
+      "rngCalls": 1092,
+      "rngCallsAfterSnapshot": 1092,
+      "rngStateSha256": "60cda5695b17ca0389c6328bd521c6f78b71f07ffe271a27a4a8c74351d8a1f4"
+    },
+    "hash8": {
+      "commandArguments": [
+        "sim",
+        "-f",
+        "constructed",
+        "-mc",
+        "off",
+        "-q",
+        "-D",
+        "/workspace/forge/tools/trace-test-decks",
+        "-d",
+        "choice-damage-x.dck",
+        "choice-damage-x.dck",
+        "-n",
+        "1",
+        "-s",
+        "12073",
+        "-c",
+        "90",
+        "-log-game",
+        "/workspace/work/cov008-native-admission/games/damage-hash8-0-full.jsonl",
+        "-log-decisions",
+        "/workspace/work/cov008-native-admission/games/damage-hash8-0-decisions.jsonl"
+      ],
+      "schemaVersion": 1,
+      "scope": "DEVELOPMENT_CAPTURE_ATTEMPTS_AT_PROCESS_SHUTDOWN",
+      "policy": "HASH8",
+      "salt": 0,
+      "releaseThreshold": 31,
+      "maximumGroups": 8192,
+      "trainingReady": false,
+      "actors": [
+        {
+          "playerId": 0,
+          "share": 128000,
+          "funded": 128000,
+          "held": 0,
+          "remaining": 121895,
+          "releaseTurn": -1,
+          "finalGameTurn": 22,
+          "entered": 390,
+          "returned": 390,
+          "threw": 0,
+          "inFlight": 0,
+          "maximumInFlight": 1,
+          "captureWork": 6100,
+          "outsideCaptureWork": 5,
+          "returnedWork": 6100,
+          "failedWork": 0,
+          "inFlightWork": 0,
+          "overflow": false,
+          "groups": {
+            "1:BEFORE_OPERATION:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 6,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 6
+              },
+              "representedZones": {}
+            },
+            "1:BEFORE_SELECTOR:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 6,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 6
+              },
+              "representedZones": {}
+            },
+            "1:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 126,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 8,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Hand": 7,
+                "Battlefield": 1
+              }
+            },
+            "1:BEFORE_SELECTOR:RULES_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 123,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 8,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Hand": 7,
+                "Battlefield": 1
+              }
+            },
+            "2:BEFORE_OPERATION:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 9,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 9
+              },
+              "representedZones": {}
+            },
+            "2:BEFORE_SELECTOR:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 6,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 6
+              },
+              "representedZones": {}
+            },
+            "2:BEFORE_OPERATION:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 7,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 7
+              },
+              "representedZones": {}
+            },
+            "2:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 3,
+              "work": 376,
+              "available": 3,
+              "partial": 3,
+              "representedCards": 27,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 3
+              },
+              "representedZones": {
+                "Battlefield": 6,
+                "Hand": 21
+              }
+            },
+            "2:BEFORE_SELECTOR:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 2,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 2
+              },
+              "representedZones": {}
+            },
+            "3:BEFORE_OPERATION:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 8,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 8
+              },
+              "representedZones": {}
+            },
+            "3:BEFORE_SELECTOR:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 10,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 10
+              },
+              "representedZones": {}
+            },
+            "3:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 126,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 10,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Battlefield": 3,
+                "Hand": 7
+              }
+            },
+            "3:BEFORE_SELECTOR:RULES_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 123,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 11,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Battlefield": 4,
+                "Hand": 7
+              }
+            },
+            "4:BEFORE_OPERATION:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 7,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 7
+              },
+              "representedZones": {}
+            },
+            "4:BEFORE_SELECTOR:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 3,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 3
+              },
+              "representedZones": {}
+            },
+            "4:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 245,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 22,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 8,
+                "Hand": 12,
+                "Graveyard": 2
+              }
+            },
+            "4:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 126,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 12,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Battlefield": 4,
+                "Graveyard": 2,
+                "Hand": 6
+              }
+            },
+            "4:BEFORE_OPERATION:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 7,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 7
+              },
+              "representedZones": {}
+            },
+            "6:BEFORE_OPERATION:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 2,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 2
+              },
+              "representedZones": {}
+            },
+            "6:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 123,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 14,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Battlefield": 6,
+                "Graveyard": 2,
+                "Hand": 6
+              }
+            },
+            "6:BEFORE_OPERATION:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 7,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 7
+              },
+              "representedZones": {}
+            },
+            "6:BEFORE_SELECTOR:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 1,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 1
+              },
+              "representedZones": {}
+            },
+            "8:BEFORE_OPERATION:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 3,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 3
+              },
+              "representedZones": {}
+            },
+            "8:BEFORE_OPERATION:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 6,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 6
+              },
+              "representedZones": {}
+            },
+            "8:BEFORE_SELECTOR:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 2,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 2
+              },
+              "representedZones": {}
+            },
+            "10:BEFORE_OPERATION:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 2,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 2
+              },
+              "representedZones": {}
+            },
+            "10:BEFORE_OPERATION:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 5,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 5
+              },
+              "representedZones": {}
+            },
+            "10:BEFORE_SELECTOR:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 2,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 2
+              },
+              "representedZones": {}
+            },
+            "10:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 126,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 17,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Battlefield": 8,
+                "Graveyard": 2,
+                "Hand": 7
+              }
+            },
+            "12:BEFORE_OPERATION:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 3,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 3
+              },
+              "representedZones": {}
+            },
+            "12:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 126,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 18,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Battlefield": 9,
+                "Graveyard": 2,
+                "Hand": 7
+              }
+            },
+            "12:BEFORE_OPERATION:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 5,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 5
+              },
+              "representedZones": {}
+            },
+            "12:BEFORE_SELECTOR:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 2,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 2
+              },
+              "representedZones": {}
+            },
+            "14:BEFORE_OPERATION:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 26,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 26
+              },
+              "representedZones": {}
+            },
+            "14:BEFORE_OPERATION:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 9,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 9
+              },
+              "representedZones": {}
+            },
+            "14:BEFORE_SELECTOR:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 6,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 6
+              },
+              "representedZones": {}
+            },
+            "14:BEFORE_SELECTOR:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 6,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 6
+              },
+              "representedZones": {}
+            },
+            "14:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 4,
+              "work": 490,
+              "available": 4,
+              "partial": 4,
+              "representedCards": 77,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 4
+              },
+              "representedZones": {
+                "Battlefield": 41,
+                "Graveyard": 12,
+                "Hand": 24
+              }
+            },
+            "14:BEFORE_SELECTOR:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 248,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 40,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 22,
+                "Graveyard": 6,
+                "Hand": 12
+              }
+            },
+            "14:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 127,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 21,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Battlefield": 11,
+                "Graveyard": 3,
+                "Hand": 7
+              }
+            },
+            "16:BEFORE_OPERATION:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 25,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 25
+              },
+              "representedZones": {}
+            },
+            "16:BEFORE_OPERATION:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 13,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 13
+              },
+              "representedZones": {}
+            },
+            "16:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 254,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 50,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 25,
+                "Graveyard": 8,
+                "Hand": 17
+              }
+            },
+            "16:BEFORE_SELECTOR:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 3,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 3
+              },
+              "representedZones": {}
+            },
+            "16:BEFORE_SELECTOR:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 2,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 2
+              },
+              "representedZones": {}
+            },
+            "16:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 246,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 48,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 25,
+                "Graveyard": 8,
+                "Hand": 15
+              }
+            },
+            "16:AFTER_SELECTION_BEFORE_APPLICATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 124,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 25,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Battlefield": 13,
+                "Graveyard": 4,
+                "Hand": 8
+              }
+            },
+            "16:BEFORE_SELECTOR:RULES_STATE:AVAILABLE": {
+              "records": 3,
+              "work": 384,
+              "available": 3,
+              "partial": 3,
+              "representedCards": 72,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 3
+              },
+              "representedZones": {
+                "Battlefield": 39,
+                "Graveyard": 12,
+                "Hand": 21
+              }
+            },
+            "18:BEFORE_OPERATION:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 25,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 25
+              },
+              "representedZones": {}
+            },
+            "18:BEFORE_OPERATION:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 12,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 12
+              },
+              "representedZones": {}
+            },
+            "18:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 125,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 28,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Battlefield": 13,
+                "Graveyard": 7,
+                "Hand": 8
+              }
+            },
+            "18:BEFORE_SELECTOR:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 7,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 7
+              },
+              "representedZones": {}
+            },
+            "18:BEFORE_SELECTOR:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 247,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 56,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 27,
+                "Graveyard": 14,
+                "Hand": 15
+              }
+            },
+            "18:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 5,
+              "work": 615,
+              "available": 5,
+              "partial": 4,
+              "representedCards": 138,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 4
+              },
+              "representedZones": {
+                "Battlefield": 67,
+                "Graveyard": 35,
+                "Hand": 35,
+                "Stack": 1
+              }
+            },
+            "18:BEFORE_SELECTOR:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 5,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 5
+              },
+              "representedZones": {}
+            },
+            "18:BEFORE_SELECTOR:RULES_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 127,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 27,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Battlefield": 13,
+                "Graveyard": 7,
+                "Hand": 7
+              }
+            },
+            "18:AFTER_SELECTION_BEFORE_APPLICATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 124,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 29,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Battlefield": 15,
+                "Graveyard": 7,
+                "Hand": 7
+              }
+            },
+            "20:BEFORE_OPERATION:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 26,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 26
+              },
+              "representedZones": {}
+            },
+            "20:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 247,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 64,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 34,
+                "Graveyard": 16,
+                "Hand": 14
+              }
+            },
+            "20:BEFORE_OPERATION:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 9,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 9
+              },
+              "representedZones": {}
+            },
+            "20:BEFORE_SELECTOR:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 4,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 4
+              },
+              "representedZones": {}
+            },
+            "20:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 3,
+              "work": 381,
+              "available": 3,
+              "partial": 3,
+              "representedCards": 99,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 3
+              },
+              "representedZones": {
+                "Battlefield": 51,
+                "Graveyard": 25,
+                "Hand": 23
+              }
+            },
+            "20:AFTER_SELECTION_BEFORE_APPLICATION:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 1,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 1
+              },
+              "representedZones": {}
+            },
+            "20:BEFORE_SELECTOR:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 6,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 6
+              },
+              "representedZones": {}
+            },
+            "22:BEFORE_OPERATION:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 30,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 30
+              },
+              "representedZones": {}
+            },
+            "22:BEFORE_OPERATION:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 3,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 3
+              },
+              "representedZones": {}
+            },
+            "22:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 126,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 36,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Battlefield": 19,
+                "Graveyard": 9,
+                "Hand": 8
+              }
+            },
+            "22:BEFORE_SELECTOR:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 1,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 1
+              },
+              "representedZones": {}
+            },
+            "22:AFTER_SELECTION_BEFORE_APPLICATION:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 2,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 2
+              },
+              "representedZones": {}
+            },
+            "22:BEFORE_SELECTOR:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 9,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 9
+              },
+              "representedZones": {}
+            },
+            "22:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 5,
+              "work": 615,
+              "available": 5,
+              "partial": 5,
+              "representedCards": 175,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 5
+              },
+              "representedZones": {
+                "Battlefield": 95,
+                "Graveyard": 45,
+                "Hand": 35
+              }
+            }
+          }
+        },
+        {
+          "playerId": 1,
+          "share": 128000,
+          "funded": 128000,
+          "held": 0,
+          "remaining": 122998,
+          "releaseTurn": -1,
+          "finalGameTurn": 22,
+          "entered": 264,
+          "returned": 264,
+          "threw": 0,
+          "inFlight": 0,
+          "maximumInFlight": 1,
+          "captureWork": 4997,
+          "outsideCaptureWork": 5,
+          "returnedWork": 4997,
+          "failedWork": 0,
+          "inFlightWork": 0,
+          "overflow": false,
+          "groups": {
+            "1:BEFORE_OPERATION:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 3,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 3
+              },
+              "representedZones": {}
+            },
+            "1:BEFORE_OPERATION:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 4,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 4
+              },
+              "representedZones": {}
+            },
+            "1:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 252,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 14,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 2,
+                "Hand": 12
+              }
+            },
+            "3:BEFORE_OPERATION:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 11,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 11
+              },
+              "representedZones": {}
+            },
+            "3:BEFORE_OPERATION:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 6,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 6
+              },
+              "representedZones": {}
+            },
+            "3:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 122,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 8,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Battlefield": 3,
+                "Hand": 5
+              }
+            },
+            "3:BEFORE_SELECTOR:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 2,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 2
+              },
+              "representedZones": {}
+            },
+            "3:BEFORE_SELECTOR:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 1,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 1
+              },
+              "representedZones": {}
+            },
+            "5:BEFORE_OPERATION:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 3,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 3
+              },
+              "representedZones": {}
+            },
+            "5:BEFORE_OPERATION:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 2,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 2
+              },
+              "representedZones": {}
+            },
+            "5:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 252,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 24,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 10,
+                "Graveyard": 4,
+                "Hand": 10
+              }
+            },
+            "5:BEFORE_SELECTOR:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 2,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 2
+              },
+              "representedZones": {}
+            },
+            "7:BEFORE_OPERATION:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 1,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 1
+              },
+              "representedZones": {}
+            },
+            "7:BEFORE_OPERATION:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 2,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 2
+              },
+              "representedZones": {}
+            },
+            "7:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 252,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 28,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 12,
+                "Graveyard": 4,
+                "Hand": 12
+              }
+            },
+            "7:BEFORE_SELECTOR:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 2,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 2
+              },
+              "representedZones": {}
+            },
+            "7:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 123,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 14,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Battlefield": 6,
+                "Graveyard": 2,
+                "Hand": 6
+              }
+            },
+            "9:BEFORE_OPERATION:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 2,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 2
+              },
+              "representedZones": {}
+            },
+            "9:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 123,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 16,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Battlefield": 8,
+                "Graveyard": 2,
+                "Hand": 6
+              }
+            },
+            "9:BEFORE_OPERATION:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 2,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 2
+              },
+              "representedZones": {}
+            },
+            "9:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 252,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 32,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 16,
+                "Graveyard": 4,
+                "Hand": 12
+              }
+            },
+            "9:BEFORE_SELECTOR:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 123,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 16,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Battlefield": 8,
+                "Graveyard": 2,
+                "Hand": 6
+              }
+            },
+            "9:BEFORE_SELECTOR:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 1,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 1
+              },
+              "representedZones": {}
+            },
+            "11:BEFORE_OPERATION:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 2,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 2
+              },
+              "representedZones": {}
+            },
+            "11:BEFORE_OPERATION:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 3,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 3
+              },
+              "representedZones": {}
+            },
+            "11:BEFORE_SELECTOR:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 2,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 2
+              },
+              "representedZones": {}
+            },
+            "11:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 126,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 17,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Battlefield": 8,
+                "Graveyard": 2,
+                "Hand": 7
+              }
+            },
+            "13:BEFORE_OPERATION:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 13,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 13
+              },
+              "representedZones": {}
+            },
+            "13:BEFORE_SELECTOR:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 7,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 7
+              },
+              "representedZones": {}
+            },
+            "13:BEFORE_OPERATION:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 8,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 8
+              },
+              "representedZones": {}
+            },
+            "13:BEFORE_SELECTOR:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 4,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 4
+              },
+              "representedZones": {}
+            },
+            "13:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 126,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 19,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Battlefield": 9,
+                "Graveyard": 2,
+                "Hand": 8
+              }
+            },
+            "13:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 3,
+              "work": 374,
+              "available": 3,
+              "partial": 3,
+              "representedCards": 56,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 3
+              },
+              "representedZones": {
+                "Battlefield": 27,
+                "Graveyard": 7,
+                "Hand": 22
+              }
+            },
+            "13:AFTER_SELECTION_BEFORE_APPLICATION:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 1,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 1
+              },
+              "representedZones": {}
+            },
+            "14:BEFORE_OPERATION:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 10,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 10
+              },
+              "representedZones": {}
+            },
+            "14:BEFORE_SELECTOR:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 10,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 10
+              },
+              "representedZones": {}
+            },
+            "14:BEFORE_SELECTOR:RULES_STATE:AVAILABLE": {
+              "records": 3,
+              "work": 371,
+              "available": 3,
+              "partial": 3,
+              "representedCards": 61,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 3
+              },
+              "representedZones": {
+                "Battlefield": 30,
+                "Graveyard": 9,
+                "Hand": 21,
+                "Stack": 1
+              }
+            },
+            "15:BEFORE_OPERATION:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 7,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 7
+              },
+              "representedZones": {}
+            },
+            "15:BEFORE_SELECTOR:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 3,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 3
+              },
+              "representedZones": {}
+            },
+            "15:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 246,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 40,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 22,
+                "Graveyard": 6,
+                "Hand": 12
+              }
+            },
+            "15:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 127,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 22,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Battlefield": 12,
+                "Graveyard": 4,
+                "Hand": 6
+              }
+            },
+            "15:BEFORE_OPERATION:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 5,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 5
+              },
+              "representedZones": {}
+            },
+            "17:BEFORE_OPERATION:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 21,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 21
+              },
+              "representedZones": {}
+            },
+            "17:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 3,
+              "work": 370,
+              "available": 3,
+              "partial": 3,
+              "representedCards": 73,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 3
+              },
+              "representedZones": {
+                "Battlefield": 42,
+                "Graveyard": 15,
+                "Hand": 16
+              }
+            },
+            "17:BEFORE_OPERATION:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 7,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 7
+              },
+              "representedZones": {}
+            },
+            "17:BEFORE_SELECTOR:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 124,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 25,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Battlefield": 14,
+                "Graveyard": 5,
+                "Hand": 6
+              }
+            },
+            "17:BEFORE_SELECTOR:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 1,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 1
+              },
+              "representedZones": {}
+            },
+            "17:BEFORE_SELECTOR:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 4,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 4
+              },
+              "representedZones": {}
+            },
+            "17:BEFORE_SELECTOR:RULES_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 256,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 48,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 28,
+                "Graveyard": 10,
+                "Hand": 10
+              }
+            },
+            "17:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 250,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 50,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 26,
+                "Graveyard": 14,
+                "Hand": 10
+              }
+            },
+            "19:BEFORE_OPERATION:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 26,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 26
+              },
+              "representedZones": {}
+            },
+            "19:BEFORE_OPERATION:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 5,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 5
+              },
+              "representedZones": {}
+            },
+            "19:BEFORE_SELECTOR:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 1,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 1
+              },
+              "representedZones": {}
+            },
+            "19:BEFORE_SELECTOR:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 124,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 28,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Battlefield": 16,
+                "Graveyard": 7,
+                "Hand": 5
+              }
+            },
+            "19:BEFORE_SELECTOR:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 5,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 5
+              },
+              "representedZones": {}
+            },
+            "19:BEFORE_SELECTOR:RULES_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 256,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 54,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 32,
+                "Graveyard": 14,
+                "Hand": 8
+              }
+            },
+            "19:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 1,
+              "work": 124,
+              "available": 1,
+              "partial": 1,
+              "representedCards": 28,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 1
+              },
+              "representedZones": {
+                "Battlefield": 16,
+                "Graveyard": 8,
+                "Hand": 4
+              }
+            },
+            "21:BEFORE_OPERATION:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 20,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 20
+              },
+              "representedZones": {}
+            },
+            "21:BEFORE_OPERATION:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 4,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 4
+              },
+              "representedZones": {}
+            },
+            "21:BEFORE_OPERATION:PLANNING_WORKING_STATE:AVAILABLE": {
+              "records": 2,
+              "work": 254,
+              "available": 2,
+              "partial": 2,
+              "representedCards": 62,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 2
+              },
+              "representedZones": {
+                "Battlefield": 35,
+                "Graveyard": 18,
+                "Hand": 9
+              }
+            },
+            "21:BEFORE_SELECTOR:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 3,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 3
+              },
+              "representedZones": {}
+            },
+            "21:AFTER_SELECTION_BEFORE_APPLICATION:PLANNING_WORKING_STATE:EXPERIMENT_SAMPLED": {
+              "records": 2,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 2
+              },
+              "representedZones": {}
+            },
+            "21:BEFORE_SELECTOR:RULES_STATE:EXPERIMENT_SAMPLED": {
+              "records": 6,
+              "work": 0,
+              "available": 0,
+              "partial": 0,
+              "representedCards": 0,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "EXPERIMENT_SAMPLED": 6
+              },
+              "representedZones": {}
+            },
+            "21:BEFORE_OPERATION:RULES_STATE:AVAILABLE": {
+              "records": 3,
+              "work": 370,
+              "available": 3,
+              "partial": 3,
+              "representedCards": 91,
+              "disclosedFacts": 0,
+              "linkedFacts": 0,
+              "omissionReasons": {
+                "UNSUPPORTED": 3
+              },
+              "representedZones": {
+                "Battlefield": 52,
+                "Graveyard": 27,
+                "Hand": 12
+              }
+            }
+          }
+        }
+      ],
+      "rngCalls": 1092,
+      "rngCallsAfterSnapshot": 1092,
+      "rngStateSha256": "60cda5695b17ca0389c6328bd521c6f78b71f07ffe271a27a4a8c74351d8a1f4"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "scope": "Final tools and selected producer sources. Primary execution runner retained separately: a Java-path portability correction leaves captured primary commands unchanged.",
+  "sources": {
+    "tools/decision-records/input-context-benchmark/GameAdmissionExperiment.java": "d97fbe71c53c9fd43e3ae557241b9468a3169537c7fe2bf01cdbc93e44fa3c58",
+    "tools/decision-records/input-context-benchmark/GameAdmissionHooksCheck.java": "fe31376904d319b18d2f28a4929c457ef09771ebac2536a648b7a72b3f83d7b7",
+    "tools/decision-records/input-context-benchmark/run-game-admission.py": "e722d8639031df114c3e0dc5f2a37da20c87a850f35c117c52d4fbcce52a37cb",
+    "tools/decision-records/input-context-benchmark/validate-game-admission.py": "dbf5118b16ed748a876efc442c59b578ec18f933baecdb47de1f022cf0db05fd",
+    "tools/decision-records/input-context-benchmark/replay-game-admission.py": "bd25aaf7efbd06ce46836b35dc99fc4b5e319104abba56c1a80d55c39d1b6f34",
+    "tools/decision-records/input-context-benchmark/fixtures/game-admission-sidecars.json": "c57a16ff087bd3f10c412277622e644f78f509aadca4848417c5d0e77f4aeda6",
+    "tools/decision-records/input-context-benchmark/fixtures/early-admission-timeout.json.gz": "6cff7b3b4defcfe47df8facb13b559cdc5e0e4a447fc36a0b7a38588bb320d3e",
+    "tools/decision-records/test_game_admission.py": "0fe2d9ba7f77a34779bfc167963138035e315c875e4c403b2f55c1aa35803cd6",
+    "forge-ai/src/main/java/forge/ai/AiInputContext.java": "8bb4b85141ba6f6661e896c393f9c3a185dd9a08de8c6206c98295a9dc2fe6be",
+    "forge-game/src/main/java/forge/game/GameAction.java": "294caa309202f6fdebceaaa81019426f959672f391434707f53f685ac0dc668d",
+    "tools/decision-records/export.py": "4f8671adc06df336561287500d77ea8c61adc0e785e2c6e3bdfcbb71be26f1fa",
+    "tools/decision-records/input_context.py": "1c147fd2c9eefecd252523968bbde248dc7575325254826d2a80584f5af57e50"
+  }
+}
